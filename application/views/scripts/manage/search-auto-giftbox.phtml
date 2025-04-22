@@ -1,0 +1,112 @@
+
+<form class="form-search form-horizontal" method="get" action="<?php echo HOST ?>manage/auto-giftbox">
+    <div class="row">
+        <div class="span5">
+            <div class="control-group">
+                <label class="span2">Category</label>
+                        <select name="cat_id" id="cat_id" disabled>
+                           <option value="">please select</option>
+                            <?php if ($this->good_categories): foreach ($this->good_categories as $id=>$name):?>
+                                <option value="<?php echo $id;?>" <?php if (isset($this->params['cat_id']) and $id==$this->params['cat_id']):?> selected<?php endif;?>><?php echo $name;?></option>
+                            <?php endforeach; endif;?>
+                        </select>
+            </div>
+            <div class="control-group">
+                <label for="good_id" class="span2">Product Phone</label>
+                    <select name="good_id" id="good_id">
+                        <option value="">please select</option>
+                        <?php if (isset($this->goods_cat) and $this->goods_cat):
+                                foreach ($this->goods_cat as $item): ?>
+                                    <option value="<?php echo $item['id'];?>" <?php if (isset($this->params['good_id']) and $item['id']==$this->params['good_id']):?> selected<?php endif;?>><?php echo $item['name'];?></option>
+                        <?php endforeach; ?>
+                         <!-- // -->
+                        <?php elseif($this->goods_cached): foreach ($this->goods_cached as $id=>$item):?>
+                            <option value="<?php echo $id;?>" <?php if(isset($this->params['good_id']) and $id==$this->params['good_id']):?> selected<?php endif;?> ><?php echo $item;?></option>
+                        <?php endforeach; endif;?>
+                    </select>
+            </div>
+            <div class="control-group">
+                <label for="auto_giftbox_start_date" class="span2">Start Date</label>
+                <input id="auto_giftbox_start_date" name="auto_giftbox_start_date" type="date" class="input-medium search-query form-control" value="<?php echo $this->params['auto_giftbox_start_date'] ?>">
+            </div>
+            <div class="control-group">
+                <label for="checkbox_allday" class="span2">All Day</label>
+                <input id="checkbox_allday" name="checkbox_allday" type="checkbox" value="1">
+            </div>
+        </div>
+        <div class="span5">
+             <div class="control-group">
+                <label class="span2">Category</label>
+                        <select class="cat_id_give"  name="cat_id_give">
+                           <option value="">please select</option>
+                            <?php if ($this->good_categories): foreach ($this->good_categories as $id=>$name):?>
+                                <option value="<?php echo $id;?>" <?php if (isset($this->params['cat_id_give']) and $id==$this->params['cat_id_give']):?> selected<?php endif;?>><?php echo $name;?></option>
+                            <?php endforeach; endif;?>
+                        </select>
+            </div>
+            <div class="control-group">
+                <label for="good_id_give" class="span2">Accessories</label>
+                    <select class="good_id_give" name="good_id_give">
+                        <option value="">please select</option>
+                        <?php if($this->goods_cached): foreach ($this->goods_cached as $id=>$item_gift):?>
+                            <option value="<?php echo $id;?>" <?php if(isset($this->params['good_id_give']) and $id==$this->params['good_id_give']):?> selected<?php endif;?> ><?php echo $item_gift;?></option>
+                        <?php endforeach; endif;?>
+                    </select>
+
+            </div>
+            <div class="control-group">
+                <label for="auto_giftbox_end_date" class="span2">End Date</label>
+                <input id="auto_giftbox_end_date" name="auto_giftbox_end_date" type="date" class="input-medium search-query form-control" value="<?php echo $this->params['auto_giftbox_end_date']?>">
+            </div>
+        </div>
+        <div class="clearfix"></div>
+
+
+    </div>
+
+    <button type="submit" class="btn btn-primary">Search</button>
+    <button type="reset" class="btn btn-warning">Reset</button>
+</form>
+
+<script type="text/javascript" src="/js/jquery-ui-1.8.12.custom.min.js"></script>
+<link rel="stylesheet" type="text/css" href="/css/jquery-ui-1.8.12.custom.css"/>
+
+
+<script type="text/javascript">
+    
+$(document).ready(function () {
+    $('#cat_id, #good_id').change(function(){
+            $(this).after('<span class="loading"></span>');
+            var _self = $(this);
+            var cat_id = $('#cat_id').val();
+
+            if (_self.attr('id')=='cat_id')
+                $('#good_id').find('option:not(:first)').remove();
+
+            var good_id = $('#good_id').val();
+
+            // $('#good_color_id').find('option:not(:first)').remove();
+
+            // $('#num, #price').val('');
+
+            $.get("/get/load",
+                {cat_id: cat_id, good_id: good_id}
+                ,function(data,status){
+                    var data = $.parseJSON( data );
+                    if (data.goods){
+                        var obj = data.goods;
+                        for (var i = 0; i < obj.length; i++) {
+                            $('#good_id').append('<option value="'+obj[i]['id']+'">'+obj[i]['name']+'</option>');
+                        }
+                    }
+                    // if (data.colors){
+                    //     var obj = data.colors;
+                    //     for (var i = 0; i < obj.length; i++) {
+                    //         $('#good_color_id').append('<option value="'+obj[i]['id']+'">'+obj[i]['name']+'</option>');
+                    //     }
+                    // }
+                    _self.nextAll('.loading').remove();
+                });
+        });
+});   
+</script>

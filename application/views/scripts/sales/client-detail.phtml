@@ -1,0 +1,285 @@
+<?php
+if($this->client['status'] == 1) {
+    $status = 'Official';
+}elseif($this->client['status'] == 2) {
+    $status = 'Freeze';
+}else{
+    $status = 'Close';
+}
+?>
+
+
+<ul class="breadcrumb" style="margin-top: 20px;">
+  <li><a href="/">Home</a> <span class="divider">/</span></li>
+  <li><a href="/sales/client-management">Client Management</a> <span class="divider">/</span></li>
+  <li class="active">Client Detail</li>
+</ul>
+
+<div class="container" style="padding-bottom: 300px; padding-top: 30px;">
+
+    <div class="row-fluid">
+        <div class="span10">
+            <div class="control-group">
+                <label style="font-size: 36px; padding-bottom: 10px; font-weight: bold;"> <?php echo $this->client['client_name'] ?> </label>
+
+            </div>
+        </div>
+        <div class="span2">
+            <div class="control-group">
+               <button class="btn" type="submit" onclick="window.history.go(-1); return false;"> Back </button>
+           </div>
+       </div>
+   </div>
+   <hr>
+
+   <div class="card">
+    <div class="row-fluid">
+
+       <div class="span5">
+        <div class="control-group">
+            <label>Customer Code :  <?php echo $this->client['customer_code'] ?></label>
+            <label>Client Name(In Short) : <?php echo $this->client['short_name'] ?></label>
+            <label>Actual Cooperate Date : <?php echo $this->client['cooperate_date'] ?></label>
+            <label>Creator : <?php echo $this->staff[$this->client['created_by']] ?></label>
+        </div>
+    </div>
+
+    <div class="span5">
+        <div class="control-group">
+            <!-- <label style="padding-bottom: 70px"></label> -->
+            <label>Client Level : <?php echo $this->client['level'] ?></label>
+            <label>Creation Time : <?php echo $this->client['created_at'] ?></label>
+        </div>
+    </div>
+
+    <div class="span2">
+        <div class="control-group">
+            <label> Status </label>
+            <label style="font-weight: bold; font-size: 20px;"> <?php echo $status ?></label>
+        </div>
+    </div>
+
+
+</div>
+
+<hr>
+
+<ul class="nav nav-tabs" id="myTab">
+  <li class="active"><a href="#basic-info">Basic Info.</a></li>
+  <li><a href="#distributor">Distributor</a></li>
+  <li><a href="#store">Store</a></li>
+</ul>
+
+<div class="tab-content">
+    <div class="tab-pane active" id="basic-info">
+        <h3 style="padding-bottom: 10px"> Basic Info </h3>
+
+        <div class="row-fluid">
+
+            <div class="span4">
+                <div class="control-group">
+                    <label> Enterprise Property : </label>
+                    <label> Business Contact Person : <?php echo $this->client['person'] ?></label>
+                    <label> Internal Sales/External Sales : </label>
+                </div>
+            </div>
+
+            <div class="span4">
+                <div class="control-group">
+                    <label> Legal Representative/Actual Controller : <?php echo $this->client['custormer'] ?></label>
+                    <label> Client Cooperation Degree : </label>
+                    <label> Tel. : <?php echo $this->client['phone_number'] ?></label>
+                    <label> Tag : </label>
+                </div>
+            </div>
+
+            <div class="span4">
+                <div class="control-group">
+                    <label> Client Type : </label>
+                    <label> E-mail : <?php echo $this->client['email'] ?></label>
+                    <label> Remarks : <?php echo $this->client['remark'] ?></label>
+                </div>
+            </div>
+
+
+        </div>
+    </div>
+
+
+
+    <div class="tab-pane" id="distributor">
+        <h3 style="padding-bottom: 10px"> Distributor </h3>
+
+        <table class="table table-bordered">
+            <thead>
+                <tr>
+                    <th>Distributor Code</th>
+                    <th>Distributor name</th>
+                    <th>Superior Distributor</th>
+                    <th>Store Quantity</th>
+                    <th>Price System</th>
+                    <th>Status</th>
+                    <th>Action</th>
+                </tr>
+            </thead>
+            <tbody>
+                <?php if(isset($this->distributors) && $this->distributors) : ?>
+                    <?php foreach ($this->distributors as $key => $value ) : ?>
+
+                        <?php
+                            $QDistributor = new Application_Model_Distributor();
+                            $distributor_data = $QDistributor->getSuperiorDistributor($value['warehouse_id']);
+
+                        if($value['status'] == 1) {
+                            $status = '<span style="color: green"> In Cooperation </span>';
+                        }else if($value['status'] == 2) {
+                            $status = '<span style="color: orange"> Suspend Cooperation</span>';
+                        }else if($value['status'] == 3) {
+                            $status = '<span style="color: red"> Close </span>';
+                        }
+
+                        ?>
+                        <tr>
+                            <td><?php echo $value['distributor_code'] ?></td>
+                            <td><?php echo $value['title'] ?></td>
+                            <td><?php echo $distributor_data[0]['title'] ?></td>
+                            <td></td>
+                            <td><?php echo $value['rank'] ?></td>
+                            <td><?php echo $status ?></td>
+                            <td>
+                                <a href="<?php echo HOST ?>sales/distributor-detail?id=<?php echo $value['id'] ?>">Deatil<a/> 
+                            <?php if(in_array($value['status'], array(1))) : ?>    
+
+                            | <a href="<?php echo HOST ?>sales/create-distributor?id=<?php echo $value['id'] ?>">Edit<a/>
+
+                            <?php endif; ?>
+
+                            <?php if(in_array($value['status'], array(1,2))) : ?>
+
+                            | <a href="#myModal"
+                                data-id="<?php echo $value['id'] ?>" 
+                                data-name="<?php echo $value['title'] ?>" 
+                                data-event ="close" 
+                                data-title ="Close Distributor"
+                                style="color: red;" data-toggle="modal" role="button" class="modal-function">Close Distributor</a>
+
+                            <?php endif; ?>
+
+                            <?php if(in_array($value['status'],array(1))) : ?>
+
+                            | <a href="#myModal"
+                                data-id="<?php echo $value['id'] ?>"
+                                data-name="<?php echo $value['title'] ?>"
+                                data-event="puss"
+                                data-title="Suspend Distributor"
+                                style="color: orange;" data-toggle="modal" role="button" class="modal-function">Suspend Cooperation</a>
+
+                            <?php endif; ?>
+
+                            <?php if(in_array($value['status'],array(3,2))) : ?>
+
+                            | <a href="#myModal"
+                                data-id="<?php echo $value['id'] ?>"
+                                data-name="<?php echo $value['title'] ?>"
+                                data-event="restart"
+                                data-title="Restart cooperation"
+                                data-toggle="modal" role="button" class="modal-function">Restart Cooperation</a>
+
+                            <?php endif; ?>
+                            </td>
+                        </tr>
+                    <?php endforeach;?>
+                <?php endif; ?>
+            </tbody>
+        </table>
+
+    </div>
+
+
+    <div class="tab-pane" id="store">
+        <h3 style="padding-bottom: 10px"> Store </h3>
+
+        <table class="table table-bordered">
+            <thead>
+                <tr>
+                    <th>Store Code</th>
+                    <th>Affiliated Agency</th>
+                    <th>Administrative Attribute</th>
+                    <th>Receiver</th>
+                    <th>Tel.</th>
+                    <th>Status</th>
+                    <th>Action</th>
+                </tr>
+            </thead>
+        </table>
+    </div>
+</div>
+
+</div>
+</div>
+
+
+<!-- Modal -->
+<div id="myModal" class="modal hide fade" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+    <div class="modal-header">
+        <button type="button" class="close" data-dismiss="modal" aria-hidden="true">×</button>
+        <h3 id="ModalLabel"></h3>
+    </div>
+    <form action="<?php echo HOST.'sales/distributor-event';?>" method="post">
+        <div class="modal-body">
+            <div class="span5">
+                <div class="control-group">
+                    <label class="control-label span2">Distributor :  </label>
+                    <div class="controls">
+                        <input type="text" name="d_name" id="d_name" value="" readonly />
+                    </div>
+                </div>
+
+                <div class="control-group">
+                    <label class="control-label span2">Reason : </label>
+                    <div class="controls">
+                        <textarea cols="2" rows="2" name="remark"></textarea>
+                    </div>
+                </div>
+                <p style="color: orange;">Close Distributor is irrevocable. Please enable it with</p>
+            </div>
+
+        </div>
+        <div class="modal-footer">
+            <input type="hidden" name="id" id="d_id">
+            <input type="hidden" name="event" id="event">
+            <button class="btn" data-dismiss="modal" aria-hidden="true">Close</button>
+            <button class="btn btn-success">Save changes</button>
+        </div>
+    </form>
+
+</div>
+
+<script>
+  $('#myTab a').click(function (e) {
+      e.preventDefault();
+      $(this).tab('show');
+  })
+
+  $(document).on("click", ".modal-function", function () {
+
+        var Id = $(this).data('id');
+        var Name = $(this).data('name');
+        var Event = $(this).data('event');
+        var Title = $(this).data('title');
+
+        $(".modal-body #d_name").val(Name);
+        $("#d_id").val(Id);
+        $("#event").val(Event);
+        $("#ModalLabel").append(Title);
+
+}); 
+
+ $('#myModal').on('hidden.bs.modal', function (e) {
+
+    $(this).removeData('bs.modal');
+
+        $('#ModalLabel').empty();
+
+    });  
+</script>

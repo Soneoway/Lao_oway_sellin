@@ -1,0 +1,71 @@
+<div class="page-header">
+    <h1>New Bank</h1>
+</div>
+
+<div class='check-money'><?php
+    if (isset($this->messages_success) and $this->messages_success)
+        foreach ($this->messages_success as $message):
+            echo '<div class="alert alert-success">'.$message.'</div>';
+        endforeach;
+
+    if (isset($this->messages) and $this->messages)
+        foreach ($this->messages as $message):
+            echo '<div class="alert alert-error">'.$message.'</div>';
+        endforeach;
+?>
+		<form action="" role='form' method="post" id='add-transaction'>
+
+				<!-- column 1-->
+				<div class='column'>
+					<div class="form-group">
+						<label>Short name:</label>
+						<input type='text' name='name' required='true'/>
+					</div>							
+				</div>
+				<!-- End column 1 -->
+				
+				<!-- column 2 -->
+				<div class='column'>					
+					<div class="form-group">
+						<label>Full name:</label>
+						<input type='text' name='fullname' class='form-control'
+							autocomplete='off'
+						/>
+					</div>
+				</div><!-- end column 2 -->
+				
+				<div class='clearfix'></div>
+				<div class="form-group">
+					<input type='submit' name='add_time' class='form-control btn btn-success' id='btn-add'  value='Save'/>
+					<input type="hidden" name="back_url" id="back_url" value="/bank">
+	    			<button type="button" class="btn btn-danger go-back">Go back</button>	
+				</div>
+		</form>
+		
+		
+</div>
+
+<link rel="stylesheet" href="<?php echo HOST?>css/select2.css" />
+<link rel="stylesheet" href="<?php echo HOST?>css/jquery-ui-1.8.12.custom.css" />
+<link rel="stylesheet" href="<?php echo HOST?>css/jquery.datetimepicker.css" />
+<link rel="stylesheet" href="<?php echo HOST?>css/checkmoney.css" />
+<script src="<?php echo HOST?>js/select2.js"></script>
+<script src="<?php echo HOST?>js/jquery-ui-1.8.12.custom.min.js"></script>
+<script src="<?php echo HOST?>js/jquery.datetimepicker.js"></script>
+
+<script>
+						
+$(function(){
+
+	$("#add-transaction").submit(function(){
+		$("#btn-add").attr('disabled',true);
+	});
+	
+	$('.go-back').click(function(e){
+        window.location.href = $('#back_url').val();
+        return false;
+    });
+
+});
+
+</script>

@@ -1,0 +1,200 @@
+<link rel="stylesheet" type="text/css" href="/css/bootstrap_3.3.7.css"/>
+<link rel="stylesheet" type="text/css" href="/css/bootstrap-year-calendar.css"/>
+<link rel="stylesheet" href="/css/jquery-confirm.min.css">
+<link href="/css/bootstrap-responsive.min.css" rel="stylesheet">
+
+<style>
+
+    a{
+        color: #19bc9c;
+    }
+
+    a:link{
+        text-decoration:none;
+        color: #19bc9c;
+    }
+    
+    a:visited{
+        text-decoration:none;
+        color: #19bc9c;
+    }
+
+    .month-container{
+        margin-bottom: 25px;
+    }
+
+    .calendar table.month tr td.disabled, .calendar table.month tr td.disabled:hover {
+        /*color: #333; */
+    }
+
+</style>
+
+<div class="page-header">
+    <h1>Kerry-Express Holiday</h1>
+</div>
+<?php
+    if (isset($this->messages_success) and $this->messages_success)
+        foreach ($this->messages_success as $message):
+            echo '<div class="alert alert-success">'.$message.'</div>';
+        endforeach;
+
+    if (isset($this->messages) and $this->messages)
+        foreach ($this->messages as $message):
+            echo '<div class="alert alert-error">'.$message.'</div>';
+        endforeach;
+?>
+
+<div class="table-responsive">
+    <div class="calendar"></div>
+</div>
+
+<script type="text/javascript" src="/js/jquery-1.12.4.js"></script>
+<script type="text/javascript" src="/js/bootstrap-year-calendar.js"></script>
+<script src="/js/jquery-confirm.min.js"></script>
+
+<script>
+
+    $(document).ready(function () {
+
+        $('li').removeClass('active');
+        $('.icon-plane').addClass('active');
+
+        var startYear = new Date().getFullYear();
+        var tempYear = startYear;
+
+        var currentYear = new Date().getFullYear();
+        var currentMonth = new Date().getMonth(); 
+        var currentDate = new Date().getDate();
+        var circleDateTime = new Date(currentYear, currentMonth, currentDate).getTime();
+
+        var calendar = $('.calendar').calendar({
+            startYear: startYear,
+            customDayRenderer: function(element, date) {
+                if(date.getTime() == circleDateTime) {
+                    $(element).css('background-color', '#00925f');
+                    $(element).css('color', 'white');
+                    $(element).css('border-radius', '15px');
+                }
+            },
+            renderEnd: function(e) {
+
+                if(tempYear != e.currentYear){
+                    tempYear = e.currentYear;
+                    getDataHoliday(e.currentYear);
+                }
+            }
+        });
+
+        getDataHoliday(startYear);
+
+        $('.calendar').clickDay(function(e){ 
+
+            var yclick = e.date.getFullYear();
+            var mclick = e.date.getMonth();
+            var dclick = e.date.getDate();
+
+            var saveDate = yclick + '-' + ("0" + (mclick + 1)).slice(-2) + '-' + ("0" + (dclick)).slice(-2);
+
+            var getDataSource = calendar.getDataSource();
+
+            var statusHoliday = 'ADD';
+
+            $.each(getDataSource, function(i,object) {
+
+                var getDateHoliday = new Date(object.startDate);
+
+                var getY = getDateHoliday.getFullYear();
+                var getM = getDateHoliday.getMonth();
+                var getD = getDateHoliday.getDate();
+
+                var getholidayForCheck = getY + '-' + ("0" + (getM + 1)).slice(-2) + '-' + ("0" + (getD)).slice(-2);
+
+                if(saveDate == getholidayForCheck){
+                    statusHoliday = 'CANCEL';
+                }
+                
+            });
+
+            if(statusHoliday == 'ADD'){
+
+                $.confirm({
+                title: 'Confirm!',
+                content: 'Are you sure to add holiday?',
+                closeIcon: function(){
+                },
+                buttons: {
+                    Confirm: function(){
+                        
+                        $.ajax({
+                            url: "addholiday",
+                            type: "post",
+                            dataType: "json",
+                            data: {saveDate : saveDate},
+                            success: function(response) {  
+                                if(response.success == 1){
+                                    getDataHoliday(yclick);
+                                }
+                                return true;
+                            } 
+                        });
+
+                    },
+                    close: function(){
+                    }
+                }
+            });
+
+            }else if(statusHoliday == 'CANCEL'){
+
+                $.confirm({
+                title: 'Confirm!',
+                content: 'Are you sure to remove holiday?',
+                closeIcon: function(){
+                },
+                buttons: {
+                    Confirm: function(){
+                        
+                        $.ajax({
+                            url: "cancelholiday",
+                            type: "post",
+                            dataType: "json",
+                            data: {saveDate : saveDate},
+                            success: function(response) {  
+                                if(response.success == 1){
+                                    getDataHoliday(yclick);
+                                }
+                                return true;
+                            } 
+                        });
+
+                    },
+                    close: function(){
+                    }
+                }
+            });
+
+            }
+
+        });
+
+        function getDataHoliday(year){
+
+            $.ajax({
+                url: "getholiday",
+                type: "post",
+                dataType: "json",
+                data: {year : year},
+                success: function(response) {  
+                    if(response.success == 1){
+                        calendar.setDataSource(response.result);
+                    }
+                } 
+            });
+
+        }
+        
+
+    });
+
+
+</script>

@@ -1,0 +1,618 @@
+
+<script type="text/javascript" src="<?php echo HOST ?>js/jquery-ui-1.8.12.custom.min.js"></script>
+<link rel="stylesheet" type="text/css" href="<?php echo HOST ?>css/jquery-ui-1.8.12.custom.css"/>
+
+<link href="<?php echo HOST ?>css/jquery.tagit.css" rel="stylesheet" type="text/css">
+<link href="<?php echo HOST ?>css/tagit.ui-zendesk.css" rel="stylesheet" type="text/css">
+
+<link rel="stylesheet" href="<?php echo HOST ?>css/bootstrap-multiselect.css" type="text/css"/>
+<script type="text/javascript" src="<?php echo HOST ?>js/bootstrap-multiselect.js"></script>
+
+<link href="../css/select2.css" rel="stylesheet"/>
+<script src="../js/select2.js"></script>
+
+<?php
+    //print_r($_GET);
+    //print_r($this->params['cancel']);
+?>
+<form class="form-search form-horizontal" method="get" action="<?php echo HOST ?>sales">
+    <div class="row">
+        <div class="span5">
+            <div class="control-group">
+                <label for="sn" class="span2">Sales Order Number</label>
+                <input id="sn" name="sn" type="text" placeholder="Search by SO" class="span2 form-control" value="<?php isset($this->params['sn']) and printf($this->params['sn']);?>">
+            </div>
+            <?php
+                $userStorage = Zend_Auth::getInstance()->getStorage()->read();
+                if (!My_Staff_Group::inGroup($userStorage->group_id, array(KERRY_STAFF,KERRY_LEADER))){
+            ?>
+            <div class="control-group">
+                <label for="sn_munti" class="span2">Sales Order Number</label>
+                <ul class="form-control" id="sn_munti"><?php
+                    if (isset($this->params['sn_munti']) and $this->params['sn_munti']):
+                        foreach ($this->params['sn_munti'] as $sn_munti)
+                            echo '<li>'.$sn_munti.'</li>';
+                    endif;
+                    ?></ul>
+            </div>
+
+            <!-- <div class="control-group">
+                <label for="payment_no" class="span2">Payment Group Number</label>
+                <input id="payment_no" name="payment_no" type="text" class="input-medium search-query form-control" value="<?php isset($this->params['payment_no']) and printf($this->params['payment_no']);?>">
+            </div> -->
+            <?php } 
+            ?>
+            <div class="control-group">
+                <label for="warehouse_id" class="span2" style="color: blue; font-kerning: bold">Warehouse</label>
+                <select id="warehouse_id" name="warehouse_id[]" class="span3 multiselect" multiple>
+                    <?php 
+                    if (isset($this->params['warehouse_id'])){
+                        if ($this->warehouses_cached): 
+                           $i=0;
+                           foreach ($this->warehouses_cached as $id=>$name):?>
+                                <?php 
+                                    $selected='';
+                                    try{
+                                        $key = array_search($id, $this->params['warehouse_id']);
+                                        $warehouse_id = $this->params['warehouse_id'][$key];
+                                        if($warehouse_id==$id){
+                                            $selected='selected';
+                                        }else{
+                                            $selected='';
+                                        }  
+                                    } catch (Exception $e) {
+                                        $selected='';
+                                    }
+      
+                                ?>
+                                <option value="<?php echo $id;?>" <?php echo $selected;?>   >
+                                    <?php echo $name;?>
+                                </option>
+
+                        <?php endforeach; endif;?>
+                    <?php }else{ ?>
+                        <?php if ($this->warehouses_cached): 
+                            foreach ($this->warehouses_cached as $id=>$name):?>
+                            <option value="<?php echo $id;?>">
+                                <?php echo $name;?>
+                            </option>
+                        <?php endforeach; endif;?>
+                    <?php } ?>
+                </select>
+            </div>
+
+            <div class="control-group">
+                <label for="brand_id" class="span2">Brand</label>
+                <select id="brand_id" class="span3" name="brand_id">
+                    <option value="">Choose</option>
+                    <?php if ($this->brands): foreach ($this->brands as $id=>$name):?>
+                        <option value="<?php echo $id;?>" <?php if (isset($this->params['brand_id']) and $id == $this->params['brand_id']):?> selected<?php endif;?>><?php echo $name;?></option>
+                    <?php endforeach; endif;?>
+                </select>
+            </div>
+
+            <div class="control-group">
+                <label for="cat_id" class="span2">Product Category</label>
+                <select id="cat_id" class="span3" name="cat_id">
+                    <option value="">Choose</option>
+                    <?php if ($this->good_categories): foreach ($this->good_categories as $id=>$name):?>
+                        <option value="<?php echo $id;?>" <?php if (isset($this->params['cat_id']) and $id==$this->params['cat_id']):?> selected<?php endif;?>><?php echo $name;?></option>
+                    <?php endforeach; endif;?>
+                </select>
+            </div>
+
+            <div class="control-group">
+                <label for="good_id" class="span2">Product</label>
+                <select id="good_id" class="span3" name="good_id">
+                    <option value="">Choose</option>
+                    <?php if ($this->goods): foreach ($this->goods as $item):?>
+                        <option value="<?php echo $item['id'];?>" <?php if (isset($this->params['good_id']) and $item['id']==$this->params['good_id']):?> selected<?php endif;?>><?php echo $item['brand_name'] ?> <?php echo $item['name'];?></option>
+                    <?php endforeach; endif;?> 
+                </select>
+            </div>
+
+            <div class="control-group">
+                <label for="good_color" class="span2">Color</label>
+                <select id="good_color" class="span3" name="good_color">
+                    <option value="">Choose</option>
+                    <?php if ($this->goodColors): foreach ($this->goodColors as $key=>$item):?>
+                        <option value="<?php echo $key;?>" <?php if (isset($this->params['good_color']) and $key==$this->params['good_color']):?> selected<?php endif;?>><?php echo $item;?></option>
+                    <?php endforeach; endif;?>
+                </select>
+            </div>
+
+            <div class="control-group">
+                <label for="type" class="span2">Order Type</label>
+                <select id="type" class="span3" name="type">
+                    <option value="">Choose</option>
+                    <option value="1" <?php if (isset($this->params['type']) and $this->params['type']==1):?> selected <?php endif;?>>For Retailer</option>
+                    <!-- <option value="2" <?php if (isset($this->params['type']) and $this->params['type']==2):?> selected <?php endif;?>>For Demo</option> -->
+                    <option value="3" <?php if (isset($this->params['type']) and $this->params['type']==3):?> selected <?php endif;?>>For Staffs</option>
+                    <option value="4" <?php if (isset($this->params['type']) and $this->params['type']==4):?> selected <?php endif;?>>For Lending</option>
+                    <option value="5" <?php if (isset($this->params['type']) and $this->params['type']==5):?> selected <?php endif;?>>For DEMO</option>
+                </select>
+            </div>
+
+             <div class="control-group">
+                <label for="payment_type" class="span2" style="color: blue;">PaymentType</label>
+                <select class="span3" name="payment_type" id="payment_type">
+                    <option value=""> Choose</option>
+                    <option value="CR" <?php if (isset($this->params['payment_type']) and $this->params['payment_type']== CR):?> selected <?php endif;?>>Cash</option>
+                    <option value="CA" <?php if (isset($this->params['payment_type']) and $this->params['payment_type']== CA):?> selected <?php endif;?>>Credit</option>
+                    <option value="Not" <?php if (isset($this->params['payment_type']) and $this->params['payment_type']== Not):?> selected <?php endif;?>>Not Payment</option>
+                </select>
+            </div>
+
+            <div class="control-group">
+                <label for="invoice_number" class="span2">Invoice Number</label>
+                <input id="invoice_number" name="invoice_number" type="text" placeholder="Search by IN" class="span2 form-control" value="<?php isset($this->params['invoice_number']) and printf($this->params['invoice_number']);?>">
+            </div>
+
+            <div class="control-group">
+                <label for="in_munti" class="span2">Invoice Number</label>
+                <ul class="form-control" id="in_munti"><?php
+                    if (isset($this->params['in_munti']) and $this->params['in_munti']):
+                        foreach ($this->params['in_munti'] as $in_munti)
+                            echo '<li>'.$in_munti.'</li>';
+                    endif;
+                    ?></ul>
+            </div>
+            <!-- <?php
+                $userStorage = Zend_Auth::getInstance()->getStorage()->read();
+                if (!My_Staff_Group::inGroup($userStorage->group_id, array(KERRY_STAFF,KERRY_LEADER))){
+            ?>
+             <div class="control-group">
+                <label for="finance_group" class="span2">Finance Group</label>
+                <select name="finance_group" id="finance_group">
+                    <option value="">All</option>
+                    <?php
+                    foreach ($this->finance_group as $key) {
+                        echo '<option value="'.trim($key['finance_group']).'">'.$key['finance_group'].'</option>';
+                    }
+                    ?>
+                </select>
+            </div>
+
+            <div class="control-group">
+                <label class="span2" for="distributor_po">KA</label>
+                <select name="distributor_ka" class="span3" id="distributor_ka">
+                    <option value>---</option>
+                    <?php if (isset($this->distributor_ka)): ?>
+                        <?php foreach ($this->distributor_ka as $_key => $ka): ?>
+                            <option value="<?php echo $_key ?>"
+                                <?php if(isset($this->params['distributor_ka']) && $this->params['distributor_ka'] == $_key) echo "selected" ?>><?php echo $ka['title'] ?></option>
+                        <?php endforeach ?>
+                    <?php endif ?>
+                </select>
+            </div>
+
+            <div class="control-group">
+                <label class="span2" for="distributor_po">PO Number</label>
+                <select name="distributor_po" class="span3" id="distributor_po">
+                    <option value>---</option>
+
+                    <?php if (isset($this->po_list)): ?>
+                        <?php foreach ($this->po_list as $_key => $_po): ?>
+                            <option value="<?php echo $_po['id'] ?>"
+                                <?php if(isset($this->params['distributor_po']) && $this->params['distributor_po'] == $_po['id']) echo "selected" ?>><?php echo $_po['po_name'] ?></option>
+                        <?php endforeach ?>
+                    <?php endif ?>
+                </select>
+            </div>
+
+            <div class="control-group">
+                <label for="myTags" class="span2">Tags</label>
+                <ul class="form-control span3" id="myTags"><?php
+                    if (isset($this->params['tags']) and $this->params['tags']):
+                        foreach ($this->params['tags'] as $ta)
+                            echo '<li>'.$ta.'</li>';
+                    endif;
+                    ?></ul>
+            </div>
+            <?php } ?> -->
+            <div class="control-group">
+                <label for="distributor_name" class="span2">Retailer Name</label>
+                <input id="distributor_name" name="distributor_name" type="text" class="span2 form-control" value="<?php isset($this->params['distributor_name']) and printf($this->params['distributor_name']);?>">
+            </div>
+            
+            <div class="control-group">
+             <label class="span2" for="rank" style="color: blue; font-kerning: bold">Select Retailer Name<span style="color: red">*</span></label>
+                
+                    <select id="rank" name="rank" class="rank span3">
+                        <option value="">---</option>
+
+                        <option value="9" <?php if( isset($this->distributor['rank']) and $this->distributor['rank']==9 ) { ?> selected<?php }?>>7. Laos(9)</option>
+                       
+
+                    </select>
+                
+             </div>       
+                
+        <div class="retailer_name_list"></div>
+
+        </div>
+        <div class="span5">
+            
+            <div class="control-group">
+                <label for="area_id" class="span2">Area</label>
+                <select name="area_id" id="area" class="span3">
+                    <option value="">Choose</option>
+                    <?php if (isset($this->areas) && $this->areas): foreach ($this->areas as $id=>$name):?>
+                        <option value="<?php echo $id;?>" <?php if (isset($this->params['area_id']) and $id==$this->params['area_id']):?> selected="selected"<?php endif;?>><?php echo $name;?></option>
+                    <?php endforeach; endif;?>
+                </select>
+            </div>
+
+            <div class="control-group">
+                <label for="region" class="span2">Province</label>
+                <select name="region_id" id="region" class="span3">
+                    <option value="">Choose</option>
+                    <?php if (isset($this->regions) && $this->regions): foreach ($this->regions as $id=>$name):?>
+                        <option value="<?php echo $id;?>" <?php if (isset($this->params['region_id']) and $id==$this->params['region_id']):?> selected="selected"<?php endif;?>><?php echo $name;?></option>
+                    <?php endforeach; endif;?>
+                </select>
+            </div>
+
+            <div class="control-group">
+                <label for="district" class="span2">District</label>
+                <select name="district_id" id="district" class="span3">
+                    <option value="">Choose</option>
+                    <?php if (isset($this->districts) && $this->districts): foreach ($this->districts as $id=>$name):?>
+                        <option value="<?php echo $id;?>" <?php if (isset($this->params['district_id']) and $id==$this->params['district_id']):?> selected="selected"<?php endif;?>><?php echo $name;?></option>
+                    <?php endforeach; endif;?>
+                </select>
+            </div>
+
+            <!-- <div class="control-group">
+                <label for="campaign" class="span2">Campaign</label>
+                <select name="campaign_id" id="campaign" class="span3">
+                    <option value="">Choose</option>
+                    <?php if (isset($this->campaign) && $this->campaign): foreach ($this->campaign as $id=>$name):?>
+                        <option value="<?php echo $id;?>" <?php if (isset($this->params['campaign_id']) and $id==$this->params['campaign_id']):?> selected="selected"<?php endif;?>><?php echo $name;?></option>
+                    <?php endforeach; endif;?>
+                </select>
+            </div> -->
+            
+
+            <div class="control-group">
+                <label for="payment" class="span2">PAYMENT</label>
+                <input id="payment" name="payment" type="checkbox" class="input-large search-query form-control" value="1" <?php if (isset($this->params['payment']) and $this->params['payment']):?>checked="checked" <?php endif;?>>
+            </div>
+            <div class="control-group">
+                <label for="outmysql_time" class="span2">OUT OF THE WAREHOUSE</label>
+                <input id="outmysql_time" name="outmysql_time" type="checkbox" class="input-large search-query form-control" value="1" <?php if (isset($this->params['outmysql_time']) and $this->params['outmysql_time']):?>checked="checked" <?php endif;?>>
+            </div>
+            <div class="control-group">
+                <label for="created_at_from" class="span2">Order Time From</label>
+                <input type="text" class="form-control search-query date" id="created_at_from" name="created_at_from" value="<?php isset($this->params['created_at_from']) and printf($this->params['created_at_from']);?>">
+            </div>
+            <div class="control-group">
+                <label for="created_at_to" class="span2">Order Time To</label>
+                <input type="text" class="form-control search-query date" id="created_at_to" name="created_at_to" value="<?php isset($this->params['created_at_to']) and printf($this->params['created_at_to']);?>">
+            </div>
+
+            <div class="control-group">
+                <label for="invoice_time_from" class="span2" style="color: blue; font-kerning: bold">Invoice Time From</label>
+                <input type="text" class="form-control search-query date" id="invoice_time_from" name="invoice_time_from" value="<?php isset($this->params['invoice_time_from']) and printf($this->params['invoice_time_from']);?>">
+            </div>
+            <div class="control-group">
+                <label for="invoice_time_to" class="span2" style="color: blue; font-kerning: bold">Invoice Time To</label>
+                <input type="text" class="form-control search-query date" id="invoice_time_to" name="invoice_time_to" value="<?php isset($this->params['invoice_time_to']) and printf($this->params['invoice_time_to']);?>">
+            </div>
+            <!-- <div class="control-group">
+                <label for="finance_confirm_time_from" class="span2">Finance Confirm Time From</label>
+                <input type="text" class="form-control search-query date" id="finance_confirm_time_from" name="finance_confirm_time_from" value="<?php isset($this->params['finance_confirm_time_from']) and printf($this->params['finance_confirm_time_from']);?>">
+            </div>
+            <div class="control-group">
+                <label for="finance_confirm_time_to" class="span2">Finance Confirm Time To</label>
+                <input type="text" class="form-control search-query date" id="finance_confirm_time_to" name="finance_confirm_time_to" value="<?php isset($this->params['finance_confirm_time_to']) and printf($this->params['finance_confirm_time_to']);?>">
+            </div> -->
+            <!-- <div class="control-group">
+                <label for="status" class="span2">Status</label>
+                <select id="status" class="span3" name="status">
+                    <option value="1" <?php if (isset($this->params['status']) and $this->params['status']==1):?> selected<?php endif;?>>Active</option>
+                    <option value="2" <?php if (isset($this->params['status']) and $this->params['status']==2):?> selected<?php endif;?>>Expired</option>
+                </select>
+            </div> -->
+            <?php
+                $userStorage = Zend_Auth::getInstance()->getStorage()->read();
+                if (!My_Staff_Group::inGroup($userStorage->group_id, array(KERRY_STAFF,KERRY_LEADER))){
+            ?>
+            
+<!--             <div class="control-group">
+                <label for="text" class="span2">Remark</label>
+                <input id="text" name="text" type="text" class="input-medium search-query form-control" value="<?php isset($this->params['text']) and printf($this->params['text']);?>">
+            </div> -->
+
+	        <div class="control-group">
+                <label for="good_id" class="span2">Discount</label>
+                <input type="checkbox" name="sale_off_percent" id="sale_off_percent" value="1">
+            </div>            
+            <div class="control-group">
+                <label for="user_id" class="span2">Order Maker</label>
+                <select id="user_id" class="span3" name="user_id">
+                    <option value="">Choose</option>
+                    <?php if ($this->staffs_cached): foreach ($this->staffs_cached as $id=>$name):?>
+                        <option value="<?php echo $id;?>" <?php if (isset($this->params['user_id']) and $id==$this->params['user_id']):?> selected<?php endif;?>><?php echo $name;?></option>
+                    <?php endforeach; endif;?>
+                </select>
+            </div>
+            <?php } ?>
+            <!-- <div class="control-group">
+                <label for="cancel" class="span2">Cancel or Not</label>
+                <select name="cancel" id="cancel" class="span3">
+                    <option value="">Choose</option>
+                    <option value="0" <?php if (isset($this->params['cancel']) and $this->params['cancel']==0):?> selected<?php endif;?>>Not Cancel</option>
+                    <option value="1" <?php if (isset($this->params['cancel']) and $this->params['cancel']==1):?> selected<?php endif;?>>Canceled</option>
+                </select>
+            </div> -->
+            <div class="control-group">
+                <label for="order_no_payment" class="span2">Order Not Payment</label>
+                <input id="order_no_payment" name="order_no_payment" type="checkbox" class="input-large search-query form-control" value="1" <?php if (isset($this->params['order_no_payment']) and $this->params['order_no_payment']):?>checked="checked" <?php endif;?>>
+            </div>
+
+            <!-- <div class="control-group">
+                <label for="order_packed_sim" class="span2">Order PACKED SIM</label>
+                <input id="order_packed_sim" name="order_packed_sim" type="checkbox" class="input-large search-query form-control" value="1" <?php if (isset($this->params['order_packed_sim']) and $this->params['order_packed_sim']):?>checked="checked" <?php endif;?>>
+            </div> -->
+        </div>
+    </div>
+<br/><br/>
+    <button type="submit" class="btn btn-primary">Search</button>
+    <!-- <button type="reset" class="btn btn-warning">Reset</button> -->
+    <button type="submit" name="export" value="13" class="btn btn-success">Export</button>
+    <button type="submit" name="export" value="19" class="btn btn-success">Export By Imei</button>
+    <button type="submit" name="export" value="1" class="btn btn-success">Export By Model</button>
+    <button type="submit" name="export" value="10" class="btn btn-success">Export By Distributor</button>
+    <button type="submit" name="export" value="30" class="btn btn-success">Finance Export</button>
+
+    
+    <?php
+        $userStorage = Zend_Auth::getInstance()->getStorage()->read();
+        if (!My_Staff_Group::inGroup($userStorage->group_id, array(KERRY_STAFF,KERRY_LEADER))){
+    ?>
+<!--     <button type="submit" name="export" value="1" class="btn btn-success">Sales By Model</button>
+    <button type="submit" name="export" value="4" style="display: none;" class="btn btn-success">IMEI Export</button>
+    <button type="submit" name="export" value="7" class="btn btn-success">Output VAT Report</button>
+    <button type="submit" name="export" value="20" class="btn btn-success">Output VAT Report New</button>
+    <button type="submit" name="export" value="11" class="btn btn-success">Sale Master Data</button>
+    <button type="submit" name="export" value="19" class="btn btn-success">Sale Master Data Original</button> -->
+
+    <!-- <button type="submit" name="export" value="18" class="btn btn-success">Sale Details</button> -->
+<!--     <br/><br/> -->
+    
+    <!-- <button type="submit" name="export" value="12" class="btn btn-success">Cash Collection</button> -->
+<!--     <br/><br/> -->
+<!--     <button type="submit" name="export" value="10" class="btn btn-success">Export By Distributor</button>
+    <button type="submit" name="export" value="8" class="btn btn-success">Order Status</button>
+    
+    <button type="submit" name="export" value="9" class="btn btn-success">Export By Province</button> -->
+
+    <?php } ?>
+    <?php
+        $userStorage = Zend_Auth::getInstance()->getStorage()->read();
+        if (My_Staff_Group::inGroup($userStorage->group_id, array(ADMINISTRATOR_ID,OPPO_BRAND_SHOP_SERVICE,CHECK_MONEY))){
+    ?>
+<!--     <button type="submit" name="export" value="14" class="btn btn-success">Export Service Job Number</button>
+    <button type="submit" name="export" value="15" class="btn btn-success">Export Cash Collection For Service</button> -->
+    <?php } ?>
+
+    <?php
+        $userStorage = Zend_Auth::getInstance()->getStorage()->read();
+        if (My_Staff_Group::inGroup($userStorage->group_id, array(ADMINISTRATOR_ID,OPPO_BRAND_SHOP,CHECK_MONEY))){
+    ?>
+<!--     <button type="submit" name="export" value="16" class="btn btn-success">Export Cash Collection For Brand Shop</button> -->
+    <?php } ?>
+<!--    
+    <button type="submit" name="export" value="2" class="btn btn-success">Export For Finance</button>
+    <button type="submit" name="export" value="3" class="btn btn-success">Export For Finance 2</button> 
+    <button type="submit" name="export" value="5" class="btn btn-success">Export For Campaign</button> 
+-->
+
+    <?php
+        $userStorage = Zend_Auth::getInstance()->getStorage()->read();
+        if (My_Staff_Group::inGroup($userStorage->group_id, array(ADMINISTRATOR_ID,CHECK_MONEY,FINANCE))){
+    ?>
+    <br/><br/>
+ <!--    <button type="submit" name="export" value="17" class="btn btn-warning">Export Pending</button>
+    <button type="submit" name="export" class="btn btn-warning">Exportລາຍການຊື້ຂາຍtesting</button> -->
+    <?php } ?>
+</form>
+<script async="async">
+    //getDistributor(<?php echo ((isset($this->params['d_id']) and $this->params['d_id']) ? $this->params['d_id'] : '');?>);
+
+    options = {
+        selectAllText: 'Select All',
+        includeSelectAllOption: true,
+        includeSelectAllIfMoreThan: 3,
+        disableIfEmpty: true
+    };
+
+    function multi() {
+        $('.multiselect').multiselect(options);
+    }
+
+    function getDistributor(currentDistributorID) {
+
+        $.ajax({
+            url: '<?php echo HOST ?>get/distributor-cached',
+            type: 'post',
+            dataType: 'json'
+        })
+            .done(function(data) {
+                if (!data || data.no_data) return false;
+                $('#d_id option').not(':first').remove();
+                d_list = [];
+                $.each(data, function(key, value) {
+                    var selected = currentDistributorID == key ? 'selected' :'';
+                    var op = '<option value="'+key+'" ' + selected + '>'+value.store_code+' - '+value.title+'</option>';
+                    d_list.push(op);
+                });
+                document.getElementById('d_id').innerHTML = d_list.join();
+
+                var jets = new Jets({
+                    searchTag: '#SearchBox',
+                    contentTag: '#d_id'
+                });
+            })
+            .fail(function() {
+                console.log("error");
+            })
+            .always(function() {
+                /*console.log("complete");*/
+            });
+
+    }
+
+    $(document).ready(function () {
+        $("#cat_id, #good_id, #good_color, #type, #payment_type, #rank, #area, #region, #district, #user_id, #brand_id").select2();
+
+        multi();
+
+        $("form").submit(function(){
+
+            var condition1 = $('#sn').val();
+            var condition2 = $('#sn_munti').tagit('assignedTags');
+            var condition3 = $('#payment_no').val();
+            var condition4 = $('#invoice_number').val();
+            var condition5 = $('#in_munti').val();
+
+            if(condition1 != '' || condition2 != '' || condition3 != '' || condition4 != '' || condition5 != ''){
+                return true;
+            }
+
+            var check = 0;
+
+            var params1 = $('#created_at_from').val();
+            var params2 = $('#created_at_to').val();
+            var params3 = $('#invoice_time_from').val();
+            var params4 = $('#invoice_time_to').val();
+            var params5 = $('#finance_confirm_time_from').val();
+            var params6 = $('#finance_confirm_time_to').val();
+
+            if(params1 != '' && params2 != ''){
+                check++;
+            }
+
+            if(params3 != '' && params4 != ''){
+                check++;
+            }
+
+            if(params5 != '' && params6 != ''){
+                check++;
+            }
+
+            if(check == 0){
+                alert('กรุณาระบุวันที่ต้องการจะที่จะค้นหา');
+                return false;
+            }
+
+        });
+
+        <?php if(isset($this->params['finance_group']) && $this->params['finance_group']){?>
+            $('#finance_group').val('<?php echo $this->params['finance_group'];?>');
+        <?php } ?>
+
+        <?php if(isset($this->rank)) { ?>
+            $('#rank').val(<?= $this->rank ?>);
+            get_distributor_cached_for_search(<?= $this->rank ?>);
+        <?php }?>
+
+        $('.rank').change(function(event) {
+            get_distributor_cached_for_search($(this).val());
+          });
+
+        function get_distributor_cached_for_search(rank_id){
+
+            var rank_id = rank_id;
+                  $.ajax({
+                      url: '<?php echo HOST ?>get/distributor-cached-for-search',
+                      type: 'POST',
+                      dataType: 'html',
+                      data: {rank_id: rank_id},
+                  })
+                  .done(function(data) {
+                      $('.retailer_name_list').empty();
+                      $('.retailer_name_list').append(data);
+                        var jets = new Jets({
+                        searchTag: '#SearchBox',
+                        contentTag: '#d_id'
+                    });
+                        <?php if(isset($this->d_id)){ ?>
+                            $('#d_id').val(<?= $this->d_id ?>);
+                        <?php }?>
+                      console.log("success");
+                  })
+                  .fail(function() {
+                      console.log("error");
+                  })
+                  .always(function() {
+                      console.log("complete");
+                  });
+
+        }
+
+        $('#sn_munti').keyup(function(event) {
+
+            var code = event.keyCode || event.which;
+            if(code == 13 || code == 32) { //Enter keycode,Spacebar
+
+                var text = $(this).text();
+
+                text = text.replace(/\×/g,'[|]');
+
+                var arr_text = text.split('[|]');     
+
+                $('#sn_munti').tagit('removeAll');
+
+                $.each(arr_text, function(index,value) {
+
+                    if(value.length > 1){
+                        var arr_text_sub = value.split(' ');
+                        $.each(arr_text_sub, function(index_sub,value_sub) {
+                            $('#sn_munti').tagit('createTag',value_sub);
+                        });
+                    }else{
+                        $('#sn_munti').tagit('createTag',value);
+                    }
+
+                });
+
+             }
+
+        });
+
+        $('#in_munti').keyup(function(event) {
+
+            var code = event.keyCode || event.which;
+            if(code == 13 || code == 32) { //Enter keycode,Spacebar
+
+                var text = $(this).text();
+
+                text = text.replace(/\×/g,'[|]');
+
+                var arr_text = text.split('[|]');     
+
+                $('#in_munti').tagit('removeAll');
+
+                $.each(arr_text, function(index,value) {
+
+                    if(value.length > 1){
+                        var arr_text_sub = value.split(' ');
+                        $.each(arr_text_sub, function(index_sub,value_sub) {
+                            $('#in_munti').tagit('createTag',value_sub);
+                        });
+                    }else{
+                        $('#in_munti').tagit('createTag',value);
+                    }
+
+                });
+
+             }
+
+        });
+
+
+    });
+
+</script>

@@ -1,0 +1,238 @@
+<script type="text/javascript" src="<?php echo HOST ?>js/jquery-ui-1.8.12.custom.min.js"></script>
+<link rel="stylesheet" type="text/css" href="<?php echo HOST ?>css/jquery-ui-1.8.12.custom.css"/>
+<link rel="stylesheet" href="<?php echo HOST ?>css/bootstrap-multiselect.css" type="text/css"/>
+<script type="text/javascript" src="<?php echo HOST ?>js/bootstrap-multiselect.js"></script>
+<link href="../css/select2.css" rel="stylesheet"/>
+<script src="../js/select2.js"></script>
+
+<form id="form" name="form" class="form-search form-horizontal" action="<?php echo HOST ?>warehouse/storage">
+    <div class="row">
+        <div class="span5">
+           <div class="control-group">
+            <label for="warehouse_id" class="span2" style="color: blue; font-kerning: bold">Warehouse</label>
+            <select id="warehouse_id" name="warehouse_id[]" class="span3" multiple>
+
+                <?php 
+                if (isset($this->params['warehouses'])){
+                    if ($this->warehouses_cached): 
+                       $i=0;
+                       foreach ($this->warehouses_cached as $id => $name) :?>
+                        <?php 
+                        $selected='';
+                        try{
+                            $key = array_search($id, $this->params['warehouses']);
+                            $warehouse_id = $this->params['warehouses'][$key];
+                            if($warehouse_id==$id){
+                                $selected='selected';
+                            }else{
+                                $selected='';
+                            }  
+                        } catch (Exception $e) {
+                            $selected='';
+                        }
+                        
+                        ?>
+                        <option value="<?php echo $id;?>" <?php echo $selected;?>   >
+                            <?php echo $name;?>
+                        </option>
+
+                    <?php endforeach; ?>
+                <?php endif; ?>
+            <?php }else{ ?>
+                <?php if ($this->warehouses_cached): ?>
+                    <?php foreach ($this->warehouses_cached as $id => $name):?>
+                        <option value="<?php echo $id;?>">
+                            <?php echo $name;?>
+                        </option>
+                    <?php endforeach; ?>
+                <?php endif; ?>
+            <?php } ?>
+
+        </select>
+    </div>
+
+</div>
+
+<div class="span5">
+    <div class="control-group">
+        <label for="brand_id" class="span2">Brand</label>
+        <select id="brand_id" class="span3" name="brand_id">
+            <option value="">All Brand</option>
+
+            <?php if ($this->brands) : ?>
+                <?php foreach ($this->brands as $id => $name) : ?>
+                    <option value="<?php echo $id;?>" <?php if (isset($this->params['brand_id']) and $id == $this->params['brand_id']):?> selected <?php endif;?> >
+                        <?php echo $name;?>
+                    </option>
+                <?php endforeach; ?>
+            <?php endif; ?> 
+
+        </select>
+    </div>
+
+    <div class="control-group">
+        <label for="cat_id" class="span2">Product Category</label>
+        <select id="cat_id" class="span3" name="cat_id">
+            <option value="">All Category</option>
+
+            <?php if ($this->goodCategories) : ?>
+                <?php foreach ($this->goodCategories as $id => $name) : ?>
+                    <option value="<?php echo $id;?>" <?php if (isset($this->params['cat_id']) and $id==$this->params['cat_id']):?> selected <?php endif;?> >
+                        <?php echo $name;?>
+                    </option>
+                <?php endforeach; ?>
+            <?php endif; ?>
+
+        </select>
+    </div>
+
+    <div class="control-group">
+        <label for="good_id" class="span2">Product</label>
+        <select id="good_id" class="span3" name="good_id[]" multiple>
+
+            <?php if (isset($this->params['good'])) { ?> 
+                <?php if ($this->goods_cached): ?>
+                    <?php $i = 0; ?>
+                    <?php foreach ($this->goods_cached as $item) : ?>
+                        <?php 
+                        $selected='';
+                        try{
+                            $key = array_search($item['id'], $this->params['good']);
+                            $good_id = $this->params['good'][$key];
+                            if($good_id == $item['id']){
+                                $selected='selected';
+                            }else{
+                                $selected='';
+                            }  
+                        } catch (Exception $e) {
+                            $selected='';
+                        }
+                        ?>
+                        <option value="<?php echo $item['id'];?>" <?php echo $selected;?>>
+                            <?php echo $item['brand_name'] ?> <?php echo $item['name'];?>
+                        </option>
+                    <?php endforeach; ?>
+                <?php endif; ?>
+            <?php }else{ ?>
+                <?php if ($this->goods_cached): ?>
+                    <?php foreach ($this->goods_cached as $item):?>
+                        <option value="<?php echo $item['id'];?>">
+                            <?php echo $item['brand_name'] ?> <?php echo $item['name'];?>
+                        </option>
+                    <?php endforeach; ?>
+                <?php endif; ?>
+            <?php } ?>
+
+        </select>
+    </div>
+
+    <div class="control-group">
+        <label for="good_color_id" class="span2">Color</label>
+        <select id="good_color_id" class="span3" name="good_color_id[]" multiple>
+
+            <?php 
+            if (isset($this->params['good'])){
+                if ($this->goodColors): 
+                   $i=0;
+                   foreach ($this->goodColors as $item) :?>
+                    <?php 
+                    $selected='';
+                    try{
+                        $key = array_search($item['id'], $this->params['good_color']);
+                        $good_color_id = $this->params['good_color'][$key];
+                        if($good_color_id == $item['id']){
+                            $selected='selected';
+                        }else{
+                            $selected='';
+                        }  
+                    } catch (Exception $e) {
+                        $selected='';
+                    }
+
+                    ?>
+                    <option value="<?php echo $item['id'];?>" <?php echo $selected;?>   >
+                        <?php echo $item['name'];?>
+                    </option>
+
+                <?php endforeach; ?>
+            <?php endif; ?>
+        <?php } ?>
+
+    </select>
+</div>
+</div>
+</div>
+
+<div class="row">
+    <div class="span10">
+        <div class="controls">
+            <button name="search" value="1" type="submit" class="btn btn-primary">Search</button>
+            <button type="reset" class="btn btn-warning">Reset</button>
+            <button type="submit" name="export" value="1" class="btn btn-success">Export</button>
+            <button type="submit" name="export" value="2" class="btn btn-success">Export IMEI</button><!-- update by PungPond -->
+        </div>
+    </div>
+</div>
+</form>
+
+<script>
+
+
+    $(document).ready(function () {
+        $("#warehouse_id, #cat_id, #good_id, #good_color_id, #brand_id").select2();
+
+        $("#brand_id").change(function() {
+            $("#good_id").empty();
+            $("#good_id").select2("val", "");
+            $("#good_color_id").select2("val", "");
+        });
+        
+        $("#cat_id").change(function() {
+            $("#good_id").empty();
+            $("#good_id").select2("val", "");
+            $("#good_color_id").select2("val", "");
+        });
+
+        $("#good_id").change(function() {
+            $("#good_color_id").select2("val", "");
+        })
+
+        $('#cat_id, #good_id, #brand_id').change(function(){
+            $(this).after('<span class="loading"></span>');
+            var div_parent = $(this).parent().parent().parent();
+            var _self = $(this);
+            var cat_id = $('#cat_id').val();
+            var brand_id = $('#brand_id').val();
+
+            if (_self.attr('id')=='cat_id')
+                $('#good_id').find('option:not(:first)').remove();
+
+            var good_id = $('#good_id').val();
+
+            $('#good_color_id').find('option:not(:first)').remove();
+
+            $('#num, #price').val('');
+
+            $.get("/get/load",
+                {cat_id: cat_id, good_id: good_id, brand_id: brand_id}
+                ,function(data,status){
+                    var data = $.parseJSON( data );
+
+                    if (data.goods){
+                        var obj = data.goods;
+                        div_parent.find('#good_id').html('<option value="0">Please select</option>');
+                        for (var i = 0; i < obj.length; i++) {
+                            $('#good_id').append('<option value="'+obj[i]['id']+'">'+obj[i]['brand_name']+' '+obj[i]['name']+'</option>');
+                        }
+                    }
+                    if (data.colors){
+                        var obj = data.colors;
+                        for (var i = 0; i < obj.length; i++) {
+                            $('#good_color_id').append('<option value="'+obj[i]['id']+'">'+obj[i]['name']+'</option>');
+                        }
+                    }
+                    _self.nextAll('.loading').remove();
+                });
+        });
+    });
+</script>

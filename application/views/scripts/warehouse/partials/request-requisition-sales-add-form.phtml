@@ -1,0 +1,229 @@
+    <?php if (isset($this->changeSalesProduct) and $this->changeSalesProduct):?>
+                    
+        <?php foreach ($this->changeSalesProduct as $item):
+                    if($item['cat_id'] == PHONE_CAT_ID)
+                        $phone_id = 1;
+                    if($item['cat_id'] == DIGITAL_CAT_ID)
+                        $digital_id = 1;
+            ?>
+
+            <div class="row">
+                <div class="span12">
+
+                    <label class="span2">Category <span style="color: red">*</span>
+                        <select class="span2 cat_id" name="cat_id[]" required="required" <?php if (isset($this->disabledFields) and is_array($this->disabledFields) and in_array('cat_id', $this->disabledFields)) {?> disabled<?php } ?>>
+                            <option value="">Please select</option>
+                            <?php foreach ($this->good_categories as $good_category):?>
+                                <option value="<?php echo $good_category->id;?>" <?php if ($good_category->id == $item->cat_id):?> selected<?php endif;?>><?php echo $good_category->name;?></option>
+                            <?php endforeach;?>
+                        </select>
+                    </label>
+
+                    <label class="span2">Product <span style="color: red">*</span>
+                        <select class="span2 good_id" name="good_id[]" required="required" <?php if (isset($this->disabledFields) and is_array($this->disabledFields) and in_array('good_id', $this->disabledFields)) {?> disabled<?php } ?>>
+                            <option value="">Please select</option>
+                            <?php foreach ($this->goods_cached as $id=>$name):?>
+                                <option value="<?php echo $id;?>" <?php if ($id == $item->good_id):?> selected<?php endif;?>><?php echo $name;?></option>
+                            <?php endforeach;?>
+                        </select>
+                    </label>
+
+                    <label class="span2">Color <span style="color: red">*</span>
+                        <select class="span2 good_color" name="good_color[]" required="required" <?php if (isset($this->disabledFields) and is_array($this->disabledFields) and in_array('good_color', $this->disabledFields)) {?> disabled<?php } ?>>
+                            <option value="">Please select</option>
+                            <?php foreach ($this->good_colors_cached as $id=>$name):?>
+                                <option value="<?php echo $id;?>" <?php if ($id == $item->good_color):?> selected<?php endif;?>><?php echo $name;?></option>
+                            <?php endforeach;?>
+                        </select>
+                    </label>
+
+                    <label class="span1">Quantity <span style="color: red">*</span>
+                        <input type="number" min="1" class="span1 num" name="num[]" required="required" maxlength="5" style="width: 50px" value="<?php printf($item->num);?>" <?php if (isset($this->disabledFields) and is_array($this->disabledFields) and in_array('num', $this->disabledFields)) {?> disabled<?php } ?> />
+                    </label>
+
+            
+
+                        <?php if ( !(isset($this->hideFields) and is_array($this->hideFields) and in_array('num_receive', $this->hideFields)) and $item['cat_id'] == ACCESS_CAT_ID ) {?>
+                            <label class="span1">Receive <span style="color: red">*</span>
+                                <input type="number" class="span1 num_receive" name="num_receive[<?php if(isset($item->id)) echo $item->id;?>]" required="required" maxlength="5" style="width: 50px" value="<?php echo ($item->receive ? $item->receive : 0);?>" <?php if (isset($this->disabledFields) and is_array($this->disabledFields) and in_array('num_receive', $this->disabledFields)) {?> disabled<?php } ?>/>
+                            </label>
+                        <?php } ?>
+
+                        <?php if ( !(isset($this->hideFields) and is_array($this->hideFields) and in_array('num_lost', $this->hideFields)) ) {?>
+                            <label class="span1">Not Received <span style="color: red">*</span>
+                                <input type="number" name="num_lost[<?php if(isset($item->id)) echo $item->id;?>]" maxlength="5" style="width: 50px" value="<?php echo ($item->num - $item->receive);?>" <?php if (isset($this->disabledFields) and is_array($this->disabledFields) and in_array('num_lost', $this->disabledFields)) {?> disabled<?php } ?> />
+                            </label>
+                        <?php } ?>
+
+                 
+
+                    <?php if ( !(isset($this->hideFields) and is_array($this->hideFields) and in_array('remove-sales', $this->hideFields)) ) {?>
+                        <label class="span1">&nbsp;<button type="button" class="btn btn-danger remove-sales"><i class="icon-minus"></i></button></label>
+                    <?php } ?>
+
+                    <input type="hidden" name="ids[]" class="ids" value="<?php if(isset($item->id)) echo $item->id;?>">
+                </div>
+            </div>
+
+        <?php endforeach;?>
+    
+     <div class="row"> 
+            <div class="span4">
+                   <?php
+             if (isset($phone_id) and $phone_id == 1) :?>
+                        <?php if ( !(isset($this->hideFields) and is_array($this->hideFields) and in_array('sns', $this->hideFields)) ) : ?>
+                            <label class="span4">Serial Number <span style="color: red">* <strong class="num_imei"><?php if (isset($this->changeSalesImeisList) and $this->changeSalesImeisList) echo count($this->changeSalesImeisList); else {?>0<?php }?></strong> SN(s)</span>
+                                <br />
+                                <textarea name="sns" cols="10" rows="8" required="required" class="imei" <?php if (isset($this->disabledFields) and is_array($this->disabledFields) and in_array('sns', $this->disabledFields)) {?> disabled<?php } ?>><?php
+                                    if (isset($this->changeSalesImeisList) and $this->changeSalesImeisList){
+                                        foreach ($this->changeSalesImeisList as $j=>$im){
+                                            if ($j > 0)
+                                                echo "\n".$im;
+                                            else
+                                                echo $im;
+                                        }
+                                    }
+                                    ?></textarea>
+                            </label>
+                        <?php endif; ?>
+            </div>
+            
+            <div class="span4">
+            
+                  <?php if ( !(isset($this->hideFields) and is_array($this->hideFields) and in_array('sns_receive', $this->hideFields)) ) {?>
+                            <label class="span4">Receive <span style="color: red">* <strong class="num_imei"><?php if (isset($this->changeSalesImeisReceivedList) and $this->changeSalesImeisReceivedList) echo count($this->changeSalesImeisReceivedList); else {?>0<?php }?></strong> SN(s)</span>
+                                <br />
+                                <textarea name="sns_receive" cols="10" rows="8" required="required" class="imei" <?php if (isset($this->disabledFields) and is_array($this->disabledFields) and in_array('sns_receive', $this->disabledFields)) {?> disabled<?php } ?>><?php
+                                    if (isset($this->changeSalesImeisReceivedList) and $this->changeSalesImeisReceivedList){
+                                        foreach ($this->changeSalesImeisReceivedList as $j=>$im){
+                                            if ($j > 0)
+                                                echo "\n".$im;
+                                            else
+                                                echo $im;
+                                        }
+                                    }
+                                    ?></textarea>
+                            </label>
+                        <?php } ?>
+            </div>
+            
+            
+            <div class="span4">
+                  <?php if ( !(isset($this->hideFields) and is_array($this->hideFields) and in_array('sns_lost', $this->hideFields)) ) {?>
+                            <label class="span4">Not Received <span style="color: red">* <strong class="num_imei"><?php if (isset($this->changeSalesImeisLostList) and $this->changeSalesImeisLostList) echo count($this->changeSalesImeisLostList); else {?>0<?php }?></strong> SN(s)</span>
+                                <br />
+                                <textarea name="sns_lost" cols="10" rows="8" required="required" disabled class="imei" <?php if (isset($this->disabledFields) and is_array($this->disabledFields) and in_array('sns_lost', $this->disabledFields)) {?> disabled<?php } ?>><?php
+                                    if (isset($this->changeSalesImeisLostList) and $this->changeSalesImeisLostList){
+                                        foreach ($this->changeSalesImeisLostList as $j=>$im){
+                                            if ($j > 0)
+                                                echo "\n".$im;
+                                            else
+                                                echo $im;
+                                        }
+                                    }
+                                    ?></textarea>
+                            </label>
+                        <?php }endif; ?>
+            </div>
+     </div>
+     
+     
+       <div class="row"> 
+            <div class="span4">
+                   <?php
+             if (isset($digital_id) and $digital_id == 1) :?>
+                        <?php if ( !(isset($this->hideFields) and is_array($this->hideFields) and in_array('sns_digital', $this->hideFields)) ) : ?>
+                            <label class="span4">Serial Number (DIGITAL) <span style="color: red">* <strong class="num_imei"><?php if (isset($this->changeSalesImeisDigitalList) and $this->changeSalesImeisDigitalList) echo count($this->changeSalesImeisDigitalList); else {?>0<?php }?></strong> SN(s)</span>
+                                <br />
+                                <textarea name="sns_digital" cols="10" rows="8" required="required" class="digital" <?php if (isset($this->disabledFields) and is_array($this->disabledFields) and in_array('sns', $this->disabledFields)) {?> disabled<?php } ?>><?php
+                                    if (isset($this->changeSalesImeisDigitalList) and $this->changeSalesImeisDigitalList){
+                                        foreach ($this->changeSalesImeisDigitalList as $j=>$im){
+                                            if ($j > 0)
+                                                echo "\n".$im;
+                                            else
+                                                echo $im;
+                                        }
+                                    }
+                                    ?></textarea>
+                            </label>
+                        <?php endif;?>
+            </div>
+            
+            <div class="span4">
+                  <?php if ( !(isset($this->hideFields) and is_array($this->hideFields) and in_array('sns_digital_receive', $this->hideFields)) ) {?>
+                            <label class="span4">Receive DIGITAL <span style="color: red">* <strong class="num_imei"><?php if (isset($this->changeSalesImeisReceivedDigitalList) and $this->changeSalesImeisReceivedDigitalList) echo count($this->changeSalesImeisReceivedDigitalList); else {?>0<?php }?></strong> SN(s)</span>
+                                <br />
+                                <textarea name="sns_digital_receive" cols="10" rows="8" required="required" class="digital" <?php if (isset($this->disabledFields) and is_array($this->disabledFields) and in_array('sns_receive', $this->disabledFields)) {?> disabled<?php } ?>><?php
+                                    if (isset($this->changeSalesImeisReceivedDigitalList) and $this->changeSalesImeisReceivedDigitalList){
+                                        foreach ($this->changeSalesImeisReceivedDigitalList as $j=>$im){
+                                            if ($j > 0)
+                                                echo "\n".$im;
+                                            else
+                                                echo $im;
+                                        }
+                                    }
+                                    ?></textarea>
+                            </label>
+                        <?php }  ?>
+            </div>
+            
+            
+            <div class="span4">
+                  <?php if ( !(isset($this->hideFields) and is_array($this->hideFields) and in_array('sns_digital_lost', $this->hideFields)) ) {?>
+                            <label class="span4">Not Received DIGITAL <span style="color: red">* <strong class="num_imei"><?php if (isset($this->changeSalesImeisLostDigitalList) and $this->changeSalesImeisLostDigitalList) echo count($this->changeSalesImeisLostDigitalList); else {?>0<?php }?></strong> SN(s)</span>
+                                <br />
+                                <textarea name="sns_digital_lost" cols="10" rows="8" required="required" disabled class="digital" <?php if (isset($this->disabledFields) and is_array($this->disabledFields) and in_array('sns_lost', $this->disabledFields)) {?> disabled<?php } ?>><?php
+                                    if (isset($this->changeSalesImeisLostDigitalList) and $this->changeSalesImeisLostDigitalList){
+                                        foreach ($this->changeSalesImeisLostDigitalList as $j=>$im){
+                                            if ($j > 0)
+                                                echo "\n".$im;
+                                            else
+                                                echo $im;
+                                        }
+                                    }
+                                    ?></textarea>
+                            </label>
+                        <?php } endif;  ?>
+            </div>
+     </div>
+     
+        
+    
+
+
+    <?php else:?>
+        <div class="row">
+            <div class="span12">
+
+                <label class="span2">Category <span style="color: red">*</span>
+                    <select class="span2 cat_id" name="cat_id[]" required="required">
+                        <option value="">Please select</option>
+                        <?php foreach ($this->good_categories as $good_category):?>
+                            <option value="<?php echo $good_category->id;?>"><?php echo $good_category->name;?></option>
+                        <?php endforeach;?>
+                    </select>
+                </label>
+
+                <label class="span2">Product <span style="color: red">*</span>
+                    <select class="span2 good_id" name="good_id[]" required="required">
+                        <option value="">Please select</option>
+                    </select>
+                </label>
+
+                <label class="span2">Color <span style="color: red">*</span>
+                    <select class="span2 good_color" name="good_color[]" required="required">
+                        <option value="">Please select</option>
+                    </select>
+                </label>
+
+                <label class="span1">Quantity <span style="color: red">*</span>
+                    <input type="number" min="1" class="span1 num" name="num[]" required="required" maxlength="5" style="width: 50px" />
+                </label>
+
+                <label class="span1">&nbsp;<button type="button" class="btn btn-danger remove-sales"><i class="icon-minus"></i></button></label>
+
+                <input type="hidden" name="ids[]" class="ids" />
+            </div>
+        </div>
+    <?php endif;?>
+    

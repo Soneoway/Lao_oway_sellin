@@ -1,0 +1,80 @@
+<div class="page-header">
+    <h1>Add Priority Distributor</h1>
+</div>
+
+<div class='check-money'><?php
+    if (isset($this->messages_success) and $this->messages_success)
+        foreach ($this->messages_success as $message):
+            echo '<div class="alert alert-success">'.$message.'</div>';
+        endforeach;
+
+    if (isset($this->messages) and $this->messages)
+        foreach ($this->messages as $message):
+            echo '<div class="alert alert-error">'.$message.'</div>';
+        endforeach;
+    ?>
+    <form action="" role='form' method="post" id='add-transaction'>
+        <div class='row'>
+            <div class='span6'>
+                <div class="form-group">
+                    <label>Retailer:</label>
+                    <input type='text' class="span4" name='SearchBox' id="SearchBox" placeholder="Search" autocomplete="off" />
+                    <select name="d_id" id="d_id" size="5">
+                        <option value="0">UnKnown</option>
+                        <?php
+                        foreach($this->distributors as $item):
+                            echo "<option value='".$item['id']."'>".$item['title']."</option>";
+                        endforeach;
+                        ?>
+                    </select>
+                </div>
+            </div>
+        </div><!--  End row -->
+        <div class='row'>
+            <div class='span12'>
+                <div class="form-group">
+                    <input type='submit' name='add_time' class='form-control btn btn-success' id='btn-add'  value='Save'/>
+                    <input type="hidden" name="back_url" id="back_url" value="/checkmoney/priority">
+                    <button type="button" class="btn btn-danger go-back">Go back</button>
+                </div>
+            </div>
+        </div>
+    </form>
+
+
+</div>
+
+
+<link rel="stylesheet" href="../css/jquery-ui.css">
+<script src="../js/jquery-ui.js"></script>
+<link rel="stylesheet" href="<?php echo HOST?>css/checkmoney.css" />
+<style>
+    .required{
+        color: red;
+    }
+    #d_id{
+        margin-left: 0px!important;
+        left: 0px!important;
+
+    }
+
+    span.highlight{
+        display: inline!important;
+        padding: 0px!important;
+        margin: 0px!important;
+    }
+
+</style>
+<script>
+    $(document).ready(function () {
+        initSearchOptionDistributor('d_id', 'SearchBox');
+        initGoBack();
+    });
+
+    function initGoBack(){
+        $('.go-back').click(function(e){
+            window.location.href = $('#back_url').val();
+            return false;
+        });
+    }
+</script>

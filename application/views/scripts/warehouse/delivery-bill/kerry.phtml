@@ -1,0 +1,54 @@
+<?php if (isset($this->distributor)): ?>
+<style>
+    .wrapper {
+        position: relative;
+        top: 60px;
+        left: 50px;
+        border:none;
+        font-size:12px;
+        width: 250px;
+    }
+
+    .element {
+        position: absolute;
+    }
+
+    .name {
+        top: 0px;
+        left: 40px;
+       
+    }
+
+    .address {
+        top: 45px;
+        left: 20px;
+        line-height:30px;
+        text-transform: capitalize;
+    }
+
+    .tel {
+        top:140px;
+        left:50px;
+    }
+</style>
+    <div class="wrapper">
+        <p class="element name"><?php echo $this->distributor['name'] ; echo '<br/>'; echo $this->distributor['title'] ?></p>
+        <p class="element address"><?php echo $this->distributor['add_tax'] ?></p>
+        <p class="element tel"><?php echo $this->distributor['tel'] ?></p>
+    </div>
+    
+
+    <!--  -->
+    <script src="<?php echo HOST ?>js/jquery-1.7.2.min.js"></script>
+    <script>
+        try {
+            $(document).ready(function() {
+                parent.window.frames['print_bill'].focus();
+                parent.window.frames['print_bill'].print();
+            });
+        } catch (err) {
+
+        }
+    </script>
+<?php endif ?>
+

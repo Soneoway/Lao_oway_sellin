@@ -1,0 +1,21 @@
+<select name="a_storeresult" id="a_storeresult" multiple="multiple" size="4">
+    <?php if (isset($this->stores) && $this->stores): ?>
+        <?php foreach ($this->stores as $key => $store): ?>
+            <option value="<?php echo $store['id'] ?>"
+                data-id="<?php echo $store['id'] ?>"
+                data-title="<?php echo $store['title'] ?>" 
+                data-company-name="<?php echo $store['unames'] ?>" 
+                data-area="<?php if(isset($this->regions[$store['region']]['area_id']) 
+                                    && $this->regions[$store['region']]['area_id']) 
+                                    echo $this->regions[$store['region']]['area_id'] ?>" 
+                data-region="<?php echo $store['region'] ?>"
+                data-region-name="<?php if (isset($this->regions[$store['region']]) && $this->regions[$store['region']]) 
+                                echo $this->regions[$store['region']]['name'] ?>"
+                data-area-name="<?php if (isset($this->areas[$this->regions[$store['region']]['area_id']]) && $this->areas[$this->regions[$store['region']]['area_id']]) 
+                                echo $this->areas[$this->regions[$store['region']]['area_id']] ?>"><?php 
+                echo $store['title'] . ( (isset($this->regions[$store['region']]) && $this->regions[$store['region']]) 
+                                ? (" | " .$this->regions[$store['region']]['name'] ) : "" )
+             ?></option>
+        <?php endforeach ?>
+    <?php endif ?>
+</select>

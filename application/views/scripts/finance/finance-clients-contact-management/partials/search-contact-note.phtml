@@ -1,0 +1,149 @@
+<link rel="stylesheet" href="<?php echo HOST?>css/select2.css" />
+<script src="<?php echo HOST?>js/select2.js"></script>
+
+
+<form class="form-search form-horizontal" method="get">
+	<div class="row">
+
+		<div class="span6">
+			<div class="control-group">
+				<label for="distributor_ids" class="control-label">Distributor(My Side) : </label>
+				<div class="controls">
+					<select class="span3" name="distributor_ids" id="distributor_ids">
+						<option value=""> Please Selected </option>
+
+						<?php if(isset($this->distributor) && $this->distributor) : ?>
+							<?php foreach ($this->distributor as $value) : ?>
+								<option value="<?php echo $value['id'] ?>" <?php if(isset($this->params['distributor_id']) && $this->params['distributor_id'] == $value['id']) : ?> selected <?php endif; ?> ><?php echo $value['title'] ?></option>
+							<?php endforeach; ?>
+						<?php endif; ?>
+					</select>
+				</div>
+			</div>
+
+			<div class="control-group">
+				<label for="finance_client" class="control-label">Finance Client : </label>
+				<div class="controls">
+					<select class="span3" name="finance_client" id="finance_client">
+						<option value=""> Please Selected </option>
+
+						<?php if(isset($this->financeclient) && $this->financeclient) : ?>
+							<?php foreach($this->financeclient as $value) : ?>
+								<option value="<?php echo $value['id'] ?>" <?php if(isset($this->params['finance_client']) && $this->params['finance_client'] == $value['id']) : ?> selected <?php endif; ?> ><?php echo $value['name'] ?></option>
+							<?php endforeach; ?>
+						<?php endif; ?>
+					</select>
+				</div>
+			</div>
+
+			<div class="control-group">
+				<label for="doc_no" class="control-label">Document No : </label>
+				<div class="controls">
+					<input type="text" class="span3" name="doc_no" id="doc_no" value="<?php isset($this->params['doc_no']) && printf($this->params['doc_no']) ?>">
+				</div>
+			</div>
+
+			<div class="control-group">
+				<label for="cost_id" class="control-label">Adjustment Type :</label>
+				<div class="controls">
+					<select class="span3" name="cost_id" id="cost_id">
+						<option value=""> Please Selected </option>
+						<?php if(isset($this->costItem) && $this->costItem) : ?>
+							<?php foreach($this->costItem as $key => $value) : ?>
+								<option value="<?php echo $key ?>" <?php if(isset($this->params['cost_id']) && $this->params['cost_id'] == $key) : ?> selected <?php endif; ?> ><?php echo $value ?></option>
+							<?php endforeach; ?>
+						<?php endif; ?>
+					</select>
+				</div>
+			</div>
+
+			<div class="control-group">
+				<label for="review_date_form" class="control-label">Review Date Form : </label>
+				<div class="controls">
+					<input type="text" class="span3 date" name="review_date_form" id="review_date_form" value="<?php isset($this->params['review_date_form']) && printf($this->params['review_date_form']) ?>">
+				</div>
+			</div>
+
+			<div class="control-group">
+				<label for="review_date_to" class="control-label">Review Date To : </label>
+				<div class="controls">
+					<input type="text" class="span3 date" name="review_date_to" id="review_date_to" value="<?php isset($this->params['review_date_to']) && printf($this->params['review_date_to']) ?>">
+				</div>
+			</div>
+		</div>
+
+		<div class="span6">
+			<div class="control-group">
+				<label for="status" class="control-label">Status : </label>
+				<div class="controls">
+					<select class="span3" name="status" id="status">
+						<option value=""> Please Selected </option>
+						<option value="1" <?php if(isset($this->params['status']) && $this->params['status'] == 1) : ?> selected <?php endif; ?> > Pending Review </option>
+						<option value="2" <?php if(isset($this->params['status']) && $this->params['status'] == 2) : ?> selected <?php endif; ?> > Approved </option>
+						<option value="4" <?php if(isset($this->params['status']) && $this->params['status'] == 4) : ?> selected <?php endif; ?> > Unapproved </option>
+						<option value="3" <?php if(isset($this->params['status']) && $this->params['status'] == 3) : ?> selected <?php endif; ?> > Re-review </option>
+					</select>
+				</div>
+			</div>
+
+			<div class="control-group">
+				<label for="reconcilia_detail" class="control-label">Reconciliation Details : </label>
+				<div class="controls">
+					<input type="text" class="span3" name="reconcilia_detail" id="reconcilia_detail" value="<?php isset($this->params['reconcilia_detail']) && printf($this->params['reconcilia_detail']) ?>">
+				</div>
+			</div>
+
+			<div class="control-group">
+				<label for="business_date_form" class="control-label">Business Date Form : </label>
+				<div class="controls">
+					<input type="text" class="span3 date" name="business_date_form" id="business_date_form" value="<?php isset($this->params['business_date_form']) && printf($this->params['business_date_form']) ?>">
+				</div>
+			</div>
+
+			<div class="control-group">
+				<label for="business_date_to" class="control-label">Business Date To : </label>
+				<div class="controls">
+					<input type="text" class="span3 date" name="business_date_to" id="business_date_to" value="<?php isset($this->params['business_date_to']) && printf($this->params['business_date_to']) ?>">
+				</div>
+			</div>
+		</div>
+
+		<div class="span12">
+			<button type="submit" class="btn btn-primary">Search</button>
+			<button type="reset" class="btn btn-warning">Reset</button>
+			<button type="submit" class="btn btn-success" name="export" value="1"> Export </button>
+		</div>
+
+	</div>
+</form>
+
+<script type="text/javascript" src="/js/jquery-ui-1.8.12.custom.min.js"></script>
+<link rel="stylesheet" type="text/css" href="/css/jquery-ui-1.8.12.custom.css"/>
+
+<script type="text/javascript">
+	$('#distributor_ids, #finance_client').select2();
+
+	$(document).ready(function () {
+		$( '.date' ).datepicker({ dateFormat: "yy-mm-dd" });
+
+		$("#distributor_ids").change(function(){
+			var distributor_id = $("#distributor_ids").val();
+
+			$.get("/finance/load-bank-account-my",
+				{distributor_id : distributor_id}
+				,function(data,status){
+					var data = $.parseJSON( data );
+
+					if (data.financeClient){
+						var obj = data.financeClient;
+						$('#finance_client').html('<option value="0"> Please Selected </option>');
+						for (var i = 0; i < obj.length; i++) {
+							$('#finance_client').append('<option value="'+obj[i]['id']+'">'+obj[i]['name']+'</option>');
+						}
+					}
+
+				});
+		});
+	});
+
+</script>

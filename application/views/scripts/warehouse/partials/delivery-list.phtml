@@ -1,0 +1,92 @@
+<?php
+function product_price($priceFloat) {
+$symbol_thousand = '.';
+$decimal_place = 0;
+$price = number_format($priceFloat, $decimal_place, '', $symbol_thousand);
+return $price;
+}
+?>
+<table class="table table-bordered">
+    <thead>
+        <tr>
+            <?php echo $this->sorting(array(
+                    '#',
+                    'sn'                 => 'Sales Order Number',
+                    // 'Product Category',
+                    // 'Product',
+                    // 'Color',
+                    'num'                => 'Quantity',
+                    'price'              => 'Price',
+                    'Invoice'            => 'Invoice',
+                    'd_id'               => 'Retailer',
+                    'area'               => 'Area',
+                    'region'             => 'Region',
+                    'outmysql_time'      => 'OUT Time',
+                    'Action'
+                ),
+                $this->url, $this->sort, $this->desc); ?>
+        </tr>
+    </thead>
+    <tbody>
+        <?php
+        if (isset($this->markets) and $this->markets)
+            foreach ($this->markets as $k=>$PO): ?>
+        <tr>
+            <td><a href="#id" class="collapse_a btn btn-default btn-small" id="m_<?php echo $PO['sn'] ?>">+</a></td>
+            <td><?php echo $PO['sn'];?></td>
+            <!-- <td></td> -->
+            <!-- <td></td> -->
+            <!-- <td></td> -->
+            <td><?php echo $PO['total_qty'];?></td>
+            <td><?php echo product_price($PO['total_price']);?></td>
+            <td><?php if(isset($PO['invoice_number'])) echo $PO['invoice_number'];?></td>
+            <td><?php if(isset($this->distributorsList[$PO['d_id']])) echo $this->distributorsList[$PO['d_id']]['title'];?></td>
+    
+            <td><?php if( isset ( $this->areas[ $this->regions[ $this->distributorsList[ $PO['d_id'] ]['region'] ] ['area_id'] ] ) ) 
+                        echo $this->areas[ $this->regions[ $this->distributorsList[ $PO['d_id'] ]['region'] ]['area_id'] ] ?></td>
+
+            <td><?php if( isset($this->regions[ $this->distributorsList[ $PO['d_id'] ]['region'] ]) )
+                        echo $this->regions[ $this->distributorsList[ $PO['d_id'] ]['region'] ]['name'] ?></td>
+            <td><?php echo $PO['outmysql_time'];?></td>
+            <td class="">
+                <div class="btn-group">
+                    <a class="btn dropdown-toggle" data-toggle="dropdown" href="#">
+                        Carrier
+                        <span class="caret"></span>
+                    </a>
+                    <ul class="dropdown-menu">
+                        <li><a href="<?php echo HOST ?>warehouse/delivery-print?carrier_id=<?php echo My_Carrier::Kerry ?>&sn=<?php echo $PO['sn'] ?>" target="print_bill">Kerry</a></li>
+                        <li><a href="<?php echo HOST ?>warehouse/delivery-print?carrier_id=<?php echo My_Carrier::Saigon_Post ?>&sn=<?php echo $PO['sn'] ?>" target="print_bill">Saigon Post</a></li>
+                    </ul>
+                </div>
+            </td>
+        </tr>
+        <?php endforeach;?>
+
+    </tbody>
+</table>
+<div class="paging">
+    <?php echo $this->paging($this->total, $this->limit, $this->offset, $this->url);?>
+</div>
+
+<iframe src="" name="print_bill" frameborder="0" style="display:none;height:0;"></iframe>
+
+<script type="text/javascript" src="/js/jquery-ui-1.8.12.custom.min.js"></script>
+<link rel="stylesheet" type="text/css" href="/css/jquery-ui-1.8.12.custom.css"/>
+<?php echo $this->load();?>
+<?php echo $this->confirm();?>
+<script>
+    $('.collapse_a').each(function(){
+        var _this = $(this);
+        var _this_id = _this.attr('id');
+        var $coll = $('.'+_this_id);
+
+        _this.click(function(){
+
+            $coll.toggle();
+            if ($coll.is(':visible'))
+                _this.html('-');
+            else _this.html('+');
+        });
+    });
+</script>

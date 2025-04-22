@@ -1,0 +1,51 @@
+<table class="table table-bordered">
+	<thead>
+		<tr>
+			<th>Code.</th>
+			<th>Finance Client.</th>
+			<th>Sale Receipt</th>
+			<th>Sale Refund</th>
+			<th>Support Found</th>
+			<th>Creadit</th>
+			<th>Outstanding Debt</th>
+			<th>Order Amount</th>
+			<th>Available Balance</th>
+		</tr>
+	</thead>
+	<tbody>
+
+		<?php if(isset($this->distributor_recon) && $this->distributor_recon) : ?>
+			<?php foreach ($this->distributor_recon as $value) : ?>
+				<?php  $outstanding_debt = (($value['total_sales_receipt'] + $value['total_support_payment']) - ($value['total_sales_refund'] + $value['total_sales_order'])) + $value['total_contact_note']; ?>
+
+				<tr>
+					<td><?php echo $value['finance_client_code'] ?></td>
+					<td><?php echo $value['finance_client_name'] ?></td>
+					<td><?php echo number_format($value['total_sales_receipt'],0) ?></td>
+					<td><?php echo number_format($value['total_sales_refund'],0) ?></td>
+					<td><?php echo number_format($value['total_support_payment'],0) ?></td>
+					<td><?php echo number_format($value['total_credit_limit'],0) ?></td>
+					<td><?php echo number_format($outstanding_debt,0) ?></td>
+					<td><?php echo number_format($value['total_sales_order'],0) ?></td>
+					<td>
+						<?php 
+
+						if($outstanding_debt > 0) { 
+							echo number_format($outstanding_debt,0);
+						}else{
+							echo "0";
+						}
+
+						?>
+					</td>
+				</tr>
+
+			<?php endforeach; ?>
+		<?php endif; ?>
+
+	</tbody>
+</table>
+
+<div class="paging">
+	<?php echo $this->paging($this->total, $this->limit, $this->offset, $this->url);?>
+</div>

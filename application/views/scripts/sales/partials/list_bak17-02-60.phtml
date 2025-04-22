@@ -1,0 +1,237 @@
+<style>
+.red
+{
+    background: #1B8324;color:red;
+}
+.show_item{
+      background-color:#32CD32;
+}
+.show_item_select{
+      background-color:#FFA500;
+}
+
+</style>
+<table class="table table-bordered" style="margin-left: -33px;">
+    <thead>
+        <tr>
+            <?php echo $this->sorting(array(
+          '#',
+          'ID'            => 'Sale ID', 
+          'sn'            => 'Sale Order Number',
+          'd_id'          => 'Retailer Name',
+          'good_id'       => 'Product Name',
+          'good_color'    => 'Product Color',
+          'num'           => 'Sales Quantity',
+          'price'         => 'Sales Price',
+          'total'         => 'Total<br/>(Exclude vat)',
+          'special Discount<br/>(Exclude vat)',
+          'total_discount' => 'Discount<br/>(Include vat)',
+          'Nat paid<br/>(Include vat)',
+          'total_amount'  => 'Total Amount<br/>(Include vat)',
+          'pay_time'      => 'Payment or Not',
+          'shipping_yes_time'      => 'Shipping',
+          'outmysql_time' => 'Out of Warehouse',
+          'warehouse_id'  => 'Warehouse',
+          'status'        => 'Status',
+          
+          'p.id'          => 'Order Time',
+          'Finance Confirm',
+          'Action'
+                ),
+                $this->url, $this->sort, $this->desc); ?>
+        </tr>
+    </thead>
+    <tbody>
+    <?php
+        function cal_sale_off_percent($percent_sale_off,$price,$num,$price_total){
+          
+            if($percent_sale_off>0){
+                $price_sale_off=$price_total/$num;
+            }else{
+                $price_sale_off = $price;
+            }
+            return $price_sale_off;
+         }
+          function ext_vat($num){
+           return $num/1.07;
+        }
+        function format_number_4($num){
+           return decimal_remove_comma(number_format($num, 4));
+        }
+         function format_number_2($num){
+           return decimal_remove_comma(number_format($num, 2));
+        }
+
+         function decimal_remove_comma($priceFloat)
+         {
+            $price = str_replace(",","",$priceFloat);;
+            return $price;
+         }
+
+        function getDatetimeNow() {
+          $tz_object = new DateTimeZone('Asia/Bangkok');
+          $datetime = new DateTime();
+          $datetime->setTimezone($tz_object);
+          return $datetime->format('Y\-m\-d\ h:i:s');
+        }
+
+
+
+        $percent_sale_off=0;
+        $gran_total=0;
+        $statuses = unserialize(DISCOUNT_STATUS);    
+
+
+        if (isset($this->markets_sn) and $this->markets_sn) :
+            //print_r($this->$markets_sn);
+            foreach ($this->markets_sn as $k=>$m):
+             $dt = DateTime::CreateFromFormat("Y-m-d H:i:s", isset($m['last_updated_at']) ? $m['last_updated_at'] : $m['add_time']);
+             $h = $dt->format('H');
+             $i = $dt->format('i');
+             $d = $dt->format('d');
+             $date = date('d');
+             //print_r($m);
+             $sn_ref = $m['sn_ref'];
+             if($sn_ref==''){
+                $sn_ref = $m['sn'];
+             }
+            $product_unit_price = $m['price'];//print_r($m);
+            $product_qty        = $m['total_qty'];
+            $price_total        = $m['total_price_amount'];
+            $sale_off_percent   = isset($m['sale_off_percent'])?$m['sale_off_percent']:'0'; 
+            $product_unit_price = cal_sale_off_percent($sale_off_percent,$product_unit_price,$product_qty,$price_total); 
+            $total_price = ext_vat($product_unit_price); 
+            $product_unit_price_4 = format_number_4($total_price);
+            $product_amount_4 =format_number_2($product_unit_price_4) * $product_qty; 
+            $total_amount = $product_amount_4*1.07;
+
+            //3025 บริษัท คอมเซเว่น จำกัด (มหาชน)
+            ////3691 OP19 - บริษัท บุญชัยค้าส่ง จำกัด (สำนักงานใหญ่)
+            $total_amount = ($m['total_price_amount']);
+            $delivery_fee = $m['delivery_fee']/1.07;
+          
+           $special_discount = 0;
+           date_default_timezone_set('Asia/Bangkok');
+           $date = new DateTime('2017-01-04 00:00:00');
+           $date_start= date_format($date,"Y-m-d H:i:s");
+           $date_order = $m['add_time'];
+           
+            if($date_order < $date_start){ 
+              if ($m['d_id'] == 3025 || $m['d_id'] == 3691) {
+
+                  $special_discount = format_number_2(($total_amount*1/100));
+              }
+
+            }else{
+              $special_discount = ($m['total_spc_discount']);
+            }
+
+            $d_id = $m['d_id'];
+            if ($d_id=='25760' || $d_id=='21088' || $d_id=='25550'){
+              $total_amount_in_vat = (($total_amount+$delivery_fee-$special_discount));
+            }else{
+              $total_amount_in_vat = (($total_amount+$delivery_fee-$special_discount)*1.07);
+            }
+
+            $gran_total  = ($total_amount_in_vat - $m['total_discount']);
+
+            if ($gran_total <= 0) {
+              $gran_total = 0;
+            }
+
+
+             if($m['delivery_fee']>0){
+                $delivery_fee ="Delivery fee = ".$m['delivery_fee'];
+             }else{
+                $delivery_fee ="";
+             }
+             
+             $userStorage = Zend_Auth::getInstance()->getStorage()->read();
+            ?>
+            <tr class="<?php
+                    if(isset($h) and isset($i) and ($h >= 16))
+                       {
+                            if($date == $d)
+                            {
+                                if($h==16 and $i>=30){
+                                    echo 'show_item';
+                                }
+                                else if($h > 16){
+                                    echo 'show_item';
+                                }
+                            }                            
+                       }
+            ?>">
+                
+                    <td><a href="#id" rel="<?php echo $m['sn'] ?>" class="collapse_a btn btn-default btn-small" id="m_<?php echo $m['sn'] ?>"><span class="col-sign">+</span><img class="img-loading" src="<?php echo HOST?>img/ajax-loader.gif" style="display: none" /></a></td>
+                <td><?php echo $m['id'] ?></td>
+                <td><?php echo $sn_ref ?></td>
+                <td><?php if (isset($this->distributors2) && $this->distributors2 && isset($this->distributors2[$m['d_id']])) echo $this->distributors2[$m['d_id']]['title']; ?></td>
+                <td><?php echo $date_start; ?></td>
+                <td></td>
+                <td><?php echo $m['total_qty'] ?></td>
+                <td></td>
+                <td><?php echo My_Number::f($total_amount, 0, ',', '.'); ?></td><!-- TOTAL -->
+                <td><?php echo My_Number::f($special_discount, 0, ',', '.'); ?></td>
+                <td><?php echo My_Number::f($m['total_discount'], 0, ',', '.'); ?></td>
+                <td><?php echo My_Number::f($gran_total, 0, ',', '.'); ?></td>
+                <td title='<?=$delivery_fee?>'><?php echo My_Number::f($total_amount_in_vat, 0, ',', '.'); ?></td><!-- TOTAL AMOUNT -->
+                <td><?php if ($m['pay_time']):?><i class="icon-ok"></i><?php else:?><i class="icon-remove"></i><?php endif;?></td>
+                <td><?php if ($m['shipping_yes_time']):?><i class="icon-ok"></i><?php else:?><i class="icon-remove"></i><?php endif;?></td>
+                <td><?php if ($m['outmysql_time']):?><i class="icon-ok"></i><?php else:?><i class="icon-remove"></i><?php endif;?></td>
+                <td><?php if (isset($this->warehouses_cached[$m['warehouse_id']])) echo $this->warehouses_cached[$m['warehouse_id']] ?></td>
+                <td><?php if ($m['status']==1):?>Active<?php else:?>Expired<?php endif;?></td>
+                <td><?php echo $m['add_time'] ?></td>
+                <td><?php echo $m['pay_time'] ?></td>
+                <td>
+                    <a title="View" href="/sales/view?sn=<?php echo $m['sn'];?>"> <i class="icon-eye-open"></i></a>
+
+                    <?php if ($m['status']==1): ?>
+                        <?php if (!$m['pay_time'] and !$m['outmysql_time']): ?>
+                            <?php if ($m['confirm_so'] != 1): ?>
+                               <a title="Edit" href="/sales/create?sn=<?php echo $m['sn'];?>&sn_ref=<?php echo $m['sn_ref'];?>"> <i class="icon-edit"></i></a>
+                           <?php endif;?>
+                            
+                            <a title="Delete" class="confirmLink" href="/sales/del?sn=<?php echo $m['sn'];?>"> <i class="icon-trash"></i></a>
+
+                        <?php else:?>
+                            <a class="lock" title="Lock" href="javascript:void(0);"> <i class="icon-lock"></i></a>
+
+                            <?php if (!$m['canceled']):?>
+                                <!-- <a class="cancel" title="Mark Canceled" rel="<?php echo $m['sn'];?>" href="javascript:void(0);"> <i class="icon-eraser"></i></a> -->
+                                <!-- <a title="Mark Canceled" data-toggle="modal" data-sn="55566645466"> <i class="icon-eraser"></i></a> -->
+                                <a data-toggle="modal" data-sn="'<?php echo $m['sn'];?>'" title="Mark Canceled" class="open-cancel" href="#cancelSO"><i class="icon-eraser"></i></a>
+
+
+                            <?php else:?> 
+                                 <a data-toggle="modal" data-sn="'<?php echo $m['sn'];?>'"  class="open-remark" href="#canceRemark"><span style="color: red">Canceled</span></a>
+                            <?php endif;?>
+                        <?php endif;?>
+                        <a title="Print" target="_blank" href="/sales/print-sale?sn=<?php echo $m['sn'];?>"> <i class="icon-print"></i></a>
+                        <?php if ($m['confirm_so'] == 0): ?>
+                            <a title="Confirming" href="/sales/sales-confirm-order?sn=<?php echo  $m['sn'];?>"> 
+                            <i class="icon-ok"></i></a>
+                        <?php endif;?>
+                        <?php if ($m['invoice_number'] != ''): ?>
+                            <a title="Invoice" target="_blank" href="/warehouse/invoice?sn=<?=$m['sn'];?>&inv_sn=<?=$m['invoice_number'];?>"> <i class="icon-file"></i></a>
+                        <?php endif;?>
+
+                        <?php 
+                        if ($m['rank']==10) :
+                      
+                        if ($m['user_id'] == $userStorage->id || My_Staff_Group::inGroup($userStorage->group_id, array(ADMINISTRATOR_ID, 41)) )://41=Update Customer Brand shop ?>
+                          <a data-toggle="modal" data-snf="'<?php echo $m['sn_ref'];?>'"  class="open-customer" href="#editCustomer"> <i class="icon-user"></i></a>
+                        <?php endif; endif; ?>
+                            
+                    <?php endif;?>
+                </td>
+                </tr>
+
+            <?php endforeach;?>
+    <?php endif; ?>
+    </tbody>
+</table>
+<div class="paging">
+    <?php echo $this->paging($this->total, $this->limit, $this->offset, $this->url);?>
+</div>
+

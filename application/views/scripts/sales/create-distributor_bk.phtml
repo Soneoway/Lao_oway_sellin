@@ -1,0 +1,372 @@
+<style type="text/css">
+    #parent_search {
+        display: block;
+    }
+
+    iframe {
+        height: 100px;
+        width: 100%;
+        border: none;
+    }
+</style>
+
+<div class="page-header">
+	<?php if (isset($this->distributor) && $this->distributor): ?>
+		<h1>Edit Distributor</h1>
+	<?php else: ?>
+		<h1>Create Distributor</h1>
+	<?php endif ?>
+    
+</div>
+<?php
+    if (isset($this->messages) and $this->messages)
+        foreach ($this->messages as $message):
+            echo '<div class="alert alert-error">'.$message.'</div>';
+        endforeach;
+?>
+<form class="form-horizontal" action="<?php echo HOST ?>sales/save-distributor" name="form" id="form" method="post" target="iframe">
+	<div class="row-fluid">
+		<div class="span5">
+			<div class="control-group">
+			    <label class="control-label" for="title">Distributor Name</label>
+			    <div class="controls">
+			    	<input type="text" id="title" name="title" placeholder="Distributor Name" required="required" value="<?php if( isset($this->distributor) && isset($this->distributor['title']) ) echo $this->distributor['title'] ?>" />
+			    	<p class="help-block"></p>
+			    </div>
+			</div>
+            
+            <div class="control-group">
+                <div id="store_name_check">
+                    
+                </div>
+            </div>
+
+            <div class="control-group">
+                <label class="control-label" for="retailer_type">Distributor Type</label>
+                <div class="controls">
+                    <select id="retailer_type" name="retailer_type" required="required">
+                        <option value="1" <?php if( isset($this->distributor['retailer_type']) and $this->distributor['retailer_type']==1 ) { ?> selected<?php }?>>Smartphone Distributor</option>
+                        <option value="2" <?php if( isset($this->distributor['retailer_type']) and $this->distributor['retailer_type']==2 ) { ?> selected<?php }?>>Digital Distributor</option>
+                    </select>
+                </div>
+            </div>
+			<div class="control-group">
+			    <label class="control-label" for="unames">Company Name</label>
+			    <div class="controls">
+			    	<input type="text" id="unames" name="unames" placeholder="Company Name" required="required" value="<?php if( isset($this->distributor) && isset($this->distributor['unames']) ) echo $this->distributor['unames'] ?>" />
+			    	<p class="help-block"></p>
+			    </div>
+			</div>
+			<div class="control-group">
+			    <label class="control-label" for="store_code">Distributor Code</label>
+			    <div class="controls">
+			    	<input type="text" id="store_code" name="store_code" required="required" value="<?php if( isset($this->distributor) && isset($this->distributor['store_code']) ) echo $this->distributor['store_code'] ?>" />
+			    	<p class="help-block"></p>
+			    </div>
+			</div>
+
+            <div class="control-group">
+                <label class="control-label" for="store_code">Credit Amount</label>
+                <div class="controls">
+                    <input type="text" id="credit_amount" name="credit_amount" required="required" value="<?php if( isset($this->distributor) && isset($this->distributor['credit_amount']) ) 
+                    echo ($this->distributor['credit_amount']) ?>" />
+                    <p class="help-block"></p>
+                </div>
+            </div>
+
+             
+            <div class="control-group">
+                <label class="control-label" for="name">Credit Days</label>
+                <div class="controls">
+                    <select name="credit_type" id="credit_type" required>
+                        <option value>---</option>
+                        <?php if (isset( $this->credits ) && $this->credits): ?>
+                            <?php foreach ($this->credits as $key => $credit): ?>
+                                <option value="<?php echo $key ?>" <?php if( isset($this->credits) && isset($this->distributor['credit_type']) && $this->distributor['credit_type'] == $key ) echo "selected='selected'" ?>><?php echo $credit ?></option>
+                            <?php endforeach ?>
+                        <?php endif ?>
+                    </select>
+                    <p class="help-block"></p>
+                </div>
+            </div>
+
+			<div class="control-group">
+			    <label class="control-label" for="name">Contact</label>
+			    <div class="controls">
+			    	<input type="text" id="name" name="name" placeholder="Contact" value="<?php if( isset($this->distributor) && isset($this->distributor['name']) ) echo $this->distributor['name'] ?>" />
+			    	<p class="help-block"></p>
+			    </div>
+			</div>
+			<div class="control-group">
+			    <label class="control-label" for="tel">Phone</label>
+			    <div class="controls">
+			    	<input type="text" id="tel" name="tel" value="<?php if( isset($this->distributor) && isset($this->distributor['tel']) ) echo $this->distributor['tel'] ?>" />
+			    	<p class="help-block"></p>
+			    </div>
+			</div>
+			
+			<div class="control-group">
+			    <label class="control-label" for="add">Address of Company (Tax)</label>
+			    <div class="controls">
+			    	<textarea name="add" id="add" cols="30" rows="5"><?php if( isset($this->distributor) && isset($this->distributor['add']) ) echo $this->distributor['add'] ?></textarea>
+			    	<p class="help-block"></p>
+			    </div>
+			</div>
+
+			<div class="control-group">
+			    <label class="control-label" for="add">Address for Delivery</label>
+			    <div class="controls">
+			    	<textarea name="add_tax" id="add_tax" cols="30" rows="5"><?php if( isset($this->distributor) && isset($this->distributor['add_tax']) ) echo $this->distributor['add_tax'] ?></textarea>
+			    	<p class="help-block"></p>
+			    </div>
+			</div>
+
+			<div class="control-group">
+			    <label class="control-label" for="email">Email</label>
+			    <div class="controls">
+			    	<input type="email" id="email" name="email" value="<?php if( isset($this->distributor) && isset($this->distributor['email']) ) echo $this->distributor['email'] ?>" />
+			    	<p class="help-block"></p>
+			    </div>
+			</div>
+		</div>
+		<div class="span5">
+            <div class="control-group">
+                <label class="control-label" for="area">Area</label>
+                <div class="controls">
+                    <select name="area" id="area" disabled>
+                        <option value>---</option>
+                        <?php if (isset( $this->areas ) && $this->areas): ?>
+                            <?php foreach ($this->areas as $key => $name): ?>
+                                <option value="<?php echo $key ?>" <?php if( isset($this->area_id) && $this->area_id == $key ) echo "selected='selected'" ?>><?php echo $name ?></option>
+                            <?php endforeach ?>
+                        <?php endif ?>
+                    </select>
+                    <p class="help-block"></p>
+                </div>
+            </div>
+            <div class="control-group">
+                <label class="control-label" for="region">Province</label>
+                <div class="controls">
+                    <select name="region" id="region" required>
+                        <option value>---</option>
+                        <?php if (isset( $this->regions ) && $this->regions): ?>
+                            <?php foreach ($this->regions as $key => $region): ?>
+                                <option value="<?php echo $key ?>" 
+                                    <?php if( isset($this->distributor['region']) && $this->distributor['region'] == $key ) echo "selected='selected'" ?>
+                                    data-area="<?php echo $region['area_id'] ?>"><?php echo $region['name'] ?></option>
+                            <?php endforeach ?>
+                        <?php endif ?>
+                    </select>
+                    <p class="help-block"></p>
+                </div>
+            </div>
+			<div class="control-group">
+			    <label class="control-label" for="district">District</label>
+			    <div class="controls">
+					<select name="district" id="district" required>
+                        <option value>---</option>
+                        <?php if (isset( $this->districts ) && $this->districts): ?>
+                            <?php foreach ($this->districts as $key => $region): ?>
+                                <option value="<?php echo $key ?>" <?php if( isset($this->distributor['district']) && $this->distributor['district'] == $key ) echo "selected='selected'" ?>><?php echo $region['name'] ?></option>
+                            <?php endforeach ?>
+                        <?php endif ?>
+                    </select>
+                    <p class="help-block"></p>
+			    </div>
+			</div>
+            
+            <div class="control-group">
+			    <label class="control-label" for="name">Warehouse</label>
+			    <div class="controls">
+					<select name="warehouse_id" id="warehouse_id" required>
+                        <option value>---</option>
+                        <?php if (isset( $this->warehouses ) && $this->warehouses): ?>
+                            <?php foreach ($this->warehouses as $key => $warehouses): ?>
+                                <option value="<?php echo $key ?>" <?php if( isset($this->distributor) && isset($this->distributor['warehouse_id']) && $this->distributor['warehouse_id'] == $key ) echo "selected='selected'" ?>><?php echo $warehouses ?></option>
+                            <?php endforeach ?>
+                        <?php endif ?>
+                    </select>
+                    <p class="help-block"></p>
+			    </div>
+			</div>
+            
+			<div class="control-group">
+			    <label class="control-label" for="parent">Dealer Parent</label>
+			    <div class="controls">
+                    <input type="text" id="parent_search">
+					<select name="parent" id="parent" size="5">
+                        <option value="0">---</option>
+                        <?php if (isset( $this->distributor_cache ) && $this->distributor_cache): ?>
+                            <?php foreach ($this->distributor_cache as $key => $_distributor): ?>
+                                <option value="<?php echo $key ?>" <?php if( isset($this->distributor) && isset($this->distributor['parent']) && $this->distributor['parent'] == $key ) echo "selected='selected'" ?>><?php echo $_distributor ?></option>
+                            <?php endforeach ?>
+                        <?php endif ?>
+                    </select>
+			    	<p class="help-block"></p>
+			    </div>
+			</div>
+			<div class="control-group">
+			    <label class="control-label" for="rank">Rank</label>
+			    <div class="controls">
+                    <select id="rank" name="rank" required="required">
+                        <option value="1" <?php if( isset($this->distributor['rank']) and $this->distributor['rank']==1 ) { ?> selected<?php }?>>1.ORG-WDS</option>
+                        <option value="2" <?php if( isset($this->distributor['rank']) and $this->distributor['rank']==2 ) { ?> selected<?php }?>>2.ORG</option>
+                        <!--<option value="3" <?php /*if( isset($this->distributor['rank']) and $this->distributor['rank']==3 ) { */?> selected<?php /*}*/?>>3</option>
+                        <option value="4" <?php /*if( isset($this->distributor['rank']) and $this->distributor['rank']==4 ) { */?> selected<?php /*}*/?>>4</option>-->
+                        <option value="5" <?php if( isset($this->distributor['rank']) and $this->distributor['rank']==5 ) { ?> selected<?php }?>>3. ORG-Dtac/Advice</option>
+                        <option value="6" <?php if( isset($this->distributor['rank']) and $this->distributor['rank']==6 ) { ?> selected<?php }?>>4. ORG-Lotus/Power by</option>
+                        <option value="7" <?php if( isset($this->distributor['rank']) and $this->distributor['rank']==7 ) { ?> selected<?php }?>>5. Dealer</option>
+                        <option value="8" <?php if( isset($this->distributor['rank']) and $this->distributor['rank']==8 ) { ?> selected<?php }?>>6. HUB</option>
+                        <option value="9" <?php if( isset($this->distributor['rank']) and $this->distributor['rank']==9 ) { ?> selected<?php }?>>7. Laos</option>
+                        <option value="3" <?php if( isset($this->distributor['rank']) and $this->distributor['rank']==3 ) { ?> selected<?php }?>>8. Online and Staff</option>
+                       <!--  <option value="10" <?php if( isset($this->distributor['rank']) and $this->distributor['rank']==10 ) { ?> selected<?php }?>>10 (Accessories For Cambodia)</option>
+                        <option value="11" <?php if( isset($this->distributor['rank']) and $this->distributor['rank']==11 ) { ?> selected<?php }?>>Điện máy Chợ Lớn</option>
+                        <option value="12" <?php if( isset($this->distributor['rank']) and $this->distributor['rank']==12 ) { ?> selected<?php }?>>Laos</option>
+                        <option value="13" <?php if( isset($this->distributor['rank']) and $this->distributor['rank']==13 ) { ?> selected<?php }?>>TGDD Thường</option>
+                        <option value="14" <?php if( isset($this->distributor['rank']) and $this->distributor['rank']==14 ) { ?> selected<?php }?>>VTA</option>
+                        <option value="15" <?php if( isset($this->distributor['rank']) and $this->distributor['rank']==15 ) { ?> selected<?php }?>>Vinpro</option>
+                        <option value="16" <?php if( isset($this->distributor['rank']) and $this->distributor['rank']==16 ) { ?> selected<?php }?>>Điện máy HC</option> -->
+                    </select>
+			    	<p class="help-block"></p>
+			    </div>
+			</div>
+			<div class="control-group">
+			    <label class="control-label" for="mst_sn">MST Number</label>
+			    <div class="controls">
+			    	<input type="text" id="mst_sn" name="mst_sn" value="<?php if( isset($this->distributor) && isset($this->distributor['mst_sn']) ) echo $this->distributor['mst_sn'] ?>" />
+			    	<p class="help-block"></p>
+			    </div>
+			</div>
+			<div class="control-group">
+			    <label class="control-label" for="nots">Note</label>
+			    <div class="controls">
+			    	<textarea name="nots" id="nots" cols="30" rows="5"><?php if( isset($this->distributor) && isset($this->distributor['nots']) ) echo $this->distributor['nots'] ?></textarea>
+			    	<p class="help-block"></p>
+			    </div>
+			</div>
+            <div class="control-group">
+                <label class="control-label" for="is_ka">Distributor is KA</label>
+                <div class="controls">
+                    <input type="checkbox" id="is_ka" name="is_ka" value="1" <?php if(isset($this->distributor['is_ka']) && $this->distributor['is_ka']) echo "checked" ?> />               
+                </div>
+            </div>
+            <div class="control-group">
+                <label class="control-label" for="is_internal">Internal Distributor</label>
+                <div class="controls">
+                    <input type="checkbox" id="is_internal" name="is_internal" value="1" <?php if(isset($this->distributor['is_internal']) && $this->distributor['is_internal']) echo "checked" ?> />               
+                </div>
+            </div>
+			<div class="control-group">
+			    <label class="control-label" for="add_time">Add Time</label>
+			    <div class="controls">
+			    	<input type="text" id="add_time" disabled="disabled" value="<?php if( isset($this->distributor) && isset($this->distributor['add_time']) ) echo $this->distributor['add_time'] ?>" />			    </div>
+			</div>
+
+
+            <div class="control-group">
+                <label class="control-label" for="partner_id">Partner ID</label>
+                <div class="controls">
+                    <input type="text" id="partner_id" name="partner_id" value="<?php if( isset($this->distributor) && isset($this->distributor['partner_id']) ) echo $this->distributor['partner_id'] ?>" />
+                    <p class="help-block"></p>
+                </div>
+            </div>
+		</div>
+	</div>
+	<input type="hidden" id="id" name="id" value="<?php if( isset($this->distributor) && isset($this->distributor['id']) ) echo $this->distributor['id'] ?>" />
+	<div class="row-fluid">
+		<div class="span10">
+            <input type="hidden" name="back_url" id="back_url" value="<?php if ( isset($this->back_url) and $this->back_url ) echo $this->back_url;?>">
+            <button type="submit" class="btn btn-primary">Submit</button>
+            <button type="button" class="btn btn-danger go-back">Go back</button>
+        </div>
+	</div>
+</form>
+
+<iframe name="iframe"></iframe>
+
+<script type="text/javascript" src="<?php echo HOST ?>js/jets.js"></script>
+<script>
+var jets = new Jets({
+  searchTag: '#parent_search',
+  contentTag: '#parent'
+});
+
+    function checkStoreName(e){
+        var timeout;
+        $("#title").on("keyup", function () {
+            var id = $("#id").val().trim();
+            var storeName = $("#title").val().trim();
+            window.clearTimeout(timeout);
+            timeout = window.setTimeout(function() {
+                checkStoreNameAction(id, storeName);
+            }, 500);
+
+        });
+    }
+
+    function checkStoreNameAction(id, storeName) {
+        $("#store_name_check").html('');
+
+        if (storeName) {
+            $.ajax({
+                    url: '<?php echo HOST ?>get/check-distributor-name',
+                    type: 'post',
+                    dataType: 'html',
+                    data: {id : id, distributor_name : storeName},
+                })
+                .done(function(data) {
+                    console.log("success");
+
+                    if (data) {
+                        $("#store_name_check").html(data);
+                    }
+                })
+                .fail(function() {
+                    console.log("error");
+                })
+                .always(function() {
+                    console.log("complete");
+                });
+                    
+        }
+    }
+
+    $(document).ready(function () {
+        $('.go-back').click(function(e){
+            e.preventDefault();
+            parent.history.back();
+            return false;
+        });
+
+        checkStoreName();
+
+        $('#region').change(function(){
+            $(this).after('<span class="loading"></span>');
+            var _self = $(this);
+            var region = _self.val();
+            var area_id = _self.find('option:selected').data('area');
+
+            $('#area').val(area_id);
+
+            $('#district').find('option:not(:first)').remove();
+
+            $.get("/get/district",
+                {region: region}
+                ,function(data,status){
+                    var data = $.parseJSON( data );
+
+                    for (var i = 0; i < data.length; i++) {
+                        $('#district').append('<option value="'+data[i]['id']+'">'+data[i]['name']+'</option>');
+                    }
+
+                    _self.nextAll('.loading').remove();
+                });
+        });
+
+        $('#form').on('submit', function(e) {
+            $('input, select, textarea').prop('readonly', true);
+            $('button').hide();
+            $('iframe').before('<span class="loading"></span>');
+        })
+    });
+</script>

@@ -1,0 +1,111 @@
+<style type="text/css">
+    label.label {
+        cursor: pointer;
+    }
+</style>
+<form class="form-search form-horizontal" method="get" action="<?php echo HOST ?>sales/member-brandshop">
+    <div class="row">
+        <div class="span5">
+            <div class="control-group">
+                <label class="control-label" for="code">Code</label>
+                <div class="controls">
+                    <input type="text" id="code" name="code" value="<?php if( isset($this->params) && isset($this->params['code']) ) echo $this->params['code'] ?>" />
+                </div>
+            </div>
+            <div class="control-group">
+                <label class="control-label" for="phone_number">Phone Number</label>
+                <div class="controls">
+                    <input type="text" id="phone_number" name="phone_number" value="<?php if( isset($this->params) && isset($this->params['phone_number']) ) echo $this->params['phone_number'] ?>" />
+                </div>
+            </div>
+            <div class="control-group">
+                <label class="control-label" for="status">Status</label>
+                <div class="controls">
+                   <select name="status" id="status">
+                       <option value="1" <?php if( isset($this->params) && isset($this->params['status']) && $this->params['status'] == '1' ) echo 'check' ?>>Active</option>
+                       <option value="0" <?php if( isset($this->params) && isset($this->params['status']) && $this->params['status'] == '0' ) echo 'check' ?>>Inactive</option>
+                   </select>
+                </div>
+            </div>
+        </div>
+        <div class="span5">
+            <div class="control-group">
+                <label class="control-label" for="customer_name">Customer Name</label>
+                <div class="controls">
+                    <input type="text" id="customer_name" name="customer_name" value="<?php if( isset($this->params) && isset($this->params['customer_name']) ) echo $this->params['customer_name'] ?>" />
+                </div>
+            </div>
+            <div class="control-group">
+                <label class="control-label" for="tax_number">Tax Number</label>
+                <div class="controls">
+                    <input type="text" id="tax_number" name="tax_number" value="<?php if( isset($this->params) && isset($this->params['tax_number']) ) echo $this->params['tax_number'] ?>" />
+                </div>
+            </div>
+            <div class="control-group">
+                <label class="control-label" for="tax_address">Tax Address</label>
+                <div class="controls">
+                    <input type="text" id="tax_address" name="tax_address" value="<?php if( isset($this->params) && isset($this->params['tax_address']) ) echo $this->params['tax_address'] ?>" />
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="row">
+        <div class="span8">
+            <div class="controls">
+                <button type="submit" class="btn btn-primary">Search</button>
+                <!-- <button type="reset" class="btn btn-warning">Reset</button> -->
+                    <!-- <button type="submit" name="export" value="1" class="btn btn-success">Export</button> -->
+            </div>            
+        </div>
+    </div>
+</form>
+<script type="text/javascript" src="/js/jquery-ui-1.8.12.custom.min.js"></script>
+<link rel="stylesheet" type="text/css" href="/css/jquery-ui-1.8.12.custom.css"/>
+<script>
+    $(document).ready(function () {
+        $( '.date' ).datepicker({ dateFormat: "dd/mm/yy" });
+
+        $('#area').change(function(){
+
+            $(this).after('<span class="loading"></span>');
+            var _self = $(this);
+            var area_id = _self.val();
+
+            $('#region').find('option:not(:first)').remove();
+
+            $.get("/get/region",
+                {area_id: area_id}
+                ,function(data,status){
+                    $('#district').find('option:not(:first)').remove();
+                    var data = $.parseJSON( data );
+
+                    for (var i = 0; i < data.length; i++) {
+                        $('#region').append('<option value="'+data[i]['id']+'">'+data[i]['name']+'</option>');
+                    }
+
+                    _self.nextAll('.loading').remove();
+                });
+        });
+
+        $('#region').change(function(){
+
+            $(this).after('<span class="loading"></span>');
+            var _self = $(this);
+            var region = _self.val();
+
+            $('#district').find('option:not(:first)').remove();
+
+            $.get("/get/district",
+                {region: region}
+                ,function(data,status){
+                    var data = $.parseJSON( data );
+
+                    for (var i = 0; i < data.length; i++) {
+                        $('#district').append('<option value="'+data[i]['id']+'">'+data[i]['name']+'</option>');
+                    }
+
+                    _self.nextAll('.loading').remove();
+                });
+        });
+    });
+</script>

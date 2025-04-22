@@ -1,0 +1,235 @@
+<style>
+    input{
+        width: 120px;
+    }
+    .input-radio{
+        margin-left: 5px !important;
+    }
+    .red{
+        color: red;
+    }
+    .green{
+        color: green;
+    }
+</style>
+
+<h2 style="margin-top: 30px; margin-bottom: 30px;">Distributor : <?=$this->distributor['name'];?></h2>
+
+<?php
+    if (isset($this->messages_success) and $this->messages_success)
+        foreach ($this->messages_success as $message):
+            echo '<div class="alert alert-success">'.$message.'</div>';
+        endforeach;
+
+    if (isset($this->messages) and $this->messages)
+        foreach ($this->messages as $message):
+            echo '<div class="alert alert-error">'.$message.'</div>';
+        endforeach;
+?>
+
+Search Payment No : <input style="margin-top: 30px; margin-bottom: 30px;" id="search" type="text">
+<br/>
+สถานะการอนุมัติ : <input class="input-radio" type="radio" name="status_type" value="all" checked> ทั้งหมด
+<input class="input-radio" type="radio" name="status_type" value="active"> อนุมัติ
+<input class="input-radio" type="radio" name="status_type" value="inactive"> ยังไม่อนุมัติ
+<br/><br/>
+
+<button class="btn btn-info" id="btn-confirm-paymentno" type="button">อนุมัติให้เริ่มใช้งาน</button>
+
+<button class="btn btn-default" id="btn-back" type="button">กลับไปหน้าก่อนหน้า</button>
+
+<form action="<?php echo HOST ?>finance/export-paymentno-manage" method="POST">
+    <input type="hidden" name="d_id" value="<?=$this->distributor['id'];?>">
+    <button class="btn btn-default pull-right" id="btn-export" type="submit">Export</button>
+</form>
+
+<br/><br/>
+
+<table>
+    <tr>
+        <td>#</td>
+        <td>Payment No</td>
+        <td>Total Amount</td>
+        <td>Total Use</td>
+        <td>Total Balance</td>
+        <td>Create Date</td>
+        <td>Update Date</td>
+        <td>Confirm Date</td>
+        <td>Confirm Status</td>
+        <td>Use Balance</td>
+        <td>Remark</td>
+        <td></td>
+    </tr>
+
+<?php $i=0; foreach ($this->getPayGroupBalance as $key) { 
+
+    $confirm_status = false;
+    $textConfirm_status = 'ยังไม่อนุมัติ';
+
+    if(isset($key['confirmed_date']) && $key['confirmed_date']){
+        $confirm_status = true;
+        $textConfirm_status = 'อนุมัติ';
+    }
+
+    ?>
+    <tr class="chat-user-list <?php if($confirm_status){echo 'confirm-status-active';}else{echo 'confirm-status-inactive';}?>">
+        <td><?php if(!$confirm_status){ ?><input class="checkbox-confirm" type="checkbox" value="<?=$key['payment_id'];?>"><?php } ?></td>
+        <td>
+        <span class="hide"><?=strtolower($key['payment_no']);?></span>
+        <input id="paymentNo-<?=$i;?>" type="text" value="<?=$key['payment_no'];?>" readonly></td>
+        <td><input id="totalAmount-<?=$i;?>" type="text" value="<?=$key['total_amount'];?>" readonly></td>
+        <td><input id="useTotal-<?=$i;?>" type="text" value="<?=$key['use_total'];?>" readonly></td>
+        <td><input id="balanceTotal-<?=$i;?>" type="text" value="<?=$key['balance_total'];?>" readonly></td>
+        <td><input id="createDate-<?=$i;?>" type="text" value="<?=$key['create_date'];?>" readonly></td>
+        <td><input id="updateDate-<?=$i;?>" type="text" value="<?=$key['update_date'];?>" readonly></td>
+        <td><input id="confirmDate-<?=$i;?>" type="text" value="<?=$key['confirmed_date'];?>" readonly></td>
+        <td><input class="<?php if($confirm_status){echo 'green';}else{echo 'red';}?>" id="confirmStatus-<?=$i;?>" type="text" value="<?=$textConfirm_status;?>" readonly></td>
+        <td><input id="useBalance-<?=$i;?>" type="number" step="0.01" min="0" max="<?=$key['balance_total'];?>" <?php if(!$confirm_status){echo 'disabled';}?>></td>
+        <td><input id="remark-<?=$i;?>" type="text" <?php if(!$confirm_status){echo 'disabled';}?>></td>
+        <td><?php if($confirm_status){?><a href="#" onclick="updateBalance('<?=$key['payment_id'];?>','<?=$i;?>')"><i style="margin-left: 15px;" class="icon-ok icon-2x"></i></a><?php } ?></td>
+        <span></span>
+    </tr>
+<?php $i++; } ?>
+
+</table>
+
+
+<script>
+    
+    $(document).ready(function () {
+    
+        $('#search').keyup(function(event) {
+          search();   
+        });
+
+        $('.input-radio').change(function(event) {
+            search();
+        });
+
+        $('#btn-confirm-paymentno').click(function(event) {
+                
+            payment_id = [];
+
+            $('.checkbox-confirm:checked').each(function(index, el) {
+                payment_id.push($(el).val());
+            });
+
+            if(payment_id.length > 0){
+
+                if (confirm('Are you sure?')) {
+
+                    $.ajax({
+                        url: '<?php echo HOST.'finance/confirm-paymentno';?>',
+                        type: 'POST',
+                        data: {'d_id':<?=$this->distributor['id'];?>,'payment_id':payment_id},
+                    })
+                    .done(function(response) {
+                        var obj_response = jQuery.parseJSON(response);
+                        console.log("success");
+
+                        console.log(obj_response.status);
+
+                         switch(obj_response.status) {
+                            case '400':
+                                alert(obj_response.message);
+                                console.log(obj_response.message);
+                                break;
+                            case '201':
+                                window.location.href = obj_response.url;
+                                break;
+                            default:
+                                console.log('ajax fail.');
+                        }
+                        
+                    });
+
+                }
+
+            }else{
+                alert('กรุณาเลือกรายการที่ต้องการ');
+            }
+
+        });
+
+        $('#btn-back').click(function(event) {
+            if (confirm('ต้องการกลับไปหน้าก่อนหน้าานี้ใช่หรือไม่ !!!')) {
+                window.location.href = '<?=$this->back_url;?>';
+            }
+        });
+
+    });
+
+    function search(){
+
+        var key = $('#search').val().toLowerCase();
+
+        var confirm_type_status = $('input[name=status_type]:checked').val();
+
+        switch(confirm_type_status) {
+            case 'active':
+                $('.chat-user-list').hide();
+                $( ".confirm-status-active:contains('"+key+"')" ).show();
+                break;
+            case 'inactive':
+                $('.chat-user-list').hide();
+                $( ".confirm-status-inactive:contains('"+key+"')" ).show();
+                break;
+            default:
+                $('.chat-user-list').hide();
+                $( ".chat-user-list:contains('"+key+"')" ).show();
+        }   
+
+    }
+
+    function updateBalance(payment_id,i){
+
+        if (confirm('Are you sure?')) {
+
+            $('.alert').addClass('hide');
+            
+            var paymentNo = $('#paymentNo-'+i);
+            var balanceTotal = $('#balanceTotal-'+i);
+            var useBalance = $('#useBalance-'+i);
+            var remark = $('#remark-'+i);
+
+            if(parseFloat(useBalance.val()) <= 0){
+                alert(paymentNo.val() + ' : Can not update, Use Balance < 0');
+                return false;
+            }
+
+            if(parseFloat(useBalance.val()) > parseFloat(balanceTotal.val())){
+                alert(paymentNo.val() + ' : Can not update, Use Balance > Total Balance');
+                return false;
+            }
+
+             $.ajax({
+                url: '<?php echo HOST.'finance/paymentno-manage';?>',
+                type: 'POST',
+                data: {'d_id':<?=$this->distributor['id'];?>,'payment_no':paymentNo.val(),'payment_id':payment_id,'use_balance':useBalance.val(),'remark':remark.val()},
+            })
+            .done(function(response) {
+                var obj_response = jQuery.parseJSON(response);
+                console.log("success");
+
+                console.log(obj_response.status);
+
+                 switch(obj_response.status) {
+                    case '400':
+                        alert(obj_response.message);
+                        console.log(obj_response.message);
+                        break;
+                    case '201':
+                        window.location.href = obj_response.url;
+                        break;
+                    default:
+                        console.log('ajax fail.');
+                }
+                
+            });
+
+        }
+            
+    }
+
+</script>
+

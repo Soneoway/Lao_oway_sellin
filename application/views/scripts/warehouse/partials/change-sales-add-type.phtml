@@ -1,0 +1,230 @@
+<h3><?= isset($this->changeSalesOrder['sn_ref']) ? $this->changeSalesOrder['sn_ref'] : ''; ?></h3>
+<!-- <div class="span5">
+
+    <div class="control-group">
+       <label class="span2" for="rank" style="color: blue;">Select Return to shop<span style="color: red">*</span></label>
+
+       <select id="rank" name="rank" class="rank span3">
+        <option value="">---</option>
+        <option value="9" <?php if( isset($this->distributor['rank']) and $this->distributor['rank']==9 ) { ?> selected<?php }?>>7. Laos(9)</option>
+        <option value="10" <?php if( isset($this->distributor['rank']) and $this->distributor['rank']==10 ) { ?> selected<?php }?>>8. Alei (10)</option>
+    </select>
+
+</div>       
+
+<div class="retailer_name_list"></div>
+</div>
+<hr> -->
+<br><br>
+
+<div class="row">
+    <div class="span6">
+        <label class="span4"><span style="color: red"></span></label>
+    </div>
+</div>
+
+<div class="row">
+    <div class="span6">
+        <label class="span4" for="is_changed_wh1">
+            <input type="radio" required="required" name="is_changed_wh" id="is_changed_wh1" value="1" <?php if (isset($this->changeSalesOrder['is_changed_wh']) and $this->changeSalesOrder['is_changed_wh'] == 1){?> checked <?php }?> <?php if (isset($this->disabledFields) and is_array($this->disabledFields) and in_array('is_changed_wh', $this->disabledFields)) {?> disabled<?php } ?>>
+            <span style="font-family: phetsarath ot; color: blue;font-size: 20px;">Warehouse to warehouse</span>
+        </label>
+
+        <br>
+
+        <label class="span4 hide" for="is_changed_wh0">
+            <input type="radio" required="required" name="is_changed_wh" id="is_changed_wh0" value="0" <?php if (isset($this->changeSalesOrder['is_changed_wh']) and $this->changeSalesOrder['is_changed_wh'] == 0){?> checked <?php }?> <?php if (isset($this->disabledFields) and is_array($this->disabledFields) and in_array('is_changed_wh', $this->disabledFields)) {?> disabled<?php } ?>>
+            Retailer to retailer
+        </label>
+    </div>
+    <?php
+    $hideType = true;
+    if (isset($this->changeSalesOrder['type']) and $this->changeSalesOrder['type']) $hideType = false;?>
+    <div class="span6 div-type" <?php if ($hideType){?> style="display: none"<?php }?>>
+        <label class="span4" for="type">
+            Type<span style="color: red">*</span>
+            <select id="type" name="type" required="required" <?php if (isset($this->disabledFields) and is_array($this->disabledFields) and in_array('type', $this->disabledFields)) {?> disabled<?php } ?>>
+                <option value="<?php echo FOR_RETAILER;?>" <?php if (isset($this->changeSalesOrder['type']) and $this->changeSalesOrder['type'] == FOR_RETAILER){?> selected="selected" <?php }?>>Normal</option>
+                <option value="<?php echo FOR_DEMO;?>" <?php if (isset($this->changeSalesOrder['type']) and $this->changeSalesOrder['type'] == FOR_DEMO){?> selected="selected" <?php }?>>Demo</option>
+                <option value="<?php echo FOR_APK;?>" <?php if (isset($this->changeSalesOrder['type']) and $this->changeSalesOrder['type']  == FOR_APK){?> selected="selected" <?php }?>>APK</option>
+            </select>
+        </label>
+    </div>
+</div>
+
+<div class="row is_changed_wh0" <?php if ((isset($this->changeSalesOrder['is_changed_wh']) 
+    and $this->changeSalesOrder['is_changed_wh'] == 1 
+    and $this->changeSalesOrder['new_id'] == $id) || !isset($this->changeSalesOrder)){?> 
+        style="display:none;" <?php }?>>
+        
+        <div class="span6 hide">
+
+            <label class="span4" for="distributor_id1">From retailer:<span style="color: red">*</span>
+                <select id="distributor_id1" class="span4" name="distributor_id1" <?php if (isset($this->disabledFields) and is_array($this->disabledFields) and in_array('is_changed_wh', $this->disabledFields)) {?> disabled<?php } ?>>
+                    <option value="">Please select</option>
+                <!-- <?php //foreach ($this->distributors as $id=>$distributor):?>
+                    <option value="<?php echo $id;?>" 
+                        <?php if (isset($this->changeSalesOrder['is_changed_wh']) 
+                            and $this->changeSalesOrder['is_changed_wh'] == 0 
+                            and $this->changeSalesOrder['old_id'] == $id){?> 
+                            selected="selected" <?php }?>
+                        ><?php echo $distributor;?></option>
+                        <?php //endforeach;?> -->
+                    </select>
+                </label>
+            </div>
+
+            <div class="span6 hide">
+                <label class="span4" for="distributor_id2">To retailer:<span style="color: red">*</span>
+                    <select id="distributor_id2" class="span4" name="distributor_id2" <?php if (isset($this->disabledFields) and is_array($this->disabledFields) and in_array('is_changed_wh', $this->disabledFields)) {?> disabled<?php } ?>>
+                        <option value="">Please select</option>
+                <!-- <?php //foreach ($this->distributors as $id=>$distributor):?>
+                    <option value="<?php echo $id;?>" 
+                        <?php if (isset($this->changeSalesOrder['is_changed_wh']) 
+                            and $this->changeSalesOrder['is_changed_wh'] == 0 
+                            and $this->changeSalesOrder['new_id'] == $id){?> 
+                            selected="selected" <?php }?>
+                        ><?php echo $distributor;?></option>
+                        <?php //endforeach;?> -->
+                    </select>
+                </label>
+            </div>
+        </div>
+
+        <div class="row is_changed_wh1" <?php if ((isset($this->changeSalesOrder['is_changed_wh']) 
+            and $this->changeSalesOrder['is_changed_wh'] == 0 
+            and $this->changeSalesOrder['new_id'] == $id) || !isset($this->changeSalesOrder)){?> 
+             style="display:none;" <?php }?> >
+
+<!--     <div class="span6">
+    <label class="span4" for="is_changed_wh2">
+             
+            <input type="checkbox"  name="is_changed_wh2" id="is_changed_wh2" value="2"<?php if (isset($this->changeSalesOrder['changed_order']) and $this->changeSalesOrder['changed_order'] == 2){?> checked <?php }?>>
+            พิมพ์ใบเบิก 
+    </label>
+
+    <div class="is_changed_wh2"  <?php if ((isset($this->changeSalesOrder['changed_order']) 
+                            and $this->changeSalesOrder['changed_order'] == 2)){?> 
+                           style="" <?php }else{?>  style="display:none;"<?php } ?> >
+            <label class="span4" >ผู้ขอเบิก<span style="color: red">*</span>
+                    <input type='text' class="span4" name='salesman_id' id="salesman_id" placeholder="" autocomplete="off" value="<?PHP if(isset($this->changeSalesOrder['changed_order']) and $this->changeSalesOrder['changed_order']){ ?> <?PHP echo $this->changeSalesList['salesman_id'] ;} ?>"> 
+                    
+            </label>
+            <label class="span4" >รายละเอียด
+                    <input type='text' class="span4" name='detail' id="detail" maxlength="120" value="<?PHP echo $this->changeSalesList['detail'] ;?>" placeholder="" autocomplete="off" />
+            </label>
+           
+            <label class="span4" >หมายเหตุ 
+                    <input type='text' class="span4" name='note' id="note" maxlength="280" placeholder="" value="<?PHP echo $this->changeSalesList['note'] ;?>" autocomplete="off" />
+            </label>
+            <label class="span4" for="doc_type">ประเภทการขอเบิก<span style="color: red">*</span>
+             <select id="doc_type" class="span4" name="doc_type" required="required">
+                <option value="0">Please select</option>
+        <?php if (isset( $this->changedoctype ) && $this->changedoctype): ?>
+            <?php foreach ($this->changedoctype as $key => $type): ?>
+                <option value="<?php echo $key;?>" 
+                        <?php if (isset($this->changeSalesList['doc_type']) 
+                            and $this->changeSalesList['doc_type'] == $key){?> 
+                            selected="selected" <?php }?>
+                        ><?php echo $type;?></option>
+            <?php endforeach ?>
+        <?php endif ?>
+            </select> 
+        </label>  
+            <?PHP $data_demand = $this->changeSalesList['product_demand'];
+                  $date=date_create($data_demand);
+                  $in_date= date_format($date,"d/m/Y");
+             ?>
+            <label for="created_at_from" class="span4">วันที่ต้องการสินค้า</label>
+                <input type="text" class="span4 search-query date" id="product_demand" name="product_demand" style="margin-left: 30px;" value="<?PHP if (isset($this->changeSalesList['product_demand']) and $this->changeSalesList['product_demand']) {echo $in_date ;} ?>">  
+    </div> 
+</div> -->
+<br/>
+
+<div class="span6">
+    <label class="span4" for="warehouse_id1">From warehouse:<span style="color: red">*</span>
+        <select id="warehouse_id1" class="span4" name="warehouse_id1" required="required" <?php if (isset($this->disabledFields) and is_array($this->disabledFields) and in_array('is_changed_wh', $this->disabledFields)) {?> disabled<?php } ?>>
+            <option value="">Please select</option>
+            <?php foreach ($this->warehouses as $id=>$warehouse):?>
+                <option value="<?php echo $id;?>" 
+                    <?php if (isset($this->changeSalesOrder['is_changed_wh']) 
+                        and $this->changeSalesOrder['is_changed_wh'] == 1 
+                        and $this->changeSalesOrder['old_id'] == $id){?> 
+                            selected="selected" <?php }?>
+                            ><?php echo $warehouse;?></option>
+                        <?php endforeach;?>
+                    </select>
+                </label>
+            </div>
+            <div class="span6">
+
+                <label class="span4" for="warehouse_id2">To warehouse:<span style="color: red">*</span>
+                    <select id="warehouse_id2" class="span4" name="warehouse_id2" required="required" <?php if (isset($this->disabledFields) and is_array($this->disabledFields) and in_array('is_changed_wh', $this->disabledFields)) {?> disabled<?php } ?>>
+                        <option value="">Please select</option>
+                        <?php foreach ($this->warehouses as $id=>$warehouse):?>
+                            <option value="<?php echo $id;?>" 
+                                <?php if (isset($this->changeSalesOrder['is_changed_wh']) 
+                                    and $this->changeSalesOrder['is_changed_wh'] == 1 
+                                    and $this->changeSalesOrder['new_id'] == $id){?> 
+                                        selected="selected" <?php }?>
+                                        ><?php echo $warehouse;?></option>
+                                    <?php endforeach;?>
+                                </select>
+                            </label>
+
+
+
+                        </div>
+                    </div>
+
+                    <script type="text/javascript" src="/js/jquery-ui-1.8.12.custom.min.js"></script>
+                    <script type="text/javascript" src="/js/jquery.ui.timepicker.js"></script>
+                    <link rel="stylesheet" type="text/css" href="/css/jquery-ui-1.8.12.custom.css"/>
+                    <link rel="stylesheet" type="text/css" href="/css/jquery.ui.timepicker.css"/>
+                    <script type="text/javascript" src="<?php echo HOST ?>js/jets.js"></script>
+
+                    <script>
+                        $(document).ready(function () {
+                            $('.date').datepicker({ dateFormat: "dd/mm/yy" });
+
+                            <?php if(isset($this->rank)) { ?>
+                                $('#rank').val(<?= $this->rank ?>);
+                                get_distributor_cached_for_search(<?= $this->rank ?>);
+                            <?php }?>
+
+                            $('.rank').change(function(event) {
+                                get_distributor_cached_for_search($(this).val());
+                            });
+
+                            function get_distributor_cached_for_search(rank_id){
+
+                                var rank_id = rank_id;
+                                $.ajax({
+                                  url: '<?php echo HOST ?>get/distributor-cached-for-search',
+                                  type: 'POST',
+                                  dataType: 'html',
+                                  data: {rank_id: rank_id},
+                              })
+                                .done(function(data) {
+                                  $('.retailer_name_list').empty();
+                                  $('.retailer_name_list').append(data);
+                                  var jets = new Jets({
+                                    searchTag: '#SearchBox',
+                                    contentTag: '#d_id'
+                                });
+                                  <?php if(isset($this->d_id)){ ?>
+                                    $('#d_id').val(<?= $this->d_id ?>);
+                                <?php }?>
+                                console.log("success");
+                            })
+                                .fail(function() {
+                                  console.log("error");
+                              })
+                                .always(function() {
+                                  console.log("complete");
+                              });
+
+                            }
+                            initSearchOptionDistributor('d_id', 'SearchBox');
+                        });
+                    </script>

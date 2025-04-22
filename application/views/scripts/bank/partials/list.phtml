@@ -1,0 +1,62 @@
+<table class="table table-bordered">
+    <thead>
+        <tr>
+            <?php echo $this->sorting(array(
+        			"b.id"=>'ID',
+            		'name'=>'name',
+            		'Fullname',        		
+                    'Action'
+                ),
+                $this->url, $this->sort, $this->desc); ?>
+        </tr>
+    </thead>
+    <tbody>
+        <?php
+        if (isset($this->list) and $this->list)
+            foreach ($this->list as $item): ?>
+        <tr>
+            <td><?php echo $item['id']?></td>
+            <td>            	
+            	<?php echo $item['name']?>
+            </td>
+            <td>            	
+            	<?php echo $item['fullname']?>
+            </td>
+            <td class="">
+                <?php 
+                    if($this->access('/bank','edit')):
+                ?>
+        		<a title="Edit" href="/bank/edit?id=<?php echo $item['id'];?>"> <i class="icon-edit"></i></a>
+                <?php 
+                    endif;
+                    if($this->access('/bank','del')):
+                ?>
+           		<a title="Delete" class="confirmLink" href="/bank/del?id=<?php echo $item['id'];?>"> <i class="icon-trash"></i></a>
+                <?php 
+                    endif;
+                ?>
+            </td>
+        </tr>
+        <?php endforeach;?>
+    </tbody>
+</table>
+<div class="paging">
+    <?php echo $this->paging($this->total, $this->limit, $this->offset, $this->url);?>
+</div>
+
+<script type="text/javascript" src="/js/jquery-ui-1.8.12.custom.min.js"></script>
+<link rel="stylesheet" type="text/css" href="/css/jquery-ui-1.8.12.custom.css"/>
+<?php echo $this->load();?>
+<?php echo $this->confirm();?>
+<script>
+    $(document).ready(function(){
+    	$('.confirmLink').bind("contextmenu",function(e){
+    	    return false;
+    	});
+        $('.lock').click(function(e){
+            e.preventDefault();
+            alert('Sorry,This information is blocked...You can not delete payment has been made or has been the storage of information!');
+        });
+    })
+
+</script>

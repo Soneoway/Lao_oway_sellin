@@ -1,0 +1,626 @@
+<?php if (isset($this->error)): ?>
+    <div class="alert alert-danger"><?php echo $this->error ?></div>
+<?php else: ?>
+<style type="text/css">
+    textarea {
+        max-width: 100%;
+    }
+</style>
+<?PHP
+
+ if (isset($this->dateNewAdd) and $this->dateNewAdd > '2017-03-15 00:00:00') { ?>
+   <form action="" onsubmit="return false;" class="form-horizontal" >
+    <fieldset>
+
+        <legend>Delivery Order</legend>
+        <div class="row">
+            <div class="span6">
+                <div class="control-group">
+                    <label class="control-label" for="distributor">Distributor</label>
+                    <div class="controls">
+                    <p><?php echo $this->distributor_list[0]['title'] ?></p>
+                    <input type="hidden" name="distributor" id="distributor" value="<?php echo $this->distributor_list[0]['id'] ?>">
+                        <!-- <select name="distributor" id="distributor" required redonly>
+                            <option value>---</option>
+                            <?php if (isset($this->distributor_list)): ?>
+                                <?php $i = 1; ?>
+                                <?php foreach ($this->distributor_list as $_key => $_item): ?>
+                                <option value="<?php echO $_item['id'] ?>"
+                                    data-name="<?php echo $_item['name'] ?>"
+                                    data-address="<?php echo $_item['address'] ?>"
+                                    data-district-id="<?php echo $_item['district'] ?>"
+                                    data-district-name="<?php echo My_Region::getValue($_item['district'], My_Region::District)  ?>"
+                                    data-province-id="<?php echo My_Region::getValue($_item['district'], My_Region::Province, My_Region::ID)  ?>"
+                                    data-province-name="<?php echo My_Region::getValue($_item['district'], My_Region::Province)  ?>"
+                                    data-phone="<?php echo $_item['phone'] ?>"
+                                    <?php if ($i++ == 1) echo "selected" ?>
+                                    ><?php echo $_item['title'] ?></option>
+                                <?php endforeach ?>
+                            <?php endif ?>
+                        </select> -->
+                    </div>
+                </div>
+<!--
+                <div class="control-group">
+                    <label class="control-label" for="receiver">Receiver</label>
+                    <div class="controls">
+                        <input type="text" name="receiver" id="receiver" />
+                    </div>
+                </div>
+-->
+
+                <div class="control-group">
+                    <label class="control-label" for="address">Addressdssss</label>
+                    <div class="controls">
+                        <p><?=$this->distributor_list[0]['address']?></p>
+                        <input type="hidden" name="shipping_id" id="shipping_id" value="<?=$this->distributor_list[0]['address_id']?>">
+                        <input type="hidden" name="address" id="address" value="<?=$this->distributor_list[0]['address']?>">
+                    </div>
+                </div>
+
+                <!-- <div class="control-group">
+                    <label class="control-label" for="province">Province</label>
+                    <div class="controls">
+                        <select name="province" id="province" required>
+                            <option value>---</option>
+                            <?php if (isset($this->provinces)): ?>
+                                <?php foreach ($this->provinces as $_id => $_name): ?>
+                                    <option value="<?php echo $_id ?>"><?php echo $_name ?></option>
+                                <?php endforeach ?>
+                            <?php endif ?>
+                        </select>
+                    </div>
+                </div>
+
+                <div class="control-group">
+                    <label class="control-label" for="district">District</label>
+                    <div class="controls">
+                        <select name="district" id="district" required>
+                            <option value>---</option>
+                        </select>
+                    </div>
+                </div> -->
+
+                <div class="control-group">
+                    <label class="control-label" for="phone">Tel/Mobile</label>
+                    <div class="controls">
+                        <p><?=$this->distributor_list[0]['phone']?></p>
+                        <input type="hidden" name="phone" id="phone2" value="<?=$this->distributor_list[0]['phone']?>">
+                        <input type="hidden" name="district" id="district" value="<?=$this->distributor_list[0]['district']?>">
+                    </div>
+                </div>
+
+            </div>
+            <div class="span6">
+
+                <div class="control-group">
+                    <label class="control-label" for="type">Type</label>
+                    <div class="controls">
+                        <select name="type" class="delivery_type" id="type" required>
+                            <option value>---</option>
+                            <?php foreach (My_Delivery_Type::$name as $type_id => $name): ?>
+                                <option value="<?php echo $type_id ?>"><?php echo $name ?></option>
+                            <?php endforeach ?>
+                        </select>
+                    </div>
+                </div>
+
+
+
+                <div class="control-group" id="hub" style="display:none;">
+                    <label class="control-label" for="choose_hub">Hub</label>
+                    <div class="controls">
+                        <input type="checkbox" name="choose_hub" id="choose_hub" /> <span></span>
+                    </div>
+                </div>
+
+                <div class="control-group" data-type="<?php echo My_Delivery_Type::Inhouse ?>" style="display:none;">
+                    <label class="control-label" for="staff_id">Staff</label>
+                    <div class="controls">
+                        <input type="text" name="SearchBox" id="SearchBox"  placeholder="Search" autocomplete="off">
+                        <select name="staff_id" id="staff_id" required size="5">
+                            <option value>---</option>
+                            <?php foreach ($this->staffs as $staff_id => $name): ?>
+                                <option value="<?php echo $staff_id ?>"><?php echo $name ?></option>
+                            <?php endforeach ?>
+                        </select>
+                    </div>
+                </div>
+
+                <div class="row" data-type="<?php echo My_Delivery_Type::Outside ?>" style="display:none;">
+                    <div class="span4">
+                        <div class="control-group">
+                            <label class="control-label" for="carrier">Carrier</label>
+                            <div class="controls">
+                                <select name="carrier" id="carrier" required>
+                                    <option value>---</option>
+                                    <?php foreach (My_Carrier::$name as $carrier_id => $name): ?>
+                                        <option value="<?php echo $carrier_id ?>"><?php echo $name ?></option>
+                                    <?php endforeach ?>
+                                </select>
+                            </div>
+                        </div>
+
+                        <div class="control-group">
+                            <label class="control-label" for="tracking_no">Tracking No</label>
+                            <div class="controls">
+                                <input type="text" name="tracking_no" id="tracking_no" required/>
+                            </div>
+                        </div>
+
+                        <div class="control-group" style="display: none;">
+                            <label class="control-label" for="delivery_sn">Delivery Code</label>
+                            <div class="controls">
+                                <input type="text" name="delivery_sn" id="delivery_sn" required />
+                            </div>
+                        </div>
+
+                        <div class="control-group">
+                            <label class="control-label" for="number_of_package">Number of Packages</label>
+                            <div class="controls">
+                                <input type="number" name="number_of_package" id="number_of_package" value="1" />
+                            </div>
+                        </div>
+
+                        <div class="control-group">
+                            <label class="control-label" for="weight">Weight</label>
+                            <div class="controls">
+                                <input type="text" name="weight" id="weight" />
+                                <p class="check_weight_info"></p>
+                            </div>
+                        </div>
+
+                        <div class="control-group hide">
+                            <label class="control-label" for="net_weight">Net Weight</label>
+                            <div class="controls">
+                                <input type="text" name="net_weight" id="net_weight" value="<?php if (isset($this->weight)) echo $this->weight ?>" readonly="readonly" />
+                            </div>
+                        </div>
+                    </div>
+
+                </div>
+
+            </div>
+        </div>
+
+        <div class="row">
+            <div class="span12">
+                <button type="submit" style="display:none;" id="submit_btn"></button>
+                <button class="btn btn-info" id="btn_save_delivery_order">Save Delivery Order</button>
+                <button class="btn btn-default" type="button" onclick="window.location.href=window.location.href">Cancel</button>
+            </div>
+        </div>
+    </fieldset>
+</form>
+<?PHP } else {?>
+ <form action="" onsubmit="return false;" class="form-horizontal" >
+
+    <fieldset>
+        <legend>Delivery Order</legend>
+        <div class="row">
+            <div class="span6">
+                <div class="control-group">
+                    <label class="control-label" for="distributor">Distributor</label>
+                    <div class="controls">
+                        <select name="distributor" id="distributor" required redonly>
+                            <option value>---</option>
+                            <?php if (isset($this->distributor_list)): ?>
+                                <?php $i = 1; ?>
+                                <?php foreach ($this->distributor_list as $_key => $_item): ?>
+                                <option value="<?php echO $_item['id'] ?>"
+                                    data-name="<?php echo $_item['name'] ?>"
+                                    data-address="<?php echo $_item['address'] ?>"
+                                    data-district-id="<?php echo $_item['district'] ?>"
+                                    data-district-name="<?php echo My_Region::getValue($_item['district'], My_Region::District)  ?>"
+                                    data-province-id="<?php echo My_Region::getValue($_item['district'], My_Region::Province, My_Region::ID)  ?>"
+                                    data-province-name="<?php echo My_Region::getValue($_item['district'], My_Region::Province)  ?>"
+                                    data-phone="<?php echo $_item['phone'] ?>"
+                                    <?php if ($i++ == 1) echo "selected" ?>
+                                    ><?php echo $_item['title'] ?></option>
+                                <?php endforeach ?>
+                            <?php endif ?>
+                        </select>
+                    </div>
+                </div>
+
+
+                <div class="control-group">
+                    <label class="control-label" for="address">Address</label>
+                    <div class="controls">
+                        <textarea name="address" id="address" required></textarea>
+                    </div>
+                </div>
+
+                <div class="control-group">
+                    <label class="control-label" for="province">Province</label>
+                    <div class="controls">
+                        <select name="province" id="province" required>
+                            <option value>---</option>
+                            <?php if (isset($this->provinces)): ?>
+                                <?php foreach ($this->provinces as $_id => $_name): ?>
+                                    <option value="<?php echo $_id ?>"><?php echo $_name ?></option>
+                                <?php endforeach ?>
+                            <?php endif ?>
+                        </select>
+                    </div>
+                </div>
+
+                <div class="control-group">
+                    <label class="control-label" for="district">District</label>
+                    <div class="controls">
+                        <select name="district" id="district" required>
+                            <option value>---</option>
+                        </select>
+                    </div>
+                </div>
+
+                <div class="control-group">
+                    <label class="control-label" for="phone">Tel/Mobile</label>
+                    <div class="controls">
+                        <input type="text" name="phone" id="phone" required/>
+                    </div>
+                </div>
+
+            </div>
+            <div class="span6">
+
+                <div class="control-group">
+                    <label class="control-label" for="type">Type</label>
+                    <div class="controls">
+                        <select name="type" class="delivery_type" id="type" required>
+                            <option value>---</option>
+                            <?php foreach (My_Delivery_Type::$name as $type_id => $name): ?>
+                                <option value="<?php echo $type_id ?>"><?php echo $name ?></option>
+                            <?php endforeach ?>
+                        </select>
+                    </div>
+                </div>
+
+
+
+                <div class="control-group" id="hub" style="display:none;">
+                    <label class="control-label" for="choose_hub">Hub</label>
+                    <div class="controls">
+                        <input type="checkbox" name="choose_hub" id="choose_hub" /> <span></span>
+                    </div>
+                </div>
+
+                <div class="control-group" data-type="<?php echo My_Delivery_Type::Inhouse ?>" style="display:none;">
+                    <label class="control-label" for="staff_id">Staff</label>
+                    <div class="controls">
+                        <input type="text" name="SearchBox" id="SearchBox"  placeholder="Search" autocomplete="off">
+                        <select name="staff_id" id="staff_id" required size="5">
+                            <option value>---</option>
+                            <?php foreach ($this->staffs as $staff_id => $name): ?>
+                                <option value="<?php echo $staff_id ?>"><?php echo $name ?></option>
+                            <?php endforeach ?>
+                        </select>
+                    </div>
+                </div>
+
+                <div class="row" data-type="<?php echo My_Delivery_Type::Outside ?>" style="display:none;">
+                    <div class="span4">
+                        <div class="control-group">
+                            <label class="control-label" for="carrier">Carrier</label>
+                            <div class="controls">
+                                <select name="carrier" id="carrier" required>
+                                    <option value>---</option>
+                                    <?php foreach (My_Carrier::$name as $carrier_id => $name): ?>
+                                        <option value="<?php echo $carrier_id ?>"><?php echo $name ?></option>
+                                    <?php endforeach ?>
+                                </select>
+                            </div>
+                        </div>
+
+                        <div class="control-group">
+                            <label class="control-label" for="tracking_no">Tracking No</label>
+                            <div class="controls">
+                                <input type="text" name="tracking_no" id="tracking_no" required/>
+                            </div>
+                        </div>
+
+                        <div class="control-group" style="display: none;">
+                            <label class="control-label" for="delivery_sn">Delivery Code</label>
+                            <div class="controls">
+                                <input type="text" name="delivery_sn" id="delivery_sn" required />
+                            </div>
+                        </div>
+
+                        <div class="control-group">
+                            <label class="control-label" for="number_of_package">Number of Packages</label>
+                            <div class="controls">
+                                <input type="number" name="number_of_package" id="number_of_package" value="1" />
+                            </div>
+                        </div>
+
+                        <div class="control-group">
+                            <label class="control-label" for="weight">Weight</label>
+                            <div class="controls">
+                                <input type="text" name="weight" id="weight" />
+                                <p class="check_weight_info"></p>
+                            </div>
+                        </div>
+
+                        <div class="control-group hide">
+                            <label class="control-label" for="net_weight">Net Weight</label>
+                            <div class="controls">
+                                <input type="text" name="net_weight" id="net_weight" value="<?php if (isset($this->weight)) echo $this->weight ?>" readonly="readonly" />
+                            </div>
+                        </div>
+                    </div>
+
+                </div>
+
+            </div>
+        </div>
+
+        <div class="row">
+            <div class="span12">
+                <button type="submit" style="display:none;" id="submit_btn"></button>
+                <button class="btn btn-info" id="btn_save_delivery_order">Save Delivery Order</button>
+                <button class="btn btn-default" type="button" onclick="window.location.href=window.location.href">Cancel</button>
+            </div>
+        </div>
+    </fieldset>
+</form>
+ <?PHP }?>
+
+
+<script type="text/javascript">
+    ;(function($) {
+        $('#distributor').change(change_receiver_info);
+        $('#btn_save_delivery_order').click(save_delivery_order);
+        $('.delivery_type').change(show_delivery_type);
+        $('#choose_hub').change(select_hub);
+        $('#weight').change(check_weight);
+        $('#weight').keyup(check_weight);
+
+        $('#delivery_sn').keypress(function(event) {
+            if (event.which == 13)  {
+                event.preventDefault();
+                return false;
+            }
+        });
+
+        $('#province').change(function(){
+            $('.loading').remove();
+            $(this).after('<span class="loading"></span>');
+            var _self = $(this);
+            var province_id = _self.val();
+            $('.hub_info input').val('');
+            $('.hub_info').fadeOut();
+
+            $('#district').find('option:not(:first)').remove();
+
+            $.get("/get/district-v2",
+                {province_id: province_id}
+                ,function(data,status){
+                    try {
+                        for (key in data)
+                            $('#district').append('<option value="'+key+'">'+data[key]+'</option>');
+
+                        $(document).off('change', '#district').on('change', '#district', checkDistrictHub);
+                    } catch(err) {console.log(err)}
+
+                    $('.loading').remove();
+
+                    if ($('#distributor option:selected').data('district-id')) {
+                        $('#district').val( $('#distributor option:selected').data('district-id') ).change();
+
+                    }
+                });
+        });
+
+        $(document).off('change', '#district').on('change', '#district', checkDistrictHub);
+
+        <?php // vì select sẵn dealer đầu tiên, nên gọi sự kiện này 1 phát để nó load thông tin vào các field dưới ?>
+        setTimeout(function() {
+            $('#distributor').change();
+        }, 500);
+    })(jQuery);
+
+function select_hub(e) {
+    _self = $(e.target);
+    is_check = _self.prop('checked');
+
+    if (is_check === true) {
+        $('#receiver').val( $('#choose_hub').data('receiver') ).prop('readonly', true);
+        $('#address').text( $('#choose_hub').data('address') ).prop('readonly', true);
+        $('#phone').val( $('#choose_hub').data('phone') ).prop('readonly', true);
+
+    } else {
+        _d = $('#distributor option:selected');
+        $('#receiver').val( _d.data('name') ).prop('readonly', false);
+        $('#address').text( _d.val() ? _d.data('address') : '' ).prop('readonly', false);
+        $('#phone').val( _d.attr('data-phone') ).prop('readonly', false);
+    }
+}
+
+function checkDistrictHub(e) {
+    $('.loading').remove();
+    $(this).after('<span class="loading"></span>');
+    var _self = $(e.target);
+    var district_id = _self.val();
+
+    $.get("/get/check-district-hub",
+        {district_id: district_id}
+        ,function(data,status){
+            try { console.log(data)
+                if (typeof data.have_hub !== "undefined" && data.have_hub) {
+                    $('#choose_hub').data('receiver', data.hub_contact );
+                    $('#choose_hub').data('address',  data.hub_address.trim());
+                    $('#choose_hub').data('phone', data.hub_tel );
+                    $('#choose_hub').data('hub_id', data.hub_id );
+
+                    $('#hub span').text(data.hub_name);
+                    $('#hub').fadeIn();
+
+                } else {
+                    $('#choose_hub').data('receiver', '');
+                    $('#choose_hub').data('address',  '');
+                    $('#choose_hub').data('phone', '');
+                    $('#choose_hub').data('hub_id', '');
+
+                    $('#hub span').val('');
+                    $('#hub').fadeOut();
+                }
+            } catch(err) {console.log(err)}
+
+            $('.loading').remove();
+        });
+}
+
+function change_receiver_info(e) {
+    _d = $('#distributor option:selected');
+    $('#receiver').val( _d.data('name') );
+    $('#address').text( _d.val() ? _d.data('address') : '' );
+    $('#phone').val( _d.attr('data-phone') );
+    $('#province').val( _d.data('province-id') );
+    $('#province').change();
+}
+
+function save_delivery_order(e) {
+
+    $('.loading').remove();
+    $('.alert').html('').hide();
+    var sn = [];
+
+    $('.order_sn_list').each(function(index, el) {
+        order_sn = $(el).val().trim();
+        if (order_sn)
+            sn.push( order_sn );
+    });
+
+    if (!sn.length) {
+        //$('.alert-danger').text('Không thể tạo vận đơn mà không có đơn hàng nào.').show();
+        $('.alert-danger').text('ไม่สามารถจัดส่งสินค้าได้.').show();
+        return false;
+    }
+
+    var type              = $('#type').val();
+    var carrier           = $('#carrier').val();
+    var staff_id          = $('#staff_id').val();
+    var distributor_id    = $('#distributor').val();
+    //var receiver          = $('#receiver').val().trim();
+    var address           = $('#address').val();
+    var shipping_id           = $('#shipping_id').val();
+    var district          = $('#district').val();
+    var choose_hub        = $('#choose_hub').prop('checked') ? 1 : 0;
+    var hub_id            = $('#choose_hub').data('hub_id') ? $('#choose_hub').data('hub_id') : 0;
+    <?PHP if (isset($this->dateNewAdd) and $this->dateNewAdd > '2017-03-15 00:00:00') {?>
+    var phone             = $('#phone2').val();
+    <?PHP }else{ ?>
+    var phone             = $('#phone').val();
+    <?PHP }?>
+    var delivery_sn       = $('#delivery_sn').val();
+    var number_of_package = $('#number_of_package').val();
+    var weight            = $('#weight').val();
+    var tracking_no       = $('#tracking_no').val();
+
+    $('#btn_save_delivery_order').after('<span class="loading"></span>');
+
+    $('button, input, select, textarea, form').prop('disabled', true);
+
+    $.ajax({
+        url: '<?php echo HOST ?>delivery/save',
+        type: 'post',
+        dataType: 'json',
+        data: {
+            sn               : sn,
+            distributor_id   : distributor_id,
+            //receiver         : receiver,
+            address          : address,
+            shipping_id      : shipping_id,
+            district         : district,
+            phone            : phone,
+            type             : type,
+            staff_id         : staff_id,
+            carrier          : carrier,
+            delivery_sn      : delivery_sn,
+            number_of_package: number_of_package,
+            weight           : weight,
+            choose_hub       : choose_hub,
+            hub_id           : choose_hub ? hub_id : 0,
+            tracking_no      : tracking_no,
+        },
+    })
+    .done(function(data) {
+        console.log(data);
+
+        if (data && typeof data.result !== 'undefined') {
+            if (data.code == 1) {
+                // print /////////////////////////////////
+                $('.alert-success').text(data.result).show();
+
+                if (data.print == 0) {
+                    window.location.reload();
+                } else {
+                    url = "<?php echo HOST ?>delivery/order-control-print?id="+data.id;
+                    window.location.href = url;
+                }
+
+            } else {
+                $('button, input, select, textarea, form').prop('disabled', false);
+                $('.alert-danger').text('Error ['+data.code+'] '+data.result).show();
+            }
+        }
+    })
+    .fail(function() {
+        console.log("error");
+    })
+    .always(function() {
+        $('.loading').remove();
+        console.log("complete");
+    }); // end ajax
+
+} // end function
+
+function ref(callback) {
+    callback();
+    window.location.reload();
+}
+
+function show_delivery_type(e) {
+    _self = $(e.target);
+    type = _self.val();
+    $('[data-type*=]').prop('disabled', true).val('').hide();
+    $('[data-type="'+type+'"]').show().prop('disabled', false);
+
+    if (type == <?php echo My_Delivery_Type::Hub_Pickup ?>) {
+        $('#choose_hub').prop('checked', true).prop('disabled', true).change();
+
+    } else {
+        $('#choose_hub').prop('checked', false).prop('disabled', false).change();
+    }
+
+    try { initSearchOption(); } catch(err) {}
+}
+
+function initSearchOption(){
+    var timeout;
+    $("#SearchBox").on("keyup", function () {
+        var userInput = $("#SearchBox").val();
+        window.clearTimeout(timeout);
+        timeout = window.setTimeout(function() {
+            showOnlyOptionsSimilarToText($("#staff_id"), userInput, true);
+        }, 500);
+
+    });
+}
+
+function check_weight() {
+    weight = $("#weight").val().trim();
+    net_weight = $("#net_weight").val().trim();
+
+    if (Math.abs(weight - net_weight) / net_weight > 0.05) {
+        $("#weight").css('color', 'red');
+        $(".check_weight_info").text("น้ำหนักที่กรอกมีค่ามากกว่าที่ระบบกำหนด");
+    } else {
+        $("#weight").css('color', 'black');
+        $(".check_weight_info").text("");
+    }
+}
+</script>
+
+<?php endif ?>
+

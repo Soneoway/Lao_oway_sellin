@@ -1,0 +1,110 @@
+<?php
+function product_price($priceFloat) {
+$symbol_thousand = '.';
+$decimal_place = 0;
+$price = number_format($priceFloat, $decimal_place, '', $symbol_thousand);
+return $price;
+}
+?>
+<table class="table table-bordered">
+    <thead>
+        <tr>
+            <?php echo $this->sorting(array(
+					'#',
+					'sn'             =>'PO number',
+					'staff_username' =>'PO name',
+					'Product Category',
+					'Product',
+					'Color',
+					'total_qty'      =>'Quantity',
+					'total_price'    =>'Price',
+					'Payment',
+					'Enter the warehouse?',
+					'warehouse_name' =>'Purchaser',
+					'Remark',
+					'created_at'     =>'Order time',
+					'Action'
+                ),
+                $this->url, $this->sort, $this->desc); ?>
+        </tr>
+    </thead>
+    <tbody>
+        <?php
+        if (isset($this->POs) and $this->POs)
+            foreach ($this->POs as $k=>$PO): 
+             $sn_ref = $PO['sn_ref'];
+             if($sn_ref==''){
+                $sn_ref = $PO['sn'];
+             }
+                ?>
+        <tr class="accordion-heading">
+        	<td><a href="#id" class="collapse_a btn btn-default btn-small" id="m_<?php echo $PO['sn'] ?>">+</a></td>
+            <td><?php echo $sn_ref;?></td>
+            <td><?php echo $PO['staff_username'];?></td>
+            <td></td>
+            <td></td>
+            <td></td>
+            <td><?php echo $PO['total_qty'] ?></td>
+            <td><?php echo "-" ?></td>
+            <td><?php if ($PO['flow']):?><i class="icon-ok"></i><?php else:?><i class="icon-remove"></i><?php endif;?></td>
+            <td><?php if ($PO['mysql_user']):?><i class="icon-ok"></i><?php else:?><i class="icon-remove"></i><?php endif;?></td>
+            <td><?php echo $PO['warehouse_name'];?></td>
+            <td><?php echo $PO['text'];?></td>
+            <td><?php echo $PO['created_at'];?></td>
+            <td class="">
+            	<?php 
+                //if (in_array( $PO['cat_id'], array(PHONE_CAT_ID, DIGITAL_CAT_ID, ILIKE_CAT_ID) ) && isset($PO['total_sn']) && $PO['total_qty'] > $PO['total_sn'] ): ?>
+            		<a title="Add IMEI" href="/warehouse/add-imei?id=<?php echo $PO['id'];?>"> <i class="icon-qrcode"></i></a>
+                    <a title="Rollback" class="confirmLink" href="/warehouse/po-rollback?id=<?php echo $PO['id'];?>"> <i class="icon-repeat"></i></a>
+                <?php //endif ?>
+                
+                <a title="Confirming" href="/warehouse/po-confirm?id=<?php echo $PO['id'];?>"> <i class="icon-ok"></i></a>
+            </td>
+        </tr>
+        	<?php if (isset($this->po_goods) && $this->po_goods && isset($this->po_goods[$PO['sn']])): ?>
+        		<?php foreach ($this->po_goods[$PO['sn']] as $key => $value): ?>
+        			<tr class="m_<?php echo $PO['sn'] ?> accordion-body collapse" style="display:none;">
+        				<td></td>
+        				<td></td>
+			            <td></td>
+			            <td><?php echo $value['good_category_name'];?></td>
+			            <td><?php echo $value['brand_name'] ?> <?php echo $value['good_name'];?></td>
+			            <td><?php echo $value['good_color_name'];?></td>
+			            <td><?php echo $value['num'];?></td>
+			            <td><?php echo "-";?></td>
+			            <td></td>
+			            <td></td>
+			            <td></td>
+			            <td></td>
+			            <td></td>
+			            <td></td>
+        			</tr>
+        		<?php endforeach ?>
+        	<?php endif ?>
+        <?php endforeach;?>
+
+    </tbody>
+</table>
+<div class="paging">
+    <?php echo $this->paging($this->total, $this->limit, $this->offset, $this->url);?>
+</div>
+
+<script type="text/javascript" src="/js/jquery-ui-1.8.12.custom.min.js"></script>
+<link rel="stylesheet" type="text/css" href="/css/jquery-ui-1.8.12.custom.css"/>
+<?php echo $this->load();?>
+<?php echo $this->confirm();?>
+<script>
+    $('.collapse_a').each(function(){
+    	var _this = $(this);
+    	var _this_id = _this.attr('id');
+    	var $coll = $('.'+_this_id);
+
+    	_this.click(function(){
+
+    		$coll.toggle();
+    		if ($coll.is(':visible'))
+	    		_this.html('-');
+	    	else _this.html('+');
+    	});
+    });
+</script>

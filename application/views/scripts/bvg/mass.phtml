@@ -1,0 +1,257 @@
+<style>
+    iframe {
+        width: 100%;
+        height: 500px;
+    }
+
+    .bar {
+        line-height: 18px;
+    }
+    .modal-scrollable
+    {
+        position: absolute;
+        z-index: 9999;
+    }
+</style>
+<div class="page-header">
+    <h1>Mass Upload Product - Price Protection</h1>
+</div>
+
+<?php
+if (isset($this->messages_success) and $this->messages_success)
+    foreach ($this->messages_success as $message):
+        echo '<div class="alert alert-success">'.$message."</div>";
+    endforeach;
+
+if (isset($this->messages) and $this->messages)
+    foreach ($this->messages as $message):
+        echo '<div class="alert alert-error">'.$message."</div>";
+    endforeach;
+
+
+$path_protection_price = realpath(APPLICATION_PATH . '/../public/files/protection_price_template/protection_price_template.xlsx');    
+/*header("Content-type: public/files/protection_price_template");
+header("Content-Disposition: attachment; filename=protection_price_template.xlsx"); 
+$pdfiledata = file_get_contents($filename);
+echo $pdfiledata;
+*/
+
+?>
+<div class="well">
+    <div class="row-fluid">
+
+        <div class="span4">
+            List of uploaded files <a class="btn btn-success btn-mini" href="<?php echo HOST ?>sales/mou-log">View Logs</a></p>
+            Product Protection Price Template <a class="btn btn-success btn-mini" href="<?php echo HOST ?>upload/protection_price/protection_price_template.xlsx">Download File</a></p>
+
+
+        </div>
+
+    </div>
+</div>
+
+<form action="<?php echo HOST ?>bvg/save-mass" id="form" target="iframe" class="form-inline" method="post" enctype="multipart/form-data">
+
+    <div class="row">
+        <div class="span6">
+            <div class="form-group">
+                <label for="joint_circular_id">Joint Circular</label>
+                <select name="joint_circular_id" required="required">
+                    <option value="">Select</option>
+                    <?php foreach ( $this->jointCircular as $item ) {?>
+                        <option value="<?php echo $item['id'];?>"><?php echo $item['name'];?></option>
+                    <?php } ?>
+                </select>
+            </div>
+        </div>
+
+        <div class="span6">
+            <div class="form-group">
+                <label class="span4">Add campaign protection price ?
+                    <button class='btn btn-mini btn-default' id="add_po_btn" type="button"><i class="icon-plus"></i> Add Joint</button>
+                </label>
+            </div>
+        </div>
+
+        <div class="modal hide fade" id="add_joint">
+            <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
+                <h3>Add New Joint Circular For Protection Price</h3>
+            </div>
+            <div class="modal-body">
+                <div class="control-group">
+                    <label class="control-label">Joint Circular</label>
+                    <div class="controls">
+                        <input type='text' name='joint_name_modal' id="joint_name_modal" placeholder="Joint Circular"  />
+                    </div>
+                </div>
+
+                <div class="control-group">
+                    <label class="control-label">Good</label>
+                    <div class="controls">
+                      <select class="good" id="good_id" name="good">
+                          <option value="0">Please select good</option>
+                          <?php if(isset($this->good) and $this->good):
+                                    foreach($this->good as $k => $v):
+                          ?>
+                          <option value="<?php echo $v['id'] ?>"><?php echo $v['name'] ?></option>
+                          <?php endforeach;endif; ?>
+                      </select>
+                    </div>
+                </div>
+
+                <div class="control-group">
+                    <label class="control-label">BVG Type</label>
+                    <div class="controls">
+                        <select class="good" name="good">
+                            <option value="0">Please select type</option>
+                            <?php if(isset($this->joint_type) and $this->joint_type):
+                                foreach($this->joint_type as $k => $v):
+                                    ?>
+                                    <option value="<?php echo $k ?>"><?php echo $v ?></option>
+                                <?php endforeach;endif; ?>
+                        </select>
+                    </div>
+                </div>
+
+                <div class="control-group">
+                    <label class="control-label">Price</label>
+                    <div class="controls">
+                        <input type='number' name='price' id="price" placeholder="price"  />
+                    </div>
+                </div>
+
+                <div class="control-group">
+                    <label class="control-label">Note</label>
+                    <div class="controls">
+                        <textarea id="note_modal"></textarea>
+                    </div>
+                </div>
+
+                <div class="control-group">
+                    <p id="info_modal" class="text-error" style='color: red;text-align: center;'></p>
+                </div>
+
+            </div>
+            <div class="modal-footer">
+                <a href="#" class="btn" data-dismiss="modal">Cancel</a>
+                <a href="#" class="btn btn-primary" id="save_joint">Save</a>
+            </div>
+        </div>
+
+        <div class="span6">
+            <div class="form-group">
+                <label for="" class="span4">File <span style="color: red">*</span>
+                    <input type="file" class="span4" name="file" required />
+                </label>
+            </div>
+        </div>
+    </div>
+
+    <div class="clearfix"></div>
+
+    <div class="form-group">
+        <button type="submit" class="form-control btn btn-primary">Save</button>
+        <a href="/bvg" class="btn btn-danger">Go back</a>
+    </div>
+</form>
+
+<div class="row">
+    <div class="span12">
+        <div class="progress progress-striped active">
+            <div class="bar" style="width: 0%;"></div>
+        </div>
+    </div>
+</div>
+
+<iframe src="" frameborder="0" name="iframe" id="iframe"></iframe>
+<script src="<?php echo HOST ?>js/jquery-ui.js"></script>
+<script src="<?php echo HOST ?>js/bootstrap-modal.js"></script>
+<script src="<?php echo HOST ?>js/bootstrap-modalmanager.js"></script>
+<script type="text/javascript" src="<?php echo HOST ?>js/sales.po.js"></script>
+
+<script>
+    function confirmExit() {
+        return "Orders are being processed.";
+    }
+
+    function set_progress(percent) {
+        $('.bar').css('width', percent+'%');
+        $('.bar').html(percent+'%');
+    }
+
+
+    $(document).ready(function () {
+
+        $('form').bind('submit',function(e){
+            $('.bar').css('width', '0%');
+            $('.bar').html('');
+            $('#iframe').get(0).contentWindow.clear_content();
+            $('form button, form input, form select').prop('readonly', true);
+            $('.loading').remove();
+            $(this).after('<span class="pre_loading">Processing <span><span class="loading"></span>');
+            window.onbeforeunload = confirmExit;
+        });
+        $('#add_po_btn').click(show_add_joint_modal);
+    });
+
+    function show_add_joint_modal() {
+
+        $modal = $('#add_joint');
+
+        $modal.modal('show');
+
+        $modal.on('hidden', function () {
+            $('#save_joint').unbind('click');
+        })
+
+        $('#save_joint').click(save_joint);
+
+    }
+    /*save joint circular*/
+    function save_joint()
+    {
+        $('#info_modal').text('');
+        var joint_name = $('#joint_name_modal').val();
+        var joint_note = $('#note_modal').val();
+        var good       = $('#good_id').val();
+        var price      = $('#price').val();
+        var bvg        = 1;
+
+
+        if (!joint_name) {
+            $('#info_modal').text('Please fill in the Joint Circular.');
+            return false;
+        }
+
+        $.ajax({
+            url: '/get/joint-save',
+            type: 'post',
+            dataType: 'json',
+            processData: true,
+            data: {
+                joint_name : joint_name,
+                note : joint_note,
+                bvg : bvg,
+                good_id : good,
+                price : price
+            }
+        })
+            .done(function(data) {
+                console.log("success");
+
+                if (data) {
+                    if (data.code != 1 && data.error) {
+                        $('#info_modal').text(data.error);
+                        return false;
+                    } else {
+                        $('#info_modal').text('Done!!!');
+                        setTimeout(window.location.reload(), 300);
+                    }
+                } else {
+                    $('#info_modal').text('Error!!!');
+                    return false;
+                }
+            });
+    }
+</script>

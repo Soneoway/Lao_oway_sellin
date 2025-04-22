@@ -1,0 +1,40 @@
+<link rel="stylesheet" href="<?php echo HOST?>css/select2.css" />
+<script src="<?php echo HOST?>js/select2.js"></script>
+
+<form class="form-search form-horizontal" method="get">
+	<div class="row">
+
+		<div class="span5">
+			<div class="control-group">
+				<label for="dis_id" class="control-label">Distributor(My Side) : </label>
+				<div class="controls">
+					<select class="span3" name="dis_id" id="dis_id">
+						<option value=""> Please Selected </option>
+						<?php foreach ($this->distributor as $value) : ?>
+							<option value="<?php echo $value['id'] ?>" <?php if(isset($this->params['dis_id']) && $this->params['dis_id'] == $value['id']) : ?> selected <?php endif; ?>><?php echo $value['title'] ?></option>
+						<?php endforeach; ?>
+					</select>
+				</div>
+			</div>
+		</div>
+
+		<div class="span6">
+			<div class="control-group">
+				<label for="finance_warehouse_group" class="control-label">Finance Warehouse Group : </label>
+				<div class="controls">
+					<input type="text" name="finance_warehouse_group" id="finance_warehouse_group" class="span3" value="<?php isset($this->params['finance_warehouse_group']) and printf($this->params['finance_warehouse_group']);?>" />
+				</div>
+			</div>
+		</div>
+
+
+		<button type="submit" class="btn btn-primary">Search</button>
+		<button type="reset" class="btn btn-warning">Reset</button>
+		<button type="submit" class="btn btn-success" name="export" value="1"> Export </button>
+
+	</div>
+</form>
+
+<script type="text/javascript">
+	$('#dis_id').select2();
+</script>

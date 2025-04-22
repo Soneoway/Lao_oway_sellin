@@ -1,0 +1,86 @@
+<?php if(isset($this->res) && $this->res): ?>
+<table class="table table-striped">
+	<thead>
+		<tr>
+			<th>#</th>
+			<th>SN</th>
+			<th>Created at</th>
+			<th>Created by</th>
+			<th>Checked payment at</th>
+			<th>Checked payment by</th>
+			<th>Warehouse completed at</th>
+			<th>Warehouse completed by</th>
+		</tr>
+	</thead>
+	<tbody>
+		<?php $i = 1; ?>
+		<?php foreach ($this->res as $k => $v): ?>
+			<tr>
+				<td><?php echo $i++; ?></td>
+				<td><?php echo $k ?></td>
+				<?php if (gettype($v) == 'string'): ?>
+					<td colspan="6"><?php echo $v ?></td>
+				<?php else: ?>
+					<td><?php echo $v['created_at'] ?></td>
+					<td><?php echo ( isset($this->staffs[$v['created_by']]) ? $this->staffs[$v['created_by']] : 'n/a' ) ?></td>
+					<td><?php echo ( !empty($v['flow_time']) ? $v['flow_time'] : 'n/a' ) ?></td>
+					<td><?php echo ( isset($this->staffs[$v['flow']]) ? $this->staffs[$v['flow']] : 'n/a' ) ?></td>
+					<td><?php echo ( !empty($v['mysql_time']) ? $v['mysql_time'] : 'n/a' ) ?></td>
+					<td><?php echo ( isset($this->staffs[$v['mysql_user']]) ? $this->staffs[$v['mysql_user']] : 'n/a' ) ?></td>
+				<?php endif; ?>
+			</tr>
+		<?php endforeach ?>
+	</tbody>
+</table>
+<div class="paging">
+    <?php echo $this->paging($this->total, $this->limit, $this->offset, $this->url);?>
+</div>
+
+<script>
+	$(document).ready(function(){
+		page();
+	});
+
+	function page() {
+    	$('a.paging-link').click(function(e){
+    		e.preventDefault();
+
+    		_self = $(this);
+			_self.parents('ul').after('<span class="loading"></span>');
+			po = $('#po').val();
+			url = _self.attr('href');
+			params = url.split('?');
+			if (params.length == 1) {
+				page = 1;
+			} else {
+				params = params[1].split('&');
+				for (i = 0; i < params.length; i++) {
+					pair = params[i].split('=');
+					if (pair[0] == 'page') {
+						page = pair[1];
+						break;
+					}
+				}
+
+				if (page === undefined) {
+					page = 1;
+				}
+			}
+
+			$.post(
+				"<?php echo HOST . 'tool/check-po'?>",
+				{
+					value : po,
+					page : page,
+					is_check : 1
+				},
+				function(data){
+					$('.ajax-load').html(data);
+					_self.nextAll('ul .loading').remove();
+			});
+
+			return false;
+    	});
+    }
+</script>
+<?php endif; ?>

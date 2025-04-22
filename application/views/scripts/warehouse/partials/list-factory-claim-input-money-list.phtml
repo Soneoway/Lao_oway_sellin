@@ -1,0 +1,73 @@
+<table class="table table-bordered">
+    <thead>
+        <tr>
+            <?php echo $this->sorting(array(
+					'#',
+                    'job_number' => 'Job Number',
+                    'old_imei' => 'IMEI',
+                    'old_good_model' => 'Product Model',
+                    'old_good' => 'Product Name',
+                    'old_good_color' => 'Product Color',
+                    'warehouse' => 'Warehouse',
+                    'remark' => 'Remark',
+                    'created_date' => 'Request Date',
+                    'fullname' => 'Request By',
+                    'status' => 'Status',
+                    'All <input type="checkbox" class="check_all" name="check_all" />'
+                    ),
+                $this->url, $this->sort, $this->desc); ?>
+        </tr>
+    </thead>
+    <tbody>
+        <?php if (isset($this->data) and $this->data) :
+            foreach ($this->data as $key => $value):
+                
+        ?>
+            <tr>
+                <td><?=($key+1)?></td>
+                <td><?=$value['job_number']?></td>
+                <td><?=$value['old_imei']?></td>
+                <td><?=$value['old_good_model']?></td>
+                <td><?=$value['old_good']?></td>
+                <td><?=$value['old_good_color']?></td>
+                <td><?php if(isset($this->warehouse_cache[$value['warehouse']])){echo $this->warehouse_cache[$value['warehouse']]; }?></td>
+                <td><?=$value['remark']?></td>
+                <td><?=$value['created_date']?></td>
+                <td><?=$value['fullname']?></td>
+                <td><?php switch ($value['status']) {
+                    case '0':
+                        echo 'Delected';
+                        break;
+                    case '1':
+                        echo 'Wait Approve';
+                        break;
+                    case '2':
+                        echo '<span style="color:green;">Approved</span>';
+                        break;
+                    case '3':
+                        echo '<span style="color:red;cursor:help;" title="' . $value['fullname_cancel'] . ' : ' . $value['del_remark'] . '">Cancel</span>';
+                        break;
+                } ?></td>
+                <td style="text-align: center;">
+                    <?php if($value['status'] == 2){ ?>
+                    <input type="checkbox" name="id" class="attach-id" value="<?php echo $value['factory_claim_id'] ?>" data-sn="<?php echo $value['factory_claim_id'] ?>">
+                    <?php } ?>
+                </td>
+            </tr>
+
+            <?php endforeach;?>
+        <?php endif; ?>
+    </tbody>
+</table>
+                
+<div class="paging">
+    <?php echo $this->paging($this->total, $this->limit, $this->offset, $this->url);?>
+</div>
+
+<script>
+
+    $( document ).ready(function() {
+
+    });
+    
+</script>

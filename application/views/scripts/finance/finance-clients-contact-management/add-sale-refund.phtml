@@ -1,0 +1,352 @@
+<link rel="stylesheet" href="<?php echo HOST?>css/select2.css" />
+<script src="<?php echo HOST?>js/select2.js"></script>
+
+<?php if(isset($this->action_type) && $this->action_type == 1) { 
+	$input_status="disabled";
+}elseif($this->action_type ==2){
+	$input_edit="disabled";
+}elseif($this->action_type==3){
+	$input_status="disabled";
+}else{
+
+} ?>
+
+<div class="page-header">
+	<?php if(isset($this->action_type) && $this->action_type == 1) : ?>
+		<h1 style="font-family: Times New Roman;">Detail Sales Refund</h1>
+	<?php elseif($this->action_type == 2) : ?>
+		<h1 style="font-family: Times New Roman;">Edit Sales Refund</h1>
+	<?php elseif($this->action_type == 3) : ?>
+		<h1 style="font-family: Times New Roman;">Approved Sales Refund</h1>
+	<?php else: ?>
+		<h1 style="font-family: Times New Roman;">Add Sales Refund</h1>
+	<?php endif; ?>
+</div>
+
+<form class="form-horizontal" method="post" action="<?php echo HOST ?>finance/save-sale-refund" >
+	<div class="row" style="border-style: solid; padding: 30px 10px 10px 10px; border-color: lavender; margin-right: 0px">
+
+		<div class="span12" style="display: flex; justify-content: end; padding-bottom: 20px;">
+			<?php if(isset($this->action_type) && $this->action_type == 1) : ?>
+				<button type="button" class="btn btn-" onclick="history.back()"> Back  </button>
+			<?php elseif($this->action_type==3): ?>
+				<button type="button" class="btn btn-success" data-toggle="modal" data-target="#myModal"> Approved </button> &nbsp;
+				<button type="button" class="btn btn-danger" onclick="history.back()"> Cancel </button>
+			<?php else: ?>
+				<input type="hidden" name="id" value="<?php isset($this->saleRefund) && printf($this->saleRefund->id) ?>">
+				<button type="submit" class="btn btn-success"> Save </button> &nbsp;
+				<button type="button" class="btn btn-danger" onclick="history.back()"> Cancel </button>
+			<?php endif; ?>
+			
+		</div>
+
+		<div class="span6">
+
+			<div class="control-group">
+				<label for="dis_id" class="control-label" style="width: 180px; padding-right: 20px;">Distributor(My Side) : <span style="color: red">*</span></label>
+				<div class="controls">
+					<select class="span3" name="dis_id" id="dis_id" required <?php echo $input_status; ?> <?php echo $input_edit ?> >
+						<option value=""> Please Selected </option>
+
+						<?php if(isset($this->distributor) && $this->distributor) : ?>
+							<?php foreach($this->distributor as $value) : ?>
+								<option value="<?php echo $value['id'] ?>" <?php if(isset($this->saleRefund) && $this->saleRefund->d_id == $value['id']) : ?> selected <?php endif; ?> ><?php echo $value['title'] ?></option>
+							<?php endforeach; ?>
+						<?php endif; ?>
+					</select>
+				</div>
+			</div>
+
+			<div class="control-group">
+				<label for="business_date" class="control-label" style="width: 180px; padding-right: 20px;">Business Date : <span style="color: red;">*</span></label>
+				<div class="controls">
+					<input type="text" name="business_date" id="business_date" class="span3 date" <?php echo $input_status; ?> required value="<?php isset($this->saleRefund) && printf($this->saleRefund->business_date) ?>">
+				</div>
+			</div>
+
+			<div class="control-group">
+				<label for="finance_client" class="control-label" style="width: 180px; padding-right: 20px">Financial Client : <span style="color: red;">*</span></label>
+				<div class="controls">
+					<select name="finance_client" id="finance_client" class="span3" required <?php echo $input_status; ?> >
+						<option value=""> Please Selected </option>
+
+						<?php if(isset($this->finance_client_arr) && $this->finance_client_arr) : ?>
+							<?php foreach($this->finance_client_arr as $value) : ?>
+								<option value="<?php echo $value['id'] ?>" <?php if(isset($this->saleRefund) && $this->saleRefund->finance_client_id == $value['id']) : ?> selected <?php endif ?> ><?php echo $value['name'] ?></option>
+							<?php endforeach; ?>
+						<?php endif; ?>
+					</select>
+				</div>
+			</div>
+
+
+			<div class="control-group">
+				<label for="refund_dealer" class="control-label" style="width: 180px; padding-right: 20px"> Store : <span style="color: red">*</span></label>
+				<div class="controls">
+					<select name="refund_dealer" id="refund_dealer" class="span3" required <?php echo $input_status; ?> >
+						<option value=""> Please Selected </option>
+
+						<?php if(isset($this->refund_dealer) && $this->refund_dealer) : ?>
+							<?php foreach($this->refund_dealer as $value) : ?>
+								<option value="<?php echo $value['id'] ?>" <?php if(isset($this->saleRefund->refund_dealer) && $this->saleRefund->refund_dealer == $value['id']) : ?> selected <?php endif; ?> ><?php echo $value['name'] ?></option>
+							<?php endforeach; ?>
+						<?php endif; ?>
+					</select>
+				</div>
+			</div>
+
+
+			<div class="control-group">
+				<label for="refund_type" class="control-label" style="width: 180px; padding-right: 20px">Settlement Type : <span style="color: red">*</span></label>
+				<div class="controls">
+					<select name="refund_type" id="refund_type" class="span3" required <?php echo $input_status; ?> >
+						<option value=""> Please Selected </option>
+
+						<?php if(isset($this->accountType) && $this->accountType) : ?>
+							<?php foreach($this->accountType as $key => $value) : ?>
+								<option value="<?php echo $key ?>" <?php if(isset($this->saleRefund->refund_type) && $this->saleRefund->refund_type == $key) : ?> selected <?php endif; ?> ><?php echo $value ?></option>
+							<?php endforeach; ?>
+						<?php endif; ?>
+
+					</select>
+				</div>
+			</div>
+
+			<?php if(isset($this->saleRefund->refund_type) && $this->saleRefund->refund_type == 1) : ?>
+
+
+				<div class="control-group">
+					<label for="my_bank" class="control-label" style="width: 180px; padding-right: 20px">My Bank Account : <span style="color: red;">*</span></label>
+					<div class="controls">
+						<select class="span3" name="my_bank" id="my_bank" required <?php echo $input_status; ?> >
+							<option value=""> Please Selected </option>
+
+							<?php if(isset($this->bankaccount) && $this->bankaccount) : ?>
+								<?php foreach($this->bankaccount as $value) : ?>
+									<option value="<?php echo $value['id'] ?>" <?php if(isset($this->saleRefund) && $this->saleRefund->my_bank == $value['id']) : ?> selected <?php endif; ?> ><?php echo $value['bank_account'] ?></option>
+								<?php endforeach; ?>
+							<?php endif; ?>
+						</select>
+					</div>
+				</div>
+
+
+			<?php else: ?>
+
+				<div class="control-group bank_account">
+					<label for="my_bank" class="control-label" style="width: 180px; padding-right: 20px">My Bank Account : <span style="color: red;">*</span></label>
+					<div class="controls">
+						<select class="span3" name="my_bank" id="my_bank" required>
+							<option value=""> Please Selected </option>
+						</select>
+					</div>
+				</div>
+
+			<?php endif; ?>
+
+			<div class="control-group">
+				<label for="amount" class="control-label" style="width: 180px; padding-right: 20px">Amount : <span style="color: red;">*</span></label>
+				<div class="controls">
+					<input type="text" name="amount" id="amount" class="span3" <?php echo $input_status; ?> required value="<?php isset($this->saleRefund) && printf($this->saleRefund->amount) ?>">
+				</div>
+			</div>
+
+			<div class="control-group">
+				<label for="" class="control-label" style="width: 180px; padding-right: 20px">Remark :</label>
+				<div class="controls">
+					<textarea cols="2" rows="2" class="span3" name="remark" <?php echo $input_status; ?> > <?php isset($this->saleRefund) && printf($this->saleRefund->remark) ?></textarea>
+				</div>
+			</div>
+
+		</div>
+
+		<div class="span6">
+
+			<div class="control-group">
+				<label for="" class="control-label" style="width: 180px; padding-right: 20px">Accounting organization(MySide) : </label>
+				<div class="controls">
+					<label id="account_my" style="padding-top: 22px; font-size: 16px;"> <?php isset($this->account_my) && printf($this->account_my->name) ?> </label>
+				</div>
+			</div>
+
+			<div class="control-group">
+				<label for="" class="control-label" style="width: 180px; padding-right: 20px">Accounting organization(YourSide) :</label>
+				<div class="controls">
+					<label id="account_you" style="padding-top: 22px; font-size: 16px"> <?php isset($this->account_you) && printf($this->account_you->name) ?> </label>
+				</div>
+			</div>
+
+			<div class="control-group">
+				<label for="" class="control-label" style="width: 180px; padding-right: 20px">Distributor(Your Side) : </label>
+				<div class="controls">
+					<label id="dis_you" style="padding-top: 6px; font-size: 16px;"> <?php isset($this->distributor_arr) && printf($this->distributor_arr->title) ?> </label>
+				</div>
+			</div>
+
+		</div>
+
+	</div>
+</form>
+
+
+<div id="myModal" class="modal hide fade" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+	<div class="modal-header">
+		<button type="button" class="close" data-dismiss="modal" aria-hidden="true">×</button>
+		<h3 id="myModalLabel">Approved</h3>
+	</div>
+
+	<div class="modal-body" style="display: flex; justify-content: center;">
+		<form method="post" id="modalForm">
+			<div class="row">
+				<div class="control-group">
+					<label class="">Finance Date <span style="color: red;">*</span> : </label>
+					<div class="controls">
+						<input type="text" name="finance_date" class="span3 date" id="finance_date" required />
+					</div>
+				</div>
+
+				<div class="control-group">
+					<label class="">Review Remarks : </label>
+					<div class="controls">
+						<textarea cols="2" rows="5" class="span3" name="remark"></textarea>
+					</div>
+				</div>
+			</div>
+
+			<div class="modal-footer">
+				<input type="hidden" name="id" value="<?php if(isset($this->saleRefund) && printf($this->saleRefund->id)) ?>">
+				<input type="hidden" name="action_type" value="3">
+				<button class="btn" data-dismiss="modal" aria-hidden="true">Close</button>
+				<button type="submit" class="btn btn-success" id="approved">Approved</button>
+			</div>
+		</form>
+	</div>
+</div>
+
+<script type="text/javascript" src="/js/jquery-ui-1.8.12.custom.min.js"></script>
+<link rel="stylesheet" type="text/css" href="/css/jquery-ui-1.8.12.custom.css"/>
+
+
+<script type="text/javascript">
+
+	$(document).ready(function () {
+
+		$('#modalForm').submit(function(event) {
+			event.preventDefault();
+
+			var data = $(this).serialize();
+
+			$.ajax({
+				url: '/finance/approved-sale-refund',
+				type: 'POST',
+				data: data,
+				success: function(response) {
+					Swal.fire({
+						title: 'Deleted!',
+						text: 'Your data has been deleted.',
+						icon: 'success',
+						showConfirmButton: false
+					});
+                // Reload page after 2 seconds (optional)
+					setTimeout(function(){ window.location.href ='/finance/sale-refund' }, 2000);
+				},
+				error: function(error) {
+        		// Handle the error response
+					alert('Error submitting data!');
+				}
+			});
+		});
+
+
+		$( '.date' ).datepicker({ dateFormat: "yy-mm-dd" });
+
+		$("#dis_id").change(function(){
+			var distributor_id = $("#dis_id").val();
+
+			$.get("/finance/load-bank-account-my",
+				{distributor_id : distributor_id}
+				,function(data,status){
+					var data = $.parseJSON( data );
+
+					if (data.financeClient){
+						var obj = data.financeClient;
+						$('#finance_client').html('<option value="0"> Please Selected </option>');
+						for (var i = 0; i < obj.length; i++) {
+							$('#finance_client').append('<option value="'+obj[i]['id']+'">'+obj[i]['name']+'</option>');
+						}
+					}
+
+					if (data.bankaccount){
+						var obj = data.bankaccount;
+						$('#my_bank').html('<option value="0"> Please Selected </option>');
+						for (var i = 0; i < obj.length; i++) {
+							$('#my_bank').append('<option value="'+obj[i]['id']+'">'+obj[i]['bank_account']+'</option>');
+						}
+					}
+
+				})
+		});
+
+
+		$("#finance_client").change(function(){
+			var finance_client = $("#finance_client").val();
+
+			$.get("/finance/load-store-or-warehouse-by-finance-client",
+				{finance_client : finance_client}
+				,function(data,status){
+					var data = $.parseJSON( data );
+
+					if (data.warehouse){
+						var obj = data.warehouse;
+						$('#refund_dealer').html('<option value="0"> Please Selected </option>');
+						for (var i = 0; i < obj.length; i++) {
+							$('#refund_dealer').append('<option value="'+obj[i]['id']+'">'+obj[i]['name']+'</option>');
+						}
+					}
+
+					if (data.store){
+						var obj = data.store;
+						$('#refund_dealer').html('<option value="0"> Please Selected </option>');
+						for (var i = 0; i < obj.length; i++) {
+							$('#refund_dealer').append('<option value="'+obj[i]['id']+'">'+obj[i]['name']+'</option>');
+						}
+					}
+
+					if (data.account_my){
+						var obj = data.account_my;
+						$('#account_my').html(obj.name);
+					}
+
+					if (data.distributor){
+						var obj = data.distributor;
+						$('#dis_you').html(obj.title);
+					}
+
+					if (data.account_you){
+						var obj = data.account_you;
+						$('#account_you').html(obj.name);
+					}
+
+				})
+		});
+
+
+		$(function() {
+			$('.bank_account').hide();
+			$("#refund_type").change(function(){
+
+				if($('#refund_type').val() == '1') {
+					$('.bank_account').show();
+					$('#my_bank').prop('required', true);
+				} else {
+					$('.bank_account').hide();
+					$('#my_bank').removeAttr('required'); 
+				} 
+			})
+		});
+
+	});
+
+
+
+</script>

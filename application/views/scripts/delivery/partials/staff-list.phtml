@@ -1,0 +1,46 @@
+<table class="table table-bordered">
+    <thead>
+        <tr>
+            <?php echo $this->sorting(array(
+                    '#',
+                    'username'   => 'Username',
+                    'hub_id'     => 'Hub',
+                    'carrier_id' => 'Carrier',
+                    'Action',
+                ),
+                $this->url, $this->sort, $this->desc); ?>
+        </tr>
+    </thead>
+    <tbody>
+        <?php
+        if (isset($this->men) and $this->men)
+            foreach ($this->men as $k=>$_man): ?>
+        <tr>
+            <td>
+                <?php echo ($this->offset + $k + 1) ?>
+            </td>
+            <td><?php echo $_man['username'];?></td>
+            <td>
+                <?php $hub_list = explode(',', $_man['hub_list']); ?>
+                <?php foreach ($hub_list as $key => $value): ?>
+                    <p><?php if(isset($this->hubs[ $value ])) echo $this->hubs[ $value ] ;?></p>
+                <?php endforeach ?>
+            </td>
+            <td><?php if(isset(My_Carrier::$name[ $_man['carrier_id'] ])) echo My_Carrier::$name[ $_man['carrier_id'] ];?></td>
+            <td>
+                <a href="<?php echo HOST ?>delivery/staff-edit?id=<?php echo $_man['id'] ?>" class="btn btn-default btn-mini" title="Edit"><i class="icon-edit"></i></a>
+            </td>
+        </tr>
+        <?php endforeach;?>
+
+    </tbody>
+</table>
+
+<div class="paging">
+    <?php echo $this->paging($this->total, $this->limit, $this->offset, $this->url);?>
+</div>
+
+<script type="text/javascript" src="/js/jquery-ui-1.8.12.custom.min.js"></script>
+<link rel="stylesheet" type="text/css" href="/css/jquery-ui-1.8.12.custom.css"/>
+<?php // echo $this->load();?>
+<?php echo $this->confirm();?>

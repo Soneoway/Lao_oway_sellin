@@ -1,0 +1,50 @@
+<link rel="stylesheet" href="<?php echo HOST ?>css/bootstrap-multiselect.css" type="text/css"/>
+<script type="text/javascript" src="<?php echo HOST ?>js/bootstrap-multiselect.js"></script>
+
+<style type="text/css">
+    label.label {
+        cursor: pointer;
+    }
+</style>
+<form class="form-search form-horizontal" method="get" action="<?php echo HOST ?>sales/shipping-address">
+    <div class="row">
+        <div class="span4">
+            <div class="control-group">
+                <label class="control-label" for="contact_name">Contact Name</label>
+                <div class="controls">
+                    <input type="text" id="contact_name" name="contact_name" value="<?php if( isset($this->params) && isset($this->params['contact_name']) ) echo $this->params['contact_name'] ?>" />
+                </div>
+            </div>
+            <div class="control-group">
+                <label class="control-label" for="address">Address</label>
+                <div class="controls">
+                    <input type="text" id="address" name="address" value="<?php if( isset($this->params) && isset($this->params['address']) ) echo $this->params['address'] ?>" />
+                </div>
+            </div>
+            <div class="control-group">
+                <label class="control-label" for="phone">Phone</label>
+                <div class="controls">
+                    <input type="text" id="phone" name="phone" value="<?php if( isset($this->params) && isset($this->params['phone']) ) echo $this->params['phone'] ?>" />
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="row">
+        <div class="span8">
+            <div class="controls">
+                <input type="hidden" name="id" value="<?php echo $this->params['id'] ?>">
+                <button type="submit" class="btn btn-primary">Search</button>
+                <!-- <button type="reset" class="btn btn-warning">Reset</button> -->
+                <!-- <button type="submit" name="export" value="1" class="btn btn-success">Export</button> -->
+            </div>            
+        </div>
+    </div>
+</form>
+<script type="text/javascript" src="/js/jquery-ui-1.8.12.custom.min.js"></script>
+<link rel="stylesheet" type="text/css" href="/css/jquery-ui-1.8.12.custom.css"/>
+<script>
+    $(document).ready(function () {
+
+        
+    });
+</script>

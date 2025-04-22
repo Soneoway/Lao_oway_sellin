@@ -1,0 +1,71 @@
+<div class="page-header">
+    <h1>OPPO All Green Upload <small>File Log</small></h1>
+</div>
+<?php
+if (isset($this->messages) and $this->messages)
+    foreach ($this->messages as $message):
+        echo '<div class="alert alert-error">'.$message.'</div>';
+    endforeach;
+?>
+<div class="row-fluid">
+    <div class="span12">
+        <table class="table table-bordered">
+            <thead>
+                <tr>
+                    <?php echo $this->sorting(array(
+                        '#',
+                        'real_file_name' => 'Real File Name',
+                        'uploaded_at'    => 'Uploaded At',
+                        'total'          => 'Total Product Quantity',
+                        'succeed'        => 'Successful',
+                        'failed'         => 'Failed',
+                        'value'          => 'Value of Successful orders',
+                        'ORIGINAL File',
+                        'SUCCESSFUL File',
+                        'ERROR File',
+                    ),
+                    $this->url, $this->sort, $this->desc); ?>
+                </tr>
+            </thead>
+            <tbody>
+                <?php if (isset($this->logs) && $this->logs): ?>
+                    <?php foreach ($this->logs as $key => $value): ?>
+                        <tr>
+                            <td><?php echo ($this->offset + $key + 1); ?></td>
+                            <td><?php echo $value['real_file_name'] ?></td>
+                            <td><?php echo date('d/m/Y H:i:s', $value['uploaded_at']) ?></td>
+                            <td><?php echo $value['total'] ?></td>
+                            <td><?php echo $value['succeed'] ?></td>
+                            <td><?php echo $value['failed'] ?></td>
+                            <td><?php echo number_format($value['value']) ?></td>
+                            <td>
+                                <?php if (isset($value['filename']) && $value['filename']): ?>
+                                    <a href="<?php echo 
+                                        HOST. 'download/mou?type=origin&folder='.$value['folder'].'&id='.$value['id'] ?>"
+                                        >Download</a>
+                                <?php endif ?>
+                            </td>
+                            <td>
+                                <?php if (isset($value['success_file_name']) && $value['success_file_name']): ?>
+                                     <a href="<?php echo 
+                                        HOST. 'finance-export/oppo-all-green?sn='.$value['success_file_name'] ?>"
+                                        >Download</a>
+                                <?php endif ?>                               
+                            </td>
+                            <td>
+                                <?php if (isset($value['error_file_name']) && $value['error_file_name']): ?>
+                                    <a href="<?php echo 
+                                        HOST. 'download/mou?type=error&folder='.$value['folder'].'&id='.$value['id'] ?>"
+                                        >Download</a>
+                                <?php endif ?>                               
+                            </td>
+                        </tr>
+                    <?php endforeach ?>
+                <?php endif ?>
+            </tbody>
+        </table>
+        <div class="paging">
+            <?php echo $this->paging($this->total, $this->limit, $this->offset, $this->url);?>
+        </div>
+    </div>
+</div>

@@ -1,0 +1,164 @@
+<style>
+
+a{
+    margin-right: 2.5px;
+    margin-left: 2.5px;
+}
+.status_confirm{
+    width: 70px;
+    background: #99ff66;
+    text-align: center;
+}
+.status_wait{
+    width: 70px;
+    background: #fff966;
+    text-align: center;
+}
+.status_cancel{
+    width: 70px;
+    background: #ff8c66;
+    text-align: center;
+}
+.hilight
+{
+    background: #E8ADAA;
+    /*color:white;*/
+}
+.hilight:hover
+{
+    /*color:black;*/
+}
+</style>
+
+<table class="table table-bordered">
+    <thead>
+        <tr>
+            <?php echo $this->sorting(array(
+                '#',
+                'presales_no'  => 'Sales Request Number',
+                'sales_order_no'  => 'Sales Number',
+                'store_code'  => 'Store Code',
+                'title'  => 'Distributor Name',
+                'sum_qty'  => 'QUANTITY',
+                'request_date'  => 'Request Date',
+                'sell_name'  => 'Request By',
+                'status'  => 'Status',
+                'admin_confirm_date'  => 'Admin Confirm Date',
+                'admin_name' => 'Admin Name',
+                'remark'  => 'หมายเหตุ',
+                'Action'
+            ),
+            $this->url, $this->sort, $this->desc); ?>
+        </tr>
+    </thead>
+    <tbody>
+        <?php
+        $statuses = unserialize(DISCOUNT_STATUS);
+        if (isset($this->get_resule) and $this->get_resule) :
+            $row=1;
+            foreach ($this->get_resule as $k=>$m):
+
+                $pre_status = 1;
+                $textpre_status = 'รอดำเนินการ';
+                $action_frm="";
+                if(isset($m['status']) && $m['status']&& $m['status']==2){
+                    $pre_status=2;
+                    $textpre_status = 'ยืนยัน';
+                    $action_frm="view";
+                }else if(isset($m['status']) && $m['status']&& $m['status']==3){
+                    $pre_status=3;
+                    $textpre_status = 'ยกเลิก';
+                    $action_frm="view";
+                }else if(isset($m['status']) && $m['status']&& $m['status']==1){
+                    $pre_status=1;
+                    $textpre_status = 'รอดำเนินการ';
+                    $action_frm="confirm";
+                }
+                
+                ?>
+
+                <tr>
+                    <td><?php echo $row; ?></td>
+                    <td><?php echo $m['presales_no'] ?></td>
+                    <td><?php echo $m['sales_order_no'] ?></td>
+                    <td><?php echo $m['store_code'] ?></td>
+                    <td><?php echo $m['title'] ?></td>
+                    <td style="text-align: right;" ><?php echo $m['sum_qty'] ?></td>
+                    <td><?php echo $m['request_date'] ?></td>
+                    <td><?php echo $m['sell_name'] ?></td>
+                    <td><input class="<?php if($pre_status==2)
+                    {echo 'status_confirm';
+                    }else if($pre_status==3){echo 'status_cancel';
+                    }else{echo 'status_wait';}
+                    ?>" 
+                    id="status-<?=$i;?>" 
+                    type="text" value="<?=$textpre_status;?>"></td>
+                    <td><?php echo $m['admin_confirm_date'] ?></td>
+                    <td><?php echo $m['admin_name'] ?></td>
+                    <td><?php echo $m['sell_remark'] ?></td>
+                    
+                    <td style="text-align: center;" >
+                        <a title="View Order"  href="/sales/pre-sales-order-list-view?action_frm=<?php echo $action_frm;?>&presales_sn=<?php echo $m['presales_sn'];?>"> <i class="icon-qrcode" style="color: red;"></i></a>
+                    </td>
+
+                    
+                    
+                    
+                </tr>
+                <?php 
+                $row +=1;
+            endforeach;
+            ?>
+        <?php endif; ?>
+    </tbody>
+</table>
+<div class="paging">
+    <?php echo $this->paging($this->total, $this->limit, $this->offset, $this->url);?>
+</div>
+
+
+
+<script type="text/javascript" src="/js/jets.js"></script>
+<script type="text/javascript" src="/js/jquery-ui-1.8.12.custom.min.js"></script>
+<script src="<?php echo HOST ?>js/tag-it.min.js" type="text/javascript" charset="utf-8"></script>
+
+<script>
+    
+
+    $(document).ready(function () {
+        
+        //alert(1);
+        $('.btn-confirm-status').click(function(event)
+        {
+            
+            var creditnote_sn = [];
+            $('.checkbox-confirm:checked').each(function(index, el) {
+                creditnote_sn.push($(el).val());
+            });
+
+            if(creditnote_sn.length > 0){
+                if (confirm('Are you sure?')) {
+
+                    $.ajax({
+                        url: '<?php echo HOST.'finance/creditnote-status';?>',
+                        type: 'POST',
+                        data: {'d_id':<?=$this->distributor['id'];?>,'creditnote_sn':creditnote_sn},
+                    })
+                    .done(function(response) {
+
+                    });
+
+                }
+            }else{
+                alert('กรุณาเลือกรายการที่ต้องการ');
+            }
+
+        });    
+    });
+
+
+    
+
+
+
+</script>

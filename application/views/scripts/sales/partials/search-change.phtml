@@ -1,0 +1,63 @@
+<script type="text/javascript" src="<?php echo HOST ?>js/jquery-ui-1.8.12.custom.min.js"></script>
+<link rel="stylesheet" type="text/css" href="<?php echo HOST ?>css/jquery-ui-1.8.12.custom.css"/>
+
+<link href="<?php echo HOST ?>css/jquery.tagit.css" rel="stylesheet" type="text/css">
+<link href="<?php echo HOST ?>css/tagit.ui-zendesk.css" rel="stylesheet" type="text/css">
+
+<link rel="stylesheet" href="<?php echo HOST ?>css/bootstrap-multiselect.css" type="text/css"/>
+<script type="text/javascript" src="<?php echo HOST ?>js/bootstrap-multiselect.js"></script>
+
+<link href="../css/select2.css" rel="stylesheet"/>
+<script src="../js/select2.js"></script>
+
+<form class="form-search form-horizontal" method="get" action="<?php echo HOST ?>sales/change-list">
+    <div class="row">
+        <div class="span5">
+          <div class="control-group">
+          <label for="imei_sn" class="span2">DO : </label>
+            <input id="do_number" name="do_number" type="text" placeholder="Search By DO Number" class="input-medium search-query form-control" value="<?php isset($this->params['do_number']) and printf($this->params['do_number']);?>">
+          </div>
+
+          <div class="control-group">
+          <label for="imei_sn" class="span2">Imei : </label>
+            <textarea cols="20" rows="10" name="imei_sn" class="imei_sn"><?php echo $this->params['imei_sn'] ?></textarea>
+          </div>
+        </div>
+
+        <div class="span5">
+          <div class="control-group">
+          <label for="form_date" class="span2">Form Date</label>
+            <input type="text" name="form_date" class="form-control search-query date" value="<?php isset($this->params['form_date']) and printf($this->params['form_date']);?>" />
+          </div>
+
+          <div class="control-group">
+          <label for="to_date" class="span2">To Date</label>
+          <input type="text" name="to_date" class="form-control search-query date" value="<?php isset($this->params['to_date']) and printf($this->params['to_date']);?>" />
+          </div>
+
+<!--           <div class="control-group">
+            <label for="new_distributor" class="span2">NEW DISTIBUTOR</label>
+            <select name="new_distributor" id="new_distributor" class="form-control search-query span3">
+              <option></option>
+             <?php foreach ($this->distibutor_list as $item):?>
+                <option value="<?php echo $item->id ?>" <?php if (isset($this->params['new_distributor']) and $item->id==$this->params['new_distributor']):?> selected<?php endif;?>>[ <?php echo $item->id ?> ] <?php echo $item->title ?> </option>
+             <?php endforeach; ?>
+            </select>
+          </div> -->
+          
+        </div>
+    </div>
+
+    <button type="submit" class="btn btn-primary">Search</button>
+    <button type="reset" class="btn btn-warning">Reset</button>
+    <button type="submit" class="btn btn-primary" name="export" value="1">Export</button>
+
+</form>
+<script type="text/javascript" src="<?php echo HOST ?>js/jets.js"></script>
+<script type="text/javascript">
+   $(document).ready(function () {
+        $("#new_distributor").select2();
+    });
+
+  $( '.date' ).datepicker({ dateFormat: "dd/mm/yy" });
+</script>

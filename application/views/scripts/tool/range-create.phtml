@@ -1,0 +1,104 @@
+<div class="page-header">
+    <?php if (isset($this->brand) && $this->brand): ?>
+        <h1>Edit Range</h1>
+    <?php else: ?>
+        <h1>Create Range</h1>
+    <?php endif ?>
+
+</div>
+<?php
+if (isset($this->messages) and $this->messages)
+    foreach ($this->messages as $message):
+        echo '<div class="alert alert-error">'.$message.'</div>';
+    endforeach;
+?>
+<form class="form-horizontal" action="<?php echo HOST ?>tool/range-create" name="form" id="form" method="post">
+
+    <div class="row-fluid">
+        <div class="span4">
+            <div class="control-group">
+                <label class="control-label" for="name">Ký hiệu hóa đơn</label>
+                <div class="controls">
+                    <select class="form-control" name="invoice_prefix" >
+                        <option>Vui lòng lựa chọn ký hiệu</option>
+                    <?php if(isset($this->invoice_prefix) and $this->invoice_prefix):
+                                foreach($this->invoice_prefix as $k => $v):
+                    ?>
+                        <option <?php if(isset($this->range->id) and $this->range->id == $v['id']) echo "selected"; ?> value="<?php echo $v['id'] ?>"><?php echo $v['name'] ?></option>
+
+                    <?php endforeach;endif; ?>
+                    </select>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="row-fluid">
+        <div class="span4">
+            <div class="control-group">
+                <label class="control-label" for="name">Trung tâm bảo hành</label>
+                <div class="controls">
+                    <select class="form-control" name="service" >
+                        <option value="0">Vui lòng lựa chọn trung tâm bảo hành</option>
+                        <?php if(isset($this->service) and $this->service):
+                            foreach($this->service as $k => $v):
+                                ?>
+                                <option <?php if(isset($this->range->object_id) and $this->range->object_id == $k) echo 'selected="selected"'; ?> value="<?php echo $k ?>"><?php echo $v['name'] ?></option>
+
+                            <?php endforeach;endif; ?>
+                    </select>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="row-fluid">
+        <div class="span4">
+            <div class="control-group">
+                <label class="control-label" for="name">Số lượng</label>
+                <div class="controls">
+                    <input type="text" id="quantity" name="quantity" placeholder="Quantity" required="required" value="<?php if(isset($this->range->total)) echo $this->range->total ?>" />
+                    <p class="help-block"></p>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="row-fluid">
+        <div class="span6">
+            <div class="control-group">
+                <label class="control-label" for="name">From Invoice</label>
+                <div class="controls">
+                    <input type="text" id="from" name="from" placeholder="From Invoice" required="required" value="<?php if(isset($this->range->first_input)) echo $this->range->first_input ?>" />
+                    <p class="help-block"></p>
+                </div>
+            </div>
+        </div>
+
+        <div class="span6">
+            <div class="control-group">
+                <label class="control-label" for="name">To Invoice</label>
+                <div class="controls">
+                    <input type="text" id="to" name="to" placeholder="To Invoice" required="required" value="<?php if(isset($this->range->last_input)) echo $this->range->last_input ?>" />
+                    <p class="help-block"></p>
+                </div>
+            </div>
+        </div>
+
+    </div>
+
+    <input type="hidden" name="id" value="<?php if( isset($this->range) && isset($this->range['id']) ) echo $this->range['id'] ?>" />
+    <div class="row-fluid">
+        <div class="span4">
+            <div class="pull-right">
+                <button type="submit" id="submit_btn" class="btn btn-primary">Submit</button>
+                <button type="button" id="cancel_btn" class="btn btn-warning">Cancel</button>
+            </div>
+        </div>
+    </div>
+</form>
+<script>
+    $('#cancel_btn').click(function(){
+        window.location = '<?php echo HOST ?>product/brand';
+    });
+</script>

@@ -1,0 +1,234 @@
+<link rel="stylesheet" href="<?php echo HOST?>css/select2.css" />
+<script src="<?php echo HOST?>js/select2.js"></script>
+
+<style type="text/css">
+	.select2-selection.required {
+    background-color: yellow !important;
+}
+</style>
+
+<div class="page-header">
+	<h1 style="font-family: Times New Roman;">Add Bank Account (Your Side)</h1>
+</div>
+
+<form class="form-horizontal" action="<?php echo HOST ?>finance/save-bank-account-your-side" method="post">
+	<div class="row" style="border-style: solid; padding: 30px 10px 10px 10px; border-color: lavender;">
+
+		<div class="span6">
+
+			<div class="control-group">
+				<label for="dis_id" class="control-label" style="width: 180px; padding-right: 20px;"> <span style="color: red">*</span> Distributor(My Side) : </label>
+				<div class="controls">
+					<select class="span3" name="dis_id" id="dis_id" required>
+						<option value=""> Please Select </option>
+						<?php foreach ($this->distributor as $value) : ?>
+							<option value="<?php echo $value['id'] ?>" <?php if(isset($this->accountYour->d_id) && $this->accountYour->d_id == $value['id'] ): ?> selected <?php endif; ?> ><?php echo $value['title'] ?></option>
+						<?php endforeach; ?>
+					</select>
+				</div>
+			</div>
+
+			<div class="control-group">
+				<label for="store_id" class="control-label" style="width: 180px; padding-right: 20px;"><span style="color: red">*</span> Store : </label>
+				<div class="controls">
+					<select name="store_id" id="store_id" class="span3" required>
+						<option value=""> Please Selected </option>
+
+						<?php if(isset($this->accountYour) && $this->accountYour) : ?>
+							<?php foreach($this->store as $value) : ?>
+								<option value="<?php echo $value['id'] ?>" <?php if(isset($this->accountYour->store_id) && $this->accountYour->store_id == $value['id']) : ?> selected <?php endif; ?> ><?php echo $value['name'] ?></option>
+							<?php endforeach; ?>
+						<?php endif; ?>
+
+					</select>
+				</div>
+			</div>
+
+			<div class="control-group">
+				<label for="finance_client" class="control-label" style="width: 180px; padding-right: 20px;"><span style="color: red">*</span> Finance Client : </label>
+				<div class="controls">
+					<select class="span3" name="finance_client" id="finance_client" required>
+						<option value=""> Please Selected </option>
+
+						<?php if(isset($this->accountYour) && $this->accountYour) : ?>
+							<?php foreach($this->financeClient as $value) : ?>
+								<option value="<?php echo $value['id'] ?>" <?php if(isset($this->accountYour->finance_client_id) && $this->accountYour->finance_client_id == $value['id']) : ?> selected <?php endif; ?> ><?php echo $value['name'] ?></option>
+							<?php endforeach; ?>
+						<?php endif; ?>
+					</select>
+				</div>
+			</div>
+
+			<div class="control-group">
+				<label class="control-label" for="bank_id" style="width: 180px; padding-right: 20px;">Bank : </label>
+				<div class="controls">
+					<select class="span3" name="bank_id" id="bank_id">
+						<option value=""> Please Selected </option>
+
+						<?php if(isset($this->banks) && $this->banks) : ?>
+							<?php foreach($this->banks as $key => $value) : ?>
+								<option value="<?php echo $key ?>" <?php if(isset($this->accountYour->bank_id) && $this->accountYour->bank_id == $key) : ?> selected <?php endif; ?> ><?php echo $value ?></option>
+							<?php endforeach; ?>
+						<?php endif; ?>
+					</select>
+				</div>
+			</div>
+
+			<div class="control-group">
+				<label class="control-label" for="account_pp" style="width: 180px; padding-right: 20px;"><span style="color: red">*</span> Account Property : </label>
+				<div class="controls">
+					<select name="account_pp" id="account_pp" class="span3" required>
+						<option value=""> Please Selected </option>
+						<option value="1" <?php if(isset($this->accountYour->account_pp) && $this->accountYour->account_pp == 1) : ?> selected <?php endif; ?> > Personal Account </option>
+						<option value="2" <?php if(isset($this->accountYour->account_pp) && $this->accountYour->account_pp == 2) : ?> selected <?php endif; ?> > Company Account </option>
+					</select>
+				</div>
+			</div>
+
+			<div class="control-group">
+				<label class="control-label" for="bank_account_my" style="width: 180px; padding-right: 20px;"><span style="color: red">*</span> Bank Account(My Side) : </label>
+				<div class="controls">
+					<select name="bank_account_my" id="bank_account_my" class="span3" required>
+						<option value=""> Please Selected </option>
+
+						<?php if(isset($this->accountYour) && $this->accountYour) : ?>
+							<?php foreach($this->bankAccountMy as $value) : ?>
+								<option value="<?php echo $value['id'] ?>" <?php if(isset($this->accountYour->b_account_my) && $this->accountYour->b_account_my == $value['id']) : ?> selected <?php endif; ?> ><?php echo $value['bank_account'] ?></option>
+							<?php endforeach; ?>
+						<?php endif; ?>
+					</select>
+				</div>
+			</div>
+
+			<div class="control-group">
+				<label class="control-label" for="opposite_account" style="width: 180px; padding-right: 20px;"><span style="color: red">*</span> Opposite Account :</label>
+				<div class="controls">
+					<input type="text" name="opposite_account" id="opposite_account" class="span3" required value="<?php if(isset($this->accountYour) && printf($this->accountYour->account_name)) ?>" >
+				</div>
+			</div>
+
+			<div class="control-group">
+				<label class="control-label" for="card_no" style="width: 180px; padding-right: 20px;"><span style="color: red">*</span> Card No./Account</label>
+				<div class="controls">
+					<input type="text" name="card_no" id="card_no" class="span3" required value="<?php if(isset($this->accountYour) && printf($this->accountYour->card_no)) ?>">
+				</div>
+			</div>
+
+		</div>
+
+		<div class="span5">
+
+			<div class="control-group">
+				<label class="control-label" form="dis_y" style="width: 180px; padding-right: 20px;">Distributor(Your Side) : </label>
+				<div class="controls" style="padding-top: 5px;">
+					<span id="dis_y_name"> <?php if(isset($this->accountYour) && printf($this->dis_arr->title)) ?></span>
+				</div>
+			</div>
+
+			<div class="control-group">
+				<label class="control-label" for="contact" style="width: 180px; padding-right: 20px;">Contact : </label>
+				<div class="controls">
+					<input type="text" name="contact" id="contact" class="span3" value="<?php if(isset($this->accountYour) && printf($this->accountYour->contact)) ?>">
+				</div>
+			</div>
+
+			<div class="control-group">
+				<label class="control-label" for="remark" style="width: 180px; padding-right: 20px;"> Remark :</label>
+				<div class="controls">
+					<textarea cols="2" rows="2" name="remark" id="remark" class="span3"><?php if(isset($this->accountYour) && printf($this->accountYour->remark)) ?></textarea>
+				</div>
+			</div>
+
+		</div>
+
+		<div class="span12" style="padding-bottom: 400px; padding-left: 50px; padding-top: 20px;">
+			<div class="control-group">
+				<input type="hidden" id="back_url" name="back_url" value="/finance/bank-account-your-side">
+				<input type="hidden" name="id" value="<?php echo $this->accountYour->id ?>" />
+
+				<button type="submit" class="btn btn-success"> Save </button>
+
+				<button type="button" class="btn btn-danger go-back"> Back </button>
+			</div>
+		</div>
+
+	</div>
+</form>
+
+<script type="text/javascript">
+
+	$('#dis_id, #bank_id').select2();
+
+	$("#store_id").select2({
+		containerCssClass: function(e) { 
+			return $(e).attr('required') ? 'required' : '';
+		}
+	});
+
+	$(document).ready(function () {
+		initGoBack();
+
+		$("#dis_id").change(function() {
+			var distributor_id    = $('#dis_id').val();
+
+			$("#store_id").select2("destroy");
+			$("#finance_client").val("");
+
+			$.get("/finance/load-bank-account-my",
+				{distributor_id : distributor_id}
+				,function(data,status){
+					var data = $.parseJSON( data );
+
+					if (data.bankaccount){
+						var obj = data.bankaccount;
+						$('#bank_account_my').html('<option value="0"> Please Selected </option>');
+						for (var i = 0; i < obj.length; i++) {
+							$('#bank_account_my').append('<option value="'+obj[i]['id']+'">'+obj[i]['bank_account']+'</option>');
+						}
+					}
+
+					if (data.store){
+						var obj = data.store;
+						$('#store_id').html('<option value="0"> Please Selected </option>');
+						for (var i = 0; i < obj.length; i++) {
+							$('#store_id').append('<option value="'+obj[i]['id']+'">'+obj[i]['name']+'</option>');
+						}
+					}
+
+					$('#store_id').select2({ allowClear: false });
+				})
+		});
+
+		$("#store_id").change(function() {
+			var store_id    = $('#store_id').val();
+
+			$.get("/finance/load-finance-account-by-store",
+				{store_id : store_id}
+				,function(data, status){
+					var data = $.parseJSON( data );
+
+					if (data.financeclient){
+						var obj = data.financeclient;
+						$('#finance_client').html('<option value="0"> Please Selected </option>');
+						for (var i = 0; i < obj.length; i++) {
+							$('#finance_client').append('<option value="'+obj[i]['id']+'">'+obj[i]['name']+'</option>');
+						}
+					}
+
+					if (data.distributor){
+						var obj = data.distributor;
+						$('#dis_y_name').html(obj.title);
+					}
+				})
+		})
+
+	});
+
+	function initGoBack(){
+		$('.go-back').click(function(e){
+			window.location.href = $('#back_url').val();
+			return false;
+		});
+	}
+
+</script>

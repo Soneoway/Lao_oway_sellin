@@ -1,0 +1,155 @@
+<link href="../css/select2.css" rel="stylesheet"/>
+<script src="../js/select2.js"></script>
+
+<form class="form-search form-horizontal" method="get" action="/po">
+    <div class="row">
+        <div class="span5">
+            <div class="control-group">
+                <label for="sn" class="span2">PO Number</label>
+                <input id="sn" name="sn" type="text" class="input-medium search-query form-control" value="<?php isset($this->params['sn']) and printf($this->params['sn']);?>">
+            </div>
+
+            <div class="control-group">
+                <label for="warehouse_id" class="span2">Warehouse</label>
+                <select name="warehouse_id" id="warehouse_id" class="span3">
+                    <option value="">Choose</option>
+                    <?php if ($this->warehouses): foreach ($this->warehouses as $id=>$name):?>
+                        <option value="<?php echo $id;?>" <?php if (isset($this->params['warehouse_id']) and $id==$this->params['warehouse_id']):?> selected<?php endif;?>><?php echo $name;?></option>
+                    <?php endforeach; endif;?>
+                </select>
+            </div>
+
+            <div class="control-group">
+                <label for="type" class="span2">PO Type</label>
+                <select name="type" id="type" class="span3">
+                    <option value="">Choose</option>
+                    <?php if (isset(My_Po_Type::$name)): foreach (My_Po_Type::$name as $_key => $_name):?>
+                        <option value="<?php echo $_key;?>" <?php if (isset($this->params['type']) and $_key==$this->params['type']):?> selected<?php endif;?>><?php echo $_name;?></option>
+                    <?php endforeach; endif;?>
+                </select>
+            </div>
+            <div class="control-group">
+                <label for="payment" class="span2">PAYMENT</label>
+                <input id="payment" name="payment" type="checkbox" class="input-large search-query form-control" value="1" <?php if (isset($this->params['payment']) and $this->params['payment']):?>checked="checked" <?php endif;?>>
+            </div>
+            <div class="control-group">
+                <label for="ship_warehouse" class="span2">WHETHER TO ENTER THE WAREHOUSE</label>
+                <input id="ship_warehouse" name="ship_warehouse" type="checkbox" class="input-large search-query form-control" value="1" <?php if (isset($this->params['ship_warehouse']) and $this->params['ship_warehouse']):?>checked="checked" <?php endif;?>>
+            </div>
+
+            <?php
+            $userStorage = Zend_Auth::getInstance()->getStorage()->read();
+            if (!My_Staff_Group::inGroup($userStorage->group_id, array(KERRY_STAFF,KERRY_LEADER))){
+                ?>
+                <div class="control-group">
+                    <label for="created_by" class="span2">PO Name</label>
+                    <select name="created_by" id="created_by" class="span3">
+                        <option value="">Choose</option>
+                        <?php if ($this->staffs): foreach ($this->staffs as $id=>$name):?>
+                            <option value="<?php echo $id;?>" <?php if (isset($this->params['created_by']) and $id==$this->params['created_by']):?> selected<?php endif;?>><?php echo $name;?></option>
+                        <?php endforeach; endif;?>
+                    </select>
+                </div>
+            <?php } ?>
+
+
+        </div>
+        <div class="span5">
+            <div class="control-group">
+                <label for="cat_id" class="span2">PRODUCT CATEGORY</label>
+                <select id="cat_id" class="span3" name="cat_id">
+                    <option value="">Choose</option>
+                    <?php if ($this->good_categories): foreach ($this->good_categories as $id=>$name):?>
+                        <option value="<?php echo $id;?>" <?php if (isset($this->params['cat_id']) and $id==$this->params['cat_id']):?> selected<?php endif;?>><?php echo $name;?></option>
+                    <?php endforeach; endif;?>
+                </select>
+            </div>
+
+            <div class="control-group">
+                <label for="good_id" class="span2">Product</label>
+                <select id="good_id" class="span3" name="good_id">
+                    <option value="">Choose</option>
+                    <?php if ($this->goods): foreach ($this->goods as $item):?>
+                        <option value="<?php echo $item['id'];?>" <?php if (isset($this->params['good_id']) and $item['id'] ==$this->params['good_id']):?> selected<?php endif;?>><?php echo $item['brand_name'] ?> <?php echo $item['name'] ;?></option>
+                    <?php endforeach; endif;?>
+                </select>
+            </div>
+
+            <div class="control-group">
+                <label for="good_color" class="span2">Color</label>
+                <select id="good_color" class="span3" name="good_color">
+                    <option value="">Choose</option>
+                    <?php if ($this->colors): foreach ($this->colors as $item):?>
+                        <option value="<?php echo $item->id;?>" <?php if (isset($this->params['good_color']) and $item->id==$this->params['good_color']):?> selected<?php endif;?>><?php echo $item->name;?></option>
+                    <?php endforeach; endif;?>
+                </select>
+            </div>
+
+            <div class="control-group">
+                <label for="created_at_from" class="span2">Order Time From</label>
+                <input type="text" class="form-control search-query date" id="created_at_from" name="created_at_from" value="<?php isset($this->params['created_at_from']) and printf($this->params['created_at_from']);?>">
+            </div>
+
+            <div class="control-group">
+                <label for="created_at_to" class="span2">Order Time To</label>
+                <input type="text" class="form-control search-query date" id="created_at_to" name="created_at_to" value="<?php isset($this->params['created_at_to']) and printf($this->params['created_at_to']);?>">
+            </div>
+
+            <div class="control-group">
+                <label for="receive_at_from" class="span2">Receive Time From</label>
+                <input type="text" class="form-control search-query date" id="receive_at_from" name="receive_at_from" value="<?php isset($this->params['receive_at_from']) and printf($this->params['receive_at_from']);?>">
+            </div>
+
+            <div class="control-group">
+                <label for="receive_at_to" class="span2">Receive Time To</label>
+                <input type="text" class="form-control search-query date" id="receive_at_to" name="receive_at_to" value="<?php isset($this->params['receive_at_to']) and printf($this->params['receive_at_to']);?>">
+            </div>
+        </div>
+    </div>
+
+    <button type="submit" class="btn btn-primary">Search</button>
+    <button type="reset" class="btn btn-warning">Reset</button>
+    <button type="submit" name="export" value="no_imei" class="btn btn-success">Export</button>
+    <button type="submit" name="export" value="all_imei" class="btn btn-success">Export IMEI</button>
+</form>
+<script>
+    $(document).ready(function () {
+        $("#warehouse_id, #created_by, #type, #cat_id, #good_id, #good_color").select2();
+
+        $( '.date' ).datepicker({ dateFormat: "dd/mm/yy" });
+
+        $('#cat_id, #good_id').change(function(){
+            $(this).after('<span class="loading"></span>');
+            var _self = $(this);
+            var cat_id = $('#cat_id').val();
+
+            if (_self.attr('id')=='cat_id')
+                $('#good_id').find('option:not(:first)').remove();
+
+            var good_id = $('#good_id').val();
+
+            $('#good_color').find('option:not(:first)').remove();
+
+            $('#num, #price').val('');
+
+            $.get("/get/load",
+                {cat_id: cat_id, good_id: good_id}
+                ,function(data,status){
+                    var data = $.parseJSON( data );
+                    if (data.goods){
+                        var obj = data.goods;
+                        for (var i = 0; i < obj.length; i++) {
+                            $('#good_id').append('<option value="'+obj[i]['id']+'">'+obj[i]['brand_name']+' '+obj[i]['name']+'</option>');
+                        }
+                    }
+                    if (data.colors){
+                        var obj = data.colors;
+                        for (var i = 0; i < obj.length; i++) {
+                            $('#good_color').append('<option value="'+obj[i]['id']+'">'+obj[i]['name']+'</option>');
+                        }
+                    }
+                    _self.nextAll('.loading').remove();
+                });
+        });
+    });
+</script>

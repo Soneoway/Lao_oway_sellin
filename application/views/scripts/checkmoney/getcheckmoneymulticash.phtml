@@ -1,0 +1,157 @@
+<?php  
+	$money_type = unserialize(MONEY_TYPE);
+?>
+<?php 
+	if(isset($this->result) AND $this->result):
+		foreach ($this->result as $key => $item):
+
+		if( $item['type'] == 2){
+			$pay_money=$item['pay_money']*-1;
+			$total_price=$pay_money+$item['pay_service'];	
+		}else{
+			$pay_money=$item['pay_money'];
+			$total_price=$pay_money+$item['pay_banktransfer']+$item['pay_servicecharge']+$item['pay_service'];	
+		}
+
+		
+?>
+<tr class="<?php echo $this->class;?>">
+	<td></td>
+	<td></td>
+	<td><?php echo $item['bank_name'];?></td>
+	<td><?php echo number_format($total_price,2);?></td>
+	<td><?php echo $item['pay_time'];?></td>
+	<td>
+		<?php echo $money_type[$item['type']];?>
+	</td>
+	<td><?php echo $item['invoice_number'];?></td>
+	<td>
+		<?php 
+		//print_r($item);
+		$sn_ref = $item['sn_ref'];
+		if($sn_ref==''){
+			$sn_ref = $item['sn'];	
+		}
+		if(isset($item['sn']) AND $item['sn'] ){ ?>
+			<a href="/sales/view?sn=<?php echo $item['sn']; ?>" target='_blank'><?php  echo $sn_ref;?></a>
+		<?php }	?>
+	</td>
+	<td>
+		<?php if(isset($item['bank_transaction_code']) AND $item['bank_transaction_code']) 
+			echo $item['bank_transaction_code'];?>
+	</td>
+	<td>
+		<?php 
+			if(isset($item['content']) and $item['content']){
+				echo $item['content'];
+			}
+		?>
+	</td>
+	<td>
+		<?php 
+			if(isset($item['note']) and $item['note']){
+				echo $item['note'];
+			}
+		?>
+	</td>
+	<td>
+		<?php 
+			if(isset($item['pay_text']) and $item['pay_text']){
+				echo $item['pay_text'];
+			}
+		?>
+	</td>
+	<td>
+
+		<?php if($this->access('checkmoney','view')):?>
+			<a href="/checkmoney/view?id=<?php echo $item['ch_id']?>&is_credit=MULTICASH" target="_blank"><i class="icon-eye-open"></i></a>			
+		<?php  
+			endif;
+			if($this->access('checkmoney','view')):
+				if( $item['type'] != 2){
+		?>			
+			
+				<a href="/checkmoney/add?id=<?php echo $item['ch_id']?>&total_money=<?php echo ($total_price) ?>&ac=edit" target="_blank" title="Edit Payment Order"><i class="icon-edit"></i></a>
+			<?php if($item['file_pay_slip'] !=''){ ?>	
+				<span title="View Payment Slip" class="badge badge-default" data-file-pay-slip="<?php echo $item['file_pay_slip']; ?>">Slip</span>
+
+			<?php } ?>	
+			
+			<?php 	
+			}
+			endif;
+		?>						
+	</td>
+</tr>
+<?php 
+		endforeach;
+	endif;
+?>
+
+<?php 
+	if(isset($this->resultCNCP) AND $this->resultCNCP):
+		foreach ($this->resultCNCP as $key => $item):
+?>
+<tr class="<?php echo $this->class;?>">
+	<td></td>
+	<td></td>
+	<td></td>
+	<td>
+		<?php echo '(' . number_format($item['use_discount'],2) . ')';?>
+	</td>
+	<td>
+		<?php echo $item['pay_time'];?>
+	</td>
+	<td>
+		<?php echo $item['creditnote_type'];?>
+	</td>
+	<td>
+		<?php echo $item['creditnote_sn'];?>
+	</td>
+	<td></td>
+	<td></td>
+	<td></td>
+	<td></td>
+	<td></td>
+	<td></td>
+</tr>
+<?php 
+		endforeach;
+	endif;
+?>
+
+<script type="text/javascript" src="/js/jquery-ui-1.8.12.custom.min.js"></script>
+<script type="text/javascript" src="/js/bootstrap-modal.js"></script>
+<script type="text/javascript" src="/js/bootstrap-modalmanager.js"></script>
+<link rel="stylesheet" type="text/css" href="/css/jquery-ui-1.8.12.custom.css"/>
+<link rel="stylesheet" type="text/css" href="/css/bootstrap-modal.css"/>
+
+<script>
+	$(document).ready(function(){
+		var show = "<?php echo $this->show_view_more;?>";
+		var _class = "<?php echo  $this->class;?>";
+		if(show == 0){
+			$('.'+_class+' .view-more').css('display','none');	
+		}
+		
+		$modal = $('#modal');
+        $('.badge.badge-default').click(function(){
+
+            _self = $(this);
+            $('body').modalmanager('loading');
+            $.post('<?php echo HOST ?>finance/view-pay-slip',
+                {
+                    file_pay_slip : _self.data('file-pay-slip')
+                },
+                function(data){
+                    //alert(data);
+                    $modal.html(data);
+                    $modal.modal();
+                    var name = _self.parents('tr').children('td:nth-child(1)').html();
+                    $modal.find('h3').append(' <small>&bull; '+name+'</small>');
+            });
+            
+        });
+
+	})
+</script>

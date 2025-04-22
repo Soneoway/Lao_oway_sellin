@@ -1,0 +1,82 @@
+<table class="table table-bordered">
+	<thead>
+		<tr>
+			<th>Distributor(Your Side)</th>
+			<th>Mnemonic code</th>
+			<th>Finance Client</th>
+			<th>Finance Warehouse Name</th>
+			<th>Code</th>
+			<th>Accounting organization(My Side)</th>
+			<th>Accounting organization(Your Side)</th>
+			<th>Creator</th>
+			<th>Remarks</th>
+			<th>Network</th>
+			<th>Off/On</th>
+			<th>Cross - accounting organizations are allowed</th>
+			<th>Operation</th>
+		</tr>
+	</thead>
+	<tbody>
+
+		<?php if(isset($this->financeclient) && $this->financeclient) : ?>
+			<?php foreach ($this->financeclient as $value) : ?>
+				<?php 
+					if($value['network'] == 1) { $network = 'All Network'; }
+					if($value['status'] == 1) { $status ='<span style="color: green"> On </span>'; } elseif($value['status'] == 2) { $status ='<span style="color: red"> Off </span>'; }
+					if($value['cross_account'] == 2) { $cross = '<span style="color: red"> No </span>'; } elseif($value['cross_account'] == 1) { $cross = '<span style="color: green"> Yes </span>'; }
+				?>
+				<tr>
+					<td><?php echo $value['distributor_your_side'] ?></td>
+					<td><?php echo $value['mnemonic_code'] ?></td>
+					<td><?php echo $value['name'] ?></td>
+					<td><?php echo $this->financewarehouse[$value['fw_id']] ?></td>
+					<td><?php echo $value['code'] ?></td>
+					<td><?php echo $this->acccountorg[$value['account_m']] ?></td>
+					<td><?php echo $this->acccountorg[$value['account_y']] ?></td>
+					<td><?php echo $this->staffs[$value['created_by']] ?></td>
+					<td><?php echo $value['remark'] ?></td>
+					<td><?php echo $network ?></td>
+					<td><?php echo $status ?></td>
+					<td><?php echo $cross ?></td>
+					<td>
+						<a href="<?php echo HOST ?>finance/add-finance-client?id=<?php echo $value['id'] ?>" > Edit </a>
+						| <a href="#" style="color: red;" data-id="<?php echo $value['id']; ?>" class="Confirm_data"> Delete </a>
+					</td>
+				</tr>
+			<?php endforeach; ?>
+		<?php endif; ?>
+
+	</tbody>
+</table>
+
+<div class="paging">
+	<?php echo $this->paging($this->total, $this->limit, $this->offset, $this->url);?>
+</div>
+
+<script type="text/javascript">
+	$(document).ready(function(){
+		$('.Confirm_data').on('click', function (event) {
+			event.preventDefault();
+			var id = $(this).data('id');
+
+			Swal.fire({
+				title: 'Confirm to delete?',
+				text: 'ຢືນຢັນການລຶບ ຂໍ້ມູນ ຫຼື ບໍ່? ຫຼັງຈາກລົບໄປເເລ້ວຈະບໍ່ສາມາດກູ້ຄືນໄດ້',
+				icon: 'question',
+				showCancelButton: true,
+				confirmButtonColor: '#3085d6',
+				cancelButtonColor: '#d33',
+				confirmButtonText: '<b style="font-family:Phetsarath OT">ຢືນຢັນ</ b>',
+				cancelButtonText: '<b style="font-family:Phetsarath OT">ຍົກເລີກ</ b>',
+			}).then((result) => {
+
+				if (result.isConfirmed) {
+					window.location.href="/finance/delete-finance-client?id="+id;
+				}
+
+			});
+		});
+
+	});
+
+</script>

@@ -1,0 +1,157 @@
+<link rel="stylesheet" href="<?php echo HOST?>css/jquery-ui-1.8.12.custom.css" />
+<link rel="stylesheet" href="<?php echo HOST?>css/checkmoney.css" />
+<link rel="stylesheet" href="<?php echo HOST?>js/chosen.css" />
+<link rel="stylesheet" href="<?php echo HOST?>css/jquery.datetimepicker.css" />
+<style>
+    table tr td ul{
+        list-style: none;        
+        margin: 0px;
+        padding: 0px;
+    }
+    table tr td{
+        vertical-align: top!important;
+    }
+    table tr.main-row
+    {
+        background: #e5e5e5!important;
+    }
+    .chosen-container-multi .chosen-choices{
+        border-radius: 3px;
+        border: 1px solid #ccc;
+        box-shadow: none;
+    }
+
+    #SearchBox{
+        width: 370px;
+    }
+    #d_id{
+        left: 0px!important;
+        margin-left: 0px;
+        margin-top: 20px;
+        width: 370px;
+    }
+    .group{
+        padding: 10px;
+        border: 1px solid #ccc;
+        margin-bottom: 15px;
+    }
+    .group p{
+        font-weight: bold;
+    }
+</style>
+<div class="page-header">
+    <h1>Payment Order</h1>
+</div>
+<?php
+    if (isset($this->messages_success) and $this->messages_success)
+        foreach ($this->messages_success as $message):
+            echo '<div class="alert alert-success">'.$message.'</div>';
+        endforeach;
+
+    if (isset($this->messages) and $this->messages)
+        foreach ($this->messages as $message):
+            echo '<div class="alert alert-error">'.$message.'</div>';
+        endforeach;
+?>
+
+<div class="accordion" id="accordion2">
+    <div class="accordion-group">
+        <div class="accordion-heading">
+            <a class="accordion-toggle collapsed" data-toggle="collapse" data-parent="#accordion2" href="#collapseTwo">
+                Search
+            </a>
+        </div>
+        <div id="collapseTwo" class="accordion-body collapse" style="height: 0px;">
+            <div class="accordion-inner">
+                <?php
+                    echo $this->render('checkmoney/partials/search-payment-order.phtml');
+                ?>
+            </div>
+        </div>
+    </div>
+</div>
+
+<div class="table-responsive">
+    <?php
+        echo $this->render('checkmoney/partials/list-payment-order.phtml');
+    ?>
+</div>
+
+<div id="div_select_bank_id" style="display: none">
+    <form id="frmConfirm" method="post" action="<?php echo HOST?>checkmoney/confirm-payment-order">
+        <p>Please choose the Bank</p>
+        <p>
+            <select id="select_bank_id" name="select_bank_id" required="required">
+                <option value="">Choose</option>
+                <?php foreach ($this->banks as $item):?>
+                    <option value="<?php echo $item['id'];?>"><?php echo $item['name'];?></option>
+                <?php endforeach;?>
+            </select>
+        </p>
+        <p>Time</p>
+        <p><input type="text"  name="receive_time" class='datetimepicker' value="" required="true" readonly="readonly"/></p>
+        <p>Company</p>
+        <p>
+            <select name="company_id" id="" class="form-control" required="true">
+                <option value="">choose</option>
+                <option value="1">OPPO</option>
+                <option value="2">SMARTMOBILE</option>
+            </select>
+        </p>
+        <p>
+            <input type="hidden" id="payment_order_id" name="payment_order_id">
+            <button type="submit" class="btn btn-success">Submit</button>
+        </p>
+    </form>
+</div>
+
+
+<script src="<?php echo HOST?>js/jets.js"></script>
+<script src="<?php echo HOST?>js/chosen.jquery.js"></script>
+<script src="<?php echo HOST?>js/jquery-ui-1.8.12.custom.min.js"></script>
+<script src="<?php echo HOST?>js/numeral.min.js"></script>
+<script src="<?php echo HOST?>js/jquery.datetimepicker.js"></script>
+
+<?php echo $this->confirm();?>
+<script>
+	$(document).ready(function () {
+        var jets = new Jets({
+          searchTag: '#SearchBox',
+          contentTag: '#d_id'
+        });
+        
+        $('.form-search button:reset').click(function (e){
+            $('.form-search input, .form-search select').val('');
+            $('.form-search').submit();
+            return false;
+        });
+        
+        initDatepicker();
+        initConfirm();
+    });
+
+    function initDatepicker(){
+        $( ".datetimepicker" ).datetimepicker({
+            format:'Y-m-d H:i'
+        });
+    }
+
+    function initConfirm(){
+        $(".confirmPayment").click(function(e){
+            e.preventDefault();
+            $('#select_bank_id').val('');
+
+            $('#payment_order_id').val($(this).attr('rel'));
+
+            //$("#dialog").html($('#div_select_bank_id').html());
+
+            $('#div_select_bank_id').dialog({
+                modal: true,
+                title: 'Confirm Payment Order'
+            });
+
+            $("#div_select_bank_id").dialog("open");
+            //return false;
+        });
+    }
+</script>

@@ -1,0 +1,107 @@
+<table class="table table-bordered">
+    <thead>
+        <tr>
+            <?php echo $this->sorting(array(
+            		'title'       	=>'Dealer',
+                    'bank'     		=>'Bank',
+            		'pay_time'    	=>'pay time / payment confirm',
+            		'pay_money',
+            		'Money Output',		
+            		'type' 			=> 'Type',           
+                    'Note',		
+                    'Action'
+                ),
+                $this->url, $this->sort, $this->desc); ?>
+        </tr>
+    </thead>
+    <tbody>
+        <?php
+        if (isset($this->list) and $this->list)
+            foreach ($this->list as $item): ?>
+        <tr>
+        
+            <td>            	
+            	<?php
+            		if($item['d_id'] == 0){
+						echo 'UNKNOWN';
+					}else{
+						echo $item['title'];	
+					} 
+            		
+            	?>
+            </td>
+    
+            <td><?php echo $item['bank_name']?></td>
+            <td><?php echo $item['pay_time'] ?></td>
+            <td class='text-right'>
+            	<?php 
+            		if($item['pay_money'] != 0){	
+						echo number_format($item['pay_money'],2);
+					}
+            		
+            	?>
+            </td>
+            <td class='text-right'>
+            	<?php
+            		if($item['output']){
+						echo number_format($item['output'],2);
+					} 
+            		
+            	?>
+            </td>
+            <td> 
+            	<?php 
+            		$type = $item['type'];
+            		if($type == 1){
+						echo "Money input";	
+					}
+					elseif ($type == 2){
+						echo "Payment confirm";
+					}
+					else{
+						echo 'Fee';
+					}
+            		
+            	?>
+            </td>
+            <td><?php echo $item['note']?></td>
+            <td class="">
+                <?php 
+                    if($this->access('checkmoney','view')):
+                ?>
+            		 <a title="View" href="/checkmoney/view?id=<?php echo $item['ch_id'];?>"> 
+            		 	<i class="icon-eye-open"></i>
+            		 </a>
+                 <?php 
+                    endif;
+                    if( $this->access('checkmoney','history') AND ($item['d_id'] != NULL) ):
+                 ?>
+            		 <a title="history" href="/checkmoney/history?d_id=<?php echo $item['d_id'];?>">
+            		 	<img src='<?php echo HOST.'img/historical.png'?>' width='12'/>
+            		 </a>
+                 <?php 
+                    endif;
+                    if($this->access('checkmoney','edit') AND $item['type'] != 2):
+                 ?>
+            		<a title="Edit" href="/checkmoney/edit?id=<?php echo $item['ch_id'];?>"> 
+                        <i class="icon-edit"></i>
+                    </a>
+                <?php 
+                    endif;
+                    if($this->access('checkmoney','del') AND $item['type'] != 2):
+                ?>
+               		<a title="Delete" class="confirmLink" href="/checkmoney/del?id=<?php echo $item['ch_id'];?>"> <i class="icon-trash"></i>
+                    </a>
+                <?php 
+                    endif;
+                ?>
+            </td>
+        </tr>
+        <?php endforeach;?>
+
+    </tbody>
+</table>
+
+<div class="paging">
+    <?php echo $this->paging($this->total, $this->limit, $this->offset, $this->url);?>
+</div>

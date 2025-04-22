@@ -1,0 +1,104 @@
+<style>
+.page-header{margin-top: 70px;}
+#submit_btn{margin-left: 10px;}
+</style>
+<div class="page-header">
+    <h1>Good Shipment</h1>
+</div>
+
+<div class="content_sale_phone">
+    <form action="<?php echo HOST;?>sales/save-shipment-phone"  method="POST">
+        <div class="shipment_wrap">
+            <div class="row-fluid">
+                <div class="row">
+                    <div class="span12">
+                        <div class="control-group">
+                            <label for="category_name">Shipment</label>
+                            <select name="id_shipment">
+                                <?php if(isset($this->dataShipment) && $this->dataShipment) :?>
+                                <?php foreach($this->dataShipment as $key=>$value) :?>
+                                <option value="<?php echo $value['id'];?>" <?php if($value['id'] == $this->data->good_shipment_id):echo 'selected';endif;?> ><?php echo $value['name'];?></option>
+                                <?php endforeach;?>
+                                <?php endif;?>
+                            </select>
+                        </div>
+                    </div>
+                    <div class="span12">
+                        <div class="control-group">
+                            <label for="category_name">Good</label>
+                            <select name="id_good">
+                                <?php if(isset($this->dataGood) && $this->dataGood) :?>
+                                <?php foreach($this->dataGood as $key=>$value) :?>
+                                <option value="<?php echo $value['id'];?>" <?php if($value['id'] == $this->data->good_id):echo 'selected';endif;?> ><?php echo $value['name'];?></option>
+                                <?php endforeach;?>
+                                <?php endif;?>
+                            </select>
+                        </div>
+                    </div>
+                    <div class="span12">
+                        <div class="control-group">
+                            <label for="category_name">Type</label>
+                            <select name="type">
+                                <option value="<?php echo $this->data->type;?>">
+                                    <?php 
+                                    switch ($this->data->type)
+                                    {
+                                        case 1:
+                                            echo "A";
+                                            break;
+                                        case 2:
+                                            echo "B";
+                                            break;
+                                        case 3:
+                                            echo "C";
+                                            break;
+                                        case 4:
+                                            echo "D";
+                                            break;
+                                    }
+                                    ?>
+                                </option>
+                                <option value="1">A</option>
+                                <option value="2">B</option>
+                                <option value="3">C</option>
+                                <option value="4">D</option>
+                            </select>
+                        </div>
+                    </div>
+                    <div class="span12">
+                        <div class="control-group">
+                            <label for="category_name">Price</label>
+                            <input type="text" name="price" value="<?php if(isset($this->data) && $this->data) : echo $this->data->price;endif;?>" />
+                        </div>
+                    </div>
+                </div>            
+            </div>
+        </div>
+        <input type="hidden" value="1" name="check" />
+        <input type="hidden" value="<?php if(isset($this->data) && $this->data) : echo $this->data->id;endif;?>" name="id" />
+        <button type="submit" class="btn btn-primary btn btn-warning" id="add_category_btn"><?php if(isset($this->data) && $this->data) : echo "Edit";else: echo "Add";endif;?></button>
+        <?php if(isset($this->data) && $this->data) : ?>
+        <a href="<?php echo HOST."sales/shipment-details?id=".$this->data->good_shipment_id;?>" class="btn btn-primary btn btn-danger" id="add_category_btn">Go Back</a>
+        <?php else:?>
+        <a href="<?php echo HOST."sales/shipment";?> class="btn btn-primary btn btn-danger" id="add_category_btn">Go Back</a>
+        <?php endif;?>
+    </form>
+</div>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+

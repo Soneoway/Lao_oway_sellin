@@ -1,0 +1,49 @@
+/* .subnavbar .container > ul > li{min-width: 50px;} */
+.select2-container{
+	display: block;
+	width: 220px;
+}
+
+.column{
+	float: left;
+	min-width: 450px;
+}
+
+.form-group{
+	margin-bottom: 20px;
+}
+
+.form-group  input[type='text'],.form-group  select{
+width: 350px;
+}
+.form-group textarea{
+	width: 400px;
+	height: 80px;
+}
+.control{
+	margin: 10px 0px;
+}
+
+.select2-container{
+width: 360px;
+}
+
+
+.history-title{
+	background: #fff;
+	padding: 10px;
+	border-radius: 5px;
+	margin-bottom: 10px;
+}
+.text-right{
+	text-align: right!important;	
+}
+.table-sub{
+width: 100%;
+}
+.table-sub:hover{
+background: none!inportant;
+}
+.table-sub td{
+border-left: none;
+}

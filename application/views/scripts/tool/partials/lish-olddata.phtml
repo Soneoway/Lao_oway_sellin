@@ -1,0 +1,64 @@
+
+    <table class="table table-bordered" id="table">
+        <thead>
+            <tr>
+                <?php echo $this->sorting(array(
+                        '<input type="checkbox" id="check-all"> All',
+                        '#',
+                        'imei'          =>'Imei',
+                        'warehouse'      =>'Warehouse',
+                        'distributor'    =>'distributor',
+                        'Set by'       => 'Set By',
+                        'Set at'        =>'Set At',
+                        'Action'
+                    ),
+                    $this->url, $this->sort, $this->desc); ?>
+            </tr>
+        </thead>
+        <tbody>
+            <?php
+
+            $QWarehouse = new Application_Model_Warehouse();
+            $QDistributor = new Application_Model_Distributor();
+            $QStaff = new Application_Model_Staff();
+
+            $distributor = $QDistributor->get_cache();
+            $warehouse_cache = $QWarehouse->get_cache();
+            $staff = $QStaff->get_cache();
+            
+                if(isset($this->olddata) and $this->olddata)
+                foreach($this->olddata as $k => $olddata):
+            ?> 
+                    <tr>
+                        <td><input type="checkbox" class="data-check" value="<?php echo $olddata['imei_sn'];?>"></td>
+                        <td>
+                            <?php 
+                            $inc = $this->offset + $k + 1;
+                            echo $inc;
+                            ?>
+                        </td>
+                        <td><?php echo $olddata['imei_sn'];?></td>
+                        <td><?php echo $warehouse_cache[$olddata['warehouse_id']];?></td>
+                        <td><?php echo $distributor[$olddata['distributor_id']] ?></td>
+                        <td><?php echo $staff[$olddata['set_olddata_by']] ?></td>
+                        <td><?php echo $olddata['set_olddata_at'] ?></td>
+                        <td>
+                        <center>
+                            <a title="unset" class="confirmLink btn btn-warning" href="/tool/unset?imei=<?php echo $olddata['imei_sn'] ?>" onclick="return confirm('Are you sure you want to Unset olddata!')">
+                                <i class="icon-unlock-alt"></i>
+                            </a>
+                        </center>
+                        </td>
+                    </tr>
+            <?php endforeach; ?>
+        </tbody>
+    </table>
+
+    <div class="paging">
+        <?php echo $this->paging($this->total, $this->limit, $this->offset, $this->url);?>
+    </div>
+    <script type="text/javascript" src="/js/jquery-ui-1.8.12.custom.min.js"></script>
+    <link rel="stylesheet" type="text/css" href="/css/jquery-ui-1.8.12.custom.css"/>
+<?php echo $this->load();?>
+<?php echo $this->confirm();?> 
+

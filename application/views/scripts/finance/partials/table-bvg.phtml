@@ -1,0 +1,43 @@
+<?php 
+    if(isset($this->detailBVG) AND $this->detailBVG):
+?>
+<table class="table table-bordered span12">
+    <thead>
+        <tr>
+            <th>Joint Circular</th>
+            <th>Product</th>
+            <th>Price</th>
+            <th>Quantity</th>
+            <th>Total</th>
+        </tr>
+    </thead>
+    <tbody>
+        <?php                      
+            $sumDiscount = 0;
+            foreach($this->detailBVG as $item):
+                $sumDiscount += $item['price'];
+        ?>
+            <tr>
+                <td><?php echo $item['joint_name']?></td>
+                <td><?php echo $item['good_name'].'('.$item['good_code'].')'?></td>
+                <td><?php echo number_format(intval($item['price'] / $item['num'])) ?></td>
+                <td><?php echo $item['num']?></td>
+                <td><?php echo number_format(intval($item['price']))?></td>
+            </tr>
+        <?php        
+                endforeach;
+        ?>
+    </tbody>
+    <tfoot>
+        <tr>
+            <td><b>Total Rebate:</b></td>
+            <td></td>
+            <td></td>
+            <td></td>
+            <td><?php echo number_format($sumDiscount);?></td>
+        </tr>
+    </tfoot>
+</table>
+<?php 
+    endif;
+?>

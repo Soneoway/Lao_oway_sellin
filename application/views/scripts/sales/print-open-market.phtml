@@ -1,0 +1,1065 @@
+<?php
+$user_agent = getenv("HTTP_USER_AGENT");
+$os = '';
+if(strpos($user_agent, "Win") !== FALSE)
+$os = "Windows";
+elseif(strpos($user_agent, "Mac") !== FALSE)
+$os = "Mac";
+?>
+
+<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
+<html>
+<head>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8">
+    <title>Print</title>
+    <script src="//ajax.googleapis.com/ajax/libs/jquery/1.10.2/jquery.min.js"></script>
+    <style type="text/css"> 
+       
+    @media print
+  {
+  #print {display: none;}
+  .alert{display: none;}
+  }
+        body{margin:0 auto;width:595px;font-size:10px;font-family:Times New Roman;padding-bottom:}.top{width:595px;text-align:right}.top p{height:24px;line-height:24px;margin:0}.textbox{width:600px;border:1px solid black;height:70px}.blank10{height:10px;clear:both}.title{width:600px;text-align:center;height:30px;font-size:15px;line-height:30px;background-color:#fabf8f;font-weight:bold}.tbl,.tbllist{width:600px;background-color:#ccc;text-align:center;font-weight:bold}.tbl tr{margin:0}.tbl tr td,.tbllist tr td{background-color:#fff}.tbl .firsttd{width:145px}.tbl .secondtd{width:100px}.tbl .thirdtd{width:36px}.tbl .forthtd{width:65px}.assign{width:100px;font-weight:bold;float:left;height:100px;margin-top:10px;border-bottom:1px solid black;margin-right:20px}.note{border-bottom:1px dotted #ccc;width:300px;float:left;margin:9px 0 0 25px}.green{text-align:center}.green td{background-color:#ccffcc!important}#logo{float:left;display:block}#logo img{width:136px;margin-top:10px}.trcenter{text-align:center}
+        .invoice{width:453px;display:block;clear:both;margin-left:119px}
+        .invoice-number{float:left;padding-left:37px;}
+        .order-type{float:right;text-align:right}
+        .right{text-align:right}
+        .detail{width:587px}
+        .detail .col1{width:140px;float:left;}
+        .detail .col1-1{width:70px;float:left;}
+        .detail .col2{width:374px;float:left}
+        .detail .col2 span{font-weight:bold}
+        .detail .col2-1{width:140px;float:left}
+        .detail .col2-1 span{font-weight:bold}
+        .detail .col2-2{width:230px;float:left}
+        .detail .col2-2 span{font-weight:bold}
+        .detail .col3{width:150px;float:left}
+        .detail .col3 span{font-weight:bold;}
+        .clear{clear:both}
+        .colleft{float:left;width:300px;}
+        .colright{float:right;width:165px}
+        .vat{width:435px!important;float:right!important}#vatnumber{clear:both}#vatnumber .sn{width:54px;border:1px solid black;height:14px;float:left}.marksn{float:left;border-left:1px solid black;font-weight:bold;padding-left:3px}.order{float:left;margin-left:10px}.order .sn{width:5px;height:10px;border:1px solid black;float:left;margin-left:5px}.order .alert{margin-left:16px;margin-bottom:4px}
+        .title small {
+            float: right;
+            font-weight: normal;
+            font-size: 8px;
+            padding-right: 2em;
+        }
+        .not_show{}
+        .not_show_sumary{display: none;}
+        input[type="text"]
+        {
+            display: block;
+            margin: 0px;
+            font-family: time new roman;
+            font-weight: bold;
+            text-align: center;
+            font-size: 10px;
+            border: none;
+        }
+        .model
+        {font-size: 8px !important;
+            text-transform:uppercase;
+        }
+        .imgbutton{width:40px !important;cursor:pointer;}
+        .print{width:20px !important;}
+        .scroll{overflow:hidden;}
+        .number{width:10px;}
+        .total_price{width:265px;margin-left: 330px;}
+        .alert{color:red;font-size: 18px}
+
+        .blockOverlay{
+            z-index: 10000 !important;
+        }
+        .blockPage{
+            z-index: 10001 !important;
+        }
+
+        .fontsize18{
+            font-size: 18px;
+            font-weight: bold;
+        }
+        .fontsize13{
+            font-size: 13px;
+            /*font-weight: bold;*/
+        }
+
+        .fontsize11{
+            font-size: 11px;
+        }
+
+        span{
+            margin-left: 10px;
+            margin-right: 10px;
+        }
+
+    </style>
+
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
+
+    <script type="text/javascript">
+        var i=0;
+        var soluong=0;
+        var tSoluong=0;
+        var tTotal=0;
+        var dongia=0;
+        function expand(id) {
+            var len = document.getElementById(id).value.length;
+            document.getElementById(id).size = len + 1;
+        }
+        function number(value)
+        {
+            soluong=value;
+            tSoluong =parseInt(tSoluong)+parseInt(soluong);
+        }
+        function price(value)
+        {
+            dongia=value;
+
+            var total=dongia*soluong;
+            tTotal =parseInt(tTotal)+parseInt(total);
+            document.getElementById('price'+i).value = total;
+            document.getElementById('subNumber').value = tSoluong;
+            document.getElementById('subTotal').value = tTotal;
+        }
+        function displayResult()
+        {
+            var table=document.getElementById("myTable");
+            var row=table.insertRow(i+1);
+            var cell1=row.insertCell(0);
+            var cell2=row.insertCell(1);
+            var cell3=row.insertCell(2);
+            var cell4=row.insertCell(3);
+            var cell5=row.insertCell(4);
+            var cell6=row.insertCell(5);
+            var cell7=row.insertCell(6);
+            var cell8=row.insertCell(7);
+
+            cell1.innerHTML=i+1;i++;
+            cell2.innerHTML='<input type="text" name="goods_name" value="" style="width:95px;overflow:hidden;font-size:8px;" onkeyup = "expand(this.id)" >';
+            cell3.innerHTML='<input class="model" type="text" name="goods_name" value="" style="width:113px;">';
+            cell4.innerHTML='<input type="text" name="goods_name" value="" style="width:36px;" >';
+            cell5.innerHTML='<input type="text" name="goods_name" class="number"  value="" style="width:18px;margin: auto;" onblur="number(this.value);" >';
+            cell6.innerHTML='<input type="text" name="goods_name" id="dongia'+i+'" value="" onblur="price(this.value);" style="width:45px;" >';
+            cell7.innerHTML='<input type="text" name="goods_name" id="price'+i+'"   style="width:50px;margin:auto;" >';
+            cell8.innerHTML='<input type="text" name="goods_name" value="" style="width:86px;" >';
+        }
+        function Print()
+        {
+            $( ".imgbutton" ).remove();
+            window.print();
+        }
+
+    </script>
+</head>
+<!-- <body>
+<div id="print" >
+    <br>
+    <img src="<?php echo HOST ?>img/print.png" title="Print" class="imgbutton print" onclick="Print()" id=""  />
+    <img src="<?php echo HOST ?>img/return_box.png" title="Return To List" class="imgbutton print" onclick="close_back()" id="close"  />
+    <br>
+    <br>
+</div>
+
+<div style="margin-left: -60px;margin-right: -60px;">
+    <span class="fontsize13">
+        ฉบับที่ 3 (สำหรับผู้หักภาษี ณ ที่จ่าย เก็บไว้เป็นหลักฐาน) (บัญชี)
+    </span>
+    <br>
+    <span class="fontsize18">
+        หนังสือรับรองการหักภาษี ณ ที่จ่าย
+    </span>
+    <span style="margin-left: 10px;">
+        ตามมาตรา 50 ทวิ แห่งประมวลรัษฎากร
+    </span>
+    <span class="fontsize13" style="margin-left: 10px;">
+        เล่มที่
+    </span>
+    <span class="fontsize13" style="margin-left: 70px;">
+        เลขที่ WM01-6106-0122
+    </span>
+    <div class="fontsize13" style="margin-left: 490px;margin-top: -10px;">.........................&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp...................................</div>
+    <table style="border-collapse: collapse; width: 100%; border-color: black;" border="1">
+        <tr>
+            <td>
+                <span class="fontsize18">
+                    ผู้มีหน้าที่หักภาษี ณ ที่จ่าย :
+                </span>
+                <span class="fontsize13" style="margin-left: 62px;">
+                    เลขที่ประจำตัวผู้เสียภาษีอากร
+                </span>
+                <div style="position: absolute;margin-top: -22px;margin-left: 445px;">
+                    <table style="border-collapse: collapse;height: 30px;" border="1">
+                        <tr align="center" class="fontsize13">
+                            <td style="width: 17px;">0</td>
+                            <td style="width: 17px;">7</td>
+                            <td style="width: 17px;">4</td>
+                            <td style="width: 17px;">5</td>
+                            <td style="width: 17px;">5</td>
+                            <td style="width: 17px;">5</td>
+                            <td style="width: 17px;">2</td>
+                            <td style="width: 17px;">0</td>
+                            <td style="width: 17px;">0</td>
+                            <td style="width: 17px;">0</td>
+                            <td style="width: 17px;">8</td>
+                            <td style="width: 17px;">6</td>
+                            <td style="width: 17px;">6</td>
+                        </tr>
+                    </table>
+                </div>
+                <br>
+                <br>
+                <span class="fontsize13">
+                    ชื่อ
+                </span>
+                <span class="fontsize18">
+                    บริษัท ไทย ออปโป้ จำกัด (สำนักงานใหญ่)
+                </span>
+                <div class="fontsize13" style="margin-left: 25px;margin-top: -10px;">.................................................................................................................................................................................................................</div>
+                <span style="margin-left: 100px;">
+                (ให้ระบุว่าเป็น บุคคล นิติบุคคล บริษัท สมาคม หรือคณะบุคคล)
+                </span>
+                <br>
+                <br>
+                <span class="fontsize13">
+                    ที่อยู่
+                </span>
+                <span class="fontsize13" style="margin-left: -5px;">
+                   89 อาคารเอไอเอ แคปปิตอล เซ็นเตอร์ ชั้น 31 ห้องเลขที่ 5-7 ถนนรัชดาภิเษก แขวงดินแดง เขตดินเเดง กรุงเทพมหานคร 10400
+                </span>
+                <div class="fontsize13" style="margin-left: 33px;margin-top: -10px;">..............................................................................................................................................................................................................</div>
+                <span style="margin-left: 100px;">
+                (ให้ระบุ เลขที่ ตรอก/ซอย หมู่ที่ ถนน ตำบล/แขวง อำเภอ/เขต จังหวัดและโทรศัพท์)
+                </span>
+            </td>
+        </tr>
+        <tr>
+            <td>
+                <span class="fontsize18">
+                    ผู้ถูกหักภาษี ณ ที่จ่าย :
+                </span>
+                <span class="fontsize13" style="margin-left: 95px;">
+                    เลขที่ประจำตัวผู้เสียภาษีอากร
+                </span>
+                <div style="position: absolute;margin-top: -22px;margin-left: 445px;">
+                    <table style="border-collapse: collapse;height: 30px;" border="1">
+                        <tr align="center" class="fontsize13">
+                            <td style="width: 17px;">0</td>
+                            <td style="width: 17px;">1</td>
+                            <td style="width: 17px;">0</td>
+                            <td style="width: 17px;">5</td>
+                            <td style="width: 17px;">5</td>
+                            <td style="width: 17px;">3</td>
+                            <td style="width: 17px;">5</td>
+                            <td style="width: 17px;">1</td>
+                            <td style="width: 17px;">4</td>
+                            <td style="width: 17px;">1</td>
+                            <td style="width: 17px;">9</td>
+                            <td style="width: 17px;">0</td>
+                            <td style="width: 17px;">8</td>
+                        </tr>
+                    </table>
+                </div>
+                <br>
+                <br>
+                <span class="fontsize13">
+                    ชื่อ
+                </span>
+                <span class="fontsize13">
+                    บริษัท ทีจี เซลลูล่าร์เวิลด์ จำกัด
+                </span>
+                <div class="fontsize13" style="margin-left: 25px;margin-top: -10px;">.................................................................................................................................................................................................................</div>
+                <span style="margin-left: 100px;">
+                (ให้ระบุว่าเป็น บุคคล นิติบุคคล บริษัท สมาคม หรือคณะบุคคล)
+                </span>
+                <br>
+                <br>
+                <span class="fontsize13">
+                    ที่อยู่
+                </span>
+                <span class="fontsize13" style="margin-left: -5px;">
+                   141/35 ชั้น 23 อาคารสกุลไทยสุรวงศ์ทาวเวอร์ ถนนสุรวงศ์ แขวงสุริยวงศ์ เขตบางรัก กรุงเทพมหานคร 10500
+                </span>
+                <div class="fontsize13" style="margin-left: 33px;margin-top: -10px;">..............................................................................................................................................................................................................</div>
+                <span style="margin-left: 100px;">
+                (ให้ระบุ เลขที่ ตรอก/ซอย หมู่ที่ ถนน ตำบล/แขวง อำเภอ/เขต จังหวัดและโทรศัพท์)
+                </span>
+            </td>
+        </tr>
+        <tr>
+            <td>
+                <table style="border-collapse: collapse;width: 100%;">
+                    <tr style="padding-top: 50px;">
+                        <td style="width: 250px; height: 40px;">
+                            <span class="fontsize18">
+                                ลำดับที่*
+                            </span>
+                            <div style="border-style: solid; border-width: 1px; height: 25px; width: 110px; position: absolute; margin-top: -25px; margin-left: 75px;">
+                            </div>
+                            <span class="fontsize13" style="margin-left: 105px;">
+                                ในแบบ
+                            </span>
+                        </td>
+                        <td>
+                            <i class="fa fa-square-o" style="font-size: 13px;"></i><span class="fontsize11">(1) ภ.ง.ด. 1ก</span>
+                            <br>
+                            <i class="fa fa-square-o" style="font-size: 13px;"></i><span class="fontsize11">(5) ภ.ง.ด. 2ก</span>
+                        </td>
+                        <td>
+                            <i class="fa fa-square-o" style="font-size: 13px;"></i><span class="fontsize11">(2) ภ.ง.ด. 1ก พิเศษ</span>
+                            <br>
+                            <i class="fa fa-square-o" style="font-size: 13px;"></i><span class="fontsize11">(6) ภ.ง.ด. 3ก</span>
+                        </td>
+                        <td>
+                            <i class="fa fa-square-o" style="font-size: 13px;"></i><span class="fontsize11">(3) ภ.ง.ด. 2</span>
+                            <br>
+                            <i class="fa fa-check-square-o" style="font-size: 13px;"></i><span class="fontsize11">(7) ภ.ง.ด. 53</span>
+                        </td>
+                        <td>
+                            <i class="fa fa-square-o" style="margin-top: -30px; font-size: 13px;"></i><span class="fontsize11">(4) ภ.ง.ด. 3</span>
+                            <br>
+                            <br>
+                        </td>
+                    </tr>
+                </table>
+            </td>
+        </tr>
+        <tr>
+            <td>
+                <table style="border-collapse: collapse;width: 100%;">
+                    <tr>
+                        <td style="width: 370px; border-bottom: 1px solid; border-right: 1px solid;" align="center">
+                            <span class="fontsize18">ประเภทเงินได้ที่จ่าย</span>
+                        </td>
+                        <td style="width: 100px; border-bottom: 1px solid; border-right: 1px solid;" align="center">
+                            <span class="fontsize13">วัน เดือน หรือ</span>
+                            <br>
+                            <span class="fontsize13">ปีภาษีที่จ่าย</span>
+                        </td>
+                        <td style="border-bottom: 1px solid; border-right: 1px solid;" align="center" colspan="2">
+                            <span class="fontsize13">จำนวนเงินที่จ่าย</span>
+                        </td>
+                        <td style="border-bottom: 1px solid;" align="center" colspan="2">
+                            <span class="fontsize13">ภาษีที่หัก</span>
+                            <br>
+                            <span class="fontsize13">และนำส่งไว้</span>
+                        </td>
+                    </tr>
+                    <tr>
+                        <td style="border-right: 1px solid; border-bottom: 1px solid;" rowspan="13">
+                            <p style="margin-top: 5px;margin-bottom: 0px; margin-left: 5px; font-size: 11px;">1. เงินเดือน ค่าจ้าง เบี้ยเลี้ยง โบนัส ฯลฯ ตามมาตรา 40 (1)</p>
+                            <p style="margin-top: 0px;margin-bottom: 0px; margin-left: 5px; font-size: 11px;">2. ค่าธรรมเนียม ค่านายหน้า ฯลฯ ตามมาตรา 40 (2)</p>
+                            <p style="margin-top: 0px;margin-bottom: 0px; margin-left: 5px; font-size: 11px;">3. ค่าแห่งลิขสิทธิ์ ฯลฯ ตามมาตรา 40 (3)</p>
+                            <p style="margin-top: 0px;margin-bottom: 0px; margin-left: 5px; font-size: 11px;">4. (1) ค่าดอกเบี้ย ฯลฯ ตามมาตรา 40 (4) (ก)</p>
+                            <p style="margin-top: 0px;margin-bottom: 0px; margin-left: 5px; font-size: 11px;">&nbsp&nbsp&nbsp&nbsp(2) เงินปันผล เงินส่วนแบ่งของกำไร ฯลฯ ตามมาตรา 40 (4) (ข) ที่จ่ายจาก</p>
+                            <p style="font-size: 10px;margin-left: 3px; margin-top: 0px;margin-bottom: 0px;"><i class="fa fa-square-o" style="margin-left: 0px; font-size: 13px;"></i> (ก) กิจการที่ต้องเสียภาษีเงินได้นิติบุคคลในอัตราร้อยละ 30 ของกำไรสุทธิ</p>
+                            <p style="font-size: 10px;margin-left: 3px; margin-top: 0px;margin-bottom: 0px;"><i class="fa fa-square-o" style="margin-left: 0px; font-size: 13px;"></i> (ข) กิจการในเขตส่งเสริมการลงทุนตามมาตรา 35 (2) แห่ง พ.ร.บ. ส่งเสริมการลงทุน <br> &nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbspพ.ศ. 2520 ที่ต้องเสียภาษีเงินได้นิติบุคคลในอัตรากึ่งหนึ่ง ของอัตราตาม (ก)</p>
+                            <p style="font-size: 10px;margin-left: 3px; margin-top: 0px;margin-bottom: 0px;"><i class="fa fa-square-o" style="margin-left: 0px; font-size: 13px;"></i> (ค) กิจการวิเทศธนกิจที่ต้องเสียภาษีเงินได้นิติบุคคลในอัตราร้อยละ 10 ของกำไรสุทธิ</p>
+                            <p style="font-size: 10px;margin-left: 3px; margin-top: 0px;margin-bottom: 0px;"><i class="fa fa-square-o" style="margin-left: 0px; font-size: 13px;"></i> (ง) กิจการที่ต้องเสียภาษีเงินได้นิติบุคคลในอัตราอื่นนอกจาก (ก) (ข) หรือ (ค)</p>
+                            <p style="margin-top: 0px;margin-bottom: 0px; margin-left: 5px; font-size: 11px;">5. การจ่ายเงินได้ที่ต้องหักภาษี ณ ที่จ่ายตามคำสั่งกรมสรรพากร ที่ออกตาม<br>&nbsp&nbsp&nbsp&nbspมาตรา 3 เตรส เช่น ค่าซื้อพืชผลทางการเกษตร (ยางพารา มันสำปะหลัง ข้าว <br> &nbsp&nbsp&nbsp&nbspฯลฯ) รางวัลในการประกวด การแข่งขัน การชิงโชค ร้องเพลง ค่าบริการ <br> &nbsp&nbsp&nbsp&nbspค่าแสดงภาพยนตร์ ดนตรี ค่าจ้างทำของ ค่าจ้างโฆษณา ค่าเช่า ฯลฯ</p>
+                            <span style="margin-top: 0px;margin-bottom: 0px; margin-left: 5px; font-size: 11px;">6. <i class="fa fa-square-o" style="margin-left: 0px; font-size: 13px;"></i> ค้าจ้างขนส่ง</span>
+                            <span style="margin-top: 0px;margin-bottom: 0px; margin-left: 5px; font-size: 11px;"><i class="fa fa-square-o" style="margin-left: 10px; font-size: 13px;"></i> ค่าเบี้ยประกันวินาศภัย</span>
+                            <p style="margin-top: 5px;margin-bottom: 0px; margin-left: 5px; font-size: 11px;">7. อื่นๆ (ระบุ)<span class="fontsize11" style="margin-left: 35px;">ค่าเช่า</span></p>
+                            <div style="margin-left: 63px;margin-top: -10px;">.........................................................................................................................</div>
+                            <p style="margin-top: 5px;margin-bottom: 0px; margin-left: 5px; font-size: 11px;">8. <span class="fontsize11" style="margin-left: 77px;">ค่าบริการ</span></p>
+                            <div style="margin-left: 20px;margin-top: -10px;">..........................................................................................................................................</div>
+                        </td>
+                    </tr>
+                    <tr style="height: 20px; border-bottom: 1px dotted;">
+                        <td style="border-right: 1px solid;"></td>
+                        <td style="border-right: 1px solid; width: 100px;"></td>
+                        <td style="border-right: 1px solid; width: 15px;"></td>
+                        <td style="border-right: 1px solid; width: 100px;"></td>
+                        <td style="width: 13px;"></td>
+                    </tr>
+                    <tr style="height: 20px; border-bottom: 1px dotted;">
+                        <td style="border-right: 1px solid;"></td>
+                        <td style="border-right: 1px solid; width: 100px;"></td>
+                        <td style="border-right: 1px solid; width: 15px;"></td>
+                        <td style="border-right: 1px solid; width: 100px;"></td>
+                        <td style="width: 13px;"></td>
+                    </tr>
+                    <tr style="height: 20px; border-bottom: 1px dotted;">
+                        <td style="border-right: 1px solid;"></td>
+                        <td style="border-right: 1px solid; width: 100px;"></td>
+                        <td style="border-right: 1px solid; width: 15px;"></td>
+                        <td style="border-right: 1px solid; width: 100px;"></td>
+                        <td style="width: 13px;"></td>
+                    </tr>
+                    <tr style="height: 20px; border-bottom: 1px dotted;">
+                        <td style="border-right: 1px solid;"></td>
+                        <td style="border-right: 1px solid; width: 100px;"></td>
+                        <td style="border-right: 1px solid; width: 15px;"></td>
+                        <td style="border-right: 1px solid; width: 100px;"></td>
+                        <td style="width: 13px;"></td>
+                    </tr>
+                    <tr style="height: 20px; border-bottom: 1px dotted;">
+                        <td style="border-right: 1px solid;"></td>
+                        <td style="border-right: 1px solid; width: 100px;"></td>
+                        <td style="border-right: 1px solid; width: 15px;"></td>
+                        <td style="border-right: 1px solid; width: 100px;"></td>
+                        <td style="width: 13px;"></td>
+                    </tr>
+                    <tr style="height: 20px; border-bottom: 1px dotted;">
+                        <td style="border-right: 1px solid;"></td>
+                        <td style="border-right: 1px solid; width: 100px;"></td>
+                        <td style="border-right: 1px solid; width: 15px;"></td>
+                        <td style="border-right: 1px solid; width: 100px;"></td>
+                        <td style="width: 13px;"></td>
+                    </tr>
+                    <tr style="height: 20px; border-bottom: 1px dotted;">
+                        <td style="border-right: 1px solid;"></td>
+                        <td style="border-right: 1px solid; width: 100px;"></td>
+                        <td style="border-right: 1px solid; width: 15px;"></td>
+                        <td style="border-right: 1px solid; width: 100px;"></td>
+                        <td style="width: 13px;"></td>
+                    </tr>
+                    <tr style="height: 20px; border-bottom: 1px dotted;">
+                        <td style="border-right: 1px solid;"></td>
+                        <td style="border-right: 1px solid; width: 100px;"></td>
+                        <td style="border-right: 1px solid; width: 15px;"></td>
+                        <td style="border-right: 1px solid; width: 100px;"></td>
+                        <td style="width: 13px;"></td>
+                    </tr>
+                    <tr style="height: 20px; border-bottom: 1px dotted;">
+                        <td style="border-right: 1px solid;"></td>
+                        <td style="border-right: 1px solid; width: 100px;"></td>
+                        <td style="border-right: 1px solid; width: 15px;"></td>
+                        <td style="border-right: 1px solid; width: 100px;"></td>
+                        <td style="width: 13px;"></td>
+                    </tr>
+                    <tr style="height: 20px; border-bottom: 1px dotted;">
+                        <td style="border-right: 1px solid;"></td>
+                        <td style="border-right: 1px solid; width: 100px;"></td>
+                        <td style="border-right: 1px solid; width: 15px;"></td>
+                        <td style="border-right: 1px solid; width: 100px;"></td>
+                        <td style="width: 13px;"></td>
+                    </tr>
+                    <tr style="height: 20px; border-bottom: 1px dotted;" align="right">
+                        <td style="border-right: 1px solid;"><span class="fontsize11">05/06/2561</span></td>
+                        <td style="border-right: 1px solid; width: 100px;"><span class="fontsize11">21,342.66</span></td>
+                        <td style="border-right: 1px solid; width: 15px;"><span class="fontsize11"></span></td>
+                        <td style="border-right: 1px solid; width: 100px;"><span class="fontsize11">1,067.13</span></td>
+                        <td style="width: 13px;"><span class="fontsize11"></span></td>
+                    </tr>
+                    <tr style="height: 22px; border-bottom: 1px solid" align="right">
+                        <td style="border-right: 1px solid;"><span class="fontsize11">05/06/2561</span></td>
+                        <td style="border-right: 1px solid; width: 100px;"><span class="fontsize11">3,980.93</span></td>
+                        <td style="border-right: 1px solid; width: 15px;"><span class="fontsize11"></span></td>
+                        <td style="border-right: 1px solid; width: 100px;"><span class="fontsize11">119.43</span></td>
+                        <td style="width: 13px;"><span class="fontsize11"></span></td>
+                    </tr>
+                    <tr align="right">
+                        <td colspan="2" style="border-right: 1px solid;">
+                            <span style="text-decoration: underline; font-size: 15px; font-weight: bold; margin-right: 20px;">รวมเงินที่จ่ายและภาษีที่หักนำส่ง</span>
+                        </td>
+                        <td style="border-right: 1px solid; border-bottom: 1px solid; width: 100px;"><span class="fontsize11">25,323.59</span></td>
+                        <td style="border-right: 1px solid; border-bottom: 1px solid; width: 15px;"><span class="fontsize11"></span></td>
+                        <td style="border-right: 1px solid; border-bottom: 1px solid; width: 100px;"><span class="fontsize11">1,186.56</span></td>
+                        <td style="border-bottom: 1px solid; width: 13px;"><span class="fontsize11"></span></td>
+                    </tr>
+                    <tr>
+                        <td style="height: 35px; border-bottom: 1px solid" colspan="6">
+                            <span style="text-decoration: underline; font-size: 13px; margin-right: 20px;">รวมเงินภาษีที่หักนำส่ง (ตัวอักษร)</span>
+                            <div style="position: absolute; margin-left: 245px; margin-top: -21px; height: 25px; width: 460px; background: lightgray; border: 1px solid;" align="center">
+                                <div style="margin-top: 3px;">
+                                    <span style="margin-top: 5px;" class="fontsize13">(หนึ่งพันหนึ่งร้อยแปดสิบหกบาทห้าสิบหกสตางค์)</span>
+                                </div>
+                            </div>
+                        </td>
+                    </tr>
+                    <tr>
+                        <td class="fontsize13" colspan="6" style="height: 35px;">
+                            <span>เงินสะสมจ่ายเข้ากองทุนสำรองเลี้ยงชีพใบอนุญาตเลขที่</span>
+                            <span style="margin-left: 150px;">จำนวนเงิน</span>
+                            <span style="margin-left: 145px;">บาท</span>
+                            <div style="margin-left: 295px;margin-top: -13px;">...................................................</div>
+                            <div style="margin-left: 513px;margin-top: -16px;">.................................................</div>
+                        </td>
+                    </tr>
+                    <tr>
+                        <td class="fontsize13" colspan="6"">
+                            <span>เงินสมทบจ่ายเข้ากองทุนประกันสังคม จำนวนเงิน</span>
+                            <span style="margin-left: 185px;">บาท</span>
+                            <div style="margin-left: 263px;margin-top: -13px;">.............................................................</div>
+                        </td>
+                    </tr>
+                    <tr>
+                        <td class="fontsize13" colspan="6">
+                            <span style="margin-left: 90px;">เลขที่บัญชีนายจ้าง</span>
+                            <span style="margin-left: 70px;">เลขที่บัตรประกันสังคม/เลขหมายบัตรประจำตัวประชาชน ของผู้ถูกหักภาษี ณ ที่จ่าย</span>
+                        </td>
+                    </tr>
+                    <tr>
+                        <td>
+                            <div style="margin-left: 15px;">
+                                <table style="border-collapse: collapse;height: 30px;">
+                                     <tr align="center" class="fontsize13">
+                                        <td style="border: 1px solid; width: 17px;"></td>
+                                        <td style="border: 1px solid; width: 17px;"></td>
+                                        <td style="width: 13px;">
+                                            <div style="margin-top: -10px;">__</div>
+                                        </td>
+                                        <td style="border: 1px solid; width: 17px;"></td>
+                                        <td style="border: 1px solid; width: 17px;"></td>
+                                        <td style="border: 1px solid; width: 17px;"></td>
+                                        <td style="border: 1px solid; width: 17px;"></td>
+                                        <td style="border: 1px solid; width: 17px;"></td>
+                                        <td style="border: 1px solid; width: 17px;"></td>
+                                        <td style="border: 1px solid; width: 17px;"></td>
+                                        <td style="width: 13px;">
+                                            <div style="margin-top: -15px;">__</div>
+                                        </td>
+                                        <td style="border: 1px solid; width: 17px;"></td>
+                                    </tr>
+                                </table>
+                            </div>
+                            <div style="margin-left: 315px; position: absolute; margin-top: -30px;">
+                                <table style="border-collapse: collapse; height: 30px;">
+                                     <tr align="center" class="fontsize13">
+                                        <td style="border: 1px solid; width: 17px;"></td>
+                                        <td style="width: 13px;">
+                                            <div style="margin-top: -10px;">__</div>
+                                        </td>
+                                        <td style="border: 1px solid; width: 17px;"></td>
+                                        <td style="border: 1px solid; width: 17px;"></td>
+                                        <td style="border: 1px solid; width: 17px;"></td>
+                                        <td style="border: 1px solid; width: 17px;"></td>
+                                        <td style="width: 13px;">
+                                            <div style="margin-top: -10px;">__</div>
+                                        </td>
+                                        <td style="border: 1px solid; width: 17px;"></td>
+                                        <td style="border: 1px solid; width: 17px;"></td>
+                                        <td style="border: 1px solid; width: 17px;"></td>
+                                        <td style="border: 1px solid; width: 17px;"></td>
+                                        <td style="border: 1px solid; width: 17px;"></td>
+                                        <td style="width: 13px;">
+                                            <div style="margin-top: -15px;">__</div>
+                                        </td>
+                                        <td style="border: 1px solid; width: 17px;"></td>
+                                        <td style="border: 1px solid; width: 17px;"></td>
+                                        <td style="width: 13px;">
+                                            <div style="margin-top: -10px;">__</div>
+                                        </td>
+                                        <td style="border: 1px solid; width: 17px;"></td>
+                                    </tr>
+                                </table>
+                            </div>
+                        </td>
+                    </tr>
+                </table>
+            </td>
+        </tr>
+        <tr>
+            <td>
+                <table style="border-collapse: collapse; width: 100%">
+                    <tr>
+                        <td style="border-right: 1px solid; width: 135px;" rowspan="13">
+                            <span class="fontsize11">ผู้จ่ายเงิน</span><br>
+                            <span class="fontsize11"><i class="fa fa-check-square-o" style="margin-right: 10px; font-size: 13px;"></i>หักภาษี ณ ที่จ่าย</span><br>
+                            <span class="fontsize11"><i class="fa fa-square-o" style="margin-right: 10px; font-size: 13px;"></i>ออกภาษีให้ตลอดไป</span><br>
+                            <span class="fontsize11"><i class="fa fa-square-o" style="margin-right: 10px; font-size: 13px;"></i>ออกภาษีให้ครั้งเดียว</span><br>
+                            <span class="fontsize11"><i class="fa fa-square-o" style="margin-right: 10px; font-size: 13px;"></i>อื่นๆให้ระบุ..........</span>
+                        </td>
+                        <td style="width: 450px;">
+                            <span class="fontsize13">
+                                ขอรับรองว่า ข้อความและตัวเลขดังกล่าวข้างต้นถูกต้องตรงกับความจริงทุกประการ
+                            </span>
+                        </td>
+                        <td align="center" rowspan="13" style="font-size: 8px;">
+                            <img width="100px" src="/img/logo_oppo_small.png">
+                            <br>
+                            <span>บริษัท ไทย ออปโป้ จำกัด</span>
+                            <span>THAI OPPO CO., LTD</span>
+                        </td>
+                    </tr>
+                    <tr>
+                        <td style="width: 450px; height: 70px;" valign="bottom">
+                            <span class="fontsize13">(ลงชื่อ)</span>
+                            <span class="fontsize13" style="margin-left: 200px;">ผู้มีหน้าที่หักภาษี ณ ที่จ่าย</span>
+                            <div style="margin-left: 45px;margin-top: -10px;">.......................................................................................</div>
+                        </td>
+                    </tr>
+                    <tr>
+                        <td style="width: 450px; height: 40px;">
+                            <span class="fontsize13" style="margin-left: 260px;">วัน เดือน ปี ที่ออกหนังสือรับรองฯ</span>
+                            <div style="margin-left: 10px;margin-top: -10px;">.....................................................................................................</div>
+                        </td>
+                    </tr>
+                </table>
+            </td>
+        </tr>
+        <tr>
+            <td style="font-size: 9.5px; width: bold; height: 45px;">
+                <span>หมายเหตุ * &nbsp&nbspให้สามารถอ้างอิงหรือสอบยันกันได้ระหว่างลำดับที่ตามหนังสือรับรองฯ กับแบบยื่นรายการภาษีหัก ณ ที่จ่าย</span>
+                <br>
+                <span>คำเตือน &nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbspผู้มีหน้าที่ออกหนังสือรับรองการหักภาษี ณ ที่จ่าย ฝ่าฝืนไม่ปฏิบัติตามมาตรา 50 ทวิ แห่งประมวลรัษฎากร ต้องรับโทษทางอาญาตามมาตรา 35 แห่งประมวลรัษฎากร ด้วย</span>
+            </td>
+        </tr>
+    </table>
+</div>
+</body> -->
+<body>
+<div id="print" >
+    <br>
+    <img src="<?php echo HOST ?>img/print.png" title="Print" class="imgbutton print" onclick="Print()" id=""  />
+    <img src="<?php echo HOST ?>img/return_box.png" title="Return To List" class="imgbutton print" onclick="close_back()" id="close"  />
+    <br>
+    <br>
+</div>
+
+<div style="margin-left: -60px;margin-right: -60px;">
+    <span class="fontsize13">
+        ฉบับที่ 3 (สำหรับผู้หักภาษี ณ ที่จ่าย เก็บไว้เป็นหลักฐาน) (บัญชี)
+    </span>
+    <br>
+    <span class="fontsize18">
+        หนังสือรับรองการหักภาษี ณ ที่จ่าย
+    </span>
+    <span style="margin-left: <?php if($os==="Mac"){echo '20';}else{echo '5';}?>px;">
+        ตามมาตรา 50 ทวิ แห่งประมวลรัษฎากร
+    </span>
+    <span class="fontsize13" style="margin-left: <?php if($os==="Mac"){echo '20';}else{echo '5';}?>px;">
+        เล่มที่
+    </span>
+    <span class="fontsize13" style="margin-left: 55px;">
+        เลขที่ &nbspWM01-6106-0122
+    </span>
+    <div class="fontsize13" style="margin-left: 510px;margin-top: -10px;">...................&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp.................................</div>
+    <table style="border-collapse: collapse; width: 100%; border-color: black;" border="1">
+        <tr>
+            <td>
+                <span class="fontsize18">
+                    ผู้มีหน้าที่หักภาษี ณ ที่จ่าย :
+                </span>
+                <span class="fontsize13" style="margin-left: 40px;">
+                    เลขที่ประจำตัวผู้เสียภาษีอากร
+                </span>
+                <div style="position: absolute;margin-top: -22px;margin-left: 445px;">
+                    <table style="border-collapse: collapse;height: 30px;" border="1">
+                        <tr align="center" class="fontsize13">
+                            <td style="width: 17px;">0</td>
+                            <td style="width: 17px;">7</td>
+                            <td style="width: 17px;">4</td>
+                            <td style="width: 17px;">5</td>
+                            <td style="width: 17px;">5</td>
+                            <td style="width: 17px;">5</td>
+                            <td style="width: 17px;">2</td>
+                            <td style="width: 17px;">0</td>
+                            <td style="width: 17px;">0</td>
+                            <td style="width: 17px;">0</td>
+                            <td style="width: 17px;">8</td>
+                            <td style="width: 17px;">6</td>
+                            <td style="width: 17px;">6</td>
+                        </tr>
+                    </table>
+                </div>
+                <br>
+                <br>
+                <span class="fontsize13">
+                    ชื่อ
+                </span>
+                <span class="fontsize18">
+                    บริษัท ไทย ออปโป้ จำกัด (สำนักงานใหญ่)
+                </span>
+                <div class="fontsize13" style="margin-left: 25px;margin-top: -10px;">.................................................................................................................................................................................................................</div>
+                <span style="margin-left: 100px;">
+                (ให้ระบุว่าเป็น บุคคล นิติบุคคล บริษัท สมาคม หรือคณะบุคคล)
+                </span>
+                <br>
+                <br>
+                <span class="fontsize13">
+                    ที่อยู่
+                </span>
+                <span class="fontsize13" style="margin-left: -5px;">
+                   89 อาคารเอไอเอ แคปปิตอล เซ็นเตอร์ ชั้น 31 ห้องเลขที่ 5-7 ถนนรัชดาภิเษก แขวงดินแดง เขตดินเเดง กรุงเทพมหานคร 10400
+                </span>
+                <div class="fontsize13" style="margin-left: 33px;margin-top: -10px;">..............................................................................................................................................................................................................</div>
+                <span style="margin-left: 100px;">
+                (ให้ระบุ เลขที่ ตรอก/ซอย หมู่ที่ ถนน ตำบล/แขวง อำเภอ/เขต จังหวัดและโทรศัพท์)
+                </span>
+            </td>
+        </tr>
+        <tr>
+            <td>
+                <span class="fontsize18">
+                    ผู้ถูกหักภาษี ณ ที่จ่าย :
+                </span>
+                <span class="fontsize13" style="margin-left: 75px;">
+                    เลขที่ประจำตัวผู้เสียภาษีอากร
+                </span>
+                <div style="position: absolute;margin-top: -22px;margin-left: 445px;">
+                    <table style="border-collapse: collapse;height: 30px;" border="1">
+                        <tr align="center" class="fontsize13">
+                            <td style="width: 17px;">0</td>
+                            <td style="width: 17px;">1</td>
+                            <td style="width: 17px;">0</td>
+                            <td style="width: 17px;">5</td>
+                            <td style="width: 17px;">5</td>
+                            <td style="width: 17px;">3</td>
+                            <td style="width: 17px;">5</td>
+                            <td style="width: 17px;">1</td>
+                            <td style="width: 17px;">4</td>
+                            <td style="width: 17px;">1</td>
+                            <td style="width: 17px;">9</td>
+                            <td style="width: 17px;">0</td>
+                            <td style="width: 17px;">8</td>
+                        </tr>
+                    </table>
+                </div>
+                <br>
+                <br>
+                <span class="fontsize13">
+                    ชื่อ
+                </span>
+                <span class="fontsize13">
+                    บริษัท ทีจี เซลลูล่าร์เวิลด์ จำกัด
+                </span>
+                <div class="fontsize13" style="margin-left: 25px;margin-top: -10px;">.................................................................................................................................................................................................................</div>
+                <span style="margin-left: 100px;">
+                (ให้ระบุว่าเป็น บุคคล นิติบุคคล บริษัท สมาคม หรือคณะบุคคล)
+                </span>
+                <br>
+                <br>
+                <span class="fontsize13">
+                    ที่อยู่
+                </span>
+                <span class="fontsize13" style="margin-left: -5px;">
+                   141/35 ชั้น 23 อาคารสกุลไทยสุรวงศ์ทาวเวอร์ ถนนสุรวงศ์ แขวงสุริยวงศ์ เขตบางรัก กรุงเทพมหานคร 10500
+                </span>
+                <div class="fontsize13" style="margin-left: 33px;margin-top: -10px;">..............................................................................................................................................................................................................</div>
+                <span style="margin-left: 100px;">
+                (ให้ระบุ เลขที่ ตรอก/ซอย หมู่ที่ ถนน ตำบล/แขวง อำเภอ/เขต จังหวัดและโทรศัพท์)
+                </span>
+            </td>
+        </tr>
+        <tr>
+            <td>
+                <table style="border-collapse: collapse;width: 100%;">
+                    <tr style="padding-top: 50px;">
+                        <td style="width: 250px; height: 40px;">
+                            <span class="fontsize18">
+                                ลำดับที่*
+                            </span>
+                            <div style="border-style: solid; border-width: 1px; height: 25px; width: 110px; position: absolute; margin-top: -25px; margin-left: 80px;">
+                            </div>
+                            <span class="fontsize13" style="margin-left: 105px;">
+                                ในแบบ
+                            </span>
+                        </td>
+                        <td>
+                            <i class="fa fa-square-o" style="font-size: 13px;"></i><span class="fontsize11">(1) ภ.ง.ด. 1ก</span>
+                            <br>
+                            <i class="fa fa-square-o" style="font-size: 13px;"></i><span class="fontsize11">(5) ภ.ง.ด. 2ก</span>
+                        </td>
+                        <td>
+                            <i class="fa fa-square-o" style="font-size: 13px;"></i><span class="fontsize11">(2) ภ.ง.ด. 1ก พิเศษ</span>
+                            <br>
+                            <i class="fa fa-square-o" style="font-size: 13px;"></i><span class="fontsize11">(6) ภ.ง.ด. 3ก</span>
+                        </td>
+                        <td>
+                            <i class="fa fa-square-o" style="font-size: 13px;"></i><span class="fontsize11">(3) ภ.ง.ด. 2</span>
+                            <br>
+                            <i class="fa fa-check-square-o" style="font-size: 13px;"></i><span class="fontsize11">(7) ภ.ง.ด. 53</span>
+                        </td>
+                        <td>
+                            <i class="fa fa-square-o" style="margin-top: -30px; font-size: 13px;"></i><span class="fontsize11">(4) ภ.ง.ด. 3</span>
+                            <br>
+                            <br>
+                        </td>
+                    </tr>
+                </table>
+            </td>
+        </tr>
+        <tr>
+            <td>
+                <table style="border-collapse: collapse;width: 100%;">
+                    <tr>
+                        <td style="width: 370px; border-bottom: 1px solid; border-right: 1px solid;" align="center">
+                            <span class="fontsize18">ประเภทเงินได้ที่จ่าย</span>
+                        </td>
+                        <td style="width: 100px; border-bottom: 1px solid; border-right: 1px solid;" align="center">
+                            <span class="fontsize13">วัน เดือน หรือ</span>
+                            <br>
+                            <span class="fontsize13">ปีภาษีที่จ่าย</span>
+                        </td>
+                        <td style="border-bottom: 1px solid; border-right: 1px solid;" align="center" colspan="2">
+                            <span class="fontsize13">จำนวนเงินที่จ่าย</span>
+                        </td>
+                        <td style="border-bottom: 1px solid;" align="center" colspan="2">
+                            <span class="fontsize13">ภาษีที่หัก</span>
+                            <br>
+                            <span class="fontsize13">และนำส่งไว้</span>
+                        </td>
+                    </tr>
+                    <tr>
+                        <td style="border-right: 1px solid; border-bottom: 1px solid;" rowspan="13">
+                            <p style="margin-top: 5px;margin-bottom: 0px; margin-left: 5px; font-size: 11px;">1. เงินเดือน ค่าจ้าง เบี้ยเลี้ยง โบนัส ฯลฯ ตามมาตรา 40 (1)</p>
+                            <p style="margin-top: 0px;margin-bottom: 0px; margin-left: 5px; font-size: 11px;">2. ค่าธรรมเนียม ค่านายหน้า ฯลฯ ตามมาตรา 40 (2)</p>
+                            <p style="margin-top: 0px;margin-bottom: 0px; margin-left: 5px; font-size: 11px;">3. ค่าแห่งลิขสิทธิ์ ฯลฯ ตามมาตรา 40 (3)</p>
+                            <p style="margin-top: 0px;margin-bottom: 0px; margin-left: 5px; font-size: 11px;">4. (1) ค่าดอกเบี้ย ฯลฯ ตามมาตรา 40 (4) (ก)</p>
+                            <p style="margin-top: 0px;margin-bottom: 0px; margin-left: 5px; font-size: 11px;">&nbsp&nbsp&nbsp&nbsp(2) เงินปันผล เงินส่วนแบ่งของกำไร ฯลฯ ตามมาตรา 40 (4) (ข) ที่จ่ายจาก</p>
+                            <p style="font-size: 10px;margin-left: 3px; margin-top: 0px;margin-bottom: 0px;"><i class="fa fa-square-o" style="margin-left: 0px; font-size: 13px;"></i> (ก) กิจการที่ต้องเสียภาษีเงินได้นิติบุคคลในอัตราร้อยละ 30 ของกำไรสุทธิ</p>
+                            <p style="font-size: 10px;margin-left: 3px; margin-top: 0px;margin-bottom: 0px;"><i class="fa fa-square-o" style="margin-left: 0px; font-size: 13px;"></i> (ข) กิจการในเขตส่งเสริมการลงทุนตามมาตรา 35 (2) แห่ง พ.ร.บ. ส่งเสริมการลงทุน <br> &nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbspพ.ศ. 2520 ที่ต้องเสียภาษีเงินได้นิติบุคคลในอัตรากึ่งหนึ่ง ของอัตราตาม (ก)</p>
+                            <p style="font-size: 10px;margin-left: 3px; margin-top: 0px;margin-bottom: 0px;"><i class="fa fa-square-o" style="margin-left: 0px; font-size: 13px;"></i> (ค) กิจการวิเทศธนกิจที่ต้องเสียภาษีเงินได้นิติบุคคลในอัตราร้อยละ 10 ของกำไรสุทธิ</p>
+                            <p style="font-size: 10px;margin-left: 3px; margin-top: 0px;margin-bottom: 0px;"><i class="fa fa-square-o" style="margin-left: 0px; font-size: 13px;"></i> (ง) กิจการที่ต้องเสียภาษีเงินได้นิติบุคคลในอัตราอื่นนอกจาก (ก) (ข) หรือ (ค)</p>
+                            <p style="margin-top: 0px;margin-bottom: 0px; margin-left: 5px; font-size: 11px;">5. การจ่ายเงินได้ที่ต้องหักภาษี ณ ที่จ่ายตามคำสั่งกรมสรรพากร ที่ออกตาม<br>&nbsp&nbsp&nbsp&nbspมาตรา 3 เตรส เช่น ค่าซื้อพืชผลทางการเกษตร (ยางพารา มันสำปะหลัง ข้าว <br> &nbsp&nbsp&nbsp&nbspฯลฯ) รางวัลในการประกวด การแข่งขัน การชิงโชค ร้องเพลง ค่าบริการ <br> &nbsp&nbsp&nbsp&nbspค่าแสดงภาพยนตร์ ดนตรี ค่าจ้างทำของ ค่าจ้างโฆษณา ค่าเช่า ฯลฯ</p>
+                            <span style="margin-top: 0px;margin-bottom: 0px; margin-left: 5px; font-size: 11px;">6. <i class="fa fa-square-o" style="margin-left: 0px; font-size: 13px;"></i> ค้าจ้างขนส่ง</span>
+                            <span style="margin-top: 0px;margin-bottom: 0px; margin-left: 5px; font-size: 11px;"><i class="fa fa-square-o" style="margin-left: 10px; font-size: 13px;"></i> ค่าเบี้ยประกันวินาศภัย</span>
+                            <p style="margin-top: 5px;margin-bottom: 0px; margin-left: 5px; font-size: 11px;">7. อื่นๆ (ระบุ)<span class="fontsize11" style="margin-left: 35px;">ค่าเช่า</span></p>
+                            <div style="margin-left: 63px;margin-top: -10px;">.........................................................................................................................</div>
+                            <p style="margin-top: 5px;margin-bottom: 0px; margin-left: 5px; font-size: 11px;">8. <span class="fontsize11" style="margin-left: 77px;">ค่าบริการ</span></p>
+                            <div style="margin-left: 20px;margin-top: -10px;">..........................................................................................................................................</div>
+                        </td>
+                    </tr>
+                    <tr style="height: 20px; border-bottom: 1px dotted;">
+                        <td style="border-right: 1px solid;"></td>
+                        <td style="border-right: 1px solid; width: 100px;"></td>
+                        <td style="border-right: 1px solid; width: 15px;"></td>
+                        <td style="border-right: 1px solid; width: 100px;"></td>
+                        <td style="width: 13px;"></td>
+                    </tr>
+                    <tr style="height: 20px; border-bottom: 1px dotted;">
+                        <td style="border-right: 1px solid;"></td>
+                        <td style="border-right: 1px solid; width: 100px;"></td>
+                        <td style="border-right: 1px solid; width: 15px;"></td>
+                        <td style="border-right: 1px solid; width: 100px;"></td>
+                        <td style="width: 13px;"></td>
+                    </tr>
+                    <tr style="height: 20px; border-bottom: 1px dotted;">
+                        <td style="border-right: 1px solid;"></td>
+                        <td style="border-right: 1px solid; width: 100px;"></td>
+                        <td style="border-right: 1px solid; width: 15px;"></td>
+                        <td style="border-right: 1px solid; width: 100px;"></td>
+                        <td style="width: 13px;"></td>
+                    </tr>
+                    <tr style="height: 20px; border-bottom: 1px dotted;">
+                        <td style="border-right: 1px solid;"></td>
+                        <td style="border-right: 1px solid; width: 100px;"></td>
+                        <td style="border-right: 1px solid; width: 15px;"></td>
+                        <td style="border-right: 1px solid; width: 100px;"></td>
+                        <td style="width: 13px;"></td>
+                    </tr>
+                    <tr style="height: 20px; border-bottom: 1px dotted;">
+                        <td style="border-right: 1px solid;"></td>
+                        <td style="border-right: 1px solid; width: 100px;"></td>
+                        <td style="border-right: 1px solid; width: 15px;"></td>
+                        <td style="border-right: 1px solid; width: 100px;"></td>
+                        <td style="width: 13px;"></td>
+                    </tr>
+                    <tr style="height: 20px; border-bottom: 1px dotted;">
+                        <td style="border-right: 1px solid;"></td>
+                        <td style="border-right: 1px solid; width: 100px;"></td>
+                        <td style="border-right: 1px solid; width: 15px;"></td>
+                        <td style="border-right: 1px solid; width: 100px;"></td>
+                        <td style="width: 13px;"></td>
+                    </tr>
+                    <tr style="height: 20px; border-bottom: 1px dotted;">
+                        <td style="border-right: 1px solid;"></td>
+                        <td style="border-right: 1px solid; width: 100px;"></td>
+                        <td style="border-right: 1px solid; width: 15px;"></td>
+                        <td style="border-right: 1px solid; width: 100px;"></td>
+                        <td style="width: 13px;"></td>
+                    </tr>
+                    <tr style="height: 20px; border-bottom: 1px dotted;">
+                        <td style="border-right: 1px solid;"></td>
+                        <td style="border-right: 1px solid; width: 100px;"></td>
+                        <td style="border-right: 1px solid; width: 15px;"></td>
+                        <td style="border-right: 1px solid; width: 100px;"></td>
+                        <td style="width: 13px;"></td>
+                    </tr>
+                    <tr style="height: 20px; border-bottom: 1px dotted;">
+                        <td style="border-right: 1px solid;"></td>
+                        <td style="border-right: 1px solid; width: 100px;"></td>
+                        <td style="border-right: 1px solid; width: 15px;"></td>
+                        <td style="border-right: 1px solid; width: 100px;"></td>
+                        <td style="width: 13px;"></td>
+                    </tr>
+                    <tr style="height: 20px; border-bottom: 1px dotted;">
+                        <td style="border-right: 1px solid;"></td>
+                        <td style="border-right: 1px solid; width: 100px;"></td>
+                        <td style="border-right: 1px solid; width: 15px;"></td>
+                        <td style="border-right: 1px solid; width: 100px;"></td>
+                        <td style="width: 13px;"></td>
+                    </tr>
+                    <tr style="height: 20px; border-bottom: 1px dotted;" align="right">
+                        <td style="border-right: 1px solid;"><span class="fontsize11">05/06/2561</span></td>
+                        <td style="border-right: 1px solid; width: 100px;"><span class="fontsize11">21,342.66</span></td>
+                        <td style="border-right: 1px solid; width: 15px;"><span class="fontsize11"></span></td>
+                        <td style="border-right: 1px solid; width: 100px;"><span class="fontsize11">1,067.13</span></td>
+                        <td style="width: 13px;"><span class="fontsize11"></span></td>
+                    </tr>
+                    <tr style="height: 22px; border-bottom: 1px solid" align="right">
+                        <td style="border-right: 1px solid;"><span class="fontsize11">05/06/2561</span></td>
+                        <td style="border-right: 1px solid; width: 100px;"><span class="fontsize11">3,980.93</span></td>
+                        <td style="border-right: 1px solid; width: 15px;"><span class="fontsize11"></span></td>
+                        <td style="border-right: 1px solid; width: 100px;"><span class="fontsize11">119.43</span></td>
+                        <td style="width: 13px;"><span class="fontsize11"></span></td>
+                    </tr>
+                    <tr align="right">
+                        <td colspan="2" style="border-right: 1px solid;">
+                            <span style="text-decoration: underline; font-size: 15px; font-weight: bold; margin-right: 20px;">รวมเงินที่จ่ายและภาษีที่หักนำส่ง</span>
+                        </td>
+                        <td style="border-right: 1px solid; border-bottom: 1px solid; width: 100px;"><span class="fontsize11">25,323.59</span></td>
+                        <td style="border-right: 1px solid; border-bottom: 1px solid; width: 15px;"><span class="fontsize11"></span></td>
+                        <td style="border-right: 1px solid; border-bottom: 1px solid; width: 100px;"><span class="fontsize11">1,186.56</span></td>
+                        <td style="border-bottom: 1px solid; width: 13px;"><span class="fontsize11"></span></td>
+                    </tr>
+                    <tr>
+                        <td style="height: 35px; border-bottom: 1px solid" colspan="6">
+                            <span style="text-decoration: underline; font-size: 13px; margin-right: 20px;">รวมเงินภาษีที่หักนำส่ง (ตัวอักษร)</span>
+                            <div style="position: absolute; margin-left: 245px; margin-top: -21px; height: 25px; width: 460px; background: lightgray; border: 1px solid;" align="center">
+                                <div style="margin-top: 3px;">
+                                    <span style="margin-top: 5px;" class="fontsize13">(หนึ่งพันหนึ่งร้อยแปดสิบหกบาทห้าสิบหกสตางค์)</span>
+                                </div>
+                            </div>
+                        </td>
+                    </tr>
+                    <tr>
+                        <td class="fontsize13" colspan="6" style="height: 35px;">
+                            <span>เงินสะสมจ่ายเข้ากองทุนสำรองเลี้ยงชีพใบอนุญาตเลขที่</span>
+                            <span style="margin-left: 150px;">จำนวนเงิน</span>
+                            <span style="margin-left: 145px;">บาท</span>
+                            <div style="margin-left: 295px;margin-top: -13px;">...................................................</div>
+                            <div style="margin-left: 513px;margin-top: -16px;">.................................................</div>
+                        </td>
+                    </tr>
+                    <tr>
+                        <td class="fontsize13" colspan="6"">
+                            <span>เงินสมทบจ่ายเข้ากองทุนประกันสังคม จำนวนเงิน</span>
+                            <span style="margin-left: 185px;">บาท</span>
+                            <div style="margin-left: 263px;margin-top: -13px;">.............................................................</div>
+                        </td>
+                    </tr>
+                    <tr>
+                        <td class="fontsize13" colspan="6">
+                            <span style="margin-left: 90px;">เลขที่บัญชีนายจ้าง</span>
+                            <span style="margin-left: 65px;">เลขที่บัตรประกันสังคม/เลขหมายบัตรประจำตัวประชาชน ของผู้ถูกหักภาษี ณ ที่จ่าย</span>
+                        </td>
+                    </tr>
+                    <tr>
+                        <td>
+                            <div style="margin-left: 15px;">
+                                <table style="border-collapse: collapse;height: 30px;">
+                                     <tr align="center" class="fontsize13">
+                                        <td style="border: 1px solid; width: 17px;"></td>
+                                        <td style="border: 1px solid; width: 17px;"></td>
+                                        <td style="width: 13px;">
+                                            <div style="margin-top: -10px;">__</div>
+                                        </td>
+                                        <td style="border: 1px solid; width: 17px;"></td>
+                                        <td style="border: 1px solid; width: 17px;"></td>
+                                        <td style="border: 1px solid; width: 17px;"></td>
+                                        <td style="border: 1px solid; width: 17px;"></td>
+                                        <td style="border: 1px solid; width: 17px;"></td>
+                                        <td style="border: 1px solid; width: 17px;"></td>
+                                        <td style="border: 1px solid; width: 17px;"></td>
+                                        <td style="width: 13px;">
+                                            <div style="margin-top: -15px;">__</div>
+                                        </td>
+                                        <td style="border: 1px solid; width: 17px;"></td>
+                                    </tr>
+                                </table>
+                            </div>
+                            <div style="margin-left: 315px; position: absolute; margin-top: -30px;">
+                                <table style="border-collapse: collapse; height: 30px;">
+                                     <tr align="center" class="fontsize13">
+                                        <td style="border: 1px solid; width: 17px;"></td>
+                                        <td style="width: 13px;">
+                                            <div style="margin-top: -10px;">__</div>
+                                        </td>
+                                        <td style="border: 1px solid; width: 17px;"></td>
+                                        <td style="border: 1px solid; width: 17px;"></td>
+                                        <td style="border: 1px solid; width: 17px;"></td>
+                                        <td style="border: 1px solid; width: 17px;"></td>
+                                        <td style="width: 13px;">
+                                            <div style="margin-top: -10px;">__</div>
+                                        </td>
+                                        <td style="border: 1px solid; width: 17px;"></td>
+                                        <td style="border: 1px solid; width: 17px;"></td>
+                                        <td style="border: 1px solid; width: 17px;"></td>
+                                        <td style="border: 1px solid; width: 17px;"></td>
+                                        <td style="border: 1px solid; width: 17px;"></td>
+                                        <td style="width: 13px;">
+                                            <div style="margin-top: -15px;">__</div>
+                                        </td>
+                                        <td style="border: 1px solid; width: 17px;"></td>
+                                        <td style="border: 1px solid; width: 17px;"></td>
+                                        <td style="width: 13px;">
+                                            <div style="margin-top: -10px;">__</div>
+                                        </td>
+                                        <td style="border: 1px solid; width: 17px;"></td>
+                                    </tr>
+                                </table>
+                            </div>
+                        </td>
+                    </tr>
+                </table>
+            </td>
+        </tr>
+        <tr>
+            <td>
+                <table style="border-collapse: collapse; width: 100%">
+                    <tr>
+                        <td style="border-right: 1px solid; width: 135px;" rowspan="13">
+                            <span class="fontsize11">ผู้จ่ายเงิน</span><br>
+                            <span class="fontsize11"><i class="fa fa-check-square-o" style="margin-right: 10px; font-size: 13px;"></i>หักภาษี ณ ที่จ่าย</span><br>
+                            <span class="fontsize11"><i class="fa fa-square-o" style="margin-right: 10px; font-size: 13px;"></i>ออกภาษีให้ตลอดไป</span><br>
+                            <span class="fontsize11"><i class="fa fa-square-o" style="margin-right: 10px; font-size: 13px;"></i>ออกภาษีให้ครั้งเดียว</span><br>
+                            <span class="fontsize11"><i class="fa fa-square-o" style="margin-right: 10px; font-size: 13px;"></i>อื่นๆให้ระบุ..........</span>
+                        </td>
+                        <td style="width: 450px;">
+                            <span class="fontsize13">
+                                ขอรับรองว่า ข้อความและตัวเลขดังกล่าวข้างต้นถูกต้องตรงกับความจริงทุกประการ
+                            </span>
+                        </td>
+                        <td align="center" rowspan="13" style="font-size: 8px; width: 125px;">
+                            <img width="100px" src="/img/logo_oppo_small.png">
+                            <br>
+                            <span>บริษัท ไทย ออปโป้ จำกัด</span>
+                            <br>
+                            <span>THAI OPPO CO., LTD</span>
+                        </td>
+                    </tr>
+                    <tr>
+                        <td style="width: 450px; height: 70px;" valign="bottom">
+                            <span class="fontsize13">(ลงชื่อ)</span>
+                            <span class="fontsize13" style="margin-left: 200px;">ผู้มีหน้าที่หักภาษี ณ ที่จ่าย</span>
+                            <div style="margin-left: 45px;margin-top: -10px;">.......................................................................................</div>
+                        </td>
+                    </tr>
+                    <tr>
+                        <td style="width: 450px; height: 40px;">
+                            <span class="fontsize13" style="margin-left: 260px;">วัน เดือน ปี ที่ออกหนังสือรับรองฯ</span>
+                            <div style="margin-left: 10px;margin-top: -10px;">.....................................................................................................</div>
+                        </td>
+                    </tr>
+                </table>
+            </td>
+        </tr>
+        <tr>
+            <td style="font-size: 9.5px; width: bold; height: 45px;">
+                <span>หมายเหตุ * &nbsp&nbspให้สามารถอ้างอิงหรือสอบยันกันได้ระหว่างลำดับที่ตามหนังสือรับรองฯ กับแบบยื่นรายการภาษีหัก ณ ที่จ่าย</span>
+                <br>
+                <span>คำเตือน &nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbspผู้มีหน้าที่ออกหนังสือรับรองการหักภาษี ณ ที่จ่าย ฝ่าฝืนไม่ปฏิบัติตามมาตรา 50 ทวิ แห่งประมวลรัษฎากร ต้องรับโทษทางอาญาตามมาตรา 35 แห่งประมวลรัษฎากร ด้วย</span>
+            </td>
+        </tr>
+    </table>
+</div>
+</body>
+<script src="/js/jquery.blockUI.js"></script>
+<script type="text/javascript">
+
+    $(document).ready(function() {
+
+    });
+
+    function Print(){window.print();}      
+
+    function close_back(){
+        window.location = "/sales";
+    }   
+</script> 
+</html>
+

@@ -1,0 +1,119 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="utf-8">
+<title>Print Imei Lot</title>
+</head>
+<style type="text/css">
+body {
+  font-family: "Times New Roman", Times, serif;
+  background: white; 
+  font-size:12px;
+  margin: 0px;
+}
+page {
+  background: white;
+  display: block;
+  margin: 0 auto;
+  /*margin-bottom: 0.5cm;*/
+  /*box-shadow: 0 0 0.5cm rgba(0,0,0,0.5);*/
+  padding-left:0.5cm;
+  padding-right:0.5cm;
+}
+page[size="A4"] {  
+  width: 21cm;
+  height: 29.7cm;
+}
+#sales-info{
+  text-align: center;
+  height:2cm;
+}
+table {
+    border-collapse: collapse;
+    width:100%;
+}
+
+table, th, td {
+    border: 1px solid black;
+}
+table.nb, table.nb th, table.nb td{
+  border: none;
+}
+.txthead{
+    text-align: center;
+    background-color: #b1a7a7;
+    height: 20px;
+    font-weight: bold;
+}
+.txtleft{
+    text-align: left;
+    background-color: #ddd;
+    height: 30px
+}
+.bgrey{
+    background-color: #ddd;
+    height: 60px;
+    text-align: left;
+    vertical-align: top;
+}
+
+</style>
+<body>
+<page size="A4">
+    <div class="details-head-page-none" style="display: none;">
+      <div align="right" style="margin-right: 30px;padding-top: 160px;"><?php echo "$current_page/$total_page";?></div>
+    </div>
+
+    <div class="details-head-page">
+      <img style="width: 100%" src='<?php echo HOST.'img/oppo_header.png'?>'>
+    </div>
+      <table id="sales-info" style="margin-top:0.2cm;">
+        <?php
+            $createdate = "";
+            foreach ($this->imeilot as $key => $imei){
+                $createdate = $imei['created_date'];
+                $lotname = $imei['lot_name'];
+            }
+         ?>
+         <tr>
+          <th width="100%" colspan="12" class='txtleft'>退机入库时间 ： <?=$createdate?></th>
+         </tr>
+         <tr>
+          <th width="100%" colspan="12" class='txtleft'>LOT Name : <?=$lotname?></th>
+         </tr>
+         <tr>
+          <th width="25%" class='bgrey'>LAOS 售后确认 : <br /></th>
+          <th width="25%" class='bgrey'>入库人 : <br /></th>
+          <th width="25%" class='bgrey'>TH 售后确认 : <br /></th>
+          <th width="25%" class="bgrey">公司确认 : <br /></th>
+         </tr>
+         
+      </table>
+      <table id="sales-info" style="margin-top:-0.2cm;">
+         <tr>
+          <td width="5%" class="txthead">No</td>
+          <td width="25%" class="txthead">IMEI</td>
+          <td width="25%" class="txthead">Model</td>
+          <td width="25%" class="txthead">Color</td>
+          <td width="25%" class="txthead">Warehouse</td>
+         </tr>
+         <?php
+            $no=1;
+            foreach ($this->imeilot as $key => $imei){
+         ?>
+         <tr>
+          <td width="5%"><?=$no?></td>
+          <td width="25%"><?=$imei['imei_sn']?></td>
+          <td width="25%"><?=$imei['good_name']?></td>
+          <td width="25%"><?=$imei['good_color_name']?></td>
+          <td width="25%"><?=$imei['warehouse_name']?></td>
+         </tr>
+         <?php
+            $no +=1;
+            }
+         ?>
+      </table>
+
+</page>
+</body>
+</html>

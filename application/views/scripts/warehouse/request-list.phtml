@@ -1,0 +1,189 @@
+<style>
+    .icon-imge{
+        padding: 0 20px;
+        cursor: pointer;
+    }
+    .img-borrowing{
+        cursor: -webkit-zoom-in;
+    }
+</style>
+
+<div class="page-header">
+    <h1>Request List</h1>
+</div>
+<?php
+    if (isset($this->messages_success) and $this->messages_success)
+        foreach ($this->messages_success as $message):
+            echo '<div class="alert alert-success">'.$message.'</div>';
+        endforeach;
+
+    if (isset($this->messages) and $this->messages)
+        foreach ($this->messages as $message):
+            echo '<div class="alert alert-error">'.$message.'</div>';
+        endforeach;
+?>
+
+<div class="accordion" id="accordion2">
+    <div class="accordion-group">
+        <div class="accordion-heading">
+            <a class="accordion-toggle collapsed" data-toggle="collapse" data-parent="#accordion2" href="#collapseTwo">
+                Search
+            </a>
+        </div>
+        <div id="collapseTwo" class="accordion-body collapse" style="height: 0px;">
+            <div class="accordion-inner">
+                <?php
+                    echo $this->render('warehouse/partials/search-request-list.phtml');
+                ?>
+            </div>
+        </div>
+    </div>
+</div>
+
+<div class="modal fade" id="modal-show-borrowing" role="dialog">
+      <div class="modal-header" align="center">
+      <button type="button" class="close" data-dismiss="modal" aria-hidden="true">×</button>
+      <h3 id="myModalLabel">Image</h3>
+    </div>
+    <div id="show-img" class="modal-body">
+    
+    </div>
+    <div class="modal-footer">
+      <button class="btn" data-dismiss="modal" aria-hidden="true">Close</button>
+    </div>
+</div>
+
+<div class="table-responsive">
+    <?php
+        echo $this->render('warehouse/partials/list-request-list.phtml');
+    ?>
+</div>
+<script>
+    $(document).ready(function () {
+        $('.form-search button:reset').click(function (e){
+            $('.form-search input, .form-search select').val('');
+            $('.form-search').submit();
+            return false;
+        });
+
+    <?php for($i=0;$i<=10;$i++){ ?>
+        var retate_current_<?=$i;?> = 0;
+        var retate_<?=$i;?> = 90;
+
+        var zoom_status_<?=$i;?> = 'IN';
+
+        $('#img-borrowing_<?=$i;?>').live('click',function(event) {
+            if(zoom_status_<?=$i;?> == 'IN'){
+                zoom_status_<?=$i;?> = 'OUT';
+                var width = $('#img-borrowing_<?=$i;?>').width()+zoom;
+                var modal_width = $('#modal-show-borrowing').width()+zoom;
+                $('#modal-show-borrowing').animate({width: modal_width+"px"}, 'slow');
+                $('#img-borrowing_<?=$i;?>').animate({width: width+"px"}, 'slow');
+                $('#img-borrowing_<?=$i;?>').css({'cursor':'-webkit-zoom-out'});
+                return false;
+            }
+
+            if(zoom_status_<?=$i;?> == 'OUT'){
+                zoom_status_<?=$i;?> = 'IN';
+                var width = $('#img-borrowing_<?=$i;?>').width()-zoom;
+                var modal_width = $('#modal-show-borrowing').width()-zoom;
+                $('#modal-show-borrowing').animate({width: modal_width+"px"}, 'slow');
+                $('#img-borrowing_<?=$i;?>').css({'cursor':'-webkit-zoom-in'});
+                $('#img-borrowing_<?=$i;?>').animate({width: width+"px"}, 'slow');
+                return false;
+            }
+
+        });
+
+        $('#icon-imge-l_<?=$i;?>').live('click',function(event) {
+            retate_current_<?=$i;?> = retate_current_<?=$i;?>-retate_<?=$i;?>;
+
+            $('#img-borrowing_<?=$i;?>').css({
+                 '-moz-transform':'rotate('+retate_current_<?=$i;?>+'deg)',
+                 '-webkit-transform':'rotate('+retate_current_<?=$i;?>+'deg)',
+                 '-o-transform':'rotate('+retate_current_<?=$i;?>+'deg)',
+                 '-ms-transform':'rotate('+retate_current_<?=$i;?>+'deg)',
+                 'transform':'rotate('+retate_current_<?=$i;?>+'deg)'
+            });
+        });
+
+        $('#icon-imge-r_<?=$i;?>').live('click',function(event) {
+            retate_current_<?=$i;?> = retate_current_<?=$i;?>+retate_<?=$i;?>;
+
+            $('#img-borrowing_<?=$i;?>').css({
+                 '-moz-transform':'rotate('+retate_current_<?=$i;?>+'deg)',
+                 '-webkit-transform':'rotate('+retate_current_<?=$i;?>+'deg)',
+                 '-o-transform':'rotate('+retate_current_<?=$i;?>+'deg)',
+                 '-ms-transform':'rotate('+retate_current_<?=$i;?>+'deg)',
+                 'transform':'rotate('+retate_current_<?=$i;?>+'deg)'
+            });
+        });
+
+        $('#img-borrowing_<?=$i;?>').error(function() {
+        $(this).attr('src', 'http://www.nosun.co.za/wp-content/themes/sistina/core/assets/images/no-featured-175.jpg');
+
+        });
+
+        <?php } ?>
+        var zoom = 350;
+
+        var old_width = $('.img-borrowing').width();
+        var old_modal_width = $('#modal-show-borrowing').width();
+
+        $('.icon-image').click(function(event) {
+
+            $('#show-img').empty();
+
+            <?php for($i=0;$i<=10;$i++){ ?>
+
+            if(zoom_status_<?=$i;?> == 'OUT'){
+                zoom_status_<?=$i;?> = 'IN';
+                var width_<?=$i;?> = $('#img-borrowing_<?=$i;?>').width()-zoom;
+                var modal_width_<?=$i;?> = $('#modal-show-borrowing').width()-zoom;
+                $('#modal-show-borrowing').css({width: modal_width_<?=$i;?>+"px"});
+                $('#img-borrowing_<?=$i;?>').css({'cursor':'-webkit-zoom-in'});
+                $('#img-borrowing_<?=$i;?>').css({width: width_<?=$i;?>+"px"});
+              }
+
+              retate_current_<?=$i;?> = 0;
+
+              $('#modal').css({width: old_modal_width+"px"});
+              $('#img-borrowing_<?=$i;?>').css({width: old_width+"px"});
+
+              $('#img-borrowing_<?=$i;?>').css({
+                 '-moz-transform':'rotate('+retate_current_<?=$i;?>+'deg)',
+                 '-webkit-transform':'rotate('+retate_current_<?=$i;?>+'deg)',
+                 '-o-transform':'rotate('+retate_current_<?=$i;?>+'deg)',
+                 '-ms-transform':'rotate('+retate_current_<?=$i;?>+'deg)',
+                 'transform':'rotate('+retate_current_<?=$i;?>+'deg)'
+                });
+
+              <?php } ?>
+   
+            var rq = $(this).data('rq');
+            
+            $('#modal-show-borrowing').modal();
+
+            $.ajax({
+                url: '<?php echo HOST.'warehouse/ajaxgetimgborrowing';?>',
+                type: 'POST',
+                data: {rq:rq},
+            })
+            .done(function(response) {
+                var obj_response = jQuery.parseJSON(response);
+                console.log("success");
+
+                var count_index = 0;
+                $.each(obj_response['img_borrowing'], function( index, value ) {
+                    // alert( index + ": " + value );
+                    console.log(value);
+                    $('#show-img').append('<table border=0 width="100%"><tr><td style="text-align:center"><img id="img-borrowing_'+count_index+'" class="img-borrowing" src="'+value+'" alt="Image" height="400" width="400"></td></tr></table><div align="center"><span><i class="icon-imge icon-mail-reply icon-3x" id="icon-imge-l_'+count_index+'"></i></span><span><i class="icon-imge icon-mail-forward icon-3x" id="icon-imge-r_'+count_index+'"></i></span></div><br/>');
+
+                    count_index++;
+
+                });
+            });
+        });
+
+    });
+</script>

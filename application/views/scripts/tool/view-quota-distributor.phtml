@@ -1,0 +1,462 @@
+<!-- pond -->
+    <link href="<?=HOST?>public/css/bootstrap.modi.min.css" rel="stylesheet">
+    <link href="<?=HOST?>public/css/jquery.bdt.css" type="text/css" rel="stylesheet">
+    <!-- <link href="<?=HOST?>public/css/style_table.css" type="text/css" rel="stylesheet"> -->
+     <style type="text/css">
+        .list-group{
+            height: 200px;
+            overflow: hidden;
+            overflow-y: scroll;
+        }
+
+        .so {
+            width: 80px;
+            padding-left: 15px;
+            display: -webkit-inline-box;
+            display: inline-block;
+        }
+        .price_ori {
+            width: 320px;
+            display: -webkit-inline-box;
+            display: inline-block;
+            text-align: left;
+        }
+        .so-title {
+            padding-left: 20px;
+            width: 100px;
+            display: -webkit-inline-box;
+            display: inline-block;
+        }
+        .price_text{
+            margin-top: 10px;
+        }
+        #d_id {
+            left: 110px !important;
+                top: -29px
+        }
+        .span2{
+            width: 100px
+        }
+        input{
+            width: 70px
+        }
+        #search{
+            width: 200px
+        }
+    </style> 
+
+    <div class="page-header">
+        <h1>View Quota</h1>
+    </div>
+    <?php
+    if (isset($this->messages_success) and $this->messages_success)
+        foreach ($this->messages_success as $message):
+            echo '<div class="alert alert-success">'.$message.'</div>';
+        endforeach;
+
+    if (isset($this->messages) and $this->messages)
+        foreach ($this->messages as $message):
+            echo '<div class="alert alert-error">'.$message.'</div>';
+        endforeach;
+?>
+    <div class="container">
+    <br />
+    <form role="form" id="form" enctype="multipart/form-data" action="<?php echo HOST.'tool/save-quota';?>" method="post" >
+        <div class="col-md-6"> 
+          
+              <div class="control-group">  
+                <label class="span3" for="rank">Warehouse<span style="color: red">*</span></label>
+                <div class="controls">
+                    <p><?=$this->quota[0]['w_name']?></p>
+                    <p class="help-block"></p>
+                </div>
+            </div>  
+            
+           
+           <div class="control-group">
+            <label class="span3" for="rank">Product Category<span style="color: red">*</span></label>
+                <div class="controls">
+                   <p><?=$this->quota[0]['gt_name']?></p>
+                </div>
+           
+            </div>
+            <div class="control-group">
+                <label class="span3" for="rank">Product<span style="color: red">*</span></label>
+                    <div class="controls">
+                   <p><?=$this->quota[0]['p_code'].' '.$this->quota[0]['p_name']?></p>
+                    </div>
+               
+            </div>
+            <div class="control-group">
+                <label class="span3" for="rank">Color<span style="color: red">*</span></label>
+                    <div class="controls">
+                   <p><?=$this->quota[0]['gc_name']?></p>
+                    </div>
+                
+            </div>
+            <div class="control-group">
+                <label class="span3" for="rank">Quota Date<span style="color: red">*</span></label>
+                    <p style="font-size: 20px;"><?=$this->quota[0]['quota_date']?></p>
+                
+            </div>
+            
+            
+                    
+          
+        </div>
+         <div class="col-md-5"> 
+            <?php if ($this->quota) {
+                $sum = 0;
+                foreach ($this->quota as $key => $value) {
+                    $sum +=$value['status'];
+                }
+               
+            } ?>
+            <?PHP $topic = $this->quota[0]['p_name'].' '.$this->quota[0]['gc_name'].' Date: '.$this->quota[0]['quota_date'];
+            if ($sum == 0) { ?>
+                <a class="btn btn-large btn-success" href="javascript:onclick=disable('<?=$this->quota[0]['sn']?>','<?PHP echo $topic ?>','enable')" style="float: right;    width: 120px;"><i class="icon-remove icon-3x pull-left"></i> Enable<br/>Quota</a>
+            <?PHP }else{ ?>
+                <a class="btn btn-large btn-danger" href="javascript:onclick=disable('<?=$this->quota[0]['sn']?>','<?PHP echo $topic ?>','disable')" style="float: right;    width: 120px;"><i class="icon-remove icon-3x pull-left"></i> Disable<br/>Quota</a>
+            <?PHP } ?>
+            <div style="clear: both;height: 15px"></div>
+                <a class="btn btn-large btn-primary" href="add-quota-distributor?sn=<?=$this->quota[0]['sn']?>" style="float: right;    width: 120px;"><i class="icon-plus icon-3x pull-left"></i> Add<br/>Quota</a>
+         
+         </div>
+        <div style="clear: both;height: 20px"></div>
+   
+        
+      
+       <div class="type_dealer">
+        <table class="table table-hover" id="bootstrap-table">
+            <thead>
+                <tr>
+                    <td width="50%"><center>Distributor</center></td>
+                    <td width="20%"><center>Quota Quantity</center></td>
+                    <td width="15%"><center>Order</center></td>
+                    <td width="15%"><center>Balance</center></td>
+                    <td width="10%"><center>Action</center></td>
+                </tr>
+            </thead>
+            <tbody>
+           
+            <?PHP for ($i=0; $i < count($this->quota); $i++) { 
+                ?>
+            <tr>
+                <td><?='[ '.$this->quota[$i]['d_code'].' ]  '.$this->quota[$i]['d_name']?>
+                        <input type="hidden" name="d_id[]" class="d_id" value="<?=$this->quota[$i]['d_id']?>">
+                        <input type="hidden" name="i_id[]" class="i_id" value="<?=$this->quota[$i]['id']?>">
+                </td>
+                <td><center><input type="text" class="number quota_qty quota_view_<?=$i?> quota_balance" required name="quota_qty[]" value="<?=$this->quota[$i]['quantity']?>"></center></td>
+                 <td><center><p class="order_qty_<?=$i?>"><?=isset($this->quota[$i]['total'])?$this->quota[$i]['total']:'0'?></p><input type="hidden" name="order_qty" class="order_c_<?=$i?> use_quota" value="<?=isset($this->quota[$i]['total'])?$this->quota[$i]['total']:'0'?>"></center></td>
+                 <td><center><p class="balance_qty">0</p></center></td>
+                 <td><center><a class="btn btn-danger remove-item"><i class="icon-remove"></i></a></center></td>
+            </tr>
+           
+               
+            
+            <?PHP } ?>
+
+            </tbody>
+        </table>
+       </div>
+      
+     
+        <div class="row">
+                <div class="span6">
+                    <div class="control-group">
+                        
+                        <div class="span4">
+                            <input type="hidden" name="sn" value="<?=$this->quota[0]['sn']?>">            
+                            <input type="hidden" name="rank" value="<?=$this->quota[0]['dis_type']?>">            
+                            <button type="submit" class="btn btn-primary" >Confirm</button>
+                            <input type="hidden" name="back_url" id="back_url" value="">
+                            <a href="quota-manage-distributor" class="btn btn-danger go-back">Go back</a>
+                        </div>
+                    </div>
+                    <div class="clearfix"></div>
+                </div>
+        </div>
+    </form>
+</div>
+   
+    <!--  -->
+     
+<script type="text/javascript" src="/js/jquery-ui-1.8.12.custom.min.js"></script>
+<link rel="stylesheet" type="text/css" href="/css/jquery-ui-1.8.12.custom.css"/>
+<script src="/js/jquery.sortelements.js" type="text/javascript"></script>
+<script src="/js/jquery.bdt.min.js" type="text/javascript"></script>
+    <script type="text/javascript">
+     
+
+
+    function initDatepicker(){
+        
+        $( '.date' ).datepicker({ dateFormat: "dd/mm/yy" });
+    }
+    function disable(sn,topic,act) {
+         if (confirm("Press Confirm Disable : "+topic) == true) {
+                window.location.assign("/tool/disable-quota-distributor?sn="+sn+"&act="+act);
+            }
+    }
+    $(document).ready(function () {
+            initDatepicker();
+            initRemoveQuota();
+           
+            initSelectProduct();
+            initInsertArea();
+            initAllQuota();
+            
+            $('.quota_balance').change();
+            initBalance();
+            $("*").keypress(function(event){  
+                 if(event.keyCode==13){  
+                    return false;  
+                 }  
+            });
+
+        $(document).ready( function () {
+        $('#bootstrap-table').bdt({
+            showSearchForm: 1,
+            showEntriesPerPageField: 1
+        });
+    });    
+        $('.number').keypress(function(event) {
+            if (event.which != 46 && (event.which < 47 || event.which > 59))
+            {
+                event.preventDefault();
+                if ((event.which == 46) && ($(this).indexOf('.') != -1)) {
+                    event.preventDefault();
+                }
+            }
+        });
+
+               
+
+        });
+
+    
+        
+        function initRemoveQuota(){
+            $(document).off('click', '.remove-item')
+            .on('click', '.remove-item', function(e) {
+                var item = $(this).val();
+                var div = $(this).parent().parent().parent();
+                var i_id = div.find('.i_id').val();
+                
+                if (i_id ) {
+                    if (confirm("Press Confirm Delete item ") == true) {
+                       
+                        $.ajax({
+                            url: 'delete-quota-distributor',
+                            type: 'POST',
+                            data: {i_id: i_id},
+                        })
+                        .done(function(data) {
+                            
+                            div.remove();
+                            console.log("success");
+                        })
+                        .fail(function() {
+                            console.log("error");
+                        })
+                        .always(function() {
+                            console.log("complete");
+                        });
+                    }
+                }
+                
+                return false;
+            });
+        }
+        function initSelectProduct(){
+            $(document).off('change', '.cat_id, .good_id')
+            .on('change', '.cat_id, .good_id', function(e) {
+                $('button[type=submit]').prop('disabled', true);
+                $('form').bind('submit',function(e){e.preventDefault();});
+
+                $('.loading').remove();
+                $(this).after('<span class="loading"></span>');
+                var div_parent = $(this).parent().parent().parent();
+                var _self = $(this);
+                var cat_id = div_parent.find('.cat_id').val();
+                var distributor_id    = $('#d_id').val();
+                var rank    = $('.rank').val();
+
+                // if (distributor_id == "" || distributor_id == null) {
+                //   alert('Please select Retailer name..');
+                //   $('#d_id').focus();
+                // $('.good_id').find('option:not(:first)').remove();
+                // $('.good_color').find('option:not(:first)').remove();
+                // $('.quantity').val('');
+                // }
+                if (_self.hasClass('cat_id'))
+                    div_parent.find('.good_id').find('option:not(:first)').remove();
+
+                var good_id = div_parent.find('.good_id').val();
+
+                div_parent.find('.good_color').find('option:not(:first)').remove();
+
+                div_parent.find('.quantity').val('');
+
+                //alert(cat_id);alert(good_id);
+                $.get("/get/load",
+                    {cat_id: cat_id, good_id: good_id}
+                    ,function(data,status){
+                        var data = $.parseJSON( data );
+                        if (data.goods){
+                            var obj = data.goods;
+                            for (var i = 0; i < obj.length; i++) {
+                                 div_parent.find('.good_id').append('<option value="'+obj[i]['id']+'">'+obj[i]['name']+'</option>');
+                            }
+                        }
+                        if (data.colors){
+                            var obj = data.colors;
+                            for (var i = 0; i < obj.length; i++) {
+                                 div_parent.find('.good_color').append('<option value="'+obj[i]['id']+'">'+obj[i]['name']+'</option>');
+                            }
+                        }
+                        $('button[type=submit]').prop('disabled', false);
+                        $('form').unbind('submit');
+                        _self.nextAll('.loading').remove();
+                    });
+
+            });
+        }
+        
+        function initAllQuota(){
+            $(document).off('change', '.all_qty')
+            .on('change', '.all_qty', function(e) {
+               
+                $('.all_qty_2').val($(this).val());
+               
+                
+
+            });
+        }
+        function initInsertArea(){
+            $(document).off('change', '.quota_qty')
+            .on('change', '.quota_qty', function(e) {
+                $('button[type=submit]').prop('disabled', true);
+                $('form').bind('submit',function(e){e.preventDefault();});
+
+                // $('.loading').remove();
+                // $(this).after('<span class="loading"></span>');
+                var div_parent = $(this).parent().parent().parent();
+                var div_parent2 = $(this).parent().parent().parent();
+               
+                var q_qty       = 0;
+                var total_q_qty = 0;
+                var total       = 0;
+                
+                $( ".quota_qty" ).each(function() {
+                        q_qty  = parseFloat($(this).val(),10);
+
+                          if(!isNaN(q_qty)){
+                                total_q_qty += q_qty;
+                            }
+                   
+                });
+                 // total = all_qty-total_q_qty
+                 // if (total < 0 ) {
+                 //    alert('Over Quota!');
+                 //    $(this).val(0).focus();
+                 //    // $(this);
+                 //    exit();
+                 // }
+                
+                q_qty  = parseFloat($(this).val(),10);
+                use_quota = div_parent.find('.use_quota').val();
+                var d_id = div_parent.find('.d_id').val();
+
+               var good_id      = <?=$this->quota[0]['good_id']?>;
+               var good_color   = <?=$this->quota[0]['good_color']?>;
+              
+               var sn           = '<?=$this->quota[0]['sn']?>';
+               var quota_date   = '<?=$this->quota[0]['quota_date']?>';
+               var warehouse    = '<?=$this->quota[0]['warehouse']?>';
+
+                $.ajax({
+                    url: 'save-item-quota',
+                    type: 'POST',
+                    data: {good_id: good_id,good_color:good_color,quota_date:quota_date,d_id:d_id,warehouse:warehouse,sn:sn,q_qty:q_qty},
+                })
+                .done(function() {
+                    console.log("success");
+                })
+                .fail(function() {
+                    console.log("error");
+                })
+                .always(function() {
+                    console.log("complete");
+                });
+                
+
+                
+        
+                    if (q_qty == 0) {
+                        var total_balance = '0';
+                    }else{
+                       var total_balance = q_qty - use_quota;
+                       
+                    }     
+                    if (total == 0) {
+                       var total_all = 0;
+                    }else{
+                       var order = parseFloat($('.order_all_s').val());
+                       var total_all = total - order;
+                    }
+               div_parent2.find('.balance_qty').empty();
+               div_parent2.find('.balance_qty').append(total_balance);          
+               // $('.all_qty_2').val(total);
+               $('.balance_all').empty();
+               $('.balance_all').append(total_all);
+               $('button[type=submit]').prop('disabled', false);
+               $('form').unbind('submit');
+                
+
+            });
+        }
+    
+        function initBalance(){
+            $(document).off('change', '.quota_balance')
+            .on('change', '.quota_balance', function(e) {
+                $('button[type=submit]').prop('disabled', true);
+                $('form').bind('submit',function(e){e.preventDefault();});
+
+                // $('.loading').remove();
+                // $(this).after('<span class="loading"></span>');
+                var div_parent = $(this).parent().parent().parent();
+                var div_parent2 = $(this).parent().parent().parent();
+               
+           
+                
+                q_qty  = parseFloat($(this).val(),10);
+                use_quota = div_parent.find('.use_quota').val();
+             
+                    if (q_qty == 0) {
+                        var total_balance = '0';
+                    }else{
+                       var total_balance = q_qty - use_quota;
+                       
+                    }     
+                    if (total == 0) {
+                       var total_all = 0;
+                    }else{
+                       var order = parseFloat($('.order_all_s').val());
+                       var total_all = total - order;
+                    }
+               div_parent2.find('.balance_qty').empty();
+               div_parent2.find('.balance_qty').append(total_balance);          
+              
+               $('button[type=submit]').prop('disabled', false);
+               $('form').unbind('submit');
+                
+
+            });
+        }
+        
+        function roundNumber(num, dec) {
+            var result = Math.round(num*Math.pow(10,dec))/Math.pow(10,dec);
+            return Number(result).toLocaleString('en',{ minimumFractionDigits: 2 });
+        }
+    </script>

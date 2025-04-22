@@ -1,0 +1,147 @@
+<div class="page-header">
+    <h1>Bundle Gift Create</h1>
+</div>
+<form action="<?php echo HOST ?>product/bundle-gift-save" class="form-horizontal">
+    <div class="control-group good_has_bonus">
+        <label class="control-label" for="good_id">Product</label>
+        <div class="controls">
+            <select name="good_id" id="good_id">
+                <option value>---</option>
+                <?php if (isset($this->goods) && $this->goods): ?>
+                    <?php foreach ($this->goods as $key => $value): ?>
+                        <option value="<?php echo $key ?>"
+                            <?php if ( isset($this->bundle_gift['good_id']) && $this->bundle_gift['good_id'] == $key ) echo 'selected' ?>><?php echo htmlentities(htmlspecialchars($value), ENT_QUOTES) ?></option>
+                    <?php endforeach ?>
+                <?php endif ?>
+            </select>
+
+        </div>
+    </div>
+
+    <?php if (isset($this->bundle_gift['gift_id']) && $this->bundle_gift['gift_id']): ?>
+        <?php foreach ($this->bundle_gift['gift_id'] as $g): ?>
+
+            <div class="control-group bonus_good">
+                <label class="control-label">Gift</label>
+                <div class="controls">
+
+                    <select name="bonus_good_id[]" class="good_bonus">
+                        <option value>---</option>
+
+                        <?php if (isset($this->goods) && $this->goods): ?>
+                            <?php foreach ($this->goods as $key => $value): ?>
+                                <option value="<?php echo $key ?>"
+                                    <?php if($key == $g) echo 'selected' ?>><?php echo htmlentities(htmlspecialchars($value), ENT_QUOTES) ?></option>
+                            <?php endforeach ?>
+                        <?php endif ?>
+
+                    </select>
+
+                    <button type="button" class="btn btn-default btn-mini btn_remove"><span class="icon-remove"></span></button>
+                </div>
+            </div>
+
+        <?php endforeach ?>
+
+    <?php else: ?>
+
+        <div class="control-group bonus_good">
+            <label class="control-label">Gift</label>
+            <div class="controls">
+                <select name="bonus_good_id[]" class="good_bonus">
+                    <option value>---</option>
+                    <?php if (isset($this->goods) && $this->goods): ?>
+                        <?php foreach ($this->goods as $key => $value): ?>
+                            <option value="<?php echo $key ?>"><?php echo htmlentities(htmlspecialchars($value), ENT_QUOTES) ?></option>
+                        <?php endforeach ?>
+                    <?php endif ?>
+                </select>
+                <button type="button" class="btn btn-default btn-mini btn_remove"><span class="icon-remove"></span></button>
+            </div>
+        </div>
+    <?php endif ?>
+
+    <div class="control-group">
+        <button type="button" class="btn btn-default btn_add"><span class="icon-plus"></span> Add Gift</button>
+    </div>
+
+    <div class="form-actions">
+        <input type="hidden" name="id" id="id" value="<?php if(isset($this->id) && $this->id) echo $this->id ?>" />
+        <button type="submit" class="btn btn-primary">Save</button>
+        <button type="button" class="btn btn-danger" onclick="window.location='<?php echo HOST ?>product/bundle-gift'">Go Back</button>
+    </div>
+</form>
+
+<script>
+    good_list = '<div class="control-group bonus_good">\
+        <label class="control-label">Gift</label>\
+        <div class="controls">\
+            <select name="bonus_good_id[]" class="good_bonus">\
+                <option value>---</option>\
+                <?php if (isset($this->goods) && $this->goods): ?>
+                    <?php foreach ($this->goods as $key => $value): ?>
+                        <option value="<?php echo $key ?>"><?php echo htmlentities(htmlspecialchars($value), ENT_QUOTES) ?></option>\
+                    <?php endforeach ?>
+                <?php endif ?>
+            </select>\
+            <button type="button" class="btn btn-default btn-mini btn_remove"><span class="icon-remove"></span></button>\
+        </div>\
+    </div>';
+
+    $(document).ready(function() {
+        $('#good_id').change(good_change);
+        $('.btn_add').click(init_add);
+        $('.btn_remove').click(remove_bonus);
+    });
+
+    function init_add(elm) {
+        if ($('.bonus_good:last').length == 0) {
+            $('.good_has_bonus').after(good_list);
+        } else {
+            $('.bonus_good:last').after(good_list);
+        }
+        
+        $('.btn_remove:last').click(remove_bonus);
+    }
+
+    function remove_bonus(elm) {
+        $(elm.target).parents('.bonus_good').remove();
+    }
+
+    function good_change(elm) {
+        $('.error-msg').remove();
+        $('.loading').remove();
+
+        _self = $(elm.target);
+        _self.after('<span class="loading"></span>');
+
+        $('select, button').prop('disabled', true);
+        $('form').unbind('submit');
+
+        $.ajax({
+            url: '<?php echo HOST ?>get/check-good',
+            data: {
+                good_id : _self.val(),
+                id : $('#id').val()
+            },
+            dataType: "json",
+            success: function(result) {
+                try {
+                    if (typeof result.code != "undefined" && result.code != 1) {
+                        _self.after('<p class="error-msg">'+result.error+'</p>');
+                    }
+                } catch(err) {
+                    console.log(err.message);
+                } finally {
+                    $('select, button').prop('disabled', false);
+                    $('form').bind('submit');
+                    $('.loading').remove();
+                }
+            },
+            fail: function(result) {
+                console.log(result.status+': URL not found');
+            }
+        });
+    }
+
+</script>

@@ -1,0 +1,90 @@
+<?php if(isset($this->res) && $this->res): ?>
+<table class="table table-striped">
+	<thead>
+		<tr>
+			<th>#</th>
+			<th>SN</th>
+			<th>Created at</th>
+			<th>Created by</th>
+			<th>Checked payment at</th>
+			<th>Checked payment by</th>
+			<th>Checked shipping at</th>
+			<th>Checked shipping by</th>
+			<th>Warehouse completed at</th>
+			<th>Warehouse completed by</th>
+		</tr>
+	</thead>
+	<tbody>
+		<?php $i = 1; ?>
+		<?php foreach ($this->res as $k => $v): ?>
+			<tr>
+				<td><?php echo $i++; ?></td>
+				<td><?php echo $k ?></td>
+				<?php if (gettype($v) == 'string'): ?>
+					<td colspan="8"><?php echo $v ?></td>
+				<?php else: ?>
+					<td><?php echo $v['add_time'] ?></td>
+					<td><?php echo ( isset($this->staffs[$v['user_id']]) ? $this->staffs[$v['user_id']] : 'n/a' ) ?></td>
+					<td><?php echo ( !empty($v['pay_time']) ? $v['pay_time'] : 'n/a' ) ?></td>
+					<td><?php echo ( isset($this->staffs[$v['pay_user']]) ? $this->staffs[$v['pay_user']] : 'n/a' ) ?></td>
+					<td><?php echo( !empty($v['shipping_yes_time']) ? $v['shipping_yes_time'] : 'n/a' ) ?></td>
+					<td><?php echo ( isset($this->staffs[$v['shipping_yes_id']]) ? $this->staffs[$v['shipping_yes_id']] : 'n/a' ) ?></td>
+					<td><?php echo ( !empty($v['outmysql_time']) ? $v['outmysql_time'] : 'n/a' ) ?></td>
+					<td><?php echo ( isset($this->staffs[$v['outmysql_user']]) ? $this->staffs[$v['outmysql_user']] : 'n/a' ) ?></td>
+				<?php endif; ?>
+			</tr>
+		<?php endforeach ?>
+	</tbody>
+</table>
+<div class="paging">
+    <?php echo $this->paging($this->total, $this->limit, $this->offset, $this->url);?>
+</div>
+
+<script>
+	$(document).ready(function(){
+		page();
+	});
+
+	function page() {
+    	$('a.paging-link').click(function(e){
+    		e.preventDefault();
+
+    		_self = $(this);
+			_self.parents('ul').after('<span class="loading"></span>');
+			po = $('#po').val();
+			url = _self.attr('href');
+			params = url.split('?');
+			if (params.length == 1) {
+				page = 1;
+			} else {
+				params = params[1].split('&');
+				for (i = 0; i < params.length; i++) {
+					pair = params[i].split('=');
+					if (pair[0] == 'page') {
+						page = pair[1];
+						break;
+					}
+				}
+
+				if (page === undefined) {
+					page = 1;
+				}
+			}
+
+			$.post(
+				"<?php echo HOST . 'tool/check-so'?>",
+				{
+					value : po,
+					page : page,
+					is_check : 1
+				},
+				function(data){
+					$('.ajax-load').html(data);
+					_self.nextAll('ul .loading').remove();
+			});
+
+			return false;
+    	});
+    }
+</script>
+<?php endif; ?>

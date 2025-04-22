@@ -1,0 +1,160 @@
+<style type="text/css">
+    #total_value {
+        font-weight: bold;
+        font-size: 13px;
+    }
+
+    #include_shipping_fee {
+        margin-top: 0;
+    }
+</style>
+
+<div class="control-group" style="display:none;">
+    <div class="span11">
+        <div class="control-group">
+            <p><span class="label">Total value: <span id="total_value">0</span></span></p>
+        </div>
+
+        <div class="control-group">
+            <div id="fees">
+            <?php 
+                if(!isset($this->sales) 
+                    || (isset($this->sales)  && isset($this->order_fee[My_Sale_Order_Fee::Shipping]) && $this->order_fee[My_Sale_Order_Fee::Shipping]
+                        && isset($this->order_fee[My_Sale_Order_Fee::Shipping]) && !$this->order_fee[My_Sale_Order_Fee::Shipping]['user_uncheck']
+                        )
+                ) 
+                $have_fee = true; else $have_fee = false; 
+            ?>
+                <p class="alert alert-<?php echo ($have_fee ? 'danger' : 'success') ?> shipping_fee">
+                    <span class="fee" style="<?php if(!$have_fee) echo 'display:none'; ?>">Phí vận chuyển: <span class="fee_value"></span></span>
+                    <span class="free" style="<?php if($have_fee) echo 'display:none'; ?>">Miễn phí vận chuyển</span>
+                    <label for="include_shipping_fee" title="Tick chọn để tính phí, bỏ chọn để bỏ phí"
+                        class="pull-right">
+                        <input type="checkbox" id="include_shipping_fee" name="include_shipping_fee" 
+                            value="1" title="Tick chọn để tính phí, bỏ chọn để bỏ phí"
+                            <?php echo ($have_fee ? 'checked' : '') ?> /> 
+                            Tính Phí Vận Chuyển
+                    </label>
+                    <input type="hidden" class="user_uncheck" name="user_uncheck" 
+                        value="<?php if(isset($this->order_fee[My_Sale_Order_Fee::Shipping]['user_uncheck']) 
+                            && $this->order_fee[My_Sale_Order_Fee::Shipping]['user_uncheck']) 
+                                echo "1"; else echo "0"; ?>" />
+                </p>
+            </div>
+        </div>
+    </div>
+</div>
+
+<script type="text/javascript">
+var user_uncheck = <?php if(isset($this->order_fee[My_Sale_Order_Fee::Shipping]['user_uncheck']) 
+                            && $this->order_fee[My_Sale_Order_Fee::Shipping]['user_uncheck']) echo 'true'; else echo 'false'; ?>;
+var no_shipping_fee_div = '<p class="alert alert-success no_shipping_fee">Miễn phí vận chuyển</p>';
+var calculating = 0;
+
+(function($) {
+    // $('#include_shipping_fee').change(include_shipping_fee); // disable fee
+    // $('#include_shipping_fee').click(user_check);
+})(jQuery);
+
+function include_shipping_fee(e) {
+    _self = $(e.target);
+
+    if (_self.prop("checked")) {
+        $('.shipping_fee').removeClass('alert-success').addClass('alert-danger');
+        $('.fee').show();
+        $('.free').hide();
+    } else {
+        $('.shipping_fee').addClass('alert-success').removeClass('alert-danger');
+        $('.free').show();
+        $('.fee').hide();
+    }
+}
+
+function user_check(e) {
+    _self = $(e.target);
+    user_uncheck = !_self.prop("checked");
+    $('.user_uncheck').val(user_uncheck);
+}
+
+function calculate_fee(e) {
+    return false; // disable fee
+    var total_value = get_total_value();
+    $('#total_value').text(float_f(total_value));
+    distributor_id = $('#distributor_id').val();
+    get_fee( total_value, distributor_id, 'shipping' );
+}
+
+function get_fee(value, distributor_id, type) {
+    return false; // disable fee
+    $('.'+type+'_fee_alert').remove();
+
+    $.ajax({
+        url: '<?php echo HOST ?>get/delivery-fee',
+        type: 'post',
+        dataType: 'json',
+        data: {
+            value: value,
+            distributor_id: distributor_id,
+            type: type
+        },
+    })
+    .done(function(data) {
+        try {
+            console.log(data);
+            if (data && typeof data.fee !== "undefined") {
+                fee = data.fee;
+
+                change_fee(fee, type);
+            }
+            else if (data && typeof data.code !== "undefined" && typeof data.message !== "undefined") {
+                shipping_fee_div_alert = '<p class="alert alert-danger shipping_fee_alert">['+data.code+'] '+data.message+'</p>';
+                $('#fees').append( shipping_fee_div_alert );
+            }
+        } catch (err) {console.log(err.message)}
+
+        return false;
+
+        console.log("success");
+    })
+    .fail(function() {
+        console.log("error");
+    })
+    .always(function() {
+        console.log("complete");
+    });
+
+    return false;
+}
+
+function get_total_value() {
+    total = 0;
+
+    $('.total').each(function(index, el) {
+        if ($(el).val())
+            total += parseFloat( floatval($(el).val()) );
+    });
+
+    $('.price_discount').each(function(index, el) {
+        if ($(el).val())
+            total -= parseFloat( floatval($(el).val()) );
+    });
+
+    $('.total_bvg').each(function(index, el) {
+        if ($(el).val())
+            total -= parseFloat( floatval($(el).val()) );
+    });
+
+    return total;
+}
+
+function change_fee(fee, type) {
+    var have_fee = false;
+
+    if (fee && fee > 0) have_fee = true;
+    $('.fee_value').text(have_fee ? fee : 0);
+
+    if (!user_uncheck) {
+        $('#include_'+type+'_fee').prop('checked', have_fee).change();
+    }
+}
+</script>

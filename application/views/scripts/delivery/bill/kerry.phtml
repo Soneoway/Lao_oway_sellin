@@ -1,0 +1,195 @@
+<link rel="stylesheet" type="text/css" href="http://wms-new.oppo.in.th/css/thaiSalaban.css">
+<style type="text/css">
+  body{
+    font-size:32px;
+    font-family:"thaiSalaban"!important;
+    margin: 0px;
+        } 
+
+</style>
+<meta charset="utf-8">
+<?php 
+    if (isset($this->order)): 
+    $dataAddress =  My_Address::genDataArray($this->order['shipping_id']); 
+?>
+<table  border=0>
+    <tr style="top: 10px !important; position: static; left: 0;" height="40px" valign="top" >
+        <td colspan="2">
+            <table>
+                <tr>
+                    <td width="140px"></td>
+                    <td align="center" width="132px">OPPO</td>
+                    <td width="158px"></td>
+                    <td width="200px"><?php echo $this->order['sales_sn_ref']; ?></td>
+                </tr>
+            </table>
+        </td>
+    </tr>
+<?php
+
+$oppo_address="";
+$oppo_address_phone="";
+$userStorage = Zend_Auth::getInstance()->getStorage()->read();
+
+if (!My_Staff_Group::inGroup($userStorage->group_id, 26)) 
+    {
+        
+    }
+
+// $oppo_address  = "&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;บริษัท ไทย ออปโป้ จำกัด <br/>230 ถ.บางขุนเทียนชายทะเล แขวงแสมดำ เขตบางขุนเทียน กทม 10150";
+$oppo_address  = "&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;บริษัท โพสเซฟี่ กรุ๊ป จำกัด <br/>อาคาร เอไอเอ แคปปิตอล เซ็นเตอร์ ชั้น 31 ห้อง 5-7 เลขที่ 89 ถนนรัชดาภิเษก แขวงดินแดง เขตดินแดง กทม 10400";
+
+$oppo_address_phone  = "&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;คุณศริญญา เกตุเขียว
+0657174931";  
+
+$oppo_zipcode  = "10400";
+
+// $oppo_contack  = "0922468952";
+$oppo_contack  = "0655062270";
+?>
+
+    <tr height="170px" valign="top" > <!-- 117 -->
+        <td width="300px">
+                <table width="300px" border=0 cellpadding="0" cellspacing="0" style="top: 20px ;">
+                    <tr height="15px">
+                        <td colspan="3"><td>
+                    </tr>
+                    <tr>
+                        <td width="30px"></td>
+                        <td >
+                            <?php echo $oppo_address;?>
+                        </td>
+                        <td width="60px"></td>
+                    </tr>
+                    <tr height="25px">
+                        <td colspan="3"><td>
+                    </tr>
+                    <tr>
+                        <td colspan="2" align="center">
+                              <?php echo $oppo_address_phone;?>
+                        </td>
+                        <td></td>
+                    </tr>
+                    <tr height="10px">
+                        <td colspan="3"><td>
+                    </tr>
+                    <tr>
+                        <td colspan="3">
+                            <table width="100%" height="100%" border=0 cellpadding="0" cellspacing="0">
+                                <tr>
+                                    <td align="center"  width="70px"><?php echo $oppo_zipcode;?></td>
+                                    <td width="44px"><td>
+                                    <td >
+                                         <?php echo $oppo_contack;?>
+                                         <div style="left:300px;position: absolute;top:5.2cm"><?=$dataAddress['zipcodes']?><span style="margin-left:35px;"><?=$dataAddress['phone']?></span></div>
+                                    </td>
+                                </tr>
+                            </table>
+                        </td>
+                        
+                    </tr>
+                </table>
+        </td>
+      
+        <td valign="top"  >
+            <table width="200px" border=0 cellpadding="0" cellspacing="0" style="top: 20px ; line-height: 110%;">
+                <tr>
+                    <td>
+                <?php echo $this->order['title']; ?> <br/>
+                <?php echo $this->order['d_contact']; ?> <br/>
+                <?php if (isset($this->order['add_time']) and $this->order['add_time'] > '2017-03-15 00:00:00') {?>
+                <?php echo My_Address::genAddessDelivery($this->order['shipping_id']); ?> <br/>
+                <?PHP }else{ ?>
+                <?php echo $this->order['address']; ?> <br/>
+                <?PHP } ?>
+                <?php echo $this->order['tel']; ?> <br/>
+                <?php echo $this->order['d_code']?>
+                    </td>
+                </tr>
+            </table>
+        </td>
+        
+    </tr>
+    <!-- <tr height="48px">
+        <td></td>
+        <td></td>
+        <td></td>
+    </tr> -->
+    <tr height="43px">
+        <td></td>
+        <td></td>
+        <td></td>
+    </tr>
+    <tr>
+        <td></td>
+        <td valign="top" style="line-height: 25px;">
+                โทรศัพท์ : <?php echo $this->order['cnt_phone']; ?> <br/>
+                ถุง : <?php echo $this->order['cnt_bag']; ?> <br />
+                อุปกรณ์เสริม : <?php echo $this->order['cnt_acc']; ?> <br />
+                <!-- นำเอกสารที่พับมุมกลับ <br/> -->
+                <?php
+                //fix remark big c
+                if($this->order['d_id'] == 30344){
+                    ?>
+                    **ประทับตราบิ๊กซีในเอกสารก่อนนำกลับทุกครั้ง**<br/>
+                <?php } ?>
+                ลูกค้า : เงินสด,เครดิต <br />
+                <?php
+                //fix remark com7/B10_Powermall
+                if(in_array($this->order['d_id'], ['34119','51174','51074','51011'])){
+                    ?>
+                    รบกวนขนส่งนำเอกสารสีเขียวกลับ<br/>
+                <?php } ?>
+        </td>
+        <td></td>
+    </tr>
+</table>
+<!--
+        <a href="<?php echo $this->refer ?>" class="no_print">Back - Click here if not automatically redirect browsers</a>
+        <div class="wrapper">
+            <p class="element name"><?php echo $this->order['receiver'];  ?></p>
+            <p class="element address"><?php echo $this->order['address']; ?></p>
+            <p class="element tel"><?php echo $this->order['phone_number']; ?></p>
+            <p class="element province">
+                <?php if (isset($this->order['district'])) echo My_Region::getValue($this->order['district'], My_Region::Province) ?>
+            </p>
+            <p class="element district">
+                <?php if (isset($this->order['district'])) echo My_Region::getValue($this->order['district'], My_Region::District) ?>
+            </p>
+            <p class="element weight"><?php //echo $this->order['weight']; ?></p>
+            <p class="element package"><?php //echo $this->order['number_of_package']; ?></p>
+        </div>
+-->
+    <script>
+        try {
+            (function() {
+
+                var beforePrint = function() {
+                    // console.log('before');
+                };
+
+                var afterPrint = function() {
+                    window.location.href = "<?php echo $this->refer ?>";
+                    // console.log('after');
+                };
+
+                if (window.matchMedia) {
+                    var mediaQueryList = window.matchMedia('print');
+                    mediaQueryList.addListener(function(mql) {
+                        if (mql.matches)
+                            beforePrint();
+                        else
+                            afterPrint();
+                    });
+                }
+
+                window.onbeforeprint = beforePrint;
+                window.onafterprint = afterPrint;
+                window.print();
+            }());
+        } catch (err) {
+            console.log(err.message);
+        }
+    </script>
+<?php endif ?>
+

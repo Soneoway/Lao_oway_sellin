@@ -1,0 +1,134 @@
+<style>
+    .joint
+    {line-height: 34px;
+        position: relative;
+        top: -4px;}
+.invoice
+{   position: absolute;
+    top: 615px;}
+    .print3
+    {
+        top: 615px !important;
+    }
+</style>
+<table class="tbllist invoice" cellspacing="1" cellpadding="5">
+    <?php if (isset($this->total) and $this->total) {
+        $price_before_vat = $this->total;
+        $price_before_vat = round($price_before_vat / 1.1, 2);
+
+    }
+    $total_bvg = 0;
+    ?>
+
+    <tr>
+
+        <?php if (isset($this->type_discount) and $this->type_discount == 2):
+            $price_before_vat = $this->total;
+            $price_before_vat = round($price_before_vat / 1.1, 2);
+            ?>
+            <td class="abc"><span>01</span></td>
+            <td class="productname joint" >
+                <?php if(isset($this->joint_circular) and $this->joint_circular) echo $this->joint_circular; ?> chi tiết theo bảng kê đính kèm số <span id="invoice_number_span">TT<?php if(isset($this->invoice_number) and $this->invoice_number) echo $this->invoice_number ?></span> ngày <?php echo
+date("d"); ?>/<?php echo
+date("m"); ?>/<?php echo
+date("Y"); ?>)
+            </td>
+            <td class="unit"></td>
+            <td class="quantity"></td>
+            <td class="price"></td>
+            <td class="total"><?php echo My_Number::product_price($price_before_vat , 2); ?></td>
+
+        <?php else: ?>
+
+
+        <?php    $i = 1; $num_total_bvg = $price_before_vat_bvg = $price_after_vat_bvg = 0;
+        foreach ($this->market_product as $k => $market_product): ?>
+
+<?php
+
+
+if(isset($market_product)  and $market_product) :
+    foreach ($market_product as $k => $md):
+
+        $md['price'] = round($md['price'] / 1.1);
+        $tt_bvg = round($md['total_price'] / 1.1,2);
+        $price_after_vat_bvg += $md['total_price'];
+        $tt_bvg = round($md['total_price'] / 1.1,2);
+        //đơn giá
+        $dg_bvg = round($tt_bvg/$md['num'],2);
+        $tt_bvg = $dg_bvg * $md['num'];
+
+
+        $total_bvg += $md['total_price'];
+
+        ?>
+
+
+
+    <?php endforeach;
+
+
+
+        endif; endforeach;
+            $price_before_vat_bvg =  round($total_bvg / 1.1,2);
+        ?>
+
+    <tr class="sp none">
+        <td class="abc"><?php if($i <= 9)  echo '0'.$i++; else echo $i++; ?></td>
+        <td class="productname joint">
+            <?php echo 'Xuất điều chỉnh giảm giá bán hàng tồn kho ( Chi tiết theo bảng kê hàng hóa đính kèm số TT<span class ="invoice_number">'.
+                $this->invoice_number.'</span> Ngày<span class="day">'. date('d') .'</span> Tháng <span class="month">'. date('m'). '</span> Năm <span class="year">' . date('Y') . '</span>)'; ?></td>
+    <td class="unit"></td>
+    <td class="quantity"></td>
+    <td class="price"></td>
+    <td class="total"><?php echo My_Number::product_price($price_before_vat_bvg , 2); ?></td>
+    </tr>
+
+
+
+
+<?php endif; ?>
+    <?php
+
+    if (isset($this->type_discount) and $this->type_discount == 2)
+    {
+        $this->vat = $vat = round($price_before_vat * 0.1);
+        $this->price_before_vat = $price_before_vat_bvg = round($price_before_vat);
+        $this->price_after_vat = round($vat + $price_before_vat);
+    }
+    else
+    {
+         $this->price_after_vat = $price_after_vat = $price_after_vat_bvg;
+         $this->price_before_vat = $price_before_vat = $price_before_vat_bvg;
+         $this->vat = $vat = round($price_after_vat - $price_before_vat);
+    }
+
+   
+    ?>
+
+    <?php 
+
+
+    if(isset($this->mk_goods) and $this->mk_goods):
+    foreach ($this->mk_goods as $k => $v):
+
+
+        $type = $v['type'];
+
+        $sale_off = $v['sale_off_percent'];
+
+        $tt = round($v['total_price'] / 1.1, 2);
+
+        //đơn giá
+        $dg = round($tt / $v['num'], 2);
+
+        $tt = $dg * $v['num']; ?>
+
+        <input type="hidden" name="invoice_price[]" value="<?php echo $v['id'] .
+            '_' . $tt; ?>" />
+        <input type="hidden" name="invoice_price_edit[]" value="<?php echo
+            $v['id'] . '_' . $tt; ?>" />
+
+    <?php endforeach;endif; ?>
+
+</table>

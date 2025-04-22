@@ -1,0 +1,203 @@
+<div class="page-header" xmlns="http://www.w3.org/1999/html">
+    <h1>Out warehouse</h1>
+</div>
+
+<?php
+if (isset($this->messages) and $this->messages)
+    foreach ($this->messages as $message):
+        echo '<div class="alert alert-error">'.$message.'</div>';
+    endforeach;
+?>
+
+<div class="row">
+	<div class="span12">
+        <form role="form" id="form" action="<?php echo HOST.'warehouse/sales-confirm';?>" method="post" class="form-inline">
+        	<?php if (isset($this->sales) and $this->sales):?>
+        		<div class="row">
+        			<div class="span6">
+        				<label class="span2">Sales order number</label>
+		                <span class="span3"><strong><?php isset($this->sales) and $this->sales and printf($this->sales[0]['sale']->sn);?></strong></span>
+        			</div>
+        		</div>
+            <?php endif;?>
+
+			<div class="row">
+    			<div class="span6">
+                    <label class="span2">Retailer name</label>
+                    <span class="span3"><strong><?php echo $this->sales[0]['retailer_name'];?></strong></span>
+            	</div>
+    		</div>
+
+			<div class="row">
+    			<div class="span6">
+                    <label class="span2">Salesman</label>
+                    <span class="span3"><strong><?php echo $this->sales[0]['salesman_name'];?></strong></span>
+            	</div>
+    		</div>
+
+			<div class="row">
+    			<div class="span6">
+                    <label class="span2">Order maker</label>
+                    <span class="span3"><strong><?php echo $this->sales[0]['created_by_name'];?></strong></span>
+            	</div>
+    		</div>
+
+			<div class="row">
+    			<div class="span6">
+                    <label class="span2">Order time</label>
+                    <span class="span3"><strong><?php echo $this->sales[0]['sale']->add_time;?></strong></span>
+            	</div>
+    		</div>
+
+            <div class="row">
+                <div class="span12">
+                    <table class="table table-bordered span12">
+                        <thead>
+                            <tr>
+                                <th>ID</th>
+                                <th>Products category</th>
+                                <th>Product</th>
+                                <th>Color</th>
+                                <th>Scanned out</th>
+                                <th>Quantity</th>
+                                <th>Price</th>
+                                <th>Total Price</th>
+                                <th>Remark</th>
+                            </tr>
+                        </thead>
+
+                        <tbody>
+
+                        <?php
+                        $total_num = $total_price = $total_total = 0;
+                        foreach ($this->sales as $k=>$item):
+                            $sale = $item['sale'];
+                            $total_num += $sale->num;
+                            $total_price += $sale->price;
+                            $total_total += $sale->total;
+                        ?>
+
+                            <tr>
+                                <td><?php echo $sale->id;?></td>
+                                <td><?php echo $item['category'];?></td>
+                                <td><?php echo $item['good'];?></td>
+                                <td><?php echo $item['color'];?></td>
+                                <td><?php
+                                    if ($sale->cat_id == PHONE_CAT_ID)
+                                        echo ( isset($this->sales_list_out[$k]) ? $this->sales_list_out[$k] : '' );
+                                    elseif ($sale->cat_id == DIGITAL_CAT_ID)
+                                        echo ( isset($this->sales_list_digital_out[$k]) ? $this->sales_list_digital_out[$k] : '' );
+                                    elseif ($sale->cat_id == ILIKE_CAT_ID)
+                                        echo ( isset($this->sales_list_ilike_out[$k]) ? $this->sales_list_ilike_out[$k] : '' );
+                                    ?></td>
+                                <td><?php echo$sale->num;?></td>
+                                <td><?php echo$sale->price;?></td>
+                                <td><?php echo$sale->total;?></td>
+                                <td><?php echo $sale->text;?></td>
+                            </tr>
+
+                        <?php endforeach;?>
+
+                        </tbody>
+
+                        <tfoot>
+                            <tr>
+                                <td colspan="5"><strong>SUMMARY</strong></td>
+                                <td><strong><?php echo $total_num;?></strong></td>
+                                <td><strong><?php echo $total_price;?></strong></td>
+                                <td><strong><?php echo $total_total;?></strong></td>
+                                <td>&nbsp;</td>
+                            </tr>
+                        </tfoot>
+                    </table>
+                </div>
+            </div>
+
+            <div class="row">
+                <div class="span6">
+                    <label class="span2">Payment or not</label>
+                    <span class="span3"><?php if ($this->sales[0]['sale']->pay_user):?><i class="icon-ok"></i><?php else:?><i class="icon-remove"></i><?php endif;?></span>
+                </div>
+            </div>
+
+            <div class="row">
+                <div class="span6">
+                    <label class="span2">Payment User</label>
+                    <span class="span3"><?php echo $this->sales[0]['pay_user_name'];?></span>
+                </div>
+            </div>
+
+            <div class="row">
+                <div class="span6">
+                    <label class="span2">Payment Time</label>
+                    <span class="span3"><?php echo $this->sales[0]['sale']->pay_time;?></span>
+                </div>
+            </div>
+
+            <div class="row">
+                <div class="span6">
+                    <label class="span2">Shipping or not</label>
+                    <span class="span3"><?php if ($this->sales[0]['sale']->shipping_yes_id):?><i class="icon-ok"></i><?php else:?><i class="icon-remove"></i><?php endif;?></span>
+                </div>
+            </div>
+
+            <div class="row">
+                <div class="span6">
+                    <label class="span2">Shipping User</label>
+                    <span class="span3"><?php echo $this->sales[0]['shipping_yes_id_name'];?></span>
+                </div>
+            </div>
+
+            <div class="row">
+                <div class="span6">
+                    <label class="span2">Shipping Time</label>
+                    <span class="span3"><?php echo $this->sales[0]['sale']->shipping_yes_time;?></span>
+                </div>
+            </div>
+
+            <div class="row">
+                <div class="span12">
+                    <span class="span4" style="color: red">* Please confirm information,This action can not be reversed!!...</span>
+                </div>
+            </div>
+
+            <div class="row">
+                <div class="span6">
+                    <div class="control-group">
+                        <input type="hidden" name="sn" value="<?php isset($this->sales) and $this->sales and printf($this->sales[0]['sale']->sn);?>">
+                        <div class="span4">
+                            <button type="submit" class="btn btn-primary">Complete out of store</button>
+                            <input type="hidden" name="back_url" id="back_url" value="<?php if (isset($this->back_url) and $this->back_url ): echo $this->back_url;else: print('/warehouse/out');endif;?>">
+                            <button type="button" class="btn btn-danger go-back">Go back</button>
+                        </div>
+                    </div>
+                    <div class="clearfix"></div>
+                </div>
+            </div>
+        </form>
+    </div>
+</div>
+
+
+<script>
+    $(document).ready(function () {
+        $('#form').submit(function (e){
+            if (!confirm('This action can not be reversed, please exercise caution...'))
+                return false;
+        });
+        initGoBack();
+    });
+
+    function initGoBack(){
+        $('.go-back').click(function(e){
+            window.location.href = $('#back_url').val();
+            return false;
+        });
+    }
+</script>
+<style>
+	label input,
+	label select {
+		margin-right: 25px;
+	}
+</style>

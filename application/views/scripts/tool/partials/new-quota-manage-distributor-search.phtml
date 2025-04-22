@@ -1,0 +1,171 @@
+<form id="form" name="form" class="form-search form-horizontal" action="<?php echo HOST ?>tool/new-quota-manage-distributor">
+    <div class="row">
+        <div class="span5">
+
+            <div class="control-group">
+                <label class="control-label" for="store_code">Store Code</label>
+                <div class="controls">
+                    <input type="text" class="span3" id="store_code" name="store_code" placeholder="Store Code" <?php if( isset($this->params['store_code']) && $this->params['store_code'] ) echo 'value="'.$this->params['store_code'].'"' ?> />
+                </div>
+            </div>
+
+            <div class="control-group">
+                <label class="control-label" for="distributor">Distributor</label>
+                <div class="controls">
+                    <input type="text" class="span3" id="distributor" name="distributor" placeholder="Distributor" <?php if( isset($this->params['distributor']) && $this->params['distributor'] ) echo 'value="'.$this->params['distributor'].'"' ?> />
+                </div>
+            </div>
+
+            <div class="control-group">
+                <label for="dis_type" class="control-label">Distributor Type</label>
+                <div class="controls">
+                    <select id="dis_type" class="span3" name="dis_type">
+                        <option value="">---</option>
+                        <option value="3" <?php if (isset($this->params['dis_type']) and '3'==$this->params['dis_type']):?> selected<?php endif;?>> KA</option>
+                        <option value="2" <?php if (isset($this->params['dis_type']) and '2'==$this->params['dis_type']):?> selected<?php endif;?>> KR</option>
+                        <option value="1" <?php if (isset($this->params['dis_type']) and '1'==$this->params['dis_type']):?> selected<?php endif;?>> Dealer/HUB</option>
+                        <option value="10" <?php if (isset($this->params['dis_type']) and '10'==$this->params['dis_type']):?> selected<?php endif;?>> Brand Shop</option>
+                        <option value="4" <?php if (isset($this->params['dis_type']) and '4'==$this->params['dis_type']):?> selected<?php endif;?>> Operator</option>
+                    </select>
+                </div>
+            </div>
+
+            <div class="control-group">
+                <label for="order_type" class="control-label">Order Type</label>
+                <div class="controls">
+                    <select id="order_type" class="span3" name="order_type">
+                        <option value=>---</option>
+                        <option value="1" <?php if (isset($this->params['order_type']) and '1'==$this->params['order_type']):?> selected<?php endif;?>>Normal</option>
+                        <option value="2" <?php if (isset($this->params['order_type']) and '2'==$this->params['order_type']):?> selected<?php endif;?>>Demo</option>
+                        <option value="5" <?php if (isset($this->params['order_type']) and '5'==$this->params['order_type']):?> selected<?php endif;?>>APK</option>
+                    </select>
+                </div>
+            </div>
+
+        </div>
+        <div class="span5">
+
+            <div class="control-group">
+
+                <label for="warehouse_id" class="control-label">Warehouse</label>
+                <div class="controls">
+                    <select id="warehouse_id" class="span3" name="warehouse_id">
+                        <option value="">---</option>
+                        <?php if ($this->warehouses): foreach ($this->warehouses as $id=>$name):?>
+                            <option value="<?php echo $id;?>" <?php if (isset($this->params['warehouse_id']) and $id==$this->params['warehouse_id']):?> selected<?php endif;?>><?php echo $name;?></option>
+                        <?php endforeach; endif;?>
+                    </select>
+                </div>
+            </div>
+            
+            <div class="control-group">
+                <label for="cat_id" class="control-label">Product Category</label>
+                <div class="controls">
+                    <select id="cat_id" class="span3" name="cat_id">
+                        <option value="">---</option>
+                        <?php if ($this->good_categories): foreach ($this->good_categories as $id=>$name):?>
+                            <option value="<?php echo $id;?>" <?php if (isset($this->params['cat_id']) and $id==$this->params['cat_id']):?> selected<?php endif;?>><?php echo $name;?></option>
+                        <?php endforeach; endif;?>
+                    </select>
+                </div>
+            </div>
+
+            <div class="control-group">
+                <label for="good_id" class="control-label">Product</label>
+                <div class="controls">
+                    <select id="good_id" class="span3" name="good_id">
+                        <option value="">---</option>
+                        <?php if ($this->goods): foreach ($this->goods as $id=>$name):?>
+                            <option value="<?php echo $id;?>" <?php if (isset($this->params['good_id']) and $id==$this->params['good_id']):?> selected<?php endif;?>><?php echo $name;?></option>
+                        <?php endforeach; endif;?>
+                    </select>
+                </div>
+            </div>
+
+            <!-- <div class="control-group">
+                <label for="good_color" class="control-label">Color</label>
+                <div class="controls">
+                    <select id="good_color" class="span3" name="good_color">
+                        <option value="">---</option>
+                        <?php if ($this->colors): foreach ($this->colors as $id=>$name):?>
+                            <option value="<?php echo $id;?>" <?php if (isset($this->params['good_color']) and $id==$this->params['good_color']):?> selected<?php endif;?>><?php echo $name;?></option>
+                        <?php endforeach; endif;?>
+                    </select>
+                </div>
+            </div> -->
+      
+        </div>
+
+
+    </div>
+
+    <div class="row">
+        <div class="span10">
+            <div class="controls">
+                <button type="submit" class="btn btn-primary">Search</button>
+            </div>
+        </div>
+    </div>
+</form>
+
+<script type="text/javascript" src="<?php echo HOST ?>js/jquery-ui-1.8.12.custom.min.js"></script>
+<script src="<?php echo HOST ?>js/tag-it.min.js" type="text/javascript" charset="utf-8"></script>
+<link rel="stylesheet" type="text/css" href="<?php echo HOST ?>css/jquery-ui-1.8.12.custom.css"/>
+<link href="<?php echo HOST ?>css/jquery.tagit.css" rel="stylesheet" type="text/css">
+<link href="<?php echo HOST ?>css/tagit.ui-zendesk.css" rel="stylesheet" type="text/css">
+<script>
+    $(document).ready(function () {
+        $( '.date' ).datepicker({ dateFormat: "dd/mm/yy" });
+
+        $('#cat_id, #good_id').change(function(){
+            $(this).after('<span class="loading"></span>');
+            var _self = $(this);
+            var cat_id = $('#cat_id').val();
+
+            if (_self.attr('id')=='cat_id')
+                $('#good_id').find('option:not(:first)').remove();
+
+            var good_id = $('#good_id').val();
+
+            $('#good_color').find('option:not(:first)').remove();
+
+            $('#num, #price').val('');
+
+            $.get("/get/load",
+                {cat_id: cat_id, good_id: good_id}
+                ,function(data,status){
+                    var data = $.parseJSON( data );
+                    if (data.goods){
+                        var obj = data.goods;
+                        for (var i = 0; i < obj.length; i++) {
+                            $('#good_id').append('<option value="'+obj[i]['id']+'">'+obj[i]['name']+'</option>');
+                        }
+                    }
+                    if (data.colors){
+                        var obj = data.colors;
+                        for (var i = 0; i < obj.length; i++) {
+                            $('#good_color').append('<option value="'+obj[i]['id']+'">'+obj[i]['name']+'</option>');
+                        }
+                    }
+                    _self.nextAll('.loading').remove();
+                });
+        });
+
+        initTag();
+        initSearchOptionDistributor('d_id', 'SearchBox');
+    });
+
+    function initTag(){
+
+        $('#myTags').tagit({
+            allowSpaces: true,
+            fieldName: 'tags[]',
+            autocomplete: {
+                delay: 0,
+                minLength: 2,
+                source: "<?php echo HOST;?>get/get-tags"
+            }
+        });
+
+    }
+</script>

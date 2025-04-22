@@ -1,0 +1,358 @@
+<?php
+    $flashMessenger = $this->_helper->flashMessenger;
+   
+
+    if ($this->getRequest()->getMethod() == 'POST'){
+
+        //mua máy nhân viên 
+        $payment_dates      = $this->getRequest()->getParam('payment_date');
+        $shipment_id        = $this->getRequest()->getParam('shipment_id'); 
+        $id_staffs          = $this->getRequest()->getParam('id_staff');
+        $name_staff_ingames = $this->getRequest()->getParam('name_staff_ingame');
+        $cmnd_staff_ingames = $this->getRequest()->getParam('cmnd_staff_ingame');
+        $shipment_types     = $this->getRequest()->getParam('shipment_type');
+        $sophieuthus        = $this->getRequest()->getParam('sophieuthu');
+        $sotienthuctes      = $this->getRequest()->getParam('sotienthucte');
+        $service_nvmm       = $this->getRequest()->getParam('service_nvmm');
+        $warehouse_nvmm     = $this->getRequest()->getParam('warehouse_nvmm');
+        $product_color_key  = $this->getRequest()->getParam('product_color_key');
+        $staff_num          = $this->getRequest()->getParam('staff_num');
+        $for_partner        = $this->getRequest()->getParam('for_partner',2);
+        $save_service       = $this->getRequest()->getParam('save_service');
+        $save_accessories   = $this->getRequest()->getParam('save_accessories');
+        //end mua may nhan vien
+
+        $market_general_id= $this->getRequest()->getParam('market_general_id');
+        $ids              = $this->getRequest()->getParam('ids');
+        $cat_ids          = $this->getRequest()->getParam('cat_id');
+        $good_ids         = $this->getRequest()->getParam('good_id');
+        $good_colors      = $this->getRequest()->getParam('good_color');
+        $sipping_add      = $this->getRequest()->getParam('sipping_add');
+
+        $nums             = $this->getRequest()->getParam('num');
+        if($nums==''){
+           $nums             = $this->getRequest()->getParam('nums'); 
+        }
+        
+        $total_spc_discount  = $this->getRequest()->getParam('total_spc_discount', 0);
+        //$prices           = $this->getRequest()->getParam('price');
+        //$$total_spc_discount=60000;
+        //Sak remove comma and convert type from string to float
+
+        if($save_service=='service'){
+            $tmp_prices = $this->getRequest()->getParam('total');
+            $tmp_totals = $this->getRequest()->getParam('total');
+        }else{
+            $tmp_prices = $this->getRequest()->getParam('price');
+            $tmp_totals = $this->getRequest()->getParam('total');
+        }
+
+        foreach ($tmp_prices as $key => $value) {
+            $prices[] = floatval(str_replace(",","", $value ));
+        }
+
+        foreach ($tmp_totals as $key => $value) {
+            $totals[] = floatval(str_replace(",","", $value ));
+        }
+       // print_r($prices);die;
+        $texts            = $this->getRequest()->getParam('text');
+        $distributor_id   = $this->getRequest()->getParam('distributor_id');
+        $warehouse_id     = $this->getRequest()->getParam('warehouse_id');
+        $salesman         = $this->getRequest()->getParam('salesman');
+        $sales_catty_id   = $this->getRequest()->getParam('salesman_catty');
+        $area_id          = $this->getRequest()->getParam('area_id');
+        $type             = $this->getRequest()->getParam('type');
+        $sale_off_percent = $this->getRequest()->getParam('sale_off_percent');
+        $sn               = $this->getRequest()->getParam('sn');
+        $life_time        = $this->getRequest()->getParam('life_time');
+        $rebate_price     = $this->getRequest()->getParam('rebate_price');
+        $service_id       = $this->getRequest()->getParam('service_id');
+        //bvg
+        $ids_bvg          = $this->getRequest()->getParam('ids_bvg');
+        $joint            = $this->getRequest()->getParam('joint');
+        $good_ids_bvg     = $this->getRequest()->getParam('good_id_bvg');
+        $prices_bvg       = $this->getRequest()->getParam('price_bvg');
+        //$prices_bvg       = preg_replace('/[^0-9]/i', '',$prices_bvg);
+        $nums_bvg         = $this->getRequest()->getParam('num_bvg');
+        $totals_bvg       = $this->getRequest()->getParam('total_bvg');
+        $bvg_imei         = $this->getRequest()->getParam('ids_bvg_imei');
+        $ids_discount     = $this->getRequest()->getParam('ids_discount');
+        $joint_discount   = $this->getRequest()->getParam('joint_discount');
+        $prices_discount  = $this->getRequest()->getParam('price_discount');
+        $campaign         = $this->getRequest()->getParam('campaign'); 
+        $for_staff        = $this->getRequest()->getParam('for_staff');
+        $edit             = $this->getRequest()->getParam('edit');
+
+        //////////Hàng bán cho nhân viên thì lưu thong tin lai/////////
+        $office = $this->getRequest()->getParam('oppo_office');
+        $company = $this->getRequest()->getParam('customer_company');
+        $customer_name = $this->getRequest()->getParam('customer_name');
+        $customer_address = $this->getRequest()->getParam('customer_address');
+        $tax_code = $this->getRequest()->getParam('tax_code');
+        $invoice = $this->getRequest()->getParam('invoice');
+        ///////////////////////////////////////////////////////////////
+        $gift_id = $this->getRequest()->getParam('gift_id');
+        $distributor_po = $this->getRequest()->getParam('distributor_po'); // PO theo dealer
+        // phương thức thanh toán
+        $payment_method = $this->getRequest()->getParam('payment_method');
+
+
+       
+
+        // = 1 thì tính phí, không thì thôi
+        $include_shipping_fee = $this->getRequest()->getParam('include_shipping_fee', 0);
+        $user_uncheck         = $this->getRequest()->getParam('user_uncheck', 0);
+
+
+        // Tanong Add New --> credit_id
+        $credit_id = $this->getRequest()->getParam('credit_id');
+        $price_balance_discount_creditnote = $this->getRequest()->getParam('price_balance_discount_creditnote');
+        $price_use_discount_creditnote = $this->getRequest()->getParam('price_use_discount_creditnote');
+        $ids_discount_creditnote = $this->getRequest()->getParam('ids_discount_creditnote');
+
+        //Tanong Delivery Address 20160320
+        $delivery_address_old = trim($this->getRequest()->getParam('add_delivery_old'));
+        $delivery_address_new = trim($this->getRequest()->getParam('add_delivery_new'));
+
+        //Tanong Delivery Fee 20160323
+        $delivery_fee = trim($this->getRequest()->getParam('delivery_fee'));
+
+
+        if($delivery_address_old==$delivery_address_new)
+        {
+            $delivery_address ='';
+        }else if($delivery_address_old!=$delivery_address_new and $delivery_address_new !='')
+        {
+            $delivery_address =$delivery_address_new;
+        }
+
+        $rank = trim($this->getRequest()->getParam('rank'));
+        if($rank==10){
+            $customer_id = trim($this->getRequest()->getParam('customer_id'));
+            $customer_name = trim($this->getRequest()->getParam('customer_name'));
+            $customer_tax_number = trim($this->getRequest()->getParam('customer_tax_number'));
+            $customer_tax_address = trim($this->getRequest()->getParam('customer_tax_address'));
+        }else{
+            $customer_id = '';
+            $customer_name = '';
+            $customer_tax_number = '';
+            $customer_tax_address = '';
+        }
+        
+
+        
+
+        // chặn edit đơn của người khác
+        if (!empty($sn)) {
+            $QMarket = new Application_Model_Market();
+            $where = $QMarket->getAdapter()->quoteInto('sn = ?', $sn);
+            $market_check = $QMarket->fetchRow($where);
+    
+            if ($market_check) {
+                $userStorage = Zend_Auth::getInstance()->getStorage()->read();
+    
+                if ($market_check['user_id'] != $userStorage->id && !My_Staff_Group::inGroup($userStorage->group_id, array(ADMINISTRATOR_ID, SUPER_SALES_ADMIN))) {
+                    $flashMessenger->setNamespace('error')->addMessage('You cannot edit this Order');
+                    $this->_redirect(HOST.'sales');
+                }
+            }
+        }
+
+        if($save_service=='service'){
+            $prices = $this->getRequest()->getParam('total');
+
+        }
+//$prices="2500";
+       // print_r($prices);die;
+        $params = array(
+                'market_general_id'    => $market_general_id,
+                'ids'                  => $ids,
+                'save_service'         => $save_service,
+                'cat_id'               => $cat_ids,
+                'good_id'              => $good_ids,
+                'good_color'           => $good_colors,
+                'num'                  => $nums,
+                'price'                => $prices,
+                'total'                => $totals,
+                'text'                 => $texts,
+                'distributor_id'       => $distributor_id,
+                'warehouse_id'         => $warehouse_id,
+                'salesman'             => $salesman,
+                'sales_catty_id'       => $sales_catty_id,
+                'area_id'              => $area_id,
+                'type'                 => $type,
+                'sale_off_percent'     => $sale_off_percent,
+                'sn'                   => $sn,
+                'life_time'            => $life_time,
+                'isbatch'              => 1,
+                'rebate_price'         => $rebate_price,
+                'service_id'           => $service_id,
+                'ids_bvg'              => $ids_bvg,
+                'joint'                => $joint,
+                'good_id_bvg'          => $good_ids_bvg,
+                'num_bvg'              => $nums_bvg,
+                'price_bvg'            => $prices_bvg,
+                'total_bvg'            => $totals_bvg,
+                'joint_discount'       => $joint_discount,
+                'ids_discount'         => $ids_discount,
+                'prices_discount'      => $prices_discount,
+                'bvg_imei'             => $bvg_imei,
+                'distributor_po'       => $distributor_po,
+                'gift_id'              => $gift_id,
+                'include_shipping_fee' => $include_shipping_fee,
+                'user_uncheck'         => $user_uncheck == 'true' ? 1 : 0,
+                'campaign'             => $campaign,
+                'payment_method'       => $payment_method,
+                'id_staff'             => $id_staffs,
+                'name_staff_ingame'    => $name_staff_ingames,
+                'cmnd_staff_ingame'    => $cmnd_staff_ingames,
+                'shipment_type'        => $shipment_types,
+                'sophieuthu'           => $sophieuthus,
+                'sotienthucte'         => $sotienthuctes,
+                'payment_date'         => $payment_dates,
+                'shipment_id'          => $shipment_id,
+                'product_color_key'    => $product_color_key,
+                'staff_num'            => $staff_num,
+                'for_partner'          => $for_partner,
+                'credit_id'            => $credit_id,
+                'delivery_address'     => $delivery_address,
+                'delivery_fee'         => $delivery_fee,
+                'customer_id'          => $customer_id,
+                'customer_name'        => $customer_name,
+                'customer_tax_number'  => $customer_tax_number,
+                'customer_tax_address' => $customer_tax_address,
+                'rank'                 => $rank,
+                'edit'                 => $edit,
+                'sipping_add'          => $sipping_add,
+                'total_spc_discount'   => $total_spc_discount,
+            );
+
+        if($save_accessories=='1'){
+            $params['order_accessories'] = 1;
+        }
+        
+        if(isset($invoice) and $invoice)
+        {
+                 $invoice_data = array(
+                'office' => $office,
+                'company' => $company,
+                'customer_name' => $customer_name,
+                'customer_address' => $customer_address,
+                'tax_code' => $tax_code,
+                'invoice' => $invoice,
+                'service_nvmm'  => $service_nvmm,
+                'warehouse_nvmm'  => $warehouse_nvmm
+            );
+            $params['invoice_data'] = $invoice_data;        
+        }
+        
+        $market_general_data = array(
+            'shipment_id'          => intval($shipment_id),
+        );
+        $params['market_general_data'] = $market_general_data;
+
+        $tmp = Zend_Auth::getInstance()->getIdentity();
+        $user_info = json_decode(json_encode($tmp), true);
+        $user_id = $user_info['id'];
+
+        if(isset($ids_discount_creditnote))
+        {  
+            $creditnote_data = array(
+                'ids_discount_creditnote' => $ids_discount_creditnote,
+                'price_balance_discount_creditnote' => $price_balance_discount_creditnote,
+                'price_use_discount_creditnote' => $price_use_discount_creditnote,
+                'distributor_id' => $distributor_id,
+                'user_id' => $user_id
+            );
+
+        }else{
+           $creditnote_data=null;
+        }
+
+        $params['creditnote_data'] = $creditnote_data;
+        
+        //print_r($params);die;
+        $result = $this->saveAPI($params);
+      
+
+        if ($result['code'] == 1) { //success
+            // save tags
+            $tags        = $this->getRequest()->getParam('tags');
+    
+            $QTag       = new Application_Model_Tag();
+            $QTagObject = new Application_Model_TagObject();
+    
+            // remove old record on tag_object
+            $where = array();
+            $where[] = $QTagObject->getAdapter()->quoteInto('object_id = ?', $result['sn']);
+            $where[] = $QTagObject->getAdapter()->quoteInto('type = ?', TAG_ORDER);
+    
+            $QTagObject->delete($where);
+    
+            if ($tags and isset($result['sn']) and $result['sn']){
+    
+                foreach ($tags as $t){
+                    $where = $QTag->getAdapter()->quoteInto('name = ?', $t);
+                    $existed_tag = $QTag->fetchRow($where);
+    
+                    if ($existed_tag){
+    
+                        $tag_id = $existed_tag['id'];
+    
+                    } else {
+    
+                        $tag_id = $QTag->insert(array('name'=>$t));
+    
+                    }
+    
+                    $QTagObject->insert(
+                        array(
+                            'tag_id'    => $tag_id,
+                            'object_id' => $result['sn'], //order sn
+                            'type'      => TAG_ORDER,
+                        )
+                    );
+    
+    
+                }
+            }
+    
+            $flashMessenger->setNamespace('success')->addMessage($result['message']);
+            
+            if($save_accessories=='1'){
+                $this->_redirect( HOST.'sales/index-accessories?view_accessories=all' );
+            }else{
+                $url= "sales/print-sale?sn=".$result['sn'];
+                $this->_redirect( HOST.$url );
+            }
+
+            //$this->_redirect( HOST.'sales' );
+
+        }else if ($result['code'] == -5)
+        {
+            $flashMessenger->setNamespace('error')->addMessage($result['message']);
+            if($save_accessories=='1'){
+                $this->_redirect( HOST.'sales/index-accessories?view_accessories=all' );
+            }else{
+                $this->_redirect( HOST.'sales' );
+            }
+            
+            //$this->_redirect( HOST.'sales/create' );
+        } else {
+            $flashMessenger->setNamespace('error')->addMessage($result['message']);
+            if($save_accessories=='1'){
+                $this->_redirect( HOST.'sales/index-accessories?view_accessories=all' );
+            }else{
+                $this->_redirect( HOST.'sales' );
+            }
+
+        }
+    
+    
+    }
+    
+    //$this->_redirect( HOST.'sales' );
+
+    
+    
+

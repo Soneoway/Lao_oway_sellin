@@ -1,0 +1,142 @@
+<style>
+    .blockOverlay{
+        z-index: 10000 !important;
+    }
+    .blockPage{
+        z-index: 10001 !important;
+    }
+</style>
+
+<div class="page-header">
+    <h1>Imei Factory Rework</h1>
+</div>
+<?php
+    if (isset($this->messages_success) and $this->messages_success)
+        foreach ($this->messages_success as $message):
+            echo '<div class="alert alert-success">'.$message.'</div>';
+        endforeach;
+
+    if (isset($this->messages) and $this->messages)
+        foreach ($this->messages as $message):
+            echo '<div class="alert alert-error">'.$message.'</div>';
+        endforeach;
+?>
+
+<div class="row" style="margin-left: 30px;">
+    <form id="form">
+
+    <table>
+        <tr>
+            <td>
+                <div style="margin-right: 50px;">
+                    <div>IMEI [Count : <span id="count_imei">0</span>]</div>
+                    <div>
+                        <textarea name="imei" id="imei" cols="30" rows="10"></textarea>
+                    </div>
+                </div>
+            </td>
+            <td class="div-invalid-data hide">
+                <div style="color: red">Invalid Data</div>
+                <textarea style="color: red;width: 483px;" name="invalid_data" id="invalid_data" cols="30" rows="10" disabled></textarea>
+            </td>
+        </tr>
+    </table>
+
+    <div class="" style="margin-top: 30px;margin-bottom: 50px;">
+        <button type="button" class="btn btn-primary" id="btn-submit">Confirm</button>
+
+    </div>
+        
+    </form>
+</div>
+
+<script src="/js/jquery.blockUI.js"></script>
+<script>
+
+    $(document).ajaxStart(function(){
+        $.blockUI({ css: { 
+            border: 'none', 
+            padding: '15px', 
+            backgroundColor: '#000', 
+            '-webkit-border-radius': '10px', 
+            '-moz-border-radius': '10px', 
+            opacity: .5, 
+            color: '#fff' 
+        } });
+    });
+
+    $(document).ajaxStop(function(){
+        $.unblockUI();
+    });
+
+    $(document).ready(function () {
+
+        var count_imei = 0;
+
+        $('#imei').keyup(function(event) {
+
+            $('.alert').remove();
+
+            var imei = this;
+
+            var array_imei = (imei.value.split('\n'));
+
+
+            if(array_imei.length > 0){
+                count_imei = array_imei.length;
+            }
+
+            if(imei.value.length < 1){
+                count_imei = 0;
+            }
+
+            $('#count_imei').html(count_imei);
+        });
+
+        $('#btn-submit').click(function(event) {
+
+            $('.alert').remove();
+
+            var imei = $('#imei').val();
+
+            if(imei.length < 1){
+                alert('Please input imei!');
+                return false;
+            }
+
+            if (!confirm('you sure to confirm')) {
+                return false;
+            }
+
+            $.ajax({
+                url: '<?php echo HOST.'warehouse/imei-factory-rework';?>',
+                type: 'POST',
+                data: {imei:imei},
+            })
+            .done(function(response) {
+                var obj_response = jQuery.parseJSON(response);
+                console.log("success");
+
+                 switch(obj_response.status) {
+                    case 200:
+                        console.log('done');
+                        $('.div-invalid-data').addClass('hide');
+                        location.reload();
+                        break;
+                    case 400:
+                        alert(obj_response.message);
+                        break;
+                    case 401:
+                        $('.div-invalid-data').removeClass('hide');
+                        $('#invalid_data').text(obj_response.message);
+                        break;
+                    default:
+                        location.reload();
+                }
+                
+            });
+
+        });
+
+    });
+</script>

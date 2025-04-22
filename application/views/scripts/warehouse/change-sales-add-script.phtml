@@ -1,0 +1,126 @@
+<script>
+    $(document).ready(function () {
+        initGoBack();
+        initSelectChangeType();
+        initSelectProduct();
+        initRemoveSales();
+        initAddSales();
+        initShowNum();
+    });
+
+    function initRemoveSales(){
+        $('.remove-sales').click(function(e){
+            $(this).parent().parent().parent().remove();
+            return false;
+        });
+    }
+
+    function initAddSales(){
+        $('.add-sales').click(function(e){
+            var old_div = $('.div-add');
+            var new_div = old_div.clone();
+
+            new_div.removeClass('div-add').find('select, input').removeAttr('disabled');
+
+            new_div.insertBefore($(this).parent().parent().parent()).show();
+
+            initSelectProduct();
+            initRemoveSales();
+
+            return false;
+        });
+    }
+
+    function initSelectChangeType(){
+
+        $('input[name=is_changed_wh]').change(function (e){
+
+            var val = $('input:radio[name=is_changed_wh]:checked').val();
+
+            if (val > 0){
+                $('.is_changed_wh0').hide().find('select').removeAttr('required');
+                $('.is_changed_wh1').show().find('select').attr('required', 'required');
+            }
+            else{
+
+                $('.is_changed_wh0').show().find('select').attr('required', 'required');
+                $('.is_changed_wh1').hide().find('select').removeAttr('required');
+            }
+
+        });
+    }
+
+    function initGoBack(){
+
+        $('.go-back').click(function(e){
+            window.location.href = $('#back_url').val();
+
+        });
+    }
+
+    function initSelectProduct(){
+        $('.cat_id, .good_id').change(function(){
+            $('button[type=submit]').prop('disabled', true);
+            $('form').bind('submit',function(e){e.preventDefault();});
+
+            $('.loading').remove();
+            $(this).after('<span class="loading"></span>');
+            var div_parent = $(this).parent().parent().parent();
+            var _self = $(this);
+            var cat_id = div_parent.find('.cat_id').val();
+            
+            if(cat_id == <?php echo ACCESS_CAT_ID; ?> || cat_id == <?php echo PHONE_CAT_ID; ?> )
+            {
+                 div_parent.find('#back_url').after('<input type="hidden" name="cat_id" value="'+cat_id+'">');
+            }
+
+            if (_self.hasClass('cat_id'))
+                div_parent.find('.good_id').find('option:not(:first)').remove();
+
+            var good_id = div_parent.find('.good_id').val();
+
+            div_parent.find('.good_color').find('option:not(:first)').remove();
+
+            div_parent.find('.num, .price, .total').val('');
+
+
+            $.get("/get/load",
+                {cat_id: cat_id, good_id: good_id}
+                ,function(data,status){
+                    var data = $.parseJSON( data );
+                    if (data.goods){
+                        var obj = data.goods;
+                        div_parent.find('.good_id').html('<option value="">Please select</option>');
+                        for (var i = 0; i < obj.length; i++) {
+                            div_parent.find('.good_id').append('<option value="'+obj[i]['id']+'">'+obj[i]['name']+'</option>');
+                        }
+                    }
+                    if (data.colors){
+                        var obj = data.colors;
+                        div_parent.find('.good_color').html('<option value="">Please select</option>');
+                        for (var i = 0; i < obj.length; i++) {
+                            div_parent.find('.good_color').append('<option value="'+obj[i]['id']+'">'+obj[i]['name']+'</option>');
+                        }
+                    }
+
+                    $('button[type=submit]').prop('disabled', false);
+                    $('form').unbind('submit');
+                    _self.nextAll('.loading').remove();
+                });
+        });
+    }
+
+    function initShowNum(){
+        $('.imei,.digital_sn,.ilike_sn').keyup(function (e){
+
+            var inputnum = 0;
+
+            if ($(this).val() != '')
+                inputnum = ($(this).val().split("\n").length).toString();
+
+
+            $(this).parent().find('.num_imei').html(inputnum);
+
+        });
+    }
+</script>

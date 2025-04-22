@@ -1,0 +1,61 @@
+<table class="table table-bordered">
+    <thead>
+        <tr>
+            <?php echo $this->sorting(array(
+                    '#',
+                    'name'     => 'Name',
+                    'Color',
+                    'category' => 'Category',
+                    'brand'    => 'Brand',
+                   
+                    'details'  => 'Product Details',
+                    'Action'
+                ),
+                $this->url, $this->sort, $this->desc); ?>
+        </tr>
+    </thead>
+    <tbody>
+        <?php
+        if (isset($this->goods) and $this->goods)
+            foreach ($this->goods as $k=>$good): ?>
+        <tr>
+            <td>
+                <?php
+                    $inc = $this->offset + $k + 1;
+                    echo $inc;
+                ?>
+            </td>
+            <td><?php echo $good['name'] ?></td>
+            <td>
+                <?php
+                    if(!empty($good['color']))
+                        $colors = explode(',', $good['color']);
+                    else $colors = array();
+                ?>
+                <?php foreach ($colors as $color): ?>
+                    <span class="label"><?php echo $this->colors[$color] ?></span>
+                <?php endforeach ?>
+            </td>
+            <td><?php if ( isset( $this->good_categories ) && isset( $this->good_categories[$good['cat_id']] ) ) echo $this->good_categories[$good['cat_id']] ?></td>
+            <td><?php if ( isset( $this->brands ) && isset( $this->brands[$good['brand_id']] ) ) echo $this->brands[$good['brand_id']] ?></td>
+            
+            <td><?php echo $good['desc'] ?></td>
+
+            <td class="">
+                <center><a title="Edit"  href="/product/add-hold-product?good_id=<?php echo $good['id'];?>" class="btn btn-success"> <i class="icon-edit"></i></a></center>
+                <!-- <a title="Delete" class="confirmLink" href="/product/product-delete?id=<?php echo $good['id'];?>"> <i class="icon-trash"></i></a>
+                 <!-- Update By PungPond -->
+                <!--<a title="Edit" href="#" onclick="change_price(<?php echo $good['id'];?>,'<?php echo $good['price_3']?>','<?PHP echo $good['name'] ?>')"  > <i class="icon-usd"></i></a> -->
+            </td>
+        </tr>
+        <?php endforeach;?>
+
+    </tbody>
+</table>
+<div class="paging">
+    <?php echo $this->paging($this->total, $this->limit, $this->offset, $this->url);?>
+</div>
+
+<?php echo $this->load();?>
+<?php echo $this->confirm();?>
+

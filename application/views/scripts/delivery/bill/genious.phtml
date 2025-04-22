@@ -1,0 +1,106 @@
+<meta charset="utf-8">
+<?php 
+    if (isset($this->order)): 
+        //print_r($this->order);
+?>
+<table  border=0>
+    <tr height="15px">
+        <td width="141px"></td>
+        <td width="207px"></td>
+        <td ></td>
+        <td width="155px"></td>
+    </tr>
+    <tr height="135px">
+        <td></td>
+        <td></td>
+        <td style="line-height: 15px;" valign="top">
+            <font face="Angsana New" size="3pt">
+            <div style="margin-left: 80px;"><?php echo $this->order['d_code'].'<br/>';?></div>
+            <div style="margin-top: 2px;margin-left: 60px;"><?php echo "(".$this->order['sales_sn_ref'].")";?></div>
+            <div style="margin-top: 3px;"><?php if(isset($this->order['title']) && $this->order['title']){echo $this->order['title'];}?></div>
+            <div><?php if(isset($this->order['d_contact']) && $this->order['d_contact']){echo $this->order['d_contact'];}?></div>
+            <div><?php if(isset($this->order['add_time']) && $this->order['add_time'] > '2017-03-15 00:00:00'){echo My_Address::genAddessDelivery($this->order['shipping_id']);}else{echo $this->order['address'];}?></div>
+            <div><?php if(isset($this->order['tel']) && $this->order['tel']){echo $this->order['tel'];}?></div>
+
+
+                <!-- <?php echo $this->order['title']; ?> <br/>
+                <?php echo $this->order['d_contact']; ?> <br/>
+                <?php if (isset($this->order['add_time']) and $this->order['add_time'] > '2017-03-15 00:00:00') {?>
+                <?php echo My_Address::genAddessDelivery($this->order['shipping_id']); ?> <br/>
+                <?PHP }else{ ?>
+                <?php echo $this->order['address']; ?> <br/>
+                <?PHP } ?>
+                <?php echo $this->order['tel']; ?> <br/>
+                <?php echo $this->order['d_code']." (".$this->order['sales_sn_ref'].")"; ?> -->
+            </font>
+        </td>
+        <td></td>
+    </tr>
+    <tr height="55px">
+        <td></td>
+        <td></td>
+        <td></td>
+        <td></td>
+    </tr>
+    <tr>
+        <td></td>
+        <td valign="top">
+            <font face="Angsana New" size="3pt">
+                โทรศัพท์ : <?php echo $this->order['cnt_phone']; ?> <br/>
+                ถุง : <?php echo $this->order['cnt_bag']; ?> <br />
+                อุปกรณ์เสริม : <?php echo $this->order['cnt_acc']; ?> <br />
+            </font>
+        </td>
+        <td></td>
+        <td></td>
+    </tr>
+</table>
+<!--
+        <a href="<?php echo $this->refer ?>" class="no_print">Back - Click here if not automatically redirect browsers</a>
+        <div class="wrapper">
+            <p class="element name"><?php echo $this->order['receiver'];  ?></p>
+            <p class="element address"><?php echo $this->order['address']; ?></p>
+            <p class="element tel"><?php echo $this->order['phone_number']; ?></p>
+            <p class="element province">
+                <?php if (isset($this->order['district'])) echo My_Region::getValue($this->order['district'], My_Region::Province) ?>
+            </p>
+            <p class="element district">
+                <?php if (isset($this->order['district'])) echo My_Region::getValue($this->order['district'], My_Region::District) ?>
+            </p>
+            <p class="element weight"><?php //echo $this->order['weight']; ?></p>
+            <p class="element package"><?php //echo $this->order['number_of_package']; ?></p>
+        </div>
+-->
+    <script>
+        try {
+            (function() {
+
+                var beforePrint = function() {
+                    // console.log('before');
+                };
+
+                var afterPrint = function() {
+                    window.location.href = "<?php echo $this->refer ?>";
+                    // console.log('after');
+                };
+
+                if (window.matchMedia) {
+                    var mediaQueryList = window.matchMedia('print');
+                    mediaQueryList.addListener(function(mql) {
+                        if (mql.matches)
+                            beforePrint();
+                        else
+                            afterPrint();
+                    });
+                }
+
+                window.onbeforeprint = beforePrint;
+                window.onafterprint = afterPrint;
+                window.print();
+            }());
+        } catch (err) {
+            console.log(err.message);
+        }
+    </script>
+<?php endif ?>
+

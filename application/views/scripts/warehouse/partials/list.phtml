@@ -1,0 +1,174 @@
+<table class="table table-bordered">
+    <thead>
+        <tr>
+            <?php echo $this->sorting(array(
+                'name' => 'Warehouse Name',
+                'Affiliated Distributor',
+                'Area',
+                'Provience',
+                'Warehouse Type',
+                'External Serial Number',
+                'Marketable',
+                'Leader',
+                'Leader Tel.',
+                'Store Affiliation',
+                'Remarks',
+                'Modifier',
+                'Modified Time',
+                'Status',
+                'Action'
+            ),
+            $this->url, $this->sort, $this->desc); ?>
+        </tr>
+    </thead>
+    <tbody>
+        <?php
+        if (isset($this->warehouses) and $this->warehouses)
+            foreach ($this->warehouses as $k => $warehouse): ?>
+                <?php
+
+                $QDistributor = new Application_Model_Distributor();
+                $distributor_data = $QDistributor->getSuperiorDistributor($warehouse['id']);
+
+                if($warehouse['status'] == 1) {
+                    $status = '<span style="color: green"> In Cooperation </span>';
+                }else if($warehouse['status'] == 2) {
+                    $status = '<span style="color: orange"> Suspend Cooperation </span>';
+                }else if($warehouse['status'] == 3) {
+                    $status = '<span style="color: red"> Close </span>';
+                } 
+
+                ?>
+                <tr>
+            <!--   <td>
+                <?php
+                    $inc = $this->offset + $k + 1;
+                    echo $inc;
+                ?>
+            </td> -->
+            <td><?php echo $warehouse['name']; ?></td>
+            <td><?php echo $distributor_data[0]['title'] ?></td>
+            <td><?php echo $this->area[$warehouse['area_id']] ?></td>
+            <td><?php echo $this->provience[$warehouse['province_id']] ?></td>
+            <td><?php echo $this->warehouseType[$warehouse['warehouse_type']] ?></td>
+            <td><?php echo $warehouse['external_serial'] ?></td>
+            <td><?php if($warehouse['market_table'] == 1) { echo "Yes"; }else{ echo "No"; } ?></td>
+            <td><?php echo $warehouse['leader'] ?></td>
+            <td><?php echo $warehouse['phone'] ?></td>
+            <td><?php if($warehouse['affiliation'] == 1) { echo "Private Warehouse"; }else{ echo "Third-party Warehouse"; } ?></td>
+            <td><?php echo $warehouse['remark'] ?></td>
+            <td><?php echo $this->staff[$warehouse['updated_by']] ?></td>
+            <td><?php echo $warehouse['updated_at'] ?></td>
+            <td><?php echo $status ?></td>
+
+            <td class="">
+                <a href="<?php echo HOST ?>warehouse/warehouse-detail?id=<?php echo $warehouse['id'] ?>">Detail</a>
+
+                <?php if($warehouse['status'] == 1) { ?>
+                | <a href="<?php echo HOST ?>warehouse/warehouse-create?id=<?php echo $warehouse['id'];?>">Edit</a>
+                <?php } ?>
+
+                <?php if(in_array($warehouse['status'], array(1,2))) { ?>
+                | <a href="#myModal" 
+                data-id="<?php echo $warehouse['id'] ?>" 
+                data-name="<?php echo $warehouse['name'] ?>" 
+                data-event ="close" 
+                data-title ="Close"
+                style="color: red;" data-toggle="modal" role="button" class="modal-function">Close Distributor</a>
+                 <?php } ?>
+
+                <?php if(in_array($warehouse['status'], array(1))) { ?>
+                | <a href="#myModal"
+                data-id="<?php echo $warehouse['id'] ?>"
+                data-name="<?php echo $warehouse['name'] ?>"
+                data-event="puss"
+                data-title="Suspend Cooperation"
+                style="color: orange;" data-toggle="modal" role="button" class="modal-function">Suspend Cooperation</a>
+                <?php } ?>
+
+                <?php if(in_array($warehouse['status'], array(3,2))) { ?>
+                | <a href="#myModal"
+                data-id="<?php echo $warehouse['id'] ?>"
+                data-name="<?php echo $warehouse['name'] ?>"
+                data-event="restart"
+                data-title="Restart cooperation"
+                data-toggle="modal" role="button" class="modal-function">Restart Cooperation</a>
+                <?php } ?>
+
+
+                <!-- <a title="Delete" class="confirmLink" href="/warehouse/warehouse-delete?id=<?php echo $warehouse['id'];?>"> <i class="icon-trash"></i></a> -->
+                <!--  <a title="Edit" href="/warehouse/warehouse-create?id=<?php echo $warehouse['id'];?>"> <i class="icon-edit"></i></a>
+                <a title="Close" href="/warehouse/warehouse-close?id=<?php echo $warehouse['id']; ?>"><i class="icon-ban-circle"></i></a>
+                <a title="Open" href="/warehouse/warehouse-open?id=<?php echo $warehouse['id']; ?>"><i class="icon-circle-blank"></i></a>  -->
+            </td>
+        </tr>
+    <?php endforeach;?>
+
+</tbody>
+</table>
+<div class="paging">
+    <?php echo $this->paging($this->total, $this->limit, $this->offset, $this->url);?>
+</div>
+
+
+<!-- Modal -->
+<div id="myModal" class="modal hide fade" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+    <div class="modal-header">
+        <button type="button" class="close" data-dismiss="modal" aria-hidden="true">×</button>
+        <h3 id="ModalLabel"></h3>
+    </div>
+    <form action="<?php echo HOST.'warehouse/warehouse-event';?>" method="post">
+        <div class="modal-body">
+            <div class="span5">
+                <div class="control-group">
+                    <label class="control-label span2">Warehouse :  </label>
+                    <div class="controls">
+                        <input type="text" name="warehouse_name" id="warehouse_name" value="" readonly />
+                    </div>
+                </div>
+
+                <div class="control-group">
+                    <label class="control-label span2">Reason : </label>
+                    <div class="controls">
+                        <textarea cols="2" rows="2" name="remark" id="remark"></textarea>
+                    </div>
+                </div>
+                <p style="color: orange;">Close Warehouse is irrevocable. Please enable it with</p>
+            </div>
+
+        </div>
+        <div class="modal-footer">
+            <input type="hidden" name="id" id="w_id">
+            <input type="hidden" name="event" id="event">
+            <button class="btn" data-dismiss="modal" aria-hidden="true">Close</button>
+            <button class="btn btn-success">Save changes</button>
+        </div>
+    </form>
+
+</div>
+
+<script type="text/javascript">
+    $(document).on("click", ".modal-function", function () {
+        var Id = $(this).data('id');
+        var Name = $(this).data('name');
+        var Event = $(this).data('event');
+        var Title = $(this).data('title');
+
+        $(".modal-body #warehouse_name").val(Name);
+        $("#w_id").val(Id);
+        $("#event").val(Event);
+        $("#ModalLabel").text(Title);
+
+    });
+
+
+    $(document).ready(function() {
+        $('#myModal').on('hidden.bs.modal', function (e) {
+            $("#remark").val('');
+        });
+    })
+
+</script>
+
+<?php echo $this->load();?>
+<?php echo $this->confirm();?>

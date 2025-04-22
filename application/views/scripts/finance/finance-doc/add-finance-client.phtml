@@ -1,0 +1,245 @@
+<link rel="stylesheet" href="<?php echo HOST?>css/select2.css" />
+<script src="<?php echo HOST?>js/select2.js"></script>
+
+<div class="page-header">
+	<?php if(isset($this->financeClient) && $this->financeClient) : ?>
+		<h1 style="font-family: Times New Roman;">Edit Financial Client</h1>
+	<?php else: ?>
+		<h1 style="font-family: Times New Roman;">Add Financial Client</h1>
+	<?php endif; ?>
+</div>
+
+<form class="form-horizontal" action="<?php echo HOST ?>finance/save-finance-client" method="post">
+	<div class="row" style="border-style: solid; padding: 30px 10px 10px 10px; border-color: lavender;">
+
+		<div class="span6">
+
+			<div class="control-group">
+				<label for="dis_id_m" class="span2"><span style="color: red">*</span> Distributor(My Side) : </label>
+				<div class="controls">
+					<select class="span3" name="dis_id_m" id="dis_id_m" required <?php if(isset($this->financeClient) && $this->financeClient) : ?> disabled <?php endif ?>>
+						<option value=""> Please Selected </option>
+
+						<?php foreach ($this->distributor as $value) : ?>
+							<option value="<?php echo $value['id'] ?>" <?php if(isset($this->financeClient['distributor_m_id']) && $this->financeClient['distributor_m_id'] == $value['id']) : ?> selected <?php endif; ?> ><?php echo $value['title'] ?></option>
+						<?php endforeach; ?>
+
+					</select>
+				</div>
+			</div>
+
+			<div class="control-group">
+				<label for="dis_id_y" class="span2"><span style="color: red">*</span> Distributor(Your Side) : </label>
+				<div class="controls">
+					<select class="span3" name="dis_id_y" id="dis_id_y" required>
+						<option value=""> Please Selected </option>
+
+						<?php if(isset($this->financeClient) && $this->financeClient) : ?>
+							<?php foreach ($this->distributor_y as $value) : ?>
+								<option value="<?php echo $value['id'] ?>" <?php if(isset($this->financeClient['distributor_y_id']) && $this->financeClient['distributor_y_id'] == $value['id']) : ?> selected <?php endif; ?> ><?php echo $value['title'] ?></option>
+							<?php endforeach; ?>
+						<?php endif; ?>
+
+					</select>
+				</div>
+			</div>
+
+			<div class="control-group">
+				<label for="" class="span2"><span style="color: red">*</span> Mnemonic code : </label>
+				<div class="controls">
+					<input type="text" name="mnemonic_code" id="mnemonic_code" class="span3" required value="<?php echo $this->financeClient['mnemonic_code'] ?>" />
+				</div>
+			</div>
+
+			<div class="control-group">
+				<label for="" class="span2"><span style="color: red">*</span> Finance Client : </label>
+				<div class="controls">
+					<input type="text" name="finance_client" id="finance_client" class="span3" required value="<?php echo $this->financeClient['name'] ?>" />
+				</div>
+			</div>
+
+			<div class="control-group">
+				<label for="" class="span2">Finance Warehouse : </label>
+				<div class="controls">
+					<select class="span3" name="finance_warehouse" id="finance_warehouse">
+						<option value=""> Please Selected </option>
+
+						<?php if(isset($this->financeClient) && $this->financeClient) : ?>
+							<?php foreach ($this->financeWarehouse as $value) : ?>
+								<option value="<?php echo $value['id'] ?>" <?php if(isset($this->financeClient['fw_id']) && $this->financeClient['fw_id'] == $value['id']) : ?> selected <?php endif; ?> ><?php echo $value['name'] ?></option>
+							<?php endforeach; ?>
+						<?php endif; ?>
+					</select>
+				</div>
+			</div>
+
+			<div class="control-group">
+				<label for="" class="span2">Off/On : </label>
+				<div class="controls">
+					<select class="span3" name="status" id="status">
+						<option value="1" <?php if(isset($this->financeClient['status']) && $this->financeClient['status'] == 1) : ?> selected <?php endif; ?> > On </option>
+						<option value="2" <?php if(isset($this->financeClient['status']) && $this->financeClient['status'] == 2) : ?> selected <?php endif; ?> > Off </option>
+					</select>
+				</div>
+			</div>
+
+		</div>
+
+		<div class="span6">
+
+			<div class="control-group">
+				<label for="account_org_m" class="span3">Accounting organization(My Side) : </label>
+				<div class="controls">
+					<select class="span3" name="account_org_m" id="account_org_m">
+						<option value=""> Please Selected </option>
+
+						<?php if(isset($this->financeClient) && $this->financeClient) : ?>
+							<?php foreach($this->account_org_m as $value) : ?>
+								<option value="<?php echo $value['id'] ?>" <?php if(isset($this->financeClient['account_m']) && $this->financeClient['account_m'] == $value['id']) : ?> selected <?php endif; ?> > <?php echo $value['name'] ?> </option>
+							<?php endforeach; ?> 
+						<?php endif; ?>
+
+					</select>
+				</div>
+			</div>
+
+			<div class="control-group">
+				<label for="account_org_y" class="span3">Accounting organization(Your Side) : </label>
+				<div class="controls">
+					<select class="span3" name="account_org_y" id="account_org_y">
+						<option value=""> Please Selected </option>
+
+						<?php if(isset($this->financeClient) && $this->financeClient) : ?>
+							<?php foreach($this->account_org_y as $value) : ?>
+								<option value="<?php echo $value['id'] ?>" <?php if(isset($this->financeClient['account_y']) && $this->financeClient['account_y'] == $value['id']) : ?> selected <?php endif; ?> ><?php echo $value['name'] ?></option>
+							<?php endforeach; ?>
+						<?php endif; ?>
+
+					</select>
+				</div>
+			</div>
+
+			<div class="control-group">
+				<label for="cross_account" class="span3"><span style="color: red">*</span> Cross - accounting organizations : </label>
+				<div class="controls">
+					<select class="span3" name="cross_account" id="cross_account" required>
+						<option value="2" <?php if(isset($this->financeClient['cross_account']) && $this->financeClient['cross_account'] == 2) : ?> selected <?php endif; ?> > No </option>
+						<option value="1" <?php if(isset($this->financeClient['cross_account']) && $this->financeClient['cross_account'] == 1) : ?> selected <?php endif; ?> > Yes </option>
+					</select>
+				</div>
+			</div>
+
+			<div class="control-group">
+				<label for="network" class="span3">Network : </label>
+				<div class="controls">
+					<select class="span3" name="network" id="network">
+						<option value=""> Please Select </option>
+						<option value="1" <?php if(isset($this->financeClient['network']) && $this->financeClient['network'] == 1) : ?> selected <?php endif; ?> > All Networks </option>
+					</select>
+				</div>
+			</div>
+
+			<div class="control-group">
+				<label for="support_money" class="span3">Support the use of money :</label>
+				<div class="controls">
+					<select class="span3" name="support_money" id="support_money">
+						<option value="1" <?php if(isset($this->financeClient['support_money']) && $this->financeClient['support_money'] == 1) : ?> selected <?php endif; ?> > Discount </option>
+						<option value="2" <?php if(isset($this->financeClient['support_money']) && $this->financeClient['support_money'] == 2) : ?> selected <?php endif; ?> > Goods Payment Discount </option>
+					</select>
+				</div>
+			</div>
+
+			<div class="control-group">
+				<label for="remark" class="span3">Remark : </label>
+				<div class="controls">
+					<textarea class="span3" rows="2" cols="2" name="remark" id="remark"><?php echo $this->financeClient['remark'] ?></textarea>
+				</div>
+			</div>
+
+		</div>
+
+		<div class="span12" style="padding-bottom: 400px; padding-left: 50px; padding-top: 20px;">
+			<div class="control-group">
+				<input type="hidden" name="id" value="<?php echo $this->financeClient['id'] ?>">
+				<input type="hidden" id="back_url" name="back_url" value="/finance/finance-client">
+				<button type="submit" class="btn btn-success"> Save </button>
+				<button type="button" class="btn btn-danger go-back"> Back </button>
+			</div>
+		</div>
+
+	</div>
+</form>
+
+
+<script type="text/javascript">
+	$('#dis_id_m, #dis_id_y').select2();
+
+
+	$(document).ready(function () {
+
+		initGoBack();
+
+		$( "#dis_id_m" ).change(function() {
+			var distributor_id    = $('#dis_id_m').val();
+
+			$.get("/finance/load-distributor",
+				{distributor_id : distributor_id}
+				,function(data,status){
+					var data = $.parseJSON( data );
+
+					if (data.distributor){
+						var obj = data.distributor;
+						$('#dis_id_y').html('<option value="0"> Please Selected </option>');
+						for (var i = 0; i < obj.length; i++) {
+							$('#dis_id_y').append('<option value="'+obj[i]['id']+'">'+obj[i]['title']+'</option>');
+						}
+					}
+
+					if (data.financewarehouse){
+						var obj = data.financewarehouse;
+						$('#finance_warehouse').html('<option value="0"> Please Selected </option>');
+						for (var i = 0; i < obj.length; i++) {
+							$('#finance_warehouse').append('<option value="'+obj[i]['id']+'">'+obj[i]['name']+'</option>');
+						}
+					}
+
+					if (data.account){
+						var obj = data.account;
+						$('#account_org_m').html('<option value="0"> Please Selected </option>');
+						for (var i = 0; i < obj.length; i++) {
+							$('#account_org_m').append('<option value="'+obj[i]['id']+'">'+obj[i]['name']+'</option>');
+						}
+					}
+
+				});
+		});
+
+		$( "#dis_id_y" ).change(function() {
+			var d_id    = $('#dis_id_y').val();
+
+			$.get("/finance/load-distributor",
+				{d_id : d_id}
+				,function(data,status){
+					var data = $.parseJSON( data );
+
+					if (data.account){
+						var obj = data.account;
+						$('#account_org_y').html('<option value="0"> Please Selected </option>');
+						for (var i = 0; i < obj.length; i++) {
+							$('#account_org_y').append('<option value="'+obj[i]['id']+'">'+obj[i]['name']+'</option>');
+						}
+					}
+
+				});
+
+		});	
+
+	});
+	
+	function initGoBack(){
+		$('.go-back').click(function(e){
+			window.location.href = $('#back_url').val();
+			return false;
+		});
+	}
+</script>

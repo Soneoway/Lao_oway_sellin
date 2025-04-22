@@ -1,0 +1,132 @@
+
+ <style type="text/css">
+ .col-sm-2 {
+                float: left;
+                width: 19%;
+                padding: 10px;
+                height: 90px;
+                
+            }
+.btu {
+    margin-left: -100px;
+}
+h2{
+  font-size: 17px;
+  margin-top: 3px;
+}
+ .box-score{
+    height: 45px;
+    margin-top: -9px;
+    font-size: 17px;
+ }
+ /*////////////////////*/
+ .box{ margin-top: -15px; height: 45px; font-size: 17px;}
+ .card-color {
+  margin-left: 345px;
+  /*margin-top: 120px;*/
+  width: 240px;
+ }
+
+ .card-color1 {
+  margin-top: 120px;
+ }
+
+</style>
+
+<?php
+    
+    if (isset($this->messages) and $this->messages)
+        foreach ($this->messages as $message):
+            echo '<div class="alert alert-error">'.$message.'</div>';
+        endforeach;
+?>
+
+<h4> Sync date:: <?php echo $this->create_date; ?></h4>
+
+<div class="row" style="height: 450px;">
+  
+  <center>
+      <div class="col-sm-2">
+        <div class="box-score-head">
+            <h2>Storage</h2>
+        </div>
+        <div class="box-score">
+             <p><?php if(isset($this->total_storage) && $this->total_storage > 0){echo $this->total_storage;}else{echo '0';} ?></p>
+        </div>
+      </div>
+
+   <div class="col-sm-2 btu">
+    <div class="box-score-head">
+        <h2>Available</h2>
+    </div>
+    <div class="box-score">
+         <p><?php if(isset($this->total_available) && $this->total_available > 0){echo $this->total_available;}else{echo '0';} ?></p>
+    </div>
+  </div>
+
+  <div class="col-sm-2 btu">
+    <div class="box-score-head">
+        <h2>Request (Unit)</h2>
+    </div>
+    <div class="box-score">
+         <p><?php if(isset($this->total_count_good['count_good']) && $this->total_count_good['count_good'] > 0){echo $this->total_count_good['count_good'];}else{echo '0';} ?></p>
+    </div>
+  </div>
+
+  <div class="col-sm-2 btu">
+    <div class="box-score-head">
+        <h2>Request (SO)</h2>
+    </div>
+    <div class="box-score">
+         <p><?php if(isset($this->total_bill['count_so']) && $this->total_bill['count_so'] > 0){echo $this->total_bill['count_so'];}else{echo '0';} ?></p>
+    </div>
+  </div>
+
+  <div class="col-sm-2 btu">
+    <div class="box-score-head">
+        <h2>Payment Confirm</h2>
+    </div>
+    <div class="box-score">
+         <p><?php if(isset($this->total_bill_unsucc['count_so']) && $this->total_bill_unsucc['count_so'] > 0){echo $this->total_bill_unsucc['count_so'];}else{echo '0';} ?></p>
+    </div>
+  </div>
+
+   <div class="col-sm-2 btu">
+    <div class="box-score-head">
+        <h2>Finance Confirm</h2>
+    </div>
+    <div class="box-score">
+         <p><?php if(isset($this->total_financ['count_so']) && $this->total_financ['count_so'] > 0){echo $this->total_financ['count_so'];}else{echo '0';} ?></p>
+    </div>
+  </div>
+
+  <div class="col-sm-2 btu">
+    <div class="box-score-head">
+        <h2>Scaned Out</h2>
+    </div>
+    <div class="box-score">
+         <p><?php if(isset($this->total_scaned['count_so']) && $this->total_scaned['count_so'] > 0){echo $this->total_scaned['count_so'];}else{echo '0';} ?></p>
+    </div>
+  </div>
+ </center>
+<!-- ##################### -->
+  <div class="row" style="height: 150px;">
+      <?php 
+    $count_class = 0;
+        if(isset($this->bill_color) and $this->bill_color)
+        foreach ($this->bill_color as $data):
+      
+    $count_class++;
+      ?>
+        <div class="card-color card-color<?=$count_class?>" align="center">
+          <div class="box-score-head">
+            <h2><?php echo $data['name'];?>(<?=$count_class?>)</h2>
+          </div>
+          <div class="box-score box">
+            <p><?php if(isset($data['count_good']) && $data['count_good'] > 0){ echo $data['count_good'];}else{echo '0';}?></p>
+          </div>
+        </div>
+      <?php endforeach; ?>
+  </div>
+<!-- ##################### -->
+</div>

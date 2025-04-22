@@ -1,0 +1,975 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="utf-8">
+  <title>Oppo Lao Invoce</title>
+  <link rel="icon" type="image/ico" href="/img/mini-icon.png" />
+  <link href="/css/bootstrap.min.css" rel="stylesheet">
+  <link href="/css/bootstrap-responsive.min.css" rel="stylesheet">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+Lao&display=swap" rel="stylesheet">
+
+  <link href="https://cdnjs.cloudflare.com/ajax/libs/limonte-sweetalert2/10.10.1/sweetalert2.min.css"
+  rel="stylesheet">
+
+  <link href="/css/font-awesome.css" rel="stylesheet">
+  <link href="/css/style.css" rel="stylesheet">
+  <link href="/css/default.css" rel="stylesheet">
+  <link href="/css/pages/dashboard.css" rel="stylesheet">
+  <link href="/css/alertify.core.css" rel="stylesheet">
+  <link href="/css/alertify.default.css" rel="stylesheet">
+
+  <style type="text/css">
+
+    body {
+      padding-top: 0px;
+      font-size: 14px;
+    }
+
+  </style>
+
+</head>
+<body>
+
+  <?php
+  function convertNumber($num)
+  {
+   list($num, $dec) = explode(".", $num);
+
+   $output = "";
+
+   if($num{0} == "-" )
+   {
+    $output = "negative ";
+    $num = ltrim($num, "-");
+  }
+  else if($num{0} == "+")
+  {
+    $output = "positive ";
+    $num = ltrim($num, "+");
+  }
+
+  if($num{0} == "0")
+  {
+    $output .= "zero";
+  }
+  else
+  {
+    $num = str_pad($num, 36, "0", STR_PAD_LEFT);
+    $group = rtrim(chunk_split($num, 3, " "), " ");
+    $groups = explode(" ", $group);
+
+    $groups2 = array();
+    foreach($groups as $g) $groups2[] = convertThreeDigit($g{0}, $g{1}, $g{2});
+
+    for($z = 0; $z < count($groups2); $z++)
+    {
+     if($groups2[$z] != "")
+     {
+      $output .= $groups2[$z].convertGroup(11 - $z).($z < 11 && !array_search('', array_slice($groups2, $z + 1, -1))
+       && $groups2[11] != '' && $groups[11]{0} == '0' ? " and " : ", ");
+    }
+  }
+
+  $output = rtrim($output, ", ");
+}
+
+if($dec > 0)
+{
+  $output .= " point";
+  for($i = 0; $i < strlen($dec); $i++) $output .= " ".convertDigit($dec{$i});
+}
+
+return $output;
+}
+
+function convertGroup($index)
+{
+ switch($index)
+ {
+  case 11: return " Decillion";
+  case 10: return " Nonillion";
+  case 9: return " Octillion";
+  case 8: return " Septillion";
+  case 7: return " Sextillion";
+  case 6: return " Quintrillion";
+  case 5: return " Quadrillion";
+  case 4: return " Trillion";
+  case 3: return " Billion";
+  case 2: return " Million";
+  case 1: return " Thousand";
+  case 0: return "";
+}
+}
+
+function convertThreeDigit($dig1, $dig2, $dig3)
+{
+ $output = "";
+
+ if($dig1 == "0" && $dig2 == "0" && $dig3 == "0") return "";
+
+ if($dig1 != "0")
+ {
+  $output .= convertDigit($dig1)." hundred";
+  if($dig2 != "0" || $dig3 != "0") $output .= " and ";
+}
+
+if($dig2 != "0") $output .= convertTwoDigit($dig2, $dig3);
+else if($dig3 != "0") $output .= convertDigit($dig3);
+
+return $output;
+}
+
+function convertTwoDigit($dig1, $dig2)
+{
+ if($dig2 == "0")
+ {
+  switch($dig1)
+  {
+   case "1": return "Ten";
+   case "2": return "Twenty";
+   case "3": return "Thirty";
+   case "4": return "Forty";
+   case "5": return "Fifty";
+   case "6": return "Sixty";
+   case "7": return "Seventy";
+   case "8": return "Eighty";
+   case "9": return "Ninety";
+ }
+}
+else if($dig1 == "1")
+{
+  switch($dig2)
+  {
+   case "1": return "Eleven";
+   case "2": return "Twelve";
+   case "3": return "Thirteen";
+   case "4": return "Fourteen";
+   case "5": return "Fifteen";
+   case "6": return "Sixteen";
+   case "7": return "Seventeen";
+   case "8": return "Eighteen";
+   case "9": return "Nineteen";
+ }
+}
+else
+{
+  $temp = convertDigit($dig2);
+  switch($dig1)
+  {
+   case "2": return "Twenty-$temp";
+   case "3": return "Thirty-$temp";
+   case "4": return "Forty-$temp";
+   case "5": return "Fifty-$temp";
+   case "6": return "Sixty-$temp";
+   case "7": return "Seventy-$temp";
+   case "8": return "Eighty-$temp";
+   case "9": return "Ninety-$temp";
+ }
+}
+}
+
+function convertDigit($digit)
+{
+ switch($digit)
+ {
+  case "0": return "Zero";
+  case "1": return "One";
+  case "2": return "Two";
+  case "3": return "Three";
+  case "4": return "Four";
+  case "5": return "Five";
+  case "6": return "Six";
+  case "7": return "Seven";
+  case "8": return "Eight";
+  case "9": return "Nine";
+}
+}
+?>
+
+<?php 
+$distributor_details= $this->distributor_details;
+$getInvoiceDetails= $this->getInvoiceDetails;
+$getarea = $this->getarea;
+
+$total = count($getInvoiceDetails);
+
+$show_item=20;
+$totalpage= CEIL(($total/$show_item));
+
+if($totalpage<=0)
+{
+  $totalpage =1;
+}
+
+$QDistributor = new Application_Model_Distributor();
+$distributor_cache = $QDistributor->get_cache2();
+
+$superi = $QDistributor->getSuperiorDistributor($distributor_details[0]['warehouse_id']);
+
+if($distributor_details[0]['agent_status'] == 1 ) {
+
+  $retailer_name = $distributor_details[0]['warehouse_name'];
+  $retailer_address = $distributor_details[0]['warehouse_address'];
+  $retailer_tel = $distributor_details[0]['warehouse_tel'];
+  $retailer_leader = $distributor_details[0]['warehouse_leader'];
+
+}elseif($distributor_details[0]['agent_status'] == 0) {
+
+  $retailer_name = $distributor_details[0]['store_name'];
+  $retailer_address = $distributor_details[0]['store_address'];
+  $retailer_tel = $distributor_details[0]['store_tel'];
+  $retailer_leader = $distributor_details[0]['store_leader'];
+
+}
+
+?>
+
+<?php
+
+if($distributor_details[0]['not_money'] ==''){
+
+  $num = 1;
+  $row_count = 0;
+  $text_num = 1;
+  $text_row_count = 0;
+
+  for ($i = 1; $i <= $totalpage; $i++)
+  {
+
+
+    ?>
+
+    <!-- <table style="width:830px; height:135px; border: 0px;"></table> -->
+
+    <div style="width:830px; display: flex; justify-content: center; align-items: center; flex-wrap: nowrap; flex-direction: row;">
+
+      <div>
+
+        <div>
+          <div class="row" style="width:830px; padding-top: 0;">
+
+            <table width="820px">
+              <tr>
+                <td style="text-align: right; font-family: time news romans; font-size: 18px; padding: 10px 10px 10px 10px; font-weight: bold;"><span> 收款单 / INVOICE </span></td>
+                <td style="text-align: right; font-weight: bold;"><?php echo $distributor_details[0]['add_time'] ?></td>
+              </tr>
+            </table>
+
+          </div>
+        </div>
+
+        <div>
+          <div class="row" style="width:816px; padding-top: 0; padding-bottom: 5px; padding-left: 6px;">
+
+            <table width="815px">
+
+              <tr>
+
+                <td width="110px">
+                  <span style="font-family: time news roman; font-weight: bold; padding-right: 20px; padding-left: 10px;" > Sales NO. : </span> 
+                </td>
+
+                <td><?php echo $distributor_details[0]['sn_ref'] ?></td>
+
+
+                <td width="140px">
+                  <span style="font-family: time news roman; font-weight: bold; padding-right: 20px;" > Shipping No. : </span>
+                </td>
+
+                <td><?php echo $distributor_details[0]['sn'] ?> </td>
+
+              </tr>
+
+              <tr>
+
+                <td>
+                  <span style="font-family: time news roman; font-weight: bold; padding-right: 20px; padding-left: 10px;" > Ship From : </span>
+                </td>
+
+                <td width="270px"><?php echo $distributor_details[0]['ship_from'] ?> </td>
+
+                <td>
+                  <span style="font-family: time news roman; font-weight: bold; padding-right: 20px;" > From Distributor : </span>
+
+                </td>
+
+
+                <td><?php echo $superi[0]['title'] ?> </td>
+
+              </tr>
+
+              <tr>
+
+                <td>
+                  <span style="font-family: time news roman; font-weight: bold; padding-right: 20px; padding-left: 10px;" > Ship To : </span>
+                </td>
+
+                <td><?php echo $retailer_name ?> </td>
+
+                <td>
+                  <span style="font-family: time news roman; font-weight: bold; padding-right: 20px;" > To Distributor : </span>
+                </td>
+
+
+                <td><?php echo $distributor_cache[$distributor_details[0]['d_id']]['title'] ?> </td>
+
+              </tr>
+
+              <tr>
+
+                <td>
+                  <span style="font-family: time news roman; font-weight: bold; padding-right: 20px; padding-left: 10px;" > Contacts : </span>
+                </td>
+                <td><span style="font-family: Noto Sans Lao;"><?php echo $retailer_leader ?></span></td>
+
+                <td style="display: contents;" rowspan="2">
+                  <span style="font-family: time news roman; font-weight: bold; padding-right: 20px;" > Finance CLient : </span>
+                </td>
+
+
+                <td rowspan="2" valign="top" style="padding-top: 3px"><?php echo $distributor_details[0]['client_fullname']; ?></td>
+
+              </tr>
+
+              <tr>
+                <td colspan="2">
+                  <span style="font-family: time news roman; font-weight: bold; padding-right: 20px; padding-left: 10px;" > Phone number : </span>
+                  <?php echo $retailer_tel ?>
+                </td>
+              </tr>
+
+              <tr>
+                <td colspan="2">
+                  <span style="font-family: time news roman; font-weight: bold; padding-right: 20px; padding-left: 10px;" > Adress : </span>
+                  <span style="font-family: Noto Sans Lao"><?php echo $retailer_address ?></span>
+                </td>
+              </tr>
+
+            </table>
+
+          </div>
+        </div>
+
+        <div>
+          <div class="row" style="width:818px; padding-top: 2px; border-style: solid; border-width: 1px;">
+
+           <?php
+
+           $Cg = new Application_Model_GoodCategory();
+           $cname = $Cg->get_cache();
+
+             // $totalprice = 0;
+           for ($j = 0; $j < 8; $j++) :
+
+
+            $text_total = $getInvoiceDetails[$text_row_count]['total'];
+            $text_price = $getInvoiceDetails[$text_row_count]['price'];
+
+            $text_row_count+=1;
+            $text_num +=1;
+
+            $text_total_price += $text_total;
+
+          endfor;
+
+          ?>
+
+          <table width="820px">
+            <tr>
+              <td>
+                <span style="font-family: time news roman; font-weight: bold; padding-right: 20px; padding-left: 10px;" > Total Amount : </span>
+                <?php echo number_format($text_total_price); ?>
+              </td>
+
+                <td width="100px"></td>
+
+              <td>
+                <span style="font-family: time news roman; font-weight: bold; padding-right: 20px;" > Invoice No. : </span>
+                <?php echo $distributor_details[0]['invoice_number']; ?>
+              </td>
+            </tr>
+
+            <tr>
+              <td>
+                <span style="font-family: time news roman; font-weight: bold; padding-right: 20px; padding-left: 10px;" > Deduction : </span>
+                0 
+              </td>
+
+                <td width="100px"></td>
+
+              <td>
+                <span style="font-family: time news roman; font-weight: bold; padding-right: 20px;" > Payable Amount : </span>
+                <?php echo number_format($text_total_price); ?>
+              </td>
+            </tr>
+
+            <tr>
+              <td colspan="3">
+
+                <span style="font-family: time news roman; font-weight: bold; padding-right: 20px; padding-left: 10px;" > Amount remarks : </span>
+                <?php echo convertNumber($text_total_price); ?>
+              </td>
+            </tr>
+
+            <tr>
+              <td colspan="3">
+                <span style="font-family: time news roman; font-weight: bold; padding-right: 20px; padding-left: 10px;" > Sale Remarks : </span>
+                <?php echo $distributor_details[0]['po_name']; ?>
+              </td>
+            </tr>
+          </table>
+
+        </div>
+      </div>
+
+      <div>
+        <div class="row" style="width:820px; padding-top: 7px;">
+
+          <table width="820px" border="2px">
+
+            <thead>
+              <th style="text-align: center; font-size: 16px; padding-top: 5px; padding-bottom: 5px;"> No. </th>
+              <th style="text-align: center; font-size: 16px;"> Product Name. </th>
+              <th style="text-align: center; font-size: 16px;"> Product Type. </th>
+              <th style="text-align: center; font-size: 16px;"> Unit Price. </th>
+              <th style="text-align: center; font-size: 16px;"> Quantity. </th>
+              <th style="text-align: center; font-size: 16px;"> Total Amount. </th>
+            </thead>
+
+            <tbody>
+             <?php
+
+             $Cg = new Application_Model_GoodCategory();
+             $cname = $Cg->get_cache();
+
+             $totalprice=0;
+             for ($j = 0; $j < count($getInvoiceDetails); $j++) :
+
+              $total = $getInvoiceDetails[$row_count]['total'];
+              $price_bofor = $getInvoiceDetails[$row_count]['price']; 
+              $discount = $getInvoiceDetails[$row_count]['product_discount'];
+
+              $price = $price_bofor - (($price_bofor*$discount)/100) ;
+
+              $totalpriceall += $total;
+
+              $good_name = $getInvoiceDetails[$row_count]['good_name'];
+              $good_cname = $getInvoiceDetails[$row_count]['good_cname'];
+              $good_color= $getInvoiceDetails[$row_count]['good_color'];
+              $brand_name = $getInvoiceDetails[$row_count]['brand_name'];
+              $unit = $getInvoiceDetails[$row_count]['num'];
+
+              $saleout_text= $getInvoiceDetails[$row_count]['text'];
+              $salenum= $getInvoiceDetails[$row_count]['num'];
+              $SaleOffPercent= '';
+
+              if ($getInvoiceDetails[$row_count]['sale_off_percent'] < '1') :
+                $SaleOffPercent=$getInvoiceDetails[$row_count]['sale_off_percent'];
+              elseif($getInvoiceDetails[$row_count]['sale_off_percent'] <= '10') :
+                $SaleOffPercent='APK '.$getInvoiceDetails[$row_count]['sale_off_percent'].'%';
+              else :
+                $SaleOffPercent='For Staff '.$getInvoiceDetails[$row_count]['sale_off_percent'].'%';
+              endif;
+
+
+              if ($getInvoiceDetails[0]['type'] == 1) :
+
+                $product_type = 'Normal';
+              elseif($getInvoiceDetails[0]['type'] == 3) :
+
+                $product_type = 'Staff';
+              elseif($getInvoiceDetails[0]['type'] == 5) :
+
+                $product_type = 'Demo';
+              else:
+
+              endif;
+
+
+              $Paymenttype = '';
+              if ($getInvoiceDetails[0]['payment_type']=='CR') : $Paymenttype = 'Cash';
+                elseif ($getInvoiceDetails[0]['payment_type']=='CA') : $Paymenttype = 'Credit';
+                  else : $Paymenttype = '';
+                  endif;
+
+                  if($good_name =="") : $num=""; endif;
+
+                  $total_num += $getInvoiceDetails[$row_count]['num'];
+
+                  ?>
+
+                  <tr>
+                    <td style="text-align: center; padding-top: 4px; padding-bottom: 4px; font-size: 16px; font-weight: bold;"><?php echo $num ; ?></td>
+                    <td style="font-size: 16px; font-weight: bold;"><?php echo $brand_name ?>&nbsp;<?php echo $good_name?>&nbsp;<?php echo $good_color ?></td>
+                    <td style="text-align: center; font-size: 16px; font-weight: bold;"><?php echo $product_type; ?></td>
+                    <td style="text-align: center; font-size: 16px; font-weight: bold;"><?php if($price) { echo number_format($price); }else{ ""; } ?></td>
+                    <td style="text-align: center; font-size: 16px; font-weight: bold;"><?php echo $unit; ?></td>
+                    <td style="text-align: center; font-size: 16px; font-weight: bold;"><?php if($total) { echo number_format($total); }else{ ""; } ?></td>
+                  </tr>
+
+                  <?php    
+                  $total_num_count = $total_num_count + $getInvoiceDetails[$row_count]['num'];
+                  $row_count+=1;
+                  $num +=1;
+
+                  $total_price += $total;
+                  $total_unit_price += $price;
+
+                endfor;
+                ?>
+
+              </tbody>
+
+              <tfoot>
+                <tr>
+                  <td style="text-align: center; padding-top: 4px; padding-bottom: 4px; font-size: 16px; font-weight: bold;" > 合计 </td>
+                  <td></td>
+                  <td></td>
+                  <td></td>
+                  <td style="text-align: center; font-weight: bold; font-size: 16px;"><?php echo $total_num; ?></td>
+                  <td style="text-align: center;  font-weight: bold; font-size: 16px;">
+                    <?php echo number_format($total_price) ?> <span style="font-family: Noto Sans Lao;">ກີບ</span>
+                  </td>
+
+
+
+                </tr>
+              </tfoot>
+
+            </table>
+
+          </div>
+        </div>
+
+        <div style="padding-top: 20px">
+          <div class="row" style="width:820px; padding-top: 2px;">
+            <table width="820px">
+              <tr>
+                <td style="padding-left: 20px; font-size: 14px; font-weight: bold;"> Biller : </td>
+                <td style="padding-left: 20px; font-size: 14px; font-weight: bold;"> Verify : </td>
+                <td style="padding-left: 20px; font-size: 14px; font-weight: bold;"> Delivery : </td>
+                <td style="padding-left: 20px; font-size: 14px; font-weight: bold;"> Signature : </td>
+              </tr>
+            </table>
+
+          </div>
+        </div>
+
+
+      </div>
+
+    </div>
+
+
+  </body>
+
+
+
+<!-- <div class="row" style="border-style: solid; width:830px; height:135px;">
+
+    <div class="span12">
+      <div class="control-group">
+        <label> INVOICE </label>
+      </div>
+    </div>
+
+    <div class="row">
+
+      <div style="border-style: solid; width: 415px;">
+
+        <div class="control-group">
+          <label> Sales No. : </label>
+        </div>
+
+        <div class="control-group">
+          <label> Ship From : </label>
+        </div>
+
+      </div>
+
+      <div style="border-style: solid; width: 415px;">
+        <label> Shipping No. : </label>
+      </div>
+    </div>
+
+</div>
+-->
+
+  <!-- <div class="row">
+    <div style="width: 415px;" >
+
+      <div class="control-group" style="text-align: left; padding-left: 50px;">
+        <label>Sales No. : </label>
+      </div>
+
+      <div class="control-group" style="text-align: left; padding-left: 50px;">
+        <label> Form Distributor : </label>
+      </div>
+
+    </div>
+
+    <div style="width: 415px;" >
+
+      <div class="control-group" style="text-align: left; padding-left: 50px;">
+        <label>Shipping No. : </label>
+      </div>
+
+      <div class="control-group" style="text-align: left; padding-left: 50px;">
+        <label> Form Distributor : </label>
+      </div>
+
+    </div>
+  </div>
+</div> -->
+
+
+<!-- <table style="width:830px; height:135px; border: 0px;">
+<tr>
+  <td style="width:525px" id="td1">
+
+     <span id="b2">ບ້ານໜອງຈັນ, ເມືອງສີສັດຕະນາກ, ນະຄອນຫຼວງວຽງຈັນ. Nongchun Village,</span> <br>
+     <span id="b2">Sisattanak District, Vientiane ໂທ/Tel:021-228789, Mobile:020-97906577</span> <br>
+     <div>ບິນຂາຍສິນຄ້າ/销售单</div>
+  </td> 
+  <td rowspan="2" id="td">
+     ເລກທີ່ : <?php echo $distributor_details[0]['sn_ref']?>/<?php echo $distributor_details[0]['invoice_number']?><br>
+     ວັນທີ : <?php echo $distributor_details[0]['invoice_time'] ?> <br>
+     ຜູ້ສັ່ງຊື້ : <?php echo $distributor_details[0]['Fullname'] ?> <br>
+     ໂທ/Tel : <?php echo $distributor_details[0]['distributor_phone'] ?> <br>
+     TAX PO : <?php echo $distributor_details[0]['po_name'] ?> <br>
+  </td>
+</tr>
+ <tr style="height:40px">
+  <td id="td">
+     ລູກຄ້າ : <?php echo $distributor_details[0]['distributor_name'] ?> (Area: <?php echo $getarea[0]['name'] ?>)<br>
+     ທີ່ຢູ່ : <?php echo $distributor_details[0]['shipping_address'] ?>
+  </td>
+</tr>
+</table> -->
+
+<!-- Table 2 -->
+<!-- <table style="width:830px;" class="somediv">
+<tr>
+  <td id="tdfont" style="width:40px; padding: 5px;">ລ.ດ</td>
+  <td id="tdfont" style="width:50px;"> ລຸ້ນ</td>
+  <td id="tdfont" style="width:427px;"> ລາຍການສິນຄ້າ/Description</td>
+  <td id="tdfont" id="tdfont"style="width:40px; padding: 5px;">ຈຳນວນ</td>
+  <td id="tdfont" style="width:100px; padding: 5px;">ລາຄາ/ໜ່ວຍ</td>
+  <td id="tdfont" style="width:100px; padding: 5px;">Sale Off</td>
+  <td id="tdfont" style="width:130px; padding: 5px;">ລາຄາລວມ</td>
+</tr style="height:200px;">
+  <?php
+
+  $Cg = new Application_Model_GoodCategory();
+  $cname = $Cg->get_cache();
+  // $num =1 ;
+  $totalprice=0;
+  for ($j = 0; $j < 10; $j++)
+  {
+   
+
+    $total=$getInvoiceDetails[$row_count]['total'];
+    $price=$getInvoiceDetails[$row_count]['price']; 
+    $totalpriceall+=$total;
+
+    $good_name = $getInvoiceDetails[$row_count]['good_name'];
+    $good_cname = $getInvoiceDetails[$row_count]['good_cname'];
+    $good_color= $getInvoiceDetails[$row_count]['good_color'];
+    $brand_name = $getInvoiceDetails[$row_count]['brand_name'];
+
+    $saleout_text= $getInvoiceDetails[$row_count]['text'];
+    $salenum= $getInvoiceDetails[$row_count]['num'];
+    $SaleOffPercent= '';
+    if ($getInvoiceDetails[$row_count]['sale_off_percent'] < '1') {
+        $SaleOffPercent=$getInvoiceDetails[$row_count]['sale_off_percent'];
+    }elseif($getInvoiceDetails[$row_count]['sale_off_percent'] <= '10'){
+        $SaleOffPercent='APK '.$getInvoiceDetails[$row_count]['sale_off_percent'].'%';
+    }else{
+        $SaleOffPercent='For Staff '.$getInvoiceDetails[$row_count]['sale_off_percent'].'%';
+    }
+    
+
+    $Paymenttype = '';
+    if ($getInvoiceDetails[0]['payment_type']=='CR') {
+       $Paymenttype = 'Cash';
+    }
+    elseif ($getInvoiceDetails[0]['payment_type']=='CA') {
+       $Paymenttype = 'Credit';
+     }
+     else{
+       $Paymenttype = '';
+     }
+
+     if($good_name =="")
+     {
+        $num="";
+     }
+
+     if($price !=""){
+        $price = number_format($price,2);
+     }else{
+        $price="";
+     }
+
+    if($total !=""){
+        $total = number_format($total,2);
+     }else{
+        $total="";
+     }
+
+     $total_num += $getInvoiceDetails[$row_count]['num'];
+
+   ?>
+    <tr>
+      <td id="tdfont" class="boderset1">
+        <?php echo $num ; ?> <br>
+      </td>
+      <td id="tdfont" id="tdleft" class="boderset1" style="text-align: center;">
+        <?php echo $cname[$good_cname] ?>
+      </td>
+      <td id="tdfont" id="tdleft" class="boderset1" style="text-align: left; padding-left: 8px;">
+        <?php echo $brand_name ?>&nbsp;<?php echo $good_name?>&nbsp;<?php echo $good_color ?>
+      </td>
+      <td id="tdfont" class="boderset1"> 
+        <?php echo $getInvoiceDetails[$row_count]['num']?>
+      </td>
+      <td id="tdfont" id="tdright" class="boderset1" style="text-align: right; padding-right: 6px;">
+        <?php echo $price ?>
+      </td>
+      <td id="tdfont" id="tdright" class="boderset1" style="text-align: center; font-size: 12px;">
+        <?php echo $SaleOffPercent ?>
+      </td>
+      <td id="tdfont" id="tdright" class="boderset1" style="text-align: right; padding-right: 6px;">
+        <?php echo ($total) ?>
+      </td>
+  
+
+  </tr>
+  <?php    
+      $total_num_count = $total_num_count + $getInvoiceDetails[$row_count]['num'];
+      $row_count+=1;
+       $num +=1;
+
+    }
+  ?>
+</table> -->
+
+<!-- <table style="width:830px;">
+<tr>
+  <?php 
+  $PaymenDistcountpp = '';
+  $PaymenDistcountrebate = '';
+  if ($getInvoiceDetails[0]['dis_type_pp']=='1' AND $getInvoiceDetails[0]['dis_type_policy']=='0') {
+   $PaymenDistcountpp = 'Price Protection';
+ }
+ elseif ($getInvoiceDetails[0]['dis_type_policy']=='1' AND $getInvoiceDetails[0]['dis_type_pp']=='0') {
+   $PaymenDistcountrebate = 'Rebate';
+ }
+ elseif ($getInvoiceDetails[0]['dis_type_policy']=='1' AND $getInvoiceDetails[0]['dis_type_pp']=='1') {
+  $PaymenDistcountrebate ="Price Protection + Rebate";
+}
+else{
+  $PaymenDistcountrebate="No Discount";
+}
+?>
+<td class="boderset2" rowspan="2" style="font-size: 14px; font-weight: bold;" ><?php echo $getInvoiceDetails[0]['discount_note'] ?></td>
+<td id="tdfont2" style="width: 50px; font-size: 16px; font-weight: bold;" ><?php echo $total_num_count ?></td>
+<td id="tdfont2" style="width: 328px"><span  style="padding-left: 10px;">
+  <?php
+  if($totalpage == $i){
+    if($getInvoiceDetails[0]['other_discounts'] != 0){
+      $total_payment = $getInvoiceDetails[0]['other_discounts'];
+      $total_payment_after_discount = $totalpriceall - $getInvoiceDetails[0]['other_discounts'];
+    }else{
+      $total_payment = '0';
+      $total_payment_after_discount = $totalpriceall;
+    }
+    ?>
+  ຫັກລາຄາສ່ວນລົດ: </span><span style="padding-left: 2px;"><?php echo '-'.number_format( $total_payment,2) ?> ກີບ <?php } ?></span><br>
+ປະເພດສ່ວນລົດ: </span><span style="padding-left: 2px;"><?php echo $PaymenDistcountpp ?> &nbsp;<?php echo $PaymenDistcountrebate ?></span><br>
+<span  style="font-weight: bold;"><?php if($totalpage == $i){ ?>ລາຄາລວມທັງໝົດ: </span><span style="padding-left: 2px; font-weight: bold; font-size: 18px;"><?php echo number_format($total_payment_after_discount,2) ?> ກີບ<?php } ?></span>
+</td>
+</tr>
+</table> -->
+
+
+<!-- <br><br> &nbsp;&nbsp;&nbsp; &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;_____________ &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;  _____________ &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; _____________  &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; _____________  <br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<b>ຜູ້ອອກບິນ</b> &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; <b>ຜູ້ສົ່ງເຄື່ອງ</b> &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; <b>ຜູ້ກວດສອບ</b> &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; <b>ຜູ້ຮັບຊື້</b> &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+
+<b>ໜ້າ <?php echo $i."/".$totalpage;?></b><br><br><br><br> -->
+
+<!-- <?php           
+
+
+}
+
+}else{
+
+  $num =1 ;
+  $row_count=0;
+  for ($i = 1; $i <= $totalpage; $i++)
+  {
+
+
+  ?> -->
+
+  <!-- Table 1 -->
+
+
+<!-- <table style="width:830px; height:135px; border: 0px;">
+<tr>
+  <td style="width:525px" id="td1">
+     <b>UMEE Electronic Applances Trading Sole CO Ltd</b> <br> 
+     <span id="b2">ບ້ານໜອງຈັນ, ເມືອງສີສັດຕະນາກ, ນະຄອນຫຼວງວຽງຈັນ. Nongchun Village,</span> <br>
+     <span id="b2">Sisattanak District, Vientiane ໂທ/Tel:021-228789, Mobile:020-97906577</span> <br>
+     <div>ບິນອອກເຄື່ອງ/调拨单</div>
+  </td> 
+  <td rowspan="2" id="td">
+     ເລກທີ່ : <?php echo $distributor_details[0]['sn_ref']?>/<?php echo $distributor_details[0]['invoice_number']?><br>
+     ວັນທີ : <?php echo $distributor_details[0]['invoice_time'] ?> <br>
+     ຜູ້ສັ່ງຊື້ : <?php echo $distributor_details[0]['Fullname'] ?> <br>
+     ໂທ/Tel : <?php echo $distributor_details[0]['distributor_phone'] ?> <br>
+     TAX PO : <?php echo $distributor_details[0]['po_name'] ?> <br>
+  </td>
+</tr>
+ <tr style="height:40px">
+  <td id="td">
+     ລູກຄ້າ : <?php echo $getarea[0]['name'] ?> <?php echo $distributor_details[0]['distributor_name'] ?><br>
+     ທີ່ຢູ່ : <?php echo $distributor_details[0]['shipping_address'] ?>
+  </td>
+</tr>
+</table> -->
+
+<!-- Table 2 -->
+<!-- <table style="width:830px;" class="somediv">
+<tr>
+  <td id="tdfont" style="width:40px; padding: 5px;">ລ.ດ</td>
+  <td id="tdfont" style="width:50px;"> ລຸ້ນ</td>
+  <td id="tdfont" style="width:390px;"> ລາຍການສິນຄ້າ/Description</td>
+  <td id="tdfont" id="tdfont"style="width:40px; padding: 5px;">ຈຳນວນ</td>
+  <td id="tdfont" style="width:100px; padding: 5px;">ລາຄາ/ໜ່ວຍ</td>
+  <td id="tdfont" style="width:120px; padding: 5px;">Sale Off</td>
+  <td id="tdfont" style="width:147px; padding: 5px;">ລາຄາລວມ</td>
+</tr style="height:200px;">
+  <?php
+
+  $Cg = new Application_Model_GoodCategory();
+  $cname = $Cg->get_cache();
+  // $num =1 ;
+  $totalprice=0;
+  for ($j = 0; $j < 10; $j++)
+  {
+   
+
+    $total=$getInvoiceDetails[$row_count]['total'];
+    $price=$getInvoiceDetails[$row_count]['price']; 
+    $totalpriceall+=$total;
+
+    $good_name = $getInvoiceDetails[$row_count]['good_name'];
+    $good_cname = $getInvoiceDetails[$row_count]['good_cname'];
+    $good_color= $getInvoiceDetails[$row_count]['good_color'];
+
+    $saleout_text= $getInvoiceDetails[$row_count]['text'];
+    $salenum= $getInvoiceDetails[$row_count]['num'];
+    $SaleOffPercent= $getInvoiceDetails[$row_count]['sale_off_percent'];
+
+    $Paymenttype = '';
+    if ($getInvoiceDetails[0]['payment_type']=='CR') {
+       $Paymenttype = 'Cash';
+    }
+    elseif ($getInvoiceDetails[0]['payment_type']=='CA') {
+       $Paymenttype = 'Credit';
+     }
+     else{
+       $Paymenttype = '';
+     }
+
+     if($good_name =="")
+     {
+        $num="";
+     }
+
+     if($price !=""){
+        $price = number_format($price,2);
+     }else{
+        $price="";
+     }
+
+    if($total !=""){
+        $total = number_format($total,2);
+     }else{
+        $total="";
+     }
+
+     $total_num += $salenum['num'];
+
+   ?>
+    <tr>
+      <td id="tdfont" class="boderset1">
+        <?php echo $num ; ?> <br>
+      </td>
+      <td id="tdfont" id="tdleft" class="boderset1" style="text-align: center;">
+        <?php echo $cname[$good_cname] ?>
+      </td>
+      <td id="tdfont" id="tdleft" class="boderset1" style="text-align: left; padding-left: 8px;">
+        <?php echo $good_name?> &nbsp; &nbsp; <?php echo $good_color ?>
+      </td>
+      <td id="tdfont" class="boderset1"> 
+        <?php echo $getInvoiceDetails[$row_count]['num']?>
+      </td>
+      <td id="tdfont" id="tdright" class="boderset1" style="text-align: right; padding-right: 6px;">
+        <?php echo $price ?>
+      </td>
+      <td id="tdfont" id="tdright" class="boderset1" style="text-align: center; font-size: 12px;">
+        <?php echo $saleout_text ?>
+      </td>
+      <td id="tdfont" id="tdright" class="boderset1" style="text-align: right; padding-right: 6px;">
+        <?php echo ($total) ?>
+      </td>
+  
+
+  </tr>
+  <?php    
+      $row_count+=1;
+       $num +=1;
+
+    }
+  ?>
+</table> -->
+
+<!-- <table style="width:830px;"> -->
+  <!-- <tr> -->
+    <!-- <td style="width:50px;"><?php echo $total_num; ?></td> -->
+    <!-- <td id="tdfont2" style="width:107px;"><span  style="padding-left: 2px;"></span><span style="padding-right: 2px;"> <?php echo $Paymenttype ?> </span></td> -->
+    <!-- <td id="tdfont2" style="width:358px;"><span  style="padding-left: 2px;"><?php if($totalpage == $i){ ?>ລາຄາລວມທັງໝົດ: </span><span style="padding-right: 2px;"><?php echo number_format($totalpriceall,2) ?> ກີບ<?php } ?></span></td> -->
+
+<!--   </tr>
+</table> -->
+
+<!-- <br><br> &nbsp;&nbsp;&nbsp; &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;_________________ &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;  _________________ &nbsp;&nbsp;&nbsp;&nbsp;&nbsp; _________________  <br> -->
+<!-- &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<b>ຜູ້ອອກບິນ-ສົ່ງເຄື່ອງ</b> &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; <b>ຜູ້ກວດສອບ</b> &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; <b>ຜູ້ຮັບຊື້</b> &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; -->
+
+<!-- <b>ໜ້າ <?php echo $i."/".$totalpage;?></b><br><br><br><br> -->
+
+<!-- <?php           
+
+
+}
+}
+?>
+
+</body> -->
+
+
+
+<script src="/js/jquery-1.7.2.min.js"></script>
+<script defer src="/js/bootstrap.js"></script>
+<script defer src="/js/alertify.js"></script>
+<script defer src="/js/base.js"></script>
+<script defer src="/js/charts/Chart2020.min.js"></script>
+<script defer src="https://cdnjs.cloudflare.com/ajax/libs/limonte-sweetalert2/10.10.1/sweetalert2.min.js"></script>
+
+
+</html>

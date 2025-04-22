@@ -1,0 +1,245 @@
+<?php 
+
+if(isset($this->action_type) && $this->action_type == 1) {
+	$detail_input = 'disabled';
+}elseif(isset($this->action_type) && $this->action_type == 2) {
+	$edit_input = 'disabled';
+}elseif(isset($this->action_type) && $this->action_type == 3) {
+	$detail_input = 'disabled';
+}
+
+?>
+
+<div class="page-header">
+	<?php if(isset($this->action_type) && $this->action_type == 1) : ?>
+		<h1 style="font-family: Times New Roman;">Detail Contact Note</h1>
+	<?php elseif(isset($this->action_type) && $this->action_type == 2) : ?>
+		<h1 style="font-family: Times New Roman;">Edit Contact Note</h1>
+	<?php elseif(isset($this->action_type) && $this->action_type == 3) : ?>
+		<h1 style="font-family: Times New Roman;">Approved Contact Note</h1>
+	<?php else: ?>
+		<h1 style="font-family: Times New Roman;">Add Contact Note</h1>
+	<?php endif; ?>
+</div>
+
+<form class="form-horizontal" method="post" action="<?php echo HOST ?>/finance/save-contact-note" enctype="multipart/form-data" >
+	<div class="row" style="border-style: solid; padding: 30px 10px 300px 10px; border-color: lavender; margin-right: 0px">
+
+		<div class="span6">
+
+			<div class="control-group">
+				<label for="distributor_ids" class="control-label" style="width: 180px; padding-right: 20px;">Distributor(My Side) : <span style="color: red">*</span></label>
+				<div class="controls">
+					<select class="span3" name="distributor_ids" id="distributor_ids" required <?php echo $detail_input ?> <?php echo $edit_input ?> >
+						<option value=""> Please Selected </option>
+
+						<?php if(isset($this->distributor) && $this->distributor) : ?>
+							<?php foreach($this->distributor as $value) : ?>
+								<option value="<?php echo $value['id'] ?>" <?php if(isset($this->ContactNote) && $this->ContactNote->d_id == $value['id']) : ?> selected <?php endif; ?> ><?php echo $value['title'] ?></option>
+							<?php endforeach; ?>
+						<?php endif; ?>
+					</select>
+				</div>
+			</div>
+
+			<div class="control-group">
+				<label for="finance_client_id" class="control-label" style="width: 180px; padding-right: 20px">Client Name : <span style="color: red;">*</span></label>
+				<div class="controls">
+					<select class="span3" name="finance_client_id" id="finance_client_id" <?php echo $detail_input ?> >
+						<option value=""> Please Selected </option>
+
+						<?php if(isset($this->financeClient) && $this->financeClient) : ?>
+							<?php foreach($this->financeClient as $value) : ?>
+								<option value="<?php echo $value['id'] ?>" <?php if(isset($this->ContactNote) && $this->ContactNote->finance_client_id == $value['id']) : ?> selected <?php endif; ?> ><?php echo $value['name'] ?></option>
+							<?php endforeach; ?>
+						<?php endif; ?>
+					</select>
+				</div>
+			</div>
+
+			<div class="control-group">
+				<label for="adjust_type" class="control-label" style="width: 180px; padding-right: 20px">Adjustment Type : <span style="color: red">*</span></label>
+				<div class="controls">
+					<select class="span3" name="adjust_type" id="adjust_type" <?php echo $detail_input ?> >
+						<option value=""> Please Selected </option>
+
+						<?php if(isset($this->cost_item) && $this->cost_item) : ?>
+							<?php foreach($this->cost_item as $key => $value) : ?>
+								<option value="<?php echo $key ?>" <?php if(isset($this->ContactNote) && $this->ContactNote->adjust_type == $key) : ?> selected <?php endif; ?> ><?php echo $value ?></option>
+							<?php endforeach; ?>
+						<?php endif; ?>
+					</select>
+				</div>
+			</div>
+
+			<div class="control-group">
+				<label for="business_date" class="control-label" style="width: 180px; padding-right: 20px">Business Date : <span style="color: red">*</span></label>
+				<div class="controls">
+					<input type="text" class="span3 date" name="business_date" id="business_date" value="<?php isset($this->ContactNote) && printf($this->ContactNote->business_date) ?>" <?php echo $detail_input ?> >
+				</div>
+			</div>
+
+			<div class="control-group">
+				<label for="conatin_product" class="control-label" style="width: 180px; padding-right: 20px">Contain Product Is Required : <span style="color: red">*</span></label>
+				<div class="controls">
+					<select class="span3" name="conatin_product" id="conatin_product" <?php echo $detail_input ?> >
+						<option value="2" <?php if(isset($this->ContactNote) && $this->ContactNote->conatin_product == 2) : ?> selected <?php endif; ?> > No </option>
+						<option value="1" <?php if(isset($this->ContactNote) && $this->ContactNote->conatin_product == 1) : ?> selected <?php endif; ?> > Yes </option>
+					</select>
+				</div>
+			</div>
+
+		</div>
+
+		<div class="span6">
+
+			<div class="control-group">
+				<label for="dis_y" class="control-label" style="width: 180px; padding-right: 20px">Distributor(Your Side) : <span style="color: red">*</span></label>
+				<div class="controls">
+					<input type="hidden" name="dis_y_id" id="dis_y_id" value="<?php isset($this->distributor_arr) && printf($this->distributor_arr->id) ?>" >
+					<input type="text" name="dis_y" class="span3" id="dis_y" value="<?php isset($this->distributor_arr) && printf($this->distributor_arr->title) ?>" <?php echo $detail_input ?> <?php echo $edit_input ?> >
+				</div>
+			</div>
+
+			<div class="control-group">
+				<label for="amount" class="control-label" style="width: 180px; padding-right: 20px">Amount : <span style="color: red">*</span> </label>
+				<div class="controls">
+					<input type="text" name="amount" id="amount" class="span3" value="<?php isset($this->ContactNote) && printf($this->ContactNote->amount) ?>" <?php echo $detail_input ?> >
+				</div>
+			</div>
+
+			<div class="control-group">
+				<label for="reconcil_details" class="control-label" style="width: 180px; padding-right: 20px">Reconciliation Details : <span style="color: red">*</span></label>
+				<div class="controls">
+					<input type="text" name="reconcil_details" id="reconcil_details" class="span3" value="<?php isset($this->ContactNote) && printf($this->ContactNote->reconcil_details) ?>" <?php echo $detail_input ?> >
+				</div>
+			</div>
+		</div>
+
+		<div class="span12" style="padding-top: 30px;display: flex; justify-content: center;">
+			<input type="hidden" name="id" value="<?php isset($this->ContactNote) && printf($this->ContactNote->id) ?>">
+			<?php if(isset($this->action_type) && $this->action_type == 1) : ?>
+				<button type="button" class="btn btn-" onclick="history.back()"> Back </button>
+			<?php elseif(isset($this->action_type) && $this->action_type == 3) : ?>
+				<button type="button" class="btn btn-success" data-toggle="modal" data-target="#myModal"> Approved </button> &nbsp;
+				<button type="button" class="btn btn-danger" onclick="history.back()"> Back </button>
+			<?php else: ?>
+				<button type="submit" class="btn btn-success"> Save </button> &nbsp;
+				<button type="button" class="btn btn-danger" onclick="history.back()"> Cancel </button>
+			<?php endif; ?>
+		</div>
+
+	</div>
+</form>
+
+<div id="myModal" class="modal hide fade" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+	<div class="modal-header">
+		<button type="button" class="close" data-dismiss="modal" aria-hidden="true">×</button>
+		<h3 id="myModalLabel">Approved</h3>
+	</div>
+
+	<div class="modal-body" style="display: flex; justify-content: center;">
+		<form method="post" id="modalForm">
+			<div class="row">
+				<div class="control-group">
+					<label class="">Finance Date <span style="color: red;">*</span> : </label>
+					<div class="controls">
+						<input type="text" name="finance_date" class="span3 date" id="finance_date" required />
+					</div>
+				</div>
+
+				<div class="control-group">
+					<label class="">Review Remarks : </label>
+					<div class="controls">
+						<textarea cols="2" rows="5" class="span3" name="remark"></textarea>
+					</div>
+				</div>
+			</div>
+
+
+		</div>
+
+		<div class="modal-footer">
+			<input type="hidden" name="id" value="<?php if(isset($this->ContactNote) && printf($this->ContactNote->id)) ?>">
+			<input type="hidden" name="action_type" value="3">
+			<button class="btn" data-dismiss="modal" aria-hidden="true">Close</button>
+			<button type="submit" class="btn btn-success" id="approved">Approved</button>
+		</div>
+	</form>
+</div>
+
+<script type="text/javascript" src="/js/jquery-ui-1.8.12.custom.min.js"></script>
+<link rel="stylesheet" type="text/css" href="/css/jquery-ui-1.8.12.custom.css"/>
+<script type="text/javascript" src="/js/dropzone.js"></script>
+
+<script type="text/javascript">
+
+	$(document).ready(function () {
+
+		$('#modalForm').submit(function(event) {
+			event.preventDefault();
+
+			var data = $(this).serialize();
+
+			$.ajax({
+				url: '/finance/approved-contact-note',
+				type: 'POST',
+				data: data,
+				success: function(response) {
+					Swal.fire({
+						title: 'Deleted!',
+						text: 'Your data has been deleted.',
+						icon: 'success',
+						showConfirmButton: false
+					});
+                // Reload page after 2 seconds (optional)
+					setTimeout(function(){ window.location.href ='/finance/contact-note' }, 2000);
+				},
+				error: function(error) {
+        // Handle the error response
+					alert('Error submitting data!');
+				}
+			});
+		});
+
+		$( '.date' ).datepicker({ dateFormat: "yy-mm-dd" });
+
+		$("#distributor_ids").change(function(){
+			var distributor_id = $("#distributor_ids").val();
+			$('#dis_y').val('');
+
+			$.get("/finance/load-store-by-distributor",
+				{distributor_id : distributor_id}
+				,function(data,status){
+					var data = $.parseJSON( data );
+
+					if (data.financeClient){
+						var obj = data.financeClient;
+						$('#finance_client_id').html('<option value="0"> Please Selected </option>');
+						for (var i = 0; i < obj.length; i++) {
+							$('#finance_client_id').append('<option value="'+obj[i]['id']+'">'+obj[i]['name']+'</option>');
+						}
+					}
+				});
+		});
+
+		$("#finance_client_id").change(function(){
+			var finance_client = $("#finance_client_id").val();
+
+			$.get("/finance/load-store-or-warehouse-by-finance-client",
+				{finance_client : finance_client}
+				,function(data,status){
+					var data = $.parseJSON( data );
+
+					if (data.distributor){
+						var obj = data.distributor;
+						$('#dis_y').val(obj.title);
+						$('#dis_y_id').val(obj.id);
+					}
+				});
+		})
+
+
+	});
+
+</script>

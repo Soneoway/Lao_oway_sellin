@@ -1,0 +1,54 @@
+<?php
+function product_price($priceFloat) {
+$symbol_thousand = '.';
+$decimal_place = 0;
+$price = number_format($priceFloat, $decimal_place, '', $symbol_thousand);
+return $price;
+}
+?>
+<div class="row">
+    <div class="span12">
+        <p>Warehouse: <?php if(isset($this->warehouses[ $this->order['warehouse_id'] ])) echo $this->warehouses[ $this->order['warehouse_id'] ] ?></p>
+    </div>
+</div>
+
+<table class="table table-bordered">
+    <caption>Order Details</caption>
+    <thead>
+        <tr>
+            <?php echo $this->sorting(array(
+                    '#',
+                    'sn'            => 'Sales Order Number',
+                    'num'           => 'Quantity',
+                    'price'         => 'Price',
+                    'd_id'          => 'Retailer',
+                    'region'        => 'Province',
+                    'district'      => 'District',
+                ),
+                $this->url, $this->sort, $this->desc); ?>
+        </tr>
+    </thead>
+    <tbody>
+        <?php
+        if (isset($this->markets) and $this->markets)
+            foreach ($this->markets as $k=>$PO): ?>
+        <tr>
+            <td>
+                <?php echo ($this->offset + $k + 1); 
+
+                $sn_ref = $PO['sn_ref'];
+                if($sn_ref==''){
+                  $sn_ref = $PO['sn'];  
+                }
+                ?>
+            </td>
+            <td><?php echo $sn_ref;?></td>
+            <td><?php echo $PO['total_qty'];?></td>
+            <td><?php echo product_price($PO['total_price']);?></td>
+            <td><?php if(isset($this->distributorsList[$PO['d_id']])) echo $this->distributorsList[$PO['d_id']]['title'];?></td>
+            <td><?php if (isset($this->distributorsList[ $PO['d_id'] ]['district'])) echo My_Region::getValue($this->distributorsList[ $PO['d_id'] ]['district'], My_Region::Province) ?></td>
+            <td><?php if (isset($this->distributorsList[ $PO['d_id'] ]['district'])) echo My_Region::getValue($this->distributorsList[ $PO['d_id'] ]['district'], My_Region::District) ?></td>
+        </tr>
+        <?php endforeach;?>
+    </tbody>
+</table>

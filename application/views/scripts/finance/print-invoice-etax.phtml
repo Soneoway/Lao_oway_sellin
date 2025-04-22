@@ -1,0 +1,1288 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="utf-8">
+<title>Print</title>
+</head>
+<style type="text/css">
+
+.pagebreak { page-break-before: always; }
+
+body {
+  font-family: "Times New Roman", Times, serif;
+  background: white; 
+  font-size:12px;
+  margin: 0px;
+}
+page {
+  background: white;
+  display: block;
+  margin: 0 auto;
+  /*margin-bottom: 0.5cm;*/
+  /*box-shadow: 0 0 0.5cm rgba(0,0,0,0.5);*/
+  padding-left:0.5cm;
+  padding-right:0.5cm;
+}
+page[size="A4"] {  
+  width: 21cm;
+  height: 29.7cm;
+}
+.company-logo{
+  width:5cm;
+  /*height:1.5cm;*/
+  float:left;
+  margin-top: 28px;
+}
+.company-name{
+  margin-top: 0.7cm;
+  margin-left:2.3cm;
+  float:left;
+  line-height: 0.5cm;
+}
+.company-address{
+  width:100%;
+  height:1cm;
+}
+.company-address p{
+  font-size:12px;
+}
+.fright{
+    float:right;
+  }
+.fleft{
+    float:left;
+  }
+.hh2{
+    font-size:12px;
+    font-weight: bold;
+  }
+.dleft{
+    border: 2px solid #000;
+    padding: 7px 20px; 
+    width: 10.5cm;
+    height: 3.5cm;
+    float:left;
+}
+.dright{
+    border: 2px solid #000;
+    padding: 7px 20px; 
+    width: 8.04cm;
+    height: 3.5cm;
+    float: left;
+    margin-left: 0.1cm;
+}
+.l{
+  font-weight: bold;
+}
+table {
+    border-collapse: collapse;
+    width:100%;
+}
+
+table, th, td {
+    border: 2px solid black;
+}
+table.nb, table.nb th, table.nb td{
+  border: none;
+}
+#sales-info{
+  text-align: center;
+  height:2cm;
+}
+.bgrey{
+    background-color: #ddd;
+}
+#products-detail{
+  margin-top:0.2cm;
+  height:10cm;
+}
+.hone{
+  height:1cm;
+}
+.h05{
+  height:0.5cm;
+}
+.h1cm{
+  height:1cm;
+}
+.centerme{
+  font-size: 12px;
+  text-align: center;
+}
+.nobottom{
+  border-bottom: 2px solid #fff;
+}
+.rightme{
+  text-align: right;
+}
+#remark{
+  margin-top:0.2cm;
+  width:100%;
+}
+#signature{
+  margin-top:0.2cm;
+}
+.sig{
+  height:5cm;
+  vertical-align: text-top;
+}
+.border-top-dot{
+  border:2px transparent solid;
+}
+.dotme{
+  width:100%;
+  border-bottom:1px dotted #000;
+}
+.transme{
+  color:white;
+}
+@media print{
+  .dotme{
+  width:100%;
+  border-bottom:1px dotted #000;
+}
+  #products-detail{
+  margin-top:0.2cm;
+  height:10cm;
+  }
+
+  .bgrey{
+    background-color: #ddd;
+  }
+  #sales-info{
+    text-align: center;
+    height:2cm;
+  }
+  table {
+      border-collapse: collapse;
+  }
+  table, th, td {
+      border: 2px solid black;
+  }
+  table.nb, table.nb th, table.nb td{
+    border: none;
+  }
+  .l{
+    font-weight: bold;
+  }
+  .dleft{
+    border: 2px solid #000;
+    padding: 7px 20px; 
+    width: 10.5cm;
+    height: 3.5cm;
+    float: left; 
+  }
+  .dright{
+    border: 2px solid #000;
+    padding: 7px 20px;
+    width: 8.04cm;
+    height: 3.5cm;
+    float: left;
+    margin-left: 0.1cm;
+  }
+  .company-address p{
+    font-size:12px;
+  }
+  .company-address{
+    width:100%;
+    height:1cm;
+  }
+  .company-logo{
+    width:5cm;
+    height:1.5cm;
+    float:left;
+  }
+  .company-name{
+    margin-top: 0.7cm;
+    float:left;
+    margin-left:2.3cm;
+    line-height: 0.5cm;
+  }
+  html{
+    padding:none;
+    margin:none;
+  }
+  body{
+    padding:none;
+    margin:none;
+  }
+  page{
+    font-size:12px;
+    height: 100%;
+    margin-top:0px;
+    margin-left:0px;
+    page-break-before: always;
+    padding-left:0.5cm;
+    padding-right:0.6cm;
+  }
+  .fright{
+    float:right;
+  }
+  .fleft{
+    float:left;
+  }
+  .hh2{
+    font-size:12px;
+    font-weight: bold;
+  }
+}
+
+/*pond*/
+ .com_name_th{
+    font-size: 24px;
+    font-weight: bold;
+    }
+    .com_name_en{
+    font-size: 24px;
+    font-weight: bold;
+    margin-top: 10px;
+    }
+    .title_th{
+      font-size: 23px;
+      font-weight: bold;
+    }
+    .title_en{
+      font-size: 20px;
+      font-weight: bold;
+  }
+  .box{
+      width: 16px;
+      height: 16px;
+      margin-left: 5px;
+      border: 1px #000 solid;
+      float: left
+    }
+    .de_box{
+      font-size: 8px;
+      float: left;
+      margin-top: -4px;
+      margin-left: 6px;
+      width: 35px;
+    }
+    .de_box_d{
+      font-size: 8px;
+      float: left;
+      margin-top: 15px;
+      margin-left: 6px;
+    }
+    .dot{
+      float: left;width: 75px;margin-top: -9px;margin-left: 18px;
+    }
+    .de_box-3{
+      font-size: 8px;
+    }
+    .details-head-page-none{
+      height: 190px;
+    }
+</style>
+
+<?php
+        $product_no="";
+        $product_name="";
+        $product_qty="";
+        $product_unit_price=0;
+        $product_amount=0;
+        $product_total_amount=0;
+        $delivery_fee=0;
+        $total_discount=0;
+        $total_discount_amount=0;
+        $vat=7;
+        $total_vat_amount=0;
+        $grand_total_amount=0;
+
+        $ext_vat_product_total_amount=0;
+
+        //print_r($this->imeis);
+        $item_per_page=19;
+        $max_total_imei=1000;
+        $goods_total=count($this->mk_goods);
+        $imei_total=count($this->imeis);
+        $item_total=$goods_total+$imei_total;
+        //$item_total=3;
+        $pg_total= ceil(($item_total)/$item_per_page);
+
+        function format_number($num){
+           return number_format($num, 2);
+        }
+
+        function format_number_4($num){
+           return decimal_remove_comma(number_format($num, 4));
+        }
+
+        function format_number_2($num){
+           return decimal_remove_comma(number_format($num, 2));
+        }
+
+         function format_number_vat($num){
+           return number_format($num, 0);
+        }
+
+        function product_price($priceFloat,$decimal_p=0) {
+             $symbol = ' THB';
+             $symbol_thousand = '.';
+             $decimal_place = $decimal_p;
+             //$priceFloat=round($priceFloat, 0, PHP_ROUND_HALF_UP);
+             $price = number_format($priceFloat, $decimal_place, ',', $symbol_thousand);
+             return $price;
+         }
+
+         function decimal_remove_comma($priceFloat)
+         {
+            $price = str_replace(",","",$priceFloat);
+            return $price;
+         }
+
+         function cal_sale_off_percent_bk($percent_sale_off,$price,$num,$price_total){
+            //$sale_off =(100-$percent_sale_off)*0.01;
+            //$price_sale_off=($price*$sale_off);
+            if($percent_sale_off>0){
+                $price_sale_off=$price_total/$num;
+            }else{
+                $price_sale_off = $price;
+            }
+            return $price_sale_off;
+         }
+
+         function cal_sale_off_percent($sale_off_percent,$price,$num,$price_total){
+
+            //$sale_off =(100-$percent_sale_off)*0.01;
+            //$price_sale_off=($price*$sale_off);
+            if($sale_off_percent>0){
+                //$price_sale_off=$price_total/$num;
+                $price_sale_off = $price - (($price*$sale_off_percent/100)*100)/100;
+
+            }else{
+                $price_sale_off = $price;
+            }
+            return $price_sale_off;
+        }
+
+
+        function ext_vat($num){
+           return $num/1.07;
+        }
+
+        function get_time_string($seconds)
+        {
+            //return date('H:i:s', strtotime("2000-01-01 + $seconds SECONDS"));
+            return $mysqltime = date ("d/m/Y", $seconds);
+        }
+
+        if ($this->distributor['id']== '3691' || $this->distributor['id']== '3025') {
+            if ($this->market['cat_id']==11) {
+                 $total_discount = 0.01;
+            }
+           
+        }
+        //print_r($this->distributor);
+        $store_id=$this->distributor['id'];
+
+        $store_code=$this->distributor['store_code'];
+        
+        $distributor_name =$this->distributor['unames'];
+        if($distributor_name==''){
+            $distributor_name =$this->distributor['title'];
+        }
+        $distributor_address=$this->distributor['add'];
+        $distributor_tax=$this->distributor['mst_sn'];
+        $customer_brandshop_id =$this->customer_brandshop_id;
+        if($customer_brandshop_id !=''){
+            $distributor_name =$this->customerbrandshop[0]['customer_name'];
+            $distributor_tax =$this->customerbrandshop[0]['tax_number'];
+            $distributor_address =$this->customerbrandshop[0]['address_tax'];
+            $distributor_branch_no =$this->customerbrandshop[0]['branch_no'];
+        }      
+        
+
+        $invoice_number = '----------';
+        if(isset($this->market['invoice_number']) and $this->market['invoice_number']){
+          $invoice_number=$this->market['invoice_number'];
+        }
+        $invoice_datetime = explode(" ", $this->market['invoice_time']);
+        $invoice_date_new =$invoice_datetime[0];
+        $invoice_time =$invoice_datetime[1];
+        $date=date_create($invoice_date_new);
+
+        $invoice_date_ex= explode('/', date_format($date,"d/m/Y")) ;
+        $years = $invoice_date_ex[2]+543;
+        $invoice_date = $invoice_date_ex[0].'/'.$invoice_date_ex[1].'/'.$years;
+        $invoice_credit= date_format($date,"d.m.Y");//pungpond
+        $invoice_timestamp = strtotime($invoice_date_new);
+
+        $salesman =$this->staff['firstname'].' '.$this->staff['lastname'];
+       // print_r($this->Tag);
+        $invoice_date5= date_format($date,"Y-m-d");
+
+        $val1 = $invoice_date5;
+        $val2 = '2016-04-18 0:0:0';
+        
+        $datetime1 = new DateTime($val1);
+        $datetime2 = new DateTime($val2);
+        
+
+
+        $sales_order_no_PO = $this->Tag[0]['name'];
+        $sales_order_no=$this->market['sn_ref'];
+        if($sales_order_no==''){
+            $sales_order_no=$this->market['sn'];
+        }
+
+        $add_delivery_fee=0;
+        $payment_order = $this->market['payment_order'];
+        $payment_type = $this->market['payment_type'];
+
+        // Add Payment Type 20160614
+        if($payment_type !=""){
+            if($payment_type =="CR"){
+                $day_credit = $this->credit_type['day'];
+                $payment_type = "เครดิต ".$day_credit.' วัน';
+               //$get_life_time= date('d/m/Y', strtotime(' +'.$day_credit.' day'));
+               $get_life_= date("d/m/Y",strtotime($invoice_credit.' +'.$day_credit.' day'));//pungpond
+               $date_x = explode('/', $get_life_);
+               $years_x = $date_x[2]+543;
+               $get_life_time = $date_x[0].'/'.$date_x[1].'/'.$years_x;
+            }else{
+                $payment_type = "ขายสด";
+                $get_life_time= $invoice_date;
+            }
+        }else{
+            if($payment_order<=0){
+                $day_credit = $this->credit_type['day'];
+                $payment_type = "เครดิต ".$day_credit.' วัน';
+               //$get_life_time= date('d/m/Y', strtotime(' +'.$day_credit.' day'));
+               $get_life_= date("d/m/Y",strtotime($invoice_credit.' +'.$day_credit.' day'));//pungpond
+               $date_x = explode('/', $get_life_);
+               $years_x = $date_x[2]+543;
+               $get_life_time = $date_x[0].'/'.$date_x[1].'/'.$years_x;
+            }else{
+                $payment_type = "ขายสด";
+                $get_life_time= $invoice_date;
+            }
+        }
+
+        
+         //if($customer_brandshop_id !=''){
+         if($this->distributor['rank'] =='10'){
+               if($distributor_branch_no =='00000'){
+                  $branch="สำนักงานใหญ่";
+                  $invoice_branch =$distributor_branch_no;
+               }else if($distributor_branch_no == '002'){
+                  $branch="ที่ 2";
+                  $invoice_branch =$distributor_branch_no;
+               }else if($distributor_branch_no){
+                  $branch="";
+                  $invoice_branch =$distributor_branch_no;
+               }else{
+                  $branch="";
+                  $invoice_branch =$this->distributor['branch_no'];
+               } 
+
+
+         }else if($this->distributor['rank'] =='11'){
+            if($this->distributor['branch_no'] =='00000'){
+                  $branch="สำนักงานใหญ่";
+                  $invoice_branch =$this->distributor['branch_no'];
+               }else{
+                  $branch=$this->distributor['branch_no'];
+                  $invoice_branch =$this->distributor['branch_no'];
+               }      
+         }else{
+            if($this->distributor['parent']==0){
+               $branch="สำนักงานใหญ่";
+               $invoice_branch =$this->distributor['branch_no']; 
+            }else{
+               if($this->distributor['branch_no'] =='00000'){
+                  $branch="สำนักงานใหญ่";
+                  $invoice_branch =$this->distributor['branch_no'];
+               }else if($distributor_branch_no){
+                  $branch="";
+                  $invoice_branch =$distributor_branch_no; 
+               }else{
+                  $branch="";
+                  $invoice_branch =$this->distributor['branch_no'];
+               }   
+            }
+         }
+
+
+        
+         if($this->distributor['rank'] =='11')
+         {
+               $invoice_branch_show= $branch."";
+         }else{
+            if($invoice_branch !=""){
+               $invoice_branch_show= $branch." ลำดับที่ : ".$invoice_branch;
+            }
+         }
+
+
+        
+        
+    // $row_item=0;$running=0;$item_running=0;
+    // for($pg=1;$pg<=$pg_total;$pg++){ 
+    //     //echo $show_data;
+    //     if($pg==1){
+    //         echo '<div style="margin-top: 80px;"></div>';
+    //     }else if($pg==2){
+    //         echo '<div style="margin-top: 20px;"></div>';
+    //     }else{
+    //         echo '<div style="margin-top: 35px;"></div>';
+    //     }  
+
+    //     $pg_number= $pg."/".$pg_total;
+
+
+         if ($this->market['rank'] == 10 || $this->market['warehouse_id'] == 71) {
+                      $shipping_text = $this->market['shipping_text'];
+                   }else{
+ 
+                $delivery_address=$this->market['delivery_address'];
+                if($delivery_address==''){
+                    $delivery_address=$this->market['add_tax'];
+                }
+    
+               if($this->market['shipping_text']!=''){
+
+                  $cus = '';
+                   if ($this->market['customer_name']) {
+                       $cus =  $this->market['customer_name'];
+                     }  
+                   if ($this->distributor['rank'] == 3 and $this->distributor['id'] != 30879 and $this->distributor['id'] != 24026 and $this->distributor['id'] != 23236 and $this->distributor['id'] != 34807 ) {
+                       $delivery_address = $delivery_address;
+                    }else if (isset($this->market['add_time']) and $this->market['add_time'] > '2017-03-15 00:00:00') {
+                       $delivery_address=  $cus.' '.My_Address::genAddessDelivery($this->market['shipping_address']);
+                        
+                    }else{
+                        $delivery_address = $delivery_address;
+                    }
+
+                 $shipping_text=$delivery_address.' หมายเหตุ : '.$this->market['shipping_text']; 
+               }else{
+                  $cus = '';
+                   if ($this->market['customer_name']) {
+                       $cus =  $this->market['customer_name'];
+                     }  
+                   if ($this->distributor['rank'] == 3 and $this->distributor['id'] != 30879 and $this->distributor['id'] != 24026 and $this->distributor['id'] != 23236 and $this->distributor['id'] != 34807 ) {
+                       $shipping_text = $delivery_address;
+                    }else if (isset($this->market['add_time']) and $this->market['add_time'] > '2017-03-15 00:00:00') {
+                       $shipping_text=  $cus.' '.My_Address::genAddessDelivery($this->market['shipping_address']);
+                        
+                    }else{
+                        $shipping_text = $delivery_address;
+                    }
+                // $shipping_text=$delivery_address; 
+               }
+            }
+
+            $contact = 'Contact : ' . $this->distributor['name'];
+            $tel = 'Tel : ' . $this->distributor['tel'];
+
+            $shipping_text = 'Order Number : ' . $sales_order_no . '<br>' . $shipping_text . '<br>' . $contact .' '. $tel;
+
+            $sub_total_new_sum = 0;
+            $sub_total_new = 0;
+            $discount_baht_new = 0;
+            $price_vat_new = 0;
+            $grand_total_new = 0;
+
+            foreach ($this->mk_goods as $key => $product){
+  
+              $d_id = $product['d_id'];
+              $num = $product['num'];
+              $sale_off_percent = $product['sale_off_percent'];
+              $price = $product['price'];
+              $price_total = $product['price_total'];
+
+              if($sale_off_percent >0){
+                if($rank == '9')
+                {
+                  $price_ex_vat  = cal_sale_off_percent($sale_off_percent,$price,$num,$price_total) ;
+                }else{
+                  $price_ex_vat  = cal_sale_off_percent($sale_off_percent,$price,$num,$price_total)/ 1.07 ;
+                }
+                
+              }else{
+                if($rank == '9')
+                {
+                  $price_ex_vat = ($product['price']);
+                }else{
+                  $price_ex_vat = ($product['price'] / 1.07 );
+                }
+                
+              }
+
+              $sum_price    = round($price_ex_vat,2) * $product['num'];
+              $sub_total    += $sum_price;
+              $total_spc_discount = $product['total_spc_discount'];
+              if($product['cat_id'] == 11){
+                 $sum_phone += $sum_price;
+              }
+              if($product['cat_id'] == 12){
+                 $sum_acc   += $sum_price;
+              }
+
+            }
+
+            if($this->market['delivery_fee'] > 0){
+              $delivery_fee = round($this->market['delivery_fee'] / 1.07,2);
+              $sub_total += $delivery_fee;
+            }
+
+            $discount_phone = 0;
+            $discount_acc   = 0;
+            $discount_baht  = 0;
+            // echo $sum_phone;
+            if(isset($this->market['spc_discount']) && $this->market['spc_discount']){
+              if(isset($this->market['spc_discount_phone']) && $this->market['spc_discount_phone']){
+                $discount_phone = ($sum_phone * $this->market['spc_discount']) / 100;
+              }
+              if(isset($this->market['spc_discount_acc']) && $this->market['spc_discount_acc']){
+                $discount_acc   = ($sum_acc * $this->market['spc_discount']) / 100;
+              }
+              $discount_baht = $discount_phone + $discount_acc;
+            }else{
+              $discount_baht = 0.00;
+            }
+
+            $discount_baht = $total_spc_discount;
+
+            $sub_total_new_sum = $sub_total;
+
+            $sub_total = $sub_total - $discount_baht;
+
+            if($this->market['ex_vat']==1){
+              $price_vat = 0;
+            }else{
+              $price_vat = round($sub_total * 0.07,2);
+            }
+
+            $grand_total = $sub_total + $price_vat;
+
+            $sub_total_new = $sub_total;
+            $discount_baht_new = $discount_baht;
+            $price_vat_new = $price_vat;
+            $grand_total_new = $grand_total;
+        
+        ?>
+
+<body>
+
+  <page size="A4">
+
+  <?php
+
+  $krow = 0;
+
+  $limit_page = 15;
+  $total_all = 0;
+  $total_page = 0;
+  $current_page = 0;
+  $start = 0;
+  $end = 0;
+
+  if($this->mk_goods){
+    $total_all = count($this->mk_goods);
+    $total_page = ceil($total_all/$limit_page);
+
+    // echo "limit_page : $limit_page";
+    // echo "<br>";
+    // echo "total_all : $total_all";
+    // echo "<br>";
+    // echo "total_page : $total_page";
+    // echo "<br>";
+
+  }
+
+  while ($current_page < $total_page) {
+
+    $start = $limit_page*$current_page;
+    $end = $start+$limit_page-1;
+
+    $current_page++;
+
+    // echo "<br>";
+    // echo "--------------";
+    // echo "<br>";
+    // echo "page : $current_page/$total_page";
+    // echo "<br>";
+    // echo "start : $start";
+    // echo "<br>";
+    // echo "end : $end";
+    // echo "<br>";
+    // echo "--------------";
+    // echo "<br>";
+
+  ?>
+
+      <div class="details-head-page-none" style="display: none;">
+          <div align="right" style="margin-right: 30px;padding-top: 160px;"><?php echo "$current_page/$total_page";?></div>
+      </div>
+
+      <?php
+
+      if($this->market['invoice_time'] < '2019-02-01'){
+
+      ?>
+
+        <div class="company-logo details-head-page">
+          <img style="width: 185px;" src='<?php echo HOST.'img/logoprint.png'?>'>
+        </div>
+        <div class="company-name details-head-page">
+          <div class="com_name_th">บริษัท ไทย ออปโป้ จำกัด</div>
+          <div class="com_name_en">THAI OPPO CO., LTD.</div>
+        </div>
+
+        <div class="details-head-page" style="clear:both;"></div>
+        <div class="company-address details-head-page">
+          <p>สำนักงานใหญ่ : อาคาร เอไอเอ แคปปิตอล เซ็นเตอร์ ชั้น 31 ห้อง 5-7 เลขที่ 89 ถนนรัชดาภิเษก แขวงดินแดง เขตดินแดง กรุงเทพฯ 10400 โทร. 02-013-1810</p>
+          <p style="margin-top: -10px;font-size: 13px;margin-bottom: 0px">Head Office : AIA Capital Center Building Fl 31 Unit 5-7 89 Ratchadaphisek Road, Din Daeng, Din Daeng, Bangkok 10400 Tel.02-013-1810</p>
+          <span style="margin-left: 75px;">www.oppothai.com</span>
+
+      <?php }else{ ?>
+
+        <div class="details-head-page">
+          <img style="width: 100%" src='<?php echo HOST.'img/oppo_header.png'?>'>
+        </div>
+
+      <?php } ?>
+
+          <div align="right" style="margin-right: 30px;"><?php echo "$current_page/$total_page";?></div>
+
+          <?php 
+
+          if($this->market['invoice_time'] < '2019-02-01'){
+
+            switch ($this->type_inv) {
+             case '1':
+                ?>
+               <center><div class="title_th">ต้นฉบับใบกำกับภาษี/ใบส่งของ</div></center>
+               <center><div class="title_en"> ORIGINAK TAX INVOICE/DELIVERY ORDER</div></center>   
+               <div class="fright hh2" style="margin-top: -150px;">(สำหรับลูกค้า)</div>
+               <div class="fright hh2">(เอกสารออกเป็นชุด)</div>
+                <?php
+                break;
+            case '2':
+                ?>
+               <center><div class="title_th">สำเนาใบกำกับภาษี/ใบส่งของ</div></center>
+               <center><div class="title_en"> COPY TAX INVOICE/DELIVERY ORDER</div></center>   
+               <div class="fright hh2" style="margin-top: -150px;">(สำหรับลูกค้า)</div>
+               <div class="fright hh2">(เอกสารออกเป็นชุด)</div>
+                <?php
+                break;
+            case '3':
+                ?>
+               <center><div class="title_th">สำเนาใบกำกับภาษี/ใบส่งของ</div></center>
+               <center><div class="title_en"> COPY TAX INVOICE/DELIVERY ORDER</div></center>   
+               <div class="fright hh2" style="margin-top: -150px;">(สำหรับลูกค้าลงนามส่งคืนบริษัท)</div>
+               <div class="fright hh2">(เอกสารออกเป็นชุด)</div>
+                <?php
+                break;
+            case '4':
+                ?>
+               <center><div class="title_th">สำเนาใบกำกับภาษี/ใบส่งของ</div></center>
+               <center><div class="title_en"> COPY TAX INVOICE/DELIVERY ORDER</div></center>   
+               <div class="fright hh2" style="margin-top: -150px;">(สำหรับบริษัท)</div>
+               <div class="fright hh2">(เอกสารออกเป็นชุด)</div>
+                <?php
+                break;
+            case '5':
+                ?>
+               <center><div class="title_th">ต้นฉบับใบเสร็จรับเงิน</div></center>
+               <center><div class="title_en"> ORIGINAL RECEIPT</div></center>   
+               <div class="fright hh2" style="margin-top: -150px;">(สำหรับลูกค้า)</div>
+               <div class="fright hh2" style="margin-top: -20px;">(ไม่ใช่ใบกำกับภาษี)</div>
+               <div class="fright hh2">(เอกสารออกเป็นชุด)</div>
+                <?php
+                break;
+            case '6':
+                ?>
+               <center><div class="title_th">สำเนาใบเสร็จรับเงิน</div></center>
+               <center><div class="title_en"> COPY RECEIPT</div></center>   
+               <div class="fright hh2" style="margin-top: -150px;">(สำหรับบริษัท)</div>
+               <div class="fright hh2" style="margin-top: -20px;">(ไม่ใช่ใบกำกับภาษี)</div>
+               <div class="fright hh2">(เอกสารออกเป็นชุด)</div>
+                <?php
+                break;
+            case '7': //proforma invoice
+                ?>
+               <center><div class="title_th">ใบแจ้งหนี้</div></center>
+               <center><div class="title_en"> PROFORMA INVOICE</div></center>   
+               <div class="fright hh2">(เอกสารออกเป็นชุด)</div>
+                <?php
+                break;
+            case '8': //New Head Invoice
+                ?>
+               <center><div class="title_th">สำเนาใบเสร็จรับเงิน/ใบกำกับภาษี/ใบส่งของ</div></center>
+               <center><div class="title_en">COPY RECEIPT/TAX INVOICE/DELIVERY ORDER</div></center>   
+               <div class="fright hh2" style="margin-top: -150px;">(สำหรับบริษัท)</div>
+               <div class="fright hh2">(เอกสารออกเป็นชุด)</div>
+                <?php
+                break;
+          }
+
+          }else{
+
+            switch ($this->type_inv) {
+             case '1':
+                ?>
+               <center><div class="title_th">ต้นฉบับใบกำกับภาษี/ใบส่งของ</div></center>
+               <center><div class="title_en"> ORIGINAK TAX INVOICE/DELIVERY ORDER</div></center>   
+               <div class="fright hh2" style="margin-top: -110px; margin-right: 10px;">(สำหรับลูกค้า)</div>
+               <div class="fright hh2" style="margin-right: 10px;">(เอกสารออกเป็นชุด)</div>
+                <?php
+                break;
+            case '2':
+                ?>
+               <center><div class="title_th">สำเนาใบกำกับภาษี/ใบส่งของ</div></center>
+               <center><div class="title_en"> COPY TAX INVOICE/DELIVERY ORDER</div></center>   
+               <div class="fright hh2" style="margin-top: -110px; margin-right: 10px;">(สำหรับลูกค้า)</div>
+               <div class="fright hh2" style="margin-right: 10px;">(เอกสารออกเป็นชุด)</div>
+                <?php
+                break;
+            case '3':
+                ?>
+               <center><div class="title_th">สำเนาใบกำกับภาษี/ใบส่งของ</div></center>
+               <center><div class="title_en"> COPY TAX INVOICE/DELIVERY ORDER</div></center>   
+               <div class="fright hh2" style="margin-top: -110px; margin-right: 10px;">(สำหรับลูกค้าลงนามส่งคืนบริษัท)</div>
+               <div class="fright hh2" style="margin-right: 10px;">(เอกสารออกเป็นชุด)</div>
+                <?php
+                break;
+            case '4':
+                ?>
+               <center><div class="title_th">สำเนาใบกำกับภาษี/ใบส่งของ</div></center>
+               <center><div class="title_en"> COPY TAX INVOICE/DELIVERY ORDER</div></center>   
+               <div class="fright hh2" style="margin-top: -110px; margin-right: 10px;">(สำหรับบริษัท)</div>
+               <div class="fright hh2" style="margin-right: 10px;">(เอกสารออกเป็นชุด)</div>
+                <?php
+                break;
+            case '5':
+                ?>
+               <center><div class="title_th">ต้นฉบับใบเสร็จรับเงิน</div></center>
+               <center><div class="title_en"> ORIGINAL RECEIPT</div></center>   
+               <div class="fright hh2" style="margin-top: -110px; margin-right: 10px;">(สำหรับลูกค้า)</div>
+               <div class="fright hh2" style="margin-top: -20px;">(ไม่ใช่ใบกำกับภาษี)</div>
+               <div class="fright hh2" style="margin-right: 10px;">(เอกสารออกเป็นชุด)</div>
+                <?php
+                break;
+            case '6':
+                ?>
+               <center><div class="title_th">สำเนาใบเสร็จรับเงิน</div></center>
+               <center><div class="title_en"> COPY RECEIPT</div></center>   
+               <div class="fright hh2" style="margin-top: -110px; margin-right: 10px;">(สำหรับบริษัท)</div>
+               <div class="fright hh2" style="margin-top: -20px;">(ไม่ใช่ใบกำกับภาษี)</div>
+               <div class="fright hh2" style="margin-right: 10px;">(เอกสารออกเป็นชุด)</div>
+                <?php
+                break;
+            case '7': //proforma invoice
+                ?>
+               <center><div class="title_th">ใบแจ้งหนี้</div></center>
+               <center><div class="title_en"> PROFORMA INVOICE</div></center>   
+               <div class="fright hh2">(เอกสารออกเป็นชุด)</div>
+                <?php
+                break;
+            case '8': //New Head Invoice
+                ?>
+               <center><div class="title_th">สำเนาใบเสร็จรับเงิน/ใบกำกับภาษี/ใบส่งของ</div></center>
+               <center><div class="title_en">COPY RECEIPT/TAX INVOICE/DELIVERY ORDER</div></center>   
+               <div class="fright hh2" style="margin-top: -110px; margin-right: 10px;">(สำหรับบริษัท)</div>
+               <div class="fright hh2" style="margin-right: 10px;">(เอกสารออกเป็นชุด)</div>
+                <?php
+                break;
+            }
+
+          }
+
+          ?>
+          
+          <div class="fleft hh2">เลขประจำตัวผู้เสียภาษี 0745552000866</div>
+          <div style="clear:both;"></div>
+
+      </div>
+      <div style="clear:both;"></div>
+      <div class="dleft">
+        <table class="nb">
+          <tr>
+            <td class='l' width="20%">รหัสลูกค้า <br />Code</td>
+            <!-- <td style="padding-left: 10px"><?=$store_code?>&nbsp;&nbsp;(<?=$sales_order_no?>)</td> -->
+            <td style="padding-left: 10px">ID : <?=$this->distributor['id']?> | <?=$store_code?></td>
+          </tr>
+          <tr>
+            <td class='l'>ชื่อลูกค้า <br />Customer</td>
+            <td style="padding-left: 10px"><?=$distributor_name?></td>
+          </tr>
+          <tr>
+            <td class='l'>ที่อยู่ <br />Address</td>
+            <td style="padding-left: 10px"><?=$distributor_address?></td>
+          </tr>
+        </table>
+      </div>
+      <div class="dright">
+        <table class='nb'>
+          <tr>
+            <td class='l'>เลขที่ <br />No.</td>
+            <td><?=$invoice_number?></td>
+          </tr>
+          <tr>
+            <td class='l'>วันที่ <br />Date</td>
+            <td><?=$invoice_date?></td>
+            <td class='l'>เวลา <br />Time</td>
+            <td><?=$invoice_time?></td>
+          </tr>
+          <tr>
+            <td class='l' colspan=2>เลขประจำตัวผู้เสียภาษีอากร <br />Taxpayer Identification number</td>
+            <td colspan=2><?=$distributor_tax?></td>
+          </tr>
+           <tr>
+            <td class='l'>สาขา <br />Branch</td>
+            <td ><?=$invoice_branch_show?></td>
+          </tr>
+        </table>
+      </div>
+      <div style="clear:both;"></div>
+      <table id="sales-info" style="margin-top:0.2cm;">
+         <tr>
+          <th width="25%" class='bgrey'>พนักงานขาย <br />Salesman</th>
+          <th width="25%" class='bgrey'>เงื่อนไขการชำระเงิน <br /> Term of Payment</th>
+          <th width="25%" class='bgrey'>วันครบกำหนด <br />Due Date</th>
+          <th width="25%" class="noright bgrey">ใบสั่งซื้อเลขที่ <br />Purchase order No.</th>
+         </tr>
+         <tr>
+          <td width="25%"><?=$salesman?></td>
+          <td width="25%"><?=$payment_type?></td>
+          <td width="25%"><?=$get_life_time?></td>
+          <td width="25%" class="noright"><?=$sales_order_no_PO?></td>
+         </tr>
+      </table>
+      <table id='products-detail'>
+         <tr class='hone'>
+          <th width="5%"  class='bgrey'>ลำดับ <br />Item</th>
+          <th width="20%" class='bgrey'>รหัสสินค้า <br />  Products Code</th>
+          <th width="40%" class='bgrey'>รายการ <br /> Description</th>
+          <th width="15%" class='bgrey'>จำนวน <br />Quantity</th>
+          <th width="10%" class="bgrey">หน่วยละ <br />Unit Price</th>
+          <th width="15%" class="noright bgrey">จำนวนเงิน <br />Amount</th>
+         </tr>
+         <?php 
+
+            foreach ($this->mk_goods as $key => $product):
+
+              if($key < $start || $key > $end){
+                // echo 'current : '.$key . '| start : ' . $start . '| end : ' . $end . '<br>';
+                continue;
+              }
+
+              $krow++;
+
+              $d_id = $product['d_id'];
+              $num = $product['num'];
+              $sale_off_percent = $product['sale_off_percent'];
+              $price = $product['price'];
+              $price_total = $product['price_total'];
+
+              if($sale_off_percent >0){
+                if($rank == '9')
+                {
+                  $price_ex_vat  = cal_sale_off_percent($sale_off_percent,$price,$num,$price_total) ;
+                }else{
+                  $price_ex_vat  = cal_sale_off_percent($sale_off_percent,$price,$num,$price_total)/ 1.07 ;
+                }
+                
+              }else{
+                if($rank == '9')
+                {
+                  $price_ex_vat = ($product['price']);
+                }else{
+                  $price_ex_vat = ($product['price'] / 1.07 );
+                }
+                
+              }
+              
+              //$price_ex_vat = ($product['price'] / 1.07 );
+
+
+              $sum_price    = round($price_ex_vat,2) * $product['num'];
+              $sub_total    += $sum_price;
+              $total_spc_discount = $product['total_spc_discount'];
+              if($product['cat_id'] == 11){
+                 $sum_phone += $sum_price;
+              }
+              if($product['cat_id'] == 12){
+                 $sum_acc   += $sum_price;
+              }
+         ?>
+         <tr class="h05 noline">
+           <td class='centerme nobottom'><?php echo $key+1; ?></td>
+
+           <?php $userStorage = Zend_Auth::getInstance()->getStorage()->read();
+            if (My_Staff_Group::inGroup($userStorage->group_id, array(KERRY_STAFF,KERRY_LEADER))){ ?>
+              <!-- <td class="nobottom"><?php echo $product['desc_name']; ?></td> -->
+           <?php }else{ ?>
+              <!-- <td class="nobottom"><?php echo $product['product_code']; ?></td> -->
+           <?php } ?>
+
+           <?php
+           $show_product = $product['desc_name'];
+           if($show_product == ''){
+            $show_product = $product['product_code'];
+           }
+           ?>
+
+           <td class="nobottom"><?php echo $show_product; ?></td>
+
+           <td class="nobottom"><?php echo $product['desc'] . '/' . $this->good_colors[$product['good_color']]; ?>
+              <?php if($this->market['warehouse_id'] == 116 && $product['cat_id'] == 11){ ?>(Locked SIM )<?php } ?>
+           </td>
+           <td class="nobottom centerme"><?php echo number_format($product['num'],0); //echo "|".$product['price']; ?></td>
+           <td class="nobottom rightme"><?php echo number_format($price_ex_vat,2); ?></td>
+           <td class="noright nobottom rightme"><?php echo number_format($sum_price,2); ?></td>
+         </tr>
+       <?php endforeach; ?>
+       <?php //Show Delivery Fee
+            if($this->market['delivery_fee'] > 0):
+               $delivery_fee = round($this->market['delivery_fee'] / 1.07,2);
+               $krow++;
+        ?>
+         <tr class="h05 noline">
+           <td class='centerme nobottom'><?php echo $krow+1; ?></td>
+           <td class="nobottom">F4001</td>
+           <td class="nobottom">ค่าบริการ</td>
+           <td class="nobottom centerme">1</td>
+           <td class="nobottom rightme"><?php echo $delivery_fee; ?></td>
+           <td class="noright nobottom rightme"><?php echo $delivery_fee; ?></td>
+         </tr>
+       <?php
+        $sub_total += $delivery_fee;
+        endif; ?>
+       <?php 
+       // 4F40011ค่า
+       //Print row until 
+       while($krow <= 14): ?>
+       <tr>
+           <td class="nobottom centerme"></td>
+           <td class="nobottom centerme"></td>
+           <td class="nobottom centerme"></td>
+           <td class="nobottom centerme"></td>
+           <td class="nobottom centerme"></td>
+           <td class="nobottom centerme"></td>
+       </tr>
+       <?php $krow++;endwhile; ?>
+       <tr>
+           <td></td>
+           <td></td>
+           <td></td>
+           <td></td>
+           <td></td>
+           <td></td>
+       </tr>
+       <tr>
+           <!-- <td colspan="3" rowspan="4" ><?php echo $info['delivery_address'] ?></td> -->
+           <td colspan="3" rowspan="4" ><?php echo $shipping_text ?></td>
+           <td colspan="2" class="nobottom leftme" style="height: 1px;">
+             รวมเงิน / Sub Total
+           </td>
+           <td  class="nobottom rightme" style="height: 1px;"><?php echo number_format($sub_total_new_sum,2); ?></td>
+       </tr>
+       <?php 
+             $discount_phone = 0;
+             $discount_acc   = 0;
+             $discount_baht  = 0;
+             // echo $sum_phone;
+             if(isset($this->market['spc_discount']) && $this->market['spc_discount']){
+               if(isset($this->market['spc_discount_phone']) && $this->market['spc_discount_phone']){
+                  $discount_phone = ($sum_phone * $this->market['spc_discount']) / 100;
+               }
+               if(isset($this->market['spc_discount_acc']) && $this->market['spc_discount_acc']){
+                  $discount_acc   = ($sum_acc * $this->market['spc_discount']) / 100;
+               }
+               $discount_baht = $discount_phone + $discount_acc;
+             }else{
+               $discount_baht = 0.00;
+             }
+
+             $discount_baht = $total_spc_discount;
+        ?>
+       <tr>
+           <td colspan="2" class="nobottom leftme" style="height: 1px;">
+             ส่วนลด/Special Disc
+           </td>
+           <td class="nobottom rightme" style="height: 1px;"><?php echo number_format($discount_baht_new,2); ?></td>
+       </tr>
+       <?php $sub_total = $sub_total - $discount_baht; ?>
+        <tr>
+           <td colspan="2" class="nobottom leftme" style="height: 1px;">
+             จำนวนเงินสุทธิหลังหักส่วนลดพิเศษ
+           </td>
+           <td class="nobottom rightme" style="height: 1px;"><?php echo number_format($sub_total_new,2); ?></td>
+       </tr>
+
+        <?php 
+
+        if($maket['ex_vat']==1){
+          $price_vat = 0;
+        }else{
+          $price_vat = round($sub_total * 0.07,2);
+        }
+          
+         ?>
+        <tr>
+           <td colspan="2" class="leftme" style="height: 1px;">
+             ภาษีมูลค่าเพิ่ม / VAT  7  %
+           </td>
+           <td class="rightme" style="height: 1px;"><?php echo number_format($price_vat_new,2); ?></td>
+       </tr>
+       <?php $grand_total = $sub_total + $price_vat; ?>
+        <tr>
+           <td colspan="3" class="bgrey" style="height: 1px;"></td>
+           <td colspan="2" class="bgrey" style="height: 1px;">
+             <center>รวมทั้งสิ้น / Grand Total</center>
+           </td>
+           <td class="bgrey rightme" style="height: 1px;"><?php echo number_format($grand_total_new,2); ?></td>
+       </tr>
+      </table>
+      <div id='remark'>
+        หากได้รับสินค้าไม่ถูกต้องหรือชำรุด กรุณาแจ้งภายใน 7 วัน มิฉะนั้น บริษัทฯจะไม่รับผิดชอบ บริษัทฯ จะคิดดอกเบี้ยอัตราร้อยละ 2 ต่อเดือนของจำนวนเงินที่ค้างชำระ <br />สินค้าตามรายการข้างต้นจะยังเป็นของผู้ขายอยู่จนกว่าผู้ขายได้รับการชำระเงินเรียบร้อยแล้ว
+      </div>
+      <table id='signature'>
+        <tr>
+           <td width='33.33%' class='sig' >
+             <div class='h1cm' >
+               ได้รับสินค้าตามรายการข้างต้นนี้ถูกต้องเรียบร้อย<br />
+               Received as per above in good and condition.
+             </div>
+             <div class='h1cm'></div>
+             <div class='h05'></div>
+             <div class='h1cm'>
+                <table>
+                 <tr>
+                 <td width='33.33%' class='centerme border-top-dot'>
+                   <!-- <div class='dotme'>&nbsp;&nbsp;</div> -->
+                   <div class='de_box-3'>..........................</div>
+                 </td>
+                 <td width='33.33%' class='centerme border-top-dot'>
+                 <div class='de_box-3'>............................</div>
+                   <!-- <div class='dotme'>&nbsp;&nbsp;</div> -->
+                 </td>
+                 <td width='33.33%' class='centerme border-top-dot'>
+                 <div class='de_box-3'>....../......../.......</div>
+                    <!-- <div class='dotme'
+                      &nbsp;&nbsp;/&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;/&nbsp;&nbsp;
+                    </div> -->
+                 </td>
+                 </tr>
+             </div>
+             <div class='h1cm'>
+                <table>
+                 <tr>
+                 <td width='33.33%' class='centerme border-top-dot'>ผู้รับสินค้า <br />Received by</td>
+                 <td width='33.33%' class='centerme border-top-dot'>(ประทับตรา)</td>
+                 <td width='33.33%' class='centerme border-top-dot'>วันที่/Date</td>
+                 </tr>
+               </table>
+             </div>
+           </td>
+           <td width='33.33%' class='sig' >
+            <div class='h1cm' >
+               ชำระเงินโดย/Payment By
+             </div>
+           
+             <div class='h05'>
+              <div class="box"></div><div class="de_box">เงินสด<br/>Cash</div>
+              <div class="box"></div><div class="de_box">เช็ค<br/>Cheque</div>
+              <div class="de_box" style="margin-left: -4px;">ธนาคาร/Bank..........................</div>
+            </div>
+          <div style="clear: both"></div>
+            <div class='h05'>
+              <div class="de_box_d">สาขา/Branch..........................เลขที่/No. .........................</div>
+            </div>
+            <div class='h05'>
+              <div class="de_box_d">วันที่/Date...../....../....จำนวนเงิน/Amount...............บาท/Baht</div>
+            </div>
+             
+             <div class='h1cm'>
+                <table>
+                 <tr>
+                 <td width='50%' class='centerme border-top-dot'>
+                   <div class='de_box-3'>.........................................</div>
+                 </td>
+                 <td width='50%' class='centerme border-top-dot'>
+                    <div class='de_box-3'>
+                    ........./......../........
+                      <!-- &nbsp;&nbsp;/&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;/&nbsp;&nbsp; -->
+                    </div>
+                 </td>
+                 </tr>
+             </div>
+             <div class='h1cm'>
+                <table>
+                 <tr>
+                 <td width='50%' class='centerme border-top-dot'>
+                 (&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;) <br />ผู้รับเงิน/Collector</td>
+                 <td width='50%' class='centerme border-top-dot'>วันที่/Date</td>
+                 </tr>
+               </table>
+             </div>
+           </td>
+           <td width='33.33%' class='sig' >
+            <div class='h1cm centerme' >
+               ในนาม บริษัท ไทย ออปโป้ จำกัด<br />
+               For THAI OPPO CO., LTD.
+             </div>
+             <div class='h1cm' align="center">
+               <?php
+                  // $img_signature = HOST.'img_signature/shan.png';
+                  $img_signature = HOST.'img_signature/Kerry1.png';
+                //Brand Shop
+                if($this->dis_group['group_type_id'] == 10){
+                  $img_signature = HOST.'img_signature/6010827.png';
+                }
+                //Service
+                if($this->dis_group['group_type_id'] == 9){
+                  $img_signature = HOST.'img_signature/jeff.png';
+                }
+                //ORG
+                if($this->dis_group['group_type_id'] == 3){
+                  $img_signature = '';
+                }
+                ?>
+               <img width="150px;" src="<?php echo $img_signature;?>">
+             </div>
+             <div class='h05'></div>
+             <div class='h1cm'>
+                <table>
+                 <tr>
+                 <td width='200%' class='centerme border-top-dot'>
+                 <div class='de_box-3'>................................................................................</div>
+                   <!-- <div class='dotme'>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</div> -->
+                 </td>
+                 </tr>
+             </div>
+             <div class='h1cm'>
+                <table>
+                 <tr>
+                 <td width='100%' class='centerme border-top-dot'>ผู้มีอำนาจลงนาม <br />Authorized Signature</td>
+                 </tr>
+               </table>
+             </div>
+           </td>
+        </tr>
+      </table>
+      <div style="margin-top: 5px;margin-bottom: 5px;font-weight: bold;">เอกสารนี้ได้จัดทำและส่งข้อมูลให้แก่กรมสรรพากรด้วยวิธีการทางอิเล็กทรอนิกส์</div>
+      <div class="pagebreak"> </div>
+<?php } ?>
+
+  </page>
+
+</body>
+
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
+<script>
+  $(document).ready(function() {
+    <?php $userStorage = Zend_Auth::getInstance()->getStorage()->read();
+      if (My_Staff_Group::inGroup($userStorage->group_id, array(KERRY_STAFF,KERRY_LEADER))){ ?>
+        $('.details-head-page').hide();
+        $('.details-head-page-none').show();
+    <?php } ?>
+  });
+</script>
+
+</html>

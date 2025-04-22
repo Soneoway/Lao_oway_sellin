@@ -1,0 +1,664 @@
+<link href="<?=HOST?>public/css/bootstrap.modi.min.css" rel="stylesheet">
+<style type="text/css">
+input{
+    width: 70px;
+}
+textarea{
+    width: 100px;
+}
+</style> 
+
+<div class="page-header">
+    <h1>Setup Discount Employee Privileges</h1>
+</div>
+
+<?php
+    if (isset($this->messages_success) and $this->messages_success)
+        foreach ($this->messages_success as $message):
+            echo '<div class="alert alert-success">'.$message.'</div>';
+        endforeach;
+
+    if (isset($this->messages) and $this->messages)
+        foreach ($this->messages as $message):
+            echo '<div class="alert alert-error">'.$message.'</div>';
+        endforeach;
+?>
+
+<!-- Modal -->
+<div class="modal fade" id="modal_add" data-backdrop="static" role="dialog">
+    <div class="modal-dialog">
+
+        <!-- Modal content-->
+        <div class="modal-content">
+            <div class="modal-header">
+              <button type="button" class="close" data-dismiss="modal">&times;</button>
+              <h4 class="modal-title">Add Discount</h4>
+            </div>
+            <div class="modal-body">
+
+                <label>Company</label>
+                <select id="company_id_add">
+                    <option value="">Choose</option>
+                    <option value="1">OPPO</option>
+                    <option value="2">ONEPLUS</option>
+                </select>
+
+                <label>Category</label>
+                <select id="cat_id_add">
+                    <option value="">Choose</option>
+                    <option value="11">Phone</option>
+                    <option value="12">Accessories</option>
+                </select>
+
+                <label>Payment Type</label>
+                <select id="payment_type_add">
+                    <option value="">Choose</option>
+                    <option value="1">เงินสด</option>
+                    <option value="2">หักเงินเดือน</option>
+                    <option value="3">EOL</option>
+                </select>
+                <br>
+                <span style="margin-top: 5px;">Discount (%)</span>
+                <br>
+                <input style="width: 210px;" id="discount_add" type="number" value="">
+
+                <hr>
+
+                <span>Special Product :</span>
+                <input style="margin-left: 5px;" id="checkbox_special_product_add" type="checkbox" onclick="hideShowSP('add')">
+                <br>
+                <label>Product</label>
+                <select id="good_id_add">
+                    <option value="">Choose</option>
+                    <?php if ($this->goods): foreach ($this->goods as $key=> $item):?>
+                        <option value="<?php echo $key;?>" <?php if (isset($this->params['good_id']) and $key==$this->params['good_id']):?> selected<?php endif;?>><?php echo $item;?></option>
+                    <?php endforeach; endif;?>
+                </select>
+
+                <hr>
+
+
+                <label>Warehouse</label>
+                <select id="warehouse_add">
+                    <option value="">Please select</option>
+                    <?php foreach ($this->warehouses_cache as $id=>$name){ ?>
+                        <option value="<?php echo $id;?>"><?php echo $name;?></option>
+                    <?php } ;?>
+                </select>
+
+                <label>Bank</label>
+                <select id="bank_add">
+                    <option value="">Please select</option>
+                    <?php foreach ($this->banks as $data){ ?>
+                        <option value="<?php echo $data['id'];?>" <?php if($data['id']==2){echo 'selected';}?>><?php echo $data['name'];?></option>
+                    <?php } ;?>
+                </select>
+
+                <label>Distributor</label>
+
+                <select id="temp_distributor_add" >
+                    <option value="">Please select</option>
+                    <option value="24026" selected><?php echo $this->distributors_cache['24026'];?></option>
+                </select>
+                <input type="hidden" id="distributor_add" value="">
+
+                <br>
+                <span style="margin-top: 5px;">QTY Per Year</span>
+                <br>
+                <input style="width: 210px;" id="qty_per_year_add" type="number" value="">
+
+                <br>
+                <span style="margin-top: 5px;">Start Use Day</span>
+                <br>
+                <input style="width: 210px;" id="start_use_day_add" type="number" value="">
+
+                <br>
+                <span style="margin-top: 5px;">Period Limit Day</span>
+                <br>
+                <input style="width: 210px;" id="period_limit_day_add" type="number" value="">
+
+                <br>
+                <span style="margin-top: 5px;">Reset Date</span>
+                <br>
+                <input style="width: 210px;" id="reset_date_add" type="text" class="date" value="">
+
+            </div>
+            <div class="modal-footer">
+                <button type="button" id="btn-add-product" class="btn btn-success pull-left">Confirm</button>
+                <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+            </div>
+        </div>
+    </div>
+</div>
+
+<div class="container">
+    <br />
+    <form role="form" id="form" action="<?php echo HOST.'product/setup-employee-privileges';?>" method="post" >
+
+        <div class="row">
+            <div class="control-group">
+
+                <div class="span4">
+                    <button type="button" class="btn btn-primary" data-toggle="modal" data-target="#modal_add">Add Discount</button>
+                    <br>
+                    <br>
+                </div>
+
+                <table class="table" border="0" style="margin-left: 33px;">
+                    <tr>
+                        <td>No.</td>
+                        <td>Company</td>
+                        <td>Category</td>
+                        <td>Payment Type</td>
+                        
+                        <td>Discount Type</td>
+                        <td>Special Product</td>
+                        <td>Product</td>
+                        
+                        <td>Warehouse</td>
+                        <td>Bank</td>
+                        <td>Distrbutor</td>
+                        <td>QTY Per Year</td>
+                        <td>Start Use Day</td>
+                        <td>Period Limit Day</td>
+                        <td>Reset Date</td>
+                        <td>Update Date</td>
+                        <td>Action</td>
+                    </tr>
+
+                    <?php
+                    foreach ($this->get_ep_pd as $key => $value) {
+                        ?>
+
+                        <tr>
+                            <td><?php echo $key+1;?></td>
+                            <td><?php echo $value['company_name'];?></td>
+                            <td><?php switch ($value['cat_id']) {
+                                case '11':
+                                    echo 'Phone';
+                                    break;
+                                case '12':
+                                    echo 'Accessories';
+                                    break;
+                            } ?>
+                            <input id="no_<?php echo $value['discount_id'];?>" type="hidden" value="<?php echo $key+1;?>">
+                            </td>
+                            <td><?php 
+                            $payment_type = '';
+                            switch ($value['payment_type']) {
+                                case '1':
+                                    $payment_type = 'เงินสด';
+                                    break;
+                                case '2':
+                                    $payment_type = 'หักเงินเดือน';
+                                    break;
+                                case '3':
+                                    $payment_type = 'EOL';
+                                    break;
+                            }
+                            echo $payment_type;
+                            ?></td>
+                            
+                            <td><?php
+                            $discount_type = '';
+                            if($value['discount_type'] == 0){
+                                $discount_type = 'EOL';
+                            }else{
+                                $discount_type = $value['discount_type']."%";
+                            }
+                            echo $discount_type;
+                            ?></td>
+                            <td><input id="checkbox_sp_<?php echo $value['ids'];?>" type="checkbox" onclick="hideShowEOL('<?php echo $value['ids'];?>')" <?php if($value['special_product']){echo 'checked';} ?> onchange="useBtnUpdate(<?php echo $value['ids'];?>)" disabled></td>
+                            <td><?php echo $value['discount_type_name']; ?></td>
+                            <td>
+                                <select id="temp_warehouse_<?php echo $value['discount_id'];?>" onchange="useBtnUpdate(<?php echo $value['discount_id'];?>)" disabled>
+                                    <option value="">Please select</option>
+                                    <?php foreach ($this->warehouses_cache as $id=>$name){ ?>
+                                        <option value="<?php echo $id;?>" <?php if (($id == $value['warehouse_id'])):?> selected<?php endif;?>><?php echo $name;?></option>
+                                    <?php } ;?>
+                                </select>
+                                <input type="hidden" id="warehouse_<?php echo $value['discount_id'];?>" value="<?php echo $value['warehouse_id'];?>">
+                            </td>
+                            <td>
+                                <?php echo $value['bank_name']; ?>
+                                <input type="hidden" id="bank_<?php echo $value['discount_id'];?>" value="<?php echo $value['bank_id'];?>">
+                            </td>
+                            <td>
+                                <?php echo $value['distributor_name']; ?>
+                                <input type="hidden" id="distributor_<?php echo $value['discount_id'];?>" value="<?php echo $value['distributor_id'];?>">
+                            </td>
+                            <td><input id="qty_per_year_<?php echo $value['discount_id'];?>" type="number" value="<?php echo $value['qty_per_year'];?>" onchange="useBtnUpdate(<?php echo $value['discount_id'];?>)"></td>
+                            <td><input id="start_use_day_<?php echo $value['discount_id'];?>" type="number" value="<?php echo $value['start_use_day'];?>" onchange="useBtnUpdate(<?php echo $value['discount_id'];?>)"></td>
+                            <td><input id="period_limit_day_<?php echo $value['discount_id'];?>" type="number" value="<?php echo $value['period_limit_day'];?>" onchange="useBtnUpdate(<?php echo $value['discount_id'];?>)"></td>
+                            <td><input id="reset_date_<?php echo $value['discount_id'];?>" type="text" class="date" value="<?php echo $value['reset_date'];?>" onchange="useBtnUpdate(<?php echo $value['discount_id'];?>)"></td>
+                            <td><?php 
+                            if($value['update_date']){
+                                echo $value['update_date'];
+                            }else{
+                                echo $value['create_date'];
+                            }
+                            ?></td>
+                            <td>
+                                <button id="btnUpdate_<?php echo $value['discount_id'];?>" title="Update" type="button" class="btn btn-success" onclick="update_data('<?php echo $value['discount_id'];?>')" disabled> <i class="icon-save"></i></button>
+                                <button title="Delete" type="button" class="btn btn-danger" onclick="del_data('<?php echo $value['company_id'];?>','<?php echo $value['discount_id'];?>')"> <i class="icon-trash"></i></button>
+                            </td>
+                        </tr>
+
+                    <?php } ?>
+                </table>
+
+            </div>
+            <div class="clearfix"></div>
+        </div>
+    </form>
+</div>
+
+<script type="text/javascript" src="/js/jquery-ui-1.8.12.custom.min.js"></script>
+<link rel="stylesheet" type="text/css" href="/css/jquery-ui-1.8.12.custom.css"/>
+<script src="/js/jquery.blockUI.js"></script>
+<script type="text/javascript">
+
+    function reload() {
+        location.reload();
+    }
+
+    function hideShowSP(id){
+
+        $('.alert').addClass('hide');
+        $('#good_id_'+id).attr('readonly', true);
+
+        if($('#checkbox_special_product_'+id).is(':checked')){
+            $('#good_id_'+id).removeAttr('readonly');
+        }else{
+            $('#good_id_'+id).attr('readonly', true);
+        }
+
+    }
+
+    $('#temp_distributor_add').change(function()
+    {
+        var distributor_id = $('#temp_distributor_add').val();
+        $('#distributor_add').val(distributor_id);
+    });
+
+    $('#company_id_add').change(function()
+    {
+
+        $('.alert').addClass('hide');
+
+        $(this).after('<span class="loading"></span>');
+        var _self = $(this);
+        var company_id = $('#company_id_add').val();
+
+        if (_self.attr('id')=='company_id_add')
+        {
+            $('#warehouse_add').find('option:not(:first)').remove();
+            $('#bank_add').find('option:not(:first)').remove();
+            $('#temp_distributor_add').find('option:not(:first)').remove();
+            $('#good_id_add').find('option:not(:first)').remove();
+        }
+
+        $.get("/get/load-staff-warehouse",
+        {company_id: company_id}
+        ,function(data,status){
+            var data = $.parseJSON( data );
+            if (data.warehouse){
+                var obj = data.warehouse;
+                for (var i = 0; i < obj.length; i++) {
+                    $('#warehouse_add').append('<option value="'+obj[i]['id']+'">'+obj[i]['name']+'</option>');
+                }
+            }
+            
+            _self.nextAll('.loading').remove();
+        });
+
+        $.get("/get/load-staff-bank",
+        {company_id: company_id}
+        ,function(data,status){
+            var data = $.parseJSON( data );
+            if (data.bank){
+                var obj = data.bank;
+                for (var i = 0; i < obj.length; i++) {
+                    $('#bank_add').append('<option value="'+obj[i]['id']+'">'+obj[i]['name']+'</option>');
+                }
+            }
+            
+            _self.nextAll('.loading').remove();
+        });
+
+        $.get("/get/load-staff-distributor",
+        {company_id: company_id}
+        ,function(data,status){
+            var data = $.parseJSON( data );
+            if (data.distributor){
+                var obj = data.distributor;
+                for (var i = 0; i < obj.length; i++) {
+                    $('#temp_distributor_add').append('<option value="'+obj[i]['id']+'">'+obj[i]['distributor_name']+'</option>');
+                }
+            }
+            
+            _self.nextAll('.loading').remove();
+        });
+    });
+
+    $('#cat_id_add,#checkbox_special_product_add').change(function(){
+
+        $('.alert').addClass('hide');
+        if($('#checkbox_special_product_add').is(':checked')){
+            $('#good_id_add').removeAttr('readonly');
+
+            $(this).after('<span class="loading"></span>');
+            var _self = $(this);
+            var company_id = $('#company_id_add').val();
+            var cat_id = $('#cat_id_add').val();
+
+            $('#good_id_add').empty();
+            $.get("/get/load-staff-product",
+            {company_id: company_id,cat_id: cat_id}
+            ,function(data,status){
+                var data = $.parseJSON( data );
+                if (data.goods){
+                    var obj = data.goods;
+                    $('#good_id_add').append('<option value="">Choose</option>');
+                    for (var i = 0; i < obj.length; i++) {
+                        $('#good_id_add').append('<option value="'+obj[i]['id']+'">'+obj[i]['name']+'</option>');
+                    }
+                }
+                _self.nextAll('.loading').remove();
+            });
+
+        }else{
+            $('#good_id_add').attr('readonly', true);
+            $('#good_id_add').empty();
+            $('#good_id_add').append('<option value="">Choose</option>');
+        }
+        
+    });
+
+    $(document).ajaxStart(function(){
+        $.blockUI({ css: { 
+            border: 'none', 
+            padding: '15px', 
+            backgroundColor: '#000', 
+            '-webkit-border-radius': '10px', 
+            '-moz-border-radius': '10px', 
+            opacity: .5, 
+            color: '#fff' 
+        } });
+    });
+
+    $(document).ajaxStop(function(){
+        $.unblockUI();
+    });
+
+    $(document).ready(function () {
+
+        $( '.date' ).datepicker({ dateFormat: "yy-mm-dd" });
+        
+        $("*").keypress(function(event){  
+           if(event.keyCode==13){  
+            return false;  
+        }
+
+    });
+
+        $('.number').keypress(function(event) {
+            if (event.which != 46 && (event.which < 47 || event.which > 59))
+            {
+                event.preventDefault();
+                if ((event.which == 46) && ($(this).indexOf('.') != -1)) {
+                    event.preventDefault();
+                }
+            }
+        });
+
+    });
+
+    $('#cat_id_add').change(function(){
+
+      //  $('#good_id_add').attr('readonly', true);
+    });
+
+    function update_data(id){
+
+        $('.alert').addClass('hide');
+
+        var no = $('#no_'+id).val();
+
+        var qty_per_year = $('#qty_per_year_'+id).val();
+        var start_use_day = $('#start_use_day_'+id).val();
+        var period_limit_day = $('#period_limit_day_'+id).val();
+        var reset_date = $('#reset_date_'+id).val();
+
+        if(!qty_per_year){
+            alert('Please input QTY Per Year [No.'+no+']');
+            $('#qty_per_year_'+id).focus();
+            return false;
+        }
+
+        if(!start_use_day){
+            alert('Please input Start Use Day [No.'+no+']');
+            $('#start_use_day_'+id).focus();
+            return false;
+        }
+
+        if(!period_limit_day){
+            alert('Please input Period Limit Day [No.'+no+']');
+            $('#period_limit_day_'+id).focus();
+            return false;
+        }
+
+        if(!reset_date){
+            alert('Please select Reset Date [No.'+no+']');
+            $('#reset_date_'+id).focus();
+            return false;
+        }
+
+        if (!confirm('You confirm to update')) {
+            return false;
+        }
+
+        $.ajax({
+            url: '<?php echo HOST.'product/save-discount-employee-privileges';?>',
+            type: 'POST',
+            data: {id:id, qty_per_year:qty_per_year, start_use_day:start_use_day, period_limit_day:period_limit_day, reset_date:reset_date},
+        })
+        .done(function(response) {
+            var obj_response = jQuery.parseJSON(response);
+            console.log("success");
+
+            switch(obj_response.status)
+            {
+                case 200:
+                console.log('done');
+                $('#btnUpdate_'+id).attr('disabled', true);
+                alert('Update Done.');
+                break;
+                case 400:
+                alert(obj_response.message);
+                break;
+                default:
+                location.reload();
+            }
+
+        });
+
+    }
+
+    function del_data(company_id,id){
+
+        $('.alert').addClass('hide');
+
+        if (!confirm('You confirm to delete.')) {
+            return false;
+        }
+        //alert(company_id);
+        $.ajax({
+            url: '<?php echo HOST.'product/del-discount-employee-privileges';?>',
+            type: 'POST',
+            data: {company_id:company_id,id:id},
+        })
+        .done(function(response) {
+            var obj_response = jQuery.parseJSON(response);
+            console.log("success");
+
+            switch(obj_response.status) {
+                case 200:
+                console.log('done');
+                location.reload();
+                break;
+                case 400:
+                alert(obj_response.message);
+                break;
+                default:
+                location.reload();
+            }
+
+        });
+    }
+
+    function useBtnUpdate(id){
+        $('.alert').addClass('hide');
+        $('#btnUpdate_'+id).removeAttr('disabled');
+    }
+
+    $('#btn-add-product').click(function(event) {
+
+        $('.alert').addClass('hide');
+
+        var company_id = $('#company_id_add').val();
+        var cat_id = $('#cat_id_add').val();
+        var good_id = $('#good_id_add').val();
+        var special_product=null;
+        var payment_type = $('#payment_type_add').val();
+        var discount = $('#discount_add').val();
+        var warehouse = $('#warehouse_add').val();
+        var bank = $('#bank_add').val();
+        var distributor = $('#distributor_add').val();
+
+        var qty_per_year = $('#qty_per_year_add').val();
+        var start_use_day = $('#start_use_day_add').val();
+        var period_limit_day = $('#period_limit_day_add').val();
+        var reset_date = $('#reset_date_add').val();
+
+        if(!company_id){
+            alert('Please select Company.');
+            $('#company_id_add').focus();
+            return false;
+        }
+
+        if(!cat_id){
+            alert('Please select Category.');
+            $('#cat_id_add').focus();
+            return false;
+        }
+
+        if(!payment_type){
+            alert('Please select Paymeny Type.');
+            $('#payment_type_add').focus();
+            return false;
+        }
+        //alert(discount);
+        if(payment_type !="3"){
+            if(!discount || discount < 1){
+                alert('Please input Discount.');
+                $('#discount_add').focus();
+                return false;
+            }
+        }
+
+        if($('#checkbox_special_product_add').is(':checked')){
+            if(good_id==''){
+                alert('Please select Product.');
+                return false;
+            }else{
+                special_product = 1;
+            }
+        }
+
+        if(!warehouse){
+            alert('Please select Warehouse.');
+            $('#warehouse_add').focus();
+            return false;
+        }
+
+        if(!bank){
+            alert('Please select Bank.');
+            $('#warehouse_add').focus();
+            return false;
+        }
+
+        if(!distributor){
+            alert('Please select Distributor.');
+            $('#distributor_add').focus();
+            return false;
+        }
+
+        if(!qty_per_year){
+            alert('Please input QTY Per Year.');
+            $('#qty_per_year_add').focus();
+            return false;
+        }
+
+        if(!start_use_day){
+            alert('Please input Start Use Day.');
+            $('#start_use_day_add').focus();
+            return false;
+        }
+
+        if(!period_limit_day){
+            alert('Please input Period Limit Day.');
+            $('#period_limit_day_add').focus();
+            return false;
+        }
+
+        if(!reset_date){
+            alert('Please select Reset Date.');
+            $('#reset_date_add').focus();
+            return false;
+        }
+
+        if (!confirm('You confirm to create.')) {
+            return false;
+        }
+
+        $.ajax({
+        url: '<?php echo HOST.'product/create-discount-employee-privileges';?>',
+        type: 'POST',
+        data: {company_id:company_id,payment_type:payment_type, discount:discount,cat_id:cat_id,good_id:good_id,special_product:special_product, warehouse:warehouse, bank:bank, distributor:distributor, qty_per_year:qty_per_year, start_use_day:start_use_day, period_limit_day:period_limit_day, reset_date:reset_date},
+        })
+        .done(function(response) {
+            var obj_response = jQuery.parseJSON(response);
+            console.log("success");
+
+            switch(obj_response.status) {
+                case 200:
+                console.log('done');
+                $('#modal_add').modal('hide');
+                location.reload();
+                break;
+                case 400:
+                alert(obj_response.message);
+                break;
+                default:
+                location.reload();
+            }
+        });
+    });
+
+    $('#payment_type').change(function(event) {
+
+        $('#discount_add').removeAttr('readonly');
+        $('#discount_add').val('');
+
+        if($(this).val() == 3){
+            $('#discount_add').attr('readonly', true);
+            $('#discount_add').val('0');
+        }
+    });
+
+    $('#temp_distributor_add').change(function(event) {
+        $('#distributor_add').val($(this).val());
+    });
+
+</script>

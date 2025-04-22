@@ -1,0 +1,197 @@
+﻿<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
+<html>
+   <head>
+      <meta http-equiv="Pragma" content="no-cache">
+      <meta http-equiv="Expires" content="-1">
+      <meta charset="UTF-8">
+      <title>Print</title>
+      <script src="//ajax.googleapis.com/ajax/libs/jquery/1.10.2/jquery.min.js"></script>
+     <style>
+.titlep{text-indent:.5in;margin:0 0 6pt 4.5in}span{font-size:11pt}h2{margin-bottom:6pt;text-align:center;text-indent:.5in;text-align:center}.titlep1{margin-bottom:6pt;text-align:center;text-indent:.5in;text-align:center}body{font-family:arial}p{margin-bottom:6pt;text-align:justify;text-indent:.5in;font-size:13px}.info{margin:20px 0}table{border-collapse:collapse;border:none;margin-left:6.75pt;margin-right:6.75pt;width:661px;border:2px solid #000}td{padding:5px;font-size:13px}.right{text-align:right}.assign-left{width:300px;float:left;margin-left:30px;margin-top:80px;font-weight:700}.assign-left span{font-weight:400;position:relative;top:50px}.assign-right{width:300px;float:right;margin-right:-30px;margin-top:60px;font-weight:700;text-align:center}.assign-right span{font-weight:400}
+   </style>
+   </head>
+   <body>
+   
+      <?php
+         function VndText($amount)
+         {
+             if($amount <=0)
+             {
+                 return $textnumber="";
+             }
+             $Text=array("không", "một", "hai", "ba", "bốn", "năm", "sáu", "bảy", "tám", "chín");
+             $TextLuythua =array("","nghìn", "triệu", "tỷ", "ngàn tỷ", "triệu tỷ", "tỷ tỷ");
+             $textnumber = "";
+             $length = strlen($amount);
+         
+             for ($i = 0; $i < $length; $i++)
+                 $unread[$i] = 0;
+         
+             for ($i = 0; $i < $length; $i++)
+             {
+                 $so = substr($amount, $length - $i -1 , 1);
+         
+                 if ( ($so == 0) && ($i % 3 == 0) && ($unread[$i] == 0)){
+                     for ($j = $i+1 ; $j < $length ; $j ++)
+                     {
+                         $so1 = substr($amount,$length - $j -1, 1);
+                         if ($so1 != 0)
+                             break;
+                     }
+         
+                     if (intval(($j - $i )/3) > 0){
+                         for ($k = $i ; $k <intval(($j-$i)/3)*3 + $i; $k++)
+                             $unread[$k] =1;
+                     }
+                 }
+             }
+         
+             for ($i = 0; $i < $length; $i++)
+             {
+                 $so = substr($amount,$length - $i -1, 1);
+                 if ($unread[$i] ==1)
+                     continue;
+         
+                 if ( ($i% 3 == 0) && ($i > 0))
+                     $textnumber = $TextLuythua[$i/3] ." ". $textnumber;
+         
+                 if ($i % 3 == 2 )
+                     $textnumber = 'trăm ' . $textnumber;
+         
+                 if ($i % 3 == 1)
+                     $textnumber = 'mươi ' . $textnumber;
+         
+         
+                 $textnumber = $Text[$so] ." ". $textnumber;
+             }
+         
+             //Phai de cac ham replace theo dung thu tu nhu the nay
+             $textnumber = str_replace("không mươi", "lẻ", $textnumber);
+             $textnumber = str_replace("lẻ không", "", $textnumber);
+             $textnumber = str_replace("mươi không", "mươi", $textnumber);
+             $textnumber = str_replace("một mươi", "mười", $textnumber);
+             $textnumber = str_replace("mươi năm", "mươi lăm", $textnumber);
+             $textnumber = str_replace("mươi một", "mươi mốt", $textnumber);
+             $textnumber = str_replace("mười năm", "mười lăm", $textnumber);
+         
+             return ucfirst($textnumber);
+         }
+         
+         function product_price($priceFloat,$decimal_p=0) {
+             $symbol = ' VND';
+             $symbol_thousand = '.';
+             $decimal_place = $decimal_p;
+             //$priceFloat=round($priceFloat, 0, PHP_ROUND_HALF_UP);
+             $price = number_format($priceFloat, $decimal_place, ',', $symbol_thousand);
+             return $price;
+         }
+         if(isset($this->add_time) and $this->add_time)
+            $add_time =$this->add_time;
+         ?>
+    <div class="container">
+        <div class="title">
+        <p class="titlep" ><b><span >Số: TT<?php if(isset($this->invoice) and $this->invoice) echo $this->invoice; ?> </span></b></p>
+            <h2>BẢNG KÊ HÓA ĐƠN</h2>
+            <p class="titlep1">(Kèm theo hóa đơn số <?php if(isset($this->invoice) and $this->invoice) echo $this->invoice; ?> ngày <?php echo date("d",strtotime($this->invoice_time)); ?> tháng <?php echo date("m",strtotime($this->invoice_time)); ?> năm <?php echo date("Y",strtotime($this->invoice_time)); ?>)</p>
+        </div>
+        <?php if(isset($this->warehouse) and $this->warehouse == 1) : ?>        
+        <div class="info">
+           <p>Người bán hàng : CÔNG TY TNHH MTV KỸ THUẬT & KHOA HỌC OPPO</p>
+           <p>Địa chỉ : Tòa nhà SCB , 242 Cống Quỳnh P.Phạm Ngũ Lão Q.1 Tp.HCM</p>
+           <p>MST: 0312059023</p>
+        </div>       
+         <?php elseif(isset($this->warehouse) and $this->warehouse == 2) : ?>        
+        <div class="info">
+           <p>Người bán hàng : Chi nhánh Công ty TNHH MTV Kỹ Thuật & Khoa Học Oppo</p>
+           <p>Địa chỉ : Tầng 8, tòa nhà 148 Tower, số 148 Hoàng Quốc Việt, phường Nghĩa Tân, quận Cầu Giấy, Thành Phố Hà Nội</p>
+           <p>MST: 0312059023-001</p>
+        </div>
+         <?php elseif(isset($this->warehouse) and $this->warehouse == 3) : ?>
+          <div class="info">
+           <p>Người bán hàng : Chi nhánh Công ty TNHH MTV Kỹ Thuật & Khoa Học Oppo tại Đà Nẵng</p>
+           <p>Địa chỉ : 118 Hàm Nghi , Phường Thạc Gián , Quận Thanh Khê , TP Đà nẵng</p>
+           <p>MST: 0312059023-006</p>
+        </div>
+        <?php endif; ?>
+        <div class="info">
+           <p>Người mua hàng : <?php echo $this->distributor['unames'] ?></p>
+           <p>Địa chỉ : <?php echo $this->distributor['add'] ?></p>
+           <p>MST: <?php echo $this->distributor['mst_sn'] ?></p>
+        </div>
+        
+        <div class="info">
+            <p>Bảng kê chi tiết hóa đơn <?php if(isset($this->joint_circular)) echo $this->joint_circular ?></p>
+        </div>
+        
+        <table border="1" cellspacing="0" cellpadding="0" align="left" style="">
+       
+        <tbody>
+
+        <tr style="background: #D3F9CC;">
+            <td>Ngày</td>
+            <td>Kí hiệu hóa đơn</td>
+            <td>Số hóa đơn</td>
+            <td>Doanh thu (chưa VAT)</td>
+            <td>Tỷ lệ </td>
+            <td>Chiết khấu (chưa VAT)</td>
+            <td>Thuế GTGT(10%)</td>
+            <td>Tổng cộng chiết khấu</td>        
+        </tr>
+      
+      <?php 
+              $total_before = 0;
+              $total_off = 0;
+              $total_vat = 0;
+              $total_after = 0;
+      if(isset($this->market_product) and $this->market_product) : ?>
+      <?php foreach($this->market_product as $k => $v): ?>
+      <?php 
+              $total_before += $v['total'];
+              $total_off += $v['discount'];
+              $total_vat += $v['vat'];
+              $total_after += $v['total_discount'];
+              
+              if(isset($this->total_price) and $this->total_price)
+              {
+                    $total_price = $this->total_price;
+                    $total_off = $total_price['total_price'];
+                    $total_vat = $total_price['vat'];
+                    $total_after = $total_price['price_after_vat'];
+              }
+              
+              
+       ?>
+      <tr>
+            <td style="width: 120px;"><?php if(isset($v['date'])and $v['date']) echo $v['date'];?></td> 
+            <td><?php if(isset($v['invoice_sign']) and $v['invoice_sign']) echo $v['invoice_sign'] ?></td>
+            <td><?php if(isset($v['invoice_number']) and $v['invoice_number']) echo $v['invoice_number'] ?></td>
+            <td><?php if(isset($v['total']) and $v['total']) echo number_format($v['total']) ?></td>
+            <td><?php if(isset($v['percent_discount']) and $v['percent_discount']) echo $v['percent_discount'].'%';?></td>
+            <td><?php if(isset($v['discount']) and $v['discount']) echo number_format($v['total_discount'] - $v['vat']) ?></td>
+            <td><?php if(isset($v['vat']) and $v['vat']) echo number_format($v['vat']) ?></td>
+            <td><?php if(isset($v['total_discount']) and $v['total_discount']) echo number_format($v['total_discount']) ?></td>            
+      </tr>
+      
+     
+      
+      <?php endforeach;endif; ?>
+        
+         <tr>
+            <td colspan="3">Tổng cộng : </td>
+            <td><?php if(isset($total_before)) echo number_format($total_before); ?></td>
+             <td></td>
+            <td><?php if(isset($total_off)) echo number_format($total_off); ?></td>
+            <td><?php if(isset($total_vat)) echo number_format($total_vat); ?></td>
+            <td><?php if(isset($total_after)) echo number_format($total_after); ?></td>
+         </tr> 
+         
+        </tbody></table>
+        <div style="clear: both;"></div>
+        
+    <div class="assign-left">    Người mua hàng     <br />
+                             <span>Bán hàng qua điện thoại</span>
+    </div>
+    <div class="assign-right"> <span>Ngày <?php echo date("d"); ?> tháng <?php echo date("m"); ?> năm <?php echo date("Y" ); ?></span> <br />   Người bán hàng    </div>
+    </div>
+   </body>
+</html>

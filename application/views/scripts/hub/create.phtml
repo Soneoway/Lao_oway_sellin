@@ -1,0 +1,241 @@
+<style type="text/css">
+    textarea {
+        max-width: 100%;
+    }
+
+    .region,
+    .district {
+        width: 80%;
+    }
+</style>
+
+<div class="page-header">
+    <h1>Hub <small><?php if(isset($this->hub)) echo "Edit"; else echo "Create"; ?></small></h1>
+</div>
+<?php
+    if (isset($this->messages_success) and $this->messages_success)
+        foreach ($this->messages_success as $message):
+            echo '<div class="alert alert-success">'.$message.'</div>';
+        endforeach;
+
+    if (isset($this->messages) and $this->messages)
+        foreach ($this->messages as $message):
+            echo '<div class="alert alert-error">'.$message.'</div>';
+        endforeach;
+?>
+<form class="form-horizontal" action="<?php echo HOST ?>hub/save" method="post">
+    <div class="row">
+        <div class="span4">
+            <div class="control-group">
+                <label class="control-label" for="name">Name</label>
+                <div class="controls">
+                    <input type="text" placeholder="Name" id="name" name="name" value="<?php if(isset($this->hub['name'])) echo $this->hub['name'] ?>">
+                </div>
+            </div>
+            <div class="control-group">
+                <label class="control-label" for="contact">Contact</label>
+                <div class="controls">
+                    <input type="text" placeholder="Contact" id="contact" name="contact" value="<?php if(isset($this->hub['contact'])) echo $this->hub['contact'] ?>">
+                </div>
+            </div>
+            <div class="control-group">
+                <label class="control-label" for="mobile_phone">Mobile Phone</label>
+                <div class="controls">
+                    <input type="text" placeholder="Mobile Phone" id="mobile_phone" name="mobile_phone" value="<?php if(isset($this->hub['mobile_phone'])) echo $this->hub['mobile_phone'] ?>">
+                </div>
+            </div>
+
+            <div class="control-group">
+                <label class="control-label" for="address">Address</label>
+                <div class="controls">
+                    <textarea id="address" name="address" placeholder="Address"><?php if(isset($this->hub['address'])) echo trim($this->hub['address']) ?></textarea>
+                </div>
+            </div>
+        </div>
+
+        <div class="span4">
+            <div class="province_list">
+                <?php if (isset($this->provinces) && count($this->provinces)): ?>
+                    <?php foreach ($this->provinces as $_key => $_province): ?>
+                        <div class="control-group item">
+                            <label class="control-label" for="province">Province</label>
+                            <div class="controls">
+                                <select name="region[]" id="province" class="region" required>
+                                    <option value>---</option>
+                                    <?php if (isset( $this->regions ) && $this->regions): ?>
+                                        <?php foreach ($this->regions as $key => $province): ?>
+                                            <option value="<?php echo $key ?>" 
+                                                <?php if( $_province == $key ) echo "selected='selected'" ?>
+                                                ><?php echo $province['name'] ?></option>
+                                        <?php endforeach ?>
+                                    <?php endif ?>
+                                </select>
+                                <button class="btn btn-default remove_btn" type="button">&times;</button>
+                            </div>
+                        </div>
+                    <?php endforeach ?>
+                <?php endif ?>
+            </div>
+
+            <div class="control-group">
+                <div class="controls">
+                    <button class="btn btn-default add_province_btn" type="button">Add Province</button>
+                </div>
+            </div>
+        </div>
+
+        <div class="span4">
+            <div class="district_list">
+                <?php if (isset($this->districts) && count($this->districts)): ?>
+                    <?php foreach ($this->districts as $_key => $_district): ?>
+                        <div class="item">
+                            <div class="control-group">
+                                <label class="control-label" for="province">Province</label>
+                                <div class="controls">
+                                    <select name="region_district[]" id="province" class="province" required>
+                                        <option value>---</option>
+                                        <?php if (isset( $this->regions ) && $this->regions): ?>
+                                            <?php foreach ($this->regions as $key => $province): ?>
+                                                <option value="<?php echo $key ?>" 
+                                                    <?php if( My_Region::getValue($_district, My_Region::Province, My_Region::ID) == $key ) echo "selected='selected'" ?>
+                                                    ><?php echo $province['name'] ?></option>
+                                            <?php endforeach ?>
+                                        <?php endif ?>
+                                    </select>
+                                </div>
+                            </div>
+                            <div class="control-group">
+                                <label class="control-label" for="district">District</label>
+                                <div class="controls">
+                                    <select name="district_id[]" id="district" class="district" required>
+                                        <option value>---</option>
+                                        <?php if (isset( $this->district_list[ $_district ] ) && $this->district_list[ $_district ]): ?>
+                                            <?php foreach ($this->district_list[ $_district ] as $key => $district): ?>
+                                                <option value="<?php echo $key ?>" <?php if( $_district == $key ) echo "selected='selected'" ?>><?php echo $district ?></option>
+                                            <?php endforeach ?>
+                                        <?php endif ?>
+                                    </select>
+                                    <button class="btn btn-default remove_btn" type="button">&times;</button>
+                                </div>
+                            </div>
+                            <hr />
+                        </div>
+                    <?php endforeach ?>
+                <?php endif ?>
+            </div>
+            <div class="control-group">
+                <div class="controls">
+                    <button class="btn btn-default add_district_btn" type="button">Add District</button>
+                </div>
+            </div>
+        </div>
+
+    </div>
+    
+
+    <div class="control-group">
+        <div class="controls">
+            <input type="hidden" name="id" value="<?php if(isset($this->hub['id'])) echo $this->hub['id'] ?>">
+            <input type="hidden" name="refer" value="<?php if(isset($this->refer)) echo $this->refer ?>">
+            <button class="btn btn-primary">Save</button>
+            <a href="<?php if(isset($this->refer)) echo $this->refer; else echo My_Url::refer('hub') ?>" class="btn btn-default">Cancel</a>
+        </div>
+    </div>
+</form>
+
+<script type="text/javascript">
+province_div = '<div class="control-group item">\
+                <label class="control-label" for="province">Province</label>\
+                <div class="controls">\
+                    <select name="region[]" id="province" class="region" required>\
+                        <option value>---</option>\
+                        <?php if (isset( $this->regions ) && $this->regions): ?>
+                            <?php foreach ($this->regions as $key => $province): ?>
+                                <option value="<?php echo $key ?>" \
+                                    ><?php echo $province['name'] ?></option>\
+                            <?php endforeach ?>
+                        <?php endif ?>
+                    </select>\
+                    <button class="btn btn-default remove_btn" type="button">&times;</button>\
+                </div>\
+            </div>';
+
+district_div = '<div class="item">\
+                <div class="control-group">\
+                <label class="control-label" for="province">Province</label>\
+                <div class="controls">\
+                    <select name="region_district[]" id="province" class="province" required>\
+                        <option value>---</option>\
+                        <?php if (isset( $this->regions ) && $this->regions): ?>
+                            <?php foreach ($this->regions as $key => $province): ?>
+                                <option value="<?php echo $key ?>" \
+                                    ><?php echo $province['name'] ?></option>\
+                            <?php endforeach ?>
+                        <?php endif ?>
+                    </select>\
+                </div>\
+            </div>\
+            <div class="control-group">\
+                <label class="control-label" for="district">District</label>\
+                <div class="controls">\
+                    <select name="district_id[]" id="district" class="district" required>\
+                        <option value>---</option>\
+                    </select>\
+                    <button class="btn btn-default remove_btn" type="button">&times;</button>\
+                </div>\
+            </div>\
+            <hr /></div>';
+
+function add_province(e) {
+    $('.province_list').append(province_div);
+
+    $(document).off('click', '.remove_btn')
+        .on('click', '.remove_btn', remove_item);
+}
+
+function add_district(e) {
+    $('.district_list').append(district_div);
+
+    $(document).off('click', '.remove_btn')
+        .on('click', '.remove_btn', remove_item);
+
+    $(document).off('change', '.province')
+        .on('change', '.province', load_district);
+}
+
+function remove_item(e) {
+    $(e.target).parents('.item').remove();
+}
+
+function load_district(e) {
+    var _self = $(this);
+    var province_id = _self.val();
+    var _district = _self.parents('.item').find('.district');
+
+    _district.find('option:not(:first)').remove();
+
+    if (province_id) {
+        $('.loading').remove();
+        $(this).after('<span class="loading"></span>');
+
+        $.get("/get/district-v2",
+            {province_id: province_id}
+            ,function(data,status){
+                try {
+                    for (key in data)
+                        _district.append('<option value="'+key+'">'+data[key]+'</option>');
+                } catch(err) {console.log(err)}
+
+                $('.loading').remove();
+            });
+    }
+}
+
+$(document).ready(function () {
+    $('.add_province_btn').on('click', add_province);
+    $('.add_district_btn').on('click', add_district);
+    $('.remove_btn').on('click', remove_item);
+
+    $(document).on('change', '.province', load_district);
+});
+</script>

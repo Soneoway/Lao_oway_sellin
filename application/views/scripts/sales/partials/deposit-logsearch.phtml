@@ -1,0 +1,114 @@
+<form class="form-search form-horizontal" method="get" action="<?php echo HOST ?>finance/deposit-log">
+    <div class="row">
+        <div class="span5">
+
+        <input type="hidden" name="d_id" value="<?php isset($this->params['d_id']) and printf($this->params['d_id']);?>">
+
+          <div class="control-group">
+            <label for="from_deposit_no" class="span2">Deposit No</label>
+            <input id="from_deposit_no" name="from_deposit_no" type="text" class="input-medium search-query form-control" value="<?php isset($this->params['from_deposit_no']) and printf($this->params['from_deposit_no']);?>">
+          </div>
+
+          <div class="control-group">
+            <label for="to_sales_no" class="span2">To Sales Order No</label>
+            <input id="to_sales_no" name="to_sales_no" type="text" class="input-medium search-query form-control" value="<?php isset($this->params['to_sales_no']) and printf($this->params['to_sales_no']);?>">
+          </div>
+
+            
+        </div>
+        <div class="span5">
+
+          <div class="control-group">
+                <label for="created_at_from" class="span2">Created Date From</label>
+                <input type="text" class="form-control search-query date" id="created_at_from" name="created_at_from" value="<?php isset($this->params['created_at_from']) and printf($this->params['created_at_from']);?>">
+            </div>
+
+            <div class="control-group">
+                <label for="created_at_to" class="span2">Created Date To</label>
+                <input type="text" class="form-control search-query date" id="created_at_to" name="created_at_to" value="<?php isset($this->params['created_at_to']) and printf($this->params['created_at_to']);?>">
+            </div>
+
+        </div>
+    </div>
+    <input type="hidden" name="counter" value="<?=$this->counter;?>">
+    <button type="submit" class="btn btn-primary">Search</button>
+    <button type="reset" class="btn btn-warning">Reset</button>
+    <button type="submit" name="export" value="1" class="btn btn-success">Export</button>
+</form>
+<script async="async">
+    //getDistributor(<?php echo ((isset($this->params['d_id']) and $this->params['d_id']) ? $this->params['d_id'] : '');?>);
+
+    <?php if(isset($this->params['finance_group']) && $this->params['finance_group']){?>
+        $('#finance_group').val('<?php echo $this->params['finance_group'];?>');
+    <?php } ?>
+    
+    <?php if(isset($this->rank)) { ?>
+            $('#rank').val(<?= $this->rank ?>);
+            get_distributor_cached_for_search(<?= $this->rank ?>);
+        <?php }?>
+
+        $('.rank').change(function(event) {
+            get_distributor_cached_for_search($(this).val());
+          });
+
+        function get_distributor_cached_for_search(rank_id){
+
+            var rank_id = rank_id;
+                  $.ajax({
+                      url: '<?php echo HOST ?>get/distributor-cached-for-search',
+                      type: 'POST',
+                      dataType: 'html',
+                      data: {rank_id: rank_id},
+                  })
+                  .done(function(data) {
+                      $('.retailer_name_list').empty();
+                      $('.retailer_name_list').append(data);
+                        var jets = new Jets({
+                        searchTag: '#SearchBox',
+                        contentTag: '#d_id'
+                    });
+                        <?php if(isset($this->d_id)){ ?>
+                            $('#d_id').val(<?= $this->d_id ?>);
+                        <?php }?>
+                      console.log("success");
+                  })
+                  .fail(function() {
+                      console.log("error");
+                  })
+                  .always(function() {
+                      console.log("complete");
+                  });
+
+        }
+
+    function getDistributor(currentDistributorID) {
+
+        $.ajax({
+            url: '<?php echo HOST ?>get/distributor-cached',
+            type: 'post',
+            dataType: 'json'
+        })
+            .done(function(data) {
+                if (!data || data.no_data) return false;
+                $('#d_id option').not(':first').remove();
+
+                $.each(data, function(key, value) {
+                    var selected = currentDistributorID == key ? 'selected' :'';
+                    var op = '<option value="'+key+'" ' + selected + '>'+value.store_code+' - '+value.title+'</option>';
+                    $('#d_id').append(op);
+                });
+
+                var jets = new Jets({
+                    searchTag: '#SearchBox',
+                    contentTag: '#d_id'
+                });
+            })
+            .fail(function() {
+                console.log("error");
+            })
+            .always(function() {
+                /*console.log("complete");*/
+            });
+
+    }
+</script>

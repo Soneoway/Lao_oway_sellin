@@ -1,0 +1,87 @@
+<form class="form-search form-horizontal" method="get">
+    <div class="row">
+        <div class="span5">
+            <div class="control-group">
+                <label for="imei_sn" class="span2">IMEI</label>
+                <input id="imei_sn" name="imei_sn" type="text" class="input-medium search-query form-control" value="<?php isset($this->params['imei_sn']) and printf($this->params['imei_sn']);?>">
+            </div>
+
+        </div>
+
+        <div class="span5">
+            <div class="control-group">
+                <label for="sn" class="span2">Sales Order Number</label>
+                <input id="sn" name="sn" type="text" class="input-medium search-query form-control" value="<?php isset($this->params['sn']) and printf($this->params['sn']);?>">
+            </div>
+
+        </div>
+
+    </div>
+
+    <div class="row">
+        <div class="span5">
+            <div class="control-group">
+                <label for="good_id" class="span2">Product</label>
+                <select id="good_id" class="span3" name="good_id">
+                    <option value="">Choose</option>
+                    <?php if ($this->goods): foreach ($this->goods as $item):?>
+                        <option value="<?php echo $item->id;?>" <?php if (isset($this->params['good_id']) and $item->id==$this->params['good_id']):?> selected<?php endif;?>><?php echo $item->name;?></option>
+                    <?php endforeach; endif;?>
+                </select>
+            </div>
+
+
+
+        </div>
+
+        <div class="span5">
+
+            <div class="control-group">
+                <label for="good_color" class="span2">Color</label>
+                <select id="good_color" class="span3" name="good_color">
+                    <option value="">Choose</option>
+                    <?php if (isset($this->good_colors_2_cached) and $this->good_colors_2_cached){
+                        foreach ($this->good_colors_2_cached as $id=>$name) {?>
+                    <option value="<?php echo $id;?>"<?php if (isset($this->params['good_color']) and $id==$this->params['good_color']){?> selected<?php }?>><?php echo $name;?></option>
+                    <?php }}?>
+                </select>
+            </div>
+
+        </div>
+
+    </div>
+
+    <button type="submit" class="btn btn-primary">Search</button>
+    <button type="reset" class="btn btn-warning">Reset</button>
+    <button type="submit" name="export" value="1" class="btn btn-success">Export</button>
+</form>
+<script>
+    $(document).ready(function () {
+        $( '.date' ).datepicker({ dateFormat: "dd/mm/yy" });
+
+        $('#good_id').change(function(){
+            $(this).after('<span class="loading"></span>');
+            var _self = $(this);
+            var cat_id = <?php echo ACCESS_CAT_ID;?>;
+
+
+            var good_id = $('#good_id').val();
+
+            $('#good_color').find('option:not(:first)').remove();
+
+            $.get("/get/load",
+                {cat_id: cat_id, good_id: good_id}
+                ,function(data,status){
+                    var data = $.parseJSON( data );
+
+                    if (data.colors){
+                        var obj = data.colors;
+                        for (var i = 0; i < obj.length; i++) {
+                            $('#good_color').append('<option value="'+obj[i]['id']+'">'+obj[i]['name']+'</option>');
+                        }
+                    }
+                    _self.nextAll('.loading').remove();
+                });
+        });
+    });
+</script>

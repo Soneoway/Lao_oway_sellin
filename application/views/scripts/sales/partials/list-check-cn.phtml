@@ -1,0 +1,197 @@
+<?php
+
+function product_price($priceFloat) {
+    $symbol = ' THB';
+    $symbol_thousand = ',';
+    $decimal_place = 2;
+    $price = number_format($priceFloat, $decimal_place, '.', $symbol_thousand);
+    return $price;
+}
+
+?>
+<table class="table table-bordered">
+    <thead>
+        <tr>
+            <?php echo $this->sorting(array(
+					'#',
+					'store_code'            => 'Distributor Code',
+					'title'          => 'Retailer Name',
+                    'Type Discount',
+					'creditnote_sn'       => 'Credit Note No',
+                    'status'       => 'Status',
+					'Discount Total',
+                    'Balance Total',
+					'create_date'      => 'Create Date',
+                    'update_date'      => 'Update Date',
+					'Action'
+                ),
+                $this->url, $this->sort, $this->desc); ?>
+        </tr>
+    </thead>
+    <tbody>
+        <?php
+        //print_r($this->markets);
+        if (isset($this->credit_note_list) and $this->credit_note_list) :
+            foreach ($this->credit_note_list as $k=>$m): ?>
+        <tr class="accordion-heading">
+        	<td><a href="#id" class="collapse_a btn btn-default btn-small" id="m_<?php echo $m['distributor_id'] ?>">+</a></td>
+            <td><?php echo $m['store_code'] ?></td>
+            <td><?php echo $m['title'] ?></td>
+            <td></td>  
+            <td></td>
+            <td></td>     
+            <td><?php echo product_price($m['total_amount']  );?></td>
+            <td><?php echo product_price($m['balance_total']  );?></td>
+            <td><?php echo $m['create_date'];?></td>
+            <td></td>
+            <td>
+            </td>
+        </tr>
+        		<?php foreach ($this->markets[$m['distributor_id']] as $key => $value): 
+                    $creditnote_type_sn = $value['creditnote_type'];
+                    //print_r($value);
+                    $chanel = $value['chanel'];
+                    $credit_status_chk = $value['credit_status_chk'];
+                    if($creditnote_type_sn=='CN'){
+                        if($chanel=='reward'){
+                            $creditnote_type='OPPO Club';
+                        }
+                        elseif ($chanel=='oppo_all_green') {
+                           $creditnote_type='OPPO All Green';
+                        }elseif ($chanel=='top_green') {
+                           $creditnote_type='OPPO Top Green';
+                        }
+                        elseif ($chanel=='accessories') {
+                           $creditnote_type='Accessories';
+                        }
+                        elseif ($chanel=='price_protection' || $chanel=='price') {
+                           $creditnote_type='Protection Price';
+                        }
+                        else{
+                            $creditnote_type='Return Product';
+                        }
+                        
+                    }else{
+                        $creditnote_type='Protection Price';
+                    }
+
+                    if($credit_status_chk=='1'){
+                        $status_show='Active';
+                    }else{
+                        $status_show='-';
+                    }
+
+                    //print_r($value);
+                ?>
+        			<tr class="m_<?php echo $m['distributor_id'] ?> accordion-body collapse" style="display:none;">
+        				<td></td>
+        				<td></td>
+			            <td></td>
+                        <td><?php echo $creditnote_type?></td>
+			            <td><?php echo $value['creditnote_sn_show']?></td>  
+                        <td><?php echo $status_show?></td>         
+			            <td><?php echo product_price($value['total_amount']  );?></td>
+                        <td><?php echo product_price($value['balance_total']  );?></td>
+			            <td><?php echo $value['cn_create_date'] ?></td>
+                        <td><?php echo $value['cn_update_date'] ?></td>
+                        <?php if($creditnote_type_sn=='CN'){  ?>
+    			            <td>
+                                
+
+                                <?php
+                                if($chanel=='reward'){
+                                ?>
+                                   <a title="Print Imei Reward List" target="_blank" href="/finance/cn-view-imei-reward-print?sn=<?php echo $value['creditnote_sn_show'];?>&d_id=<?php echo $value['distributor_id'];?>&creditnote_type=<?=$creditnote_type_sn?>&chanel=<?=$chanel?>"> <i class="icon-qrcode"></i></a>
+                                <?php    
+                                }
+                                ?>
+                                <?php
+                                if($creditnote_type=='Return Product'){
+                                ?>
+                                    <a title="View Return Product" target="_blank" href="/finance/cn-view-print?sn=<?php echo $value['creditnote_sn_show'];?>&d_id=<?php echo $value['distributor_id'];?>&creditnote_type=<?=$creditnote_type_sn?>&chanel=<?=$chanel?>"> <i class="icon-print"></i></a>
+
+                                    <a title="Print Imei Return List" target="_blank" href="/finance/cn-view-imei-return-print?sn=<?php echo $value['creditnote_sn_show'];?>&d_id=<?php echo $value['distributor_id'];?>&creditnote_type=<?=$creditnote_type_sn?>&chanel=<?=$chanel?>"> <i class="icon-qrcode"></i></a>
+                                <?php    
+                                }
+                                ?>
+                                <?php
+                                if($chanel=='reward'){
+                                ?>
+                                    <a title="View OPPO CLUB" target="_blank" href="/finance/cn-reward-view-print?sn=<?php echo $value['creditnote_sn_show'];?>&d_id=<?php echo $value['distributor_id'];?>&creditnote_type=reward"> <i class="icon-print" style="color: #4300ff"></i></a>
+                                <?php    
+                                }
+                                ?>
+
+                                <?php
+                                if($chanel=='oppo_all_green'){
+                                ?>
+                                    <a title="View OPPO All Green" target="_blank" href="/finance/cn-reward-all-green-print?sn=<?php echo $value['creditnote_sn_show'];?>&d_id=<?php echo $value['distributor_id'];?>&creditnote_type=oppo_all_green"> <i class="icon-print" style="color: red"></i></a>
+                                <?php    
+                                }
+                                ?>
+                                <?php
+                                if($chanel=='service'){
+                                ?>
+                                <a title="View OPPO Fee Service" target="_blank" href="/finance/cn-reward-service-view-print?sn=<?php echo $value['creditnote_sn_show'];?>&d_id=<?php echo $value['distributor_id'];?>&creditnote_type=reward"> <i class="icon-print" style="color: #ed38c3"></i></a>
+                                <?php    
+                                }
+                                ?>
+
+                                <?php
+                                if($chanel=='top_green'){
+                                ?>
+                                    <a title="View OPPO Top Green" target="_blank" href="/finance/cn-reward-top-green-print?sn=<?php echo $value['creditnote_sn_show'];?>&d_id=<?php echo $value['distributor_id'];?>&creditnote_type=top_green"> <i class="icon-print" style="color: red"></i></a>
+                                <?php    
+                                }
+                                ?>
+                                
+                                <a title="Edit" target="_blank" href="/finance/edit-return-cn/?sn=<?php echo $value['sn'];?>"> <i class="icon-edit"></i></a>
+                            </td>
+                        <?php }else{  ?>
+
+                            <td>
+                                <a title="Protection Price" target="_blank" href="/finance/cp-view-print?sn=<?php echo $value['creditnote_sn_show'];?>&d_id=<?php echo $value['distributor_id'];?>&creditnote_type=<?=$creditnote_type_sn?>"> <i class="icon-print"></i></a>
+                                <a title="Print Imei List" target="_blank" href="/finance/cp-view-imei-print?sn=<?php echo $value['creditnote_sn_show'];?>&d_id=<?php echo $value['distributor_id'];?>&creditnote_type=<?=$creditnote_type_sn?>"> <i class="icon-qrcode"></i></a>
+
+                                <a title="CP Import Data" target="_blank" href="/finance/cp-view-import-print?sn=<?php echo $value['creditnote_sn_show'];?>&d_id=<?php echo $value['distributor_id'];?>&creditnote_type=<?=$creditnote_type_sn?>"> <i class="icon-print"></i></a>
+                                <a title="Print Imei Import List" target="_blank" href="/finance/cp-view-imei-import-print?sn=<?php echo $value['creditnote_sn_show'];?>&d_id=<?php echo $value['distributor_id'];?>&creditnote_type=<?=$creditnote_type_sn?>"> <i class="icon-qrcode"></i></a>
+                                
+                                <a title="Edit" target="_blank" href="/finance/edit-return-cn/?sn=<?php echo $value['sn'];?>"> <i class="icon-edit"></i></a>
+                            </td>
+
+                        <?php }  ?>
+        			</tr>
+        		<?php endforeach ?>
+
+        <?php endforeach;?>
+		<?php endif; ?>
+    </tbody>
+</table>
+<div class="paging">
+    <?php echo $this->paging($this->total, $this->limit, $this->offset, $this->url);?>
+</div>
+
+<script type="text/javascript" src="/js/jquery-ui-1.8.12.custom.min.js"></script>
+<link rel="stylesheet" type="text/css" href="/css/jquery-ui-1.8.12.custom.css"/>
+<?php echo $this->load();?>
+<?php echo $this->confirm();?>
+<script>
+    $('.lock').click(function(e){
+        e.preventDefault();
+        alert('Sorry,This information is blocked...You can not delete payment has been made or has been the storage of information!');
+    });
+
+    $('.collapse_a').each(function(){
+    	var _this = $(this);
+    	var _this_id = _this.attr('id');
+    	var $coll = $('.'+_this_id);
+
+    	_this.click(function(){
+
+    		$coll.toggle();
+    		if ($coll.is(':visible'))
+	    		_this.html('-');
+	    	else _this.html('+');
+    	});
+    });
+</script>

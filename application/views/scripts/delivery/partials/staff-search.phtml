@@ -1,0 +1,15 @@
+<form class="form-inline form-search" method="get" action="<?php echo HOST ?>delivery/staff">
+    <input type="text" name="username" value="<?php if(isset($this->params['username'])) echo $this->params['username'] ?>" placeholder="Username" />
+    <button type="submit" class="btn btn-primary">Search</button>
+    <button type="reset" class="btn btn-danger">Reset</button>
+</form>
+<script type="text/javascript">
+    ;(function($) {
+        $('.form-search button:reset').click(function (e){
+            $('.form-search input, .form-search select').val('');
+            $('.form-search').submit();
+            return false;
+        });
+
+    })(jQuery);
+</script>

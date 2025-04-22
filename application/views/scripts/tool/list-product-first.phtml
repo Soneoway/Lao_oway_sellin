@@ -1,0 +1,150 @@
+
+       <div class="col-md-12" style="display: flex;">
+            <div class="dual-list list-left-product col-md-5">
+                <div class="well-p">
+                    <div class="row tabLeft">
+                        <div class="col-md-7">
+                            <div class="input-prepend">
+                                <span class="add-on"><i class="icon icon-search"></i></span>
+                                <input type="text" name="SearchDualListProduct" class="form-control" placeholder="Search" />
+                            </div>
+                        </div>
+                        <div class="col-md-2">
+                            <div class="btn-group">
+                                <a class="btn btn-default selectorP" title="select all"><i class="icon icon-circle-blank"></i></a>
+                            </div>
+                        </div>
+                    </div>
+                    <div>
+                         <span class="so-title">Product ID</span>
+                         <span class="price_ori">Product Name</span>
+                         
+                    </div>
+                    <ul class="list-group">
+                    </ul>
+                </div>
+            </div>
+
+            <div class="list-arrows-product col-md-1 text-center">
+                <div class="but"><a class="btn btn-default btn-sm move-left">
+                    <span class="icon icon-chevron-left"></span>
+                </a>
+
+                <a class="btn btn-default btn-sm move-right">
+                    <span class="icon icon-chevron-right"></span>
+                </a>
+                </div>
+                
+            </div>
+
+            <div class="dual-list list-right-product col-md-5">
+                <div class="well-p">
+                    <div class="row tabLeft">
+                        
+                        <div class="col-md-7">
+                            <div class="input-prepend">
+                                <span class="add-on"><i class="icon icon-search"></i></span>
+                                <input type="text" name="SearchDualList" class="form-control" placeholder="Search" />
+                                
+                            </div>
+                        </div>
+                        <div class="col-md-2">
+                            <div class="btn-group">
+                                <a class="btn btn-default selectorP" title="select all"><i class="icon icon-circle-blank"></i></a>
+                            </div>
+                        </div>
+                    </div>
+                    <div>
+                         <span class="so-title">Product ID</span>
+                         <span class="price_ori">Product Name</span>
+                         
+                    </div>
+                    <ul class="list-group">
+                        <?PHP 
+                        $i = 1;
+                        foreach ($this->forceSaleSelect   as $list ) :
+                         
+                            ?>
+                        <li class="list-group-item item-product">
+                            <span class="so"><?=$list['good_id']?></span>
+                            <span class="price_ori "><?=$list['good_name']?>
+
+                            <input type="hidden" class="sn" name="g_id[]"  value="<?=$list['good_id']?>">
+                            </span>
+                           
+                            <span class="price_text"><span style="vertical-align: super;">จำนวน : </span> 
+
+                            <input type="number" min="1"    name="g_id_num[]" value="<?=$list['num']?>" required>
+                            </span>
+                            
+                        </li>
+                            
+                            
+                      <?PHP $i+=1; 
+                       
+                      endforeach; ?>  
+                    </ul>
+                
+                </div>
+            </div>
+        </div>
+
+
+    <script type="text/javascript">
+    
+    $(document).ready(function () {
+        
+
+            $('body').on('click', '.list-group .item-product', function () {
+                $(this).toggleClass('activeP');
+            });
+
+          
+            $('.list-arrows-product a').click(function () {
+                var $button = $(this), actives = '';
+                if ($button.hasClass('move-left')) {
+                    actives = $('.list-right-product ul li.activeP');
+                    actives.removeClass('activeP');
+                   acc = actives.clone().appendTo('.list-left-product ul').find('span').addClass('none_price').find('input,textarea,select,hidden,number').attr('disabled','disabled');
+                    acc.parent().parent().find('.pay_ment').removeClass('pay_money_total');
+                    actives.remove();
+                    
+                  
+                } else if ($button.hasClass('move-right')) {
+                    actives = $('.list-left-product ul li.activeP');
+                    actives.removeClass('activeP');
+                    acc  =  actives.clone().appendTo('.list-right-product ul').find('span').removeClass('none_price').find('input,textarea,select,hidden,number').removeAttr('disabled');
+                    acc.parent().find('.pay_ment').addClass('pay_money_total');
+                    actives.remove();
+                   
+                    
+                    
+                }
+            });
+
+            $('.selectorP').click(function () {
+                var $checkBox = $(this);
+                if (!$checkBox.hasClass('selected')) {
+                    $checkBox.addClass('selected').closest('.well-p').find('ul li:not(.activeP)').addClass('activeP');
+                    $checkBox.children('i').removeClass('icon icon-circle-blank').addClass('icon icon-ok');
+                } else {
+                    $checkBox.removeClass('selected').closest('.well-p').find('ul li.activeP').removeClass('activeP');
+                    $checkBox.children('i').removeClass('icon icon-ok').addClass('icon icon-circle-blank');
+                }
+            });
+
+            
+
+            $(document).on("submit", "form", function(e)
+            {
+                 $('#form').submit();
+            });
+            
+        });
+
+        
+        function roundNumber(num, dec) {
+            var result = Math.round(num*Math.pow(10,dec))/Math.pow(10,dec);
+            return Number(result).toLocaleString('en',{ minimumFractionDigits: 2 });
+        }
+    </script>

@@ -1,0 +1,9410 @@
+<?php
+
+class SalesController extends My_Controller_Action
+{
+    public function indexAction()
+    {
+        require_once 'sales' . DIRECTORY_SEPARATOR . 'index.php';
+    }
+
+    public function stockAction()
+    {
+        require_once 'sales' . DIRECTORY_SEPARATOR . 'stock.php';
+    }
+
+    public function stockStorageAction()
+    {
+        require_once 'sales' . DIRECTORY_SEPARATOR . 'stock-storage.php';
+    }
+
+    public function createAction()
+    {
+        require_once 'sales' . DIRECTORY_SEPARATOR . 'create.php';
+    }
+
+    public function createDigitalAction()
+    {
+        require_once 'sales' . DIRECTORY_SEPARATOR . 'create-digital.php';
+    }
+
+    public function createServiceAction()
+    {
+        require_once 'sales' . DIRECTORY_SEPARATOR . 'create-service.php';
+    }
+
+    public function createAccessoriesAction()
+    {
+        require_once 'sales' . DIRECTORY_SEPARATOR . 'create-accessories.php';
+    }
+
+    public function indexAccessoriesAction()
+    {
+        require_once 'sales' . DIRECTORY_SEPARATOR . 'index-accessories.php';
+    }
+
+    public function createStockAction()
+    {
+        require_once 'sales' . DIRECTORY_SEPARATOR . 'create-stock.php';
+    }
+
+    public function saveStockAction()
+    {
+        require_once 'sales' . DIRECTORY_SEPARATOR . 'save-stock.php';
+    }
+
+    public function createExcelAction()
+    {
+        require_once 'sales' . DIRECTORY_SEPARATOR . 'create-excel.php';
+    }
+
+    public function createSimAction()
+    {
+        require_once 'sales' . DIRECTORY_SEPARATOR . 'create-sim.php';
+    }
+
+    public function createTgddAction()
+    {
+        require_once 'sales' . DIRECTORY_SEPARATOR . 'create-tgdd.php';
+    }
+
+    public function viewAction()
+    {
+        require_once 'sales' . DIRECTORY_SEPARATOR . 'view.php';
+    }
+
+    public function viewStockAction()
+    {
+        require_once 'sales' . DIRECTORY_SEPARATOR . 'view-stock.php';
+    }
+
+    public function saveAction()
+    {
+        require_once 'sales' . DIRECTORY_SEPARATOR . 'save.php';
+    }
+
+    public function saveServiceAction()
+    {
+        require_once 'sales' . DIRECTORY_SEPARATOR . 'save.php';
+    }
+
+    public function saveExcelAction()
+    {
+        require_once 'sales' . DIRECTORY_SEPARATOR . 'save-excel.php';
+    }
+
+    public function saveSimAction()
+    {
+        require_once 'sales' . DIRECTORY_SEPARATOR . 'save-sim.php';
+    }
+
+    public function saveTgddAction()
+    {
+        require_once 'sales' . DIRECTORY_SEPARATOR . 'save-tgdd.php';
+    }
+
+    public function mouLogAction()
+    {
+        require_once 'sales' . DIRECTORY_SEPARATOR . 'mou-log.php';
+    }
+
+    public function returnAction()
+    {
+        require_once 'sales' . DIRECTORY_SEPARATOR . 'return.php';
+    }
+
+    public function returnViewAction()
+    {
+        require_once 'sales' . DIRECTORY_SEPARATOR . 'return-view.php';
+    }
+
+    public function saveReturnAction()
+    {
+        require_once 'sales' . DIRECTORY_SEPARATOR . 'save-return.php';
+    }
+
+    public function distributorAction()
+    {
+        require_once 'sales' . DIRECTORY_SEPARATOR . 'distributor.php';
+    }
+
+    public function distributorMassUploadAction()
+    {
+        require_once 'sales' . DIRECTORY_SEPARATOR . 'distributor-mass-upload.php';
+    }
+
+    public function distributorMassUploadSaveAction()
+    {
+        require_once 'sales' . DIRECTORY_SEPARATOR . 'distributor-mass-upload-save.php';
+    }
+
+    public function distributorMassUploadVtaAction()
+    {
+        require_once 'sales' . DIRECTORY_SEPARATOR . 'distributor-mass-upload-vta.php';
+    }
+
+    public function distributorMassUploadVtaSaveAction()
+    {
+        require_once 'sales' . DIRECTORY_SEPARATOR . 'distributor-mass-upload-vta-save.php';
+    }
+
+    public function createDistributorAction()
+    {
+        require_once 'sales' . DIRECTORY_SEPARATOR . 'create-distributor.php';
+    }
+    public function shippingAddressAction()
+    {
+        require_once 'sales' . DIRECTORY_SEPARATOR . 'shipping-address.php';
+    }
+    public function addShippingAddressAction()
+    {
+        require_once 'sales' . DIRECTORY_SEPARATOR . 'add-shipping-address.php';
+    }
+    public function saveDistributorAction()
+    {
+        require_once 'sales' . DIRECTORY_SEPARATOR . 'save-distributor.php';
+    }
+
+    public function deleteDistributorAction()
+    {
+        require_once 'sales' . DIRECTORY_SEPARATOR . 'delete-distributor.php';
+    }
+
+    public function undeleteDistributorAction()
+    {
+        require_once 'sales' . DIRECTORY_SEPARATOR . 'undelete-distributor.php';
+    }
+
+    public function returnListAction()
+    {
+        require_once 'sales' . DIRECTORY_SEPARATOR . 'return-list.php';
+    }
+
+    public function delAction()
+    {
+        require_once 'sales' . DIRECTORY_SEPARATOR . 'del.php';
+    }
+
+    public function delStockAction()
+    {
+        require_once 'sales' . DIRECTORY_SEPARATOR . 'del-stock.php';
+    }
+
+    public function checkListCreditNoteAction()
+    {
+        require_once 'sales' . DIRECTORY_SEPARATOR . 'check-list-cn.php';
+    }
+
+    public function printSaleAction()
+    {
+        require_once 'sales' . DIRECTORY_SEPARATOR . 'print-sale.php';
+    }
+
+    public function targetAction()
+    {
+        require_once 'sales' . DIRECTORY_SEPARATOR . 'target.php';
+    }
+
+    public function targetSaveAction()
+    {
+        require_once 'sales' . DIRECTORY_SEPARATOR . 'target-save.php';
+    }
+
+    public function targetCheckAction()
+    {
+        require_once 'sales' . DIRECTORY_SEPARATOR . 'target-check.php';
+    }
+
+    public function targetViewAction()
+    {
+        require_once 'sales' . DIRECTORY_SEPARATOR . 'target-view.php';
+    }
+
+    public function targetUpdateAction()
+    {
+        require_once 'sales' . DIRECTORY_SEPARATOR . 'target-update.php';
+    }
+
+    public function delPoAction()
+    {
+        require_once 'sales' . DIRECTORY_SEPARATOR . 'del-po.php';
+    }
+
+    public function createPaymentGroupAction()
+    {
+        require_once 'sales' . DIRECTORY_SEPARATOR . 'create-payment-group.php';
+    }
+
+    public function showPaymentGroupAction()
+    {
+        require_once 'sales' . DIRECTORY_SEPARATOR . 'show-payment-group.php';
+    }
+
+    public function massDistributorOnlineAction()
+    {
+        require_once 'sales' . DIRECTORY_SEPARATOR . 'mass-distributor-online.php';
+    }
+    /**
+     * List of model and quantity to check price protection
+     * @return [type] [description]
+     */
+    public function priceProtectionAction()
+    {
+        require_once 'sales' . DIRECTORY_SEPARATOR . 'price-protection.php';
+    }
+
+    /**
+     * Tách đơn hàng thành 2 đơn nhỏ - (giữ một phần đơn gốc + tạo 1 đơn mới)
+     * @return [type] [description]
+     */
+    public function splitAction()
+    {
+        require_once 'sales' . DIRECTORY_SEPARATOR . 'split.php';
+    }
+
+    /**
+     * Tách đơn hàng thành 2 đơn nhỏ - (giữ một phần đơn gốc + tạo 1 đơn mới)
+     * @return [type] [description]
+     */
+    public function splitGetOrderAction()
+    {
+        require_once 'sales' . DIRECTORY_SEPARATOR . 'split-get-order.php';
+    }
+
+    /**
+     * Tách đơn hàng thành 2 đơn nhỏ - (giữ một phần đơn gốc + tạo 1 đơn mới)
+     * @return [type] [description]
+     */
+    public function splitActAction()
+    {
+        require_once 'sales' . DIRECTORY_SEPARATOR . 'split-act.php';
+    }
+
+    /**
+     * Function saveAPI
+     * Action sales/save và sales/save-excel sẽ dùng chung API này
+     *     để thuận tiện việc nhập và trả dữ liệu
+     * @param  array  $params - mảng tất cả các tham số cần thiết
+     * @return array
+     */
+    private function saveAPI($params = array())
+    {   
+        // echo "<pre>";
+         //print_r($params);die;
+       // echo $this->getRequest()->getParam('sn');
+      
+        $market_general_id    = isset($params['market_general_id']) ? $params['market_general_id'] : null;
+        $ids                  = isset($params['ids']) ? $params['ids'] : null;
+        $cat_ids              = isset($params['cat_id']) ? $params['cat_id'] : null;
+        $good_ids             = isset($params['good_id']) ? $params['good_id'] : null;
+        $good_colors          = isset($params['good_color']) ? $params['good_color'] : null;
+        $nums                 = isset($params['num']) ? $params['num'] : null;
+        $save_service         = isset($params['save_service']) ? $params['save_service'] : null;
+        $prices               = isset($params['price']) ? $params['price'] : null;
+        $totals               = isset($params['total']) ? $params['total'] : null;
+        $texts                = isset($params['text']) ? $params['text'] : null;
+        $distributor_id       = isset($params['distributor_id']) ? $params['distributor_id'] : null;
+        $warehouse_id         = isset($params['warehouse_id']) ? $params['warehouse_id'] : null;
+        $salesman             = isset($params['salesman']) ? $params['salesman'] : null;
+        $sales_catty_id       = isset($params['sales_catty_id']) ? $params['sales_catty_id'] : null;
+
+        $type                 = isset($params['type']) ? $params['type'] : null;
+        $sale_off_percent     = isset($params['sale_off_percent']) ? $params['sale_off_percent'] : null;
+        $sn                   = isset($params['sn']) ? $params['sn'] : null;
+        $sn_ref               = isset($params['sn_ref']) ? $params['sn_ref'] : null;
+        $isbatch              = isset($params['isbatch']) ? $params['isbatch'] : null;
+        $life_time            = isset($params['life_time']) ? $params['life_time'] : null;
+        $service_id           = isset($params['service_id']) ? $params['service_id'] : null;
+        $ids_bvg              = isset($params['ids_bvg']) ? $params['ids_bvg'] : null;
+        $good_ids_bvg         = isset($params['good_id_bvg']) ? $params['good_id_bvg'] : null;
+        $nums_bvg             = isset($params['num_bvg']) ? $params['num_bvg'] : null;
+        $prices_bvg           = isset($params['price_bvg']) ? $params['price_bvg'] : null;
+        $totals_bvg           = isset($params['total_bvg']) ? $params['total_bvg'] : null;
+        $joint                = isset($params['joint']) ? $params['joint'] : null;
+        $ids_discount         = isset($params['ids_discount']) ? $params['ids_discount'] : null;
+        $joint_discount       = isset($params['joint_discount']) ? $params['joint_discount'] : null;
+        $prices_discount      = isset($params['prices_discount']) ? $params['prices_discount'] : null;
+        $bvg_imei             = isset($params['bvg_imei']) ? $params['bvg_imei'] : null;
+        $userStorage          = Zend_Auth::getInstance()->getStorage()->read();
+        $distributor_po       = isset($params['distributor_po']) ? $params['distributor_po'] : null;
+        $invoice              = isset($params['invoice_data']) ? $params['invoice_data'] : null;
+        $gift_id              = isset($params['gift_id']) ? $params['gift_id'] : null;
+        $include_shipping_fee = isset($params['include_shipping_fee']) ? $params['include_shipping_fee'] : 0;
+        $user_uncheck         = isset($params['user_uncheck']) ? $params['user_uncheck'] : 0;
+        $campaign             = isset($params['campaign']) ? $params['campaign'] : null;
+        $payment_method       = isset($params['payment_method']) ? $params['payment_method'] : null;
+        $invoice_number_data  = isset($params['invoice_number_data']) ? $params['invoice_number_data'] : null;
+
+        $currentTime          = date('Y-m-d H:i:s');
+
+        //Thông tin nhân viên mua máy
+        $market_general_data  = isset($params['market_general_data']) ? $params['market_general_data'] : null;
+        $id_staffs            = isset($params['id_staff']) ? $params['id_staff'] : null;
+        $cmnd_staff_ingames   = isset($params['cmnd_staff_ingame']) ? $params['cmnd_staff_ingame'] : null;
+        $product_color_keys   = isset($params['product_color_key']) ? $params['product_color_key'] : null;
+        $staff_nums           = isset($params['staff_num']) ? $params['staff_num'] : null;
+        $shipment_id          = isset($params['shipment_id']) ? $params['shipment_id'] : null;
+        $for_partner          = isset($params['for_partner']) ? $params['for_partner'] : NULL;
+
+        //Tanong Add New credit_id 2016/02/26
+        $credit_id            = isset($params['credit_id']) ? $params['credit_id'] : NULL;
+        $creditnote_data      = isset($params['creditnote_data']) ? $params['creditnote_data'] : null;
+        //Tanong Delivery Address
+        $delivery_address     = isset($params['delivery_address']) ? $params['delivery_address'] : null;
+        $add_delivery_new     = $this->getRequest()->getParam('add_delivery_new');
+        //echo $add_delivery_new;
+        //Tanong Delivery Fee
+        $delivery_fee           = isset($params['delivery_fee']) ? $params['delivery_fee'] : null;
+        $customer_id            = isset($params['customer_id']) ? $params['customer_id'] : null;
+        $customer_name          = isset($params['customer_name']) ? $params['customer_name'] : null;
+        $customer_tax_number    = isset($params['customer_tax_number']) ? $params['customer_tax_number'] : null;
+        $customer_branch_number    = isset($params['customer_branch_number']) ? $params['customer_branch_number'] : null;
+        $customer_tax_address   = isset($params['customer_tax_address']) ? $params['customer_tax_address'] : null;
+        $rank                   = isset($params['rank']) ? $params['rank'] : null;
+        $creditnote_data        = isset($params['creditnote_data']) ? $params['creditnote_data'] : null;
+        $order_accessories      = isset($params['order_accessories']) ? $params['order_accessories'] : null;
+        $edit                   = isset($params['edit']) ? $params['edit'] : null;
+        $sipping_add            = isset($params['sipping_add']) ? $params['sipping_add'] : null;
+        $total_spc_discount     = isset($params['total_spc_discount']) ? $params['total_spc_discount'] : 0;
+        
+        $customer_name_for_staff= isset($params['customer_name_for_staff']) ? $params['customer_name_for_staff'] : null;
+        $digital_discount       = isset($params['digital_discount']) ? $params['digital_discount'] : null;
+
+        //$total_spc_discount = 50000;
+        //$total_spc_discount=100;
+        //print_r($creditnote_data);die;
+        /**
+         * @author: buu.pham
+         * market fee - tính giá ship
+         * nếu giá trị đơn hàng - bảo vệ giá - chiết khấu < giá tối thiểu => cộng tiền ship
+         *     >= giá tối thiểu => tiền ship = 0
+         */
+        $s_total_price = 0; // tổng giá đơn hàng để tính tiền ship
+
+        //check can edit lifetime
+        $QExceptionCase = new Application_Model_ExceptionCase();
+        $where = $QExceptionCase->getAdapter()->quoteInto('name = ?',
+            'LIFETIME_EXCEPTION');
+        $lifetime_exception = $QExceptionCase->fetchRow($where);
+
+        $exception_case = null;
+        if (isset($lifetime_exception) and $lifetime_exception['value'])
+        {
+            eval(json_decode($lifetime_exception['value']));
+            $exception_case = isset($data_exception) ? $data_exception : null;
+        }
+
+        if (My_Staff_Group::inGroup($userStorage->group_id, array(ADMINISTRATOR_ID, SUPER_SALES_ADMIN))
+            or ($exception_case and in_array($userStorage->id, $exception_case)))
+            $life_time_editable = 1;
+        else
+            $life_time_editable = 0;
+
+        if ($life_time_editable and $life_time <= 0)
+        {
+            return array(
+                'code' => -1,
+                'message' => 'Invalid lifetime, please try again!',
+                );
+        }
+        //end of check can edit lifetime
+        //
+        if (!$type)
+            return array(
+                'code' => -1,
+                'message' => 'Invalid type, please try again!',
+                );
+
+        if (isset($ids_bvg) and $ids_bvg and isset($ids_discount) and $ids_discount)
+        {
+            return array(
+                'code' => -1,
+                'message' => 'Multiple type, please select only one discount!',
+                );
+        }
+
+        // check PO Number
+        if (!empty($distributor_po))
+        {
+            $QDistributorPo = new Application_Model_DistributorPo();
+            $po_check = $QDistributorPo->find($distributor_po);
+            $po_check = $po_check->current();
+
+            if (!$po_check)
+                return array(
+                    'code' => -6,
+                    'message' => 'Invalid PO Number',
+                    );
+        }
+
+        //Tanong
+        if (!$sn){
+            $sn = date('YmdHis') . substr(microtime(), 2, 4);
+
+            $sn_ref=$this->getSalesOrderNo_Ref($sn);
+            //$sn_ref="";
+        }
+
+        $QLog = new Application_Model_Log();
+        $db = Zend_Registry::get('db');
+        $db->beginTransaction();
+        
+        $QGood = new Application_Model_Good();
+        $QGoodColor = new Application_Model_GoodColor();
+        $goods_cache = $QGood->get_cache();
+        $good_colors_cache = $QGoodColor->get_cache();
+        try
+        {
+            //customer_brandshop
+            if($rank==10){
+                $QCustomerBrandShop   = new Application_Model_CustomerBrandShop();
+                $CustomerBrandShop = $QCustomerBrandShop->chkCustomerBrandshop($customer_name,$customer_tax_number);
+                if(!$CustomerBrandShop){
+                    $customer_id='';
+                }
+
+                $data_customer = array();
+                $data_customer['customer_name'] = $customer_name;
+                $data_customer['tax_number'] = $customer_tax_number;
+                $data_customer['branch_no'] = $customer_branch_number;
+                $data_customer['address_tax'] = $customer_tax_address;
+                $key_sn = date('YmdHis') . substr(microtime(), 2, 4);
+
+                if($customer_id !='')
+                { //update
+                    $data_customer['update_date']   = $currentTime;
+                    $data_customer['update_by']  = $userStorage->id;
+                    $data_customer['key_sn']   = $key_sn;
+                    $where = $QCustomerBrandShop->getAdapter()->quoteInto('customer_id = ?', $customer_id);
+                    $QCustomerBrandShop->update($data_customer, $where);
+                }else{ //insert
+                    
+                    $data_customer['status'] = 1;
+                    $data_customer['create_date']   = $currentTime;
+                    $data_customer['create_by']  = $userStorage->id;
+                    $data_customer['key_sn']   = $key_sn;
+                    // print_r($data_customer);die;
+                    $QCustomerBrandShop->insert($data_customer);
+
+                    $whereCustomer = array();
+                    $whereCustomer[] = $QCustomerBrandShop->getAdapter()->quoteInto('key_sn = ?', $key_sn);
+                    $customer = $QCustomerBrandShop->fetchRow($whereCustomer);
+                    $customer_id = $customer['customer_id'];
+                }
+            }
+
+            $QMarketDeduction = new Application_Model_MarketDeduction();
+            //get old ids
+            $old_ids = $error_ids = null;
+
+            if ($sn)
+            {
+                $where = $QMarketDeduction->getAdapter()->quoteInto('sn = ?', $sn);
+                $old_sales = $QMarketDeduction->fetchAll($where);
+
+                if ($old_sales)
+                {
+                    foreach ($old_sales as $sale)
+                    {
+                        $old_ids[] = $sale->id;
+                    }
+                }
+            }
+
+            if (isset($ids_discount) and is_array($ids_discount))
+            {
+
+                $total_price_discount = 0;
+                $price_discount_joint = 0;
+                $discounts = array();
+                $discount = array('d_id' => $distributor_id, );
+                $price_discount_joint = $QMarketDeduction->getPrice($discount);
+
+                foreach ($ids_discount as $k => $id)
+                {
+                    if (isset($joint_discount[$k]) and $joint_discount[$k] and isset($prices_discount[$k]) and
+                        $prices_discount[$k])
+                    {
+
+                        if ((intval($price_discount_joint[$joint_discount[$k]]) - intval($prices_discount[$k])) < 0)
+                        {
+                            throw new Exception(' Your discount is larger than limited ');
+                        }
+
+                        $data = array(
+                            'price'             => My_Number::floatval( $prices_discount[$k] ),
+                            'd_id'              => intval( $distributor_id ),
+                            'joint_circular_id' => intval( $joint_discount[$k] ),
+                            );
+
+                        // tổng giá
+                        $s_total_price -= My_Number::floatval( $prices_discount[$k] );
+
+                        if ($id)
+                        { //update
+                            $where = $QMarketDeduction->getAdapter()->quoteInto('id = ?', $id);
+                            $QMarketDeduction->update($data, $where);
+                        } else
+                        {
+                            $data['add_time']   = $currentTime;
+                            $data['sn']         = $sn;
+                            $QMarketDeduction->insert($data);
+                        }
+                    }
+                }
+
+                //todo log
+                $ip = $this->getRequest()->getServer('REMOTE_ADDR');
+                $info = 'Discount Sale : ';
+                $info .= $sn;
+
+                $QLog->insert(array(
+                    'info' => $info,
+                    'user_id' => $userStorage->id,
+                    'ip_address' => $ip,
+                    'time' => $currentTime,
+                    ));
+            }
+
+            if ($sn)
+            {
+                if ($ids_discount)
+                {
+                    $newIds = $ids_discount ? $ids_discount : array();
+                    $removed_sales_ids = array_diff($old_ids, $newIds);
+                    if ($removed_sales_ids)
+                    {
+                        $where = $QMarketDeduction->getAdapter()->quoteInto('id IN (?)', $removed_sales_ids);
+                        $QMarketDeduction->delete($where);
+                    }
+                }
+            }
+
+        }
+        catch (exception $e)
+        {
+            return array(
+                'code' => -3,
+                'message' => 'Cannot save, please try again! 1' . $e->getMessage(),
+            );
+        }
+
+        try
+        {
+            $QMarketProduct = new Application_Model_MarketProduct();
+            $QBVGIMEI = new Application_Model_BvgImei();
+
+            //get old ids
+            $old_ids = $error_ids = null;
+            if ($sn)
+            {
+                $where = $QMarketProduct->getAdapter()->quoteInto('sn = ?', $sn);
+                $old_sales = $QMarketProduct->fetchAll($where);
+
+                if ($old_sales)
+                {
+                    foreach ($old_sales as $sale)
+                    {
+                        $old_ids[] = $sale->id;
+                    }
+                }
+            }
+
+            if (isset($ids_bvg) and is_array($ids_bvg))
+            {
+
+                foreach ($ids_bvg as $k => $id)
+                {
+                    if (isset($good_ids_bvg[$k]) and $good_ids_bvg[$k] and isset($nums_bvg[$k]) and
+                        $nums_bvg[$k] and isset($prices_bvg[$k]) and $prices_bvg[$k] and isset($totals_bvg[$k]) and
+                        $totals_bvg[$k])
+                    {
+                        // them viec kiem tra imei do co fai duoc bao ve gia cho dai ly do khong
+                        $list_imei = explode(',', $bvg_imei[$k]);
+                        $where     = array();
+                        $where[]   = $QBVGIMEI->getAdapter()->quoteInto('id in ( ? )', $list_imei);
+                        $where[]   = $QBVGIMEI->getAdapter()->quoteInto('bvg_payment_confirmed_at is NULL', null);
+                        $where[]   = $QBVGIMEI->getAdapter()->quoteInto('d_id = ?', $distributor_id);
+
+                        $imeiListChecked = $QBVGIMEI->fetchAll($where);
+
+                        if ($imeiListChecked->count() != count($list_imei)){
+                            throw new Exception('List BVG IMEI is invalid');
+                        }
+                        // End of them viec kiem tra imei do co fai duoc bao ve gia cho dai ly do khong
+
+                        $data = array(
+                            'good_id'      => intval( $good_ids_bvg[$k] ),
+                            'num'          => intval( $nums_bvg[$k] ),
+                            'price'        => My_Number::floatval( $prices_bvg[$k] ),
+                            'total'        => My_Number::floatval( $totals_bvg[$k] ),
+                            'd_id'         => intval( $distributor_id ),
+                            'warehouse_id' => intval( $warehouse_id ),
+                            'joint'        => intval( $joint[$k] ),
+                            'text'         => trim($texts[$k] ? $texts[$k] : '')
+                            );
+
+                        // tổng giá
+                        $s_total_price -= My_Number::floatval( $totals_bvg[$k] );
+
+                        if ($id)
+                        { //update
+                            $where     = $QMarketProduct->getAdapter()->quoteInto('id = ?', $id);
+                            $QMarketProduct->update($data, $where);
+                            $list_imei = explode(',', $bvg_imei[$k]);
+                            $data      = array('bvg_market_product_id' => $id);
+                            $where     = array();
+                            $where[]   = $QBVGIMEI->getAdapter()->quoteInto('id in ( ? )', $list_imei);
+                            $where[]   = $QBVGIMEI->getAdapter()->quoteInto('bvg_payment_confirmed_at is NULL', null);
+                            $QBVGIMEI->update($data, $where);
+                        } else
+                        {
+                            $data['add_time'] = date('Y-m-d H:i:s');
+                            $data['user_id']  = $userStorage->id;
+                            $data['sn']       = $sn;
+                            $id_bvg           = $QMarketProduct->insert($data);
+                            $list_imei        = explode(',', $bvg_imei[$k]);
+                            $data             = array('bvg_market_product_id' => $id_bvg);
+                            $where            = array();
+                            $where[]          = $QBVGIMEI->getAdapter()->quoteInto('id in ( ? )', $list_imei);
+                            $where[]          = $QBVGIMEI->getAdapter()->quoteInto('bvg_payment_confirmed_at is NULL', null);
+                            $QBVGIMEI->update($data, $where);
+                        }
+                    }
+                }
+
+
+
+                //todo log
+                $ip = $this->getRequest()->getServer('REMOTE_ADDR');
+                $info = 'BVG : ';
+                $info .= $sn;
+
+                $QLog->insert(array(
+                    'info'      => $info,
+                    'user_id'   => $userStorage->id,
+                    'ip_address'=> $ip,
+                    'time'      => $currentTime,
+                    ));
+
+            }
+
+
+            if ($sn)
+            {
+                if ($old_ids)
+                {
+                    $newIds = $ids_bvg ? $ids_bvg : array();
+                    $removed_sales_ids = array_diff($old_ids, $newIds);
+
+                    if ($removed_sales_ids)
+                    {
+                        $where = $QMarketProduct->getAdapter()->quoteInto('id IN (?)', $removed_sales_ids);
+                        $QMarketProduct->delete($where);
+
+                        $where = $QBVGIMEI->getAdapter()->quoteInto('bvg_market_product_id IN (?)', $removed_sales_ids);
+                        $data             = array('bvg_market_product_id' => NULL);
+                        $QBVGIMEI->update($data, $where);
+                    }
+                }
+            }
+
+        }
+        catch (exception $e)
+        {
+            return array(
+                'code' => -3,
+                'message' => 'Cannot save, please try again! 2' . $e->getMessage(),
+            );
+        }
+
+        if (is_array($ids))
+        {
+
+            try
+            {
+
+
+                $QDistributor = new Application_Model_Distributor();
+                $where = $QDistributor->getAdapter()->quoteInto('id = ?', $distributor_id);
+                $array_good_color = array();
+                $distributor = $QDistributor->fetchRow($where);
+                $rank = $distributor['rank'];
+
+                $spc_discount = $distributor['spc_discount'];
+                $spc_discount_phone = $distributor['spc_discount_phone'];
+                $spc_discount_acc = $distributor['spc_discount_acc'];
+                $spc_discount_digital = $distributor['spc_discount_digital'];
+
+                $QMarket = new Application_Model_Market();
+
+                /* TODO insert market general */
+                $QMarketGeneral = new Application_Model_MarketGeneral();
+                $data           = array(
+                    'sn'                => $sn,
+                    'price_clas'        => intval( $rank ),
+                    'd_id'              => intval( $distributor_id ),
+                    'warehouse_id'      => intval( $warehouse_id ),
+                    'isbatch'           => intval( $isbatch ),
+                    'salesman'          => intval( $salesman ),
+                    'sales_catty_id'    => intval( $sales_catty_id ),
+                    'type'              => intval( $type ),
+                    'service'           => intval( $service_id ),
+                );
+
+
+                if ($market_general_id) {
+                    $whereMarketGeneral = $QMarketGeneral->getAdapter()->quoteInto('id = ?', $market_general_id);
+                    $QMarketGeneral->update($data, $whereMarketGeneral);
+                } else {
+                    $data['add_time']   = $currentTime;
+                    $data['user_id']    = $userStorage->id;
+                    $newMarketGeneralId = $QMarketGeneral->insert($data);
+
+                }
+                /* TODO End of insert market general */
+
+
+
+                if (!isset($ids_bvg))
+                {
+                    $QMarketProduct = new Application_Model_MarketProduct();
+                    $where = $QMarketProduct->getAdapter()->quoteInto('sn = ? ', $sn);
+                    $QMarketProduct->delete($where);
+                }
+
+                if (!isset($ids_discount))
+                {
+                    $QMarketProduct = new Application_Model_MarketDeduction();
+                    $where = $QMarketProduct->getAdapter()->quoteInto('sn = ? ', $sn);
+                    $QMarketProduct->delete($where);
+                }
+
+                //My_Lock::setStatus($sn , 0 , array());
+
+                //get old ids
+                $old_ids = $error_ids = null;
+                if ($sn)
+                {
+                    $where = $QMarket->getAdapter()->quoteInto('sn = ?', $sn);
+                    $old_sales = $QMarket->fetchAll($where);
+
+                    if ($old_sales)
+                    {
+                        foreach ($old_sales as $sale)
+                        {
+                            $old_ids[] = $sale->id;
+
+                            if ($sale['pay_time'] or $sale['shipping_yes_time'] or $sale['outmysql_time'])
+                                $error_ids[] = $sale->id;
+                        }
+                    }
+                }
+
+                if ($error_ids)
+                {
+                    return array(
+                        'code' => -5,
+                        'message' => 'This order was confirmed!',
+                        'sn' => $sn,
+                        );
+                }
+
+
+                // Nhân viên mua máy
+                if($type == FOR_STAFFS AND in_array($distributor_id, array(OPPO_STAFF,OPPO_INGAME)) AND intval($for_partner) == 2 )
+                {
+                    // Neu la don hang thanh ly thi kiem tra
+                    if($shipment_id){
+                        foreach($ids as $k =>  $v){
+                            $where_shipment_s   = array();
+                            $GoodShipmentPhone  = new Application_Model_GoodShipmentPhone();
+                            $where_shipment_s[] = $GoodShipmentPhone->getAdapter()->quoteInto('good_shipment_id = ?', $market_general_data['shipment_id']);
+                            $where_shipment_s[] = $GoodShipmentPhone->getAdapter()->quoteInto('good_id = ?', $good_ids[$k]);
+                            $data_s             = $GoodShipmentPhone->fetchRow($where_shipment_s);
+
+                            if(!$data_s){
+                                return array(
+                                    'code'    => -5,
+                                    'message' => 'Chỉ được chọn mặt hàng trong lô máy.!!!!!!!!!!!',
+                                );
+                            }
+                        }
+                    }
+
+                    $QStaffOrder = new Application_Model_StaffOrder();
+                    $count_40 = array();
+                    if(count($product_color_keys) == 0){
+                        return array(
+                            'code'    => -5,
+                            'message' => 'Vui lòng chọn Nhân viên mua máy',
+                        );
+                    }
+
+
+                    //Kiểm tra số lượng sản phẩm có phù hợp ko?
+                    foreach($cat_ids as $k => $v){
+                        $_product_color_key = $good_ids[$k].'_'.$good_colors[$k];
+                        $check_num = 0;
+                        foreach($product_color_keys as $_k => $_v){
+                            if( $_v == $_product_color_key ){
+                                $check_num += $staff_nums[$_k];
+                            }
+                        }
+
+                        if($check_num != $nums[$k]){
+                            return array(
+                                'code'    => -5,
+                                'message' => 'Số lượng sản phẩm đặt mua và số lượng sản phẩm cho nhân viên không đúng'.$nums[$k].'-'.$check_num,
+                            );
+                        }
+
+                    }
+
+                    if($distributor_id == OPPO_STAFF)
+                    {
+
+                        if($for_partner == 2){
+
+                            foreach($cat_ids as $k => $v){
+                                if($sale_off_percent[$k] == 40){
+                                    $_product_color_key = $good_ids[$k].'_'.$good_colors[$k];
+                                    foreach($product_color_keys as $_k => $_v){
+                                        if( $_v == $_product_color_key ){
+                                            if( isset($count_40[$id_staffs[$_k]]) ){
+                                                $count_40[$id_staffs[$_k]] += intval($staff_nums[$_k]);
+
+                                            }else{
+                                                $count_40[$id_staffs[$_k]] = intval($staff_nums[$_k]);
+                                            }
+                                        }
+                                    }
+                                }
+                            }
+
+                            foreach($count_40 as $_staff_id => $num){
+                                if($num > 1){
+                                    return array(
+                                        'code'    => -5,
+                                        'message' => 'Nhân viên mỗi lần chỉ được mua 1 máy 40%',
+                                    );
+                                }else{
+                                    $check = $QStaffOrder->checkStaffBuyProduct($_staff_id,1,NULL,$sn);
+                                    if($check['status'] == 0){
+                                        return array(
+                                            'code'    => -5,
+                                            'message' => $check['message'],
+                                        );
+                                    }
+                                }
+                            }
+                        }
+                    }
+                    elseif($distributor_id == OPPO_INGAME){
+                        foreach($cat_ids as $k => $v){
+                            if($sale_off_percent[$k] == 40){
+                                $_product_color_key = $good_ids[$k].'_'.$good_colors[$k];
+                                foreach($product_color_keys as $_k => $_v){
+                                    if( $_v == $_product_color_key ){
+                                        $cmnd = trim($cmnd_staff_ingames[$_k]);
+
+                                        if($cmnd == ''){
+                                            return array(
+                                                'code'    => -5,
+                                                'message' => 'Please insert ID number',
+                                            );
+                                        }
+
+                                        if( isset($count_40[$cmnd]) ){
+                                            $count_40[$cmnd] += intval($staff_nums[$_k]);
+                                        }else{
+                                            $count_40[$cmnd] = intval($staff_nums[$_k]);
+                                        }
+                                    }
+                                }
+                            }
+                        }
+
+                        foreach($count_40 as $_id_number => $num){
+                            if($num > 1){
+                                return array(
+                                    'code'    => -5,
+                                    'message' => 'Nhân viên mỗi lần chỉ được mua 1 máy 40%',
+                                );
+                            }else{
+                                $check = $QStaffOrder->checkStaffIngameBuyProduct($_id_number,1,NULL,$sn);
+                                if($check['status'] == 0){
+                                    return array(
+                                        'code'    => -5,
+                                        'message' => $check['message'],
+                                    );
+                                }
+                            }
+                        }
+
+                    }
+
+                }
+
+
+                if (isset($invoice) and $invoice)
+                {
+                    $QCustomer = new Application_Model_Customer();
+
+                    $data = array(
+                        'name'         => $invoice['customer_name'],
+                        'company'      => $invoice['company'],
+                        'address'      => $invoice['customer_address'],
+                        'office_id'    => intval($invoice['office']),
+                        'tax_code'     => $invoice['tax_code'],
+                        'invoice_type' => $invoice['invoice'],
+                        'add_time'     => $currentTime,
+                        'sn'           => $sn,
+                        'service_nvmm' => intval($invoice['service_nvmm']),
+                        'warehouse_nvmm' => intval($invoice['warehouse_nvmm']),
+                        );
+
+
+                    if (!$id)
+                        $QCustomer->insert($data);
+                    else
+                    {
+                        $where = $QCustomer->getAdapter()->quoteInto('id = ?', $id);
+                        $QCustomer->update($data, $where);
+                    }
+
+                }
+
+                $missing_stock = array();
+
+                if (isset($ids) and $ids)
+                {
+                    $resultSet = $QMarket->find($ids[0]);
+                    $market_current = $resultSet->current();
+                    if (isset($market_current) and $market_current)
+                    {
+                        $date_curent = $market_current['add_time'];
+                        $distributor_id_current = $market_current['d_id'];
+                        $current_time  = date('H:i:s');
+                        //kiểm tra không cho đổi đại lý
+                        if($distributor_id != $distributor_id_current && $current_time > TIME_LIMIT_ORDER)
+                        {
+                            throw new Exception("Sorry, you can't change distributor for this order.Please remove order and create again.");
+                        }
+                    }
+                }
+
+                
+                foreach ($ids as $k => $id)
+                {
+                    // print_r($_POST);
+                    if (isset($cat_ids[$k]) and $cat_ids[$k] and isset($good_ids[$k]) and $good_ids[$k] and
+                        isset($good_colors[$k]) and $good_colors[$k] and isset($nums[$k]) and $nums[$k] and
+                        isset($prices[$k]))
+                    {
+                        //print_r($data);die;
+                        $total2 = 0;
+
+                        if ($cat_ids[$k] == PHONE_CAT_ID)
+                        {
+                            if(in_array($good_ids[$k] . '_' . $good_colors[$k] , $array_good_color))
+                            {
+                                throw new Exception("Sorry, your input is duplicated, Model : " . $goods_cache[$good_ids[$k]] . " - " . $good_colors_cache[$good_colors[$k]]);
+                            }
+                            $array_good_color[] = $good_ids[$k] . '_' . $good_colors[$k];
+                        }
+
+                        $storageParams = array(
+                            'warehouse_id'  => $warehouse_id,
+                            'cat_id'        => $cat_ids[$k],
+                            'good_id'       => $good_ids[$k],
+                            'good_color_id' => $good_colors[$k],
+                            );
+
+                        // truong hop edit lai
+                        if ($id)
+                            $storageParams['current_order_id'] = $id;
+
+                        $storageParams['not_get_ilike_bad_count'] = $storageParams['not_get_digital_bad_count'] =
+                            $storageParams['not_get_imei_bad_count'] = $storageParams['not_get_damage_product_count'] =
+                            $storageParams['not_get_total'] = $storageParams['not_order'] = true;
+
+                        if ($cat_ids[$k] == PHONE_CAT_ID)
+                        {
+                            $storageParams['not_get_ilike_count'] = $storageParams['not_get_digital_count'] =
+                                $storageParams['not_get_product_count'] = true;
+                        } elseif ($cat_ids[$k] == ACCESS_CAT_ID)
+                        {
+                            $storageParams['not_get_ilike_count'] = $storageParams['not_get_digital_count'] =
+                                $storageParams['not_get_imei_count'] = true;
+                        } elseif ($cat_ids[$k] == DIGITAL_CAT_ID)
+                        {
+                            $storageParams['not_get_ilike_count'] = $storageParams['not_get_product_count'] =
+                                $storageParams['not_get_imei_count'] = true;
+                        } elseif ($cat_ids[$k] == ILIKE_CAT_ID)
+                        {
+                            $storageParams['not_get_digital_count'] = $storageParams['not_get_product_count'] =
+                                $storageParams['not_get_imei_count'] = true;
+                        }
+
+                        $storage = $QGood->fetchPaginationStorage(1, null, $total2, $storageParams);
+
+                        $current_order = isset($storage[0]['current_order']) ? $storage[0]['current_order'] : 0;
+                        $current_change_order = isset($storage[0]['current_change_order']) ? $storage[0]['current_change_order'] : 0;
+                        if ($cat_ids[$k]==PHONE_CAT_ID and $type==FOR_DEMO){
+                            $current_order = isset($storage[0]['current_order_demo']) ? $storage[0]['current_order_demo'] : 0;
+                            $current_change_order   = isset($storage[0]['current_change_order_demo']) ? $storage[0]['current_change_order_demo'] : 0;
+                        }
+
+                        $current_storage = 0;
+
+                        if (isset($storage[0]) and $storage[0])
+                        {
+                            switch ($cat_ids[$k]){
+                                case DIGITAL_CAT_ID:
+                                    $current_storage = (isset($storage[0]['digital_count']) and $storage[0]['digital_count']) ? $storage[0]['digital_count'] : 0;
+                                    break;
+                                case PHONE_CAT_ID:
+                                    $current_storage = (isset($storage[0]['imei_count']) and $storage[0]['imei_count']) ? $storage[0]['imei_count'] : 0;
+                                    if ($type==FOR_DEMO){
+                                        $current_storage = (isset($storage[0]['imei_demo_count']) and $storage[0]['imei_demo_count']) ? $storage[0]['imei_demo_count'] : 0;
+                                    }
+                                    break;
+                                case ILIKE_CAT_ID:
+                                    $current_storage = (isset($storage[0]['ilike_count']) and $storage[0]['ilike_count']) ? $storage[0]['ilike_count'] : 0;
+                                    break;
+                                case ACCESS_CAT_ID:
+                                    $current_storage = (isset($storage[0]['product_count']) and $storage[0]['product_count']) ? $storage[0]['product_count'] : 0;
+                                    break;
+
+                            }
+                        }
+
+                        if (($current_storage - $current_order - $current_change_order) < $nums[$k])
+                        {
+                            $missing_stock[] = array(
+                                'warehouse_id'    => $warehouse_id,
+                                'cat_id'          => $cat_ids[$k],
+                                'good_id'         => $good_ids[$k],
+                                'good_color_id'   => $good_colors[$k],
+                                'current_storage' => $current_storage,
+                                'current_order'   => $current_order,
+                                );
+                        }
+
+
+                        // $tem_total = (isset($totals[$k]) and $totals[$k]) ? $totals[$k] : 0;
+                        //PungPond
+                        
+                        if ($sale_off_percent[$k] == 0) {
+                            
+                            $tem_total = ($prices[$k]*$nums[$k]);
+                           
+                        }else{
+                           
+
+                            $total_price_one = $prices[$k] - round(($prices[$k]*$sale_off_percent[$k]/100)*100)/100;
+                            $x_total = $total_price_one*$nums[$k];
+                            $tem_total =  round($x_total); 
+                        }
+                        
+                        $price_ext = round(($prices[$k]/1.07),2);
+                        $total_ext = round(($tem_total/1.07),2);
+
+                        if($delivery_fee==''){
+                            $delivery_fee=0;
+                        }
+
+                        // Check Special Discount
+                        if(isset($warehouse_id) and $warehouse_id == 71){
+                            $total_discount_digital = $digital_discount + $distributor['spc_discount'];
+                            $spc_discount = $total_discount_digital;
+                        }else{
+                            $spc_discount = $distributor['spc_discount'];
+                        }
+                        
+                        $spc_discount_phone = $distributor['spc_discount_phone'];
+                        $spc_discount_acc = $distributor['spc_discount_acc'];
+                        $spc_discount_digital = $distributor['spc_discount_digital'];
+
+                        if(isset($total_discount_digital) and $total_discount_digital > 0){
+                            $spc_discount_digital = 1;
+                        }
+
+                        //$total_spc_discount=20050;
+
+                        $data = array(
+                            'market_general_id'=> ($market_general_id ? $market_general_id : (isset($newMarketGeneralId) ? $newMarketGeneralId : 0)),
+                            'cat_id'           => intval( $cat_ids[$k] ),
+                            'good_id'          => intval( $good_ids[$k] ),
+                            'good_color'       => intval( $good_colors[$k] ),
+                            'num'              => intval( $nums[$k] ),
+                            'price'            => My_Number::floatval( $prices[$k] ),
+                            'price_ext'        => My_Number::floatval( $price_ext ),
+                            'total'            => My_Number::floatval( $tem_total ),
+                            'total_ext'        => My_Number::floatval( $total_ext ),
+                            'text'             => (isset($texts[$k]) ? $texts[$k] : null),
+                            'price_clas'       => intval( $rank ),
+                            'd_id'             => intval( $distributor_id ),
+                            'warehouse_id'     => intval( $warehouse_id ),
+                            'isbatch'          => intval( $isbatch ),
+                            'salesman'         => intval( $salesman ),
+                            'sales_catty_id'   => intval( $sales_catty_id ),
+                            'type'             => intval( $type ),
+                            'service'          => intval( $service_id ),
+                            'sale_off_percent' => intval( $sale_off_percent[$k] ),
+                            'campaign'         => intval($campaign[$k]),
+                            'last_updated_at'  => $currentTime,
+                            'payment_method'   => $payment_method,
+                            'for_partner'      => $for_partner,
+                            'credit_id'        => $credit_id,
+                            'delivery_address' => $delivery_address,
+                            'delivery_fee'     => $delivery_fee,
+                            'shipping_address' => $sipping_add,
+                            'spc_discount'      => $spc_discount,
+                            'spc_discount_phone' => $spc_discount_phone,
+                            'spc_discount_acc'   => $spc_discount_acc,
+                            'spc_discount_digital' => $spc_discount_digital,
+                            'total_spc_discount' => $total_spc_discount,
+                            'customer_name'   => $customer_name_for_staff ,     
+                            
+                        );
+                        // echo json_encode($data);
+                        
+
+                        if ( $cat_ids[$k] == 11 and ($prices[$k] <= 0 || $price_ext <= 0)) {
+                            $QlogCreateSaleOrder = new Application_Model_logCreateSaleOrder();
+
+                            $userAgent = new Zend_Http_UserAgent();
+                            $device = $userAgent->getDevice();
+                            $browser_1 = $device->getBrowser();
+                            $browser_2 = $device->getUserAgent();
+                            $data_i['text_data'] = json_encode($data);
+                            $data_i['browser']   = $browser_1." | ".$browser_2;
+                            $data_i['create_at'] = $currentTime;
+                            $data_i['create_by'] = $userStorage->id;
+                            // $this->insertLog($data_i);
+                            $QlogCreateSaleOrder ->insert($data_i);
+                        }
+                        if($rank==10){
+                            if($customer_id !=''){
+                               $data['customer_id'] = $customer_id; 
+                               $data['customer_tax_address'] = $customer_tax_address;
+                            }
+                        }    
+
+                        if(isset($invoice_number_data) and $invoice_number_data)
+                        {
+                            // số hóa đơn khi save mass upload
+                            $invoice_number = unserialize($invoice_number_data);
+                            if(is_array($invoice_number) and $invoice_number)
+                            {
+                                $data['invoice_number'] = $invoice_number['invoice_number'] ? $invoice_number['invoice_number'] : '';
+                                $data['invoice_sign']   = $invoice_number['invoice_sign'] ? $invoice_number['invoice_sign'] : '';
+                                $data['invoice_time']   = $invoice_number['invoice_time'] ? $invoice_number['invoice_time'] : '';
+                                $data['text']           = 'Đơn hàng tồn kho tặng kèm sim';
+
+                                $data['shipping_yes_time'] = $currentTime;
+                                $data['pay_time']          = $currentTime;
+                                $data['shipping_yes_id']   = 1;
+                                $data['pay_user']          = 1;
+                                $data['outmysql_time']     = $currentTime;
+                                $data['outmysql_user']     = 1;
+                                $data['campaign']          = 99;
+
+                            }
+
+                        }
+
+                        // tổng giá
+                        $s_total_price += My_Number::floatval( $tem_total );
+
+                        ///đơn hàng tặng cho nhân viên
+                        if (isset($gift_id) and $gift_id)
+                        {
+                            $data['office'] = $gift_id;
+                        }
+
+                        if (isset($invoice) and $invoice)
+                        {
+                            $data['office']             = intval($invoice['office']);  
+                            $data['warehouse_nvmm']     = intval($invoice['warehouse_nvmm']);
+                            $data['service']            = intval($invoice['service_nvmm']);
+                        }
+                        //Tanong
+                        //total
+
+                        if (!empty($distributor_po))
+                            $data['po_id'] = $distributor_po;
+                        else
+                            $data['po_id'] = null;
+
+                        if ($life_time_editable and $life_time) {
+                            if ($life_time <= 0 || $life_time > 5 || !is_numeric($life_time)) $life_time = 2;
+                            $data['life_time'] = $life_time * 24 * 60 * 60;
+                        }
+
+
+
+                        
+
+                        //insert_order
+                        if ($id)
+                        { //update
+                            
+                            $data['delivery_address'] = $add_delivery_new;
+                          
+                            $where = $QMarket->getAdapter()->quoteInto('id = ?', $id);
+                            $QMarket->update($data, $where);
+
+
+                            $db = Zend_Registry::get('db');
+                        
+                        $QLogQuota = new Application_Model_LogQuotaTran();
+                        $QLogQuotaDis = new Application_Model_LogQuotaTranDistributor();
+                         $data_q = array(
+                                'warehouse_id'     => intval( $warehouse_id ),
+                                'd_id'             => intval( $distributor_id ),
+                                'cat_id'           => intval( $cat_ids[$k] ),
+                                'good_id'          => intval( $good_ids[$k] ),
+                                'good_color'       => intval( $good_colors[$k] ),
+                                'num'              => intval( $nums[$k] ),
+                                // 'add_time'         => $currentTime,
+                                'user_id'          => $userStorage->id,
+                                'sn'               => $sn,
+                            );
+                        $data_dis = array(
+                                'warehouse_id'     => intval( $warehouse_id ),
+                                'cat_id'           => intval( $cat_ids[$k] ),
+                                'good_id'          => intval( $good_ids[$k] ),
+                                'good_color'       => intval( $good_colors[$k] ),
+                                'num'              => intval( $nums[$k] ),
+                                // 'add_time'         => $currentTime,
+                                'user_id'          => $userStorage->id,
+                                // 'sn'               => $sn,
+                            );
+                        $where_l = $QLogQuota->getAdapter()->quoteInto('market_id = ?', $id);
+                        $where_dis = $QLogQuotaDis->getAdapter()->quoteInto('market_id = ?', $id);
+                        $QLogQuota->update($data_q, $where_l);
+                        $QLogQuotaDis->update($data_dis, $where_dis);
+
+                        }else{ //insert
+                             $db = Zend_Registry::get('db');
+                            if (isset($date_curent) and $date_curent)
+                                $date_time_add = $date_curent;
+                            else
+                                $date_time_add = $currentTime;
+
+                            $data['add_time'] = $date_time_add;
+                            $data['user_id']  = $userStorage->id;
+                            $data['sn']       = $sn;
+                                      
+                            $data['print_no'] = ($QMarket->get_print_no_max($sn)) + 1;
+
+                             if (!$this->getRequest()->getParam('sn')){
+                                /*$data['sn_ref']   = $sn_ref;  
+                                if($sn_ref==''){
+                                    $db->rollback();
+                                    return array(
+                                    'code' => -5,
+                                    'message' => 'Cannot Save, please try again! 3',
+                                    );
+                                }*/
+                             }else{
+                                $data['sn_ref']   = $this->getRequest()->getParam('sn_ref');  
+                             }
+
+                            if($save_service =='service'){
+
+                                $QWarehouse = new Application_Model_Warehouse();
+                               // $invoice_number= $QWarehouse->getInvoiceNo($sn);
+
+                                //$data['invoice_number'] = $invoice_number;
+                                //$data['invoice_time'] = $currentTime;
+
+                                $data['outmysql_time']     = $currentTime;
+                                $data['outmysql_user']     = $userStorage->id;
+
+
+                                if ($data['cat_id'] == ACCESS_CAT_ID) {
+                                    $QWarehouseProduct = new Application_Model_WarehouseProduct();
+                                    $where_acc = array();
+                                    $where_acc[] = $QWarehouseProduct->getAdapter()->quoteInto('cat_id = ?', $data['cat_id']);
+                                    $where_acc[] = $QWarehouseProduct->getAdapter()->quoteInto('good_id = ?', $data['good_id']);
+                                    $where_acc[] = $QWarehouseProduct->getAdapter()->quoteInto('good_color = ?', $data['good_color']);
+                                    $where_acc[] = $QWarehouseProduct->getAdapter()->quoteInto('warehouse_id = ?', $data['warehouse_id']);
+
+                                    $result = $QWarehouseProduct->fetchRow($where_acc);
+                                    if ($result) {
+                                        $where_acc = $QWarehouseProduct->getAdapter()->quoteInto('id = ?', $result['id']);
+                                        $quantity = $result['quantity'] - $data['num'];
+                                        $data_acc = array('quantity' => ($quantity > 0 ? $quantity : 0));
+
+                                        $QWarehouseProduct->update($data_acc, $where_acc);
+                                    }
+                                }
+
+                            }
+
+                            if($order_accessories==1){
+                                $data['order_accessories'] = 1;
+                            }
+                         
+                           // insert market pond
+                           // OPPW-1 - PRODUCT WARRANTY = 21921
+                           // WM04 - คลังโทรศัพท์เคลมโรงงาน = 6
+                        // echo '<pre>';
+                        // print_r($data);
+                        // die;
+                        if ($cat_ids[$k] == 11)
+                        {
+                             if($prices[$k]==0 || $prices[$k] == ''|| $price_ext == 0 || $price_ext == '' || $tem_total == 0 || $tem_total == ''){
+                                if($distributor_id == 21921 && $warehouse_id == 6){
+                                    $id = $QMarket->insert($data);
+                                }else{
+                                    throw new Exception("Some product set to Zero. Please try again.");
+                                }
+                            }else{
+                                $id = $QMarket->insert($data);
+                            }
+                        }else{
+                            $id = $QMarket->insert($data);
+                        }   
+                           
+                            
+
+                           // pond insert log quota 
+                    if ($type == FOR_RETAILER) {
+                        
+                    
+                           $select_a = $db->select()
+                                ->from(array('d' => 'distributor'), array('d.rank','d.quota_channel'));
+
+                           $select_a->joinLeft(array('r' => HR_DB.'.regional_market'),'r.id=d.region',array());
+                           $select_a->joinLeft(array('a' => HR_DB.'.area'),'r.area_id=a.id',array('area_id'=>'a.id'));
+                           $select_a->where('d.id = ?', $distributor_id);
+                           $distributor = $db->fetchRow($select_a);
+                         
+                           $dis_type = '';
+                           if ($distributor['quota_channel']) {
+                               if ($distributor['quota_channel'] == 1) {
+                                  $action_quota = "1";
+                                 
+                               }else if ($distributor['quota_channel'] == 10) {
+                                  $action_quota = "10";
+                                 
+                               }
+                           }else{
+                                if (in_array($distributor['rank'], array(7,8))) {
+                                   $action_quota = "7"; 
+                                }else if (in_array($distributor['rank'], array(1,2,5,6))) {
+                                  $action_quota = "1";
+                                }else if ($distributor['rank'] == 10) {
+                                  $action_quota = "10";
+                                }
+                           }
+                          
+                           if ($action_quota) {
+                            $toDay = date('Y-m-d');
+
+                            $select_q = $db->select()
+                                ->from(array('o' => 'quota_oppo_by_distributor'), array('o.good_id','o.good_color'));
+                            $select_q->where('o.quota_date = ?',$toDay);
+                            $select_q->where('o.d_id = ?',$distributor_id);
+                            $select_q->where('o.warehouse = ?',$warehouse_id);
+                            $select_q->where('o.good_id = ?',$good_ids[$k]);
+                            $select_q->where('o.good_color = ?',$good_colors[$k]);
+                            $select_q->where('o.status = 1');
+                            $select_q->where('o.del is null');
+                            $select_q->group(array('o.good_id','o.good_color'));
+                            $product_quota_by_dis = $db->fetchAll($select_q);
+                           
+                            
+                            if (isset($product_quota_by_dis) and $product_quota_by_dis) {
+                                
+                                    $QLogQuotaDis = new Application_Model_LogQuotaTranDistributor();
+                                    foreach ($product_quota_by_dis as $key => $value) {
+                                        if ($value['good_id'] == $good_ids[$k] && $value['good_color'] == $good_colors[$k]) {
+                                           $data_q = array(
+                                                'market_id'        => intval( $id ),
+                                                'warehouse_id'     => intval( $warehouse_id ),
+                                                'd_id'             => intval( $distributor_id ),
+                                                'cat_id'           => intval( $cat_ids[$k] ),
+                                                'good_id'          => intval( $good_ids[$k] ),
+                                                'good_color'       => intval( $good_colors[$k] ),
+                                                'num'              => intval( $nums[$k] ),
+                                                'add_time'         => $currentTime,
+                                                'user_id'          => $userStorage->id,
+                                                'sn'               => $sn,
+                                            );
+                                         
+                                           $QLogQuotaDis->insert($data_q);
+                                        }
+                                    }
+                                
+                            }else{
+                                $select_q = $db->select()
+                                    ->from(array('o' => 'quota_oppo'), array('o.good_id','o.good_color'));
+                                $select_q->where('o.quota_date = ?',$toDay);
+                                $select_q->where('o.dis_type = ?',$action_quota);
+                                $select_q->group(array('o.good_id','o.good_color'));
+                                $product_quota = $db->fetchAll($select_q);
+                                
+                                if ($product_quota) {
+                                    $QLogQuota = new Application_Model_LogQuotaTran();
+                                    foreach ($product_quota as $key => $value) {
+                                        if ($value['good_id'] == $good_ids[$k] && $value['good_color'] == $good_colors[$k]) {
+                                           $data_q = array(
+                                                'market_id'        => intval( $id ),
+                                                'warehouse_id'     => intval( $warehouse_id ),
+                                                'd_id'             => intval( $distributor_id ),
+                                                'cat_id'           => intval( $cat_ids[$k] ),
+                                                'good_id'          => intval( $good_ids[$k] ),
+                                                'good_color'       => intval( $good_colors[$k] ),
+                                                'num'              => intval( $nums[$k] ),
+                                                'add_time'         => $currentTime,
+                                                'user_id'          => $userStorage->id,
+                                                'sn'               => $sn,
+                                            );
+                                          
+                                           $QLogQuota->insert($data_q);
+                                        }
+                                    }
+                                }
+                            }
+                        }             
+
+                           
+                    }// End insert quota
+                           // 
+                           // FoceSale แถมออโต่
+                             $findFoceSale = new Application_Model_Warehouse();
+                             $QForcesale = new Application_Model_ForceSaleDetail();
+                             $paramsFoce = array(
+                                    'good_id'          => $good_ids[$k],
+                                    'warehouse_id'     => intval( $warehouse_id ),
+                                    'type'             => intval( $type ),
+                                    'd_id'             => intval( $distributor_id ),
+                                    'color'            => $good_colors[$k],
+                            );
+                            
+                            $foce_sale = $findFoceSale->findForceSales($paramsFoce) ; 
+                          
+                            if ($foce_sale) {
+                             
+                            
+                                 $forcesale = $QForcesale->forceSale($foce_sale['campaign_id']);
+                                 $total_foce = 0;
+                                foreach ($forcesale as $key => $value) {
+                                 $heckAccessories =   $findFoceSale->checkAccessoriesInMarket($value['g_id'],$sn);
+                                
+                                    $data['good_id']          = $value['g_id'];
+                                    $data['good_color']       = $value['color'];
+                                    $data['price']            = '0';
+                                    $data['total']            = '0';
+                                    $data['cat_id']            = $value['cat_id'];
+                                    $data['sale_off_percent'] = '100';
+            
+                                 if ($heckAccessories !='') {
+                                    $total_foce = $nums[$k]*$value['g_id_num'];
+
+                                    $where = $QMarket->getAdapter()->quoteInto('id = ?', $heckAccessories['id']);
+                                    $data_update['num']              = ($heckAccessories['num']+$total_foce);
+                                    // print_r($data);echo '==';die;
+                                   $id = $QMarket->update($data_update,$where);
+                                 }else{
+                                    $total_foce = $nums[$k]*$value['g_id_num'];
+
+                                   
+                                    $data['num']              = $total_foce;
+                                     // print_r($data);echo '++';die;
+                                   $id = $QMarket->insert($data);
+                                 }
+
+
+                             }
+
+                                
+                            }
+                            //endPungpond
+                            
+                            //Tanong New Sales Order Format 20160312 1305
+                            /*
+                            if ($sn!=''){
+                                //print_r($sn);die;
+                                $this->getSalesOrderNo_Ref($sn);
+                            }
+                            */
+                        }
+
+
+
+                        //Tanong
+                        $Total_Amount=$QMarket->LoadSalesOrderAmount($distributor_id);
+                        $total_amount_all = $Total_Amount[0]['total_acmount'];
+                        $total_ptice = $data['total'];
+                        $delivery_fee_all = $Total_Amount[0]['delivery_fee'];
+
+
+                        
+                        if ($delivery_fee_all >0 && $total_amount_all>=10000)
+                        { //update delivery_fee =0 all sales order in 1 day when sales order amount all 1 day >10000
+                         //   print_r($Total_Amount);
+                         // echo 'chk_total_amount_all >>'.$total_amount_all;
+                         // echo 'delivery_fee_all >>'.$delivery_fee_all;
+                         // die;
+                            $data_delivery = array(
+                                'delivery_fee' => 0,
+                            );
+
+                            //$data['delivery_fee'] = 0;
+                            $where = $QMarket->getAdapter()->quoteInto("(DATE_FORMAT(add_time,'%Y%m%d')=DATE_FORMAT(NOW(),'%Y%m%d'))", null);
+                            $where = $QMarket->getAdapter()->quoteInto('d_id = ?', $distributor_id);
+                           // $QMarket->update($data_delivery, $where);
+                        }
+
+                        
+
+                    }
+                }
+                //เพิ่มถุงอัตโนมัติ Gift Box
+
+                $data['price_ext'] = 0.00;
+                $data['total_ext'] = 0.00;
+
+                $Switch = new Application_Model_Switch();
+                $switch_i =  $Switch->fetchRow();
+                   
+                if ($switch_i['switch'] == 1) {
+
+                     $db = Zend_Registry::get('db');
+                            $kr = array('57',
+                                '189',
+                                '318',
+                                '580',
+                                '606',
+                                '649',
+                                '992',
+                                '1076',
+                                '3172',
+                                '10021',
+                                '10216',
+                                '10217',
+                                '10343',
+                                '10362',
+                                '10449',
+                                '25054',
+                                '26704',
+                                '34649',
+                                '34650');                     
+                    if ($type == 2 || $type == 5) { // type Demo APK
+                      
+                        
+                    }else{
+                     
+                if ($good_ids) {
+                    if (date('Y-m-d H:i:s') > '2017-04-03 00:00:00'){
+                    if (in_array('208', $good_ids)) {//R9s
+                        $findFoceSale = new Application_Model_Warehouse();
+                        if (($warehouse_id == 36) AND ($rank == 7 || $rank == 8)) {
+                            if(!in_array($distributor_id,$kr)){
+                            $product = array(208,210,142,256);
+                            $total_produce =  $findFoceSale->checkPhoneInMarketForesale($sn,$product);
+                            $stock = $db->query("CALL proc_get_storage('warehouse_id=36|cat_id=12|good_id=216|desc=1|search=1',0,40,@total)");
+                            $result = $stock->fetchAll();
+                            $stock_sun = $result[0]['product_count']-$result[0]['current_order']-$result[0]['current_change_order'];
+                            $stock->closeCursor();
+                            $goodtung = 216; //05GB0005 Gift Box (Mai Davika)
+                            $heckAccessories =   $findFoceSale->checkAccessoriesInMarket($goodtung,$sn);
+                           
+                            if ($stock_sun >= $total_produce && false) {
+
+                                    if ($stock_sun >= $total_produce) {
+                                        $data['good_id']          = '216';
+                                        $data['good_color']       = '1';
+                                        $data['price']            = '0';
+                                        $data['total']            = '0';
+                                        $data['cat_id']            = '12';
+                                        $data['sale_off_percent'] = '100';
+                                        $data['num']              = $total_produce;
+                                        if ($heckAccessories !='') {
+                                            $where = $QMarket->getAdapter()->quoteInto('id = ?', $heckAccessories['id']);
+                                            $id = $QMarket->update($data,$where);
+                                        }else{
+
+                                               $id = $QMarket->insert($data);
+                                             }
+                                    }
+
+                                }else{
+                                    $total_produce2 =  $findFoceSale->checkPhoneInMarketForesale($sn,$product);
+                                    $stock2 = $db->query("CALL proc_get_storage('warehouse_id=36|cat_id=12|good_id=215|desc=1|search=1',0,40,@total)");
+                                    $result2 = $stock2->fetchAll();
+                                    $stock_sun2 = $result2[0]['product_count']-$result2[0]['current_order']-$result2[0]['current_change_order'];
+                                    $stock2->closeCursor();
+                                    $goodtung2 = 215; //05GB0004 Gift Box (Lee Min Ho)
+                                    $heckAccessories =   $findFoceSale->checkAccessoriesInMarket($goodtung2,$sn);
+                                    if ($stock_sun2) {
+
+                                            if ($stock_sun2 >= $total_produce2) {
+                                                $data['good_id']          = '215';
+                                                $data['good_color']       = '1';
+                                                $data['price']            = '0';
+                                                $data['total']            = '0';
+                                                $data['cat_id']            = '12';
+                                                $data['sale_off_percent'] = '100';
+                                                $data['num']              = $total_produce2;
+                                                if ($heckAccessories !='') {
+                                                    $where = $QMarket->getAdapter()->quoteInto('id = ?', $heckAccessories['id']);
+                                                    $id = $QMarket->update($data,$where);
+                                                }else{
+
+                                                       $id = $QMarket->insert($data);
+                                                     }
+                                            }
+
+                                        } 
+                                }
+                            }//kr      
+                                                   
+                        }
+                    }//if good
+                   
+                    }//Time
+
+                    if (in_array('210', $good_ids)) {//R9sPlus
+                        $findFoceSale = new Application_Model_Warehouse();
+                        if (date('Y-m-d H:i:s') > '2017-04-03 00:00:00'){
+                        if (($warehouse_id == 36) AND ($rank == 7 || $rank == 8)) {
+                            if(!in_array($distributor_id,$kr)){
+                            $product = array(208,210,142,256);
+                            $total_produce =  $findFoceSale->checkPhoneInMarketForesale($sn,$product);
+                            $stock = $db->query("CALL proc_get_storage('warehouse_id=36|cat_id=12|good_id=216|desc=1|search=1',0,40,@total)");
+                            $result = $stock->fetchAll();
+                            $stock_sun = $result[0]['product_count']-$result[0]['current_order']-$result[0]['current_change_order'];
+                            $stock->closeCursor();
+                            $goodtung = 216; //05GB0005 Gift Box (Mai Davika)
+                            $heckAccessories =   $findFoceSale->checkAccessoriesInMarket($goodtung,$sn);
+                            if ($stock_sun >= $total_produce && false) {
+                                if ($stock_sun >= $total_produce) {
+                                    $data['good_id']          = '216';
+                                    $data['good_color']       = '1';
+                                    $data['price']            = '0';
+                                    $data['total']            = '0';
+                                    $data['cat_id']            = '12';
+                                    $data['sale_off_percent'] = '100';
+                                    $data['num']              = $total_produce;
+                          
+                                    if ($heckAccessories !='') {
+                                    $where = $QMarket->getAdapter()->quoteInto('id = ?', $heckAccessories['id']);
+                                    $id = $QMarket->update($data,$where);
+                                }else{
+                                       $id = $QMarket->insert($data);
+                                     }
+                                }
+                                    
+                                }else{
+                                    $total_produce2 =  $findFoceSale->checkPhoneInMarketForesale($sn,$product);
+                                    $stock2 = $db->query("CALL proc_get_storage('warehouse_id=36|cat_id=12|good_id=215|desc=1|search=1',0,40,@total)");
+                                    $result2 = $stock2->fetchAll();
+                                    $stock_sun2 = $result2[0]['product_count']-$result2[0]['current_order']-$result2[0]['current_change_order'];
+                                    $stock2->closeCursor();
+                                    $goodtung2 = 215; //05GB0004 Gift Box (Lee Min Ho)
+                                    $heckAccessories =   $findFoceSale->checkAccessoriesInMarket($goodtung2,$sn);
+                                    if ($stock_sun2) {
+
+                                            if ($stock_sun2 >= $total_produce2) {
+                                                $data['good_id']          = '215';
+                                                $data['good_color']       = '1';
+                                                $data['price']            = '0';
+                                                $data['total']            = '0';
+                                                $data['cat_id']            = '12';
+                                                $data['sale_off_percent'] = '100';
+                                                $data['num']              = $total_produce2;
+                                                if ($heckAccessories !='') {
+                                                    $where = $QMarket->getAdapter()->quoteInto('id = ?', $heckAccessories['id']);
+                                                    $id = $QMarket->update($data,$where);
+                                                }else{
+
+                                                       $id = $QMarket->insert($data);
+                                                     }
+                                            }
+
+                                        }
+                                }
+                            }//kr      
+                                                   
+                        }
+                    }
+
+                    
+                }
+                    if (in_array('142', $good_ids)) {//F1s
+                        $findFoceSale = new Application_Model_Warehouse();
+                        if (date('Y-m-d H:i:s') > '2017-04-03 00:00:00'){
+                        if (($warehouse_id == 36) AND ($rank == 7 || $rank == 8)) {
+                            if(!in_array($distributor_id,$kr)){
+                            $product = array(208,210,142,256);
+                            $total_produce =  $findFoceSale->checkPhoneInMarketForesale($sn,$product);
+                            $stock = $db->query("CALL proc_get_storage('warehouse_id=36|cat_id=12|good_id=216|desc=1|search=1',0,40,@total)");
+                            $result = $stock->fetchAll();
+                            $stock_sun = $result[0]['product_count']-$result[0]['current_order']-$result[0]['current_change_order'];
+                            $stock->closeCursor();
+                            $goodtung = 216; //05GB0005 Gift Box (Mai Davika)
+                            $heckAccessories =   $findFoceSale->checkAccessoriesInMarket($goodtung,$sn);
+                            if ($stock_sun >= $total_produce && false) {
+                                if ($stock_sun >= $total_produce) {
+                                    $data['good_id']          = '216';
+                                    $data['good_color']       = '1';
+                                    $data['price']            = '0';
+                                    $data['total']            = '0';
+                                    $data['cat_id']            = '12';
+                                    $data['sale_off_percent'] = '100';
+                                    $data['num']              = $total_produce;
+                          
+                                    if ($heckAccessories !='') {
+                                    $where = $QMarket->getAdapter()->quoteInto('id = ?', $heckAccessories['id']);
+                                    $id = $QMarket->update($data,$where);
+                                }else{
+                                       $id = $QMarket->insert($data);
+                                     }
+                                }
+                                    
+                                }else{
+                                    $total_produce2 =  $findFoceSale->checkPhoneInMarketForesale($sn,$product);
+                                    $stock2 = $db->query("CALL proc_get_storage('warehouse_id=36|cat_id=12|good_id=215|desc=1|search=1',0,40,@total)");
+                                    $result2 = $stock2->fetchAll();
+                                    $stock_sun2 = $result2[0]['product_count']-$result2[0]['current_order']-$result2[0]['current_change_order'];
+                                    $stock2->closeCursor();
+                                    $goodtung2 = 215; //05GB0004 Gift Box (Lee Min Ho)
+                                    $heckAccessories =   $findFoceSale->checkAccessoriesInMarket($goodtung2,$sn);
+                                    if ($stock_sun2) {
+
+                                            if ($stock_sun2 >= $total_produce2) {
+                                                $data['good_id']          = '215';
+                                                $data['good_color']       = '1';
+                                                $data['price']            = '0';
+                                                $data['total']            = '0';
+                                                $data['cat_id']            = '12';
+                                                $data['sale_off_percent'] = '100';
+                                                $data['num']              = $total_produce2;
+                                                if ($heckAccessories !='') {
+                                                    $where = $QMarket->getAdapter()->quoteInto('id = ?', $heckAccessories['id']);
+                                                    $id = $QMarket->update($data,$where);
+                                                }else{
+
+                                                       $id = $QMarket->insert($data);
+                                                     }
+                                            }
+
+                                        }
+                                }
+                           }//kr     
+                                                   
+                        }
+                    }
+
+                    
+                }
+
+
+                if (in_array('142', $good_ids)) {//F1s
+                        $findFoceSale = new Application_Model_Warehouse();
+                        if (date('Y-m-d H:i:s') > '2017-06-08 00:00:00'){
+                        if (($warehouse_id == 36) AND ($rank == 7 || $rank == 8)) {
+                            if(!in_array($distributor_id,$kr)){
+                            $product = array(142);
+                            $total_produce =  $findFoceSale->checkPhoneInMarketForesale($sn,$product);
+                            $stock = $db->query("CALL proc_get_storage('warehouse_id=36|cat_id=12|good_id=154|good_color_id=2|desc=1|search=1',0,40,@total)");
+                            $result = $stock->fetchAll();
+                            $stock_sun = $result[0]['product_count']-$result[0]['current_order']-$result[0]['current_change_order'];
+                            $stock->closeCursor();
+                            $goodtung = 154; //05SB0005 SetboxF1sP2 color black
+                            $heckAccessories =   $findFoceSale->checkAccessoriesInMarket($goodtung,$sn);
+                            if ($stock_sun >= $total_produce && false) {
+                                if ($stock_sun >= $total_produce) {
+                                    $data['good_id']          = '154';
+                                    $data['good_color']       = '2';
+                                    $data['price']            = '0';
+                                    $data['total']            = '0';
+                                    $data['cat_id']            = '12';
+                                    $data['sale_off_percent'] = '100';
+                                    $data['num']              = $total_produce;
+                          
+                                    if ($heckAccessories !='') {
+                                    $where = $QMarket->getAdapter()->quoteInto('id = ?', $heckAccessories['id']);
+                                    $id = $QMarket->update($data,$where);
+                                }else{
+                                       $id = $QMarket->insert($data);
+                                     }
+                                }
+                                    
+                                }else{
+                                    $total_produce2 =  $findFoceSale->checkPhoneInMarketForesale($sn,$product);
+                                    $stock2 = $db->query("CALL proc_get_storage('warehouse_id=36|cat_id=12|good_id=154|good_color_id=12|desc=1|search=1',0,40,@total)");
+                                    $result2 = $stock2->fetchAll();
+                                    $stock_sun2 = $result2[0]['product_count']-$result2[0]['current_order']-$result2[0]['current_change_order'];
+                                    $stock2->closeCursor();
+                                    $goodtung2 = 154; //05SB0005 SetboxF1sP2 color gold
+                                    $heckAccessories =   $findFoceSale->checkAccessoriesInMarket($goodtung2,$sn);
+                                    if ($stock_sun2) {
+
+                                            if ($stock_sun2 >= $total_produce2) {
+                                                $data['good_id']          = '154';
+                                                $data['good_color']       = '12';
+                                                $data['price']            = '0';
+                                                $data['total']            = '0';
+                                                $data['cat_id']            = '12';
+                                                $data['sale_off_percent'] = '100';
+                                                $data['num']              = $total_produce2;
+                                                if ($heckAccessories !='') {
+                                                    $where = $QMarket->getAdapter()->quoteInto('id = ?', $heckAccessories['id']);
+                                                    $id = $QMarket->update($data,$where);
+                                                }else{
+
+                                                       $id = $QMarket->insert($data);
+                                                     }
+                                            }
+
+                                        }
+                                }
+                           }//kr     
+                                                   
+                        }
+                    }
+
+                    
+                }
+
+
+                if (in_array('211', $good_ids)) {//A57
+                        $findFoceSale = new Application_Model_Warehouse();
+                        if (date('Y-m-d H:i:s') > '2017-04-24 00:00:00' && date('Y-m-d H:i:s') < '2017-06-01 00:00:00'){
+                        if (($warehouse_id == 36) AND ($rank == 7 || $rank == 8)) {
+                            if(!in_array($distributor_id,$kr)){
+                            $product = array(208,210,142,256);
+                            $total_produce =  $findFoceSale->checkPhoneInMarketForesale($sn,$product);
+                            $stock = $db->query("CALL proc_get_storage('warehouse_id=36|cat_id=12|good_id=216|desc=1|search=1',0,40,@total)");
+                            $result = $stock->fetchAll();
+                            $stock_sun = $result[0]['product_count']-$result[0]['current_order']-$result[0]['current_change_order'];
+                            $stock->closeCursor();
+                            $goodtung = 216; //05GB0005 Gift Box (Mai Davika)
+                            $heckAccessories =   $findFoceSale->checkAccessoriesInMarket($goodtung,$sn);
+                            if ($stock_sun >= $total_produce && false) {
+                                if ($stock_sun >= $total_produce) {
+                                    $data['good_id']          = '216';
+                                    $data['good_color']       = '1';
+                                    $data['price']            = '0';
+                                    $data['total']            = '0';
+                                    $data['cat_id']            = '12';
+                                    $data['sale_off_percent'] = '100';
+                                    $data['num']              = $total_produce;
+                          
+                                    if ($heckAccessories !='') {
+                                    $where = $QMarket->getAdapter()->quoteInto('id = ?', $heckAccessories['id']);
+                                    $id = $QMarket->update($data,$where);
+                                }else{
+                                       $id = $QMarket->insert($data);
+                                     }
+                                }
+                                    
+                                }else{
+                                    $total_produce2 =  $findFoceSale->checkPhoneInMarketForesale($sn,$product);
+                                    $stock2 = $db->query("CALL proc_get_storage('warehouse_id=36|cat_id=12|good_id=215|desc=1|search=1',0,40,@total)");
+                                    $result2 = $stock2->fetchAll();
+                                    $stock_sun2 = $result2[0]['product_count']-$result2[0]['current_order']-$result2[0]['current_change_order'];
+                                    $stock2->closeCursor();
+                                    $goodtung2 = 215; //05GB0004 Gift Box (Lee Min Ho)
+                                    $heckAccessories =   $findFoceSale->checkAccessoriesInMarket($goodtung2,$sn);
+                                    if ($stock_sun2) {
+
+                                            if ($stock_sun2 >= $total_produce2) {
+                                                $data['good_id']          = '215';
+                                                $data['good_color']       = '1';
+                                                $data['price']            = '0';
+                                                $data['total']            = '0';
+                                                $data['cat_id']            = '12';
+                                                $data['sale_off_percent'] = '100';
+                                                $data['num']              = $total_produce2;
+                                                if ($heckAccessories !='') {
+                                                    $where = $QMarket->getAdapter()->quoteInto('id = ?', $heckAccessories['id']);
+                                                    $id = $QMarket->update($data,$where);
+                                                }else{
+
+                                                       $id = $QMarket->insert($data);
+                                                     }
+                                            }
+
+                                        }
+                                }
+                           }//kr     
+                                                   
+                        }
+                    }
+
+                    
+                }
+
+                if (in_array('211', $good_ids)) {//A57
+                        $findFoceSale = new Application_Model_Warehouse();
+                        if (date('Y-m-d H:i:s') > '2017-06-01 00:00:00'){
+                        if (($warehouse_id == 36) AND ($rank == 7 || $rank == 8)) {
+                            if(!in_array($distributor_id,$kr)){
+                            $product = array(211);
+                            $total_produce =  $findFoceSale->checkPhoneInMarketForesale($sn,$product);
+                            $stock = $db->query("CALL proc_get_storage('warehouse_id=36|cat_id=12|good_id=257|desc=1|search=1',0,40,@total)");
+                            $result = $stock->fetchAll();
+                            $stock_sun = $result[0]['product_count']-$result[0]['current_order']-$result[0]['current_change_order'];
+                            $stock->closeCursor();
+                            $goodtung = 257; //05GB0006 Gift Box (3 in 1)
+                            $heckAccessories =   $findFoceSale->checkAccessoriesInMarket($goodtung,$sn);
+                            if ($stock_sun >= $total_produce) {
+                                if ($stock_sun >= $total_produce) {
+                                    $data['good_id']          = '257';
+                                    $data['good_color']       = '1';
+                                    $data['price']            = '0';
+                                    $data['total']            = '0';
+                                    $data['cat_id']            = '12';
+                                    $data['sale_off_percent'] = '100';
+                                    $data['num']              = $total_produce;
+                          
+                                    if ($heckAccessories !='') {
+                                    $where = $QMarket->getAdapter()->quoteInto('id = ?', $heckAccessories['id']);
+                                    $id = $QMarket->update($data,$where);
+                                }else{
+                                       $id = $QMarket->insert($data);
+                                     }
+                                }
+                                    
+                                }else{
+                                    // $total_produce2 =  $findFoceSale->checkPhoneInMarketForesale($sn,$product);
+                                    // $stock2 = $db->query("CALL proc_get_storage('warehouse_id=36|cat_id=12|good_id=215|desc=1|search=1',0,40,@total)");
+                                    // $result2 = $stock2->fetchAll();
+                                    // $stock_sun2 = $result2[0]['product_count']-$result2[0]['current_order']-$result2[0]['current_change_order'];
+                                    // $stock2->closeCursor();
+                                    // $goodtung2 = 215; //05GB0004 Gift Box (Lee Min Ho)
+                                    // $heckAccessories =   $findFoceSale->checkAccessoriesInMarket($goodtung2,$sn);
+                                    // if ($stock_sun2) {
+
+                                    //         if ($stock_sun2 >= $total_produce2) {
+                                    //             $data['good_id']          = '215';
+                                    //             $data['good_color']       = '1';
+                                    //             $data['price']            = '0';
+                                    //             $data['total']            = '0';
+                                    //             $data['cat_id']            = '12';
+                                    //             $data['sale_off_percent'] = '100';
+                                    //             $data['num']              = $total_produce2;
+                                    //             if ($heckAccessories !='') {
+                                    //                 $where = $QMarket->getAdapter()->quoteInto('id = ?', $heckAccessories['id']);
+                                    //                 $id = $QMarket->update($data,$where);
+                                    //             }else{
+
+                                    //                    $id = $QMarket->insert($data);
+                                    //                  }
+                                    //         }
+
+                                    //     }
+                                }
+                           }//kr     
+                                                   
+                        }
+                    }
+
+                    
+                }
+
+                if (in_array('256', $good_ids)) {//A77
+                        $findFoceSale = new Application_Model_Warehouse();
+                        if (date('Y-m-d H:i:s') > '2017-05-30 00:00:00'){
+                        if (($warehouse_id == 36) AND ($rank == 7 || $rank == 8)) {
+                            if(!in_array($distributor_id,$kr)){
+                            $product = array(208,210,142,256);
+                            $total_produce =  $findFoceSale->checkPhoneInMarketForesale($sn,$product);
+                            $stock = $db->query("CALL proc_get_storage('warehouse_id=36|cat_id=12|good_id=215|desc=1|search=1',0,40,@total)");
+                            $result = $stock->fetchAll();
+                            $stock_sun = $result[0]['product_count']-$result[0]['current_order']-$result[0]['current_change_order'];
+                            $stock->closeCursor();
+                            $goodtung = 215; //05GB0004 Gift Box (Lee Min Ho)
+                            $heckAccessories =   $findFoceSale->checkAccessoriesInMarket($goodtung,$sn);
+                            if ($stock_sun >= $total_produce) {
+                                if ($stock_sun >= $total_produce) {
+                                    $data['good_id']          = '215';
+                                    $data['good_color']       = '1';
+                                    $data['price']            = '0';
+                                    $data['total']            = '0';
+                                    $data['cat_id']            = '12';
+                                    $data['sale_off_percent'] = '100';
+                                    $data['num']              = $total_produce;
+                          
+                                    if ($heckAccessories !='') {
+                                    $where = $QMarket->getAdapter()->quoteInto('id = ?', $heckAccessories['id']);
+                                    $id = $QMarket->update($data,$where);
+                                }else{
+                                       $id = $QMarket->insert($data);
+                                     }
+                                }
+                                    
+                                }else{
+                                    // $total_produce2 =  $findFoceSale->checkPhoneInMarketForesale($sn,$product);
+                                    // $stock2 = $db->query("CALL proc_get_storage('warehouse_id=36|cat_id=12|good_id=215|desc=1|search=1',0,40,@total)");
+                                    // $result2 = $stock2->fetchAll();
+                                    // $stock_sun2 = $result2[0]['product_count']-$result2[0]['current_order']-$result2[0]['current_change_order'];
+                                    // $stock2->closeCursor();
+                                    // $goodtung2 = 215; //05GB0004 Gift Box (Lee Min Ho)
+                                    // $heckAccessories =   $findFoceSale->checkAccessoriesInMarket($goodtung2,$sn);
+                                    // if ($stock_sun2) {
+
+                                    //         if ($stock_sun2 >= $total_produce2) {
+                                    //             $data['good_id']          = '215';
+                                    //             $data['good_color']       = '1';
+                                    //             $data['price']            = '0';
+                                    //             $data['total']            = '0';
+                                    //             $data['cat_id']            = '12';
+                                    //             $data['sale_off_percent'] = '100';
+                                    //             $data['num']              = $total_produce2;
+                                    //             if ($heckAccessories !='') {
+                                    //                 $where = $QMarket->getAdapter()->quoteInto('id = ?', $heckAccessories['id']);
+                                    //                 $id = $QMarket->update($data,$where);
+                                    //             }else{
+
+                                    //                    $id = $QMarket->insert($data);
+                                    //                  }
+                                    //         }
+
+                                    //     }
+                                }
+                           }//kr     
+                                                   
+                        }
+                    }
+
+                    
+                }
+
+
+            }//good_ids
+            } 
+                       
+        }//switch_i
+                if ($rank == 10) { //rank Brand Shop/Service(10)
+                       
+                   }else{ 
+                    if ($type == 2 || $type == 5) { // type Demo APK
+                      
+                        
+                    }else{
+                        if ($warehouse_id == 5 || $warehouse_id == 6 || $warehouse_id == 8) {
+                           
+                        }else{
+                                
+                             if ($edit=='') {
+                                
+                                if (in_array('11', $cat_ids)) {
+                                   
+                                    $total_produce =  $findFoceSale->checkPhoneInMarket($sn);
+                                    $goodtung = 127;
+                                    $heckAccessories =   $findFoceSale->checkAccessoriesInMarket($goodtung,$sn);
+                                                    $data['good_id']          = '127';
+                                                    $data['good_color']       = '1';
+                                                    $data['price']            = '0';
+                                                    $data['total']            = '0';
+                                                    $data['cat_id']            = '12';
+                                                    $data['sale_off_percent'] = '100';
+                                                    $data['num']              = $total_produce;
+                                            if ($heckAccessories !='') {
+                                                $where = $QMarket->getAdapter()->quoteInto('id = ?', $heckAccessories['id']);
+                                                $id = $QMarket->update($data,$where);
+                                            }else{
+                                                   $id = $QMarket->insert($data);
+                                                 }
+                                }
+                               
+                            }    
+                        
+                    }//warehouse_id
+                    }//type
+            }//rank   
+               
+                //delete old sales
+                if ($this->getRequest()->getParam('sn'))
+                {
+                    if ($old_ids)
+                    {
+                        $removed_sales_ids = array_diff($old_ids, $ids);
+                        if ($removed_sales_ids)
+                        {   
+                            //pond
+                            $QQLogQuotaTranDistributor = new Application_Model_LogQuotaTranDistributor();
+                            $QQLogQuotaTran = new Application_Model_LogQuotaTran();
+
+                            $where = $QMarket->getAdapter()->quoteInto('id IN (?)', $removed_sales_ids);
+                            $where1 = $QQLogQuotaTranDistributor->getAdapter()->quoteInto('market_id IN (?)', $removed_sales_ids);
+                            $where2 = $QQLogQuotaTran->getAdapter()->quoteInto('market_id IN (?)', $removed_sales_ids);
+                            $QMarket->delete($where);
+                            $QQLogQuotaTranDistributor->delete($where1);
+                            $QQLogQuotaTran->delete($where2);
+                        }
+                    }
+                    $info = 'Batch EditSale order number: Sale order number： 1';
+                } else
+                {
+                    $info = 'Batch addSale order number: Sale order number： 2';
+                }
+
+                // NHAN VIEN MUA MAY
+                if($type == FOR_STAFFS AND in_array($distributor_id, array(OPPO_STAFF,OPPO_INGAME))){
+                    $QStaffOrder = new Application_Model_StaffOrder();
+                    $resultStaffOrder = $QStaffOrder->save($params,$sn);
+                    if($resultStaffOrder['status'] < 0){
+                        return array(
+                            'code' => -5,
+                            'message' => $resultStaffOrder['message']
+                        );
+                    }
+                }
+
+                // Neu co nhung don khuyen mai massupload thi khong can kiem tra stock
+
+                if($save_service !='service'){
+                    if(!$invoice_number_data)
+                    {
+                        if ($missing_stock){
+                            // throw new Exception(1);
+                        }
+                    }
+                }
+
+                //$sales_order = $result['sn'];
+                if ($sn!='')
+                {
+                    $creditnote_data['sales_order']=$sn;
+                    if($creditnote_data !=null)
+                    {  
+                       $result_status = $this->saveAPICreditNoteAction($db,$distributor_id,$sn,$creditnote_data);
+                    }else{
+                       $result_status = $this->saveAPICreditNoteAction($db,$distributor_id,$sn,'no_discount');
+                    }
+                }
+
+                //todo log
+                $ip = $this->getRequest()->getServer('REMOTE_ADDR');
+                $info .= $sn;
+
+                $QLog->insert(array(
+                    'info'       => $info,
+                    'user_id'    => $userStorage->id,
+                    'ip_address' => $ip,
+                    'time'       => $currentTime,
+                ));
+
+                //commit
+                $chk = $db->commit();
+
+                $result = array(
+                    'code' => 1,
+                    'message' => 'Done!',
+                    'sn' => $sn,
+                );
+
+                if (isset($id) && $id) $result['id'] = $id;
+
+                return $result;
+
+            }
+            catch (exception $e)
+            {
+                $db->rollback();
+
+                if ($e->getMessage() == 1)
+                    return array(
+                        'code' => -2,
+                        'message' => 'The stock available is not enough! >>'.$e,
+                        );
+                else
+                    return array(
+                        'code' => -3,
+                        'message' => 'Cannot save, please try again! 4' . $e->getCode()."/".$e->getMessage(),
+                        );
+            }
+
+        } else
+        {
+            $db->rollback();
+            return array(
+                'code' => -4,
+                'message' => 'Cannot save, please try again! 5',
+                );
+        }
+    }
+
+    /**
+     * Tạo đơn hàng từ Stock tết
+     * @param array $params
+     * @return integer
+     */
+    private function saveAPIStock($params = array())
+    {
+        $ids              = isset($params['ids']) ? $params['ids'] : null;
+        $cat_ids          = isset($params['cat_id']) ? $params['cat_id'] : null;
+        $good_ids         = isset($params['good_id']) ? $params['good_id'] : null;
+        $good_colors      = isset($params['good_color']) ? $params['good_color'] : null;
+        $nums             = isset($params['num']) ? $params['num'] : null;
+        $prices           = isset($params['price']) ? $params['price'] : null;
+        $totals           = isset($params['total']) ? $params['total'] : null;
+        $texts            = isset($params['text']) ? $params['text'] : null;
+        $distributor_id   = isset($params['distributor_id']) ? $params['distributor_id'] : null;
+        $warehouse_id     = isset($params['warehouse_id']) ? $params['warehouse_id'] : null;
+        $salesman         = isset($params['salesman']) ? $params['salesman'] : null;
+        $type             = isset($params['type']) ? $params['type'] : null;
+        $sale_off_percent = isset($params['sale_off_percent']) ? $params['sale_off_percent'] : null;
+        $sn               = isset($params['sn']) ? $params['sn'] : null;
+        $isbatch          = isset($params['isbatch']) ? $params['isbatch'] : null;
+        $life_time        = isset($params['life_time']) ? $params['life_time'] : null;
+        $userStorage      = Zend_Auth::getInstance()->getStorage()->read();
+        $gift_id          = isset($params['gift_id']) ? $params['gift_id'] : null;
+        $campaign         = isset($params['campaign']) ? $params['campaign'] : null;
+        $imei_list        = isset($params['imei_list']) ? $params['imei_list'] : null;
+        $currentTime      = date('Y-m-d H:i:s');
+
+        //check can edit lifetime
+        $QExceptionCase = new Application_Model_ExceptionCase();
+        $where = $QExceptionCase->getAdapter()->quoteInto('name = ?',
+            'LIFETIME_EXCEPTION');
+        $lifetime_exception = $QExceptionCase->fetchRow($where);
+
+        $exception_case = null;
+        if (isset($lifetime_exception) and $lifetime_exception['value']) {
+            eval(json_decode($lifetime_exception['value']));
+            $exception_case = isset($data_exception) ? $data_exception : null;
+        }
+
+        if (My_Staff_Group::inGroup($userStorage->group_id, array(ADMINISTRATOR_ID, SUPER_SALES_ADMIN))
+            or ($exception_case and in_array($userStorage->id, $exception_case)))
+            $life_time_editable = 1;
+        else
+            $life_time_editable = 0;
+
+        if ($life_time_editable and $life_time <= 0) {
+            return array(
+                'code' => -1,
+                'message' => 'Invalid lifetime, please try again!',
+            );
+        }
+        //end of check can edit lifetime
+        //
+        if ($type != 1)
+            return array(
+                'code' => -1,
+                'message' => 'Invalid type, please try again!',
+            );
+
+        $QLog         = new Application_Model_Log();
+        $QGood        = new Application_Model_Good();
+        $QGoodColor   = new Application_Model_GoodColor();
+        $QDistributor = new Application_Model_Distributor();
+        $QMarket      = new Application_Model_MarketStock();
+
+        $db = Zend_Registry::get('db');
+        $db->beginTransaction();
+
+        if (!$sn)
+            $sn = date('YmdHis') . substr(microtime(), 2, 4);
+
+        $goods_cache = $QGood->get_cache();
+        $good_colors_cache = $QGoodColor->get_cache();
+
+        if (!is_array($ids)) {
+            $db->rollback();
+            return array(
+                'code' => -4,
+                'message' => 'Cannot save, please try again! 6',
+            );
+        }
+
+        try {
+            $where            = $QDistributor->getAdapter()->quoteInto('id = ?', $distributor_id);
+            $distributor      = $QDistributor->fetchRow($where);
+            $rank             = $distributor['rank'];
+            $array_good_color = array();
+
+            //get old ids
+            $old_ids = $error_ids = null;
+            if ($sn) {
+                $where = $QMarket->getAdapter()->quoteInto('sn = ?', $sn);
+                $old_sales = $QMarket->fetchAll($where);
+
+                if ($old_sales) {
+                    foreach ($old_sales as $sale) {
+                        $old_ids[] = $sale->id;
+
+                        if ($sale['pay_time'] or $sale['shipping_yes_time'] or $sale['outmysql_time'])
+                            $error_ids[] = $sale->id;
+                    }
+                }
+            }
+
+            if ($error_ids) {
+                return array(
+                    'code' => -5,
+                    'message' => 'This order was confirmed!',
+                    'sn' => $sn,
+                );
+            }
+
+            $missing_stock = array();
+
+            if (isset($ids) and $ids) {
+                $resultSet = $QMarket->find($ids[0]);
+                $market_current = $resultSet->current();
+
+                if (isset($market_current) and $market_current) {
+                    $date_curent = $market_current['add_time'];
+                    $distributor_id_current = $market_current['d_id'];
+                    $current_time  = date('H:i:s');
+                    //kiểm tra không cho đổi đại lý
+                    if($distributor_id != $distributor_id_current && $current_time > TIME_LIMIT_ORDER)
+                        throw new Exception("Sorry, you can't change distributor for this order.Please remove order and create again.");
+                }
+            }
+
+            // format imei list
+            $imei_list = trim($imei_list);
+            $imei_list = preg_replace("/(^[\r\n]*|[\r\n]+)[\s\t]*[\r\n]+/", "\n", $imei_list);
+            $imei_list = explode("\n", $imei_list);
+            $imei_list = array_filter($imei_list);
+
+            $imei_list_text = implode(',', $imei_list);
+
+            if (!count($imei_list))
+                throw new Exception("IMEI List cannot blank");
+
+            $total_quantity = 0;
+            $total_value = 0;
+
+            $QImeiStock = new Application_Model_ImeiStock();
+            $where = $QImeiStock->getAdapter()->quoteInto('market_stock_sn = ?', $sn);
+            $QImeiStock->delete($where);
+
+            foreach ($ids as $k => $id) {
+                if ( !(
+                    isset($cat_ids[$k]) and $cat_ids[$k] and isset($good_ids[$k]) and $good_ids[$k] and
+                    isset($good_colors[$k]) and $good_colors[$k] and isset($nums[$k]) and $nums[$k] and
+                    isset($prices[$k])
+                ) ) continue;
+
+                $total2 = 0;
+
+                if ($cat_ids[$k] == PHONE_CAT_ID) {
+                    if(in_array($good_ids[$k] . '_' . $good_colors[$k] , $array_good_color))
+                        throw new Exception("Sorry, your input is duplicated, Model : " . $goods_cache[$good_ids[$k]] . " - " . $good_colors_cache[$good_colors[$k]]);
+
+                    $array_good_color[] = $good_ids[$k] . '_' . $good_colors[$k];
+                }
+
+                $total_quantity += intval( $nums[$k] );
+                $total_value += My_Number::floatval( $prices[$k] ) * intval( $nums[$k] );
+
+                // check stock
+                $db->query("SET @result := 0;");
+
+                $db->query("CALL sp_check_stock_storage (?, ?, ?, ?, ?, @result);", array(
+                    $nums[$k],
+                    $distributor_id,
+                    $good_ids[$k],
+                    $good_colors[$k],
+                    $imei_list_text,
+                ));
+
+                $stmt = $db->query("SELECT @result");
+                $result = $stmt->fetchAll();
+
+                if (!isset($result[0]['@result']) || $result[0]['@result'] != 1)
+                    throw new Exception("Tồn kho không đủ, hoặc số lượng IMEI khác với số trên chi tiết đơn hàng.");
+
+                $tem_total = (isset($totals[$k]) and $totals[$k]) ? $totals[$k] : 0;
+
+                $data = array(
+                    'market_general_id' => 0,
+                    'cat_id'            => intval( $cat_ids[$k] ),
+                    'good_id'           => intval( $good_ids[$k] ),
+                    'good_color'        => intval( $good_colors[$k] ),
+                    'num'               => intval( $nums[$k] ),
+                    'price'             => My_Number::floatval( $prices[$k] ),
+                    'total'             => My_Number::floatval( $tem_total ),
+                    'text'              => (isset($texts[$k]) ? My_String::trim($texts[$k]) : null),
+                    'price_clas'        => intval( $rank ),
+                    'd_id'              => intval( $distributor_id ),
+                    'warehouse_id'      => intval( $warehouse_id ),
+                    'isbatch'           => intval( $isbatch ),
+                    'salesman'          => intval( $salesman ),
+                    'type'              => intval( $type ),
+                    'sale_off_percent'  => intval( $sale_off_percent[$k] ),
+                    'campaign'          => 16,
+                    'last_updated_at'   => $currentTime,
+                );
+
+                if ($life_time_editable and $life_time) {
+                    if ($life_time <= 0 || $life_time > 5 || !is_numeric($life_time)) $life_time = 2;
+                    $data['life_time'] = $life_time * 24 * 60 * 60;
+                }
+
+                if ($id) { //update
+                    $where = $QMarket->getAdapter()->quoteInto('id = ?', $id);
+                    $QMarket->update($data, $where);
+
+                } else { //insert
+
+                    if (isset($date_curent) and $date_curent)
+                        $date_time_add = $date_curent;
+                    else
+                        $date_time_add = $currentTime;
+
+                    $data['add_time'] = $date_time_add;
+                    $data['user_id']  = $userStorage->id;
+                    $data['sn']       = $sn;
+                    $data['print_no'] = ($QMarket->get_print_no_max($sn)) + 1;
+                    $id = $QMarket->insert($data);
+                }
+            }
+
+            if ($total_quantity != count($imei_list))
+                throw new Exception("Số lượng IMEI trong list khác với tổng số lượng trong chi tiết đơn hàng.");
+
+            // if ($total_value >= 20*1000*1000)
+                // throw new Exception("Đơn hàng phải dưới 20 triệu");
+
+            //delete old sales
+            if ($this->getRequest()->getParam('sn')) {
+                if ($old_ids) {
+                    $removed_sales_ids = array_diff($old_ids, $ids);
+                    if ($removed_sales_ids) {
+                        $where = $QMarket->getAdapter()->quoteInto('id IN (?)', $removed_sales_ids);
+                        $QMarket->delete($where);
+                    }
+                }
+                $info = 'Edit Stock Order SN number: ';
+            } else {
+                $info = 'Create Stock Order SN number: ';
+            }
+
+            // insert imei
+            foreach ($imei_list as $key => $value) {
+                $imei_data = array(
+                    'imei_sn'         => $value,
+                    'distributor_id'  => intval($distributor_id),
+                    'out_date'        => date('Y-m-d H:i:s'),
+                    'market_stock_sn' => $sn,
+                );
+
+                $QImeiStock->insert($imei_data);
+            }
+
+            $sql = "update imei_stock, imei
+                SET imei_stock.good_id=imei.good_id
+                , imei_stock.good_color=imei.good_color
+                WHERE imei_stock.imei_sn=imei.imei_sn
+                AND imei_stock.imei_sn IN (".implode(',', $imei_list).");";
+            $db->query($sql);
+
+            $sql = "update imei_stock, market_stock
+                SET imei_stock.market_stock_id=market_stock.id
+                WHERE imei_stock.market_stock_sn=market_stock.sn
+                AND imei_stock.good_id=market_stock.good_id
+                AND imei_stock.good_color=market_stock.good_color;
+                AND imei_stock.imei_sn IN (".implode(',', $imei_list).");";
+            $db->query($sql);
+
+            //todo log
+            $ip = $this->getRequest()->getServer('REMOTE_ADDR');
+            $info .= $sn;
+
+            $QLog->insert(array(
+                'info'       => $info,
+                'user_id'    => $userStorage->id,
+                'ip_address' => $ip,
+                'time'       => $currentTime,
+            ));
+
+            //commit
+            $db->commit();
+
+            $result = array(
+                'code' => 1,
+                'message' => 'Done!',
+                'sn' => $sn,
+            );
+
+            if (isset($id) && $id) $result['id'] = $id;
+
+            return $result;
+        }
+        catch (exception $e)
+        {
+            $db->rollback();
+
+            if ($e->getMessage() == 1) {
+                return array(
+                    'code' => -2,
+                    'message' => 'The stock available is not enough!',
+                );
+            } else {
+                return array(
+                    'code' => -3,
+                    'message' => 'Cannot save, please try again! 7' . $e->getCode()."/".$e->getMessage(),
+                );
+            }
+        }
+    }
+
+
+    private function _exportCancelIMEI($can_sn)
+    {
+        
+        $this->_helper->layout->disableLayout();
+        $this->_helper->viewRenderer->setNoRender(true);
+
+        $db = Zend_Registry::get('db');
+        set_time_limit(0);
+        error_reporting(~E_ALL);
+        ini_set('display_error', 0);
+        //ini_set('memory_limit', -1);
+        $filename = 'Cancel List - IMEI'. ' - '.date('d-m-Y H-i-s');
+        // output headers so that the file is downloaded rather than displayed
+        header('Content-Type: text/csv; charset=utf-8');
+        header('Content-Disposition: attachment; filename='.$filename.'.csv');
+        // echo "\xEF\xBB\xBF"; // UTF-8 BOM
+        echo chr(239) . chr(187) . chr(191); // UTF-8 BOM
+        $output = fopen('php://output', 'w');
+
+        $headss = array(
+            'NO',
+            'IMEI',
+            'SN',
+            'CANCELED DATE',
+            'CANCELED ID',
+            'CANCELED BY',
+            
+        );
+
+        fputcsv($output, $headss);
+        $QStaff         = new Application_Model_Staff();
+        $staff          = $QStaff->get_cache();
+
+        $sql_imei = "select * from imei_cancel_log m 
+                    where m.sales_sn = ".$can_sn;
+        $data = $db->fetchAll($sql_imei);
+        
+        if (!$data){return;}
+        $userStorage = Zend_Auth::getInstance()->getStorage()->read();
+        $i =1;
+        foreach($data as $item){
+            $row = array();
+            $row[] = $i++;
+            $row[] = '="'.$item['imei_sn'].'"';
+            $row[] = '="'.$item['sales_sn'].'"';
+            $row[] = $item['date_canceled'];
+            $row[] = $item['canceled_by'];
+            $row[] = $staff[$item['canceled_by']];
+        
+        
+            fputcsv($output, $row);
+            unset($row);
+            unset($item);
+
+        }
+        
+        unset($data);
+        // die;
+    }
+    private function _exportReturnSaleExcel($data)
+    {
+        //print_r($data);die;
+        set_time_limit(0);
+        error_reporting(~E_ALL);
+        ini_set('display_error', 0);
+        ini_set('memory_limit', -1);
+        require_once 'PHPExcel.php';
+        $cacheMethod = PHPExcel_CachedObjectStorageFactory::cache_to_phpTemp;
+        $cacheSettings = array( 'memoryCacheSize' => '64MB');
+        PHPExcel_Settings::setCacheStorageMethod($cacheMethod, $cacheSettings);
+        $PHPExcel = new PHPExcel();
+        $heads = array(
+            'No.',
+            'SALE ORDER NUMBER',
+            'Credit Note NUMBER',
+            'RETAILER NAME',
+            'PRODUCT NAME',
+            'PRODUCT COLOR',
+            'SALES QUANTITY',
+            'SALES PRICE',
+            'TOTAL',
+            'ORDER TIME',
+            'WAREHOUSE',
+            'Finance Group',
+            'Text'
+        );
+
+        //var_dump($data);exit;
+        $PHPExcel->setActiveSheetIndex(0);
+        $sheet = $PHPExcel->getActiveSheet();
+
+        $alpha = 'A';
+        $index = 1;
+        foreach ($heads as $key)
+        {
+            $sheet->setCellValue($alpha . $index, $key);
+            $alpha++;
+        }
+        $index = 2;
+
+
+        $QGood = new Application_Model_Good();
+        $QGoodColor = new Application_Model_GoodColor();
+        $QMarket = new Application_Model_Market();
+        $QDistributor = new Application_Model_Distributor();
+        $QGoodCategory = new Application_Model_GoodCategory();
+        $QWarehouse = new Application_Model_Warehouse();
+
+        $goods = $QGood->get_cache();
+        $goodColors = $QGoodColor->get_cache();
+        $distributors = $QDistributor->get_cache();
+        $good_categories = $QGoodCategory->get_cache();
+        $warehouses_cached = $QWarehouse->get_cache();
+
+
+        $i = 1;
+        $markets = array();
+
+        foreach ($data as $key => $m)
+        {
+            $where = $QMarket->getAdapter()->quoteInto('sn = ?', $m['sn']);
+            $markets[$m['sn']] = $QMarket->fetchAll($where);
+        }
+
+        foreach ($data as $item)
+        {
+            $alpha = 'A';
+            $sheet->setCellValue($alpha++ . $index, $i++);
+            $sheet->getCell($alpha++ . $index)->setValueExplicit($item['sn_ref'],
+                PHPExcel_Cell_DataType::TYPE_STRING);
+            $sheet->getCell($alpha++ . $index)->setValueExplicit($item['creditnote_sn'],
+                PHPExcel_Cell_DataType::TYPE_STRING);
+
+            //$this->distributors[$m['d_id']]
+            if (isset($distributors) && isset($distributors[$item['d_id']]))
+                $distributor = $distributors[$item['d_id']];
+            else
+                $distributor = '';
+
+            //check payment
+            isset($item['pay_time']) ? $pay = 'v' : $pay = 'X';
+
+            //check shipping
+            if ($item['shipping_yes_time'])
+                $shipping = 'v';
+            else
+                $shipping = 'X';
+
+            //check out_warehouse
+            isset($item['outmysql_time']) ? $out = 'v' : $out = 'X';
+
+            if ($item['status'] == 1)
+                $status = 'v';
+            else
+                $status = 'X';
+
+            $sheet->setCellValue($alpha++ . $index, $distributor);
+            $sheet->setCellValue($alpha++ . $index, @$item['price_1']);
+            $sheet->setCellValue($alpha++ . $index, @$item['price_2']);
+            $sheet->setCellValue($alpha++ . $index, $item['total_qty']);
+            $sheet->setCellValue($alpha++ . $index, @$item['price_4']);
+            $sheet->setCellValue($alpha++ . $index, $item['total_price']);
+            $sheet->setCellValue($alpha++ . $index, $item['add_time']);
+            $sheet->setCellValue($alpha++ . $index, isset($warehouses_cached[ $item['warehouse_id'] ]) ? $warehouses_cached[ $item['warehouse_id'] ] : '');
+            $sheet->setCellValue($alpha++ . $index, $item['finance_group']);
+            $sheet->setCellValue($alpha++ . $index, $item['text']);
+            
+            $index++;
+
+
+            foreach ($markets[$item['sn']] as $key => $value)
+            {
+                $alpha = 'A';
+                $sheet->setCellValue($alpha++ . $index, '');
+                //$sheet->setCellValue($alpha++ . $index, $i++);
+                //  $sheet->setCellValue($alpha++.$index, $value['sn']);
+
+                if (isset($goods) && isset($goods[$value['good_id']]))
+                    $good_name = $goods[$value['good_id']];
+                if (isset($goodColors) && isset($goodColors[$value['good_color']]))
+                    $good_color = $goodColors[$value['good_color']];
+
+                $sheet->setCellValue($alpha++ . $index, '');
+                $sheet->setCellValue($alpha++ . $index, '');
+                $sheet->setCellValue($alpha++ . $index, '');
+                $sheet->setCellValue($alpha++ . $index, $good_name);
+                $sheet->setCellValue($alpha++ . $index, $good_color);
+                $sheet->setCellValue($alpha++ . $index, $value['num']);
+                $sheet->setCellValue($alpha++ . $index, @$value['price']);
+                $sheet->setCellValue($alpha++ . $index, $value['total']);
+                $sheet->setCellValue($alpha++ . $index, '');
+                $sheet->setCellValue($alpha++ . $index, '');
+                $sheet->setCellValue($alpha++ . $index, '');
+                $sheet->setCellValue($alpha++ . $index, '');
+                $sheet->setCellValue($alpha++ . $index, '');
+                $index++;
+            }
+
+        }
+
+        $filename = 'List_Return_Order_' . date('d/m/Y');
+        $objWriter = new PHPExcel_Writer_Excel2007($PHPExcel);
+
+        header('Content-Type: application/vnd.openxmlformats-officedocument.spreadsheetml.sheet');
+        header('Content-Disposition: attachment;filename="' . $filename . '.xlsx"');
+
+        $objWriter->save('php://output');
+        exit;
+    }
+
+    private function _exportCampaignExcel($sql)
+    {
+
+        require_once 'ExcelWriterXML.php';
+
+        set_time_limit(0);
+        ini_set('memory_limit', '-1');
+        error_reporting(E_ALL);
+        ini_set('display_error', 1);
+
+        $filename = 'List_Campaign_Sales_' . date('YmdHis') . '.xml';
+        $xml = new ExcelWriterXML($filename);
+        $xml->docAuthor('OPPO Vietnam');
+
+        $xml->sendHeaders();
+        $xml->stdOutStart();
+
+        $sheet = $xml->addSheet('Sales');
+
+        $heads = array(
+            'SALE ORDER NUMBER',
+            'RETAILER ID',
+            'RETAILER NAME',
+            'AREA',
+            'PROVINCE',
+            'DISTRICT',
+            'PRODUCT NAME',
+            'PRODUCT COLOR',
+            'SALES QUANTITY',
+            'SALES PRICE',
+            'TOTAL',
+            'INVOICE NUMBER',
+            'INVOICE PREFIX',
+            'WAREHOUSE',
+            'OUT OF WAREHOUSE',
+            'STATUS',
+            'ORDER TIME',
+            'ORDER TYPE',
+            'ORDER DESCRIPTION',
+            'CAMPAIGN NAME',
+            'CAMPAIGN_ID'
+        );
+
+        $sheet->stdOutSheetStart();
+
+
+        $sheet->stdOutSheetRowStart(1);
+        foreach ($heads as $k => $item)
+        {
+            $sheet->stdOutSheetColumn('String', 1, $k + 1, $item);
+        }
+        $sheet->stdOutSheetRowEnd();
+
+        $QGood = new Application_Model_Good();
+        $QGoodColor = new Application_Model_GoodColor();
+        $QDistributor = new Application_Model_Distributor();
+        $QWarehouse = new Application_Model_Warehouse();
+        $QInvoicePrefix = new Application_Model_InvoicePrefix();
+        $QCampaign = new Application_Model_Campaign();
+
+        $goods          = $QGood->get_cache();
+        $goodColors     = $QGoodColor->get_cache();
+        $distributors   = $QDistributor->get_all_cache();
+        $warehouses     = $QWarehouse->get_cache();
+        $invoice_prefixs= $QInvoicePrefix->get_cache();
+        $campaign       = $QCampaign->get_cache();
+
+        //load config
+        $config = new Zend_Config_Ini(APPLICATION_PATH . '/configs/application.ini');
+        $config = $config->toArray();
+        $con = mysqli_connect($config['resources']['db']['params']['host'], $config['resources']['db']['params']['username'],
+            $config['resources']['db']['params']['password'], $config['resources']['db']['params']['dbname']);
+        mysqli_set_charset($con, "utf8");
+
+        $result = mysqli_query($con, $sql);
+
+        $i = 2;
+
+        while ($item = mysqli_fetch_assoc($result)) {
+            $sheet->stdOutSheetRowStart($i);
+
+            $j = 1;
+
+            $sheet->stdOutSheetColumn('String', $i, $j++, $item['sn']);
+
+            if (isset($distributors) && isset($distributors[$item['d_id']]))
+                $distributor = $distributors[$item['d_id']]['title'];
+            else
+                $distributor = '';
+
+            //check payment
+            isset($item['pay_time']) ? $pay = 'v' : $pay = 'X';
+
+            //check invoice number
+            $invoice_number = isset($item['invoice_number']) ? $item['invoice_number'] : 'x';
+            $invoice_prefix = isset($invoice_prefixs[$item['invoice_sign']]) ? $invoice_prefixs[$item['invoice_sign']] : 'x';
+            //check out_warehouse
+            isset($item['outmysql_time']) ? $out = 'v' : $out = 'X';
+            $campaign_name = isset($campaign[$item['campaign']]) ? $campaign[$item['campaign']] : 'x';
+
+            if ($item['status'] == 1)
+                $status = 'v';
+            else
+                $status = 'X';
+
+            $good_name = $good_color = '';
+            if (isset($goods) && isset($goods[$item['good_id']]))
+                $good_name = $goods[$item['good_id']];
+            if (isset($goodColors) && isset($goodColors[$item['good_color']]))
+                $good_color = $goodColors[$item['good_color']];
+
+            $warehouse = isset($warehouses[$item['warehouse_id']]) ? $warehouses[$item['warehouse_id']] : '';
+            $sheet->stdOutSheetColumn('String', $i, $j++, $item['d_id']);
+            $sheet->stdOutSheetColumn('String', $i, $j++, $distributor);
+            $sheet->stdOutSheetColumn('String', $i, $j++, isset($item['district']) ?
+                My_Region::getValue($item['district'], My_Region::Area) : '');
+            $sheet->stdOutSheetColumn('String', $i, $j++, isset($item['district']) ?
+                My_Region::getValue($item['district'], My_Region::Province) : '');
+            $sheet->stdOutSheetColumn('String', $i, $j++, isset($item['district']) ?
+                My_Region::getValue($item['district'], My_Region::District) : '');
+            $sheet->stdOutSheetColumn('String', $i, $j++, $good_name);
+            $sheet->stdOutSheetColumn('String', $i, $j++, $good_color);
+            $sheet->stdOutSheetColumn('Number', $i, $j++, $item['num']);
+            $sheet->stdOutSheetColumn('Number', $i, $j++, $item['price']);
+            $sheet->stdOutSheetColumn('Number', $i, $j++, $item['total']);
+            $sheet->stdOutSheetColumn('String', $i, $j++, $invoice_number);
+            $sheet->stdOutSheetColumn('String', $i, $j++, $invoice_prefix);
+            $sheet->stdOutSheetColumn('String', $i, $j++, $warehouse);
+            $sheet->stdOutSheetColumn('String', $i, $j++, $out);
+            $sheet->stdOutSheetColumn('String', $i, $j++, $status);
+            $sheet->stdOutSheetColumn('String', $i, $j++, $item['add_time']);
+
+            if ($item['type'] == 1) //for retailer
+                $type = 'For Retailer';
+            elseif ($item['type'] == 2) //for demo
+                $type = 'For Demo';
+            elseif ($item['type'] == 3) //for staffs
+                $type = 'For Staffs';
+            elseif ($item['type'] == 4) //for lending
+                $type = 'For Lending';
+            elseif ($item['type'] == 5) //for APK
+                $type = 'For APK';
+
+            $sheet->stdOutSheetColumn('String', $i, $j++, $type);
+            $sheet->stdOutSheetColumn('String', $i, $j++, $item['text'] ? $item['text'] : '');
+            $sheet->stdOutSheetColumn('String', $i, $j++, $campaign_name ? $campaign_name : '');
+            $sheet->stdOutSheetRowEnd();
+
+            $i++;
+
+        }
+
+        $sheet->stdOutSheetEnd();
+
+        $xml->stdOutEnd();
+
+        exit;
+    }
+
+         
+    //Export
+    private function _exportExcel($sql) {
+        // echo $sql;die;
+        // this function Copy from _exportExcel4 becuase cannot use PHPExcel here! //
+        $this->_helper->layout->disableLayout();
+        $this->_helper->viewRenderer->setNoRender(true);
+
+        $db = Zend_Registry::get('db');
+        set_time_limit(0);
+        error_reporting(~E_ALL);
+        ini_set('display_error', 0);
+        ini_set('memory_limit', -1);
+        $filename = 'Sell out List - '.date('d-m-Y H-i-s').'.csv';
+        // output headers so that the file is downloaded rather than displayed
+        while (@ob_end_clean());
+        ob_start();
+        header('Content-Encoding: UTF-8');
+        header('Content-Type: text/csv; charset=utf-8');
+        header('Content-Disposition: attachment; filename='.$filename);
+        $userStorage = Zend_Auth::getInstance()->getStorage()->read();
+        $file_path = APPLICATION_PATH.'/../public/files/sales/export/'.$userStorage->id.'/'.uniqid();
+        if (!file_exists($file_path))
+            mkdir($file_path, 0777, true);
+
+
+        $path = $file_path.'/'.$filename;
+        $output = fopen($path, 'w+');
+        echo "\xEF\xBB\xBF"; // UTF-8 BOM
+
+
+        $heads = array(
+            'SALE ORDER NUMBER',
+            'INVOICE NUMBER',
+            'DELIVERY TRACKING NO',
+            'DISTRIBUTOR ID',
+            'DISTRIBUTOR CODE',
+            'DISTRIBUTOR NAME',
+            'Company NAME',
+            'MST NAME',
+            'BRANCH TYPE',
+            'BRANCH NUMBER',
+            'GRAND AREA',
+            'AREA',
+            'PROVINCE',
+            'DISTRICT',
+            'PRODUCT TYPE',
+            'PRODUCT NAME',
+            'PRODUCT COLOR',
+            'SALES QUANTITY',
+            'SET OFF (%)',
+            'UNIT PRICE EX',
+            'TOTAL EX',
+            'DELIVERY FEE',
+            'UNIT PRICE',
+            'TOTAL',
+            'DISCOUNT EX',
+            'DISCOUNT',
+            'GRAND TOTAL EX',
+            'GRAND TOTAL',
+            'SUMMARY TOTAL EX',
+            'SUMMARY TOTAL VAT',
+            'SUMMARY TOTAL',
+            'SALES CONFIRM DATETIME',
+            'PAID DATETIME',
+            'SHIPPING DATETIME',
+            'WAREHOUSE',
+            'STOCKOUT DATETIME',
+            'STATUS',
+            'SALE ORDER TIME',
+            'CUSTOMER ORDER TYPE',
+            'ORDER DESCRIPTION',
+            'SALES CATTY',
+            'SALES AREA',
+            'SALES ADMIN ID',
+            'SALES ADMIN',
+            'TAX PO',
+            'Finance Group',
+            'PAY TEXT',
+            'CHANNEL TYPE'
+            );
+
+        fputcsv($output, $heads);
+
+        $QGood          = new Application_Model_Good();
+        $QGoodColor     = new Application_Model_GoodColor();
+        $QGoodCategory  = new Application_Model_GoodCategory();
+        $QDistributor   = new Application_Model_Distributor();
+        $QWarehouse     = new Application_Model_Warehouse();
+
+        $goods             = $QGood->get_cache();
+        $goodColors        = $QGoodColor->get_cache();
+        $good_categories   = $QGoodCategory->get_cache();
+        $distributor_cache = $QDistributor->get_cache2();
+        $warehouses        = $QWarehouse->get_cache();
+
+        $result = $db->query($sql);
+        //print_r($result);die;
+        
+        $i = 2;
+        $next_sn='';$delivery_fee_count =0;
+
+        // $grand_e1 = array(73,81,82,83,84);
+        // $grand_e2 = array(74,80,85,86,87,88,89);
+        // $grand_e3 = array(77,90,91,92,93);
+        // $grand_e4 = array(79,94,95,96,97,109);
+        // $grand_w1 = array(75,98,99,100,101,102);
+        // $grand_w2 = array(76,78,103,104,105,106,107,108);
+
+        $grand_e1 = array(81,82,83);
+        $grand_e2 = array(85,86,87,115);
+        $grand_e3 = array(90,91,92,93,113);
+        $grand_e4 = array(94,95,96);
+        $grand_e5 = array(88,89,117);
+        $grand_e6 = array(110,111,112);
+        $grand_e7 = array(97,109);
+        $grand_w1 = array(98,99,100,101,102,114);
+        $grand_w2 = array(103,104,105,116);
+        $grand_w3 = array(106,107,108);
+
+        foreach($result as $item) {
+            $d_id = $item['d_id'];
+            if (is_null($item['sn_ref']) || $item['sn_ref'] == '') { $temp_sn = $item['sn']; } 
+            else { $temp_sn = $item['sn_ref']; }
+
+            /*--Show delivery_fee 1 row --*/   
+            if($next_sn==$item['sn']){
+                $delivery_fee_count+=1;
+            }else{
+                $next_sn=$item['sn'];
+            }
+
+            if($delivery_fee_count ==1){
+                $delivery_fee = !is_null($item['delivery_fee']) ? $item['delivery_fee'] : 0;
+                $delivery_fee_count=0;
+            }else{
+                $delivery_fee =0;
+            }
+            
+            if ($item['status'] == 1) { $temp_status = 'Actived'; }
+            else if ($item['status'] == 2) { $temp_status = 'Expired'; }
+            else { $temp_status = 'Expired'; }
+
+            if ($item['type'] == 1) //for retailer
+                $type = 'For Retailer';
+            elseif ($item['type'] == 2) //for demo
+                $type = 'For Demo';
+            elseif ($item['type'] == 3) //for staffs
+                $type = 'For Staffs';
+            elseif ($item['type'] == 4) //for lending
+                $type = 'For Lending';
+            elseif ($item['type'] == 5) //for APK
+                $type = 'For APK';    
+
+            if ($distributor_cache[$item['d_id']]['parent'] == 0) { $branch_type = 'สำนักงานใหญ่'; }
+            else { $branch_type = 'สาขา'; }
+            $num = $item['num'];
+
+            $where_payment = $QDistributor->getAdapter()->quoteInto('id = ?', $item['d_id']);
+            $distributors_payment = $QDistributor->fetchRow($where_payment);
+            $rank = $distributors_payment->rank;
+
+            $total_spc_discount = $item['total_spc_discount'];
+
+            if($rank=='9'){
+                $price = $this->format_number_2($item['price']);
+                $total_amount_ex_vat = $this->format_number_2($price)* $num;
+            }else{
+                $price_ext = $this->ext_vat($item['price']);
+                $price = $this->cal_sale_off_percent($item['sale_off_percent'],$price_ext,$num,$item['total']);
+                // $price_in = $price *1.07;
+                //$total_amount_ex_vat = ($this->format_number_2($price)* $num)-$total_spc_discount;
+                // $total_amount_ex_vat = ($this->format_number_2($this->ext_vat($item['total'])));
+                // $total_amount_in_vat = ($total_amount_ex_vat*1.07);
+
+                $price_in = $item['price'];
+                $total_amount_ex_vat = $this->format_number_2($this->format_number_2($this->ext_vat($item['price']))*$item['num']);
+                $total_amount_in_vat = $this->format_number_2($item['total']);
+            }
+
+            $excel_area_name = My_Region::getValue($distributor_cache[$item['d_id']]['district'], My_Region::Area);
+
+            $excel_area_id = My_Region::getValue($distributor_cache[$item['d_id']]['district'], My_Region::Area, My_Region::ID);
+
+            // if ( in_array($excel_area_id, $grand_e1) ) { $grand_area = 'BKK East-1'; } 
+            // else if ( in_array($excel_area_id, $grand_e2) ) { $grand_area = 'BKK East-2'; }
+            // else if ( in_array($excel_area_id, $grand_e3) ) { $grand_area = 'BKK East-3'; }
+            // else if ( in_array($excel_area_id, $grand_e4) ) { $grand_area = 'BKK East-4'; }
+            // else if ( in_array($excel_area_id, $grand_w1) ) { $grand_area = 'BKK West-1'; }
+            // else if ( in_array($excel_area_id, $grand_w2) ) { $grand_area = 'BKK West-2'; }
+            // else { $grand_area = $excel_area_name; }
+
+            if ( in_array($excel_area_id, $grand_e1) ) { $grand_area = 'BKK East-1'; } 
+            else if ( in_array($excel_area_id, $grand_e2) ) { $grand_area = 'BKK East-2'; }
+            else if ( in_array($excel_area_id, $grand_e3) ) { $grand_area = 'BKK East-3'; }
+            else if ( in_array($excel_area_id, $grand_e4) ) { $grand_area = 'BKK East-4'; }
+            else if ( in_array($excel_area_id, $grand_e5) ) { $grand_area = 'BKK East-5'; }
+            else if ( in_array($excel_area_id, $grand_e6) ) { $grand_area = 'BKK East-6'; }
+            else if ( in_array($excel_area_id, $grand_e7) ) { $grand_area = 'BKK East-7'; }
+            else if ( in_array($excel_area_id, $grand_w1) ) { $grand_area = 'BKK West-1'; }
+            else if ( in_array($excel_area_id, $grand_w2) ) { $grand_area = 'BKK West-2'; }
+            else if ( in_array($excel_area_id, $grand_w3) ) { $grand_area = 'BKK West-3'; }
+            else { $grand_area = $excel_area_name; }
+
+            $row = array();
+            $row[] = '="'.$temp_sn.'"';
+            $row[] = $item['invoice_number'];
+            $row[] = $item['tracking_no'];
+            $row[] = $distributor_cache[$item['d_id']]['d_id'];
+            $row[] = $distributor_cache[$item['d_id']]['code'];
+            $row[] = $distributor_cache[$item['d_id']]['title'];
+            $row[] = $distributor_cache[$item['d_id']]['unames'];
+            $row[] = '="'.$distributor_cache[$item['d_id']]['mst_sn'].'"';
+            $row[] = $branch_type;
+            $row[] = '="'.$distributor_cache[$item['d_id']]['branch_no'].'"';
+            $row[] = $grand_area;
+            $row[] = $excel_area_name;
+            $row[] = My_Region::getValue($distributor_cache[$item['d_id']]['district'], My_Region::Province);
+            $row[] = My_Region::getValue($distributor_cache[$item['d_id']]['district'], My_Region::District);
+            $row[] = $good_categories[$item['cat_id']];
+            $row[] = $goods[$item['good_id']];
+            $row[] = $goodColors[$item['good_color']];
+            $row[] = $item['num'];
+
+            $row[] = $item['sale_off_percent'];
+            $row[] = My_Number::f($price, 0, ',', '.');
+            if($total_amount_ex_vat <=0){
+                $row[] = 0; 
+            }else{
+                $row[] = My_Number::f($total_amount_ex_vat, 0, ',', '.');
+            }
+
+            $row[] = $delivery_fee;
+           // $row[] = number_format($total_spc_discount, 2);
+            if($rank=='9'){
+                $row[] = number_format($price_ext, 2);
+                if($total_amount_ex_vat <=0){
+                   $row[] = 0; 
+                }else{
+                   $row[] = number_format($total_amount_ex_vat, 2);  
+                }
+            }else{
+
+                $row[] = number_format($price_in, 2);
+                if($total_amount_ex_vat<=0){
+                   $row[] = 0;
+                }else{
+                   $row[] = number_format($total_amount_in_vat, 2);
+                }
+            }
+
+           // $grand_total_amount_in_vat += $total_amount_in_vat;
+
+            $row[] = number_format($item['total_spc_discount'], 2);
+            $row[] = number_format($item['total_spc_discount']*1.07, 2);
+
+            $row[] = number_format($item['grand_total']/1.07, 2);
+            $row[] = number_format($item['grand_total'], 2);
+
+            $row[] = number_format($item['grand_total']/1.07 - $item['total_spc_discount'], 2);
+
+            $row[] = number_format(($item['grand_total'] - ($item['total_spc_discount']*1.07)) - ($item['grand_total']/1.07 - $item['total_spc_discount']), 2);
+
+            $row[] = number_format(($this->format_number_2($item['grand_total']/1.07) - ($this->format_number_2($item['total_spc_discount'])))*1.07, 2);
+
+            $row[] = $item['sales_confirm_date'];
+            $row[] = $item['pay_time'];
+            $row[] = $item['shipping_yes_time'];
+            
+            $row[] = $warehouses[$item['warehouse_id']];
+            $row[] = $item['outmysql_time'];
+            $row[] = $temp_status;
+            $row[] = $item['add_time'];
+            $row[] = $type;
+            $row[] = $item['text'];
+            $row[] = $item['sales_catty_name'];
+            $row[] = $item['sales_area'];
+            $row[] = $item['sales_admin_id'];
+            $row[] = $item['sales_admin'];
+            $row[] = $item['tax_po'];
+            $row[] = $item['finance_group'];
+            $row[] = $item['pay_text'];
+
+            $channel_type = '';
+            switch (isset($item['quota_channel'])) {
+                case '10':
+                    $channel_type = 'Brand Shop By Dealer';
+                    break;
+            }
+            $row[] = $channel_type;
+
+            fputcsv($output, $row);
+            unset($item);
+            unset($row);
+
+
+        }
+
+        fclose($output);
+
+        ob_flush();
+        ob_start();
+        while (@ob_end_flush());
+
+        header('Expires: 0');
+        header('Cache-Control: must-revalidate');
+        header('Pragma: public');
+        header('Content-Length: ' . filesize($path));
+        readfile($path);
+        exit;
+
+        $file = fopen($path, 'r');
+        $content = fread($file, filesize($path));
+        var_dump(filesize($path));
+        var_dump($content);
+
+        exit;
+    }
+
+    private function _exportExcelNew($sql) {
+        // echo $sql;die;
+        // this function Copy from _exportExcel4 becuase cannot use PHPExcel here! //
+        $this->_helper->layout->disableLayout();
+        $this->_helper->viewRenderer->setNoRender(true);
+
+        $db = Zend_Registry::get('db');
+        set_time_limit(0);
+        error_reporting(~E_ALL);
+        ini_set('display_error', 0);
+        ini_set('memory_limit', -1);
+        $filename = 'Sell out List - '.date('d-m-Y H-i-s').'.csv';
+        // output headers so that the file is downloaded rather than displayed
+        while (@ob_end_clean());
+        ob_start();
+        header('Content-Encoding: UTF-8');
+        header('Content-Type: text/csv; charset=utf-8');
+        header('Content-Disposition: attachment; filename='.$filename);
+        $userStorage = Zend_Auth::getInstance()->getStorage()->read();
+        $file_path = APPLICATION_PATH.'/../public/files/sales/export/'.$userStorage->id.'/'.uniqid();
+        if (!file_exists($file_path))
+            mkdir($file_path, 0777, true);
+
+
+        $path = $file_path.'/'.$filename;
+        $output = fopen($path, 'w+');
+        echo "\xEF\xBB\xBF"; // UTF-8 BOM
+
+        $heads = array(
+            'SALE ORDER NUMBER',
+            'INVOICE NUMBER',
+            'DELIVERY TRACKING NO',
+            'DISTRIBUTOR ID',
+            'DISTRIBUTOR CODE',
+            'DISTRIBUTOR NAME',
+            'Company NAME',
+            'MST NAME',
+            'BRANCH TYPE',
+            'BRANCH NUMBER',
+            'GRAND AREA',
+            'AREA',
+            'PROVINCE',
+            'DISTRICT',
+            'PRODUCT TYPE',
+            'PRODUCT NAME',
+            'PRODUCT COLOR',
+            'SALES QUANTITY',
+            'UNIT PRICE EX',
+            'TOTAL EX',
+            'SALES CONFIRM DATETIME',
+            'PAID DATETIME',
+            'SHIPPING DATETIME',
+            'WAREHOUSE',
+            'STOCKOUT DATETIME',
+            'STATUS',
+            'SALE ORDER TIME',
+            'CUSTOMER ORDER TYPE',
+            'ORDER DESCRIPTION',
+            'SALES CATTY',
+            'SALES AREA',
+            'SALES ADMIN ID',
+            'SALES ADMIN',
+            'TAX PO',
+            'FINANCE GROUP',
+            'CANCEL OR NOT'
+            );
+
+        fputcsv($output, $heads);
+
+        $QGood          = new Application_Model_Good();
+        $QGoodColor     = new Application_Model_GoodColor();
+        $QGoodCategory  = new Application_Model_GoodCategory();
+        $QDistributor   = new Application_Model_Distributor();
+        $QWarehouse     = new Application_Model_Warehouse();
+
+        $goods             = $QGood->get_cache();
+        $goodColors        = $QGoodColor->get_cache();
+        $good_categories   = $QGoodCategory->get_cache();
+        $distributor_cache = $QDistributor->get_cache2();
+        $warehouses        = $QWarehouse->get_cache();
+
+        $result = $db->query($sql);
+        //print_r($result);die;
+        
+        $i = 2;
+        $next_sn='';$delivery_fee_count =0;
+
+        // $grand_e1 = array(73,81,82,83,84);
+        // $grand_e2 = array(74,80,85,86,87,88,89);
+        // $grand_e3 = array(77,90,91,92,93);
+        // $grand_e4 = array(79,94,95,96,97,109);
+        // $grand_w1 = array(75,98,99,100,101,102);
+        // $grand_w2 = array(76,78,103,104,105,106,107,108);
+
+        $grand_e1 = array(81,82,83);
+        $grand_e2 = array(85,86,87,115);
+        $grand_e3 = array(90,91,92,93,113);
+        $grand_e4 = array(94,95,96);
+        $grand_e5 = array(88,89,117);
+        $grand_e6 = array(110,111,112);
+        $grand_e7 = array(97,109);
+        $grand_w1 = array(98,99,100,101,102,114);
+        $grand_w2 = array(103,104,105,116);
+        $grand_w3 = array(106,107,108);
+
+        $count = 0;
+        $old_sn = '';
+
+        foreach($result as $item) {
+
+            $d_id = $item['d_id'];
+            if ($item['canceled']== 1){$cancel = 'Canceled';}else{$cancel = 'Not Cancel';}
+
+            if($old_sn != $item['sn']){
+                $old_sn = $item['sn'];
+                $count = 0;
+            }else{
+                $count++;
+            }
+
+            if (is_null($item['sn_ref']) || $item['sn_ref'] == '') { $temp_sn = $item['sn']; } 
+            else { $temp_sn = $item['sn_ref']; }
+
+            /*--Show delivery_fee 1 row --*/   
+            if($next_sn==$item['sn']){
+                $delivery_fee_count+=1;
+            }else{
+                $next_sn=$item['sn'];
+            }
+
+            if($delivery_fee_count ==1){
+                $delivery_fee = !is_null($item['delivery_fee']) ? $item['delivery_fee'] : 0;
+                $delivery_fee_count=0;
+            }else{
+                $delivery_fee =0;
+            }
+            
+            if ($item['status'] == 1) { $temp_status = 'Actived'; }
+            else if ($item['status'] == 2) { $temp_status = 'Expired'; }
+            else { $temp_status = 'Expired'; }
+
+            if ($item['type'] == 1) //for retailer
+                $type = 'For Retailer';
+            elseif ($item['type'] == 2) //for demo
+                $type = 'For Demo';
+            elseif ($item['type'] == 3) //for staffs
+                $type = 'For Staffs';
+            elseif ($item['type'] == 4) //for lending
+                $type = 'For Lending';
+            elseif ($item['type'] == 5) //for APK
+                $type = 'For APK';    
+
+            if ($distributor_cache[$item['d_id']]['parent'] == 0) { $branch_type = 'สำนักงานใหญ่'; }
+            else { $branch_type = 'สาขา'; }
+            $num = $item['num'];
+
+            $where_payment = $QDistributor->getAdapter()->quoteInto('id = ?', $item['d_id']);
+            $distributors_payment = $QDistributor->fetchRow($where_payment);
+            $rank = $distributors_payment->rank;
+
+            $total_spc_discount = $item['total_spc_discount'];
+
+            if($rank=='9'){
+                $price = $this->format_number_2($item['price']);
+                $total_amount_ex_vat = $this->format_number_2($price)* $num;
+            }else{
+                $price_ext = $this->ext_vat($item['price']); 
+                $price = $this->cal_sale_off_percent($item['sale_off_percent'],$price_ext,$num,$item['total']);
+                $price_in = $price *1.07;
+                $total_amount_ex_vat = ($this->format_number_2($this->ext_vat($item['total'])));
+                $total_amount_in_vat = ($total_amount_ex_vat*1.07);
+
+                //$total_amount_ex_vat = ($this->format_number_2($price)* $num)-$total_spc_discount;
+            }
+
+            $excel_area_name = My_Region::getValue($distributor_cache[$item['d_id']]['district'], My_Region::Area);
+
+            $excel_area_id = My_Region::getValue($distributor_cache[$item['d_id']]['district'], My_Region::Area, My_Region::ID);
+
+            // if ( in_array($excel_area_id, $grand_e1) ) { $grand_area = 'BKK East-1'; } 
+            // else if ( in_array($excel_area_id, $grand_e2) ) { $grand_area = 'BKK East-2'; }
+            // else if ( in_array($excel_area_id, $grand_e3) ) { $grand_area = 'BKK East-3'; }
+            // else if ( in_array($excel_area_id, $grand_e4) ) { $grand_area = 'BKK East-4'; }
+            // else if ( in_array($excel_area_id, $grand_w1) ) { $grand_area = 'BKK West-1'; }
+            // else if ( in_array($excel_area_id, $grand_w2) ) { $grand_area = 'BKK West-2'; }
+            // else { $grand_area = $excel_area_name; }
+
+            if ( in_array($excel_area_id, $grand_e1) ) { $grand_area = 'BKK East-1'; } 
+            else if ( in_array($excel_area_id, $grand_e2) ) { $grand_area = 'BKK East-2'; }
+            else if ( in_array($excel_area_id, $grand_e3) ) { $grand_area = 'BKK East-3'; }
+            else if ( in_array($excel_area_id, $grand_e4) ) { $grand_area = 'BKK East-4'; }
+            else if ( in_array($excel_area_id, $grand_e5) ) { $grand_area = 'BKK East-5'; }
+            else if ( in_array($excel_area_id, $grand_e6) ) { $grand_area = 'BKK East-6'; }
+            else if ( in_array($excel_area_id, $grand_e7) ) { $grand_area = 'BKK East-7'; }
+            else if ( in_array($excel_area_id, $grand_w1) ) { $grand_area = 'BKK West-1'; }
+            else if ( in_array($excel_area_id, $grand_w2) ) { $grand_area = 'BKK West-2'; }
+            else if ( in_array($excel_area_id, $grand_w3) ) { $grand_area = 'BKK West-3'; }
+            else { $grand_area = $excel_area_name; }
+
+            if($count == 0){
+
+                if($item['delivery_fee'] > 0){
+                    $row = array();
+                    $row[] = '="'.$temp_sn.'"';
+                    $row[] = $item['invoice_number'];
+                    $row[] = $item['tracking_no'];
+                    $row[] = $distributor_cache[$item['d_id']]['d_id'];
+                    $row[] = $distributor_cache[$item['d_id']]['code'];
+                    $row[] = $distributor_cache[$item['d_id']]['title'];
+                    $row[] = $distributor_cache[$item['d_id']]['unames'];
+                    $row[] = '="'.$distributor_cache[$item['d_id']]['mst_sn'].'"';
+                    $row[] = $branch_type;
+                    $row[] = '="'.$distributor_cache[$item['d_id']]['branch_no'].'"';
+                    $row[] = $grand_area;
+                    $row[] = $excel_area_name;
+                    $row[] = My_Region::getValue($distributor_cache[$item['d_id']]['district'], My_Region::Province);
+                    $row[] = My_Region::getValue($distributor_cache[$item['d_id']]['district'], My_Region::District);
+                    $row[] = 'Delivery Fee';
+                    $row[] = '';
+                    $row[] = '';
+
+                    $row[] = 1;
+
+                    if($item['delivery_fee'] > 0){
+                        $row[] = number_format($this->ext_vat($item['delivery_fee']),2);
+                        $row[] = number_format($this->ext_vat($item['delivery_fee']),2);
+                    }else{
+                        $row[] = 0;
+                        $row[] = 0;
+                    }
+
+                    $row[] = $item['sales_confirm_date'];
+                    $row[] = $item['pay_time'];
+                    $row[] = $item['shipping_yes_time'];
+                    
+                    $row[] = $warehouses[$item['warehouse_id']];
+                    $row[] = $item['outmysql_time'];
+                    $row[] = $temp_status;
+                    $row[] = $item['add_time'];
+                    $row[] = $type;
+                    $row[] = $item['text'];
+                    $row[] = $item['sales_catty_name'];
+                    $row[] = $item['sales_area'];
+                    $row[] = $item['sales_admin_id'];
+                    $row[] = $item['sales_admin'];
+                    $row[] = $item['tax_po'];
+                    $row[] = $item['finance_group'];
+                    $row[] = $cancel;
+                    fputcsv($output, $row);
+                    unset($row);
+                }
+
+                if($item['total_spc_discount'] > 0){
+
+                    $row = array();
+                    $row[] = '="'.$temp_sn.'"';
+                    $row[] = $item['invoice_number'];
+                    $row[] = $item['tracking_no'];
+                    $row[] = $distributor_cache[$item['d_id']]['d_id'];
+                    $row[] = $distributor_cache[$item['d_id']]['code'];
+                    $row[] = $distributor_cache[$item['d_id']]['title'];
+                    $row[] = $distributor_cache[$item['d_id']]['unames'];
+                    $row[] = '="'.$distributor_cache[$item['d_id']]['mst_sn'].'"';
+                    $row[] = $branch_type;
+                    $row[] = '="'.$distributor_cache[$item['d_id']]['branch_no'].'"';
+                    $row[] = $grand_area;
+                    $row[] = $excel_area_name;
+                    $row[] = My_Region::getValue($distributor_cache[$item['d_id']]['district'], My_Region::Province);
+                    $row[] = My_Region::getValue($distributor_cache[$item['d_id']]['district'], My_Region::District);
+                    $row[] = 'Discount';
+                    $row[] = '';
+                    $row[] = '';
+
+                    $row[] = 1;
+                    $row[] = $item['total_spc_discount']*-1;
+                    $row[] = $item['total_spc_discount']*-1;
+
+                    $row[] = $item['sales_confirm_date'];
+                    $row[] = $item['pay_time'];
+                    $row[] = $item['shipping_yes_time'];
+                    
+                    $row[] = $warehouses[$item['warehouse_id']];
+                    $row[] = $item['outmysql_time'];
+                    $row[] = $temp_status;
+                    $row[] = $item['add_time'];
+                    $row[] = $type;
+                    $row[] = $item['text'];
+                    $row[] = $item['sales_catty_name'];
+                    $row[] = $item['sales_area'];
+                    $row[] = $item['sales_admin_id'];
+                    $row[] = $item['sales_admin'];
+                    $row[] = $item['tax_po'];
+                    $row[] = $item['finance_group'];
+                    $row[] = $cancel;
+                    fputcsv($output, $row);
+                    unset($row);
+
+                }
+
+            }
+
+            $row = array();
+            $row[] = '="'.$temp_sn.'"';
+            $row[] = $item['invoice_number'];
+            $row[] = $item['tracking_no'];
+            $row[] = $distributor_cache[$item['d_id']]['d_id'];
+            $row[] = $distributor_cache[$item['d_id']]['code'];
+            $row[] = $distributor_cache[$item['d_id']]['title'];
+            $row[] = $distributor_cache[$item['d_id']]['unames'];
+            $row[] = '="'.$distributor_cache[$item['d_id']]['mst_sn'].'"';
+            $row[] = $branch_type;
+            $row[] = '="'.$distributor_cache[$item['d_id']]['branch_no'].'"';
+            $row[] = $grand_area;
+            $row[] = $excel_area_name;
+            $row[] = My_Region::getValue($distributor_cache[$item['d_id']]['district'], My_Region::Province);
+            $row[] = My_Region::getValue($distributor_cache[$item['d_id']]['district'], My_Region::District);
+            $row[] = $good_categories[$item['cat_id']];
+            $row[] = $goods[$item['good_id']];
+            $row[] = $goodColors[$item['good_color']];
+
+            $product_unit_price = $this->product_price($this->format_number_4($this->ext_vat($this->cal_sale_off_percent($item['sale_off_percent'],$item['price'],$item['num'],$item['total']))));
+
+            if($rank == '9'){
+                $product_unit_price = $this->product_price($this->format_number_4($this->cal_sale_off_percent($item['sale_off_percent'],$item['price'],$item['num'],$item['total'])));
+            }
+
+            $product_total_price = $this->product_price($item['num'] * $this->decimal_remove_comma($product_unit_price));
+
+            $row[] = $item['num'];
+            if($item['price'] > 0){
+                $row[] = $product_unit_price;
+                $row[] = $product_total_price;
+            }else{
+                $row[] = 0;
+                $row[] = 0;
+            }
+            
+
+            $row[] = $item['sales_confirm_date'];
+            $row[] = $item['pay_time'];
+            $row[] = $item['shipping_yes_time'];
+            
+            $row[] = $warehouses[$item['warehouse_id']];
+            $row[] = $item['outmysql_time'];
+            $row[] = $temp_status;
+            $row[] = $item['add_time'];
+            $row[] = $type;
+            $row[] = $item['text'];
+            $row[] = $item['sales_catty_name'];
+            $row[] = $item['sales_area'];
+            $row[] = $item['sales_admin_id'];
+            $row[] = $item['sales_admin'];
+            $row[] = $item['tax_po'];
+            $row[] = $item['finance_group'];
+            $row[] = $cancel;
+            fputcsv($output, $row);
+            unset($item);
+            unset($row);
+
+
+        }
+
+        fclose($output);
+
+        ob_flush();
+        ob_start();
+        while (@ob_end_flush());
+
+        header('Expires: 0');
+        header('Cache-Control: must-revalidate');
+        header('Pragma: public');
+        header('Content-Length: ' . filesize($path));
+        readfile($path);
+        exit;
+
+        $file = fopen($path, 'r');
+        $content = fread($file, filesize($path));
+        var_dump(filesize($path));
+        var_dump($content);
+
+        exit;
+    }
+
+    function product_price($priceFloat)
+    {
+        $symbol = ' THB';
+        $symbol_thousand = ',';
+        $decimal_place = 2;
+        $price = number_format($priceFloat, $decimal_place, '.', $symbol_thousand);
+        return $price;
+    }
+
+    private function _exportExcel2($sql)
+    {
+        require_once 'ExcelWriterXML.php';
+
+        set_time_limit(0);
+        ini_set('memory_limit', -1);
+        error_reporting(0);
+        ini_set('display_error', 0);
+
+        $filename = 'List_Sales_' . date('YmdHis') . '.xml';
+
+        $xml = new ExcelWriterXML($filename);
+        $xml->docAuthor('OPPO Vietnam');
+
+        $xml->sendHeaders();
+
+        $xml->stdOutStart();
+
+        $sheet = $xml->addSheet('Sales');
+
+        $heads = array(
+            'Ma_KH',
+            'Nguoi_MH',
+            'Dia_Chi',
+            'Quyet_So',
+            'So_seri',
+            'So_hoa_don',
+            'Ngay_chung_tu',
+            'So_luong',
+            'Gia',
+            'Tien',
+            'Gia_von',
+            'Tien_von',
+            'Ty_le_chiet_khau',
+            'Ma_thue',
+            'Tai_khoan_no',
+            'Tai_khoan_doanh_thu',
+            'Tai_khoan_kho',
+            'Tai_khoan_gia_vo',
+            'Tai_khoan_chiec_khau',
+            'Tai_khoan_thue',
+            'Ma_kho',
+            'Ma_vat_tu',
+            'Dien_giai',
+            'Han_thanh_toan',
+            );
+
+        $sheet->stdOutSheetStart();
+
+
+        $sheet->stdOutSheetRowStart(1);
+        foreach ($heads as $k => $item)
+        {
+            $sheet->stdOutSheetColumn('String', 1, $k + 1, $item);
+        }
+        $sheet->stdOutSheetRowEnd();
+
+        $QGood = new Application_Model_Good();
+        $QDistributor = new Application_Model_Distributor();
+        $QDistributorPo = new Application_Model_DistributorPo();
+        $po_cache = $QDistributorPo->get_cache();
+
+        $goods = $QGood->get_cache();
+        $distributors = $QDistributor->get_cache2();
+
+        //load config
+        $config = new Zend_Config_Ini(APPLICATION_PATH . '/configs/application.ini');
+        $config = $config->toArray();
+        $con = mysqli_connect($config['resources']['db']['params']['host'], $config['resources']['db']['params']['username'],
+            $config['resources']['db']['params']['password'], $config['resources']['db']['params']['dbname']);
+        mysqli_set_charset($con, "utf8");
+
+        $result = mysqli_query($con, $sql);
+
+        $i = 2;
+
+        while ($item = mysqli_fetch_assoc($result))
+        {
+            $sheet->stdOutSheetRowStart($i);
+
+            $j = 1;
+
+            $store_code = '';
+
+            if (isset($distributors) && isset($distributors[$item['d_id']]))
+            {
+                $distributor = $distributors[$item['d_id']];
+
+                $store_code = $distributor['store_code'];
+            }
+
+
+            $good_name = '';
+            if (isset($goods) && isset($goods[$item['good_id']]))
+                $good_name = $goods[$item['good_id']];
+
+            $Quyet_So = '01GTKT3';
+            $Ma_kho = '';
+
+            switch ($item['warehouse_id'])
+            {
+                case 1:
+                    $So_seri = 'QQ/14P';
+                    $Ma_kho = 'Q4HCM';
+                    break;
+                case 2:
+                    $So_seri = 'HN/14P';
+                    $Ma_kho = 'HN';
+                    break;
+                case 3:
+                    $So_seri = 'DN/14P';
+                    $Ma_kho = 'DANANG';
+                    break;
+            }
+
+            $Nguoi_MH = isset($distributors[$item['d_id']]['unames']) ? $distributors[$item['d_id']]['unames'] :
+                '';
+            $Dia_Chi = isset($distributors[$item['d_id']]['add']) ? $distributors[$item['d_id']]['add'] :
+                '';
+            $So_hoa_don = $item['invoice_number'];
+            $Ngay_chung_tu = date('d/m/Y', strtotime($item['outmysql_time']));
+            $So_luong = $item['num'];
+            $Gia = round(($item['total'] / 1.1) / $So_luong, 2);
+            $Tien = $Gia * $So_luong;
+            $Gia_von = '';
+            $Tien_von = '';
+            $Ty_le_chiet_khau = '';
+            $Ma_thue = '10';
+
+            $Tai_khoan_doanh_thu = $Tai_khoan_no = '';
+            switch ($item['type'])
+            {
+                case 1:
+                    $Tai_khoan_no = '131A';
+                    $Tai_khoan_doanh_thu = '511A';
+                    break;
+                case 2:
+                    $Tai_khoan_no = '131E';
+                    $Tai_khoan_doanh_thu = '511E';
+                    break;
+                case 3:
+                    $Tai_khoan_no = '131D';
+                    $Tai_khoan_doanh_thu = '511D';
+                    break;
+            }
+
+
+            $Tai_khoan_kho = '1561';
+            $Tai_khoan_gia_vo = '632';
+            $Tai_khoan_chiec_khau = '5321';
+            $Tai_khoan_thue = '33311';
+
+            $Ma_vat_tu = $good_name;
+            // xem comment bên khai báo hàm
+            $Dien_giai = My_Sale_Order::getStockTetNote($item['sn']);
+
+            if (empty($Dien_giai))
+            {
+                $Dien_giai = isset($po_cache[$item['po_id']]) ? $po_cache[$item['po_id']] : '';
+                $Dien_giai .= "\r\n" . $item['text'];
+            }
+
+            $Han_thanh_toan = '';
+
+            $sheet->stdOutSheetColumn('String', $i, $j++, $store_code);
+            $sheet->stdOutSheetColumn('String', $i, $j++, $Nguoi_MH);
+            $sheet->stdOutSheetColumn('String', $i, $j++, $Dia_Chi);
+            $sheet->stdOutSheetColumn('String', $i, $j++, $Quyet_So);
+            $sheet->stdOutSheetColumn('String', $i, $j++, $So_seri);
+            $sheet->stdOutSheetColumn('String', $i, $j++, $So_hoa_don);
+            $sheet->stdOutSheetColumn('String', $i, $j++, $Ngay_chung_tu);
+            $sheet->stdOutSheetColumn('String', $i, $j++, $So_luong);
+            $sheet->stdOutSheetColumn('String', $i, $j++, $Gia);
+            $sheet->stdOutSheetColumn('String', $i, $j++, $Tien);
+            $sheet->stdOutSheetColumn('String', $i, $j++, $Gia_von);
+            $sheet->stdOutSheetColumn('String', $i, $j++, $Tien_von);
+            $sheet->stdOutSheetColumn('String', $i, $j++, $Ty_le_chiet_khau);
+            $sheet->stdOutSheetColumn('String', $i, $j++, $Ma_thue);
+            $sheet->stdOutSheetColumn('String', $i, $j++, $Tai_khoan_no);
+            $sheet->stdOutSheetColumn('String', $i, $j++, $Tai_khoan_doanh_thu);
+            $sheet->stdOutSheetColumn('String', $i, $j++, $Tai_khoan_kho);
+            $sheet->stdOutSheetColumn('String', $i, $j++, $Tai_khoan_gia_vo);
+            $sheet->stdOutSheetColumn('String', $i, $j++, $Tai_khoan_chiec_khau);
+            $sheet->stdOutSheetColumn('String', $i, $j++, $Tai_khoan_thue);
+            $sheet->stdOutSheetColumn('String', $i, $j++, $Ma_kho);
+            $sheet->stdOutSheetColumn('String', $i, $j++, $Ma_vat_tu);
+            $sheet->stdOutSheetColumn('String', $i, $j++, $Dien_giai);
+            $sheet->stdOutSheetColumn('String', $i, $j++, $Han_thanh_toan);
+            $sheet->stdOutSheetRowEnd();
+            $i++;
+
+        }
+
+        $sheet->stdOutSheetEnd();
+
+        $xml->stdOutEnd();
+
+        exit;
+    }
+
+    private function _exportExcel3($sql)
+    {
+        require_once 'ExcelWriterXML.php';
+        set_time_limit(0);
+        ini_set('memory_limit', '-1');
+        $filename = 'List_Sales_For_Finance_' . date('YmdHis') . '.xml';
+
+        $xml = new ExcelWriterXML($filename);
+        $xml->docAuthor('OPPO Vietnam');
+
+        $xml->sendHeaders();
+
+        $xml->stdOutStart();
+
+        $sheet = $xml->addSheet('Sales');
+
+        $heads = array(
+            'STT',
+            'KyHieuMauHoaDon',
+            'KyHieuHoaDon',
+            'SoHoaDon',
+            'SoDonHang',
+            'Ngay',
+            'MaKH',
+            'TenNguoiMua',
+            'MST',
+            'MatHang',
+            'BVG',
+            'SoTienBVG',
+            'GiaTriDonHang',
+            'DoanhSoChuaThue',
+            'ThueGTGT',
+            'GiaTriDonHangHD',
+            'DoanhSoChuaThueHD',
+            'ThueGTGTHD',
+            'GhiChu',
+            );
+
+        $sheet->stdOutSheetStart();
+
+
+        $sheet->stdOutSheetRowStart(1);
+        foreach ($heads as $k => $item)
+        {
+            $sheet->stdOutSheetColumn('String', 1, $k + 1, $item);
+        }
+        $sheet->stdOutSheetRowEnd();
+
+        //load config
+        $config = new Zend_Config_Ini(APPLICATION_PATH . '/configs/application.ini');
+        $config = $config->toArray();
+        $con = mysqli_connect($config['resources']['db']['params']['host'], $config['resources']['db']['params']['username'],
+            $config['resources']['db']['params']['password'], $config['resources']['db']['params']['dbname']);
+        mysqli_set_charset($con, "utf8");
+
+        $result = mysqli_query($con, $sql);
+        $QProductBVG = new Application_Model_MarketProduct();
+        $QInvoiceSign = new Application_Model_InvoicePrefix();
+        $QMarket_invoice_price = new Application_Model_MarketInvoicePriceSn();
+        $QMarket_deduction = new Application_Model_MarketDeduction();
+        $prefix = $QInvoiceSign->get_cache();
+        $QDistributorPo = new Application_Model_DistributorPo();
+        $po_cache = $QDistributorPo->get_cache();
+
+
+        $i = 2;
+
+        $KyHieuMauHoaDon = '01GTKT3/0';
+        $MatHang = 'Điện thoại di động';
+
+
+        $k = 1;
+
+        while ($item = mysqli_fetch_assoc($result))
+        {
+            $sheet->stdOutSheetRowStart($i);
+
+            $j = 1;
+
+            if (isset($prefix[$item['invoice_sign']]) and $prefix[$item['invoice_sign']])
+                $KyHieuHoaDon = $prefix[$item['invoice_sign']];
+            else
+            {
+                //th những số hóa đơn cũ
+                switch ($item['warehouse_id'])
+                {
+                    case 1:
+                        $KyHieuHoaDon = 'QQ/14P';
+                        break;
+                    case 2:
+                        $KyHieuHoaDon = 'HN/14P';
+                        break;
+                    case 3:
+                        $KyHieuHoaDon = 'DN/14P';
+                        break;
+                    default:
+                        $KyHieuHoaDon = 'QQ/14P';
+                        break;
+                }
+            }
+
+
+            $SoHoaDon = $item['invoice_number'];
+            $Ngay = ($item['invoice_time'] ? date('d/m/Y', strtotime($item['invoice_time'])) :
+                '');
+            $SoDonHang = $item['sn'];
+            $giaTriDonHang = $item['total_price'];
+            $TenNguoiMua = $item['unames'];
+            $MaNguoiMua = $item['store_code'];
+            $MST = $item['mst_sn'];
+            $total_price = $item['total_price'];
+            $bvg = '';
+            $price_bvg = 0;
+
+            $discount = $QProductBVG->getDiscount($item['sn']);
+
+
+            if (isset($discount) and $discount)
+            {
+                $invoice_discount = $QProductBVG->getInvoice($item['sn']);
+                $params = array(
+                    'sn' => $SoDonHang,
+                    'isbacks' => 0,
+                    'group_good' => 1,
+                    );
+
+                $params['group_sn'] = 1;
+                $total2 = 0;
+
+
+                if ($discount == 1)
+                {
+                    $bvg = 'BVG';
+                    // $discount_result = $QProductBVG->fetchPagination(1, null, $total2, $params);
+                } elseif ($discount == 2)
+                {
+                    $bvg = 'CK';
+                    //   $discount_result = $QMarket_deduction->fetchPagination(1, null, $total2, $params);
+                }
+                $price_bvg = $QProductBVG->getPrice($item['sn']);
+            }
+
+
+            $DoanhSoChuaThue = round($total_price / 1.1, 2);
+            $ThueGTGT = round($DoanhSoChuaThue * 0.1, 2);
+            $where = array();
+            $where[] = $QMarket_invoice_price->getAdapter()->quoteInto('sn = ?', $item['sn']);
+            //  $where[] = $QMarket_invoice_price->getAdapter()->quoteInto('invoice_number = ?',
+            //    $item['invoice_number']);
+            $invoice_price = $QMarket_invoice_price->fetchRow($where);
+
+            // xem comment ở khai báo hàm
+            $GhiChu = My_Sale_Order::getStockTetNote($item['sn']);
+
+            if (empty($GhiChu))
+            {
+                $GhiChu = isset($po_cache[$item['po_id']]) ? $po_cache[$item['po_id']] : '';
+                $GhiChu .= "\r\n" . $item['text'];
+            }
+
+            $sheet->stdOutSheetColumn('String', $i, $j++, $k);
+            $sheet->stdOutSheetColumn('String', $i, $j++, $KyHieuMauHoaDon);
+            $sheet->stdOutSheetColumn('String', $i, $j++, $KyHieuHoaDon);
+            $sheet->stdOutSheetColumn('String', $i, $j++, $SoHoaDon);
+            $sheet->stdOutSheetColumn('String', $i, $j++, $SoDonHang);
+            $sheet->stdOutSheetColumn('String', $i, $j++, $Ngay);
+            $sheet->stdOutSheetColumn('String', $i, $j++, $MaNguoiMua);
+            $sheet->stdOutSheetColumn('String', $i, $j++, $TenNguoiMua);
+            $sheet->stdOutSheetColumn('String', $i, $j++, $MST);
+            $sheet->stdOutSheetColumn('String', $i, $j++, $MatHang);
+            $sheet->stdOutSheetColumn('String', $i, $j++, $bvg);
+            $sheet->stdOutSheetColumn('String', $i, $j++, $price_bvg ? number_format($price_bvg) :
+                0);
+            $sheet->stdOutSheetColumn('String', $i, $j++, number_format($giaTriDonHang));
+            $sheet->stdOutSheetColumn('String', $i, $j++, number_format($DoanhSoChuaThue));
+            $sheet->stdOutSheetColumn('String', $i, $j++, number_format($ThueGTGT));
+            $sheet->stdOutSheetColumn('String', $i, $j++, number_format($invoice_price['total_invoice_after_vat']));
+            $sheet->stdOutSheetColumn('String', $i, $j++, number_format($invoice_price['total_invoice_price']));
+            $sheet->stdOutSheetColumn('String', $i, $j++, number_format($invoice_price['total_invoice_vat']));
+            $sheet->stdOutSheetColumn('String', $i, $j++, $GhiChu);
+            $sheet->stdOutSheetRowEnd();
+            $i++;
+            $k++;
+
+            if (isset($discount) and $discount)
+            {
+
+                $sheet->stdOutSheetRowStart($i);
+                $j = 1;
+                $total_price = $price_bvg;
+                $DoanhSoChuaThue = round($total_price / 1.1, 2);
+                $ThueGTGT = round($DoanhSoChuaThue * 0.1, 2);
+                $where = array();
+                $where[] = $QMarket_invoice_price->getAdapter()->quoteInto('sn = ?', $item['sn']);
+                $where[] = $QMarket_invoice_price->getAdapter()->quoteInto('invoice_number = ?',
+                    $discount_result['invoice_number']);
+                $invoice_price = $QMarket_invoice_price->fetchRow($where);
+                $invoice_price = $invoice_price ? $invoice_price : null;
+                $sheet->stdOutSheetColumn('String', $i, $j++, $k);
+                $sheet->stdOutSheetColumn('String', $i, $j++, $KyHieuMauHoaDon);
+                $sheet->stdOutSheetColumn('String', $i, $j++, $KyHieuHoaDon);
+                $sheet->stdOutSheetColumn('String', $i, $j++, $invoice_discount);
+                $sheet->stdOutSheetColumn('String', $i, $j++, $SoDonHang);
+                $sheet->stdOutSheetColumn('String', $i, $j++, $Ngay);
+                $sheet->stdOutSheetColumn('String', $i, $j++, $MaNguoiMua);
+                $sheet->stdOutSheetColumn('String', $i, $j++, $TenNguoiMua);
+                $sheet->stdOutSheetColumn('String', $i, $j++, $MST);
+                $sheet->stdOutSheetColumn('String', $i, $j++, $MatHang);
+                $sheet->stdOutSheetColumn('String', $i, $j++, $bvg);
+                $sheet->stdOutSheetColumn('String', $i, $j++, 0);
+                $sheet->stdOutSheetColumn('String', $i, $j++, '-' . number_format($total_price));
+                $sheet->stdOutSheetColumn('String', $i, $j++, '-' . number_format($DoanhSoChuaThue));
+                $sheet->stdOutSheetColumn('String', $i, $j++, '-' . number_format($ThueGTGT));
+                $sheet->stdOutSheetColumn('String', $i, $j++, '-' . number_format($total_price));
+                $sheet->stdOutSheetColumn('String', $i, $j++, '-' . number_format($DoanhSoChuaThue));
+                $sheet->stdOutSheetColumn('String', $i, $j++, '-' . number_format($ThueGTGT));
+                $sheet->stdOutSheetColumn('String', $i, $j++, $GhiChu);
+                $sheet->stdOutSheetRowEnd();
+                $i++;
+                $k++;
+            }
+
+        }
+
+        $sheet->stdOutSheetEnd();
+
+        $xml->stdOutEnd();
+
+        exit;
+    }
+
+    private function _exportExcel4($data)
+    {
+         ////////////////////////////////////////////////////
+        /////////////////// KHỞI TẠO ĐỂ XUẤT CSV
+        ////////////////////////////////////////////////////
+        $this->_helper->layout->disableLayout();
+        $this->_helper->viewRenderer->setNoRender(true);
+
+        $db = Zend_Registry::get('db');
+        set_time_limit(0);
+        error_reporting(~E_ALL);
+        ini_set('display_error', 0);
+        ini_set('memory_limit', -1);
+        $filename = 'Sell out List - IMEI - '.date('d-m-Y H-i-s').'.csv';
+        // output headers so that the file is downloaded rather than displayed
+        while (@ob_end_clean());
+        ob_start();
+        header('Content-Encoding: UTF-8');
+        header('Content-Type: text/csv; charset=utf-8');
+        header('Content-Disposition: attachment; filename='.$filename);
+        $userStorage = Zend_Auth::getInstance()->getStorage()->read();
+        $file_path = APPLICATION_PATH.'/../public/files/sales/export/'.$userStorage->id.'/'.uniqid();
+        if (!file_exists($file_path))
+            mkdir($file_path, 0777, true);
+
+
+        $path = $file_path.'/'.$filename;
+        $output = fopen($path, 'w+');
+        echo "\xEF\xBB\xBF"; // UTF-8 BOM
+        // echo chr(239) . chr(187) . chr(191); // UTF-8 BOM
+        // fputs($output, chr(239) . chr(187) . chr(191));
+
+        ////////////////////////////////////////////////////
+        /////////////////// TỔNG HỢP DỮ LIỆU
+        ////////////////////////////////////////////////////
+
+        $heads = array(
+            'SALE ORDER NUMBER',
+            'PRODUCT CATEGORY',
+            'PRODUCT NAME',
+            'PRODUCT COLOR',
+            'IMEI',
+            'WAREHOUSE',
+            'RETAILER',
+            'CODE',
+            'REGION',
+            'AREA',
+            'OUT TIME',
+            'ACTIVATED_DATE',
+            'GIA HE THONG',
+            'GIA THUC TE',
+            'INVOICE NUMBER',
+            'INVOICE DATE',
+            'INVOICE SIGN',
+            'ORDER TYPE',
+            'RETURN'
+        );
+
+        fputcsv($output, $heads);
+
+        $QGood          = new Application_Model_Good();
+        $QGoodColor     = new Application_Model_GoodColor();
+        $QDistributor   = new Application_Model_Distributor();
+        $QGoodCategory  = new Application_Model_GoodCategory();
+        $QWarehouse     = new Application_Model_Warehouse();
+        $QRegion        = new Application_Model_Region();
+        $QArea          = new Application_Model_Area();
+        $QMarket        = new Application_Model_Market();
+        $QInvoicePrefix = new Application_Model_InvoicePrefix();
+
+        $goods             = $QGood->get_cache();
+        $goodColors        = $QGoodColor->get_cache();
+        $distributor_cache = $QDistributor->get_cache2();
+        $good_categories   = $QGoodCategory->get_cache();
+        $warehouses        = $QWarehouse->get_cache();
+        $invoice_prefix    = $QInvoicePrefix->get_cache();
+
+        $result = $db->query($data);
+        //print_r($result);die;
+        $i = 2;
+
+        foreach($result as $item)
+        {
+             if (is_null($item['sn_ref']) || $item['sn_ref'] == '') { $temp_sn = $item['sn']; } 
+            else { $temp_sn = $item['sn_ref']; }
+
+            $row = array();
+            $row[] = '="'.$temp_sn.'"';
+            //$row[] = '="'.$item['sn'].'"';
+            $row[] = $good_categories[$item['cat_id']];
+            $row[] = $goods[$item['good_id']];
+            $row[] = $goodColors[$item['good_color']];
+            $row[] = $item['imei_sn'];
+            $row[] = isset($warehouses[$item['warehouse_id']])? $warehouses[$item['warehouse_id']] : '';
+            $row[] = isset($distributor_cache[ $item['d_id'] ]['title']) ? $distributor_cache[ $item['d_id'] ]['title'] : '';
+            $row[] = isset($distributor_cache[ $item['d_id'] ]['code']) ? $distributor_cache[ $item['d_id'] ]['code'] : '';
+            $row[] = isset($distributor_cache[ $item['d_id'] ]['district']) ? My_Region::getValue($distributor_cache[ $item['d_id'] ]['district'], My_Region::Area) : '';
+            $row[] = isset($distributor_cache[ $item['d_id'] ]['district']) ? My_Region::getValue($distributor_cache[ $item['d_id'] ]['district'], My_Region::Province) : '';
+            $row[] = $item['outmysql_time'];
+            $row[] = $item['activated_date'];
+
+
+            if ( isset($item['imei_sn']) ) {
+
+                $price_product_relative = $price_export_relative = $invoice_time = 0;
+                $order_type             = '';
+
+                $price_product_relative = $item['price'];
+                $price_export_relative  = intval($item['total'] / $item['num']) ? intval($item['total'] / $item['num']) : 0;
+                switch ( $item['type'] ) {
+                    case '1':
+                        $order_type = 'Retailer';
+                        break;
+                    case '2':
+                        $order_type = 'Demo';
+                        break;
+                    case '3':
+                        $order_type = 'Staff';
+                        break;
+                    default:
+
+                        break;
+                }
+
+            }
+
+            $row[] = isset($price_product_relative) ? $price_product_relative : '';
+            $row[] = isset($price_export_relative) ? $price_export_relative : 0;
+            $row[] = isset($item['invoice_number']) ? $item['invoice_number'] : 'x';
+            $row[] = isset($item['invoice_time']) ? $item['invoice_time'] : 'x';
+            $row[] = isset($invoice_prefix[$item['invoice_sign']]) ? $invoice_prefix[$item['invoice_sign']] : 'x';
+            $row[] = $order_type;
+            $row[] = $item['return_sn'] ? $item['return_sn'] : '';
+
+            fputcsv($output, $row);
+            unset($item);
+            unset($row);
+        }
+
+        unset($data);
+        unset($result);
+
+        fclose($output);
+
+        ob_flush();
+        ob_start();
+        while (@ob_end_flush());
+
+        header('Expires: 0');
+        header('Cache-Control: must-revalidate');
+        header('Pragma: public');
+        header('Content-Length: ' . filesize($path));
+        readfile($path);
+        exit;
+
+        $file = fopen($path, 'r');
+        $content = fread($file, filesize($path));
+        var_dump(filesize($path));
+        var_dump($content);
+
+        exit;
+    }
+
+    private function _export_target($target)
+    {
+        set_time_limit(0);
+        error_reporting(0);
+        ini_set('display_error', 0);
+        ini_set('memory_limit', -1);
+
+        $tmp_name = md5(uniqid("", true) . microtime(true)) . '.csv';
+
+        $uniqid = uniqid('', true);
+        $userStorage = Zend_Auth::getInstance()->getStorage()->read();
+
+        if (!$userStorage)
+            exit;
+
+        $save_dir = APPLICATION_PATH . DIRECTORY_SEPARATOR . '..' . DIRECTORY_SEPARATOR .
+            'public' . DIRECTORY_SEPARATOR . 'files' . DIRECTORY_SEPARATOR . 'sales' .
+            DIRECTORY_SEPARATOR . 'target' . DIRECTORY_SEPARATOR . $userStorage->id .
+            DIRECTORY_SEPARATOR . $uniqid;
+
+        if (!is_dir($save_dir))
+            @mkdir($save_dir, 0777, true);
+
+        $fullpath = $save_dir . DIRECTORY_SEPARATOR . $tmp_name;
+
+        $output = fopen($fullpath, 'w');
+
+        $heads = array(
+            'No.',
+            'Area',
+            'Retailer ID',
+            'Retailer Name',
+            'Target',
+            'Value',
+            );
+
+        fputcsv($output, $heads);
+
+        $QArea = new Application_Model_Area();
+        $areas = $QArea->get_cache();
+
+        $QDistributor = new Application_Model_Distributor();
+        $distributors = $QDistributor->get_cache();
+
+        $i = 1;
+
+        foreach ($target as $value)
+        {
+            $row = array();
+            $alpha = 'A';
+            $row[] = $i++;
+            $row[] = isset($areas[$value['area_id']]) ? $areas[$value['area_id']] : '';
+            $row[] = $value['d_id'];
+            $row[] = isset($distributors[$value['d_id']]) ? $distributors[$value['d_id']] :
+                '';
+            $row[] = $value['target'];
+            $row[] = $value['total'];
+
+            fputcsv($output, $row);
+        }
+
+        fclose($fullpath);
+
+        $filename = 'Target - Distributor - ' . date('d-m-Y H-i-s') . ".csv";
+        header('Content-Description: File Transfer');
+        header('Content-Encoding: UTF-8');
+        header('Content-Disposition: attachment; filename=' . $filename);
+        // echo "\xEF\xBB\xBF"; // UTF-8 BOM
+        header('X-Rack-Cache: miss');
+        header('ETag: ' . hash("sha1", microtime(true) . uniqid()));
+        header('Content-Type: application/csv; charset=utf-8');
+        // header('Expires: 0');
+        header('Cache-Control:  max-age=0, no-cache, no-store');
+        header('Pragma: no-cache');
+        header('Content-Length: ' . filesize($fullpath));
+
+        ob_clean(); // discard any data in the output buffer (if possible)
+        flush(); // flush headers (if possible)
+
+        echo chr(239) . chr(187) . chr(191); // UTF-8 BOM
+
+        readfile($fullpath);
+
+        exit;
+    }
+
+    public function createOrderAction()
+    {
+
+    }
+
+    public function createOrderExcelAction()
+    {
+        $this->_helper->layout->disableLayout();
+
+        $save_folder = 'importorder';
+        $new_file_path = '';
+        $requirement = array(
+            'Size' => array('min' => 5, 'max' => 5000000),
+            'Count' => array('min' => 1, 'max' => 1),
+            'Extension' => array('xls', 'xlsx'),
+            );
+
+        try
+        {
+            set_time_limit(0);
+            ini_set('memory_limit', -1);
+
+            $file = My_File::get($save_folder, $requirement);
+
+            if (!$file || !count($file))
+                throw new Exception("Upload failed");
+
+            $inputFileName = My_File::getDefaultDir() . DIRECTORY_SEPARATOR . $save_folder .
+                DIRECTORY_SEPARATOR . $file['folder'] . DIRECTORY_SEPARATOR . $file['filename'];
+
+            $userStorage = Zend_Auth::getInstance()->getStorage()->read();
+        }
+        catch (exception $e)
+        {
+            $this->view->errors = $e->getMessage();
+            return;
+        }
+
+        //read file
+        include 'PHPExcel/IOFactory.php';
+
+        //  Read your Excel workbook
+        try
+        {
+            $inputFileType = PHPExcel_IOFactory::identify($inputFileName);
+            $objReader = PHPExcel_IOFactory::createReader($inputFileType);
+            $objPHPExcel = $objReader->load($inputFileName);
+        }
+        catch (exception $e)
+        {
+            $this->view->errors = $e->getMessage();
+            return;
+        }
+
+        //  Get worksheet dimensions
+        $sheet = $objPHPExcel->getSheet(0);
+        $highestRow = $sheet->getHighestRow();
+        $highestColumn = $sheet->getHighestColumn();
+        $db = Zend_Registry::get('db');
+        $arrDistributorGood = array();
+        $failed_list = array();
+        $order_by_distributor = array();
+
+        for ($row = 2; $row <= ($highestRow + 1); $row++)
+        {
+            //  Read a row of data into an array
+            $rowData = $sheet->rangeToArray('A' . $row . ':' . $highestColumn . $row, null, true, false);
+            $rowData = $rowData[0];
+
+            $old_distributor_id = isset($info['d_id']) ? $info['d_id'] : null;
+            $old_date = isset($out_date_tmp) ? $out_date_tmp : null;
+
+            if ((empty($rowData[0]) && empty($rowData[1])))
+            {
+
+                if (is_array($order_by_distributor) && count($order_by_distributor))
+                {
+                    try
+                    {
+                        $db->beginTransaction();
+                        $this->_createGroupOrder($order_by_distributor);
+                        $db->commit();
+                    }
+                    catch (exception $e)
+                    {
+                        $db->rollback();
+                        $failed_list[$row] = $e->getMessage();
+                    }
+
+                    $order_by_distributor = array();
+                }
+
+                break;
+            }
+
+            //row data from excel
+            $info = array(
+                'd_id' => intval(trim($rowData[0])),
+                'out_date' => '17/02/2015',
+                'region' => trim($rowData[2]),
+                'title' => trim($rowData[3]),
+                'good_name' => trim($rowData[4]),
+                'color_name' => trim($rowData[5]),
+                'imei' => trim($rowData[6]),
+                'price' => intval(trim($rowData[7])),
+                'office' => trim($rowData[11]),
+                'note' => trim($rowData[9]),
+                );
+
+
+            // nếu thấy ngày out mới thì tách đơn dù cùng dealer id
+            if (!is_null($old_date) && isset($out_date_tmp) && $old_date != $out_date_tmp)
+            {
+                if (is_array($order_by_distributor) && count($order_by_distributor))
+                {
+                    try
+                    {
+                        $db->beginTransaction();
+                        $this->_createGroupOrder($order_by_distributor);
+                        $db->commit();
+                    }
+                    catch (exception $e)
+                    {
+                        $db->rollback();
+                        $failed_list[$row] = $e->getMessage();
+                    }
+
+                    $order_by_distributor = array();
+                }
+            }
+
+            // validate
+            try
+            {
+                $QOffice = new Application_Model_Office();
+                $office = $QOffice->get_warehouse($info['office']);
+
+                if (!$office)
+                    throw new Exception("Wrong warehouse", 3);
+
+                $info['warehouse_id'] = $office;
+
+                if ($info['good_name'] == 'PT5111-Blue')
+                {
+                    $info['good_id'] = 169;
+                    $info['good_color'] = 28;
+                    $info['price'] = 0;
+                    $info['cat_id'] = ACCESS_CAT_ID;
+
+                } else
+                {
+                    $this->_validateDataRow($info);
+                }
+
+            }
+            catch (exception $e)
+            {
+                $failed_list[$row] = $e->getMessage();
+                continue;
+            }
+
+
+            if (!is_null($old_distributor_id) && $info['d_id'] != $old_distributor_id)
+            {
+                // create Orders by group
+
+                try
+                {
+                    $db->beginTransaction();
+                    unset($info['out_date_tmp']);
+                    $this->_createGroupOrder($order_by_distributor);
+                    $db->commit();
+
+                }
+                catch (exception $e)
+                {
+                    $db->rollback();
+
+                    $failed_list[$row] = $e->getMessage();
+                }
+
+                $order_by_distributor = array();
+            }
+
+            // group by Order SN
+            $order_by_distributor[] = $info;
+
+        } //end for
+
+        $objPHPExcel_out = new PHPExcel();
+        $objPHPExcel_out->createSheet();
+        $objWorksheet_out = $objPHPExcel_out->getActiveSheet();
+        $index = 1;
+
+        $row = array(
+            'ID Dealer',
+            'Ngày',
+            'KV',
+            'Tên cửa hàng',
+            'Mã hàng',
+            'Màu',
+            'IMEI',
+            'Đơn giá',
+            'Thành Tiền',
+            'NOTE',
+            'OUT Date',
+            'Distributor',
+            );
+
+        $objWorksheet_out->fromArray($row, null, 'A' . $index++);
+
+        foreach ($failed_list as $row => $reason)
+        {
+            //  Read a row of data into an array
+            $rowData = $sheet->rangeToArray('A' . $row . ':' . $highestColumn . $row, null, true, false);
+            $rowData = $rowData[0];
+
+            if (isset($rowData['imei']))
+                $rowData['imei'] = '\'' . $rowData['imei'];
+
+            $rowData[] = $reason;
+
+            $objWorksheet_out->fromArray($rowData, null, 'A' . $index++);
+        } // export error list
+
+        $objWriter = new PHPExcel_Writer_Excel2007($objPHPExcel_out);
+        $new_file_dir = My_File::getDefaultDir() . DIRECTORY_SEPARATOR . $save_folder .
+            DIRECTORY_SEPARATOR . $file['folder'] . DIRECTORY_SEPARATOR . $file['filename'] .
+            '-failed.xlsx';
+
+        $objWriter->save($new_file_dir);
+
+        $this->view->failed_list = $failed_list;
+    } //end func create order
+
+    /**
+     * Kiểm tra dữ liệu
+     * Dealer ID, KV, tên cửa hàng, mã hàng, màu, IMEI có khớp nhau, đúng thực tế hay không
+     * kiểm tra IMEI có xuất cho kho office (distributor) này chưa
+     * @param  array  $dataRow
+     * @return array : code, message
+     */
+    private function _validateDataRow(array & $dataRow)
+    {
+        // kiểm tra distributor
+        $QDistributor = new Application_Model_Distributor();
+        $where = $QDistributor->getAdapter()->quoteInto('id = ?', $dataRow['d_id']);
+        $distributor = $QDistributor->fetchRow($where);
+
+        if (!$distributor)
+            throw new Exception("Invalid Distributor " . $dataRow['d_id'], 1);
+
+        // kiểm tra kho office
+        if (!$dataRow['office'])
+            throw new Exception("Empty Office", 2);
+
+        // kiểm tra giá trị, định dạng ngày
+        $date = DateTime::createFromFormat('d/m/Y', $dataRow['out_date']);
+
+        if (!$date)
+            throw new Exception("Invalid date format/value", 5);
+
+        // kiểm tra tên sản phẩm, màu với imei khớp hay không
+        $QImei = new Application_Model_Imei();
+        $where = $QImei->getAdapter()->quoteInto('imei_sn = ?', $dataRow['imei']);
+        $imei_check = $QImei->fetchRow($where);
+
+        if (!$imei_check)
+            throw new Exception("Invalid IMEI " . $dataRow['imei'], 6);
+
+        // kiểm tra product
+        $QGood = new Application_Model_Good();
+        $good_cache = $QGood->get_cache();
+
+        if (!isset($good_cache[$imei_check['good_id']]) || $good_cache[$imei_check['good_id']] !=
+            $dataRow['good_name'])
+            throw new Exception("Wrong Product name " . $dataRow['good_name'] .
+                ", check again", 7);
+
+        $dataRow['good_id'] = $imei_check['good_id'];
+
+        // kiểm tra color
+        $QGoodColor = new Application_Model_GoodColor();
+        $color_cache = $QGoodColor->get_cache();
+
+        if (!isset($color_cache[$imei_check['good_color']]) || $color_cache[$imei_check['good_color']] !=
+            $dataRow['color_name'])
+            throw new Exception("Wrong Product color " . $dataRow['color_name'] .
+                ", check again", 8);
+
+        $dataRow['good_color'] = $imei_check['good_color'];
+
+        $dataRow['cat_id'] = PHONE_CAT_ID;
+
+        // kiểm tra kho office
+        // $where = $QDistributor->getAdapter()->quoteInto('id = ?', $imei_check['distributor_id']);
+        // $distributor_office = $QDistributor->fetchRow($where);
+
+        // if (!$distributor_office || $distributor_office['title'] != $dataRow['office']) throw new Exception("Invalid Office Warehouse", 9);
+
+        return true;
+    }
+
+    /**
+     * [_createGroupOrder description]
+     * @param  [type] $orders [description]
+     * @return [type]         [description]
+     */
+    private function _createGroupOrder($orders)
+    {
+        $QMarket = new Application_Model_Market();
+        $QImei = new Application_Model_Imei();
+        $userStorage = Zend_Auth::getInstance()->getStorage()->read();
+
+        $order_quantity = array(); // list đơn hàng để chèn vào bảng market
+        $insert_orders = array(); // list đơn hàng để chèn vào bảng market
+        $imei_order = array();
+        $sn = date('YmdHis') . substr(microtime(), 2, 4);
+        $user_id = $userStorage->id;
+        $add_time = $shipping_yes_time = $outmysql_time = $pay_time = $price_time = date('Y-m-d H:i:s');
+        $out_date = '';
+        $d_id = 0;
+        $imei_list = array();
+
+        /**
+         * tạo list order mới để chèn vào bảng market
+         * group và đếm tổng số máy theo model, màu
+         */
+        foreach ($orders as $key => $order)
+        {
+            if (!isset($order_quantity[$order['good_id']][$order['good_color']]))
+            {
+                $out_date = DateTime::createFromFormat('d/m/Y', $order['out_date'])->format('Y-m-d');
+                $d_id = $order['d_id'];
+                $warehouse_id = $order['warehouse_id'];
+
+                $order_quantity[$order['good_id']][$order['good_color']]['num'] = 0;
+                $order_quantity[$order['good_id']][$order['good_color']]['cat_id'] = $order['cat_id'];
+                $order_quantity[$order['good_id']][$order['good_color']]['price'] = $order['price'];
+                $order_quantity[$order['good_id']][$order['good_color']]['note'] = $order['note'];
+            }
+
+            $order_quantity[$order['good_id']][$order['good_color']]['num']++;
+            $imei_list[] = $order['imei'];
+
+            if ($order['cat_id'] == PHONE_CAT_ID)
+                $imei_order[$order['good_id']][$order['good_color']][] = $order['imei'];
+        }
+
+        foreach ($order_quantity as $_good_id => $_good_color)
+        {
+            foreach ($_good_color as $_color_id => $item)
+            {
+                $insert_orders[] = array(
+                    'sn' => $sn,
+                    'd_id' => $d_id,
+                    'user_id' => $user_id,
+                    'num' => $item['num'],
+                    'add_time' => $add_time,
+                    'price' => $item['price'],
+                    'total' => $item['num'] * $item['price'],
+                    'shipping_yes_time' => $shipping_yes_time,
+                    'pay_time' => $pay_time,
+                    'shipping_yes_id' => $user_id,
+                    'pay_user' => $user_id,
+                    'outmysql_time' => $out_date,
+                    'outmysql_user' => $user_id,
+                    'price_time' => $price_time,
+                    'good_color' => $_color_id,
+                    'good_id' => $_good_id,
+                    'cat_id' => $item['cat_id'],
+                    'text' => $item['note'] . '--Imported by tool',
+                    'isbatch' => 1,
+                    'status' => 1,
+                    'life_time' => ORDER_TIMELIFE,
+                    'type' => FOR_RETAILER,
+                    'warehouse_id' => $warehouse_id,
+                    'salesman' => $user_id,
+                    );
+            }
+        }
+
+
+        foreach ($insert_orders as $item)
+        {
+            //
+            // chèn đơn
+            $id = $QMarket->insert($item);
+
+            if (!$id)
+                throw new Exception("Cannot insert sales order", 1);
+
+            if ($item['cat_id'] == ACCESS_CAT_ID)
+                continue;
+
+            // update num trên đơn cũ
+            $imei_ = $imei_order[$item['good_id']][$item['good_color']];
+
+            foreach ($imei_ as $imei__)
+            {
+                $where = $QImei->getAdapter()->quoteInto('imei_sn = ?', $imei__);
+                $imei_check = $QImei->fetchRow($where);
+
+                if (!$imei_check)
+                    throw new Exception("Cannot find IMEI " . $imei__, 1);
+
+                // trừ stock imei
+                $where = array();
+                $where[] = $QMarket->getAdapter()->quoteInto('sn = ?', $imei_check['sales_sn']);
+                $where[] = $QMarket->getAdapter()->quoteInto('good_id = ?', $item['good_id']);
+                $where[] = $QMarket->getAdapter()->quoteInto('good_color = ?', $item['good_color']);
+                $market_check = $QMarket->fetchRow($where);
+
+                if (!$market_check)
+                    throw new Exception("Cannot find sales order " . $imei_check['sales_sn'], 1);
+
+                $data = array('num' => ($market_check['num'] - 1));
+                $QMarket->update($data, $where);
+
+                if ($item['good_id'] == 168)
+                { // N1 mini - có hàng tặng kèm
+                    // trừ stock phụ kiện luôn
+                    $where = array();
+                    $where[] = $QMarket->getAdapter()->quoteInto('sn = ?', $market_check['sn']);
+                    $where[] = $QMarket->getAdapter()->quoteInto('good_id = ?', 169);
+                    $where[] = $QMarket->getAdapter()->quoteInto('good_color = ?', 28);
+                    $market_check = $QMarket->fetchRow($where);
+
+                    if (!$market_check)
+                        throw new Exception("Cannot find sales order " . $market_check['sn'], 1);
+
+                    $data = array('num' => ($market_check['num'] - 1));
+                    $QMarket->update($data, $where);
+
+                } // end if ; trừ stock phụ kiện
+
+            } // end foreach
+
+            // update bảng imei theo đơn
+            $where = $QImei->getAdapter()->quoteInto('imei_sn IN (?)', $imei_);
+
+            $data = array(
+                'out_date' => $out_date,
+                'distributor_id' => $d_id,
+                'sales_sn' => $sn,
+                'out_price' => $item['price'],
+                'price_date' => $item['outmysql_time'],
+                'sales_id' => $id,
+                );
+
+            $QImei->update($data, $where);
+
+            //
+            //
+        } // end foreach $orders array
+    }
+
+    /**
+     * hoang.hien
+     * kiểm tra nếu mà điện thoại chọn mức giảm giá ko có trong bảng giảm giá(good_sale_phone) thì xuất thông báo
+     */
+    public function checkSalePhoneAction()
+    {
+        $phone_id             = $this->getRequest()->getParam('phone_id');
+        $sale_off_percent     = $this->getRequest()->getParam('sale_off_percent');
+
+        $QCheckSale = new Application_Model_GoodSalePhone();
+        $check_sale = $QCheckSale->checkSalePhone(intval($phone_id),intval($sale_off_percent));
+        echo $check_sale;
+        exit;
+    }
+
+    /**
+     * [hoang.hien]Thêm view giảm giá
+     * Tương ứng với 1 điện thoại thì giảm bao nhiêu %
+     */
+
+     public function saleAction(){
+        $QSale = new Application_Model_GoodSale();
+        $data = $QSale->fetchAll();
+
+        $this->view->data = $data;
+     }
+
+     public function saveSaleAction(){
+
+        $id = $this->getRequest()->getParam('id');
+        $type = $this->getRequest()->getParam('type');
+        $sale = $this->getRequest()->getParam('sale');
+
+        $data = array(
+            'type'             => $type,
+            'sale'             => $sale
+        );
+
+        $QSale = new Application_Model_GoodSale();
+        if($id){
+            $where = $QSale->getAdapter()->quoteInto('id = ?', $id);
+            $QSale->update($data,$where);
+            $this->_redirect(HOST . 'sales/edit-sale?id='.$id);
+        }
+        else{
+            $QSale->insert($data);
+            $this->_redirect(HOST . 'sales/sale');
+        }
+
+     }
+
+     public function editSaleAction(){
+        $id = $this->getRequest()->getParam('id');
+        $QSale = new Application_Model_GoodSale();
+        $where = $QSale->getAdapter()->quoteInto('id = ?', $id);
+        $data = $QSale->fetchRow($where);
+
+        $this->view->data = $data;
+     }
+
+     public function salePhoneAction(){
+        $QSale = new Application_Model_GoodSale();
+        $dataSale = $QSale->fetchAll();
+
+        $QGood = new Application_Model_Good();
+        $dataGood = $QGood->fetchAll();
+
+        $QSalePhone = new Application_Model_GoodSalePhone();
+        $data = $QSalePhone->getAllSalePhone();
+
+        $QGoodCategory = new Application_Model_GoodCategory();
+        $this->view->good_categories = $QGoodCategory->fetchAll();
+
+        $this->view->dataSale = $dataSale;
+        $this->view->dataGood = $dataGood;
+        $this->view->data = $data;
+     }
+
+     public function deleteSaleAction(){
+        $id = $this->getRequest()->getParam('id_sale');
+        $QSale = new Application_Model_GoodSale();
+        $where = $QSale->getAdapter()->quoteInto('id = ?', $id);
+        $QSale->delete($where);
+        echo "successful";
+        exit;
+     }
+
+     public function changeSaleCheckboxAction(){
+        $good_id = $this->getRequest()->getParam('good_id');
+        $phone_sale_id = $this->getRequest()->getParam('phone_sale_id');
+        $check = $this->getRequest()->getParam('check');
+
+        if((int)$check == 1){
+            $QSalePhone = new Application_Model_GoodSalePhone();
+            $data = array(
+                'good_id' => $good_id,
+                'good_sale_id' => $phone_sale_id
+            );
+            $id = $QSalePhone->insert($data);
+
+            echo "successful";
+            exit;
+        }
+        elseif(((int)$check == 0)){
+            $QSalePhone = new Application_Model_GoodSalePhone();
+            $where[] = $QSalePhone->getAdapter()->quoteInto('good_id = ?', $good_id);
+            $where[] = $QSalePhone->getAdapter()->quoteInto('good_sale_id = ?', $phone_sale_id);
+            $QSalePhone->delete($where);
+
+            echo "successful";
+            exit;
+        }
+        elseif(((int)$check == 3)){
+            $QSalePhone = new Application_Model_GoodSalePhone();
+            $data = array(
+                'good_id' => $good_id,
+                'good_sale_id' => $phone_sale_id
+            );
+            $id = $QSalePhone->insert($data);
+            $this->_redirect(HOST . 'sales/sale-phone');
+        }
+
+     }
+
+
+
+     /**
+     * [hoang.hien]Thêm view lô hàng (bán cho nhân viên)
+     * Tương ứng với lô thì có các sản phẩm có giá khác nhau %
+     */
+     public function shipmentAction(){
+        $QShipment = new Application_Model_GoodShipment();
+        $dataShipment = $QShipment->fetchAll();
+        $this->view->data = $dataShipment;
+     }
+
+
+     public function saveShipmentAction(){
+        $id = $this->getRequest()->getParam('id');
+        $name = $this->getRequest()->getParam('name');
+        $number_shipment = $this->getRequest()->getParam('number_shipment');
+        $content = $this->getRequest()->getParam('content');
+        $active = $this->getRequest()->getParam('active');
+        $check = $this->getRequest()->getParam('check');
+
+        if((int)$check == 1){
+            $QShipment = new Application_Model_GoodShipment();
+            $data = array(
+                'name'      => $name,
+                'number'    => $number_shipment,
+                'content'   => $content,
+                'active'    => $active
+
+            );
+            $where = $QShipment->getAdapter()->quoteInto('id = ?', $id);
+            $QShipment->update($data,$where);
+            $this->_redirect(HOST . 'sales/shipment-edit?id='.$id);
+        }
+        elseif(((int)$check == 0)){
+            $QSalePhone = new Application_Model_GoodSalePhone();
+            $where[] = $QSalePhone->getAdapter()->quoteInto('good_id = ?', $good_id);
+            $where[] = $QSalePhone->getAdapter()->quoteInto('good_sale_id = ?', $phone_sale_id);
+            $QSalePhone->delete($where);
+
+            echo "successful";
+            exit;
+        }
+        elseif(((int)$check == 3)){
+            $QShipment = new Application_Model_GoodShipment();
+            $data = array(
+                'name'      => $name,
+                'number'    => $number_shipment,
+                'content'   => $content,
+                'active'    => $active
+
+            );
+            $id = $QShipment->insert($data);
+            $this->_redirect(HOST . 'sales/shipment');
+        }
+
+     }
+
+     public function shipmentEditAction(){
+        $id = $this->getRequest()->getParam('id');
+        $QShipment = new Application_Model_GoodShipment();
+        $where = $QShipment->getAdapter()->quoteInto('id = ?', $id);
+        $data = $QShipment->fetchRow($where);
+
+        $this->view->data = $data;
+     }
+
+     public function deleteShippmentAction(){
+        $id = $this->getRequest()->getParam('id_shipment');
+        $QShipment = new Application_Model_GoodShipmentPhone();
+        $where = $QShipment->getAdapter()->quoteInto('id = ?', $id);
+        $QShipment->delete($where);
+        echo "successful";
+        exit;
+     }
+
+     public function createShipmentPhoneAction(){
+        $id = $this->getRequest()->getParam('id');
+        $QShipmentPhone = new Application_Model_GoodShipmentPhone();
+        $where = $QShipmentPhone->getAdapter()->quoteInto('id = ?', $id);
+        $data = $QShipmentPhone->fetchRow($where);
+
+        $QShipment = new Application_Model_GoodShipment();
+        $dataShipment = $QShipment->fetchAll();
+
+        $QGood = new Application_Model_Good();
+        $dataGood = $QGood->fetchAll();
+
+        $this->view->dataShipment = $dataShipment;
+        $this->view->dataGood = $dataGood;
+        $this->view->data = $data;
+     }
+
+
+     public function saveShipmentPhoneAction(){
+
+        $id = $this->getRequest()->getParam('id');
+        $id_shipment = $this->getRequest()->getParam('id_shipment');
+        $id_good = $this->getRequest()->getParam('id_good');
+        $price = $this->getRequest()->getParam('price');
+        $type  = $this->getRequest()->getParam('type');
+        $data = array(
+            'good_shipment_id' => $id_shipment,
+            'good_id'          => $id_good,
+            'price'            => $price,
+            'type'             => intval($type)
+        );
+
+        $QShipmentPhone = new Application_Model_GoodShipmentPhone();
+        if($id){
+            $where = $QShipmentPhone->getAdapter()->quoteInto('id = ?', $id);
+            $QShipmentPhone->update($data,$where);
+            $this->_redirect(HOST . 'sales/create-shipment-phone?id='.$id);
+        }
+        else{
+            $QShipmentPhone->insert($data);
+            $this->_redirect(HOST . 'sales/shipment-details?id='.$id_shipment);
+        }
+
+     }
+
+    public function shipmentDetailsAction(){
+        $id = $this->getRequest()->getParam('id');
+        $QShipment = new Application_Model_GoodShipment();
+        $where = $QShipment->getAdapter()->quoteInto('id = ?', $id);
+        $data = $QShipment->fetchRow($where);
+
+        $QShipmentPhone = new Application_Model_GoodShipmentPhone();
+        $dataPhone = $QShipmentPhone->getShipmentPhone($id);
+
+        $QGood = new Application_Model_Good();
+
+        foreach($dataPhone as $key=>$value){
+            $whereGood[] = $QGood->getAdapter()->quoteInto("id NOT IN (?)", (int)$value['id_good']);
+        }
+
+        if($dataPhone){
+            $dataGood = $QGood->fetchAll($whereGood);
+        }
+        else{
+            $dataGood = $QGood->fetchAll();
+        }
+
+        $this->view->dataGood = $dataGood;
+
+        $QShipmentAll = new Application_Model_GoodShipment();
+        $dataShipmentAll = $QShipmentAll->fetchAll();
+
+        $QGoodCategory = new Application_Model_GoodCategory();
+        $this->view->good_categories = $QGoodCategory->fetchAll();
+
+        $this->view->data = $data;
+        $this->view->dataPhone = $dataPhone;
+        $this->view->dataShipment = $dataShipmentAll;
+     }
+
+    public function checkPriceShipmentAction(){
+        $shipment_id = $this->getRequest()->getParam('shipment');
+        $good_id     = $this->getRequest()->getParam('good_id');
+        $price       = $this->getRequest()->getParam('price');
+
+        if ($shipment_id) {
+            $QGoodShipmentPhone = new Application_Model_GoodShipmentPhone();
+            $where_shipment[] = $QGoodShipmentPhone->getAdapter()->quoteInto('good_id = ?', $good_id);
+            $where_shipment[] = $QGoodShipmentPhone->getAdapter()->quoteInto('good_shipment_id = ?', $shipment_id);
+            $where_shipment[] = $QGoodShipmentPhone->getAdapter()->quoteInto('price = ?', $price);
+            $data = $QGoodShipmentPhone->fetchRow($where_shipment);
+
+            if($data){
+                echo "true";
+                exit;
+            }
+            else{
+                echo "false";
+                exit;
+            }
+
+        }
+        exit;
+     }
+
+//Tanong Get SalesOrderNo 20160313 1155
+    public function getSalesOrderNo()
+    {
+        $flashMessenger = $this->_helper->flashMessenger;    
+        $sales_order_sn='';
+    try {
+            $db = Zend_Registry::get('db');
+            $stmt = $db->prepare("CALL get_sales_order_sn()");
+            $stmt->execute();
+            $data = $stmt->fetchAll();
+            $sales_order_sn= $data[0]['sales_order_sn'];
+        }catch (exception $e) {
+            $flashMessenger->setNamespace('error')->addMessage('Cannot Get Sales Order No, please try again!');
+        }
+        return $sales_order_sn;
+    }
+
+    //Tanong Get SalesOrderNoRef 20160313 1155
+    public function getSalesOrderNo_Ref($sn)
+    {
+        $flashMessenger = $this->_helper->flashMessenger;
+        $sn_ref="";
+        try {
+            /*
+            $db = Zend_Registry::get('db');
+            $stmt = $db->prepare("CALL gen_running_no_ref('SO',".$sn.")");
+            $stmt->execute();
+            $result = $stmt->fetch();
+            $sn_ref = $result['running_no'];
+            */
+
+        }catch (exception $e) {
+            $flashMessenger->setNamespace('error')->addMessage('Cannot Get Sales Order No, please try again!');
+        }
+        return $sn_ref;
+    }
+
+    //Tanong Get SalesOrderNoRef 20160313 1155
+    public function getReturnOrderNo_Ref($sn)
+    {
+        $flashMessenger = $this->_helper->flashMessenger;
+    try {
+            
+            $db = Zend_Registry::get('db');
+            $stmt = $db->prepare("CALL gen_running_no_ref('RO',".$sn.")");
+            //$stmt = $db->prepare("CALL gen_running_no_ref('SO',201603121740314924)");
+            $stmt->execute();
+        }catch (exception $e) {
+            $flashMessenger->setNamespace('error')->addMessage('Cannot Get Sales Order No, please try again!');
+        }
+    }
+
+     //Tanong For Credit Note 20160311 1155
+    public function saveAPICreditNoteAction($db,$distributor_id,$sales_order,$creditnote_data)
+    {
+        $flashMessenger = $this->_helper->flashMessenger;
+        $status_sn='';
+        //return;
+        //print_r($creditnote_data);die;
+    try {
+            
+            $db = Zend_Registry::get('db');
+            $item_row=0;
+            if($creditnote_data=='no_discount')
+            {
+                $item_row=0;
+            }else{
+                $item_row = count($creditnote_data['ids_discount_creditnote']);
+            }
+            $creditnote_sn='';
+            if($item_row>0)
+            {
+                $CreditNote_new = array();$CreditNote_old = array();
+                for($i=0;$i<$item_row;$i++){
+                    $creditnote_sn=$creditnote_data['ids_discount_creditnote'][$i];
+                    $CreditNote_new[] = $creditnote_sn;
+                }
+
+                $QCreditNote = new Application_Model_CreditNote();
+                $CreditNote = $QCreditNote->getCredit_Note_By_SalesOrder($sales_order,$distributor_id);
+                foreach ($CreditNote as $cn){
+                    $creditnote_sn = $cn['creditnote_sn'];
+                    $CreditNote_old[] = $creditnote_sn;
+                }
+
+                $removed_ids = array_diff($CreditNote_old, $CreditNote_new);
+                if ($removed_ids)
+                {
+                    $QCreditNoteTran = new Application_Model_CreditNoteTran();
+                    $where   = array();
+                    $where[] = $QCreditNoteTran->getAdapter()->quoteInto('sales_order =?', $sales_order);
+                    $where[] = $QCreditNoteTran->getAdapter()->quoteInto('distributor_id =?', $distributor_id);
+                    $where = $QCreditNoteTran->getAdapter()->quoteInto('creditnote_sn =?', $removed_ids);
+                    $QCreditNoteTran->delete($where);
+                }
+
+                for($i=0;$i<$item_row;$i++){
+                    $creditnote_sn=$creditnote_data['ids_discount_creditnote'][$i];
+                    $use_total=$this->decimal_remove_comma($creditnote_data['price_use_discount_creditnote'][$i]);
+                    $balance_total=$creditnote_data['price_balance_discount_creditnote'][$i];
+                    $sales_order=$creditnote_data['sales_order'];
+                    $user_id=$creditnote_data['user_id'];
+                    $distributor_id=$creditnote_data['distributor_id'];
+
+                    //$stmt = $db->prepare("CALL update_credit_note_sn('1105','CP590325-00001',100,'201603252045563500','10',0,0)");
+                    /*
+                    $stmt = $db->prepare("CALL update_credit_note_sn('".$distributor_id."','".$creditnote_sn."',".$use_total.",'".$sales_order."','".$user_id."',0,0)");          
+                    $stmt->execute();
+                    */
+                    $db->query("CALL update_credit_note_sn('".$distributor_id."','".$creditnote_sn."',".$use_total.",'".$sales_order."','".$user_id."',0,0)");          
+                    //$stmt->execute();
+                    
+                }
+            }else{
+                   
+                $db->query("CALL update_credit_note_sn('".$distributor_id."','no_discount',0,'".$sales_order."','10',0,0)");
+                //$stmt->execute();
+                
+                //$stmt = $db->prepare("CALL update_credit_note_sn('1105','CP590325-00001',100,'201603252045563500','10',0,0)");
+                /* 
+                $stmt = $db->prepare("CALL update_credit_note_sn('".$distributor_id."','no_discount',0,'".$sales_order."','10',0,0)");
+                $stmt->execute();
+                */
+            }
+        }catch (exception $e) {
+            $flashMessenger->setNamespace('error')->addMessage('Cannot Create Credit Note, please try again!');
+        }
+        return $status_sn;
+    }
+
+    function decimal_remove_comma($priceFloat)
+    {
+        $price = str_replace(",","",$priceFloat);;
+        return $price;
+    }
+
+
+    function cal_sale_off_percent($sale_off_percent,$price,$num,$price_total){
+        if($sale_off_percent>0){
+            $price_sale_off = $price - (($price*$sale_off_percent/100)*100)/100;
+        }else{
+            $price_sale_off = $price;
+        }
+        return $price_sale_off;
+    }
+
+    function ext_vat($num){
+           return $num/1.07;
+    }
+    function format_number_4($num){
+       return $this->decimal_remove_comma(number_format($num, 4));
+    }
+     function format_number_2($num){
+       return $this->decimal_remove_comma(number_format($num, 2));
+    }
+
+    //Output VAT Report
+    private function _exportExcelOutputVat($sql) 
+    {
+        //print_r($sql);die;
+        // this function Copy from _exportExcel4 becuase cannot use PHPExcel here! //
+        $this->_helper->layout->disableLayout();
+        $this->_helper->viewRenderer->setNoRender(true);
+
+        $db = Zend_Registry::get('db');
+        set_time_limit(0);
+        error_reporting(~E_ALL);
+        ini_set('display_error', 0);
+        ini_set('memory_limit', -1);
+        $filename = 'Sell out List - OUTPUT VAT - '.date('d-m-Y H-i-s').'.csv';
+        // output headers so that the file is downloaded rather than displayed
+        while (@ob_end_clean());
+        ob_start();
+        header('Content-Encoding: UTF-8');
+        header('Content-Type: text/csv; charset=utf-8');
+        header('Content-Disposition: attachment; filename='.$filename);
+        $userStorage = Zend_Auth::getInstance()->getStorage()->read();
+        $file_path = APPLICATION_PATH.'/../public/files/sales/export/'.$userStorage->id.'/'.uniqid();
+        if (!file_exists($file_path))
+            mkdir($file_path, 0777, true);
+
+        $path = $file_path.'/'.$filename;
+        $output = fopen($path, 'w+');
+        echo "\xEF\xBB\xBF"; // UTF-8 BOM
+
+        $heads = array(
+            'INVOICE CREATE DATE',
+            'INVOICE NUMBER',
+            'COMPANY NAME',
+            'MST NUMBER',
+            'BRANCH TYPE',
+            'BRANCH NUMBER',
+            'TOTAL PRICE (EXCLUDE VAT)',
+            'TOTAL VAT',
+            'TOTAL PRICE (INCLUDE VAT)',
+            'CANCEL OR NOT',
+            'DELIVERY ADDRESS',
+            'CUSTOMER BRANDSHOP',
+            'SALES CATTY',
+            'TAX PO',
+            'Finance Group',
+            'SALE ORDER NUMBER',
+            'DISTRIBUTOR ID',
+            'DISTRIBUTOR CODE',
+            'DISTRIBUTOR NAME',
+            'PROVINCE'
+        );
+
+        fputcsv($output, $heads);
+
+        $QDistributor   = new Application_Model_Distributor();
+        $distributor_cache = $QDistributor->get_cache2();
+        $result = $db->query($sql);
+        $i = 2;
+
+        foreach($result as $item) {
+
+            $where_payment = $QDistributor->getAdapter()->quoteInto('id = ?', $item['d_id']);
+            $distributors_payment = $QDistributor->fetchRow($where_payment);
+            $rank = $distributors_payment->rank;
+
+             $product_qty        = $item['num'];
+            if ($distributor_cache[$item['d_id']]['parent'] == 0) { $branch_type = 'สำนักงานใหญ่'; }else { $branch_type = 'สาขา'; }
+            if ($item['canceled']== 1){$cancel = 'Canceled';}else{$cancel = 'Not Cancel';}
+            $row = array();
+            $row[] = $item['invoice_time'];
+            $row[] = $item['invoice_number'];
+            $row[] = $distributor_cache[$item['d_id']]['unames'];
+            $row[] = '="'.$distributor_cache[$item['d_id']]['mst_sn'].'"';
+            $row[] = $branch_type;
+            $row[] = '="'.$distributor_cache[$item['d_id']]['branch_no'].'"';
+
+            if($item['canceled']==1){
+                $row[]=0;
+                $row[]=0;
+                $row[]=0;
+            }else{
+
+                $sum_total_discount = 0;
+                date_default_timezone_set('Asia/Bangkok');
+                $date = new DateTime('2017-01-04 00:00:00');
+                $date_start= date_format($date,"Y-m-d H:i:s");
+
+                $date_outvat = new DateTime('2017-09-06 00:00:00');
+                $date_outvat_start= date_format($date_outvat,"Y-m-d H:i:s");
+
+                $date_order = $item['add_time'];
+                if($date_order < $date_start){
+                    if ($item['d_id']== '3691')
+                    {
+                        if ($item['cat_id']==11)
+                        {
+                           $total_discount = 1;
+                           $sum_total_discount = ($item['sum_total']*$total_discount)/100;
+                        }else{
+                           $sum_total_discount = 0;
+                        }                    
+                        
+                        $sum_total = $item['sum_total']-$sum_total_discount;
+                        $row[] = number_format( $sum_total, 2);//EXCLUDE VAT
+                        $row[] = number_format( ($sum_total * 1.07) - $sum_total, 2 ); // TOTAL VAT
+                        $row[] = number_format( $sum_total * 1.07, 2);  // INCLUDE VAT
+                    }else if ($item['d_id']== '3025' ){
+                        $total_discount = 1;
+                        $sum_total_discount = ($item['sum_total']*$total_discount)/100;                  
+                        
+                        $sum_total = $item['sum_total']-$sum_total_discount;
+                        $row[] = number_format( $sum_total, 2);//EXCLUDE VAT
+                        $row[] = number_format( ($sum_total * 1.07) - $sum_total, 2 ); // TOTAL VAT
+                        $row[] = number_format( $sum_total * 1.07, 2);  // INCLUDE VAT    
+                    }else if ($rank== '9') {
+                        $sum_total = $item['sum_total'];
+                        $row[] = number_format( $sum_total, 2);//EXCLUDE VAT
+                        $row[] = number_format( 0, 2 ); // TOTAL VAT
+                        $row[] = number_format( $sum_total, 2);  // INCLUDE VAT
+                    }else{
+                        $sum_total = $item['sum_total'];
+                        $row[] = number_format( $sum_total, 2);//EXCLUDE VAT
+                        $row[] = number_format( ($sum_total * 1.07) - $sum_total, 2 ); // TOTAL VAT
+                        $row[] = number_format( $sum_total * 1.07, 2);  // INCLUDE VAT  
+                    }
+                }else{
+
+                    if ($rank== '9') {  //ZT MOBILE (GONGPALAN)
+                        $sum_total = $item['sum_total'];
+                        $row[] = number_format( $sum_total, 2);//EXCLUDE VAT
+                        $row[] = number_format( 0, 2 ); // TOTAL VAT
+                        $row[] = number_format( $sum_total, 2);  // INCLUDE VAT
+                    }else if($item['sale_off_percent']>0){
+
+                        //$sum_total = round($item['sum_total']*$item['sale_off_percent']/100,2);
+                        $sum_total = $item['sum_total'];
+                        $row[] = number_format( $sum_total, 2);//EXCLUDE VAT
+                        $row[] = number_format( ($sum_total * 1.07) - $sum_total, 2 ); // TOTAL VAT
+                        $row[] = number_format( $sum_total * 1.07, 2);  // INCLUDE VAT 
+
+                    /*}else if($item['sale_off_percent']>0 && $item['for_partner'] !=2 && $item['type'] ==5 && $date_order > $date_outvat_start){
+
+                        $price_ext = $item['price'];
+                        $price = $this->cal_sale_off_percent($item['sale_off_percent'],$price_ext,$num,$item['total']);
+
+                        $price_in = $item['price'];
+                        $total_amount_ex_vat = $this->format_number_2($this->format_number_2($this->ext_vat($price))*$item['num']);
+                        $total_amount_in_vat = $this->format_number_2($item['total']);
+
+                        //$sum_total = round($item['sum_total']*$item['sale_off_percent']/100,2);
+                        $sum_total = $price;
+                        $row[] = number_format( $total_amount_ex_vat, 2);//EXCLUDE VAT
+                        $row[] = number_format( ($total_amount_ex_vat * 1.07) - $total_amount_ex_vat, 2 ); // TOTAL VAT
+                        $row[] = number_format( $total_amount_ex_vat+ ($total_amount_ex_vat * 1.07) - $total_amount_ex_vat, 2);  // INCLUDE VAT */
+        
+                    }else{
+                        
+                        $sum_total = $item['sum_total'];
+                        $row[] = number_format( $sum_total, 2);//EXCLUDE VAT
+                        $row[] = number_format( ($sum_total * 1.07) - $sum_total, 2 ); // TOTAL VAT
+                        $row[] = number_format( $sum_total * 1.07, 2);  // INCLUDE VAT
+                        
+
+                        /*
+                        $price_ext = $item['price'];
+                        $price = $this->cal_sale_off_percent($item['sale_off_percent'],$price_ext,$num,$item['total']);
+
+                        $price_in = $item['price'];
+                        $total_amount_ex_vat = $this->format_number_2($this->format_number_2($this->ext_vat($price))*$item['num']);
+                        $total_amount_in_vat = $this->format_number_2($item['total']);
+
+                        //$sum_total = round($item['sum_total']*$item['sale_off_percent']/100,2);
+                        $sum_total = $price;
+                        $row[] = number_format( $total_amount_ex_vat, 2);//EXCLUDE VAT
+                        $row[] = number_format( ($total_amount_ex_vat * 1.07) - $total_amount_ex_vat, 2 ); // TOTAL VAT
+                        $row[] = number_format( $total_amount_ex_vat+ ($total_amount_ex_vat * 1.07) - $total_amount_ex_vat, 2);  // INCLUDE VAT 
+                        */
+
+
+
+                    }
+                }
+                
+            }
+
+            $row[] = $cancel;
+            $row[] = $item['delivery_address'];
+            $row[] = $item['customer_name'];
+            $row[] = $item['sales_catty_name'];
+            $row[] = $item['tax_po'];
+            $row[] = $item['finance_group'];
+
+            if (is_null($item['sn_ref']) || $item['sn_ref'] == '') { $temp_sn = $item['sn']; } 
+            else { $temp_sn = $item['sn_ref']; }
+
+            $row[] = $temp_sn;
+            $row[] = $distributor_cache[$item['d_id']]['d_id'];
+            $row[] = $distributor_cache[$item['d_id']]['code'];
+            $row[] = $distributor_cache[$item['d_id']]['title'];
+            $row[] = My_Region::getValue($distributor_cache[$item['d_id']]['district'], My_Region::Province);
+
+            fputcsv($output, $row);
+            unset($item);
+            unset($row);
+        
+        }
+        fclose($output);
+
+        ob_flush();
+        ob_start();
+        while (@ob_end_flush());
+
+        header('Expires: 0');
+        header('Cache-Control: must-revalidate');
+        header('Pragma: public');
+        header('Content-Length: ' . filesize($path));
+        readfile($path);
+        exit;
+
+        $file = fopen($path, 'r');
+        $content = fread($file, filesize($path));
+        var_dump(filesize($path));
+        var_dump($content);
+
+        exit;
+    }
+
+    //Cash Collection
+    private function _exportExcelCashCollection($sql) 
+    {
+
+        // this function Copy from _exportExcel4 becuase cannot use PHPExcel here! //
+        $this->_helper->layout->disableLayout();
+        $this->_helper->viewRenderer->setNoRender(true);
+        //print_r($sql);die;
+        $db = Zend_Registry::get('db');
+        set_time_limit(0);
+        error_reporting(~E_ALL);
+        ini_set('display_error', 0);
+        ini_set('memory_limit', -1);
+        $filename = 'Sell out List - Cash Collection - '.date('d-m-Y H-i-s').'.csv';
+        // output headers so that the file is downloaded rather than displayed
+        while (@ob_end_clean());
+        ob_start();
+        header('Content-Encoding: UTF-8');
+        header('Content-Type: text/csv; charset=utf-8');
+        header('Content-Disposition: attachment; filename='.$filename);
+        $userStorage = Zend_Auth::getInstance()->getStorage()->read();
+        $file_path = APPLICATION_PATH.'/../public/files/sales/export/'.$userStorage->id.'/'.uniqid();
+        if (!file_exists($file_path))
+            mkdir($file_path, 0777, true);
+
+        $path = $file_path.'/'.$filename;
+        $output = fopen($path, 'w+');
+        echo "\xEF\xBB\xBF"; // UTF-8 BOM
+
+        $heads = array(
+            'INVOICE CREATE DATE',
+            'INVOICE NUMBER',
+            'COMPANY NAME',
+            'MST NUMBER',
+            'BRANCH TYPE',
+            'BRANCH NUMBER',
+            'TOTAL PRICE (EXCLUDE VAT)',
+            'TOTAL VAT',
+            'TOTAL PRICE (INCLUDE VAT)',
+            'CANCEL OR NOT',
+            'DELIVERY ADDRESS',
+            'CUSTOMER BRANDSHOP',
+            'SALES CATTY',
+            'TAX PO',
+            'Finance Group'
+        );
+
+        fputcsv($output, $heads);
+
+        $QDistributor   = new Application_Model_Distributor();
+        $distributor_cache = $QDistributor->get_cache2();
+        $result = $db->query($sql);
+        $i = 2;
+
+        foreach($result as $item) {
+             $product_qty        = $item['num'];
+            if ($distributor_cache[$item['d_id']]['parent'] == 0) { $branch_type = 'สำนักงานใหญ่'; }else { $branch_type = 'สาขา'; }
+            if ($item['canceled']== 1){$cancel = 'Canceled';}else{$cancel = 'Not Cancel';}
+            $row = array();
+            $row[] = $item['invoice_time'];
+            $row[] = $item['invoice_number'];
+            $row[] = $distributor_cache[$item['d_id']]['unames'];
+            $row[] = '="'.$distributor_cache[$item['d_id']]['mst_sn'].'"';
+            $row[] = $branch_type;
+            $row[] = '="'.$distributor_cache[$item['d_id']]['branch_no'].'"';
+
+                
+            if($item['canceled']==1){
+                $row[]=0;
+                $row[]=0;
+                $row[]=0;
+            }else{
+
+                $sum_total_discount = 0;
+                date_default_timezone_set('Asia/Bangkok');
+                $date = new DateTime('2017-01-04 00:00:00');
+                $date_start= date_format($date,"Y-m-d H:i:s");
+                $date_order = $item['add_time'];
+                if($date_order < $date_start){
+                    if ($item['d_id']== '3691') // บุญชัย
+                    {
+                        if ($item['cat_id']==11)
+                        {
+                           $total_discount = 1;
+                           $sum_total_discount = ($item['sum_total']*$total_discount)/100;
+                        }else{
+                           $sum_total_discount = 0;
+                        }                    
+                        
+                        $sum_total = $item['sum_total']-$sum_total_discount;
+                        $row[] = number_format( $sum_total, 2);//EXCLUDE VAT
+                        $row[] = number_format( ($sum_total * 1.07) - $sum_total, 2 ); // TOTAL VAT
+                        $row[] = number_format( $sum_total * 1.07, 2);  // INCLUDE VAT
+                    }else if ($item['d_id']== '3025' ) // Com 7
+                    {
+                        $total_discount = 1;
+                        $sum_total_discount = ($item['sum_total']*$total_discount)/100;                  
+                        
+                        $sum_total = $item['sum_total']-$sum_total_discount;
+                        $row[] = number_format( $sum_total, 2);//EXCLUDE VAT
+                        $row[] = number_format( ($sum_total * 1.07) - $sum_total, 2 ); // TOTAL VAT
+                        $row[] = number_format( $sum_total * 1.07, 2);  // INCLUDE VAT    
+                    }else if ($item['d_id']== '21088') {
+                        $sum_total = $item['sum_total'];
+                        $row[] = number_format( $sum_total, 2);//EXCLUDE VAT
+                        $row[] = number_format( 0, 2 ); // TOTAL VAT
+                        $row[] = number_format( $sum_total, 2);  // INCLUDE VAT
+                    }else{
+                        $sum_total = $item['sum_total'];
+                        $row[] = number_format( $sum_total, 2);//EXCLUDE VAT
+                        $row[] = number_format( ($sum_total * 1.07) - $sum_total, 2 ); // TOTAL VAT
+                        $row[] = number_format( $sum_total * 1.07, 2);  // INCLUDE VAT  
+                    }
+                }else{
+                        $sum_total = $item['sum_total'];
+                        $row[] = number_format( $sum_total, 2);//EXCLUDE VAT
+                        $row[] = number_format( ($sum_total * 1.07) - $sum_total, 2 ); // TOTAL VAT
+                        $row[] = number_format( $sum_total * 1.07, 2);  // INCLUDE VAT  
+                }
+
+                
+            }
+
+            $row[] = $cancel;
+            $row[] = $item['delivery_address'];
+            $row[] = $item['customer_name'];
+            $row[] = $item['sales_catty_name'];
+            $row[] = $item['tax_po'];
+            $row[] = $item['finance_group'];
+            fputcsv($output, $row);
+            unset($item);
+            unset($row);
+        
+        }
+        fclose($output);
+
+        ob_flush();
+        ob_start();
+        while (@ob_end_flush());
+
+        header('Expires: 0');
+        header('Cache-Control: must-revalidate');
+        header('Pragma: public');
+        header('Content-Length: ' . filesize($path));
+        readfile($path);
+        exit;
+
+        $file = fopen($path, 'r');
+        $content = fread($file, filesize($path));
+        var_dump(filesize($path));
+        var_dump($content);
+
+        exit;
+    }
+
+    private function _exportExcelOrderStatus($sql) {
+
+        // this function Copy from _exportExcel4 becuase cannot use PHPExcel here! //
+        $this->_helper->layout->disableLayout();
+        $this->_helper->viewRenderer->setNoRender(true);
+
+        $db = Zend_Registry::get('db');
+        set_time_limit(0);
+        error_reporting(~E_ALL);
+        ini_set('display_error', 0);
+        ini_set('memory_limit', -1);
+        $filename = 'Order Status - '.date('d-m-Y H-i-s').'.csv';
+        // output headers so that the file is downloaded rather than displayed
+        while (@ob_end_clean());
+        ob_start();
+        header('Content-Encoding: UTF-8');
+        header('Content-Type: text/csv; charset=utf-8');
+        header('Content-Disposition: attachment; filename='.$filename);
+        $userStorage = Zend_Auth::getInstance()->getStorage()->read();
+        $file_path = APPLICATION_PATH.'/../public/files/sales/export/'.$userStorage->id.'/'.uniqid();
+        if (!file_exists($file_path))
+            mkdir($file_path, 0777, true);
+
+
+        $path = $file_path.'/'.$filename;
+        $output = fopen($path, 'w+');
+        echo "\xEF\xBB\xBF"; // UTF-8 BOM
+
+        $heads = array(
+            'SALE ORDER NUMBER',
+            'INVOICE NUMBER',
+            'DISTRIBUTOR ID',
+            'DISTRIBUTOR NAME',
+            'AREA',
+            'PROVINCE',
+            'DISTRICT',
+            'TOTAL',
+            'PAID DATETIME',
+            'SHIPPING DATETIME',
+            'STOCKOUT DATETIME',
+            'MONEYCHECK DATETIME'
+        );
+
+        fputcsv($output, $heads);
+
+        $QDistributor   = new Application_Model_Distributor();
+        $distributor_cache = $QDistributor->get_cache2();
+
+        $result = $db->query($sql);
+        //print_r($result);die;
+        $i = 2;
+
+        foreach($result as $item) {
+
+            if (is_null($item['sn_ref']) || $item['sn_ref'] == '') { $temp_sn = $item['sn']; } 
+            else { $temp_sn = $item['sn_ref']; }
+
+            $row = array();
+            $row[] = '="'.$temp_sn.'"';
+            $row[] = $item['invoice_number'];
+            $row[] = $distributor_cache[$item['d_id']]['code'];
+            $row[] = $distributor_cache[$item['d_id']]['title'];
+            $row[] = My_Region::getValue($distributor_cache[$item['d_id']]['district'], My_Region::Area);
+            $row[] = My_Region::getValue($distributor_cache[$item['d_id']]['district'], My_Region::Province);
+            $row[] = My_Region::getValue($distributor_cache[$item['d_id']]['district'], My_Region::District);
+            $row[] = number_format($item['sum_total'], 2);
+            $row[] = $item['pay_time'];
+            $row[] = $item['shipping_yes_time'];
+            $row[] = $item['outmysql_time'];
+            $row[] = $item['checkmoney_create_at'];
+
+            fputcsv($output, $row);
+            unset($item);
+            unset($row);
+        }
+
+        fclose($output);
+
+        ob_flush();
+        ob_start();
+        while (@ob_end_flush());
+
+        header('Expires: 0');
+        header('Cache-Control: must-revalidate');
+        header('Pragma: public');
+        header('Content-Length: ' . filesize($path));
+        readfile($path);
+        exit;
+
+        $file = fopen($path, 'r');
+        $content = fread($file, filesize($path));
+        var_dump(filesize($path));
+        var_dump($content);
+
+        exit;
+    }
+
+private function _exportExcelByProvince($sql) {
+
+        // this function Copy from _exportExcel4 becuase cannot use PHPExcel here! //
+        $this->_helper->layout->disableLayout();
+        $this->_helper->viewRenderer->setNoRender(true);
+
+        $db = Zend_Registry::get('db');
+        set_time_limit(0);
+        error_reporting(~E_ALL);
+        ini_set('display_error', 0);
+        ini_set('memory_limit', -1);
+        $filename = 'Sell out By Province - '.date('d-m-Y H-i-s').'.csv';
+        // output headers so that the file is downloaded rather than displayed
+        while (@ob_end_clean());
+        ob_start();
+        header('Content-Encoding: UTF-8');
+        header('Content-Type: text/csv; charset=utf-8');
+        header('Content-Disposition: attachment; filename='.$filename);
+        $userStorage = Zend_Auth::getInstance()->getStorage()->read();
+        $file_path = APPLICATION_PATH.'/../public/files/sales/export/'.$userStorage->id.'/'.uniqid();
+        if (!file_exists($file_path))
+            mkdir($file_path, 0777, true);
+
+
+        $path = $file_path.'/'.$filename;
+        $output = fopen($path, 'w+');
+        echo "\xEF\xBB\xBF"; // UTF-8 BOM
+
+
+        $heads = array(
+            /*
+            'SALE ORDER NUMBER',
+            'INVOICE NUMBER',
+            'RETAILER ID',
+            'RETAILER NAME',
+            'Company NAME',
+            'MST NAME',
+            'BRANCH TYPE',
+            'BRANCH NUMBER',*/
+            'AREA',
+            'PROVINCE',
+            'DISTRICT',
+            'PRODUCT TYPE',
+            'PRODUCT NAME',
+            'PRODUCT COLOR',
+            'SALES QUANTITY',
+            'SET OFF (%)',
+            'UNIT PRICE EX',
+            'TOTAL EX',
+            'DELIVERY FEE',
+            'UNIT PRICE',
+            'TOTAL',
+            /*
+            'PAID DATETIME',
+            'SHIPPING DATETIME',
+            'WAREHOUSE',
+            'STOCKOUT DATETIME',
+            'STATUS',
+            'SALE ORDER TIME',
+            'CUSTOMER ORDER TYPE',
+            'ORDER DESCRIPTION'*/
+            );
+
+        fputcsv($output, $heads);
+
+        $QGood          = new Application_Model_Good();
+        $QGoodColor     = new Application_Model_GoodColor();
+        $QGoodCategory  = new Application_Model_GoodCategory();
+        $QDistributor   = new Application_Model_Distributor();
+        $QWarehouse     = new Application_Model_Warehouse();
+
+        $goods             = $QGood->get_cache();
+        $goodColors        = $QGoodColor->get_cache();
+        $good_categories   = $QGoodCategory->get_cache();
+        $distributor_cache = $QDistributor->get_cache2();
+        $warehouses        = $QWarehouse->get_cache();
+
+        $result = $db->query($sql);
+        //print_r($result);die;
+        $i = 2;
+
+        foreach($result as $item) {
+
+            if (is_null($item['sn_ref']) || $item['sn_ref'] == '') { $temp_sn = $item['sn']; } 
+            else { $temp_sn = $item['sn_ref']; }
+
+            if ($item['status'] == 1) { $temp_status = 'Actived'; }
+            else if ($item['status'] == 2) { $temp_status = 'Expired'; }
+            else { $temp_status = 'Expired'; }
+
+            if ($item['type'] == 1) //for retailer
+                $type = 'For Retailer';
+            elseif ($item['type'] == 2) //for demo
+                $type = 'For Demo';
+            elseif ($item['type'] == 3) //for staffs
+                $type = 'For Staffs';
+            elseif ($item['type'] == 4) //for lending
+                $type = 'For Lending';
+            elseif ($item['type'] == 5) //for APK
+                $type = 'For APK';    
+
+            if ($distributor_cache[$item['d_id']]['parent'] == 0) { $branch_type = 'สำนักงานใหญ่'; }
+            else { $branch_type = 'สาขา'; }
+
+            $row = array();
+            /*
+            $row[] = '="'.$temp_sn.'"';
+            $row[] = $item['invoice_number'];
+            $row[] = $distributor_cache[$item['d_id']]['code'];
+            $row[] = $distributor_cache[$item['d_id']]['title'];
+            $row[] = $distributor_cache[$item['d_id']]['unames'];
+            $row[] = '="'.$distributor_cache[$item['d_id']]['mst_sn'].'"';
+            $row[] = $branch_type;
+            $row[] = '="'.$distributor_cache[$item['d_id']]['branch_no'].'"';*/
+            $row[] = My_Region::getValue($distributor_cache[$item['d_id']]['district'], My_Region::Area);
+            $row[] = My_Region::getValue($distributor_cache[$item['d_id']]['district'], My_Region::Province);
+            $row[] = My_Region::getValue($distributor_cache[$item['d_id']]['district'], My_Region::District);
+            $row[] = $good_categories[$item['cat_id']];
+            $row[] = $goods[$item['good_id']];
+            $row[] = $goodColors[$item['good_color']];
+            $row[] = $item['sum_num'];
+
+            $row[] = $item['sale_off_percent'];
+            $row[] = number_format($item['sum_price'] / 1.07, 2);
+            $row[] = number_format($item['sum_total'] / 1.07, 2);
+            $row[] = !is_null($item['delivery_fee']) ? $item['delivery_fee'] : 0;
+
+            $row[] = number_format($item['sum_price'], 2);
+            $row[] = number_format($item['sum_total'], 2);
+            /*
+            $row[] = $item['pay_time'];
+            $row[] = $item['shipping_yes_time'];
+            $row[] = $warehouses[$item['warehouse_id']];
+            $row[] = $item['outmysql_time'];
+            $row[] = $temp_status;
+            $row[] = $item['add_time'];
+            $row[] = $type;
+            $row[] = $item['text'];*/
+
+            fputcsv($output, $row);
+            unset($item);
+            unset($row);
+        }
+
+        fclose($output);
+
+        ob_flush();
+        ob_start();
+        while (@ob_end_flush());
+
+        header('Expires: 0');
+        header('Cache-Control: must-revalidate');
+        header('Pragma: public');
+        header('Content-Length: ' . filesize($path));
+        readfile($path);
+        exit;
+
+        $file = fopen($path, 'r');
+        $content = fread($file, filesize($path));
+        var_dump(filesize($path));
+        var_dump($content);
+
+        exit;
+
+    }
+    //Sale Master Data
+
+    private function _exportExcelByModel($sql) {
+
+        // this function Copy from _exportExcel4 becuase cannot use PHPExcel here! //
+        $this->_helper->layout->disableLayout();
+        $this->_helper->viewRenderer->setNoRender(true);
+
+        $db = Zend_Registry::get('db');
+        set_time_limit(0);
+        error_reporting(~E_ALL);
+        ini_set('display_error', 0);
+        ini_set('memory_limit', -1);
+        $filename = 'Export By Model - '.date('d-m-Y H-i-s').'.csv';
+        // output headers so that the file is downloaded rather than displayed
+        while (@ob_end_clean());
+        ob_start();
+        header('Content-Encoding: UTF-8');
+        header('Content-Type: text/csv; charset=utf-8');
+        header('Content-Disposition: attachment; filename='.$filename);
+        $userStorage = Zend_Auth::getInstance()->getStorage()->read();
+        $file_path = APPLICATION_PATH.'/../public/files/sales/export/'.$userStorage->id.'/'.uniqid();
+        if (!file_exists($file_path))
+            mkdir($file_path, 0777, true);
+
+
+        $path = $file_path.'/'.$filename;
+        $output = fopen($path, 'w+');
+        echo "\xEF\xBB\xBF"; // UTF-8 BOM
+
+        $heads = array(
+            'SALE ORDER NUMBER',
+            'INVOICE NUMBER',
+            'DISTRIBUTOR ID',
+            'DISTRIBUTOR NAME',
+            'GRAND AREA',
+            'AREA',
+            'PROVINCE',
+            'DISTRICT',
+            'QUANTITY',
+            'TOTAL',
+            'SALES CONFIRM',
+            'PAID DATETIME',
+            'SHIPPING DATETIME',
+            'STOCKOUT DATETIME',
+            'FINANCE GROUP',
+            'CHANNEL TYPE'
+        );
+
+        fputcsv($output, $heads);
+
+        $QDistributor   = new Application_Model_Distributor();
+        $distributor_cache = $QDistributor->get_cache2();
+
+        $result = $db->query($sql);
+        //print_r($result);die;
+        $i = 2;
+
+        // $grand_e1 = array(73,81,82,83,84);
+        // $grand_e2 = array(74,80,85,86,87,88,89);
+        // $grand_e3 = array(77,90,91,92,93);
+        // $grand_e4 = array(79,94,95,96,97,109);
+        // $grand_w1 = array(75,98,99,100,101,102);
+        // $grand_w2 = array(76,78,103,104,105,106,107,108);
+
+        $grand_e1 = array(81,82,83);
+        $grand_e2 = array(85,86,87,115);
+        $grand_e3 = array(90,91,92,93,113);
+        $grand_e4 = array(94,95,96);
+        $grand_e5 = array(88,89,117);
+        $grand_e6 = array(110,111,112);
+        $grand_e7 = array(97,109);
+        $grand_w1 = array(98,99,100,101,102,114);
+        $grand_w2 = array(103,104,105,116);
+        $grand_w3 = array(106,107,108);
+
+        foreach($result as $item) {
+
+            if (is_null($item['sn_ref']) || $item['sn_ref'] == '') { $temp_sn = $item['sn']; } 
+            else { $temp_sn = $item['sn_ref']; }
+
+            $excel_area_name = My_Region::getValue($distributor_cache[$item['d_id']]['district'], My_Region::Area);
+
+            $excel_area_id = My_Region::getValue($distributor_cache[$item['d_id']]['district'], My_Region::Area, My_Region::ID);
+
+            // if ( in_array($excel_area_id, $grand_e1) ) { $grand_area = 'BKK East-1'; } 
+            // else if ( in_array($excel_area_id, $grand_e2) ) { $grand_area = 'BKK East-2'; }
+            // else if ( in_array($excel_area_id, $grand_e3) ) { $grand_area = 'BKK East-3'; }
+            // else if ( in_array($excel_area_id, $grand_e4) ) { $grand_area = 'BKK East-4'; }
+            // else if ( in_array($excel_area_id, $grand_w1) ) { $grand_area = 'BKK West-1'; }
+            // else if ( in_array($excel_area_id, $grand_w2) ) { $grand_area = 'BKK West-2'; }
+            // else { $grand_area = $excel_area_name; }
+
+            if ( in_array($excel_area_id, $grand_e1) ) { $grand_area = 'BKK East-1'; } 
+            else if ( in_array($excel_area_id, $grand_e2) ) { $grand_area = 'BKK East-2'; }
+            else if ( in_array($excel_area_id, $grand_e3) ) { $grand_area = 'BKK East-3'; }
+            else if ( in_array($excel_area_id, $grand_e4) ) { $grand_area = 'BKK East-4'; }
+            else if ( in_array($excel_area_id, $grand_e5) ) { $grand_area = 'BKK East-5'; }
+            else if ( in_array($excel_area_id, $grand_e6) ) { $grand_area = 'BKK East-6'; }
+            else if ( in_array($excel_area_id, $grand_e7) ) { $grand_area = 'BKK East-7'; }
+            else if ( in_array($excel_area_id, $grand_w1) ) { $grand_area = 'BKK West-1'; }
+            else if ( in_array($excel_area_id, $grand_w2) ) { $grand_area = 'BKK West-2'; }
+            else if ( in_array($excel_area_id, $grand_w3) ) { $grand_area = 'BKK West-3'; }
+            else { $grand_area = $excel_area_name; }
+
+            $row = array();
+            $row[] = '="'.$temp_sn.'"';
+            $row[] = $item['invoice_number'];
+            $row[] = $distributor_cache[$item['d_id']]['code'];
+            $row[] = $distributor_cache[$item['d_id']]['title'];
+            $row[] = $grand_area;
+            $row[] = $excel_area_name;
+            $row[] = My_Region::getValue($distributor_cache[$item['d_id']]['district'], My_Region::Province);
+            $row[] = My_Region::getValue($distributor_cache[$item['d_id']]['district'], My_Region::District);
+            $row[] = number_format($item['sum_num'], 2);
+            $row[] = number_format($item['sum_total'], 2);
+            $row[] = $item['sales_confirm_date'];
+            $row[] = $item['pay_time'];
+            $row[] = $item['shipping_yes_time'];
+            $row[] = $item['outmysql_time'];
+            $row[] = $item['finance_group'];
+
+            $channel_type = '';
+            switch (isset($item['quota_channel'])) {
+                case '10':
+                    $channel_type = 'Brand Shop By Dealer';
+                    break;
+            }
+            $row[] = $channel_type;
+
+            fputcsv($output, $row);
+            unset($item);
+            unset($row);
+        }
+
+        fclose($output);
+
+        ob_flush();
+        ob_start();
+        while (@ob_end_flush());
+
+        header('Expires: 0');
+        header('Cache-Control: must-revalidate');
+        header('Pragma: public');
+        header('Content-Length: ' . filesize($path));
+        readfile($path);
+        exit;
+
+        $file = fopen($path, 'r');
+        $content = fread($file, filesize($path));
+        var_dump(filesize($path));
+        var_dump($content);
+
+        exit;
+    }
+
+    private function _exportExcelOutputVatImei($sql) {
+
+        // this function Copy from _exportExcel4 becuase cannot use PHPExcel here! //
+        $this->_helper->layout->disableLayout();
+        $this->_helper->viewRenderer->setNoRender(true);
+
+        $db = Zend_Registry::get('db');
+        set_time_limit(0);
+        error_reporting(~E_ALL);
+        ini_set('display_error', 0);
+        ini_set('memory_limit', -1);
+        $filename = 'Sale Master Data List - '.date('d-m-Y H-i-s').'.csv';
+        // output headers so that the file is downloaded rather than displayed
+        while (@ob_end_clean());
+        ob_start();
+        header('Content-Encoding: UTF-8');
+        header('Content-Type: text/csv; charset=utf-8');
+        header('Content-Disposition: attachment; filename='.$filename);
+        $userStorage = Zend_Auth::getInstance()->getStorage()->read();
+        $file_path = APPLICATION_PATH.'/../public/files/sales/export/'.$userStorage->id.'/'.uniqid();
+        if (!file_exists($file_path))
+            mkdir($file_path, 0777, true);
+
+
+        $path = $file_path.'/'.$filename;
+        $output = fopen($path, 'w+');
+        echo "\xEF\xBB\xBF"; // UTF-8 BOM
+
+
+        $heads = array(
+            'SALE ORDER NUMBER',
+            'INVOICE NUMBER',
+            'DISTRIBUTOR ID',
+            'DISTRIBUTOR NAME',
+            'Company NAME',
+            'MST NAME',
+            'BRANCH TYPE',
+            'BRANCH NUMBER',
+            'AREA',
+            'PROVINCE',
+            'DISTRICT',
+            'PRODUCT TYPE',
+            'PRODUCT NAME',
+            'PRODUCT COLOR',
+            'SALES QUANTITY',
+            'IMEI',
+            'SET OFF (%)',
+            'UNIT PRICE EX',
+            'TOTAL EX',
+            'DELIVERY FEE',
+            'UNIT PRICE',
+            'TOTAL',
+            'PAID DATETIME',
+            'SHIPPING DATETIME',
+            'WAREHOUSE',
+            'STOCKOUT DATETIME',
+            'STATUS',
+            'SALE ORDER TIME',
+            'CUSTOMER ORDER TYPE',
+            'ORDER DESCRIPTION');
+
+        fputcsv($output, $heads);
+
+        $QGood          = new Application_Model_Good();
+        $QGoodColor     = new Application_Model_GoodColor();
+        $QGoodCategory  = new Application_Model_GoodCategory();
+        $QDistributor   = new Application_Model_Distributor();
+        $QWarehouse     = new Application_Model_Warehouse();
+
+        $goods             = $QGood->get_cache();
+        $goodColors        = $QGoodColor->get_cache();
+        $good_categories   = $QGoodCategory->get_cache();
+        $distributor_cache = $QDistributor->get_cache2();
+        $warehouses        = $QWarehouse->get_cache();
+
+        $result = $db->query($sql);
+        //print_r($result);die;
+        $i = 2;
+
+        foreach($result as $item) {
+
+            if (is_null($item['sn_ref']) || $item['sn_ref'] == '') { $temp_sn = $item['sn']; } 
+            else { $temp_sn = $item['sn_ref']; }
+
+            if ($item['status'] == 1) { $temp_status = 'Actived'; }
+            else if ($item['status'] == 2) { $temp_status = 'Expired'; }
+            else { $temp_status = 'Expired'; }
+
+            if ($item['type'] == 1) //for retailer
+                $type = 'For Retailer';
+            elseif ($item['type'] == 2) //for demo
+                $type = 'For Demo';
+            elseif ($item['type'] == 3) //for staffs
+                $type = 'For Staffs';
+            elseif ($item['type'] == 4) //for lending
+                $type = 'For Lending';
+            elseif ($item['type'] == 5) //for APK
+                $type = 'For APK';    
+
+            if ($distributor_cache[$item['d_id']]['parent'] == 0) { $branch_type = 'สำนักงานใหญ่'; }
+            else { $branch_type = 'สาขา'; }
+
+            $row = array();
+            $row[] = '="'.$temp_sn.'"';
+            $row[] = $item['invoice_number'];
+            $row[] = $distributor_cache[$item['d_id']]['code'];
+            $row[] = $distributor_cache[$item['d_id']]['title'];
+            $row[] = $distributor_cache[$item['d_id']]['unames'];
+            $row[] = '="'.$distributor_cache[$item['d_id']]['mst_sn'].'"';
+            $row[] = $branch_type;
+            $row[] = '="'.$distributor_cache[$item['d_id']]['branch_no'].'"';
+            $row[] = My_Region::getValue($distributor_cache[$item['d_id']]['district'], My_Region::Area);
+            $row[] = My_Region::getValue($distributor_cache[$item['d_id']]['district'], My_Region::Province);
+            $row[] = My_Region::getValue($distributor_cache[$item['d_id']]['district'], My_Region::District);
+            $row[] = $good_categories[$item['cat_id']];
+            $row[] = $goods[$item['good_id']];
+            $row[] = $goodColors[$item['good_color']];
+            //$row[] = $item['num'];
+            if ($item['cat_id'] == PHONE_CAT_ID) { $row[] = '1'; } 
+            else { $row[] = $item['num']; } 
+            $row[] = $item['imei_sn'];
+
+            $row[] = $item['sale_off_percent'];
+            $row[] = number_format($item['price'] / 1.07, 2);
+            $row[] = number_format($item['total'] / 1.07, 2);
+            $row[] = !is_null($item['delivery_fee']) ? $item['delivery_fee'] : 0;
+
+            $row[] = number_format($item['price'], 2);
+            $row[] = number_format($item['total'], 2);
+            $row[] = $item['pay_time'];
+            $row[] = $item['shipping_yes_time'];
+            $row[] = $warehouses[$item['warehouse_id']];
+            $row[] = $item['outmysql_time'];
+            $row[] = $temp_status;
+            $row[] = $item['add_time'];
+            $row[] = $type;
+            $row[] = $item['text'];
+
+            fputcsv($output, $row);
+            unset($item);
+            unset($row);
+        }
+
+        fclose($output);
+
+        ob_flush();
+        ob_start();
+        while (@ob_end_flush());
+
+        header('Expires: 0');
+        header('Cache-Control: must-revalidate');
+        header('Pragma: public');
+        header('Content-Length: ' . filesize($path));
+        readfile($path);
+        exit;
+
+        $file = fopen($path, 'r');
+        $content = fread($file, filesize($path));
+        var_dump(filesize($path));
+        var_dump($content);
+
+        exit;
+
+    }
+
+    public function salesConfirmAccessoriesOrderAction()
+    {
+        // print_r($_POST);die;
+        $sn = $this->getRequest()->getParam('sn');
+        $flashMessenger = $this->_helper->flashMessenger;
+
+        $messages = $flashMessenger->setNamespace('error')->getMessages();
+        $this->view->messages = $messages;
+
+        $userStorage = Zend_Auth::getInstance()->getStorage()->read();
+
+        if ($sn) {
+
+            $db = Zend_Registry::get('db');
+            $QMarket = new Application_Model_Market();
+            $where = array();
+            $where[] = $QMarket->getAdapter()->quoteInto('sn = ?', $sn);
+            $where[] = $QMarket->getAdapter()->quoteInto('status = ?', 1);
+
+            $sales = $QMarket->fetchAll($where);
+
+            //check
+            if (!$sales) {
+                $flashMessenger->setNamespace('error')->addMessage('Invalid SN!');
+                $this->_redirect('/sales');
+            }
+
+            if (!isset($sales[0]) || ($sales[0]['shipping_yes_time'] and $sales[0]['pay_time'])) {
+
+                $flashMessenger->setNamespace('error')->addMessage('This order cannot be changed!');
+
+                $this->_redirect('/sales');
+
+            }
+
+            $QMarketProduct = new Application_Model_MarketProduct();
+            $QMarket = new Application_Model_Market();
+            //Tiền đi đơn nếu có bảo vệ giá thì đã trừ tiền
+            $sn_total = 0;
+            $intRebate = intval($QMarketProduct->getPrice($sn)); // số tiền được giảm
+            //$sn_total = $total_amount - $intRebate; // số tiền còn lại
+            $sn_total = $QMarket->getPrice($sn) - $intRebate; // số tiền còn lại
+
+            $strNoteRebate = '';
+            if ($intRebate > 0) {
+                $strNoteRebate = ', rebate: ' . $intRebate;
+            }
+
+            if($sales[0]['office']){
+                $selectArea = $db->select()
+                    ->from(array('a'=>'office'),array('a.*'))
+                    ->where('a.id = ?',$sales[0]['office']);
+                ;
+                $office_area = $db->fetchRow($selectArea);
+                $this->view->office_area = $office_area;
+            }
+
+            //Store account
+            $QStoreaccount = new Application_Model_Storeaccount();
+            $QDistributor  = new Application_Model_Distributor();
+            $QCampaign     = new Application_Model_Campaign();
+
+            //lấy dealer mẹ
+            $main_retailer                   = $QDistributor->getRootDistributor($sales[0]['d_id']);
+            $this->view->main_retailer       = $main_retailer;
+            $total_balance_row               = $QStoreaccount->getBalanceByGroup($sales[0]['d_id']);
+            $distributor_balance_row         = $QStoreaccount->getBalance($sales[0]['d_id']);
+
+            $selectCompany = $db->select()
+                ->from(array('p'=>'warehouse'),array('p.company_id'))
+                ->where('id = ?',$sales[0]['warehouse_id']);
+            $company_id = $db->fetchOne($selectCompany);
+
+            $remain_balance                  = ($company_id == 1) ? $total_balance_row['balance'] : $total_balance_row['balance_smartmobile'];
+            $distributor_balance             = ($company_id == 1) ? $distributor_balance_row['balance'] : $distributor_balance_row['balance_smartmobile'];
+            $this->view->distributor_balance = $distributor_balance;
+
+            $checkBalance = 0;
+            $checkPaymentStatus = 0; //kiểm tra có thể cho phép payment không?
+            if ($remain_balance) {
+
+                if ($sn_total <= $remain_balance)
+                {
+                    $checkPaymentStatus = 1;
+                } else{
+                    $checkPaymentStatus = 0;
+                }
+
+                $checkBalance = $remain_balance - $sn_total;
+            } else{
+                $checkBalance = -$sn_total;
+            }
+
+            //xử lý check payment
+            $this->view->need               = abs($checkBalance);
+            $this->view->checkPaymentStatus = $checkPaymentStatus;
+            $this->view->checkBalance       = $checkBalance;
+            $this->view->remain_balance     = $remain_balance;
+            $this->view->campaign           = $QCampaign->get_cache();
+
+            // get tags
+            $QTag = new Application_Model_Tag();
+            $QTagObject = new Application_Model_TagObject();
+
+            $where = array();
+            $where[] = $QTagObject->getAdapter()->quoteInto('object_id = ?', $sn);
+            $where[] = $QTagObject->getAdapter()->quoteInto('type = ?', TAG_ORDER);
+
+            $a_tags = array();
+
+            $tags_object = $QTagObject->fetchAll($where);
+            if ($tags_object)
+                foreach ($tags_object as $to) {
+                    $where = $QTag->getAdapter()->quoteInto('id = ?', $to['tag_id']);
+                    $tag = $QTag->fetchRow($where);
+                    if ($tag)
+                        $a_tags[] = $tag['name'];
+                }
+
+            $this->view->a_tags = $a_tags;
+
+            if ($this->getRequest()->getMethod() == 'POST') {
+                //print_r($_POST);die;
+                // print_r($_FILES); die;
+                //$file_name_show = $_FILES['file']['name'];
+                //print_r($file_name_show);
+                //die;
+
+                $db->beginTransaction();
+                try { 
+
+                    $payment       = $this->getRequest()->getParam('payment');
+                    $shipping      = $this->getRequest()->getParam('shipping');
+                    $pay_text      = $this->getRequest()->getParam('pay_text');
+                    $shipping_text = $this->getRequest()->getParam('shipping_text');
+                    $payment_type = $this->getRequest()->getParam('payment_type',NULL);
+                    $payment_order = $this->getRequest()->getParam('payment_order', 0);
+                    $payment_bank_transfer = $this->getRequest()->getParam('payment_bank_transfer', 0);
+                    $payment_service = $this->getRequest()->getParam('payment_service', 0);
+                    $payment_servicecharge = $this->getRequest()->getParam('payment_servicecharge', 0);
+                
+                    $pay_time      = $this->getRequest()->getParam('pay_time');
+                    $bank          = $this->getRequest()->getParam('select_bank_id', NULL);
+                    $type          = 1;
+                    //$company_id    = $this->getRequest()->getParam('company_id');
+                    $company_id    = 1;
+                    $retailer_rank = $this->getRequest()->getParam('retailer_rank', NULL);
+
+                    $sn_total  = $this->getRequest()->getParam('total_out_amount', 0);
+                    $total_amount  = $this->getRequest()->getParam('total_amount', 0);
+                    
+
+                    if($total_amount==0)
+                    {
+                        $payment_order=0;
+                        $payment_bank_transfer=0;
+                        $payment_servicecharge=0;
+                        $payment_service=0;
+                    }                   
+
+                    $where = array();
+                    $where[] = $QMarket->getAdapter()->quoteInto('sn = ?', $sn);
+                    $where[] = $QMarket->getAdapter()->quoteInto('status = ?', 1);
+
+                    $data = array(
+                        'pay_text' => $pay_text,
+                        'shipping_text' => $shipping_text,
+                        );
+
+                    $date = date('Y-m-d H:i:s');
+
+                    $checkUpdateCheckMoney = 0;
+                    //$QCheckMoney    = new Application_Model_CheckmoneySales();
+
+                    $confirm_access_status = $this->getRequest()->getParam('confirm_access_status', NULL);
+                    $confirm_access_remark = $this->getRequest()->getParam('confirm_access_remark', NULL);
+                    if($confirm_access_status==1){
+                        $data['confirm_access_status'] = 1;
+                        $data['confirm_access_date'] = $date;
+                        $data['confirm_access_by'] = $userStorage->id;
+                        $data['confirm_access_remark'] = $confirm_access_remark;
+
+                        $data['confirm_so'] = 1;
+                        $data['sales_confirm_date'] = $date;
+                        $data['sales_confirm_id'] = $userStorage->id;
+
+                        $data['pay_time'] = $date;
+                        $data['pay_user'] = $userStorage->id;
+                        $data['shipping_yes_time'] = $date;
+                        $data['shipping_yes_id'] = $userStorage->id;
+
+                        $data['pay_text'] = $pay_text;
+                        $data['payment_type'] = 'CR';
+                        
+                        $data['shipping_text'] = $shipping_text;
+                        $data['finance_confirm_id'] = $userStorage->id;
+                        $data['finance_confirm_date'] = $date;
+
+                    }else{
+                        $data['confirm_access_status'] = 2;
+                        $data['confirm_access_date'] = $date;
+                        $data['confirm_access_by'] = $userStorage->id;
+                        $data['confirm_access_remark'] = $confirm_access_remark;
+                    }
+                    
+                    //print_r($data);die;
+                    $QMarket->update($data, $where);
+
+                    $QCheckmoney = new Application_Model_Checkmoney();
+                    /*---------------OUT-----------*/
+                     $note_new='';
+                     $data_ch = array(
+                                'd_id'       => $sales[0]['d_id'],
+                                'payment'    => $date,
+                                'pay_time'   => $date,
+                                'pay_service'     => $payment_service_val,
+                                'output'     => $total_amount,
+                                'pay_money'  => -$total_amount,
+                                'type'       => 2,
+                                'sn'         => $sn,
+                                'user_id'    => $userStorage->id,
+                                'create_by'  => $userStorage->id,
+                                'create_at'  => $date,
+                                'note'       => $note_new,
+                                'company_id' => $company_id,
+                                'sales_confirm_date'    => $date,
+                                'sales_confirm_id'    => $userStorage->id,
+                                );
+
+                     $QCheckmoney->insert($data_ch);
+
+                    /* -----------IN------------- */
+                             $date = date('Y-m-d H:i:s');
+                             $note_new='';
+                             $data_f = array(
+                                    'd_id'                  => $sales[0]['d_id'],
+                                    'bank'                  => 0,
+                                    'pay_money'             => $total_amount,
+                                    'pay_servicecharge'     => 0,
+                                    'pay_banktransfer'      => 0,
+                                    'pay_service'           => 0,
+                                    'type'                  => 1,
+                                    'pay_time'              => $date,
+                                    'bank_serial'           => null,
+                                    'bank_transaction_code' => null,
+                                    'note'                  => $note_new,
+                                    'content'               => null,
+                                    'company_id'            => $company_id,
+                                    'sn'                    => $sn,
+                                    'file_pay_slip'         => null,
+                                    'user_id'               => $userStorage->id,
+                                    'create_by'             => $userStorage->id,
+                                    'create_at'             => $date,
+                                    'sales_confirm_id'      => $userStorage->id,
+                                    'sales_confirm_date'    => $date,
+                                    'addition'              => 1
+                            );
+                             
+                         $QCheckmoney->insert($data_f);
+
+                    /* ------------------------ */     
+
+                    //todo log
+                    $ip = $this->getRequest()->getServer('REMOTE_ADDR');
+
+                    $info = 'Verify: Sale order number: ' . $sn;
+
+                    $QLog = new Application_Model_Log();
+
+                    $QLog->insert(array(
+                        'info' => $info,
+                        'user_id' => $userStorage->id,
+                        'ip_address' => $ip,
+                        'time' => $date,
+                        ));
+
+                    //check before commit
+                    if ($payment) {
+                        $whereCheckMoney       = array();
+                        $whereCheckMoney[]     = $QCheckmoney->getAdapter()->quoteInto('sn = ?',$sales[0]['sn']);
+                        $checkUpdateCheckMoney = $QCheckmoney->fetchRow($whereCheckMoney);
+                        if (!$checkUpdateCheckMoney) {
+                            $db->rollback();
+                            $flashMessenger->setNamespace('error')->addMessage('Cannot update, please try again!');
+                            $this->_redirect('/sales/sales-confirm-accessories-order?sn=' . $sn);
+                        }
+                    }
+
+                    $db->commit();
+                    $flashMessenger->setNamespace('success')->addMessage('Done!');
+                    $this->_redirect('/sales/index-accessories?view_accessories=wait');
+                }
+                catch (exception $e) {
+                    $db->rollback();
+                    $flashMessenger->setNamespace('error')->addMessage('Cannot update, please try again!' .
+                        $e->getMessage());
+                    $this->_redirect('/sales/sales-confirm-accessories-order?sn=' . $sn);
+                }
+                $flashMessenger->setNamespace('success')->addMessage('Done!');
+                $this->_redirect('/sales/index-accessories?view_accessories=wait');
+
+            } //End if check post
+
+            $where = array();
+            $where[] = $QMarket->getAdapter()->quoteInto('sn = ?', $sn);
+            $where[] = $QMarket->getAdapter()->quoteInto('status = ?', 1);
+
+            $sales = $QMarket->fetchAll($where);
+            //print_r($sales);
+
+            $data = array();
+
+            $QGoodCategory = new Application_Model_GoodCategory();
+            $categories    = $QGoodCategory->get_cache();
+
+            $QGood         = new Application_Model_Good();
+            $goods         = $QGood->get_cache();
+
+            $QGoodColor    = new Application_Model_GoodColor();
+            $goodColors    = $QGoodColor->get_cache();
+
+            $QStaff        = new Application_Model_Staff();
+            $staffs        = $QStaff->get_cache();
+
+            $QDistributor  = new Application_Model_Distributor();
+            $distributors  = $QDistributor->get_cache();
+
+            // get another info of distributor
+            $where = $QDistributor->getAdapter()->quoteInto('id = ?', $sales[0]->d_id);
+            $distributors_info = $QDistributor->fetchRow($where);
+
+            // get credit from distributor's credit type
+            $QCredit  = new Application_Model_Credit();
+            $where = $QCredit->getAdapter()->quoteInto('id = ?', $distributors_info->credit_type);
+            $credit = $QCredit->fetchRow($where);
+
+            $QWarehouse    = new Application_Model_Warehouse();
+            $warehouses    = $QWarehouse->get_cache();
+
+            $Credit_Note = $QMarket->fetchCredit_Note($sn);
+
+            $show_cash_menu=false;
+            if (My_Staff_Group::inGroup($userStorage->group_id, OPPO_BRAND_SHOP_SERVICE) || $userStorage->group_id == ADMINISTRATOR_ID ) 
+            {
+                $show_cash_menu  = true;
+            }
+            
+            foreach ($sales as $k => $sale) {
+                //get warehouse
+                $data[$k]['warehouse_name'] = isset($warehouses[$sale->warehouse_id]) ? $warehouses[$sale->
+                    warehouse_id] : '';
+
+                //get retailer
+                $data[$k]['retailer_name'] = isset($distributors[$sale->d_id]) ? $distributors[$sale->
+                    d_id] : '';
+
+                //get retailer : rank
+                $data[$k]['retailer_rank'] = isset($distributors_info->rank) ? $distributors_info->rank : '';
+
+                //get retailer : rank
+                $data[$k]['show_cash_menu'] = $show_cash_menu;
+
+                //get retailer : credit amount
+                $data[$k]['credit_amount'] = isset($distributors_info->credit_amount) ? $distributors_info->credit_amount : '';
+
+                //print_r($sales[0]['credit_amount']);
+
+                $credit_amount = isset($distributors_info->credit_amount) ? $distributors_info->credit_amount : '0';
+
+                $this->view->distributor_total_balance = ($credit_amount - ($distributor_balance*-1));
+
+
+                //get retailer : credit type
+                $data[$k]['credit_type'] = isset($credit->name) ? $credit->name : '';
+
+                //get created_by_name
+                $data[$k]['created_by_name'] = isset($staffs[$sale->user_id]) ? $staffs[$sale->
+                    user_id] : '';
+
+                //get created_by_name
+                $data[$k]['salesman_name'] = isset($staffs[$sale->salesman]) ? $staffs[$sale->
+                    salesman] : '';
+
+                //get sales man Catty
+                if($sale->sales_catty_id !=''){
+                    $staffs_catty = $QStaff->getSalesCattyByStore($sale->d_id,$sale->sales_catty_id);
+                }
+
+                $data[$k]['salescatty_name'] = isset($staffs_catty) ? $staffs_catty[0]['fullname'] : '';
+
+                //get category
+                $data[$k]['category'] = isset($categories[$sale->cat_id]) ? $categories[$sale->
+                    cat_id] : '';
+
+                //get good
+                $data[$k]['good'] = isset($goods[$sale->good_id]) ? $goods[$sale->good_id] : '';
+
+                //get goods color
+                $data[$k]['color'] = isset($goodColors[$sale->good_color]) ? $goodColors[$sale->
+                    good_color] : '';
+
+                $data[$k]['sale'] = $sale;
+
+               // $data[$k]['total_discount'] = $Credit_Note[0]['total_discount'];
+
+               // $data[$k]['credit_note_list'] = $Credit_Note[0];
+                //print_r($Credit_Note[0]);
+
+                $data[$k]['total_discount'] = $Credit_Note[0]['total_discount'];
+
+                $data[$k]['credit_note_list'] = $Credit_Note;
+
+
+            }
+
+            //Get remain discount
+            $QMarketDeduction = new Application_Model_MarketDeduction();
+            $deduction = $QMarketDeduction->getPrice(array('d_id' => $sales[0]['d_id']));
+
+            $discount_ck = (isset($deduction[DISCOUNT_CK]) ? $deduction[DISCOUNT_CK] : 0) + (isset($deduction[DISCOUNT_CK_II]) ? $deduction[DISCOUNT_CK_II] : 0) + (isset($deduction[DISCOUNT_CK_III]) ? $deduction[DISCOUNT_CK_III] : 0);
+            $diamond_discount = (isset($deduction[DISCOUNT_DIAMOND_CLUB]) ? $deduction[DISCOUNT_DIAMOND_CLUB] : 0) + (isset($deduction[DISCOUNT_DIAMOND_CLUB_5]) ? $deduction[DISCOUNT_DIAMOND_CLUB_5] : 0) + (isset($deduction[DISCOUNT_DIAMOND_CLUB_6]) ? $deduction[DISCOUNT_DIAMOND_CLUB_6] : 0) + (isset($deduction[DISCOUNT_DIAMOND_CLUB_7]) ? $deduction[DISCOUNT_DIAMOND_CLUB_7] : 0)+ (isset($deduction[DISCOUNT_DIAMOND_CLUB_8]) ? $deduction[DISCOUNT_DIAMOND_CLUB_8] : 0);
+
+            $this->view->discount = $discount_ck;
+            $this->view->diamond_discount = $diamond_discount;
+
+             //Get remain discount BVG
+            $discount_bvg = $QMarketProduct->getPriceDiscount(array('d_id' => $sales[0]['d_id']));
+            $this->view->discount_bvg = $discount_bvg;
+
+            //Get detail discount
+            $detailDiscount = $QMarketProduct->getDetailDiscount($sn);
+            //get detail BVG
+            $detailBVG = $QMarketProduct->getDetailBVG($sn);
+
+            $QBank = new Application_Model_Bank();
+            $banks = $QBank->fetchAll(null,'name asc');
+            $this->view->banks = $banks;
+
+            $this->view->detailBVG = $detailBVG;
+            $this->view->detailDiscount = $detailDiscount;
+            
+            $this->view->sales = $data;
+
+            //print_r($data);
+        }
+    }
+
+    public function salesConfirmOrderAction()
+    {   
+        $sn = $this->getRequest()->getParam('sn');
+        $flashMessenger = $this->_helper->flashMessenger;
+
+        $messages = $flashMessenger->setNamespace('error')->getMessages();
+        $this->view->messages = $messages;
+
+        $userStorage = Zend_Auth::getInstance()->getStorage()->read();
+
+        if ($sn) {
+
+            $db = Zend_Registry::get('db');
+            $QMarket = new Application_Model_Market();
+            $where = array();
+            $where[] = $QMarket->getAdapter()->quoteInto('sn = ?', $sn);
+            $where[] = $QMarket->getAdapter()->quoteInto('status = ?', 1);
+
+            $sales = $QMarket->fetchAll($where);
+
+            //check
+            if (!$sales) {
+                $flashMessenger->setNamespace('error')->addMessage('Invalid SN!');
+                $this->_redirect('/sales');
+            }
+
+            if (!isset($sales[0]) || ($sales[0]['shipping_yes_time'] and $sales[0]['pay_time'])) {
+
+                $flashMessenger->setNamespace('error')->addMessage('This order cannot be changed!');
+
+                $this->_redirect('/sales');
+
+            }
+
+            $usePaygroup = [];
+            $QPGBal = new Application_Model_PayGroupBalance();
+
+            $usePaygroup = $QPGBal->getUsePaygroup($sales[0]['d_id']);
+
+            $this->view->usePaygroup = $usePaygroup;
+
+            $pay_group_data = [];
+            $pay_group_bank_data = [];
+            $pay_group_cause_data = [];
+
+            if(isset($sales[0]['pay_group']) and $sales[0]['pay_group'] == 1){
+
+                $payment_no = $sales[0]['payment_no'];
+
+                $QPG = new Application_Model_PayGroup();
+                $QPGB = new Application_Model_PayGroupBank();
+                $QPGC = new Application_Model_PayGroupCause();
+
+                // $where = $QPG->getAdapter()->quoteInto('payment_no = ?',$payment_no);
+                // $pay_group_data = $QPG->fetchAll($where);
+
+                $pay_group_data = $QPG->getPaymentGroup($payment_no);
+
+                if(isset($pay_group_data[0]['payment_id'])){
+
+                    $payment_id = $pay_group_data[0]['payment_id'];
+
+                    // $where = $QPGB->getAdapter()->quoteInto('payment_id = ?',$payment_id);
+                    // $pay_group_bank_data = $QPGB->fetchAll($where);
+
+                    $pay_group_bank_data = $QPGB->getPaymentGroupBank($payment_id);
+
+                    $where = $QPGC->getAdapter()->quoteInto('payment_id = ?',$payment_id);
+                    $pay_group_cause_data = $QPGC->fetchAll($where);
+                }
+
+            }
+
+            $this->view->pay_group_status = $sales[0]['pay_group'];
+            $this->view->pay_group_data = $pay_group_data;
+            $this->view->pay_group_bank_data = $pay_group_bank_data;
+            $this->view->pay_group_cause_data = $pay_group_cause_data;
+
+            $QMarketProduct = new Application_Model_MarketProduct();
+            $QMarket = new Application_Model_Market();
+            //Tiền đi đơn nếu có bảo vệ giá thì đã trừ tiền
+            $sn_total = 0;
+            $intRebate = intval($QMarketProduct->getPrice($sn)); // số tiền được giảm
+            //$sn_total = $total_amount - $intRebate; // số tiền còn lại
+            $sn_total = $QMarket->getPrice($sn) - $intRebate; // số tiền còn lại
+
+            $strNoteRebate = '';
+            if ($intRebate > 0) {
+                $strNoteRebate = ', rebate: ' . $intRebate;
+            }
+
+            if($sales[0]['office']){
+                $selectArea = $db->select()
+                    ->from(array('a'=>'office'),array('a.*'))
+                    ->where('a.id = ?',$sales[0]['office']);
+                ;
+                $office_area = $db->fetchRow($selectArea);
+                $this->view->office_area = $office_area;
+            }
+
+            //Store account
+            $QStoreaccount = new Application_Model_Storeaccount();
+            $QDistributor  = new Application_Model_Distributor();
+            $QCampaign     = new Application_Model_Campaign();
+
+            //lấy dealer mẹ
+            $main_retailer                   = $QDistributor->getRootDistributor($sales[0]['d_id']);
+            $this->view->main_retailer       = $main_retailer;
+            $total_balance_row               = $QStoreaccount->getBalanceByGroup($sales[0]['d_id']);
+            $distributor_balance_row         = $QStoreaccount->getBalance($sales[0]['d_id']);
+           // $q_total_balance                 = $QStoreaccount->getMainDistributorBalance($sales[0]['d_id']); 
+            //------------------------
+
+            $selectCompany = $db->select()
+                ->from(array('p'=>'warehouse'),array('p.company_id'))
+                ->where('id = ?',$sales[0]['warehouse_id']);
+            $company_id = $db->fetchOne($selectCompany);
+
+           // $remain_balance                  = ($company_id == 1) ? $distributor_balance_row['balance'] : $distributor_balance_row['balance_smartmobile'];
+
+            $credit_amount                  = $distributor_balance_row['credit_amount'];
+            $remain_balance                  = $distributor_balance_row['use_credit'];
+            $total_balance                  = $distributor_balance_row['balance'];
+
+            $distributor_balance             = ($company_id == 1) ? $distributor_balance_row['balance'] : $distributor_balance_row['balance_smartmobile'];
+            $this->view->distributor_balance = $distributor_balance;
+
+            $checkBalance = 0;
+            $checkPaymentStatus = 0; //kiểm tra có thể cho phép payment không?
+            if ($remain_balance) {
+
+                if ($sn_total <= $remain_balance)
+                {
+                    $checkPaymentStatus = 1;
+                } else{
+                    $checkPaymentStatus = 0;
+                }
+
+                //$checkBalance = $remain_balance - $sn_total;
+                $checkBalance =  $total_balance - $sn_total;
+            } else{
+                $checkBalance = -$sn_total;
+            }
+
+            //xử lý check payment
+            $this->view->need               = abs($checkBalance);
+            $this->view->checkPaymentStatus = $checkPaymentStatus;
+            $this->view->credit_amount       = $credit_amount;
+            $this->view->checkBalance       = $checkBalance;
+            $this->view->remain_balance     = $remain_balance*-1;
+            $this->view->campaign           = $QCampaign->get_cache();
+
+            // get tags
+            $QTag = new Application_Model_Tag();
+            $QTagObject = new Application_Model_TagObject();
+
+            $where = array();
+            $where[] = $QTagObject->getAdapter()->quoteInto('object_id = ?', $sn);
+            $where[] = $QTagObject->getAdapter()->quoteInto('type = ?', TAG_ORDER);
+
+            $a_tags = array();
+
+            $tags_object = $QTagObject->fetchAll($where);
+            if ($tags_object)
+                foreach ($tags_object as $to) {
+                    $where = $QTag->getAdapter()->quoteInto('id = ?', $to['tag_id']);
+                    $tag = $QTag->fetchRow($where);
+                    if ($tag)
+                        $a_tags[] = $tag['name'];
+                }
+ 
+            $this->view->a_tags = $a_tags;
+                if ($this->getRequest()->getMethod() == 'POST') {
+                    // print_r($_POST);die;
+                    // echo "<pre>";
+                    // print_r($_POST);
+                    // print_r($_FILES); die;
+                    //$file_name_show = $_FILES['file']['name'];
+                    //print_r($file_name_show);
+                    $db = Zend_Registry::get('db');
+                    $select = $db->select()
+                            ->from(array('m' => 'market'),
+                                array('m.sn_ref'));
+                            $select->join(array('s'=>'staff'),'sales_confirm_id=s.id',array('s.firstname'));
+                            $select->where('m.sn = ?', $sn);
+                            $select->where('sales_confirm_id  IS NOT NULL');
+                            $select->where('sales_confirm_date  IS NOT NULL');
+                            $select->group('m.sn');
+
+                       
+                        
+                        $Check_pay_list = $db->fetchRow($select);
+                   
+                   
+
+                if (isset($Check_pay_list) and $Check_pay_list) {
+                    // die($Check_pay_list['sn_ref']);
+                    $flashMessenger->setNamespace('error')->addMessage('Order '.$Check_pay_list['sn_ref'].' ทำรายการแล้วโดย '.$Check_pay_list['firstname'] );
+                        $this->_redirect('/sales');
+                   
+                }else{
+                    $db->beginTransaction();
+
+                    try { 
+
+                        $payment       = $this->getRequest()->getParam('payment');
+                        $shipping      = $this->getRequest()->getParam('shipping');
+                        $pay_text      = $this->getRequest()->getParam('pay_text');
+                        $shipping_text = $this->getRequest()->getParam('shipping_text');
+                        $payment_type = $this->getRequest()->getParam('payment_type',NULL);
+                        $payment_order = $this->getRequest()->getParam('payment_order', 0);
+                        $payment_bank_transfer = $this->getRequest()->getParam('payment_bank_transfer', 0);
+                        $payment_service = $this->getRequest()->getParam('payment_service', 0);
+                        $payment_servicecharge = $this->getRequest()->getParam('payment_servicecharge', 0);
+                    
+                        $pay_time      = $this->getRequest()->getParam('pay_time');
+                        $bank          = $this->getRequest()->getParam('select_bank_id', 0);
+                        $type          = 1;
+                        //$company_id    = $this->getRequest()->getParam('company_id');
+                        $company_id    = 1;
+                        $retailer_rank = $this->getRequest()->getParam('retailer_rank', NULL);
+
+                        $sn_total       = $this->getRequest()->getParam('total_out_amount', 0);
+                        $total_amount  = $this->getRequest()->getParam('total_amount', 0);
+
+                        $lacksurplus  = $this->getRequest()->getParam('lacksurplus', 0);
+
+                        $checkbox_use_paygroup   = $this->getRequest()->getParam('checkbox_use_paygroup');
+                        $use_paygroup   = $this->getRequest()->getParam('use_paygroup');
+                        $money_use_paygroup   = $this->getRequest()->getParam('money_use_paygroup');
+
+                        $d_id = $sales[0]['d_id'];
+
+                        if($lacksurplus < -10){
+                            // echo 'ไม่สามารถสร้างกลุ่มใบเปอินได้ เนื่องจากเงินขาดมากเกินไป';
+                            $flashMessenger->setNamespace('error')->addMessage('ไม่สามารถทำรายการได้ เนื่องจากเงินขาดมากเกินไป');
+                            $this->_redirect('/sales/sales-confirm-order?sn=' . $sn);
+                            exit();
+                        }
+
+                        if($checkbox_use_paygroup){
+
+                            $usePaygroup = $QPGBal->getUsePaygroup($d_id);
+
+                            $count_check_usepaygroup=0;
+                            $i=0;
+                            foreach ($use_paygroup as $key) {
+                                
+                                foreach ($usePaygroup as $key_sub) {
+                                    if($key == $key_sub['payment_id']){
+
+                                        if($key_sub['balance_total'] >= $money_use_paygroup[$i]){
+                                            $count_check_usepaygroup++;
+                                        }else{
+                                            // echo 'ไม่สามารถใช้ยอดเงินเหลือจากใบเปอินเก่าได้ ' . $key_sub['payment_no'] . ' เนื่องจากเงินคงเหลือไม่พอ';
+                                            $flashMessenger->setNamespace('error')->addMessage('ไม่สามารถใช้ยอดเงินเหลือจากใบเปอินเก่าได้ ' . $key_sub['payment_no'] . ' เนื่องจากเงินคงเหลือไม่พอ');
+                                            $this->_redirect('/sales/sales-confirm-order?sn=' . $sn);
+                                            exit();
+                                        }
+                                    }
+                                }
+                                $i++;
+                            }
+
+                            if($count_check_usepaygroup < count($use_paygroup)){
+                                // echo 'ยอดเงินเหลือจากใบเปอินเก่าผิดพลาด';
+                                $flashMessenger->setNamespace('error')->addMessage('ยอดเงินเหลือจากใบเปอินเก่าผิดพลาด');
+                                $this->_redirect('/sales/sales-confirm-order?sn=' . $sn);
+                                exit();
+                            }
+
+                        }
+
+                        if($total_amount==0)
+                        {
+                            $payment_order=0;
+                            $payment_bank_transfer=0;
+                            $payment_servicecharge=0;
+                            $payment_service=0;
+                        }
+
+                        if(isset($sales[0]['pay_group']) and $sales[0]['pay_group'] != 1){
+                            // payment no
+
+                            $QPG = new Application_Model_PayGroup();
+                            $where = array();
+                            $where[] = $QPG->getAdapter()->quoteInto('sale_order = ?', $sn);
+                            $where[] = $QPG->getAdapter()->quoteInto('status = ?', 1);
+                            $payment_group_check = $QPG->fetchRow($where);
+                    
+                            if ($payment_group_check) {
+
+                                $payment_id = $payment_group_check['payment_id'];
+
+                                $array_data = array(
+                                    'created_at' => $userStorage->id,
+                                    'modified_date' => date('Y-m-d H:i:s')
+                                    );
+
+                                $where = array();
+                                $where[] = $QPG->getAdapter()->quoteInto('sale_order = ?', $sn);
+                                $where[] = $QPG->getAdapter()->quoteInto('status = ?', 1);
+
+                                $QPG->update($array_data, $where);
+
+                            }else{
+                                $payment_id = date('YmdHis') . substr(microtime(), 2, 4);
+                                $sale_order = $sn;
+                                $payment_group = 0;
+                                $case_text = null;
+                                $money = $this->getRequest()->getParam('total_amount', 0);
+                                // $lacksurplus = 0.00;
+
+                                $pay_bank_transfer = 0.00;
+                                $pay_servicecharge = 0.00;
+
+                                $created_date = date('Y-m-d H:i:s');
+                                $modified_date = date('Y-m-d H:i:s');
+                                $status = 1;
+
+                                $QPG->insert(array(
+                                    'payment_no' => $payment_id,
+                                    'payment_id' => $payment_id,
+                                    'sale_order' => $sale_order,
+                                    'd_id' => $d_id,
+                                    'payment_group' => $payment_group,
+                                    'case_text' => $case_text,
+                                    'money' => $money,
+                                    'lacksurplus' => $lacksurplus,
+                                    'pay_bank_transfer' => $pay_bank_transfer,
+                                    'pay_servicecharge' => $pay_servicecharge,
+
+                                    'created_at' => $userStorage->id,
+                                    'created_date' => $created_date,
+                                    'modified_at' => $userStorage->id,
+                                    'modified_date' => $modified_date,
+                                    'status' => $status
+                                ));
+
+                                if($lacksurplus > 0){
+                                    $QPGBal->insert(array(
+                                                        'payment_id' => $payment_id,
+                                                        'distributor_id' => $d_id,
+                                                        'total_amount' => $lacksurplus,
+                                                        'use_total' => 0,
+                                                        'balance_total' => $lacksurplus,
+                                                        'status' => $status,
+                                                        'create_date' => $created_date,
+                                                        'create_by' => $userStorage->id,
+                                                        'update_date' => $modified_date,
+                                                        'update_by' => $userStorage->id,
+                                                        'use_status' => 0,
+                                                        'remark' => null
+                                                    ));
+                                }else{
+                                    $QPGBal->insert(array(
+                                                        'payment_id' => $payment_id,
+                                                        'distributor_id' => $d_id,
+                                                        'total_amount' => 0,
+                                                        'use_total' => 0,
+                                                        'balance_total' => 0,
+                                                        'status' => $status,
+                                                        'create_date' => $created_date,
+                                                        'create_by' => $userStorage->id,
+                                                        'update_date' => $modified_date,
+                                                        'update_by' => $userStorage->id,
+                                                        'use_status' => 0,
+                                                        'remark' => null
+                                                    ));
+                                }
+                            }
+
+                            if($checkbox_use_paygroup){
+
+                                $QPGT = new Application_Model_PayGroupTran();
+
+                                $i=0;
+                                foreach ($use_paygroup as $key) {
+                                    
+                                    if($money_use_paygroup[$i] > 0){
+
+                                        $QPGT->insert(array(
+                                                        'payment_id' => $key,
+                                                        'payment_tran_id' => $payment_id,
+                                                        'distributor_id' => $d_id,
+                                                        'use_total' => $money_use_paygroup[$i],
+                                                        'create_date' => $created_date,
+                                                        'create_by' => $userStorage->id,
+                                                        'status' => 1
+                                                    ));
+                                    }
+
+                                    $i++;
+                                }
+                            }
+
+                        }
+
+                        $where = array();
+                        $where[] = $QMarket->getAdapter()->quoteInto('sn = ?', $sn);
+                        $where[] = $QMarket->getAdapter()->quoteInto('status = ?', 1);
+
+                        $data = array(
+                            'pay_text' => $pay_text,
+                            'shipping_text' => $shipping_text,
+                            );
+
+                        // get another info of distributor
+                        $where_payment = $QDistributor->getAdapter()->quoteInto('id = ?', $sales[0]['d_id']);
+                        $distributors_payment = $QDistributor->fetchRow($where_payment);
+
+
+                        $auto_confirm_finance = $distributors_payment->auto_confirm_finance;
+                        $auto_confirm_finance_warehouse = $distributors_payment->warehouse_id;
+                        if($auto_confirm_finance_warehouse =='73' || $auto_confirm_finance_warehouse =='62')
+                        {
+                          $auto_confirm_finance =1;  
+                        }
+
+                        $date = date('Y-m-d H:i:s');
+
+                        $checkUpdateCheckMoney = 0;
+                        //$QCheckMoney    = new Application_Model_CheckmoneySales();
+
+                        if ($payment) {
+
+                            //$data['pay_time'] = $date;
+                           // $data['pay_user'] = $userStorage->id;
+                            $data['payment_type'] = $payment_type;
+
+                            //check money
+                            $QCheckmoney = new Application_Model_Checkmoney();
+
+                            //Kiểm tra đơn hàng đã đánh đấu payment lần nào chưa?, nếu rồi thì bỏ qua
+                            $select_sn = array();
+                            $select_sn[] = $QCheckmoney->getAdapter()->quoteInto('sn = ?', $sales[0]['sn']);
+                            $select_sn[] = $QCheckmoney->getAdapter()->quoteInto('type = ?', 2); // phân loại trừ tiền
+                            $check_sn_exist = $QCheckmoney->fetchRow($select_sn);
+
+
+                            if (!$check_sn_exist) {
+
+                                $payment_service_val=0;
+                                for($i=0;$i<count($payment_order);$i++){
+                                    $payment_service_val +=$payment_service[$i];
+                                }
+
+                                $sn_total = 0;
+                                $intRebate = intval($QMarketProduct->getPrice($sales[0]['sn']));
+                                $sn_total = $QMarket->getPrice($sales[0]['sn']) - $intRebate;
+
+                                $note_new='Payment Order='.number_format($sn_total,2).' ค่าอะไหล่และค่าบริการ='.number_format($payment_service_val,2);
+
+                                //data for checkmoney transaction
+                                $data_ch = array(
+                                    'd_id'       => $sales[0]['d_id'],
+                                    'payment'    => $date,
+                                    'pay_time'   => $date,
+                                    'pay_service'     => $payment_service_val,
+                                    'output'     => $sn_total,
+                                    'pay_money'  => -$sn_total,
+                                    'type'       => 2,
+                                    'sn'         => $sales[0]['sn'],
+                                    'user_id'    => $userStorage->id,
+                                    'create_by'  => $userStorage->id,
+                                    'create_at'  => $date,
+                                    'note'       => $note_new,
+                                    'company_id' => $company_id,
+                                    'sales_confirm_date'    => $date,
+                                    'sales_confirm_id'    => $userStorage->id,
+                                    );
+
+                                if($auto_confirm_finance =='1')
+                                {
+                                    $data_ch['finance_confirm_id'] = $userStorage->id;
+                                    $data_ch['finance_confirm_date'] = $date;
+                                }
+
+
+                                $checkUpdateCheckMoney = $QCheckmoney->insert($data_ch);
+
+                                // update balance
+                                if ($checkUpdateCheckMoney) {
+                                   // $QStoreaccount->updateBalance($sales[0]['d_id']);
+                                } else {
+                                    exit("Loi khong dong bo!");
+                                }
+
+                                // Neu co uy nhiem chi
+                                    $payment_order_val=0;$payment_bank_transfer_val=0;$pay_service_val=0;$i=0;
+                                    for($i=0;$i<count($payment_order);$i++){
+                                        $payment_order_val +=$payment_order[$i];
+                                        $pay_service_val +=$pay_service[$i];
+                                        $payment_order_val +=$payment_order[$i];
+                                    }
+                                    
+                                    if($payment_type=="CA"){
+                                        if ($payment_order_val >=0) {
+                                            $status=1;
+                                            if($retailer_rank ==10){
+                                                $status=0;
+                                            }
+                                           // $pay_money = $payment_order+$payment_bank_transfer;
+                                        $QCheckmoneyPaymentorder = new Application_Model_CheckmoneyPaymentorder();
+                                            $QCheckmoneyPaymentorder->insert(array(
+                                                'd_id'          => $sales[0]['d_id'],
+                                                'sn'            => $sales[0]['sn'],
+                                                'payment_order' => ($payment_order_val+$payment_order_val),
+                                                'pay_banktransfer' => $payment_bank_transfer_val,
+                                                'status'        => $status,
+                                                'created_at'    => $date,
+                                                'created_by'    => $userStorage->id,
+                                                'sales_confirm_date'    => $date,
+                                                'sales_confirm_id'    => $userStorage->id,
+                                                ));
+                                        } //End check payment order
+                                    }
+                            } //End check sn existed
+
+                        } //End check if payment
+
+                        if ($shipping) {
+                           // $data['shipping_yes_time'] = $date;
+                           // $data['shipping_yes_id'] = $userStorage->id;
+                        }
+
+                        $data['confirm_so'] = 1;
+
+                        $data['sales_confirm_date'] = $date;
+                        $data['sales_confirm_id'] = $userStorage->id;
+
+
+                        if($auto_confirm_finance =='1'){
+                            $data['pay_time'] = $date;
+                            $data['pay_user'] = $userStorage->id;
+                            $data['shipping_yes_time'] = $date;
+                            $data['shipping_yes_id'] = $userStorage->id;
+
+                            $data['pay_text'] = "Confirm Payment Auto by Finance";
+                            //$data['shipping_text'] = "Confirm Shipping Auto by Finance";
+                            $data['finance_confirm_id'] = $userStorage->id;
+                            $data['finance_confirm_date'] = $date;
+
+                        }
+                        //print_r($data);die;
+                        $QMarket->update($data, $where);
+
+                        /* ---------Add Money Check--------------- */
+
+                        if($total_amount >= 0 && $payment_type=="CA")
+                        {
+                            $payment_order_val=0;$payment_bank_transfer_val=0;$i=0;
+                            $payment_service_val=0;$payment_servicecharge_val=0;
+
+                            for($i=0;$i<count($payment_order);$i++){
+                                
+                               if($bank[$i]==''){
+                                  $bank_id=0; 
+                               }else{
+                                  $bank_id=$bank[$i];
+                               }
+                                $payment_order_val =$payment_order[$i];
+                                $payment_bank_transfer_val =$payment_bank_transfer[$i];
+                                $payment_service_val =$payment_service[$i];
+                                $payment_servicecharge_val =$payment_servicecharge[$i];
+                                $pay_time_val=$pay_time[$i];
+                                $d_id = $sales[0]['d_id'];
+                                $date = date('Y-m-d H:i:s');
+
+                                //pay_banktransfer
+
+                                $QCheckMoney    = new Application_Model_Checkmoney();
+                                $QStoreaccount  = new Application_Model_Storeaccount();
+                                //$userStorage    = Zend_Auth::getInstance()->getStorage()->read();
+
+                                //$pay_money = $payment_order+$payment_bank_transfer;
+                                $file_name_upload = '/pay_slips/'.$sn.'/'.$_FILES['file']['name'][$i];
+                            
+                                $note_new='PayMoney='.number_format($payment_order_val,2) .' Fee transfer='.number_format($payment_bank_transfer_val,2).' Service Charge='.number_format($payment_servicecharge_val,2).' ค่าอะไหล่และค่าบริการ='.number_format($payment_service_val,2);
+
+                                $data = array(
+                                        'd_id'                  => $d_id,
+                                        'bank'                  => $bank_id,
+                                        'pay_money'             => $payment_order_val,
+                                        'pay_servicecharge'     => $payment_servicecharge_val,
+                                        'pay_banktransfer'      => $payment_bank_transfer_val,
+                                        'pay_service'           => $payment_service_val,
+                                        'type'                  => 1,
+                                        'pay_time'              => $pay_time_val,
+                                        'bank_serial'           => null,
+                                        'bank_transaction_code' => null,
+                                        'note'                  => $note_new,
+                                        'content'               => null,
+                                        'company_id'            => $company_id,
+                                        'sn'                    => $sn,
+                                        'file_pay_slip'         => $file_name_upload,
+                                        'user_id'               => $userStorage->id,
+                                        'create_by'             => $userStorage->id,
+                                        'create_at'             => $date,
+                                        'sales_confirm_id'      => $userStorage->id,
+                                        'sales_confirm_date'    => $date,
+                                        'addition'              => 1
+                                );
+
+                                if($lacksurplus > 0){
+                                    // $data['payment_surplus'] = $lacksurplus;
+                                    $data['payment_surplus'] = 0;
+                                }
+
+                                if($lacksurplus < 0){
+                                    // $data['lack_of_money'] = $lacksurplus*-1;
+                                    $data['lack_of_money'] = 0;
+                                }
+
+                            $checkUpdateCheckMoney2 = $QCheckmoney->getCheckDuplicate($sn,$file_name_upload,$payment_order_val);
+
+                            
+                            $file_name_upload = $_FILES['file']['name'][$i];
+
+                            // die;
+                            if ($checkUpdateCheckMoney2) {
+                                // print_r($checkUpdateCheckMoney2);
+
+                                // die;
+                            }else{
+                                if($ch_id){
+                                    // echo "1";
+                                    $old_checkmoney = $QCheckMoney->find($ch_id)->current();
+                                    $data['user_id'] = $userStorage->id;
+                                    $data['updated_at'] = $date;
+                                    $where = $db->quoteInto('id = ?',$ch_id);
+                                    $QCheckMoney->update($data,$where); 
+                                    
+                                }else{
+                                    // echo "2";
+                                    $data['bank'] = $bank_id;
+                                    $data['create_by'] = $userStorage->id;
+                                    $data['create_at'] = $date;
+                                    $QCheckMoney->insert($data);
+                                }
+                            
+                             
+                             
+                                /*
+                                if($data['d_id'] >= 0){  
+                                    if($ch_id){//Trường hợp update
+                                        if($data['d_id'] == $old_checkmoney['d_id']){
+                                            $QStoreaccount->updateBalance( $data['d_id'] );
+                                        }else{
+                                            $QStoreaccount->updateBalance( $data['d_id'] );
+                                            if( intval( $old_checkmoney['d_id'] ) >= 0 ){
+                                                $QStoreaccount->updateBalance($old_checkmoney['d_id']);
+                                            }
+                                        }
+                                    }else{//Trường hợp thêm mới.
+                                        $QStoreaccount->updateBalance($data['d_id']);
+                                    }           
+                                }
+                                */
+                             }
+
+                             //print_r($data_money);die;
+                             /*-------------------File Pay Slip Upload--------------------------*/
+                                $upload    = new Zend_File_Transfer_Adapter_Http();
+                                $files  = $upload->getFileInfo();
+                                $count_file_upload=0;$r=0;
+                                foreach($files as $file => $fileInfo)
+                                {
+                                    if($upload->isUploaded($file))
+                                    {
+                                            
+                                        $uniqid = uniqid('', true);
+
+                                        $uploaded_dir = APPLICATION_PATH . DIRECTORY_SEPARATOR . '..'
+                                            . DIRECTORY_SEPARATOR . 'public' . DIRECTORY_SEPARATOR . 'files'
+                                            . DIRECTORY_SEPARATOR . 'finance'. DIRECTORY_SEPARATOR . 'pay_slips'
+                                            . DIRECTORY_SEPARATOR . $sn;
+
+                                        $file_pay_slip = DIRECTORY_SEPARATOR . 'pay_slips'
+                                            . DIRECTORY_SEPARATOR . $sn . DIRECTORY_SEPARATOR;    
+
+                                        if (!is_dir($uploaded_dir))
+                                            @mkdir($uploaded_dir, 0777, true);
+
+                                        
+                                        $upload->setDestination($uploaded_dir);
+
+                                        // Upload Max 5 MB
+                                        $upload->setValidators(array(
+                                            'Size' => array('min' => 50, 'max' => 2000000),
+                                            'Count' => array('min' => 1, 'max' => 3),
+                                            'Extension' => array('jpg','jpeg', 'PNG','GIF'),
+                                        ));
+
+                                        if (!$upload->isValid($file)) { // validate IF
+                                        $errors = $upload->getErrors();
+                                        $sError = null;
+                                            if ($errors and isset($errors[0]))
+                                            switch ($errors[0]) {
+                                                case 'fileUploadErrorIniSize':
+                                                    $sError = 'File size is too large';
+                                                    break;
+                                                case 'fileMimeTypeFalse':
+                                                    $sError = 'The file you selected weren\'t the type we were expecting';
+                                                    break;
+                                                case 'fileExtensionFalse':
+                                                    $sError = 'Please choose a file in JPG or PNG format.';
+                                                    break;
+                                                case 'fileCountTooFew':
+                                                    $sError = 'Please choose a PO file (in JPG or PNG format)';
+                                                    break;
+                                                case 'fileUploadErrorNoFile':
+                                                    $sError = 'Please choose a PO file (in JPG or PNG format)';
+                                                    break;
+                                                case 'fileSizeTooBig':
+                                                    $sError = 'File size is too big';
+                                                    break;
+                                            }
+
+                                            if($sError!=''){
+                                                $db->rollback();
+                                                $flashMessenger->setNamespace('error')->addMessage($sError);
+                                                $this->_redirect('/sales/sales-confirm-order?sn=' . $sn);
+                                            }
+                                        }else{
+                                           $upload->receive($file);
+                                        }                                                     
+                                    }
+                                    $r+=1;
+                                }
+                            }    
+                            /*-------------------End File Pay Slip Upload--------------------------*/
+                        }
+                        /* ------------------------ */
+                        if($total_amount >= 0 && $payment_type=="CC")
+                        {
+                            $payment_order_val=0;$payment_bank_transfer_val=0;$i=0;
+                            $payment_service_val=0;$payment_servicecharge_val=0;
+
+                            for($i=0;$i<count($payment_order);$i++){
+                                
+                               if($bank[$i]==''){
+                                  $bank_id=0; 
+                               }else{
+                                  $bank_id=$bank[$i];
+                               }
+                                $payment_order_val =$payment_order[$i];
+                                $payment_bank_transfer_val =$payment_bank_transfer[$i];
+                                $payment_service_val =$payment_service[$i];
+                                $payment_servicecharge_val =$payment_servicecharge[$i];
+                                $pay_time_val=$pay_time[$i];
+                                $d_id = $sales[0]['d_id'];
+                                $date = date('Y-m-d H:i:s');
+
+                                //pay_banktransfer
+
+                                $QCheckMoney    = new Application_Model_Checkmoney();
+                                $QStoreaccount  = new Application_Model_Storeaccount();
+                                //$userStorage    = Zend_Auth::getInstance()->getStorage()->read();
+
+                                //$pay_money = $payment_order+$payment_bank_transfer;
+                            echo    $file_name_upload = '/pay_slips/'.$sn.'/'.$_FILES['file']['name'][$i];
+                            
+                                $note_new='PayMoney='.number_format($payment_order_val,2) .' Fee transfer='.number_format($payment_bank_transfer_val,2).' Service Charge='.number_format($payment_servicecharge_val,2).' ค่าอะไหล่และค่าบริการ='.number_format($payment_service_val,2);
+
+                                $data = array(
+                                        'd_id'                  => $d_id,
+                                        'bank'                  => $bank_id,
+                                        'pay_money'             => $payment_order_val,
+                                        'pay_servicecharge'     => $payment_servicecharge_val,
+                                        'pay_banktransfer'      => $payment_bank_transfer_val,
+                                        'pay_service'           => $payment_service_val,
+                                        'type'                  => 1,
+                                        'pay_time'              => $pay_time_val,
+                                        'bank_serial'           => null,
+                                        'bank_transaction_code' => null,
+                                        'note'                  => $note_new,
+                                        'content'               => null,
+                                        'company_id'            => $company_id,
+                                        'sn'                    => $sn,
+                                        'file_pay_slip'         => $file_name_upload,
+                                        'user_id'               => $userStorage->id,
+                                        'create_by'             => $userStorage->id,
+                                        'create_at'             => $date,
+                                        'sales_confirm_id'      => $userStorage->id,
+                                        'sales_confirm_date'    => $date,
+                                        'addition'              => 1
+                                );
+
+                                $file_name_upload = $_FILES['file']['name'][$i];
+                                // die;
+                                if($ch_id){
+                                    $old_checkmoney = $QCheckMoney->find($ch_id)->current();
+                                    $data['user_id'] = $userStorage->id;
+                                    $data['updated_at'] = $date;
+                                    $where = $db->quoteInto('id = ?',$ch_id);
+                                    $QCheckMoney->update($data,$where); 
+                                    
+                                }else{
+                                    $data['bank'] = $bank_id;
+                                    $data['create_by'] = $userStorage->id;
+                                    $data['create_at'] = $date;
+                                    $QCheckMoney->insert($data);
+                                }
+
+                                /*
+                                if($data['d_id'] >= 0){  
+                                    if($ch_id){//Trường hợp update
+                                        if($data['d_id'] == $old_checkmoney['d_id']){
+                                            $QStoreaccount->updateBalance( $data['d_id'] );
+                                        }else{
+                                            $QStoreaccount->updateBalance( $data['d_id'] );
+                                            if( intval( $old_checkmoney['d_id'] ) >= 0 ){
+                                                $QStoreaccount->updateBalance($old_checkmoney['d_id']);
+                                            }
+                                        }
+                                    }else{//Trường hợp thêm mới.
+                                        $QStoreaccount->updateBalance($data['d_id']);
+                                    }           
+                                }
+                                */
+                             }
+
+                             //print_r($data_money);die;
+                             /*-------------------File Pay Slip Upload--------------------------*/
+                                $upload    = new Zend_File_Transfer_Adapter_Http();
+                                $files  = $upload->getFileInfo();
+                                $count_file_upload=0;$r=0;
+                                foreach($files as $file => $fileInfo)
+                                {
+                                    if($upload->isUploaded($file))
+                                    {
+                                            
+                                        $uniqid = uniqid('', true);
+
+                                        $uploaded_dir = APPLICATION_PATH . DIRECTORY_SEPARATOR . '..'
+                                            . DIRECTORY_SEPARATOR . 'public' . DIRECTORY_SEPARATOR . 'files'
+                                            . DIRECTORY_SEPARATOR . 'finance'. DIRECTORY_SEPARATOR . 'pay_slips'
+                                            . DIRECTORY_SEPARATOR . $sn;
+
+                                        $file_pay_slip = DIRECTORY_SEPARATOR . 'pay_slips'
+                                            . DIRECTORY_SEPARATOR . $sn . DIRECTORY_SEPARATOR;    
+
+                                        if (!is_dir($uploaded_dir))
+                                            @mkdir($uploaded_dir, 0777, true);
+
+                                        
+                                        $upload->setDestination($uploaded_dir);
+
+                                        // Upload Max 5 MB
+                                        $upload->setValidators(array(
+                                            'Size' => array('min' => 50, 'max' => 2000000),
+                                            'Count' => array('min' => 1, 'max' => 3),
+                                            'Extension' => array('jpg','jpeg', 'PNG','GIF'),
+                                        ));
+
+                                        if (!$upload->isValid($file)) { // validate IF
+                                        $errors = $upload->getErrors();
+                                        $sError = null;
+                                            if ($errors and isset($errors[0]))
+                                            switch ($errors[0]) {
+                                                case 'fileUploadErrorIniSize':
+                                                    $sError = 'File size is too large';
+                                                    break;
+                                                case 'fileMimeTypeFalse':
+                                                    $sError = 'The file you selected weren\'t the type we were expecting';
+                                                    break;
+                                                case 'fileExtensionFalse':
+                                                    $sError = 'Please choose a file in JPG or PNG format.';
+                                                    break;
+                                                case 'fileCountTooFew':
+                                                    $sError = 'Please choose a PO file (in JPG or PNG format)';
+                                                    break;
+                                                case 'fileUploadErrorNoFile':
+                                                    $sError = 'Please choose a PO file (in JPG or PNG format)';
+                                                    break;
+                                                case 'fileSizeTooBig':
+                                                    $sError = 'File size is too big';
+                                                    break;
+                                            }
+
+                                            if($sError!=''){
+                                                $db->rollback();
+                                                $flashMessenger->setNamespace('error')->addMessage($sError);
+                                                $this->_redirect('/sales/sales-confirm-order?sn=' . $sn);
+                                            }
+                                        }else{
+                                           $upload->receive($file);
+                                        }                                                     
+                                    }
+                                    $r+=1;
+                                }
+                             
+                            /*-------------------End File Pay Slip Upload--------------------------*/
+                        }
+                        //todo log
+                        $ip = $this->getRequest()->getServer('REMOTE_ADDR');
+
+                        $info = 'Verify: Sale order number: ' . $sn;
+
+                        $QLog = new Application_Model_Log();
+
+                        $QLog->insert(array(
+                            'info' => $info,
+                            'user_id' => $userStorage->id,
+                            'ip_address' => $ip,
+                            'time' => $date,
+                            ));
+
+                        //check before commit
+                        if ($payment) {
+                            $whereCheckMoney       = array();
+                            $whereCheckMoney[]     = $QCheckmoney->getAdapter()->quoteInto('sn = ?',$sales[0]['sn']);
+                            $checkUpdateCheckMoney = $QCheckmoney->fetchRow($whereCheckMoney);
+                            if (!$checkUpdateCheckMoney) {
+                                $db->rollback();
+                                $flashMessenger->setNamespace('error')->addMessage('Cannot update, please try again!');
+                                $this->_redirect('/sales/sales-confirm-order?sn=' . $sn);
+                            }
+                        }
+
+                        $db->commit();
+                        $flashMessenger->setNamespace('success')->addMessage('Done!');
+                        $this->_redirect('/sales');
+                    }
+                    catch (exception $e) {
+                        $db->rollback();
+                        $flashMessenger->setNamespace('error')->addMessage('Cannot update, please try again!' .
+                            $e->getMessage());
+                        $this->_redirect('/sales/sales-confirm-order?sn=' . $sn);
+                    }
+                    $flashMessenger->setNamespace('success')->addMessage('Done!');
+                    $this->_redirect('/sales');
+                }
+
+                } //End if check post
+           
+            $where = array();
+            $where[] = $QMarket->getAdapter()->quoteInto('sn = ?', $sn);
+            $where[] = $QMarket->getAdapter()->quoteInto('status = ?', 1);
+
+            $sales = $QMarket->fetchAll($where);
+            //print_r($sales);
+
+            $data = array();
+
+            $QGoodCategory = new Application_Model_GoodCategory();
+            $categories    = $QGoodCategory->get_cache();
+
+            $QGood         = new Application_Model_Good();
+            $goods         = $QGood->get_cache();
+
+            $QGoodColor    = new Application_Model_GoodColor();
+            $goodColors    = $QGoodColor->get_cache();
+
+            $QStaff        = new Application_Model_Staff();
+            $staffs        = $QStaff->get_cache();
+
+            $QDistributor  = new Application_Model_Distributor();
+            $distributors  = $QDistributor->get_cache();
+
+
+            // get another info of distributor
+            $where = $QDistributor->getAdapter()->quoteInto('id = ?', $sales[0]->d_id);
+            $distributors_info = $QDistributor->fetchRow($where);
+
+            // get credit from distributor's credit type
+            $QCredit  = new Application_Model_Credit();
+            $where = $QCredit->getAdapter()->quoteInto('id = ?', $distributors_info->credit_type);
+            $credit = $QCredit->fetchRow($where);
+
+            $QWarehouse    = new Application_Model_Warehouse();
+            $warehouses    = $QWarehouse->get_cache();
+
+            $Credit_Note = $QMarket->fetchCredit_Note($sn);
+
+            $QStoreAccount  = new Application_Model_Storeaccount();
+
+
+            $show_cash_menu=false;
+            if (My_Staff_Group::inGroup($userStorage->group_id, OPPO_BRAND_SHOP_SERVICE) || $userStorage->group_id == ADMINISTRATOR_ID ) 
+            {
+                $show_cash_menu  = true;
+            }
+            
+            foreach ($sales as $k => $sale) {
+                //get warehouse
+                $data[$k]['warehouse_name'] = isset($warehouses[$sale->warehouse_id]) ? $warehouses[$sale->
+                    warehouse_id] : '';
+
+                //get retailer
+                $data[$k]['retailer_name'] = isset($distributors[$sale->d_id]) ? $distributors[$sale->
+                    d_id] : '';
+
+                //get retailer : rank
+                $data[$k]['retailer_rank'] = isset($distributors_info->rank) ? $distributors_info->rank : '';
+
+                //get retailer : rank
+                $data[$k]['show_cash_menu'] = $show_cash_menu;
+
+                //get retailer : credit amount
+                $q_store_account  = $QStoreAccount->getMainDistributorBalance($sale->d_id);
+
+                //print_r($distributors_info);
+
+                //$data[$k]['credit_amount'] = isset($distributors_info->credit_amount) ? $distributors_info->credit_amount : '';
+
+                $credit_amount = isset($q_store_account['credit_amount']) ? $q_store_account['credit_amount'] : '0';
+
+                $data[$k]['credit_amount'] = $credit_amount;
+
+                
+
+                //print_r($sales[0]['credit_amount']);
+
+                //$credit_amount = isset($distributors_info->credit_amount) ? $distributors_info->credit_amount : '0';
+
+                $this->view->distributor_total_balance = ($credit_amount - ($distributor_balance));
+
+
+                //get retailer : credit type
+                $data[$k]['credit_type'] = isset($credit->name) ? $credit->name : '';
+
+                //get created_by_name
+                $data[$k]['created_by_name'] = isset($staffs[$sale->user_id]) ? $staffs[$sale->
+                    user_id] : '';
+
+                //get created_by_name
+                $data[$k]['salesman_name'] = isset($staffs[$sale->salesman]) ? $staffs[$sale->
+                    salesman] : '';
+
+                //get sales man Catty
+                if($sale->sales_catty_id !=''){
+                    $staffs_catty = $QStaff->getSalesCattyByStore($sale->d_id,$sale->sales_catty_id);
+                }
+
+                $data[$k]['salescatty_name'] = isset($staffs_catty) ? $staffs_catty[0]['fullname'] : '';
+
+                //get category
+                $data[$k]['category'] = isset($categories[$sale->cat_id]) ? $categories[$sale->
+                    cat_id] : '';
+
+                //get good
+                $data[$k]['good'] = isset($goods[$sale->good_id]) ? $goods[$sale->good_id] : '';
+
+                //get goods color
+                $data[$k]['color'] = isset($goodColors[$sale->good_color]) ? $goodColors[$sale->
+                    good_color] : '';
+
+                $data[$k]['sale'] = $sale;
+
+               // $data[$k]['total_discount'] = $Credit_Note[0]['total_discount'];
+
+               // $data[$k]['credit_note_list'] = $Credit_Note[0];
+                //print_r($Credit_Note[0]);
+
+                $data[$k]['total_discount'] = $Credit_Note[0]['total_discount'];
+
+                $data[$k]['credit_note_list'] = $Credit_Note;
+                $data[$k]['total_spc_discount'] = $sale->total_spc_discount;
+
+
+            }
+
+            //Get remain discount
+            $QMarketDeduction = new Application_Model_MarketDeduction();
+            $deduction = $QMarketDeduction->getPrice(array('d_id' => $sales[0]['d_id']));
+
+            $discount_ck = (isset($deduction[DISCOUNT_CK]) ? $deduction[DISCOUNT_CK] : 0) + (isset($deduction[DISCOUNT_CK_II]) ? $deduction[DISCOUNT_CK_II] : 0) + (isset($deduction[DISCOUNT_CK_III]) ? $deduction[DISCOUNT_CK_III] : 0);
+            $diamond_discount = (isset($deduction[DISCOUNT_DIAMOND_CLUB]) ? $deduction[DISCOUNT_DIAMOND_CLUB] : 0) + (isset($deduction[DISCOUNT_DIAMOND_CLUB_5]) ? $deduction[DISCOUNT_DIAMOND_CLUB_5] : 0) + (isset($deduction[DISCOUNT_DIAMOND_CLUB_6]) ? $deduction[DISCOUNT_DIAMOND_CLUB_6] : 0) + (isset($deduction[DISCOUNT_DIAMOND_CLUB_7]) ? $deduction[DISCOUNT_DIAMOND_CLUB_7] : 0)+ (isset($deduction[DISCOUNT_DIAMOND_CLUB_8]) ? $deduction[DISCOUNT_DIAMOND_CLUB_8] : 0);
+
+            $this->view->discount = $discount_ck;
+            $this->view->diamond_discount = $diamond_discount;
+
+             //Get remain discount BVG
+            $discount_bvg = $QMarketProduct->getPriceDiscount(array('d_id' => $sales[0]['d_id']));
+            $this->view->discount_bvg = $discount_bvg;
+
+            //Get detail discount
+            $detailDiscount = $QMarketProduct->getDetailDiscount($sn);
+            //get detail BVG
+            $detailBVG = $QMarketProduct->getDetailBVG($sn);
+
+            $QBank = new Application_Model_Bank();
+            $where = $QBank->getAdapter()->quoteInto("type_payment in('TR','CC')",null);
+            $banks = $QBank->fetchAll($where,'name asc');
+
+            $where = $QBank->getAdapter()->quoteInto('type_payment = ?','CC');
+            $banksCredit = $QBank->fetchAll($where,'name asc');
+            $this->view->banks = $banks;
+            $this->view->banksCredit = $banksCredit;
+
+            $this->view->detailBVG = $detailBVG;
+            $this->view->detailDiscount = $detailDiscount;
+            
+            $this->view->sales = $data;
+
+            //print_r($data);
+        }
+    }
+
+    public function salesConfirmOrderMultiAction()
+    {   
+        $sn = $this->getRequest()->getParam('sn');
+        $flashMessenger = $this->_helper->flashMessenger;
+
+        $messages = $flashMessenger->setNamespace('error')->getMessages();
+        $this->view->messages = $messages;
+
+        $userStorage = Zend_Auth::getInstance()->getStorage()->read();
+
+        $sn = explode(",", $sn);
+
+        if ($sn) {
+
+            $db = Zend_Registry::get('db');
+            $QMarket = new Application_Model_Market();
+            $where = array();
+            $where[] = $QMarket->getAdapter()->quoteInto('sn in (?)', $sn);
+            $where[] = $QMarket->getAdapter()->quoteInto('status = ?', 1);
+
+            $sales = $QMarket->fetchAll($where);
+
+            $checkDis = array();
+            foreach ($sales as $key) {
+                array_push($checkDis, $key['d_id']);
+            }
+            if(count(array_unique($checkDis)) > 1){
+                $flashMessenger->setNamespace('error')->addMessage('Can not select many Distributor!');
+                $this->_redirect('/sales');
+            }
+
+            //check
+            if (!$sales) {
+                $flashMessenger->setNamespace('error')->addMessage('Invalid SN!');
+                $this->_redirect('/sales');
+            }
+
+            if (!isset($sales[0]) || ($sales[0]['shipping_yes_time'] and $sales[0]['pay_time'])) {
+
+                $flashMessenger->setNamespace('error')->addMessage('This order cannot be changed!');
+
+                $this->_redirect('/sales');
+
+            }
+
+            $QMarketProduct = new Application_Model_MarketProduct();
+            $QMarket = new Application_Model_Market();
+            //Tiền đi đơn nếu có bảo vệ giá thì đã trừ tiền
+            $sn_total = 0;
+            $intRebate = intval($QMarketProduct->getPrice($sn)); // số tiền được giảm
+            //$sn_total = $total_amount - $intRebate; // số tiền còn lại
+            $sn_total = $QMarket->getPrice($sn) - $intRebate; // số tiền còn lại
+
+            $strNoteRebate = '';
+            if ($intRebate > 0) {
+                $strNoteRebate = ', rebate: ' . $intRebate;
+            }
+
+            if($sales[0]['office']){
+                $selectArea = $db->select()
+                    ->from(array('a'=>'office'),array('a.*'))
+                    ->where('a.id = ?',$sales[0]['office']);
+                ;
+                $office_area = $db->fetchRow($selectArea);
+                $this->view->office_area = $office_area;
+            }
+
+            //Store account
+            $QStoreaccount = new Application_Model_Storeaccount();
+            $QDistributor  = new Application_Model_Distributor();
+            $QCampaign     = new Application_Model_Campaign();
+
+            //lấy dealer mẹ
+            $main_retailer                   = $QDistributor->getRootDistributor($sales[0]['d_id']);
+            $this->view->main_retailer       = $main_retailer;
+            $total_balance_row               = $QStoreaccount->getBalanceByGroup($sales[0]['d_id']);
+            $distributor_balance_row         = $QStoreaccount->getBalance($sales[0]['d_id']);
+           // $q_total_balance                 = $QStoreaccount->getMainDistributorBalance($sales[0]['d_id']); 
+            //------------------------
+
+            $selectCompany = $db->select()
+                ->from(array('p'=>'warehouse'),array('p.company_id'))
+                ->where('id = ?',$sales[0]['warehouse_id']);
+            $company_id = $db->fetchOne($selectCompany);
+
+           // $remain_balance                  = ($company_id == 1) ? $distributor_balance_row['balance'] : $distributor_balance_row['balance_smartmobile'];
+
+            $credit_amount                  = $distributor_balance_row['credit_amount'];
+            $remain_balance                  = $distributor_balance_row['use_credit'];
+            $total_balance                  = $distributor_balance_row['balance'];
+
+            $distributor_balance             = ($company_id == 1) ? $distributor_balance_row['balance'] : $distributor_balance_row['balance_smartmobile'];
+            $this->view->distributor_balance = $distributor_balance;
+
+            $checkBalance = 0;
+            $checkPaymentStatus = 0; //kiểm tra có thể cho phép payment không?
+            if ($remain_balance) {
+
+                if ($sn_total <= $remain_balance)
+                {
+                    $checkPaymentStatus = 1;
+                } else{
+                    $checkPaymentStatus = 0;
+                }
+
+                //$checkBalance = $remain_balance - $sn_total;
+                $checkBalance =  $total_balance - $sn_total;
+            } else{
+                $checkBalance = -$sn_total;
+            }
+
+            //xử lý check payment
+            $this->view->need               = abs($checkBalance);
+            $this->view->checkPaymentStatus = $checkPaymentStatus;
+            $this->view->credit_amount       = $credit_amount;
+            $this->view->checkBalance       = $checkBalance;
+            $this->view->remain_balance     = $remain_balance*-1;
+            $this->view->campaign           = $QCampaign->get_cache();
+
+            // get tags
+            $QTag = new Application_Model_Tag();
+            $QTagObject = new Application_Model_TagObject();
+
+            $where = array();
+            $where[] = $QTagObject->getAdapter()->quoteInto('object_id = ?', $sn);
+            $where[] = $QTagObject->getAdapter()->quoteInto('type = ?', TAG_ORDER);
+
+            $a_tags = array();
+
+            $tags_object = $QTagObject->fetchAll($where);
+            if ($tags_object)
+                foreach ($tags_object as $to) {
+                    $where = $QTag->getAdapter()->quoteInto('id = ?', $to['tag_id']);
+                    $tag = $QTag->fetchRow($where);
+                    if ($tag)
+                        $a_tags[] = $tag['name'];
+                }
+ 
+            $this->view->a_tags = $a_tags;
+                if ($this->getRequest()->getMethod() == 'POST') {
+                    // echo "<pre>";
+                    // print_r($_POST);
+                    // print_r($_FILES); die;
+                    //$file_name_show = $_FILES['file']['name'];
+                    //print_r($file_name_show);
+                    $db = Zend_Registry::get('db');
+                    $select = $db->select()
+                            ->from(array('m' => 'market'),
+                                array('m.sn_ref'));
+                            $select->join(array('s'=>'staff'),'sales_confirm_id=s.id',array('s.firstname'));
+                            $select->where('m.sn = ?', $sn);
+                            $select->where('sales_confirm_id  IS NOT NULL');
+                            $select->where('sales_confirm_date  IS NOT NULL');
+                            $select->group('m.sn');
+
+                       
+                        
+                        $Check_pay_list = $db->fetchRow($select);
+                   
+                   
+
+                if (isset($Check_pay_list) and $Check_pay_list) {
+                    // die($Check_pay_list['sn_ref']);
+                    $flashMessenger->setNamespace('error')->addMessage('Order '.$Check_pay_list['sn_ref'].' ทำรายการแล้วโดย '.$Check_pay_list['firstname'] );
+                        $this->_redirect('/sales');
+                   
+                }else{
+                    $db->beginTransaction();
+
+                    try { 
+
+                        $payment       = $this->getRequest()->getParam('payment');
+                        $shipping      = $this->getRequest()->getParam('shipping');
+                        $pay_text      = $this->getRequest()->getParam('pay_text');
+                        $shipping_text = $this->getRequest()->getParam('shipping_text');
+                        $payment_type = $this->getRequest()->getParam('payment_type',NULL);
+                        $payment_order = $this->getRequest()->getParam('payment_order', 0);
+                        $payment_bank_transfer = $this->getRequest()->getParam('payment_bank_transfer', 0);
+                        $payment_service = $this->getRequest()->getParam('payment_service', 0);
+                        $payment_servicecharge = $this->getRequest()->getParam('payment_servicecharge', 0);
+                    
+                        $pay_time      = $this->getRequest()->getParam('pay_time');
+                        $bank          = $this->getRequest()->getParam('select_bank_id', 0);
+                        $type          = 1;
+                        //$company_id    = $this->getRequest()->getParam('company_id');
+                        $company_id    = 1;
+                        $retailer_rank = $this->getRequest()->getParam('retailer_rank', NULL);
+
+                        $sn_total       = $this->getRequest()->getParam('total_out_amount', 0);
+                        $total_amount  = $this->getRequest()->getParam('total_amount', 0);
+                        
+
+                        if($total_amount==0)
+                        {
+                            $payment_order=0;
+                            $payment_bank_transfer=0;
+                            $payment_servicecharge=0;
+                            $payment_service=0;
+                        }                   
+
+                        $where = array();
+                        $where[] = $QMarket->getAdapter()->quoteInto('sn = ?', $sn);
+                        $where[] = $QMarket->getAdapter()->quoteInto('status = ?', 1);
+
+                        $data = array(
+                            'pay_text' => $pay_text,
+                            'shipping_text' => $shipping_text,
+                            );
+
+                        // get another info of distributor
+                        $where_payment = $QDistributor->getAdapter()->quoteInto('id = ?', $sales[0]['d_id']);
+                        $distributors_payment = $QDistributor->fetchRow($where_payment);
+
+
+                        $auto_confirm_finance = $distributors_payment->auto_confirm_finance;
+                        $auto_confirm_finance_warehouse = $distributors_payment->warehouse_id;
+                        if($auto_confirm_finance_warehouse =='73' || $auto_confirm_finance_warehouse =='62')
+                        {
+                          $auto_confirm_finance =1;  
+                        }
+
+                        $date = date('Y-m-d H:i:s');
+
+                        $checkUpdateCheckMoney = 0;
+                        //$QCheckMoney    = new Application_Model_CheckmoneySales();
+
+                        if ($payment) {
+
+                            //$data['pay_time'] = $date;
+                           // $data['pay_user'] = $userStorage->id;
+                            $data['payment_type'] = $payment_type;
+
+                            //check money
+                            $QCheckmoney = new Application_Model_Checkmoney();
+
+                            //Kiểm tra đơn hàng đã đánh đấu payment lần nào chưa?, nếu rồi thì bỏ qua
+                            $select_sn = array();
+                            $select_sn[] = $QCheckmoney->getAdapter()->quoteInto('sn = ?', $sales[0]['sn']);
+                            $select_sn[] = $QCheckmoney->getAdapter()->quoteInto('type = ?', 2); // phân loại trừ tiền
+                            $check_sn_exist = $QCheckmoney->fetchRow($select_sn);
+
+
+                            if (!$check_sn_exist) {
+
+                                $payment_service_val=0;
+                                for($i=0;$i<count($payment_order);$i++){
+                                    $payment_service_val +=$payment_service[$i];
+                                }
+
+                                $sn_total = 0;
+                                $intRebate = intval($QMarketProduct->getPrice($sales[0]['sn']));
+                                $sn_total = $QMarket->getPrice($sales[0]['sn']) - $intRebate;
+
+                                $note_new='Payment Order='.number_format($sn_total,2).' ค่าอะไหล่และค่าบริการ='.number_format($payment_service_val,2);
+
+                                //data for checkmoney transaction
+                                $data_ch = array(
+                                    'd_id'       => $sales[0]['d_id'],
+                                    'payment'    => $date,
+                                    'pay_time'   => $date,
+                                    'pay_service'     => $payment_service_val,
+                                    'output'     => $sn_total,
+                                    'pay_money'  => -$sn_total,
+                                    'type'       => 2,
+                                    'sn'         => $sales[0]['sn'],
+                                    'user_id'    => $userStorage->id,
+                                    'create_by'  => $userStorage->id,
+                                    'create_at'  => $date,
+                                    'note'       => $note_new,
+                                    'company_id' => $company_id,
+                                    'sales_confirm_date'    => $date,
+                                    'sales_confirm_id'    => $userStorage->id,
+                                    );
+
+                                if($auto_confirm_finance =='1')
+                                {
+                                    $data_ch['finance_confirm_id'] = $userStorage->id;
+                                    $data_ch['finance_confirm_date'] = $date;
+                                }
+
+
+                                $checkUpdateCheckMoney = $QCheckmoney->insert($data_ch);
+
+                                // update balance
+                                if ($checkUpdateCheckMoney) {
+                                   // $QStoreaccount->updateBalance($sales[0]['d_id']);
+                                } else {
+                                    exit("Loi khong dong bo!");
+                                }
+
+                                // Neu co uy nhiem chi
+                                    $payment_order_val=0;$payment_bank_transfer_val=0;$pay_service_val=0;$i=0;
+                                    for($i=0;$i<count($payment_order);$i++){
+                                        $payment_order_val +=$payment_order[$i];
+                                        $pay_service_val +=$pay_service[$i];
+                                        $payment_order_val +=$payment_order[$i];
+                                    }
+                                    
+                                    if($payment_type=="CA"){
+                                        if ($payment_order_val >=0) {
+                                            $status=1;
+                                            if($retailer_rank ==10){
+                                                $status=0;
+                                            }
+                                           // $pay_money = $payment_order+$payment_bank_transfer;
+                                        $QCheckmoneyPaymentorder = new Application_Model_CheckmoneyPaymentorder();
+                                            $QCheckmoneyPaymentorder->insert(array(
+                                                'd_id'          => $sales[0]['d_id'],
+                                                'sn'            => $sales[0]['sn'],
+                                                'payment_order' => ($payment_order_val+$payment_order_val),
+                                                'pay_banktransfer' => $payment_bank_transfer_val,
+                                                'status'        => $status,
+                                                'created_at'    => $date,
+                                                'created_by'    => $userStorage->id,
+                                                'sales_confirm_date'    => $date,
+                                                'sales_confirm_id'    => $userStorage->id,
+                                                ));
+                                        } //End check payment order
+                                    }
+                            } //End check sn existed
+
+                        } //End check if payment
+
+                        if ($shipping) {
+                           // $data['shipping_yes_time'] = $date;
+                           // $data['shipping_yes_id'] = $userStorage->id;
+                        }
+
+                        $data['confirm_so'] = 1;
+
+                        $data['sales_confirm_date'] = $date;
+                        $data['sales_confirm_id'] = $userStorage->id;
+
+
+                        if($auto_confirm_finance =='1'){
+                            $data['pay_time'] = $date;
+                            $data['pay_user'] = $userStorage->id;
+                            $data['shipping_yes_time'] = $date;
+                            $data['shipping_yes_id'] = $userStorage->id;
+
+                            $data['pay_text'] = "Confirm Payment Auto by Finance";
+                            //$data['shipping_text'] = "Confirm Shipping Auto by Finance";
+                            $data['finance_confirm_id'] = $userStorage->id;
+                            $data['finance_confirm_date'] = $date;
+
+                        }
+                        //print_r($data);die;
+                        $QMarket->update($data, $where);
+
+                        /* ---------Add Money Check--------------- */
+
+                        if($total_amount >= 0 && $payment_type=="CA")
+                        {
+                            $payment_order_val=0;$payment_bank_transfer_val=0;$i=0;
+                            $payment_service_val=0;$payment_servicecharge_val=0;
+
+                            for($i=0;$i<count($payment_order);$i++){
+                                
+                               if($bank[$i]==''){
+                                  $bank_id=0; 
+                               }else{
+                                  $bank_id=$bank[$i];
+                               }
+                                $payment_order_val =$payment_order[$i];
+                                $payment_bank_transfer_val =$payment_bank_transfer[$i];
+                                $payment_service_val =$payment_service[$i];
+                                $payment_servicecharge_val =$payment_servicecharge[$i];
+                                $pay_time_val=$pay_time[$i];
+                                $d_id = $sales[0]['d_id'];
+                                $date = date('Y-m-d H:i:s');
+
+                                //pay_banktransfer
+
+                                $QCheckMoney    = new Application_Model_Checkmoney();
+                                $QStoreaccount  = new Application_Model_Storeaccount();
+                                //$userStorage    = Zend_Auth::getInstance()->getStorage()->read();
+
+                                //$pay_money = $payment_order+$payment_bank_transfer;
+                                $file_name_upload = '/pay_slips/'.$sn.'/'.$_FILES['file']['name'][$i];
+                            
+                                $note_new='PayMoney='.number_format($payment_order_val,2) .' Fee transfer='.number_format($payment_bank_transfer_val,2).' Service Charge='.number_format($payment_servicecharge_val,2).' ค่าอะไหล่และค่าบริการ='.number_format($payment_service_val,2);
+
+                                $data = array(
+                                        'd_id'                  => $d_id,
+                                        'bank'                  => $bank_id,
+                                        'pay_money'             => $payment_order_val,
+                                        'pay_servicecharge'     => $payment_servicecharge_val,
+                                        'pay_banktransfer'      => $payment_bank_transfer_val,
+                                        'pay_service'           => $payment_service_val,
+                                        'type'                  => 1,
+                                        'pay_time'              => $pay_time_val,
+                                        'bank_serial'           => null,
+                                        'bank_transaction_code' => null,
+                                        'note'                  => $note_new,
+                                        'content'               => null,
+                                        'company_id'            => $company_id,
+                                        'sn'                    => $sn,
+                                        'file_pay_slip'         => $file_name_upload,
+                                        'user_id'               => $userStorage->id,
+                                        'create_by'             => $userStorage->id,
+                                        'create_at'             => $date,
+                                        'sales_confirm_id'      => $userStorage->id,
+                                        'sales_confirm_date'    => $date,
+                                        'addition'              => 1
+                                );
+
+                            $checkUpdateCheckMoney2 = $QCheckmoney->getCheckDuplicate($sn,$file_name_upload,$payment_order_val);
+
+                            
+                            $file_name_upload = $_FILES['file']['name'][$i];
+
+                            // die;
+                            if ($checkUpdateCheckMoney2) {
+                                // print_r($checkUpdateCheckMoney2);
+
+                                // die;
+                            }else{
+                                if($ch_id){
+                                    // echo "1";
+                                    $old_checkmoney = $QCheckMoney->find($ch_id)->current();
+                                    $data['user_id'] = $userStorage->id;
+                                    $data['updated_at'] = $date;
+                                    $where = $db->quoteInto('id = ?',$ch_id);
+                                    $QCheckMoney->update($data,$where); 
+                                    
+                                }else{
+                                    // echo "2";
+                                    $data['bank'] = $bank_id;
+                                    $data['create_by'] = $userStorage->id;
+                                    $data['create_at'] = $date;
+                                    $QCheckMoney->insert($data);
+                                }
+                            
+                             
+                             
+                                /*
+                                if($data['d_id'] >= 0){  
+                                    if($ch_id){//Trường hợp update
+                                        if($data['d_id'] == $old_checkmoney['d_id']){
+                                            $QStoreaccount->updateBalance( $data['d_id'] );
+                                        }else{
+                                            $QStoreaccount->updateBalance( $data['d_id'] );
+                                            if( intval( $old_checkmoney['d_id'] ) >= 0 ){
+                                                $QStoreaccount->updateBalance($old_checkmoney['d_id']);
+                                            }
+                                        }
+                                    }else{//Trường hợp thêm mới.
+                                        $QStoreaccount->updateBalance($data['d_id']);
+                                    }           
+                                }
+                                */
+                             }
+
+                             //print_r($data_money);die;
+                             /*-------------------File Pay Slip Upload--------------------------*/
+                                $upload    = new Zend_File_Transfer_Adapter_Http();
+                                $files  = $upload->getFileInfo();
+                                $count_file_upload=0;$r=0;
+                                foreach($files as $file => $fileInfo)
+                                {
+                                    if($upload->isUploaded($file))
+                                    {
+                                            
+                                        $uniqid = uniqid('', true);
+
+                                        $uploaded_dir = APPLICATION_PATH . DIRECTORY_SEPARATOR . '..'
+                                            . DIRECTORY_SEPARATOR . 'public' . DIRECTORY_SEPARATOR . 'files'
+                                            . DIRECTORY_SEPARATOR . 'finance'. DIRECTORY_SEPARATOR . 'pay_slips'
+                                            . DIRECTORY_SEPARATOR . $sn;
+
+                                        $file_pay_slip = DIRECTORY_SEPARATOR . 'pay_slips'
+                                            . DIRECTORY_SEPARATOR . $sn . DIRECTORY_SEPARATOR;    
+
+                                        if (!is_dir($uploaded_dir))
+                                            @mkdir($uploaded_dir, 0777, true);
+
+                                        
+                                        $upload->setDestination($uploaded_dir);
+
+                                        // Upload Max 5 MB
+                                        $upload->setValidators(array(
+                                            'Size' => array('min' => 50, 'max' => 2000000),
+                                            'Count' => array('min' => 1, 'max' => 3),
+                                            'Extension' => array('jpg','jpeg', 'PNG','GIF'),
+                                        ));
+
+                                        if (!$upload->isValid($file)) { // validate IF
+                                        $errors = $upload->getErrors();
+                                        $sError = null;
+                                            if ($errors and isset($errors[0]))
+                                            switch ($errors[0]) {
+                                                case 'fileUploadErrorIniSize':
+                                                    $sError = 'File size is too large';
+                                                    break;
+                                                case 'fileMimeTypeFalse':
+                                                    $sError = 'The file you selected weren\'t the type we were expecting';
+                                                    break;
+                                                case 'fileExtensionFalse':
+                                                    $sError = 'Please choose a file in JPG or PNG format.';
+                                                    break;
+                                                case 'fileCountTooFew':
+                                                    $sError = 'Please choose a PO file (in JPG or PNG format)';
+                                                    break;
+                                                case 'fileUploadErrorNoFile':
+                                                    $sError = 'Please choose a PO file (in JPG or PNG format)';
+                                                    break;
+                                                case 'fileSizeTooBig':
+                                                    $sError = 'File size is too big';
+                                                    break;
+                                            }
+
+                                            if($sError!=''){
+                                                $db->rollback();
+                                                $flashMessenger->setNamespace('error')->addMessage($sError);
+                                                $this->_redirect('/sales/sales-confirm-order?sn=' . $sn);
+                                            }
+                                        }else{
+                                           $upload->receive($file);
+                                        }                                                     
+                                    }
+                                    $r+=1;
+                                }
+                            }    
+                            /*-------------------End File Pay Slip Upload--------------------------*/
+                        }
+                        /* ------------------------ */
+                        if($total_amount >= 0 && $payment_type=="CC")
+                        {
+                            $payment_order_val=0;$payment_bank_transfer_val=0;$i=0;
+                            $payment_service_val=0;$payment_servicecharge_val=0;
+
+                            for($i=0;$i<count($payment_order);$i++){
+                                
+                               if($bank[$i]==''){
+                                  $bank_id=0; 
+                               }else{
+                                  $bank_id=$bank[$i];
+                               }
+                                $payment_order_val =$payment_order[$i];
+                                $payment_bank_transfer_val =$payment_bank_transfer[$i];
+                                $payment_service_val =$payment_service[$i];
+                                $payment_servicecharge_val =$payment_servicecharge[$i];
+                                $pay_time_val=$pay_time[$i];
+                                $d_id = $sales[0]['d_id'];
+                                $date = date('Y-m-d H:i:s');
+
+                                //pay_banktransfer
+
+                                $QCheckMoney    = new Application_Model_Checkmoney();
+                                $QStoreaccount  = new Application_Model_Storeaccount();
+                                //$userStorage    = Zend_Auth::getInstance()->getStorage()->read();
+
+                                //$pay_money = $payment_order+$payment_bank_transfer;
+                            echo    $file_name_upload = '/pay_slips/'.$sn.'/'.$_FILES['file']['name'][$i];
+                            
+                                $note_new='PayMoney='.number_format($payment_order_val,2) .' Fee transfer='.number_format($payment_bank_transfer_val,2).' Service Charge='.number_format($payment_servicecharge_val,2).' ค่าอะไหล่และค่าบริการ='.number_format($payment_service_val,2);
+
+                                $data = array(
+                                        'd_id'                  => $d_id,
+                                        'bank'                  => $bank_id,
+                                        'pay_money'             => $payment_order_val,
+                                        'pay_servicecharge'     => $payment_servicecharge_val,
+                                        'pay_banktransfer'      => $payment_bank_transfer_val,
+                                        'pay_service'           => $payment_service_val,
+                                        'type'                  => 1,
+                                        'pay_time'              => $pay_time_val,
+                                        'bank_serial'           => null,
+                                        'bank_transaction_code' => null,
+                                        'note'                  => $note_new,
+                                        'content'               => null,
+                                        'company_id'            => $company_id,
+                                        'sn'                    => $sn,
+                                        'file_pay_slip'         => $file_name_upload,
+                                        'user_id'               => $userStorage->id,
+                                        'create_by'             => $userStorage->id,
+                                        'create_at'             => $date,
+                                        'sales_confirm_id'      => $userStorage->id,
+                                        'sales_confirm_date'    => $date,
+                                        'addition'              => 1
+                                );
+
+                                $file_name_upload = $_FILES['file']['name'][$i];
+                                // die;
+                                if($ch_id){
+                                    $old_checkmoney = $QCheckMoney->find($ch_id)->current();
+                                    $data['user_id'] = $userStorage->id;
+                                    $data['updated_at'] = $date;
+                                    $where = $db->quoteInto('id = ?',$ch_id);
+                                    $QCheckMoney->update($data,$where); 
+                                    
+                                }else{
+                                    $data['bank'] = $bank_id;
+                                    $data['create_by'] = $userStorage->id;
+                                    $data['create_at'] = $date;
+                                    $QCheckMoney->insert($data);
+                                }
+
+                                /*
+                                if($data['d_id'] >= 0){  
+                                    if($ch_id){//Trường hợp update
+                                        if($data['d_id'] == $old_checkmoney['d_id']){
+                                            $QStoreaccount->updateBalance( $data['d_id'] );
+                                        }else{
+                                            $QStoreaccount->updateBalance( $data['d_id'] );
+                                            if( intval( $old_checkmoney['d_id'] ) >= 0 ){
+                                                $QStoreaccount->updateBalance($old_checkmoney['d_id']);
+                                            }
+                                        }
+                                    }else{//Trường hợp thêm mới.
+                                        $QStoreaccount->updateBalance($data['d_id']);
+                                    }           
+                                }
+                                */
+                             }
+
+                             //print_r($data_money);die;
+                             /*-------------------File Pay Slip Upload--------------------------*/
+                                $upload    = new Zend_File_Transfer_Adapter_Http();
+                                $files  = $upload->getFileInfo();
+                                $count_file_upload=0;$r=0;
+                                foreach($files as $file => $fileInfo)
+                                {
+                                    if($upload->isUploaded($file))
+                                    {
+                                            
+                                        $uniqid = uniqid('', true);
+
+                                        $uploaded_dir = APPLICATION_PATH . DIRECTORY_SEPARATOR . '..'
+                                            . DIRECTORY_SEPARATOR . 'public' . DIRECTORY_SEPARATOR . 'files'
+                                            . DIRECTORY_SEPARATOR . 'finance'. DIRECTORY_SEPARATOR . 'pay_slips'
+                                            . DIRECTORY_SEPARATOR . $sn;
+
+                                        $file_pay_slip = DIRECTORY_SEPARATOR . 'pay_slips'
+                                            . DIRECTORY_SEPARATOR . $sn . DIRECTORY_SEPARATOR;    
+
+                                        if (!is_dir($uploaded_dir))
+                                            @mkdir($uploaded_dir, 0777, true);
+
+                                        
+                                        $upload->setDestination($uploaded_dir);
+
+                                        // Upload Max 5 MB
+                                        $upload->setValidators(array(
+                                            'Size' => array('min' => 50, 'max' => 2000000),
+                                            'Count' => array('min' => 1, 'max' => 3),
+                                            'Extension' => array('jpg','jpeg', 'PNG','GIF'),
+                                        ));
+
+                                        if (!$upload->isValid($file)) { // validate IF
+                                        $errors = $upload->getErrors();
+                                        $sError = null;
+                                            if ($errors and isset($errors[0]))
+                                            switch ($errors[0]) {
+                                                case 'fileUploadErrorIniSize':
+                                                    $sError = 'File size is too large';
+                                                    break;
+                                                case 'fileMimeTypeFalse':
+                                                    $sError = 'The file you selected weren\'t the type we were expecting';
+                                                    break;
+                                                case 'fileExtensionFalse':
+                                                    $sError = 'Please choose a file in JPG or PNG format.';
+                                                    break;
+                                                case 'fileCountTooFew':
+                                                    $sError = 'Please choose a PO file (in JPG or PNG format)';
+                                                    break;
+                                                case 'fileUploadErrorNoFile':
+                                                    $sError = 'Please choose a PO file (in JPG or PNG format)';
+                                                    break;
+                                                case 'fileSizeTooBig':
+                                                    $sError = 'File size is too big';
+                                                    break;
+                                            }
+
+                                            if($sError!=''){
+                                                $db->rollback();
+                                                $flashMessenger->setNamespace('error')->addMessage($sError);
+                                                $this->_redirect('/sales/sales-confirm-order?sn=' . $sn);
+                                            }
+                                        }else{
+                                           $upload->receive($file);
+                                        }                                                     
+                                    }
+                                    $r+=1;
+                                }
+                             
+                            /*-------------------End File Pay Slip Upload--------------------------*/
+                        }
+                        //todo log
+                        $ip = $this->getRequest()->getServer('REMOTE_ADDR');
+
+                        $info = 'Verify: Sale order number: ' . $sn;
+
+                        $QLog = new Application_Model_Log();
+
+                        $QLog->insert(array(
+                            'info' => $info,
+                            'user_id' => $userStorage->id,
+                            'ip_address' => $ip,
+                            'time' => $date,
+                            ));
+
+                        //check before commit
+                        if ($payment) {
+                            $whereCheckMoney       = array();
+                            $whereCheckMoney[]     = $QCheckmoney->getAdapter()->quoteInto('sn = ?',$sales[0]['sn']);
+                            $checkUpdateCheckMoney = $QCheckmoney->fetchRow($whereCheckMoney);
+                            if (!$checkUpdateCheckMoney) {
+                                $db->rollback();
+                                $flashMessenger->setNamespace('error')->addMessage('Cannot update, please try again!');
+                                $this->_redirect('/sales/sales-confirm-order?sn=' . $sn);
+                            }
+                        }
+
+                        $db->commit();
+                        $flashMessenger->setNamespace('success')->addMessage('Done!');
+                        $this->_redirect('/sales');
+                    }
+                    catch (exception $e) {
+                        $db->rollback();
+                        $flashMessenger->setNamespace('error')->addMessage('Cannot update, please try again!' .
+                            $e->getMessage());
+                        $this->_redirect('/sales/sales-confirm-order?sn=' . $sn);
+                    }
+                    $flashMessenger->setNamespace('success')->addMessage('Done!');
+                    $this->_redirect('/sales');
+                }
+
+                } //End if check post
+           
+            $where = array();
+            $where[] = $QMarket->getAdapter()->quoteInto('sn = ?', $sn);
+            $where[] = $QMarket->getAdapter()->quoteInto('status = ?', 1);
+
+            $sales = $QMarket->fetchAll($where);
+            //print_r($sales);
+
+            $data = array();
+
+            $QGoodCategory = new Application_Model_GoodCategory();
+            $categories    = $QGoodCategory->get_cache();
+
+            $QGood         = new Application_Model_Good();
+            $goods         = $QGood->get_cache();
+
+            $QGoodColor    = new Application_Model_GoodColor();
+            $goodColors    = $QGoodColor->get_cache();
+
+            $QStaff        = new Application_Model_Staff();
+            $staffs        = $QStaff->get_cache();
+
+            $QDistributor  = new Application_Model_Distributor();
+            $distributors  = $QDistributor->get_cache();
+
+
+            // get another info of distributor
+            $where = $QDistributor->getAdapter()->quoteInto('id = ?', $sales[0]->d_id);
+            $distributors_info = $QDistributor->fetchRow($where);
+
+            // get credit from distributor's credit type
+            $QCredit  = new Application_Model_Credit();
+            $where = $QCredit->getAdapter()->quoteInto('id = ?', $distributors_info->credit_type);
+            $credit = $QCredit->fetchRow($where);
+
+            $QWarehouse    = new Application_Model_Warehouse();
+            $warehouses    = $QWarehouse->get_cache();
+
+            $Credit_Note = $QMarket->fetchCredit_Note($sn);
+
+            $QStoreAccount  = new Application_Model_Storeaccount();
+
+
+            $show_cash_menu=false;
+            if (My_Staff_Group::inGroup($userStorage->group_id, OPPO_BRAND_SHOP_SERVICE) || $userStorage->group_id == ADMINISTRATOR_ID ) 
+            {
+                $show_cash_menu  = true;
+            }
+            
+            foreach ($sales as $k => $sale) {
+                //get warehouse
+                $data[$k]['warehouse_name'] = isset($warehouses[$sale->warehouse_id]) ? $warehouses[$sale->
+                    warehouse_id] : '';
+
+                //get retailer
+                $data[$k]['retailer_name'] = isset($distributors[$sale->d_id]) ? $distributors[$sale->
+                    d_id] : '';
+
+                //get retailer : rank
+                $data[$k]['retailer_rank'] = isset($distributors_info->rank) ? $distributors_info->rank : '';
+
+                //get retailer : rank
+                $data[$k]['show_cash_menu'] = $show_cash_menu;
+
+                //get retailer : credit amount
+                $q_store_account  = $QStoreAccount->getMainDistributorBalance($sale->d_id);
+
+                //print_r($distributors_info);
+
+                //$data[$k]['credit_amount'] = isset($distributors_info->credit_amount) ? $distributors_info->credit_amount : '';
+
+                $credit_amount = isset($q_store_account['credit_amount']) ? $q_store_account['credit_amount'] : '0';
+
+                $data[$k]['credit_amount'] = $credit_amount;
+
+                
+
+                //print_r($sales[0]['credit_amount']);
+
+                //$credit_amount = isset($distributors_info->credit_amount) ? $distributors_info->credit_amount : '0';
+
+                $this->view->distributor_total_balance = ($credit_amount - ($distributor_balance));
+
+
+                //get retailer : credit type
+                $data[$k]['credit_type'] = isset($credit->name) ? $credit->name : '';
+
+                //get created_by_name
+                $data[$k]['created_by_name'] = isset($staffs[$sale->user_id]) ? $staffs[$sale->
+                    user_id] : '';
+
+                //get created_by_name
+                $data[$k]['salesman_name'] = isset($staffs[$sale->salesman]) ? $staffs[$sale->
+                    salesman] : '';
+
+                //get sales man Catty
+                if($sale->sales_catty_id !=''){
+                    $staffs_catty = $QStaff->getSalesCattyByStore($sale->d_id,$sale->sales_catty_id);
+                }
+
+                $data[$k]['salescatty_name'] = isset($staffs_catty) ? $staffs_catty[0]['fullname'] : '';
+
+                //get category
+                $data[$k]['category'] = isset($categories[$sale->cat_id]) ? $categories[$sale->
+                    cat_id] : '';
+
+                //get good
+                $data[$k]['good'] = isset($goods[$sale->good_id]) ? $goods[$sale->good_id] : '';
+
+                //get goods color
+                $data[$k]['color'] = isset($goodColors[$sale->good_color]) ? $goodColors[$sale->
+                    good_color] : '';
+
+                $data[$k]['sale'] = $sale;
+
+               // $data[$k]['total_discount'] = $Credit_Note[0]['total_discount'];
+
+               // $data[$k]['credit_note_list'] = $Credit_Note[0];
+                //print_r($Credit_Note[0]);
+
+                $data[$k]['total_discount'] = $Credit_Note[0]['total_discount'];
+
+                $data[$k]['credit_note_list'] = $Credit_Note;
+                $data[$k]['total_spc_discount'] = $sale->total_spc_discount;
+
+
+            }
+
+            //Get remain discount
+            $QMarketDeduction = new Application_Model_MarketDeduction();
+            $deduction = $QMarketDeduction->getPrice(array('d_id' => $sales[0]['d_id']));
+
+            $discount_ck = (isset($deduction[DISCOUNT_CK]) ? $deduction[DISCOUNT_CK] : 0) + (isset($deduction[DISCOUNT_CK_II]) ? $deduction[DISCOUNT_CK_II] : 0) + (isset($deduction[DISCOUNT_CK_III]) ? $deduction[DISCOUNT_CK_III] : 0);
+            $diamond_discount = (isset($deduction[DISCOUNT_DIAMOND_CLUB]) ? $deduction[DISCOUNT_DIAMOND_CLUB] : 0) + (isset($deduction[DISCOUNT_DIAMOND_CLUB_5]) ? $deduction[DISCOUNT_DIAMOND_CLUB_5] : 0) + (isset($deduction[DISCOUNT_DIAMOND_CLUB_6]) ? $deduction[DISCOUNT_DIAMOND_CLUB_6] : 0) + (isset($deduction[DISCOUNT_DIAMOND_CLUB_7]) ? $deduction[DISCOUNT_DIAMOND_CLUB_7] : 0)+ (isset($deduction[DISCOUNT_DIAMOND_CLUB_8]) ? $deduction[DISCOUNT_DIAMOND_CLUB_8] : 0);
+
+            $this->view->discount = $discount_ck;
+            $this->view->diamond_discount = $diamond_discount;
+
+             //Get remain discount BVG
+            $discount_bvg = $QMarketProduct->getPriceDiscount(array('d_id' => $sales[0]['d_id']));
+            $this->view->discount_bvg = $discount_bvg;
+
+            //Get detail discount
+            $detailDiscount = $QMarketProduct->getDetailDiscount($sn);
+            //get detail BVG
+            $detailBVG = $QMarketProduct->getDetailBVG($sn);
+
+            $QBank = new Application_Model_Bank();
+            $where = $QBank->getAdapter()->quoteInto("type_payment in('TR','CC')",null);
+            $banks = $QBank->fetchAll($where,'name asc');
+
+            $where = $QBank->getAdapter()->quoteInto('type_payment = ?','CC');
+            $banksCredit = $QBank->fetchAll($where,'name asc');
+            $this->view->banks = $banks;
+            $this->view->banksCredit = $banksCredit;
+
+            $this->view->detailBVG = $detailBVG;
+            $this->view->detailDiscount = $detailDiscount;
+            
+            $this->view->sales = $data;
+
+            //print_r($data);
+        }
+    }
+
+     function saveMassDistributorOnlineAction()
+    {
+        $this->_helper->layout->disableLayout();
+        $warehouse_online = $this->getRequest()->getParam('warehouse_online');
+
+
+            if ($_POST['warehouse_online'] =='1') {
+                $sales_ch = 'LA';
+                $warehouse_id = '62';
+                $add = '(Lazada)';
+                $finance_group="B02_Lazada";
+            }else{
+                $sales_ch = 'ST';
+                $warehouse_id = '73';
+                $add = '(11Street)';
+                $finance_group="B03_11ST";
+            }
+            
+        $QDistributor = new Application_Model_Distributor();
+        $QDistributorMapping = new Application_Model_DistributorMapping();
+       
+        if ($this->getRequest()->getMethod() == 'POST') {
+            define('MASS_BVG_LIST_ROW_START', 2);
+            define('MASS_BVG_LIST_COL_CUSTOMER', 0);
+            define('MASS_BVG_LIST_COL_ADDESS', 1);
+            define('MASS_BVG_LIST_COL_POST_CODE', 2);
+            define('MASS_BVG_LIST_COL_PHONE_NUMBER', 3);
+            
+
+            set_time_limit(0);
+            ini_set('memory_limit', -1);
+            $db = Zend_Registry::get('db');
+            
+
+            $progress = new My_File_Progress('parent.set_progress');
+            $progress->flush(0);
+
+            $upload = new Zend_File_Transfer();
+
+            $uniqid = uniqid('', true);
+            $userStorage = Zend_Auth::getInstance()->getStorage()->read();
+
+            $uploaded_dir = APPLICATION_PATH . DIRECTORY_SEPARATOR . '..'
+                . DIRECTORY_SEPARATOR . 'public' . DIRECTORY_SEPARATOR . 'files'
+                . DIRECTORY_SEPARATOR . 'mou'
+                . DIRECTORY_SEPARATOR . $userStorage->id
+                . DIRECTORY_SEPARATOR . $uniqid;
+
+            if (!is_dir($uploaded_dir))
+                @mkdir($uploaded_dir, 0777, true);
+
+            
+            $upload->setDestination($uploaded_dir);
+
+            $upload->setValidators(array(
+                'Size' => array('min' => 50, 'max' => 10000000),
+                'Count' => array('min' => 1, 'max' => 1),
+                'Extension' => array('xlsx', 'xls'),
+            ));
+
+            if (!$upload->isValid()) { // validate IF
+                $errors = $upload->getErrors();
+                $sError = null;
+
+                if ($errors and isset($errors[0]))
+                    switch ($errors[0]) {
+                        case 'fileUploadErrorIniSize':
+                            $sError = 'File size is too large';
+                            break;
+                        case 'fileMimeTypeFalse':
+                            $sError = 'The file you selected weren\'t the type we were expecting';
+                            break;
+                        case 'fileExtensionFalse':
+                            $sError = 'Please choose a file in XLS or XLSX format.';
+                            break;
+                        case 'fileCountTooFew':
+                            $sError = 'Please choose a PO file (in XLS or XLSX format)';
+                            break;
+                        case 'fileUploadErrorNoFile':
+                            $sError = 'Please choose a PO file (in XLS or XLSX format)';
+                            break;
+                        case 'fileSizeTooBig':
+                            $sError = 'File size is too big';
+                            break;
+                    }
+
+                $this->view->error = $sError;
+
+            } else {
+                try {
+                    
+                    $db->beginTransaction();
+                    
+                    $path_info = pathinfo($upload->getFileName());
+                    $filename =  $path_info['filename'];
+                    $extension = $path_info['extension'];
+
+                    $old_name = $filename . '.' . $extension;
+                    $new_name = 'UPLOAD-' . md5($filename . uniqid('', true)) . '.' . $extension;
+
+                    if (is_file($uploaded_dir . DIRECTORY_SEPARATOR . $old_name)) {
+                        rename($uploaded_dir . DIRECTORY_SEPARATOR . $old_name, $uploaded_dir . DIRECTORY_SEPARATOR . $new_name);
+                    } else {
+                        $new_name = $old_name;
+                    }
+
+                    $upload->addFilter('Rename',
+                       array('target' => $uploaded_dir. DIRECTORY_SEPARATOR .$new_name,
+                             'overwrite' => true));
+
+                    $upload->receive();
+                    chmod($uploaded_dir. DIRECTORY_SEPARATOR .$new_name, 777);
+
+
+                    $userStorage = Zend_Auth::getInstance()->getStorage()->read();
+                    $QFileLog = new Application_Model_FileUploadLog();
+
+                    $data = array(
+                        'staff_id' => $userStorage->id,
+                        'folder' => $uniqid,
+                        'filename' => $new_name,
+                        'type' => 'mass BVG upload',
+                        'real_file_name' => $filename . '.' . $extension,
+                        'uploaded_at' => time(),
+                    );
+
+                    $log_id = $QFileLog->insert($data);
+                    
+                       
+                    $number_of_order = 0;
+                    $error_list = array();
+                    $success_list = array();
+                    $listBvgByProduct = array();
+
+                    
+
+                    $QImei    = new Application_Model_Imei();
+                    $QBvgImei = new Application_Model_BvgImei();
+                    $QBvgProduct = new Application_Model_BvgProduct();
+
+                    
+                    require_once 'PHPExcel.php';
+                    $cacheMethod = PHPExcel_CachedObjectStorageFactory::cache_to_phpTemp;
+                    $cacheSettings = array('memoryCacheSize' => '8MB');
+                    PHPExcel_Settings::setCacheStorageMethod($cacheMethod, $cacheSettings);
+ 
+                    switch ($extension) {
+                        case 'xls':
+                            $objReader = PHPExcel_IOFactory::createReader('Excel5');
+                            break;
+                        case 'xlsx':
+                            $objReader = PHPExcel_IOFactory::createReader('Excel2007');
+                            break;
+                        default:
+                            throw new Exception("Invalid file extension");
+                            break;
+                    }
+
+                    $objReader->setReadDataOnly(true);
+
+                    $objPHPExcel = $objReader->load($uploaded_dir . DIRECTORY_SEPARATOR . $new_name);
+                    $objWorksheet = $objPHPExcel->setActiveSheetIndex(0);
+
+                    $highestRow = $objWorksheet->getHighestRow(); // e.g. 10
+                    $total_order_row = $highestRow - MASS_BVG_LIST_ROW_START + 1;
+
+                    $highestColumn = $objWorksheet->getHighestColumn(); // e.g 'F'
+                    $highestColumnIndex = PHPExcel_Cell::columnIndexFromString($highestColumn); // e.g. 5
+                    $status=1; $d_id='';   
+                                      
+                    $data_sn=null;
+                    $sn = date('YmdHis') . substr(microtime(), 2, 1);
+                     
+                    for ($i = MASS_BVG_LIST_ROW_START; $i <= $highestRow; $i++) {
+
+                        $customer = trim($objWorksheet
+                            ->getCellByColumnAndRow(MASS_BVG_LIST_COL_CUSTOMER, $i)
+                            ->getValue());
+
+                        $address = trim($objWorksheet
+                            ->getCellByColumnAndRow(MASS_BVG_LIST_COL_ADDESS, $i)
+                            ->getValue());
+
+                        $post_code = trim($objWorksheet
+                            ->getCellByColumnAndRow(MASS_BVG_LIST_COL_POST_CODE, $i)
+                            ->getValue());
+
+                        $phone_number = trim($objWorksheet
+                            ->getCellByColumnAndRow(MASS_BVG_LIST_COL_PHONE_NUMBER, $i)
+                            ->getValue());
+
+                        
+                        $chk_customer = $this->check_customer($customer);
+                        // print_r($chk_customer);die;
+                        if(is_array($chk_customer)>0){
+                            $data_error['name'] = $customer;
+                            $data_error['address'] = $address;
+                            $data_error['post_code'] = $post_code;
+                            $data_error['phone_number'] = $phone_number;
+                            $data_error['message'] = "มีรายชื่อลูกค้าในระบบแล้ว";
+                            $error_list[] = $data_error;
+                        }else{
+
+                            
+                            $data = array(
+                                    'title'         => trim(preg_replace(array('/\s{2,}/', '/[\t\n]+/'), ' ', $customer)),
+                                    'name'          => trim(preg_replace(array('/\s{2,}/', '/[\t\n]+/'), ' ', $customer)),
+                                    'tel'           => trim(preg_replace(array('/\s{2,}/', '/[\t\n]+/'), ' ', $phone_number)),
+                                    'warehouse_id'  => intval($warehouse_id),
+                                    'region'        => intval('5902'),
+                                    'district'      => intval('5903'),
+                                    'add'           => trim(preg_replace(array('/\s{2,}/', '/[\t\n]+/'), ' ', $address.' '.$post_code)),
+                                    'add_tax'       => trim(preg_replace(array('/\s{2,}/', '/[\t\n]+/'), ' ', $add.' '.$address.' '.$post_code)),
+                                    'admin'         => 0,
+                                    'rank'          => intval('3'),
+                                    'unames'        => trim(preg_replace(array('/\s{2,}/', '/[\t\n]+/'), ' ', $customer)),
+                                    'mst_sn'        => '',
+                                    'branch_no'     => '00000',
+                                    'credit_amount' => '0.00',
+                                    'credit_type'   => 6,
+                                    'parent'        => 0,
+                                  
+                                    'retailer_type' => 1,
+                                    'is_ka'         => 0,
+                                    'is_internal'   => 0,
+                                    'credit_status' => 0,
+                                    'finance_group' => $finance_group
+                            );
+
+
+                            $add_time = date('Y-m-d H:i:s');
+                            $data['add_time'] = $add_time;
+                            $data['create_by'] = $userStorage->id;
+                            $data['create_date'] = $add_time;
+                            $store_code = $QDistributor->getDistributorCode($sales_ch);
+                            $data['store_code'] = $store_code;
+                            $data['sales_ch'] = $sales_ch;
+                            $data['group_id'] = 5;
+                          //  $result = $QDistributorMapping->get_insert_inport_distributor($data);
+                          $result = $QDistributor->insert($data);
+                        }
+                        
+                        //print_r($result);die;
+                        //$data['dealer_name'] = $dealer_name;
+                        $status = $result['code'];
+                        if ($result) {
+                            $success_list[] = $data;                           
+                        } else {
+                           // $data['message'] = $result['message'];
+                            // $error_list[] = $data;
+                        }
+
+                        $number_of_order++;
+                        $percent = round($number_of_order * 100 / $total_order_row, 1);
+                        $progress->flush($percent);
+                    }
+
+                    //print_r($data_sn);die;
+                    // echo '<pre>';
+                    
+                    // echo "<br/>".count($error_list);
+                   
+                    $data = array(
+                        'total' => $total_order_row,
+                        'failed' => count($error_list),
+                        'succeed' => $total_order_row - count($error_list),
+                    );
+                    
+                    // xuất file excel các order lỗi
+                    if (is_array($error_list) && count($error_list) > 0) 
+                    {
+                        
+                        $data['error_file_name'] = $d_id.'-'.'FAILED-' . md5(microtime(true) . uniqid('', true)) . '.' . $extension;
+                        // xuất excel @@
+                        //
+                        //$error_file_name = date('YmdHis') . substr(microtime(), 2, 4);
+                        //$data['error_file_name'] = 'FAILED-' .$error_file_name.'.' . $extension;
+
+                        $objPHPExcel_out = new PHPExcel();
+                        $objPHPExcel_out->createSheet();
+                        $objWorksheet_out = $objPHPExcel_out->getActiveSheet();
+                        //
+                        // get product list
+                            $objWorksheet_out->setCellValueByColumnAndRow(MASS_BVG_LIST_COL_CUSTOMER, 1, 'CUSTOMER');
+                            $objWorksheet_out->setCellValueByColumnAndRow(MASS_BVG_LIST_COL_ADDESS, 1, 'ADDESS');
+                            $objWorksheet_out->setCellValueByColumnAndRow(MASS_BVG_LIST_COL_POST_CODE, 1, 'POST_CODE');
+                            $objWorksheet_out->setCellValueByColumnAndRow(MASS_BVG_LIST_COL_PHONE_NUMBER, 1, 'PHONE_NUMBER');
+
+
+                        // các dòng lỗi
+                        $i = 2;
+                        foreach ($error_list as $key => $row) {
+                            
+                            $objWorksheet_out->setCellValueByColumnAndRow(MASS_BVG_LIST_COL_CUSTOMER, $i, $row['name']);
+                            $objWorksheet_out->setCellValueByColumnAndRow(MASS_BVG_LIST_COL_ADDESS, $i, $row['address']);
+                            $objWorksheet_out->setCellValueByColumnAndRow(MASS_BVG_LIST_COL_POST_CODE, $i, $row['post_code']);
+                            $objWorksheet_out->setCellValueByColumnAndRow(MASS_BVG_LIST_COL_PHONE_NUMBER, $i, $row['phone_number']);
+                            $i++;
+                        }
+                    
+                        switch ($extension) {
+                            case 'xls':
+                                $objWriter = new PHPExcel_Writer_Excel5($objPHPExcel_out);
+                                break;
+                            case 'xlsx':
+                                $objWriter = new PHPExcel_Writer_Excel2007($objPHPExcel_out);
+                                break;
+                            default:
+                                throw new Exception("Invalid file extension");
+                                break;
+                        }
+
+                        $new_file_dir = $uploaded_dir . DIRECTORY_SEPARATOR . $data['error_file_name'];
+
+                        //Tanong
+                        $objWriter->save($new_file_dir);
+                    }
+                    // END IF // xuất file excel các order lỗi
+
+                    $where = $QFileLog->getAdapter()->quoteInto('id = ?', $log_id);
+                    $QFileLog->update($data, $where);
+
+                    $this->view->error_list = $error_list;
+                    $this->view->objWorksheet = $objWorksheet;
+                    $this->view->number_of_order = $number_of_order;
+
+                    //commit
+                    $db->commit();
+
+                    $this->view->error_file = isset($data['error_file_name']) ? (HOST
+                        . 'files'
+                        . DIRECTORY_SEPARATOR . 'mou'
+                        . DIRECTORY_SEPARATOR . $userStorage->id
+                        . DIRECTORY_SEPARATOR . $uniqid
+                        . DIRECTORY_SEPARATOR . $data['error_file_name']) : false;
+                    $progress->flush(100);
+                } // end of Try
+                catch (Exception $e) {
+                    $db->rollback();
+                    $this->view->error = $e->getMessage();
+                    $progress->flush(0);
+                }
+                
+            }// end of check file
+
+           // unlink(APPLICATION_PATH . '/../public/files/mou/lock');
+
+           // $progress->flush(0);
+        } // end of check POST
+    }
+ 
+    function check_customer($customer)
+    {
+        $db = Zend_Registry::get('db');
+            $select = $db->select()
+            ->from(array('s'=> 'distributor'),array('s.*'))
+          
+            ->where('s.title LIKE ?', '%'.trim($customer).'%');
+            
+            // echo $select;
+            $total = $db->fetchRow($select);
+        return $total;
+    }
+
+    public function listDistributorForCreateAction(){
+        $this->_helper->layout->disableLayout();
+        // $this->_helper->viewRenderer->setNoRender(true);
+        $QDistributor               = new Application_Model_Distributor();
+ 
+
+        $rank                       = $this->getRequest()->getParam('rank_id');
+        
+        $distributors                  = $QDistributor->listDistributorForCreate($rank);
+        $this->view->distributors      = $distributors;
+        
+       
+    }
+
+    public function saveShippingAction()
+    {
+        $QShippingAddress       = new Application_Model_ShippingAddress();
+        $this->_helper->layout->disableLayout();
+         $userStorage          = Zend_Auth::getInstance()->getStorage()->read();
+        // print_r($_POST);die;
+        $flashMessenger = $this->_helper->flashMessenger;
+        try{
+
+             $db = Zend_Registry::get('db');
+
+            $db->beginTransaction();
+        if ($this->getRequest()->getMethod() == 'POST'){
+
+            $ship_id  = $this->getRequest()->getParam('ship_id', null);
+            $id  = $this->getRequest()->getParam('id', null);
+            $contract_name  = $this->getRequest()->getParam('contract_name', null);
+            $data_address   = $this->getRequest()->getParam('data_address', null);
+            $ship_province  = $this->getRequest()->getParam('ship_province', null);
+            $amphures       = $this->getRequest()->getParam('amphures', null);
+            $districts_sipping = $this->getRequest()->getParam('districts_sipping', null);
+            $zip_id         = $this->getRequest()->getParam('zip_id', null);
+            $contract_phone = $this->getRequest()->getParam('contract_phone', null);
+            $back_url       = $this->getRequest()->getParam('back_url', null);
+            $remark         = $this->getRequest()->getParam('remark', null);
+
+
+
+
+            $data_address =array(
+
+            'contact_name'  =>  $contract_name,
+            'd_id'          =>  $id,
+            'address'       =>  $data_address,
+            'province_id'   =>  $ship_province,
+            'amphures_id'   =>  $amphures,
+            'districts_id'  =>  $districts_sipping,
+            'zipcodes'      =>  $zip_id,
+            'phone'         =>  $contract_phone,
+            'remark'        =>  $remark,
+            
+
+            );
+            if (isset($ship_id) and $ship_id) {
+                $data_address['updated_at'] = date('Y-m-d H:i:s');
+                $data_address['updated_by'] = $userStorage->id;
+                $where =  $QShippingAddress->getAdapter()->quoteInto('id = ?',$ship_id);
+                 $QShippingAddress->update($data_address,$where);   
+            }else{
+
+                $data_address['created_at'] = date('Y-m-d H:i:s');
+                $data_address['created_by'] = $userStorage->id;
+                // print_r($data_address);die;
+
+                $QShippingAddress->insert($data_address);
+
+            }    
+            // print_r($data_address); die;
+
+
+        }  
+            $db->commit();
+            $flashMessenger->setNamespace('success')->addMessage('Done!');
+            $this->_redirect($back_url);
+           
+        }catch (Exception $e){
+
+            $db->rollback();
+             $flashMessenger->setNamespace('success')->addMessage('Cannot save, please try again!');
+            $this->_redirect($back_url);    
+          
+        }  
+
+    }
+
+    
+    public function checkQuotaAction()
+    {
+            $distributor_id     = $this->getRequest()->getParam('distributor_id', null);
+            $good_id            = $this->getRequest()->getParam('good_id', null);
+            $good_color         = $this->getRequest()->getParam('good_color', null);
+            $num                = $this->getRequest()->getParam('num', null);
+            $QMarket              = new Application_Model_Market();
+
+            $params = array(
+                'distributor_id' => $distributor_id,
+                'good_id'        => $good_id,
+                'good_color'     => $good_color,
+                'num'            => $num   
+
+                );
+
+            $quota      = $QMarket->checkQuota($params);
+
+            print_r($quota);exit();
+
+    }
+    public function checkQuota($params)
+    {
+        $db = Zend_Registry::get('db');
+        $num = $params['num'];
+        $select_q = $db->select()
+            ->from(array('q' => 'quota'), array('q.quantity'));
+        $select_q->where('q.d_id = ?', $params['distributor_id']);
+        $select_q->where('q.good_id = ?', $params['good_id']);
+        $select_q->where('q.good_color = ?', $params['good_color']);
+        $select_q->where('q.status = ?', 1);
+        $data = $db->fetchOne($select_q);
+        if ($data) {
+        $select_m = $db->select()
+            ->from(array('m' => $this->_name), array('sum(m.num)'));
+        $select_m->where('m.d_id = ?', $params['distributor_id']);
+        $select_m->where('m.good_id = ?', $params['good_id']);
+        $select_m->where('m.good_color = ?', $params['good_color']);
+        $select_m->where('m.status = ?', 1);
+        $select_m->where('m.canceled = ?', 0);
+        $select_m->where('m.add_time >= ?', '2017-01-01 00:00:00');
+
+
+        $isSum = $db->fetchOne($select_m);
+        
+        if ($isSum) {
+            if ($num+$isSum > $data) {
+                $q='1';
+            }else{
+                $q='0';
+            }
+        }else{
+            $q = '0';
+        }
+
+        }else{ // ​์No data return 0
+            $q = '0';
+        }
+        return $q;
+    }
+    public function checkQuotaOppoAction()
+    {
+            $distributor_id       = $this->getRequest()->getParam('distributor_id', null);
+            $good_id              = $this->getRequest()->getParam('good_id', null);
+            $good_color           = $this->getRequest()->getParam('good_color', null);
+            $num                  = $this->getRequest()->getParam('num', null);
+            $rank                 = $this->getRequest()->getParam('rank', null);
+            $warehouse            = $this->getRequest()->getParam('warehouse', null);
+            $cat_id               = $this->getRequest()->getParam('cat_id', null);
+            $sales_sn             = $this->getRequest()->getParam('sales_sn', null);
+            $type                 = $this->getRequest()->getParam('type', null);
+            $QMarket              = new Application_Model_Market();
+
+            $params = array(
+                'distributor_id' => $distributor_id,
+                'good_id'        => $good_id,
+                'good_color'     => $good_color,
+                'num'            => $num,   
+                'rank'           => $rank,   
+                'warehouse'      => $warehouse,   
+                'cat_id'         => $cat_id,   
+                'sales_sn'       => $sales_sn,   
+                'type'           => $type,   
+
+                );
+
+            $quota      = $QMarket->checkQuotaOppo($params);
+
+            print_r($quota);exit();
+
+    }
+
+    private function _exportExcelCheckCn($data)
+    {
+
+        $this->_helper->layout->disableLayout();
+        $this->_helper->viewRenderer->setNoRender(true);
+
+        $db = Zend_Registry::get('db');
+        set_time_limit(0);
+        error_reporting(~E_ALL);
+        ini_set('display_error', 0);
+        ini_set('memory_limit', '200M');
+        $filename = 'Check Credit Note_'.date('d-m-Y H-i-s').'.csv';
+        // output headers so that the file is downloaded rather than displayed
+        while (@ob_end_clean());
+        ob_start();
+        header('Content-Encoding: UTF-8');
+        header('Content-Type: text/csv; charset=utf-8');
+        header('Content-Disposition: attachment; filename='.$filename);
+        $userStorage = Zend_Auth::getInstance()->getStorage()->read();
+        $file_path = APPLICATION_PATH.'/../public/files/sales/export/'.$userStorage->id.'/'.uniqid();
+        if (!file_exists($file_path))
+            mkdir($file_path, 0777, true);
+        $path = $file_path.'/'.$filename;
+        $output = fopen($path, 'w+');
+        echo "\xEF\xBB\xBF"; // UTF-8 BOM
+        // echo chr(239) . chr(187) . chr(191); // UTF-8 BOM
+        // fputs($output, chr(239) . chr(187) . chr(191));
+
+        ////////////////////////////////////////////////////
+        /////////////////// TỔNG HỢP DỮ LIỆU
+        ////////////////////////////////////////////////////
+
+        $heads = array(
+            'Distributor ID',
+            'Distributor Number',
+            'Distributor Name',
+            'Grand Area',
+            'Area',
+            'Province',
+            'District',
+            'Type',
+            'Type Name',
+            'Creditnote',
+            'Total',
+            'Use',
+            'Balance',
+            'Created Time',
+            'User Time'
+        );
+        
+        fputcsv($output, $heads);
+
+        // $grand_e1 = array(73,81,82,83,84);
+        // $grand_e2 = array(74,80,85,86,87,88,89);
+        // $grand_e3 = array(77,90,91,92,93);
+        // $grand_e4 = array(79,94,95,96,97,109);
+        // $grand_w1 = array(75,98,99,100,101,102);
+        // $grand_w2 = array(76,78,103,104,105,106,107,108);
+
+        $grand_e1 = array(81,82,83);
+        $grand_e2 = array(85,86,87,115);
+        $grand_e3 = array(90,91,92,93,113);
+        $grand_e4 = array(94,95,96);
+        $grand_e5 = array(88,89,117);
+        $grand_e6 = array(110,111,112);
+        $grand_e7 = array(97,109);
+        $grand_w1 = array(98,99,100,101,102,114);
+        $grand_w2 = array(103,104,105,116);
+        $grand_w3 = array(106,107,108);
+
+        foreach($data as $item)
+        {
+            $creditnote_type_sn = $item['creditnote_type'];
+            $creditnote_chanel_sn = $item['chanel'];
+
+            if($creditnote_chanel_sn=='reward'){
+                $creditnote_chanel='OPPOCLUB';
+                $creditnote_type='CN';
+            }else if($creditnote_chanel_sn=='accessories'){
+                $creditnote_chanel='Price Protection';
+                $creditnote_type='CP';
+            }else if($creditnote_chanel_sn=='oppo_all_green'){
+                $creditnote_chanel='OPPO ALL GREEN';
+                $creditnote_type='CN';
+            }else if($creditnote_chanel_sn=='top_green'){
+                $creditnote_chanel='OPPO TOP GREEN';
+                $creditnote_type='CN';
+            }else{
+                if($creditnote_type_sn=='CN')
+                {
+                    if($creditnote_chanel_sn=='oppo_all_green'){
+                        $creditnote_chanel='oppo_all_green';
+                        $creditnote_type='CN';
+                    }else if($creditnote_chanel_sn=='service'){
+                        $creditnote_chanel='Credit Note';
+                        $creditnote_type='CN';
+                    }else{
+                        $creditnote_chanel='Return';
+                        $creditnote_type='CN';
+                    }
+                }else{
+                    $creditnote_chanel='Price Protection';
+                    $creditnote_type='CP';
+                }
+            }
+
+            $excel_area_id = $item['area_id'];
+            $excel_area_name = $item['area_name'];
+
+            // if ( in_array($excel_area_id, $grand_e1) ) { $grand_area = 'BKK East-1'; } 
+            // else if ( in_array($excel_area_id, $grand_e2) ) { $grand_area = 'BKK East-2'; }
+            // else if ( in_array($excel_area_id, $grand_e3) ) { $grand_area = 'BKK East-3'; }
+            // else if ( in_array($excel_area_id, $grand_e4) ) { $grand_area = 'BKK East-4'; }
+            // else if ( in_array($excel_area_id, $grand_w1) ) { $grand_area = 'BKK West-1'; }
+            // else if ( in_array($excel_area_id, $grand_w2) ) { $grand_area = 'BKK West-2'; }
+            // else { $grand_area = $excel_area_name; }
+
+            if ( in_array($excel_area_id, $grand_e1) ) { $grand_area = 'BKK East-1'; } 
+            else if ( in_array($excel_area_id, $grand_e2) ) { $grand_area = 'BKK East-2'; }
+            else if ( in_array($excel_area_id, $grand_e3) ) { $grand_area = 'BKK East-3'; }
+            else if ( in_array($excel_area_id, $grand_e4) ) { $grand_area = 'BKK East-4'; }
+            else if ( in_array($excel_area_id, $grand_e5) ) { $grand_area = 'BKK East-5'; }
+            else if ( in_array($excel_area_id, $grand_e6) ) { $grand_area = 'BKK East-6'; }
+            else if ( in_array($excel_area_id, $grand_e7) ) { $grand_area = 'BKK East-7'; }
+            else if ( in_array($excel_area_id, $grand_w1) ) { $grand_area = 'BKK West-1'; }
+            else if ( in_array($excel_area_id, $grand_w2) ) { $grand_area = 'BKK West-2'; }
+            else if ( in_array($excel_area_id, $grand_w3) ) { $grand_area = 'BKK West-3'; }
+            else { $grand_area = $excel_area_name; }
+
+            $row = array();
+
+            $row[] = $item['D_id'];
+            $row[] = $item['store_code'];
+            $row[] = $item['title'];
+
+            $row[] = $grand_area;
+            $row[] = $excel_area_name;
+            $row[] = $item['province'];
+            $row[] = $item['district'];
+
+            $row[] = $creditnote_type;
+            $row[] = $creditnote_chanel;
+            $row[] = $item['creditnote_sn'];
+            $row[] = $item['total_amount'];
+            $row[] = $item['use_discount'];
+            $row[] = $item['balance_total'];
+            $row[] = $item['create_date'];
+            $row[] = $item['pay_time'];
+
+            fputcsv($output, $row);
+            unset($item);
+            unset($row);
+
+        }
+
+        unset($data);
+        unset($result);
+
+        fclose($output);
+
+        ob_flush();
+        ob_start();
+        while (@ob_end_flush());
+
+        header('Expires: 0');
+        header('Cache-Control: must-revalidate');
+        header('Pragma: public');
+        header('Content-Length: ' . filesize($path));
+        readfile($path);
+        exit;
+
+        $file = fopen($path, 'r');
+        $content = fread($file, filesize($path));
+        var_dump(filesize($path));
+        var_dump($content);
+
+        exit;
+    }
+
+    public function ajaxgetimgpaymentAction()
+    {
+
+        $this->_helper->layout->disableLayout();
+        $this->_helper->viewRenderer->setNoRender(true);
+
+        $sn = $this->getRequest()->getParam('sn');
+        $sn = str_replace("'","",$sn);
+        $payment_no = $this->getRequest()->getParam('payment_no');
+
+        $QMarket = new Application_Model_Market();
+
+        if($payment_no){
+            $sn = $QMarket->getSnByPaymentNo($payment_no);
+        }
+
+        $getImgPatment = $QMarket->getImgPayment($sn);
+
+        // print_r($getImgPatment);die;
+
+        $arr_part_img = [];
+        $part_pay_one = HOST . 'public' . DIRECTORY_SEPARATOR . 'files' . DIRECTORY_SEPARATOR . 'finance';
+        $part_pay_group = HOST . 'public' . DIRECTORY_SEPARATOR . 'files' . DIRECTORY_SEPARATOR . 'payment_group'. DIRECTORY_SEPARATOR . 'pay_slips' . DIRECTORY_SEPARATOR;
+
+        foreach ($getImgPatment as $key) {
+            if($key['pay_group'] == 0 && $key['img_pay_one']){
+                $part_img = $part_pay_one . $key['img_pay_one'];
+                array_push($arr_part_img, $part_img);
+            }
+
+            if($key['pay_group'] == 1 && $key['img_pay_group']){
+                $part_img = $part_pay_group . $key['img_pay_group'];
+                array_push($arr_part_img, $part_img);
+            }
+        }
+
+        // print_r($arr_part_img);die;
+
+        echo json_encode(['img_payment' => $arr_part_img]);
+        exit();
+
+    }
+}

@@ -1,0 +1,201 @@
+<table class="table table-bordered">
+    <thead>
+        <tr>
+            <?php echo $this->sorting(array(
+					'#',
+                    'rq' => 'Request Number',
+                    'product_grade' => 'Grade',
+                    // 'borrowing_type' => 'Type',
+					'hrs_department_name' => 'Type',
+                    'Product',
+                    'Color',
+                    'Quantity',
+                    'code' => 'Code',
+                    'fullname' => 'Request By',
+                    'position_name' => 'Position',
+                    'area' => 'Area',
+                    'created_date' => 'Request Date',
+                    'return_date' => 'Return Date',
+                    'sn_ref' => 'CO Number',
+                    'update_datetime' => 'Receive Date',
+                    'status' => 'Status',
+                    'missing' => 'Lost',
+					'remark' => 'Remark',
+                    'Action
+'                ),
+                $this->url, $this->sort, $this->desc); ?>
+        </tr>
+    </thead>
+    <tbody>
+        <?php if (isset($this->data) and $this->data) :
+            foreach ($this->data as $key => $value):?>
+
+            <tr>
+                <td><a href="#id" rel="<?php echo $value['sn'] ?>" class="collapse_a btn btn-default btn-small" id="m_<?php echo $value['sn'] ?>"><span class="col-sign">+</span><img class="img-loading" src="<?php echo HOST?>img/ajax-loader.gif" style="display: none" /></a></td>
+                <td><?=$value['rq']?></td>
+                <td><?php switch ($value['product_grade']) {
+                    case '1':
+                        echo 'A';
+                        break;
+                    case '2':
+                        echo 'B';
+                        break;
+                    case '3':
+                        echo 'Demo';
+                        break;
+                    case '4':
+                        echo 'APK';
+                        break;
+                    case '5':
+                        echo 'Prototype';
+                        break;
+                } ?></td>
+                <!-- <td><?php switch ($value['borrowing_type']) {
+                    case '1':
+                        // echo 'Demo for Event';
+                        echo 'เบิกยืมพนักงาน';
+                        break;
+                    case '2':
+                        // echo 'Complimentary';
+                        echo 'อภินันทนาการ';
+                        break;
+                    case '3':
+                        // echo 'Replace Customer Service';
+                        echo 'เบิกเปลี่ยนเครื่องลูกค้า';
+                        break;
+                    case '4':
+                        echo 'Prototype';
+                        break;
+                } ?></td> -->
+                <td><?=$value['hrs_department_name']?></td>
+                <td></td>
+                <td></td>
+                <td></td>
+                <td><?=$value['code']?></td>
+                <td><?=$value['fullname']?></td>
+                <td><?=$value['position_name']?></td>
+                <td><?=$value['name']?></td>
+                <td><?=$value['created_date']?></td>
+                <td><?=$value['return_date']?></td>
+                <td><?=$value['sn_ref']?></td>
+                <td><?php
+                if($value['status'] == '14'){
+                    echo $value['update_datetime'];
+                }
+                ?></td>
+                <td><?php
+                switch ($value['status']) {
+                    case '1':
+                        if($value['wms_status'] == 1){
+                            echo 'Prepare product';
+                        }else{
+                            echo 'Waiting approval from Finance';
+                        }
+                        break;
+                    case '2':
+                        echo 'Waiting approval from Admin';
+                        break;
+                    case '3':
+                        echo 'Waiting approval from ASM';
+                        break;
+                    case '4':
+                        echo 'Waiting approval from RD';
+                        break;
+                    case '5':
+                        echo 'Waiting approval from Area Director';
+                        break;
+                    case '6':
+                        echo 'Waiting approval from Operation Director';
+                        break;
+                    case '7':
+                        echo 'Waiting approval from Manager';
+                        break;
+                    case '8':
+                        echo '';
+                        break;
+                    case '9':
+                        echo 'No Approved';
+                        break;
+                    case '10':
+                        echo '';
+                        break;
+                    case '11':
+                        echo 'Ready to shipping';
+                        break;
+                    case '12':
+                        echo 'WMS no appoved';
+                        break;
+                    case '13':
+                        echo 'Received product';
+                        break;
+                    case '14':
+                        echo 'Return product';
+                        break;
+                }
+
+                ?></td>
+                <td><?=$value['missing']?></td>
+                <td><?=$value['remark']?></td>
+                <td style="text-align: center;"><a href="<?=HOST."warehouse/borrowing-report-details?id=".$value['id']?>" title="details"><i class="icon-file-text"></i></a>
+                    <?php if($value['image_name']){ ?>
+                    <a class="icon-image" href="#" title="image" data-rq="<?=$value['rq']?>"><i class="icon-picture"></i></a>
+                    <?php } ?>
+                </td>
+            </tr>
+
+            <?php endforeach;?>
+        <?php endif; ?>
+    </tbody>
+</table>
+                
+<div class="paging">
+    <?php echo $this->paging($this->total, $this->limit, $this->offset, $this->url);?>
+</div>
+
+<script>
+    
+    $('.collapse_a').click(function(){
+        var _this = $(this);
+        var _this_id = _this.attr('id');
+        var sn = _this.attr('rel');
+
+        if (_this.parent().parent().next().hasClass('accordion-body')){
+
+            $('.m_'+sn).toggle();
+
+            if ($('.m_'+sn).is(':visible'))
+                _this.find('.col-sign'). html('-');
+            else _this.find('.col-sign'). html('+');
+
+        } else {
+            _this.find('.col-sign'). html('');
+
+            getBorrowingDetail(sn);
+        }
+
+    });
+
+    function getBorrowingDetail(sn){
+        if (! $('#m_'+sn).parent().parent().next().hasClass('accordion-body')){
+            $('#m_'+sn+' .col-sign').html('');
+            $('#m_'+sn+' .img-loading').show();
+
+            $.ajax({
+                type: 'post',
+                url: '/get/borrowing-detail',
+                data: {
+                    'sn': sn
+                },
+                error: function(){
+                },
+                success: function(data){
+                    $('.m_'+sn).remove();
+                    $('#m_'+sn).parent().parent().after(data);
+                    $('#m_'+sn).find('.col-sign').html('-');
+                    $('#m_'+sn+' .img-loading').hide();
+                }
+            });
+        }
+    }
+
+</script>

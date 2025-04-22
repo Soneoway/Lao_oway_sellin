@@ -1,0 +1,33 @@
+<table class="table table-bordered">
+    <thead>
+        <tr>
+        	<th>IMEI SN</th>
+        	<th>Goods Name</th>
+        	<th>Goods Color</th>
+        	<th>Into Date</th>
+        	<th>Purchase Order</th>
+        	<th>Out Date</th>
+        	<th>Sales Order</th>
+        	<th>Activated At</th>
+        </tr>
+    </thead>
+    <tbody>
+        <?php if (isset($this->imeis) && $this->imeis): ?>
+        	<?php foreach ($this->imeis as $k => $v): ?>
+        		<tr>
+        			<td><?php echo $v['imei_sn'] ?></td>
+        			<td><?php echo isset($this->goods[$v['good_id']]) ? $this->goods[$v['good_id']] : '' ?></td>
+        			<td><?php echo isset($this->good_colors[$v['good_color']]) ? $this->good_colors[$v['good_color']] : '' ?></td>
+        			<td><?php echo isset($v['into_date']) ? $v['into_date'] : '' ?></td>
+        			<td><?php echo isset($v['po_sn']) ? $v['po_sn'] : '' ?></td>
+        			<td><?php echo isset($v['out_date']) ? $v['out_date'] : '' ?></td>
+        			<td><?php echo isset($v['sales_sn']) ? $v['sales_sn'] : '' ?></td>
+        			<td><?php echo $v['activated_at'] ?></td>
+        		</tr>
+        	<?php endforeach ?>
+        <?php endif ?>
+    </tbody>
+</table>
+<div class="paging">
+    <?php echo $this->paging($this->total, $this->limit, $this->offset, $this->url);?>
+</div>

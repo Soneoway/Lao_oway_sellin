@@ -1,0 +1,411 @@
+    <!-- <link href="//netdna.bootstrapcdn.com/bootstrap/3.2.0/css/bootstrap.min.css" rel="stylesheet" id="bootstrap-css"> -->
+
+
+
+ <script type="text/javascript" src="<?php echo HOST ?>js/jquery-1.7.2.min.js"></script> 
+<script type="text/javascript" src="<?php echo HOST ?>js/jquery-ui-1.8.12.custom.min.js"></script>
+  <link rel="stylesheet" type="text/css" href="<?php echo HOST ?>css/jquery-ui-1.8.12.custom.css"/>  
+<link rel="stylesheet" href="<?php echo HOST ?>css/bootstrap-multiselect.css" type="text/css"/>
+<script type="text/javascript" src="<?php echo HOST ?>js/bootstrap-multiselect.js"></script>
+    <link href="<?=HOST?>public/css/bootstrap.modi.min.css" rel="stylesheet">
+     <style type="text/css">
+       .container
+       {
+          max-width: 1400px !important;
+       }
+        .list-group{
+            height: 200px;
+            overflow: hidden;
+            overflow-y: scroll;
+        }
+
+        .so {
+            width: 50px !important;
+            padding-left: 15px;
+            display: -webkit-inline-box;
+            display: inline-block;
+        }
+        .price_ori {
+            width: 320px;
+            display: -webkit-inline-box;
+            display: inline-block;
+            text-align: left;
+        }
+        .so-title {
+            padding-left: 5px;
+            width: 100px;
+            display: -webkit-inline-box;
+            display: inline-block;
+        }
+        .price_text{
+            margin-top: 0px;
+        }
+        .list-left-warehouses li, .list-right-warehouses li{
+            cursor: pointer;
+        }
+        .activeW, .activeD, .activeP, .activePG, .list-group-item{
+            cursor: pointer;
+        }
+        input[type=checkbox] {
+          transform: scale(1.2);
+        }
+        .list-group-item{
+            padding: 4px !important;
+        }
+
+        .list-group-item.activeW, .list-group-item.activeW:hover, .list-group-item.activeW:focus,
+        .list-group-item.activeD, .list-group-item.activeD:hover, .list-group-item.activeD:focus,
+        .list-group-item.activeP, .list-group-item.activeP:hover, .list-group-item.activeP:focus,
+        .list-group-item.activePG, .list-group-item.activePG:hover, .list-group-item.activePG:focus {
+        z-index: 2;
+        color: #fff;
+        background-color: #69e0b6;
+        border-color: #69e0b6;
+        }
+    </style> 
+
+    <div class="page-header">
+        <h1>Create Force Sale</h1>
+    </div>
+    <div class="container">
+    <form role="form" id="form" enctype="multipart/form-data" action="<?php echo HOST.'force-sale/insert';?>" method="post"  >
+       <div class="well"> 
+        <div class="row">
+            <div class="span7">
+                <div class="control-group">
+                    <h2>Name Force Sale
+                        <input type="name" class="form-control" name="name" style="width:350px;" required value="<?=$this->forceSaleSelect[0]['name'] ?>" >
+                    </h2>
+                </div>
+            </div>    
+            <div class="span">
+                <div class="control-group"> 
+                    <h2> Status :  <input type="checkbox" name="status" value="1" checked>  Active</h2>
+                </div>
+            </div>
+        </div>    
+
+<?php 
+  
+  list( $year, $month, $day) = explode('-', $this->forceSaleSelect[0]['start_date']);
+  // if (isset($day) and isset($month) and isset($year) )
+  $day=substr($day,0,2);
+   $start_date = $day.'/'.$month.'/'.$year;
+ $end_date =  $this->forceSaleSelect[0]['end_date'];
+ list( $year2, $month2, $day2) = explode('-', $end_date);
+  // if (isset($day) and isset($month) and isset($year) )
+  $day2=substr($day2,0,2);
+   $end_date = $day2.'/'.$month2.'/'.$year2;
+
+   if($this->forceSaleSelect[0]['campaign_id'] != ''){
+?>
+  <input type="hidden" class="form-control" name="key" style="width:350px;" required value="<?=$this->forceSaleSelect[0]['campaign_id'] ?>" >
+  <input type="hidden" class="form-control" name="create_date" style="width:350px;" required value="<?=$this->forceSaleSelect[0]['create_date'] ?>" >
+
+<?php }?>
+
+        <div class="row">
+            <div class="span5">
+                <div class="control-group">
+                    <h2>Start Date
+                        <input type="text" class="form-control search-query date" id="start_date" name="start_date" required value="<?=$start_date ?>">
+                    </h2>
+                </div>
+            </div>    
+            <div class="span6">
+                <div class="control-group"> 
+                    <h2> End Date 
+                        <input type="text" class="form-control search-query date" id="end_date" name="end_date" required value="<?=$end_date ?>">
+                        
+
+                    </h2>
+                </div>
+            </div>
+        </div> 
+      </div>
+
+      <div class="well"> 
+        <div class="row">
+            <div class="span5">
+                <div class="control-group">
+                  <h2>Order Type
+                    <select id="type" class="span3" name="type" required>
+                        <option value="">Choose</option>
+                        <option value="1" <?php if (isset($this->params['type']) and $this->params['type']==1):?> selected <?php endif;?>>For Retailer</option>
+                        <option value="2" <?php if (isset($this->params['type']) and $this->params['type']==2):?> selected <?php endif;?>>For Demo</option>
+                        <option value="3" <?php if (isset($this->params['type']) and $this->params['type']==3):?> selected <?php endif;?>>For Staffs</option>
+                        <option value="4" <?php if (isset($this->params['type']) and $this->params['type']==4):?> selected <?php endif;?>>For Lending</option>
+                    </select>
+                </div>
+            </div>
+        </div> 
+
+    <div class="col-md-12"> 
+
+        <h2>Warehouse</h2> 
+        <div class="list_warehouses"> 
+            <?php
+                echo $this->render('tool/list-warehouses.phtml');
+            ?>   
+       </div>
+
+       <h2>Distributor</h2>
+        <div class="control-group">
+            <div class="controls">ประเภทร้านค้า<span style="color: red">*</span> 
+                <select id="rank" name="rank" class="rank">
+                    <option value="">---</option>
+                    <option value="1" <?php if( isset($this->distributor['rank']) and $this->distributor['rank']==1 ) { ?> selected<?php }?>>1. ORG-WDS(1)</option>
+                    <option value="2" <?php if( isset($this->distributor['rank']) and $this->distributor['rank']==2 ) { ?> selected<?php }?>>2. ORG(2)</option>
+                    <option value="5" <?php if( isset($this->distributor['rank']) and $this->distributor['rank']==5 ) { ?> selected<?php }?>>3. ORG-Dtac/Advice(5)</option>
+                    <option value="6" <?php if( isset($this->distributor['rank']) and $this->distributor['rank']==6 ) { ?> selected<?php }?>>4. ORG-Lotus/Power by(6)</option>
+                    <option value="7" <?php if( isset($this->distributor['rank']) and $this->distributor['rank']==7 ) { ?> selected<?php }?>>5. Dealer(7)</option>
+                    <option value="8" <?php if( isset($this->distributor['rank']) and $this->distributor['rank']==8 ) { ?> selected<?php }?>>6. HUB(8)</option>
+                    <option value="9" <?php if( isset($this->distributor['rank']) and $this->distributor['rank']==9 ) { ?> selected<?php }?>>7. Laos(9)</option>
+                    <option value="3" <?php if( isset($this->distributor['rank']) and $this->distributor['rank']==3 ) { ?> selected<?php }?>>8. Online and Staff(3)</option>
+                    <option value="10" <?php if( isset($this->distributor['rank']) and $this->distributor['rank']==10 ) { ?> selected<?php }?>>9. Brand Shop/Service(10)</option>
+                    <option value="11" <?php if( isset($this->distributor['rank']) and $this->distributor['rank']==11 ) { ?> selected<?php }?>>10. King Power(11)</option>
+                    <option value="12" <?php if( isset($this->distributor['rank']) and $this->distributor['rank']==12 ) { ?> selected<?php }?>>11. Jaymart(12)</option>
+                    <option value="13" <?php if( isset($this->distributor['rank']) and $this->distributor['rank']==13 ) { ?> selected<?php }?>>12. Brand Shop By Dealer(13)</option>
+                    <option value="14" <?php if( isset($this->distributor['rank']) and $this->distributor['rank']==14 ) { ?> selected<?php }?>>13. KR Dealer(14)</option>
+                    <option value="15" <?php if( isset($this->distributor['rank']) and $this->distributor['rank']==15 ) { ?> selected<?php }?>>14. TRUE(15)</option>
+                </select>
+                &nbsp;&nbsp;&nbsp; ร้านค้าทั้งหมด &nbsp;&nbsp; <input type="checkbox" name="distributor_all" value="1" <?php echo($this->forceSaleSelect[0]['distributor_all']==1?'checked':'')?>> 
+                <p class="help-block"></p>
+            </div>
+        </div> 
+
+       <div class="list_distributor">    
+            <?php
+                echo $this->render('tool/list-distributor-force-sale-first.phtml');
+            ?>   
+       </div>
+
+        <h2>Product Sale</h2>
+        <div class="control-group">
+            <div class="controls">Category<span style="color: red">*</span>
+
+                <select id="category" name="category" class="category" >
+                    <option value="">---</option>
+                    <?php 
+                    foreach ($this->good_categories as $key => $value) { ?> 
+                    <option value="<?php echo $key;?>" ><?php echo $value;?></option>
+                   <?php  } ?>
+                
+                </select>
+                <p class="help-block"></p>
+            </div>
+        </div> 
+
+       <div class="list_product">    
+            <?php
+                echo $this->render('tool/list-product-first.phtml');
+            ?>   
+       </div>
+
+
+        <h2>รายการของแถม</h2>
+        <div class="control-group">
+            <div class="controls">Category<span style="color: red">*</span>
+
+                <select id="category-gift" name="category-gift" class="category-gift" >
+                    <option value="">---</option>
+                    <?php 
+                    foreach ($this->good_categories as $key => $value) { ?> 
+                    <option value="<?php echo $key;?>" ><?php echo $value;?></option>
+                   <?php  } ?>
+                    
+
+<!--                     <option value="2" <?php if( isset($this->distributor['rank']) and $this->distributor['rank']==2 ) { ?> selected<?php }?>>2. ORG(2)</option>
+                    <option value="5" <?php if( isset($this->distributor['rank']) and $this->distributor['rank']==5 ) { ?> selected<?php }?>>3. ORG-Dtac/Advice(5)</option>
+                    <option value="6" <?php if( isset($this->distributor['rank']) and $this->distributor['rank']==6 ) { ?> selected<?php }?>>4. ORG-Lotus/Power by(6)</option>
+                    <option value="7" <?php if( isset($this->distributor['rank']) and $this->distributor['rank']==7 ) { ?> selected<?php }?>>5. Dealer(7)</option>
+                    <option value="8" <?php if( isset($this->distributor['rank']) and $this->distributor['rank']==8 ) { ?> selected<?php }?>>6. HUB(8)</option>
+                    <option value="9" <?php if( isset($this->distributor['rank']) and $this->distributor['rank']==9 ) { ?> selected<?php }?>>7. Laos(9)</option>
+                    <option value="3" <?php if( isset($this->distributor['rank']) and $this->distributor['rank']==3 ) { ?> selected<?php }?>>8. Online and Staff(3)</option>
+                    <option value="10" <?php if( isset($this->distributor['rank']) and $this->distributor['rank']==10 ) { ?> selected<?php }?>>9. Brand Shop/Service(10)</option> -->
+                  
+                </select>
+                <p class="help-block"></p>
+            </div>
+        </div> 
+
+       <div class="list_product_gift">    
+            <?php
+                echo $this->render('tool/list-product-gift-first.phtml');
+            ?>   
+       </div>
+        
+        <div class="row">
+                <div class="span6">
+                    <div class="control-group">
+                        
+                        <div class="span4">
+
+                            <button type="submit" class="btn btn-primary" id="submit_btn">Confirm</button>
+                            <a href="/force-sale" class="btn btn-danger go-back">Go back</a>
+                        </div>
+                    </div>
+                    <div class="clearfix"></div>
+                </div>
+        </div>
+    </form>
+</div>
+    
+    <!--  -->
+     
+<!-- <script type="text/javascript" src="http://code.jquery.com/jquery.js"></script> -->
+<!-- <script src="<?php echo HOST?>js/jquery.datetimepicker.js"></script>
+<link rel="stylesheet" href="<?php echo HOST?>css/jquery.datetimepicker.css" /> -->
+<script type="text/javascript" src="<?php echo HOST ?>js/jets.js"></script>
+
+    <script type="text/javascript">
+     
+    // function initDatepicker(){
+    //     $( ".date" ).datepicker({
+    //         format:'Y-m-d H:i:s'
+    //     });
+    // }
+    
+    $(document).ready(function () {
+
+      $( '.date' ).datepicker({ dateFormat: "dd/mm/yy" });
+
+        initSearchOptionDistributor('d_id', 'SearchBox');
+        $( '.date' ).datepicker({ dateFormat: "dd/mm/yy" });
+            // initDatepicker();
+          
+            $("*").keypress(function(event){  
+                 if(event.keyCode==13){  
+                    return false;  
+                 }  
+            });
+
+            // $('body').on('click', '.list-group .list-group-item', function () {
+            //     $(this).toggleClass('active');
+            // });
+          
+
+            $('body').on('change', '.rank', function () {
+               var list =  $(this).val();
+               
+               $.ajax({
+                   url: '/tool/list-distributor-force-sale',
+                   type: 'POST',
+                   data: {rank: list},
+               })
+               .done(function(data) {
+                    $('.list-left-distributor').empty();
+                    $('.list-left-distributor').append(data);
+                   console.log("success");
+               })
+               .fail(function() {
+                   console.log("error");
+               })
+               .always(function() {
+                   console.log("complete");
+               });
+               
+            });
+
+            $('body').on('change', '.category', function () {
+               var list =  $(this).val();
+               
+               $.ajax({
+                   url: '/tool/list-product',
+                   type: 'GET',
+                   data: {cat_id: list},
+               })
+               .done(function(data) {
+                    $('.list-left-product').empty();
+                    $('.list-left-product').append(data);
+                   console.log("success");
+               })
+               .fail(function() {
+                   console.log("error");
+               })
+               .always(function() {
+                   console.log("complete");
+               });
+               
+            });
+
+            $('body').on('change', '.category-gift', function () {
+               var list =  $(this).val();
+               
+               $.ajax({
+                   url: '/tool/list-product-gift',
+                   type: 'GET',
+                   data: {cat_id: list},
+               })
+               .done(function(data) {
+                    $('.list-left-product-gift').empty();
+                    $('.list-left-product-gift').append(data);
+                   console.log("success");
+               })
+               .fail(function() {
+                   console.log("error");
+               })
+               .always(function() {
+                   console.log("complete");
+               });
+               
+            });
+
+          
+            // $('.list-arrows a').click(function () {
+            //     var $button = $(this), actives = '';
+            //     if ($button.hasClass('move-left')) {
+            //         actives = $('.list-right ul li.active');
+            //        acc = actives.clone().appendTo('.list-left ul').find('span.price_text').addClass('none_price').find('input,textarea,select,hidden,number').attr('disabled','disabled').val('');
+            //         acc.parent().parent().find('.pay_ment').removeClass('pay_money_total');
+            //         actives.remove();
+                    
+                  
+            //     } else if ($button.hasClass('move-right')) {
+            //         actives = $('.list-left ul li.active');
+            //         acc  =  actives.clone().appendTo('.list-right ul').find('span').removeClass('none_price').find('input,textarea,select,hidden,number').removeAttr('disabled');
+            //         acc.parent().find('.pay_ment').addClass('pay_money_total');
+            //         actives.remove();
+                   
+                    
+                    
+            //     }
+            // });
+
+            // $('.dual-list .selector').click(function () {
+            //     var $checkBox = $(this);
+            //     if (!$checkBox.hasClass('selected')) {
+            //         $checkBox.addClass('selected').closest('.well').find('ul li:not(.active)').addClass('active');
+            //         $checkBox.children('i').removeClass('icon icon-circle-blank').addClass('icon icon-ok');
+            //     } else {
+            //         $checkBox.removeClass('selected').closest('.well').find('ul li.active').removeClass('active');
+            //         $checkBox.children('i').removeClass('icon icon-ok').addClass('icon icon-circle-blank');
+            //     }
+            // });
+            // $('[name="SearchDualList"]').keyup(function (e) {
+            //     var code = e.keyCode || e.which;
+            //     if (code == '9') return;
+            //     if (code == '27') $(this).val(null);
+            //     var $rows = $(this).closest('.dual-list').find('.list-group li');
+            //     var val = $.trim($(this).val()).replace(/ +/g, ' ').toLowerCase();
+            //     $rows.show().filter(function () {
+            //         var text = $(this).text().replace(/\s+/g, ' ').toLowerCase();
+            //         return !~text.indexOf(val);
+            //     }).hide();
+            // });
+
+            
+
+            // $(document).on("submit", "form", function(e)
+            // {
+            //      $('#form').submit();
+            // });
+            
+        });
+
+        
+        function roundNumber(num, dec) {
+            var result = Math.round(num*Math.pow(10,dec))/Math.pow(10,dec);
+            return Number(result).toLocaleString('en',{ minimumFractionDigits: 2 });
+        }
+    </script>

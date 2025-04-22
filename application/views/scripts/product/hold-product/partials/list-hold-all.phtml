@@ -1,0 +1,66 @@
+<table class="table table-bordered">
+    <thead>
+        <tr>
+                    <td>#</td>
+                    <td>Name</td>
+                    <td>Warehouse</td>
+                    <td>Color</td>
+                    <td>Hold By</td>
+                    <td>Hold date</td>
+                    <td>Unblock By</td>
+                    <td>Unblock date</td>
+                    <td>Action <input type="checkbox" id="checkBoxAll"  value="">'</td>
+        </tr>
+    </thead>
+    <tbody>
+        <?php  print_r($this->colors);
+        if (isset($this->hold_all) and $this->hold_all)
+            foreach ($this->hold_all as $k=>$hold_all): ?>
+        <tr>
+            <td>
+                <?php
+                    $inc = $this->offset + $k + 1;
+                    echo $inc;
+                ?>
+            </td>
+            <td><?php echo $hold_all['p_name'] ?></td>
+            <td><?php echo $this->warehouses[$hold_all['warehouse_id']] ?></td>
+            <td><center>
+                
+                    <?PHP if($hold_all['type_all'] == 1): ?>
+                    <span class="label">All</span>
+                    <?PHP else: ?>
+                        <span class="label"><?php echo $this->goodColors[$hold_all['good_color']] ?></span>
+                    <?php endif; ?>
+               </center>
+            </td>
+            <td><?php echo $hold_all['name'] ?></td>
+            <td><?php echo $hold_all['hold_at'] ?></td>
+            <td><?php echo $hold_all['name_unblock'] ?></td>
+            <td><?php echo $hold_all['unblock_at'] ?></td>
+            
+
+            <td class="">
+            <?PHP  if (isset($hold_all['unblock_by']) and $hold_all['unblock_by']) {
+               
+            }else{?>
+               <center> <input type="checkbox" class="unblock" name="unblock[]" value="<?php echo $hold_all['id'] ?>"></center>
+            <?PHP }?>
+                <!-- <a title="Delete" class="confirmLink" href="/product/product-delete?id=<?php echo $good['id'];?>"> <i class="icon-trash"></i></a>
+                 <!-- Update By PungPond -->
+                <!--<a title="Edit" href="#" onclick="change_price(<?php echo $good['id'];?>,'<?php echo $good['price_3']?>','<?PHP echo $good['name'] ?>')"  > <i class="icon-usd"></i></a> -->
+            </td>
+        </tr>
+        <?php endforeach;?>
+
+    </tbody>
+</table>
+<div class="paging">
+    <?php echo $this->paging($this->total, $this->limit, $this->offset, $this->url);?>
+</div>
+
+<script type="text/javascript">
+    $("#checkBoxAll").change(function () {
+    $("input:checkbox.unblock").prop('checked', $(this).prop("checked"));
+    });
+</script>

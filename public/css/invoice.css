@@ -1,0 +1,366 @@
+.block{
+    margin: 0 auto;
+    width: 1100px;
+    font-family: Myriad Pro;
+    font-size: 18px;
+    position: relative;
+}
+
+body{
+    font-family: 'Myriad Pro';
+    font-size: 20px;
+}
+@font-face
+{
+    font-family: Myriad Pro;
+
+}
+#logo
+{
+    width: 300px;
+    display: block;
+    float: left;
+}
+
+#logo img {
+    width: 256px;
+    margin-top: 10px;
+}
+
+h2 {
+    font-size: 32px;
+    font-weight: 400;
+    text-transform: uppercase;
+    margin-top: 6px;
+    margin-bottom: 10px;
+}
+.inform
+{
+    display: block;
+    width: 459px;
+    float: left;
+    padding: 10px;
+    text-align: center;
+}
+
+.inform p
+{
+    margin: 6px;
+}
+
+
+.clear
+{
+    clear: both;
+}
+
+.date
+{
+    display: inline-block;
+    width: 330px;
+}
+.date div{
+    width: 104px;
+    float: left;
+}
+.sign
+{
+    width: 300px;
+    padding: 5px;
+    display: block;
+    float: right;
+    font-size: 18px;
+    position: relative;
+    left: 78px;
+}
+.col {
+    display: inline-block;
+    width: 1100px;
+    line-height: 34px;
+}
+
+.row-1 .col span{
+    display: block;
+    width: 158px;
+    float: left;
+}
+.col strong
+{
+    padding-left: 6px;
+}
+
+.not
+{
+    font-weight: normal;
+}
+
+.devider {
+    width: 1200px;
+    height: 3px;
+    background-color: #8dd0b7;
+    clear: both;
+    margin: 20px;
+    position: relative;
+    left: 50%;
+    margin-left: -600px;
+}
+
+.devider2
+{
+    width: 1200px;
+    height: 6px;
+    background-color: #8dd0b7;
+    clear: both;
+    margin: 20px;
+    position: relative;
+    left: 50%;
+    margin-left: -600px;
+}
+
+@media all {
+    .page-break { display: none; }
+}
+
+@media print {
+    .page-break { display: block; page-break-before: always; }
+}
+
+.table-border
+{
+    border: 2px solid black;
+}
+.productname {
+    width: 454px;
+}
+
+.unit
+{
+    width: 98px;
+    text-align: center;
+}
+
+.quantity
+{
+    width: 76px;
+    text-align: center;
+}
+
+.price
+{
+    width: 157px;
+    text-align: center;
+}
+
+.total
+{
+    width: 205px;
+    text-align: center;
+}
+.sp td{
+    border-bottom: 2px dotted black;
+    border-width:1px;
+    height: 35px;
+    border-right: 2px solid black;
+    border-spacing: 0px !important;
+    border-left: none;
+}
+.sp1 td{
+    border-bottom: 2px solid black;
+    border-width:1px;
+    height: 35px;
+    border-right: 2px solid black;
+    border-spacing: 0px !important;
+    border-left: none;
+}
+
+.price-name
+{
+    border-bottom: none !important;
+    height: 70px !important;;
+    text-align: left !important;;
+    padding-left: 25px;
+    vertical-align: top;
+}
+.price-name span{
+    font-style: italic;
+    padding-left: 8px;
+}
+.vat
+{
+    text-align: left;
+    float: left;
+    padding-left: 15px;
+}
+
+.print2
+{
+    position: relative;
+    top:30px;
+}
+
+.sp1 td:first-child
+{
+    width: 871px;
+    text-align: right;
+}
+
+.sp1 td:last-child
+{
+    border-right: none;
+    width: 204px;
+    text-align: right;
+}
+.limited
+{
+    margin: 0px 0px 0px 20px;
+}
+.sp td:last-child
+{
+    border-right: none;
+}
+
+.sp:last-child
+{
+    border-bottom: none;
+}
+
+.thead td {
+    border-bottom: 2px solid black;
+    border-right: 2px solid black;
+    border-spacing: 0px !important;
+    -webkit-border-horizontal-spacing: 0px;
+    -webkit-border-vertical-spacing: 0px;
+    margin: 0px;
+    padding: 6px;
+    border-collapse: collapse;
+    text-align: center;
+}
+.thead td:last-child
+{
+    border-right: none;
+}
+
+
+.none td{
+    border: none !important;
+    vertical-align: top;
+    height: 27px;
+}
+
+.abc
+{
+    width: 38px;
+    text-align: center;
+}
+
+.name {
+    text-transform: uppercase;
+    font-size: 15px;
+}
+
+.mst
+{
+    letter-spacing: 5px;
+}
+
+.text-title {
+    font-size: 23px;
+    font-weight: bold;
+    margin-top: 0px;
+}
+
+.col-left
+{
+    width: 660px;
+    float: left;
+}
+
+.col-right
+{
+    width: 340px;
+    float: right;
+}
+.col-right div
+{
+    margin: 10px 0px;
+    clear: both;
+}
+
+.divide {
+    width: 100%;
+    height: 3px;
+    border-bottom: 2px double #8dd0b7;
+    border-top: 2px double #8dd0b7;
+    position: relative;
+    top: 4px;
+}
+
+.signname
+{
+    width: 500px;
+    float: left;
+    text-align: center;
+    margin-top: 16px;
+}
+
+.foot
+{
+    font-size: 14px;
+    text-align: center;
+    margin-top: 50px;
+}
+
+.foot p
+{
+    line-height: 5px;
+}
+.signleft
+{
+    text-align: left;
+    padding-left: 100px;
+}
+
+.print
+{
+    width: 40px;
+    position: absolute;
+    top: 86px;
+    display: block;
+}
+.print img
+{
+    width: 30px;
+    cursor: pointer;
+}
+
+.signname p
+{
+    margin: 3px 0px;
+    font-size: 16px;
+    padding-left: 10px;
+}
+
+.col-right span{
+    width: 143px;
+    display: block;
+    float: left;
+}
+
+.date span{
+    position: relative;
+    left: 6px;
+}
+
+@media print{.print,.no-print{display:none!important}}
+
+.barcode
+{
+    position: absolute;
+    top: 114px;
+    left: -90px;
+}
+
+
+
+
+

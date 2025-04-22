@@ -1,0 +1,150 @@
+<style>
+
+    .editable .target {
+        width: 45px;
+    }
+
+    .status {
+        margin-left: 10px;
+    }
+</style>
+
+<table class="table table-bordered">
+    <thead>
+        <tr>
+            <?php echo $this->sorting(array(
+                    '#',
+                    'distributor_id'            => 'Distributor',
+                    'target'    => 'Target',
+                    'total'    => 'Total value',
+                    'area_id'    => 'Area',
+                    'created_by'          => 'Set by',
+                    'created_at'       => 'Set at',
+                    'updated_by'          => 'Updated by',
+                    'updated_at'       => 'Updated at',
+                ),
+                $this->url, $this->sort, $this->desc); ?>
+        </tr>
+    </thead>
+    <tbody>
+        <?php if (isset($this->target) && $this->target): ?>
+            <?php foreach ($this->target as $key => $value): ?>
+                <tr>
+                    <td><?php echo $this->offset + $key + 1; ?></td>
+                    <td><?php echo (isset($this->distributors[ $value['d_id'] ]) ? $this->distributors[ $value['d_id'] ] : '') ?></td>
+                    <td>
+                        <?php if (!$this->access('sales', 'target-update')): ?>
+                            <?php echo $value['target'] ?>
+                        <?php else: ?>
+
+                            <div class="editable">
+                                <?php $checksum = hash('sha256', md5( $value['id'] ) . $value['target']) ?>
+                                <a href="#" class="value" data-value="<?php echo $value['target'] ?>"><?php echo $value['target'] ?></a>
+                                <span class="form" style="display:none;">
+                                    <input type="text" data-id="<?php echo $value['id'] ?>" data-checksum="<?php echo $checksum ?>" class="form-control target" value="<?php echo $value['target'] ?>">
+                                </span>
+                            </div>
+
+                        <?php endif ?>
+                    </td>
+                    <td><?php echo $value['total'] ?></td>
+                    <td><?php echo (isset($this->areas[ $value['area_id'] ]) ? $this->areas[ $value['area_id'] ] : '') ?></td>
+                    <td><?php echo (isset($value['created_by']) && isset($this->staffs[ $value['created_by'] ]) ? $this->staffs[ $value['created_by'] ] : '') ?></td>
+                    <td><?php echo (isset($value['created_at']) ? date('d/m/Y H:i:s', strtotime($value['created_at'])) : '') ?></td>
+                    <td><?php echo (isset($value['updated_by']) && isset($this->staffs[ $value['updated_by'] ]) ? $this->staffs[ $value['updated_by'] ] : '') ?></td>
+                    <td><?php echo (isset($value['updated_at']) ? date('d/m/Y H:i:s', strtotime($value['updated_at'])) : '') ?></td>
+                </tr>
+            <?php endforeach ?>
+        <?php endif ?>
+    </tbody>
+</table>
+<div class="paging">
+    <?php echo $this->paging($this->total, $this->limit, $this->offset, $this->url);?>
+</div>
+
+<script>
+    <?php if ($this->access('sales', 'target-update')): ?>
+    
+    $(document).ready(function() {
+        $('.editable .value').click(show_edit_form);
+    });
+
+
+    old_value = 0;
+
+    function show_edit_form(e) {
+        e.preventDefault();
+
+        _self = $(e.target);
+        _self.hide();
+
+        old_value = _self.data('value');
+
+        _form = _self.parent('.editable').find('.form');
+        _form.show();
+        
+        _form.keypress(save_target);
+
+        $('.editable .value').unbind('click');
+    }
+
+    function save_target(e) {
+        if (e.which == 13) {
+            e.preventDefault();
+
+            _self = $(e.target);
+
+            target = 0;
+            id = _self.data("id");
+            checksum = _self.data("checksum");
+
+            try {
+                target = parseInt( _self.val().trim() );
+            } catch (err) {
+                console.log(err.message);
+                return false;
+            }
+
+            $.ajax({
+                url: '<?php echo HOST ?>sales/target-update',
+                type: 'post',
+                dataType: 'json',
+                data: {
+                    target : target,
+                    id : id,
+                    checksum : checksum
+                },
+            })
+            .done(function(data) {
+                console.log("success");
+
+                if (typeof data.code !== "undefined" && data.code == 0) {
+                    _self.unbind('keypress').hide();
+                    _self.parents('.editable')
+                        .find('.value')
+                        .text(target)
+                        .show()
+                        .after('<i class="status icon-ok"></i>');
+
+                    $('.editable .value').click(show_edit_form);
+
+                    setTimeout(function() {
+                        $('.status').fadeOut(function() {
+                            $('.status').remove();
+                        });
+                    }, 1500);
+                }
+            })
+            .fail(function() {
+                console.log("error");
+            })
+            .always(function() {
+                console.log("complete");
+
+            });
+            
+        }
+    }
+
+    <?php endif; ?>
+</script>

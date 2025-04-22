@@ -1,0 +1,126 @@
+<link rel="stylesheet" href="<?php echo HOST?>css/select2.css" />
+<script src="<?php echo HOST?>js/select2.js"></script>
+
+
+<form class="form-search form-horizontal" method="get">
+	<div class="row">
+
+		<div class="span5">
+			<div class="control-group">
+				<label for="distributor_ids" class="control-label">Distributor(My Side) : </label>
+				<div class="controls">
+					<select class="span3" name="distributor_ids" id="distributor_ids">
+						<option value=""> Please Selected </option>
+
+						<?php if(isset($this->distributor) && $this->distributor) : ?>
+							<?php foreach ($this->distributor as $value) : ?>
+								<option value="<?php echo $value['id'] ?>" <?php if(isset($this->params['distributor_ids']) && $this->params['distributor_ids'] == $value['id']) : ?> selected <?php endif; ?> ><?php echo $value['title'] ?></option>
+							<?php endforeach; ?>
+						<?php endif; ?>
+					</select>
+				</div>
+			</div>
+
+			<div class="control-group">
+				<label for="doc_type" class="control-label">Doc. Type : </label>
+				<div class="controls">
+					<select class="span3" name="doc_type" id="doc_type">
+						<option value=""> Please Selected </option>
+						<option value="1" <?php if(isset($this->params['doc_type']) && $this->params['doc_type'] == 1) : ?> selected <?php endif; ?> > Sale Order </option>
+						<option value="2" <?php if(isset($this->params['doc_type']) && $this->params['doc_type'] == 2) : ?> selected <?php endif; ?> > Return Order </option>
+						<option value="3" <?php if(isset($this->params['doc_type']) && $this->params['doc_type'] == 3) : ?> selected <?php endif; ?> > Sale Receipt </option>
+						<option value="4" <?php if(isset($this->params['doc_type']) && $this->params['doc_type'] == 4) : ?> selected <?php endif; ?> > Sale Refund </option>
+						<option value="5" <?php if(isset($this->params['doc_type']) && $this->params['doc_type'] == 5) : ?> selected <?php endif; ?> > Policy Support </option>
+					</select>
+				</div>
+			</div>
+
+			<div class="control-group">
+				<label for="regional" class="control-label">Organization :</label>
+				<div class="controls">
+					<select class="span3" name="regional" id="regional">
+						<option value=""> Please Selected </option>
+
+						<?php if(isset($this->regional) && $this->regional) : ?>
+							<?php foreach($this->regional as $key => $value) : ?>
+								<option value="<?php echo $key ?>" <?php if(isset($this->params['regional']) && $this->params['regional'] == $key) :?> selected <?php endif; ?> > <?php echo $value ?> </option>
+							<?php endforeach; ?>
+						<?php endif; ?>
+					</select>
+				</div>
+			</div>
+		</div>
+
+		<div class="span6">
+			<div class="control-group">
+				<label for="finance_client" class="control-label">Finance Client : </label>
+				<div class="controls">
+					<select class="span3" name="finance_client" id="finance_client">
+						<option value=""> Please Selected </option>
+
+						<?php if(isset($this->finance_client_arr) && $this->finance_client_arr) : ?>
+							<?php foreach($this->finance_client_arr as $value) : ?>
+								<option value="<?php echo $value['id'] ?>" <?php if(isset($this->params['finance_client']) && $this->params['finance_client'] == $value['id']) : ?> selected <?php endif; ?> > <?php echo $value['name'] ?> </option>
+							<?php endforeach; ?>
+						<?php endif; ?>
+					</select>
+				</div>
+			</div>
+
+			<div class="control-group">
+				<label for="date_from" class="control-label">Date (From) : </label>
+				<div class="controls">
+					<input type="text" name="date_from" class="span3 date" id="date_from" value="<?php isset($this->params['date_from']) && printf($this->params['date_from']) ?>">
+				</div>
+			</div>
+
+			<div class="control-group">
+				<label for="date_to" class="control-label">Date (To) : </label>
+				<div class="controls">
+					<input type="text" name="date_to" class="span3 date" id="date_to" value="<?php isset($this->params['date_to']) && printf($this->params['date_to']) ?>">
+				</div>
+			</div>
+		</div>
+
+		<div class="span12">
+			<button type="submit" class="btn btn-primary">Search</button>
+			<button type="reset" class="btn btn-warning">Reset</button>
+			<button type="submit" class="btn btn-success" name="export" value="1"> Export </button>
+		</div>
+
+	</div>
+</form>
+
+<script type="text/javascript" src="/js/jquery-ui-1.8.12.custom.min.js"></script>
+<link rel="stylesheet" type="text/css" href="/css/jquery-ui-1.8.12.custom.css"/>
+
+<script type="text/javascript">
+	$('#distributor_ids, #doc_type, #finance_client, #regional').select2();
+
+	$(document).ready(function () {
+
+		$( '.date' ).datepicker({ dateFormat: "yy-mm-dd" });
+
+		$("#distributor_ids").on('change',function(){
+			var distributor_id = $("#distributor_ids").val();
+
+			$("#finance_client").select2("val", "");
+
+			$.get("/finance/load-bank-account-my",
+				{distributor_id : distributor_id}
+				,function(data,status){
+					var data = $.parseJSON( data );
+
+					if (data.financeClient){
+						var obj = data.financeClient;
+						$('#finance_client').html('<option value="0"> Please Selected </option>');
+						for (var i = 0; i < obj.length; i++) {
+							$('#finance_client').append('<option value="'+obj[i]['id']+'">'+obj[i]['name']+'</option>');
+						}
+					}
+
+				});
+		});
+
+	});
+</script>

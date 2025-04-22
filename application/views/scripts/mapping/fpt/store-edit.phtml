@@ -1,0 +1,58 @@
+<style type="text/css">
+    #distributor_id,
+    #SearchBox {
+        display: block;
+    }
+
+    #distributor_id {
+        margin-bottom: 0;
+    }
+</style>
+
+<div class="page-header">
+    <h1><?php echo ( isset($this->mapping) && $this->mapping ? 'Edit' : 'Create' ) ?> Distributor Mapping <small>For Mass Order Upload</small></h1>
+</div>
+<div class="row">
+    <div class="span12">
+        <form action="<?php echo HOST ?>mapping/fpt-store-save" action="post" class="form-horizontal">
+            <div class="control-group">
+                <label class="control-label" >Distributor name</label>
+                <div class="controls">
+                    <input type='text' class="" name='SearchBox' id="SearchBox" placeholder="Search" autocomplete="off" />
+                    <select name="distributor_id" class="" id="distributor_id" size="5">
+                        <option value="">Please select</option>
+                        <?php
+                            foreach($this->distributors as $_id => $distributor):
+                                $selected = '';
+                                if(isset($this->mapping['distributor_id']) and $_id == $this->mapping['distributor_id']){
+                                    $selected = 'selected';
+                                }
+                                echo '<option '.$selected.' value="'.$_id.'" title="'.$distributor.'">'.$distributor.'</option>';
+                            endforeach;
+                        ?>
+                    </select>
+                </div>
+            </div>
+
+            <div class="control-group">
+                <label class="control-label">Code</label>
+                <div class="controls">
+                    <input type="text" class="" placeholder="Code" name="code"
+                        value="<?php if(isset($this->mapping['code'])) echo trim($this->mapping['code']) ?>">
+                </div>
+            </div>
+            <div class="control-group">
+                <div class="controls">
+                    <button class="btn btn-success">Save</button>
+                    <button class="btn btn-danger" type="button" onclick="window.location='<?php echo HOST ?>mapping/fpt-store'">Go Back</button>
+                </div>
+            </div>
+        </form>
+    </div>
+</div>
+
+<script>
+    $(document).ready(function () {
+        initSearchOptionDistributor("distributor_id", "SearchBox");
+    });
+</script>

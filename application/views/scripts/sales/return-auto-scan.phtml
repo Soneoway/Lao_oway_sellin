@@ -1,0 +1,848 @@
+<link rel="stylesheet" href="<?php echo HOST?>css/select2.css" />
+<script src="<?php echo HOST?>js/select2.js"></script>
+<link rel="stylesheet" href="<?php echo HOST?>css/dropzone.css" />
+
+<div class="page-header">
+    <?php if (isset($this->sales) and $this->sales):?>
+        <h1> Edit Returned Auto Check </h1>
+    <?php else:?>
+        <h1 style="font-family: Time new romans;"> Return Management </h1>
+
+    <?php endif;?>
+</div>
+
+<?php
+
+if (isset($this->messages) and $this->messages)
+    foreach ($this->messages as $message):
+        echo '<div class="alert alert-error">'.$message.'</div>';
+    endforeach;
+    ?>
+
+    <form role="form" id="form" action="<?php echo HOST.'sales/save-return-auto-scan';?>" method="post" target="ifrmSave" class="form-inline">
+
+        <iframe name="ifrmSave" id="ifrmSave" width="100%" style="display:none;"></iframe>
+
+        <div class="row" style="border-style: solid; border-width: thin; border-color: lavender; margin-right: 0px; margin-left: 0px">
+
+            <h2 style="padding-left: 10px; font-family: Time new romans;"> Basic Info. </h2>
+            <hr />
+
+            <div class="span6">
+
+                <div class="control-group">
+                    <label for="return_type" class="control-label" style="width: 190px; padding-right: 20px;"> <span style="color: red">*</span> Store/Warehouse(return) : </label>
+                    <div class="controls">
+                       <select class="span4" name="return_type" id="return_type">
+                           <option value=""> Please Selected </option>
+                           <option value="1"> Store </option>
+                           <option value="2"> Warehouse </option>
+                       </select>
+                   </div>
+               </div>
+
+               <div class="control-group store_id_input" style="padding-bottom: 40px">
+                <label for="store_id" class="control-label" style="width: 180px; padding-right: 20px;"> <span style="color: red">*</span> Store Name (return) : </label>
+                <div class="controls">
+                    <select class="span4" name="store_id" id="store_id">
+                        <option value=""> Please Selected </option>
+
+                        <?php if(isset($this->store) && $this->store) : ?>
+                            <?php foreach($this->store as $key => $value) : ?>
+                                <option value="<?php echo $key ?>"><?php echo $value ?></option>
+                            <?php endforeach; ?>
+                        <?php endif; ?>
+                    </select>
+                </div>
+            </div>
+
+            <div class="control-group warehouse_id_input" style="padding-bottom: 40px">
+                <label for="warehouse_id" class="control-label"> <span style="color: red">*</span> Warehouse Name (return) : </label>
+                <div class="controls">
+                    <select class="span4" name="warehouse_id" id="warehouse_id">
+                        <option value=""> Please Selected </option>
+
+                        <?php if(isset($this->warehouse) && $this->warehouse) : ?>
+                            <?php foreach($this->warehouse as $key => $value) : ?>
+                                <option value="<?php echo $key ?>"><?php echo $value ?></option>
+                            <?php endforeach; ?>
+                        <?php endif; ?>
+                    </select>
+                </div>
+            </div>
+
+            <div class="control-group" style="padding-bottom: 40px">
+                <label for="finance_client" class="control-label" style="width: 180px; padding-right: 20px;"> <span style="color: red">*</span> Finance Client : </label>
+                <div class="controls">
+                    <select class="span4" name="finance_client" id="finance_client">
+                        <option value=""> Please Selected </option>
+                    </select>
+                </div>
+            </div>
+
+            <div class="control-group">
+                <label for="delivery" class="control-label"> Delivery : </label>
+                <div class="controls">
+                    <select class="span4" name="delivery" id="delivery">
+                        <option value=""> Please Selected </option>
+                        <option value="1"> Expedition </option>
+                        <option value="2"> Self Collect </option>
+                    </select>
+                </div>
+            </div>
+
+            <div class="control-group">
+                <label class="control-label"> Remarks : </label>
+                <div class="controls">
+                    <textarea class="span4" cols="2" rows="3" name="remark"></textarea>
+                </div>
+            </div>
+
+        </div>
+
+        <div class="span6">
+
+            <div class="control-group">
+                <input id="create_cn" class="create_cn" name="create_cn" type="checkbox" value="1" checked disabled> 
+                <span style="font-family: phetsarath ot;"> ສ້າງລະຫັດ CN  </span><span style="color: red">*</span>
+            </input>
+        </br>
+
+        <input id="active_cn" class="active_cn" name="active_cn" type="checkbox" value="1" checked disabled> 
+        <span style="font-family: phetsarath ot;"> ເປີດໃຊ້ງານ CN</span> <span style="color: red">*</span>
+    </input>
+    <br />
+
+</div>
+
+<div class="control-group" style="padding-top: 20px;">
+    <label class="control-label"> Distributor for Sales Return : <span style="color: green" id="distributor_ids"> </span> </label> <br />
+    <label class="control-label"> Distributor for Receiving : <span style="color: green" id="distributor_recevie"> </span> </label>
+</div>
+
+</div>
+
+</div>
+
+<div class="row" style="border-style: solid; border-width: thin; margin-top: 10px; border-color: lavender; margin-bottom: 10px; margin-right: 0px; margin-left: 0px">
+
+    <h2 style="padding-left: 10px; font-family: Time new romans;"> Item Info. </h2>
+    <hr />
+
+    <div class="span12" style="padding-bottom: 15px;">
+
+        <div class="control-group">
+            <label class="control-label"> Returned Goods Item Code : </label>
+            <div class="controls">
+                <textarea class="span12" cols="3" rows="5" name="imei" id="imei"></textarea>
+            </div>
+        </div>
+
+        <button type="button" class="btn btn-success btn-check-imei"> Check </button>
+
+    </div>
+
+    <div class="span12">
+
+        <div class="control-group" style="padding-bottom: 50px">
+            <div class="controls">
+
+                <table class="table">
+                    <thead>
+                      <tr>
+                        <th>Item Code</th>
+                        <th>Product Name</th>
+                        <th>Invoice Number</th>
+                        <th>Price</th>
+                    </tr>
+                </thead>
+
+                <tbody class="table-body">
+
+                </tbody>
+            </table>
+
+        </div>
+    </div>
+
+</div>
+
+</div>
+
+<div class="row" style="border-style: solid; border-width: thin; margin-top: 10px; border-color: lavender; margin-bottom: 10px; margin-right: 0px; margin-left: 0px">
+    <div class="span12">
+        <div class="control-group" style="margin-top: 10px">
+            <input type="hidden" name="data_phone_return" id="data_phone_return" />
+            <input type="hidden" id="back_url" name="back_url" value="/sales/return-list" />
+            <input type="hidden" id="type" name="type" value="1" />
+            <button type="submit" class="btn btn-success" id="save-button"> Save </button>
+            <button type="button" class="btn btn-" onclick="history.back()"> Cancel </button>
+        </div>
+    </div>
+
+</div>
+</form>
+
+<script type="text/javascript" src="/js/jquery-ui-1.8.12.custom.min.js"></script>
+<link rel="stylesheet" type="text/css" href="/css/jquery-ui-1.8.12.custom.css"/>
+<script src="/js/jquery.blockUI.js"></script>
+<script type="text/javascript" src="<?php echo HOST ?>js/jets.js"></script>
+
+<script>
+
+    $("#store_id, #warehouse_id, #finance_client").select2();
+
+    $(document).ready(function () {
+
+        $('.store_id_input').hide();
+        $('.warehouse_id_input').hide();
+        $("#imei").prop('disabled', true);
+
+        $("#return_type").change(function() {
+
+            var return_type = $("#return_type").val();
+
+            $('#distributor_recevie').html('');
+            $('#distributor_ids').html('');
+
+            $("#store_id").select2("val", "");
+            $("#warehouse_id").select2("val", "");
+            $("#finance_client").select2("val", "");
+
+            if(return_type == '') {
+
+                $("#imei").prop('disabled', true);
+                $('.warehouse_id_input').hide();
+                $('.store_id_input').hide();
+                $('#warehouse_id').prop('required', false);
+                $('#store_id').prop('required', false);
+
+            } else if(return_type == 1) {
+
+                $('.store_id_input').show();
+                $('#store_id').prop('required', true);
+                $("#imei").prop('disabled', false);
+                $('.warehouse_id_input').hide();
+                $('#warehouse_id').prop('required', false);
+
+            } else if(return_type == 2) {
+
+                $('.warehouse_id_input').show();
+                $('#warehouse_id').prop('required', true);
+                $("#imei").prop('disabled', false);
+                $('.store_id_input').hide();
+                $('#store_id').prop('required', false);
+
+            }
+
+        });
+
+        $("#store_id").change(function(){
+            var store_id = $("#store_id").val();
+
+            $.get("/finance/load-finance-account-by-store",
+                {store_id : store_id}
+                ,function(data,status){
+                    var data = $.parseJSON( data );
+
+                    if (data.financeclient){
+                        var obj = data.financeclient;
+                        $('#finance_client').html('<option value="0"> Please Selected </option>');
+                        for (var i = 0; i < obj.length; i++) {
+                            $('#finance_client').append('<option value="'+obj[i]['id']+'">'+obj[i]['name']+'</option>');
+                        }
+                    }
+
+
+                    if (data.distributor){
+                        var obj = data.distributor;
+                        $('#distributor_ids').html(obj.title);
+                    }
+
+                    if (data.supre_distributor){
+                        var obj = data.supre_distributor;
+                        $('#distributor_recevie').html(obj.title);
+                    }
+
+                });
+        });
+
+        $("#warehouse_id").change(function(){
+            var warehouse_id = $("#warehouse_id").val();
+
+            $.get("/finance/load-finance-account-by-warehouse",
+                {warehouse_id : warehouse_id}
+                ,function(data,status){
+                    var data = $.parseJSON( data );
+
+                    if(data.financeclient){
+                        var obj = data.financeclient;
+                        $('#finance_client').html('<option value="0"> Please Selected </option>');
+                        for (var i = 0; i < obj.length; i++) {
+                            $('#finance_client').append('<option value="'+obj[i]['id']+'">'+obj[i]['name']+'</option>');
+                        }
+                    }
+
+                    if(data.supre_distributor){
+                        var obj = data.supre_distributor;
+                        $('#distributor_recevie').html(obj.title);
+                    }
+
+                    if(data.distributor){
+                        var obj = data.distributor;
+                        $('#distributor_ids').html(obj.title);
+                    }
+                })
+        })
+
+        $("#imei").keydown(function(){
+            $('.content_list').remove();
+        });
+
+        $("#imei").keyup(function(){
+            $('.content_list').remove();
+        })
+
+
+        $('.btn-check-imei').click(function(e){
+
+            var div_parent = $(this).parent().parent().parent();
+
+            $('.content_list').remove();
+
+            var imei = $('#imei').val();
+            if (imei == ''){
+                alert('Please Input Imei SN !');
+                return;
+            }
+
+            var imei_v = $.trim(imei).split("\n");
+            var imei_list = '';
+            
+            $.each(imei_v , function(i, val) { 
+                imei_list += "'"+$.trim(imei_v[i])+"',";
+            });
+
+            var warehouse_id = $("#warehouse_id").val();
+            var store_id = $("#store_id").val();
+            var return_type = $("#return_type").val();
+
+            $.get("/get/check-imei-return",
+                {warehouse_id: warehouse_id, imei_list: imei_list.slice(0, -1), store_id: store_id, return_type: return_type}
+                ,function(data,status){
+
+                    $('#data_phone_return').val(data);
+                    var data = $.parseJSON( data );
+
+                    console.log(data);
+
+                    if (data.check==1){
+                        var obj = data.result_imei;
+                        $('.data_phone_return').val(data.result_phone);
+
+                        var total_row = obj.length-1;
+                        for (var i = 0; i < obj.length; i++) {
+                            var price =   new Intl.NumberFormat('de-DE', { style: 'currency', currency: 'LAK' }).format(obj[i]['agent_to_dealer_price'],0);
+                            var invoice = obj[i]['agent_sale_invoice'];
+
+                            if(invoice) {
+                                invoice = obj[i]['agent_sale_invoice'];
+                            }else{
+                                invoice = '-';
+                            }
+
+                            div_parent.find('.table-body').append('<tr class="content_list"><td>'+obj[i]['imei_sn']+'</td><td>'+obj[i]['brand_name']+' '+obj[i]['good_name']+' '+obj[i]['good_color_name']+'</td><td>'+invoice+'</td><td>'+price+'</td></tr>');
+                        }
+
+                    }else if(data.check==2){
+
+                        alert('Imei Exist in Return Data!');
+
+                    }else if(data.check==3){
+
+                        alert(data.error);
+                        $("#save-button").prop('disabled', true);
+                        location.reload()
+
+                    }else{
+                        alert('No Data !');
+                    } 
+
+                });
+            
+            return false;
+        });
+
+    });
+
+
+$(document).ajaxStart(function(){
+    $.blockUI({ css: { 
+        border: 'none', 
+        padding: '15px', 
+        backgroundColor: '#000', 
+        '-webkit-border-radius': '10px', 
+        '-moz-border-radius': '10px', 
+        opacity: .5, 
+        color: '#fff' 
+    } });
+});
+
+$(document).ajaxStop(function(){
+    $.unblockUI();
+});
+
+$(document).on("submit", "form", function(e){
+
+    $.blockUI({ css: { 
+        border: 'none', 
+        padding: '15px', 
+        backgroundColor: '#000', 
+        '-webkit-border-radius': '10px', 
+        '-moz-border-radius': '10px', 
+        opacity: .5, 
+        color: '#fff' 
+    } });
+
+});
+
+$('#ifrmSave').load(function() {
+    $.unblockUI();
+});
+
+
+    //  <?php if(isset($this->rank)) { ?>
+    //     $('#rank').val(<?= $this->rank ?>);
+    //     get_distributor_cached_for_search(<?= $this->rank ?>);
+    // <?php }?>
+
+    // $('.rank').change(function(event) {
+    //     get_distributor_cached_for_search($(this).val());
+    // });
+
+    // function get_distributor_cached_for_search(rank_id){
+
+    //     var rank_id = rank_id;
+    //     $.ajax({
+    //       url: '<?php echo HOST ?>get/distributor-cached-for-search',
+    //       type: 'POST',
+    //       dataType: 'html',
+    //       data: {rank_id: rank_id},
+    //   })
+    //     .done(function(data) {
+    //       $('.retailer_name_list').empty();
+    //       $('.retailer_name_list').append(data);
+    //       var jets = new Jets({
+    //         searchTag: '#SearchBox',
+    //         contentTag: '#d_id'
+    //     });
+    //       <?php if(isset($this->d_id)){ ?>
+    //         $('#d_id').val(<?= $this->d_id ?>);
+    //     <?php }?>
+    //     console.log("success");
+    // })
+    //     .fail(function() {
+    //       console.log("error");
+    //   })
+    //     .always(function() {
+    //       console.log("complete");
+    //   });
+
+    // }
+
+    // initSearchOptionDistributor('d_id', 'SearchBox');
+    //     //initSearchOptionDistributor('distributor_id', 'SearchBox');
+    // initGoBack();
+    // initAddSales();
+    // initRemoveSales();
+    // initSelectProduct();
+    // initSelectQuantity();
+    // initReset();
+    // initShowIMEINum();
+    // initCheckReturnImei();
+
+    // $(document).ajaxStart(function(){
+    //     $.blockUI({ css: { 
+    //         border: 'none', 
+    //         padding: '15px', 
+    //         backgroundColor: '#000', 
+    //         '-webkit-border-radius': '10px', 
+    //         '-moz-border-radius': '10px', 
+    //         opacity: .5, 
+    //         color: '#fff' 
+    //     } });
+    // });
+
+//     $(document).ajaxStop(function(){
+//         $.unblockUI();
+//     });
+
+//     $(document).on("submit", "form", function(e){
+
+//         $.blockUI({ css: { 
+//             border: 'none', 
+//             padding: '15px', 
+//             backgroundColor: '#000', 
+//             '-webkit-border-radius': '10px', 
+//             '-moz-border-radius': '10px', 
+//             opacity: .5, 
+//             color: '#fff' 
+//         } });
+
+//             // $.unblockUI();
+
+//     });
+
+//     $('#ifrmSave').load(function() {
+//         $.unblockUI();
+//     });
+
+//     $('#create_cn').change(function(e) {
+//         if(this.checked) {
+//             $('.div-return-type').removeClass('hide');
+//         }else{
+//             $('.div-return-type').addClass('hide');
+//         }
+//     });
+// });
+
+//     <?php if(isset($this->sales[0]['sale']->return_type) && $this->sales[0]['sale']->return_type){?>
+//         $('#return_type').val('<?=$this->sales[0]['sale']->return_type;?>');
+//     <?php } ?>
+
+
+//     function initShowIMEINum(){
+//         $('#imei').keyup(function (e){
+
+//             var inputnum = 0;
+
+//             if ($(this).val() != '')
+//                 inputnum = ($(this).val().split("\n").length).toString();
+
+
+//             $('#num_imei').html(inputnum);
+
+//         });
+//     }
+
+//     function palert(msg){
+//         $('.alert-error').remove();
+//         $('.page-header').after('<div class="alert alert-error">'+msg+'</div>');
+
+//         return;
+//     }
+
+//     function initGoBack(){
+//         $('.go-back').click(function(e){
+//             window.location.href = $('#back_url').val();
+//             return false;
+//         });
+//     }
+
+//     function initRemoveSales(){
+//         $('.remove-sales').click(function(e){
+//             $(this).parent().parent().parent().remove();
+//             return false;
+//         });
+//     }
+
+//     function initAddSales(){
+//         $('.add-sales').click(function(e){
+//             var old_div = $('.div-add');
+//             var new_div = old_div.clone();
+
+//             new_div.removeClass('div-add').find('select, input, textarea').removeAttr('disabled');
+
+//             new_div.insertBefore($(this).parent().parent().parent()).show();
+
+//             initSelectProduct();
+//             initSelectQuantity();
+//             initRemoveSales();
+
+//             return false;
+//         });
+//     }
+
+    // function SelectProduct(this_id,cat_id,good_id,good_color,qty,price,total_price,sn_ref,invoice_number,distributor_id){
+    //     var div_parent = this_id.parent().parent().parent();
+    //     var _self = this_id;
+
+    //     $.get("/get/load",
+    //         {cat_id: cat_id, good_id: ''}
+    //         ,function(data,status){
+    //             var data = $.parseJSON( data );
+    //             if (data.goods){
+    //                 var obj = data.goods;
+    //                 for (var i = 0; i < obj.length; i++) {
+    //                     var select ='';
+    //                     if(good_id==obj[i]['id'])
+    //                     {
+    //                         select='selected';    
+    //                         div_parent.find('.good_id').append('<option '+select+' value="'+obj[i]['id']+'">'+obj[i]['brand_name']+' '+obj[i]['name']+'</option>');
+    //                     }else{
+    //                         div_parent.find('.good_id').append('<option value="'+obj[i]['id']+'">'+obj[i]['name']+'</option>');
+    //                     } 
+    //                 }
+    //             }
+
+    //         });
+
+    //     $.get("/get/load",
+    //         {cat_id: cat_id, good_id: good_id}
+    //         ,function(data,status){
+    //             var data = $.parseJSON( data );
+    //             if (data.colors){
+    //                 div_parent.find('.good_color').empty();
+    //                 var obj = data.colors;
+    //                 for (var i = 0; i < obj.length; i++) {
+    //                     var select ='';
+    //                     if(good_color==obj[i]['id']){
+    //                         select='selected'; 
+    //                         div_parent.find('.good_color').append('<option '+select+' value="'+obj[i]['id']+'">'+obj[i]['name']+'</option>');
+    //                     }else{
+    //                         div_parent.find('.good_color').append('<option value="'+obj[i]['id']+'">'+obj[i]['name']+'</option>');
+    //                     }
+    //                 }
+    //             }
+
+    //         });
+
+    //     div_parent.find('.ids').val(distributor_id);
+    //     div_parent.find('.num').val(qty);
+    //     div_parent.find('.price').val(price);
+    //     div_parent.find('.total').val(total_price);
+
+    //     div_parent.find('.invoice_sn').empty();
+    //     $.get("/get/load-invoice",
+    //         {distributor_id: distributor_id, good_id: good_id, good_color: good_color}
+    //         ,function(data,status){
+    //             //alert(data);
+    //             var data = $.parseJSON( data );
+    //             if (data.invoice_sn){
+    //                 var obj = data.invoice_sn;
+    //                 for (var i = 0; i < obj.length; i++){
+    //                     var select ='';
+    //                     if(sn_ref==obj[i]['sn_ref']){
+    //                         select='selected'; 
+    //                         div_parent.find('.invoice_sn').append('<option '+select+' value="'+obj[i]['invoice_number']+'">'+obj[i]['invoice_number']+'/'+obj[i]['sn_ref']+'</option>');
+    //                     }else{
+    //                         div_parent.find('.invoice_sn').append('<option value="'+obj[i]['invoice_number']+'">'+obj[i]['invoice_number']+'/'+obj[i]['sn_ref']+'</option>');
+    //                     }
+    //                 }
+    //             }
+
+    //             _self.nextAll('.loading').remove();
+    //         });
+    // }
+
+    // function AddSales(total_row,index_row,cat_id,good_id,good_color,qty,price,total_price,sn_ref,invoice_number,distributor_id)
+    // {
+    //     if(index_row>0)
+    //     {
+    //         var i=0;
+    //         $('.cat_id').each(function(){
+    //             if(i>total_row)
+    //             {
+    //                 $(this).parent().parent().parent().remove();
+    //             }
+    //             i+=1;
+    //         });
+    //         var old_div = $('.div-add');
+    //         var new_div = old_div.clone();
+    //         new_div.removeClass('div-add').find('select, input, textarea').removeAttr('disabled');
+    //         new_div.insertBefore($('.add-sales').parent().parent().parent()).show();
+    //         initSelectProduct();
+    //         initSelectQuantity();
+    //         initRemoveSales();
+    //     }
+    //     var i=0;
+    //     $('.cat_id').each(function(){
+    //         if(index_row==i){
+    //             $('.cat_id option[value='+cat_id+']').attr('selected','selected');
+    //             SelectProduct($(this),cat_id,good_id,good_color,qty,price,total_price,sn_ref,invoice_number,distributor_id);
+    //         }
+    //         i+=1;
+    //     });
+
+    // }
+
+    // function initCheckReturnImei()
+    // {
+    //     $('.btn-check-imei').click(function(e){
+
+    //         var imei = $('#imei').val();
+    //         if (imei == ''){
+    //             alert('Please Input Imei SN !');
+    //             return;
+    //         }
+
+    //         var imei_v = $.trim(imei).split("\n");
+    //         var imei_list = '';
+
+    //        /* $.each(imei_v , function(i, val) { 
+    //             imei_list += $.trim(imei_v[i])+',';
+    //         });*/
+
+    //         $.each(imei_v , function(i, val) { 
+    //             imei_list += "'"+$.trim(imei_v[i])+"',";
+    //         });
+
+    //         var warehouse_id = $('#warehouse_id').val();
+
+    //        // distributor_id=1266;warehouse_id=1;
+
+
+    //         $.post("/get/check-return-imei-auto-scan",
+    //             {warehouse_id: warehouse_id, imei_list: imei_list.slice(0, -1)}
+    //             ,function(data,status){
+    //                 console.log(data);
+    //                 $('#data_phone_return').val(data);
+    //                // alert(data);
+    //                 var data = $.parseJSON(data);
+    //                // $('.data_phone_return').val('');
+    //                 if (data.check==1){
+    //                     var obj = data.result_market;
+    //                     //$('.data_phone_return').val(data.result);
+
+    //                     var total_row = obj.length-1;
+    //                     for (var i = 0; i < obj.length; i++) {
+    //                         var cat_id=obj[i]['cat_id'];
+    //                         var good_id=obj[i]['good_id'];
+    //                         var good_color=obj[i]['good_color'];
+    //                         var qty=obj[i]['qty'];
+    //                         var price=obj[i]['out_price'];
+    //                         var total_price=obj[i]['total_price'];
+    //                         var sn_ref=obj[i]['sn_ref'];
+    //                         var invoice_number=obj[i]['invoice_number'];
+    //                         var distributor_id=obj[i]['distributor_id'];
+    //                         //$('.data_phone_return').val(obj[i]['cat_id']);
+
+
+    //                         AddSales(total_row,i,cat_id,good_id,good_color,qty,price,total_price,sn_ref,invoice_number,distributor_id);
+    //                     }
+    //                 }else if(data.check==2){
+    //                     alert('Imei Exist in Return Data!');
+    //                     $('select, input:text, input.num, input.price, input.total').val('');
+    //                 }else if(data.check==3){
+    //                     alert(data.error);
+    //                     $('select, input:text, input.num, input.price, input.total').val('');
+    //                 }else{
+    //                     alert('No Data !');
+    //                     $('select, input:text, input.num, input.price, input.total').val('');
+    //                 }
+    //             });
+
+    //         return false;
+    //     });
+    // }
+
+
+
+    // function initSelectProduct(){
+    //     $('.cat_id, .good_id').change(function(){
+    //         $(this).after('<span class="loading"></span>');
+    //         var div_parent = $(this).parent().parent().parent();
+    //         var _self = $(this);
+    //         var cat_id = div_parent.find('.cat_id').val();
+
+    //         if (_self.hasClass('cat_id'))
+    //             div_parent.find('.good_id').find('option:not(:first)').remove();
+
+    //         var good_id = div_parent.find('.good_id').val();
+
+    //         div_parent.find('.good_color').find('option:not(:first)').remove();
+
+    //         div_parent.find('.num, .price, .total').val('');
+
+    //         $.get("/get/load",
+    //             {cat_id: cat_id, good_id: good_id}
+    //             ,function(data,status){
+    //                 var data = $.parseJSON( data );
+    //                 if (data.goods){
+    //                     var obj = data.goods;
+    //                     for (var i = 0; i < obj.length; i++) {
+    //                         div_parent.find('.good_id').append('<option value="'+obj[i]['id']+'">'+obj[i]['name']+'</option>');
+    //                     }
+    //                 }
+    //                 if (data.colors){
+    //                     div_parent.find('.good_color').empty();
+    //                     var obj = data.colors;
+    //                     for (var i = 0; i < obj.length; i++) {
+    //                         div_parent.find('.good_color').append('<option value="'+obj[i]['id']+'">'+obj[i]['name']+'</option>');
+    //                     }
+    //                 }
+    //                 _self.nextAll('.loading').remove();
+    //             });
+    //     });
+    // }
+
+    // function initSelectQuantity(){
+    //     $('.num').change(function(){
+    //     	$('.loading').remove();
+    //         var div_parent = $(this).parent().parent().parent();
+    //         var _self = $(this);
+    //         var num = _self.val();
+    //         var good_id = div_parent.find('.good_id').val();
+    //         var good_color = div_parent.find('.good_color').val();
+    //         var distributor_id = $('#distributor_id').val();
+    //         if (distributor_id) {
+    //             $(this).after('<span class="loading"></span>');
+    //             $.get("/get/load-price-return",
+    //                 {num: num, good_id: good_id, good_color: good_color, is_sales_price: 1, is_return: 1, distributor_id: distributor_id}
+    //                 ,function(data,status){
+    //                     if (data=='-1'){
+    //                         alert('The product quantity is 0');
+    //                     } else if (data.indexOf("-2") !== -1){
+    //                         var myarr = data.split("|");
+    //                         alert('The product quantity is only '+myarr[1]);
+    //                     } else {
+    //                         var price = 0;
+
+    //                         if (data > 0 && num > 0) price = data/num;
+
+    //                         div_parent.find('.price').val(price);
+    //                         div_parent.find('.total').val(data);
+    //                     }
+    //                     _self.nextAll('.loading').remove();
+    //                 });
+
+    //             div_parent.find('.invoice_sn').empty();
+
+    //             $.get("/get/load-invoice",
+    //                 {distributor_id: distributor_id, good_id: good_id, good_color: good_color}
+    //                 ,function(data,status){
+    //                     var data = $.parseJSON( data );
+    //                     if (data.invoice_sn){
+    //                         var obj = data.invoice_sn;
+    //                         for (var i = 0; i < obj.length; i++) {
+    //                             div_parent.find('.invoice_sn').append('<option value="'+obj[i]['invoice_number']+'">'+obj[i]['invoice_number']+'/'+obj[i]['sn_ref']+'</option>');
+    //                         }
+    //                     }
+
+    //                     _self.nextAll('.loading').remove();
+    //                 });
+
+    //         } else{
+    //             _self.val('');
+    //             alert('Please select Retailer!');
+    //         }
+    //     });
+    // }
+
+    // function initReset(){
+    //     $('button.btn-reset').click(function(e){
+    //         e.preventDefault();
+    //         $('select, input:text, input.num, input.price').val('');
+    //         $('textarea').val('');
+
+    //         $('#num_imei').html(0);
+    //     })
+    // }
+
+</script>
+<style>
+	label input,
+	label select {
+		margin-right: 25px;
+	}
+</style>

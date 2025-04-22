@@ -1,0 +1,391 @@
+<!-- <link href="//netdna.bootstrapcdn.com/bootstrap/3.2.0/css/bootstrap.min.css" rel="stylesheet" id="bootstrap-css"> -->
+
+<link href="<?=HOST?>public/css/bootstrap.modi.min.css" rel="stylesheet">
+ <style type="text/css">
+ 
+</style> 
+
+<div class="page-header">
+    <?php if (isset($this->auto_giftbox) && $this->auto_giftbox): ?>
+        <h1>Edit Auto Giftbox</h1>
+    <?php else: ?>
+        <h1>Add Auto Giftbox</h1>
+    <?php endif ?>
+    
+</div>
+
+<?php
+    if (isset($this->messages) and $this->messages)
+        foreach ($this->messages as $message):
+            echo '<div class="alert alert-error">'.$message.'</div>';
+        endforeach;
+
+    if (isset($this->messages_success) and $this->messages_success)
+        foreach ($this->messages_success as $message):
+            echo '<div class="alert alert-success">'.$message.'</div>';
+        endforeach;
+
+        // print_r($this->auto_giftbox); die;
+?>
+
+<div class="container">
+
+    <form class="form-horizontal" action="<?php echo HOST ?>manage/add-auto-giftbox" name="form" id="form" method="post">
+        <div class="col-md-6"> 
+
+            <h3>
+                Condition
+            </h3>
+            <br>
+
+           <div class="control-group">
+            <label class="span3">Product Category<span style="color: red">*</span></label>
+                <div class="controls">
+                 <select class="cat_id span3"  name="cat_id" disabled>
+                    <option value="">Choose</option>
+                    <?php if ($this->good_categories): foreach ($this->good_categories as $id=>$name):?>
+                        <option value="<?php echo $id;?>" 
+                            <?php if (isset($this->auto_giftbox['cat_id']) and $id==$this->auto_giftbox['cat_id']):
+                            ?> 
+                            selected<?php endif;?>
+                            <?php if (isset($this->params['cat_id']) and $id==$this->params['cat_id']):?> selected<?php endif;?> >
+                            <?php echo $name;?>
+                        </option>
+                    <?php endforeach; endif;?>
+                 </select>
+                </div>
+            </div>
+            <div class="control-group">
+                <label class="span3">Product<span style="color: red">*</span></label>
+                    <div class="controls">
+                      <select class="good_id span3" name="good_id" required="required">
+                        <option value="">Choose</option>
+                        <?php if (isset($this->goods_cat) and $this->goods_cat):
+                                foreach ($this->goods_cat as $item): ?>
+                                    <option value="<?php echo $item['id'];?>" 
+                                        <?php if (isset($this->auto_giftbox['good_id']) and $item['id']==$this->auto_giftbox['good_id']):?> selected<?php endif;?>><?php echo $item['name'];?>
+                                    </option>
+                                <?php endforeach; ?>
+                         <!-- // -->
+                        <?php elseif($this->goods_cached): foreach ($this->goods_cached as $id=>$item):?>
+                            <option value="<?php echo $id;?>" <?php if(isset($this->auto_giftbox['good_id']) and $id==$this->auto_giftbox['good_id']):?> selected<?php endif;?> ><?php echo $item;?></option>
+                        <?php endforeach; endif;?>
+                      </select>
+                    </div>
+            </div>
+        
+            <div class="control-group showhide_always">
+                <label class="span3">Always<span style="color: red">*</span></label>
+                <div class="controls">
+                    <input type="checkbox" id="checkbox_allday" name="checkbox_allday" value=""
+                    <?php if(isset($this->auto_giftbox)): ?>
+                        <?php if (!isset($this->auto_giftbox)):?>checked <?php else: isset($this->auto_giftbox) and $this->auto_giftbox->all_date==1 and printf('checked'); endif;?>>
+                    <?php endif; ?>
+                </div>
+            </div><br>
+
+            <div class="control-group showhide_date">
+                <label class="span3">Auto Giftbox Start Date<span style="color: red">*</span></label>
+                <div class="controls">
+                    <?php if(isset($this->auto_giftbox)): ?>
+                        <input type="text" class="date" id="auto_giftbox_start_date" name="auto_giftbox_start_date" style="width: 260px;" value="<?php isset($this->auto_giftbox) and $this->auto_giftbox and printf($this->auto_giftbox->start_date)?>">
+                    <?php else: ?>
+                        <input type="text" class="date" id="auto_giftbox_start_date" name="auto_giftbox_start_date" style="width: 260px;" value="<?php isset($this->auto_giftbox) and $this->auto_giftbox and printf($this->auto_giftbox->start_date)?>" required>
+                    <?php endif; ?>
+                </div>
+            </div>
+
+            <div class="control-group showhide_date">
+                <label class="span3">Auto Giftbox End Date<span style="color: red">*</span></label>
+                <div class="controls">
+                    <?php if(isset($this->auto_giftbox)): ?>
+                        <input type="text" class="date" id="auto_giftbox_end_date" name="auto_giftbox_end_date" style="width: 260px;" value="<?php isset($this->auto_giftbox) and $this->auto_giftbox and printf($this->auto_giftbox->end_date)?>">
+                    <?php else: ?>
+                        <input type="text" class="date" id="auto_giftbox_end_date" name="auto_giftbox_end_date" style="width: 260px;" value="<?php isset($this->auto_giftbox) and $this->auto_giftbox and printf($this->auto_giftbox->end_date)?>" required>
+                    <?php endif; ?>
+                </div>
+            </div>
+            <hr>
+            <h3>
+                Give Item
+            </h3>
+            <br>
+
+            <div class="control-group">
+            <label class="span3">Product Category<span style="color: red">*</span></label>
+                <div class="controls">
+                  <select class="cat_id_give span3"  name="cat_id_give" required="required">
+                    <option value="">Choose</option>
+                    <?php if ($this->good_categories): foreach ($this->good_categories as $id=>$name):?>
+                        <option value="<?php echo $id;?>" <?php if (isset($this->auto_giftbox['gift_cat_id']) and $id==$this->auto_giftbox['gift_cat_id']):?> selected<?php endif;?>><?php echo $name;?></option>
+                    <?php endforeach; endif;?>
+                  </select>
+                </div>
+           
+            </div>
+            <div class="control-group">
+                <label class="span3">Product<span style="color: red">*</span></label>
+                <div class="controls">
+                    <select class="good_id_give span3" name="good_id_give" required="required">
+                        <option value="">Choose</option>
+                        <?php if($this->goods_cached): foreach ($this->goods_cached as $id=>$item):?>
+                            <option value="<?php echo $id;?>" <?php if(isset($this->auto_giftbox['gift_good_id']) and $id==$this->auto_giftbox['gift_good_id']):?> selected<?php endif;?> ><?php echo $item;?></option>
+                        <?php endforeach; endif;?>
+                    </select>
+                </div>
+               
+            </div>
+
+            <div class="control-group">
+                <label class="span3">Color<span style="color: red">*</span></label>
+                <div class="controls">
+                    <select class="good_color_give span3" name="good_color_give" required="required">
+                        <option value="">Choose</option>
+                        <?php if ($this->goodColors): foreach ($this->goodColors as $id=>$name):?>
+                        <option value="<?php echo $id;?>" <?php if (isset($this->auto_giftbox['gift_good_color']) and $id==$this->auto_giftbox['gift_good_color']):?> selected<?php endif;?>><?php echo $name;?></option>
+                        <?php endforeach; endif;?>
+                    </select>
+                </div>
+            </div>
+
+            <hr>
+            <h3>
+                Spare Give Item
+            </h3>
+            <br>
+
+            <div class="control-group">
+            <label class="span3">Product Category<span style="color: red">*</span></label>
+                <div class="controls">
+                  <select class="cat_id_give2 span3"  name="cat_id_give2" required="required">
+                    <option value="">Choose</option>
+                    <?php if ($this->good_categories): foreach ($this->good_categories as $id=>$name):?>
+                        <option value="<?php echo $id;?>" <?php if (isset($this->auto_giftbox['gift_cat_id']) and $id==$this->auto_giftbox['gift_cat_id']):?> selected<?php endif;?>><?php echo $name;?></option>
+                    <?php endforeach; endif;?>
+                  </select>
+                </div>
+           
+            </div>
+            <div class="control-group">
+                <label class="span3">Product<span style="color: red">*</span></label>
+                <div class="controls">
+                    <select class="good_id_give2 span3" name="good_id_give2" required="required">
+                        <option value="">Choose</option>
+                        <?php if($this->goods_cached): foreach ($this->goods_cached as $id=>$item):?>
+                            <option value="<?php echo $id;?>" <?php if(isset($this->auto_giftbox['gift_good_id']) and $id==$this->auto_giftbox['gift_good_id']):?> selected<?php endif;?> ><?php echo $item;?></option>
+                        <?php endforeach; endif;?>
+                    </select>
+                </div>
+               
+            </div>
+
+            <div class="control-group">
+                <label class="span3">Color<span style="color: red">*</span></label>
+                <div class="controls">
+                    <select class="good_color_give2 span3" name="good_color_give2" required="required">
+                        <option value="">Choose</option>
+                        <?php if ($this->goodColors): foreach ($this->goodColors as $id=>$name):?>
+                        <option value="<?php echo $id;?>" <?php if (isset($this->auto_giftbox['gift_good_color']) and $id==$this->auto_giftbox['gift_good_color']):?> selected<?php endif;?>><?php echo $name;?></option>
+                        <?php endforeach; endif;?>
+                    </select>
+                </div>
+            </div>
+          
+        </div>
+      
+        <div style="clear: both"></div>
+        <hr>
+        <div class="row">
+            <div class="span6">
+                <div class="control-group">
+                    
+                    <div class="span4">
+                        <input type="hidden" name="id" id="id" value="<?php isset($this->auto_giftbox) and $this->auto_giftbox and printf($this->auto_giftbox->id);?>">
+                        <button type="submit" class="btn btn-primary" >Confirm</button>
+                        <!-- <a href="add-auto-giftbox" class="btn btn-warning">Reset</a> -->
+                        <input type="button" onclick="myReset()" class="btn btn-warning" value="Reset">
+                        <a href="auto-giftbox" class="btn btn-danger go-back">Go back</a>
+                    </div>
+                </div>
+                <div class="clearfix"></div>
+            </div>
+        </div>
+    </form>
+</div>
+
+<script type="text/javascript" src="/js/jquery-ui-1.8.12.custom.min.js"></script>
+<link rel="stylesheet" type="text/css" href="/css/jquery-ui-1.8.12.custom.css"/>
+<script type="text/javascript">
+
+function myReset() {
+  document.getElementById("form").reset();
+}
+ 
+function initDatepicker(){
+    $( '.date' ).datepicker({ dateFormat: "yy-m-d" });
+}
+
+$(document).ready(function () {
+    initDatepicker();
+    initSelectProduct();
+
+    
+
+    $('#checkbox_allday').change(function(event) {
+        if(this.checked) {
+            $('.showhide_date').addClass('hide');
+            $('#auto_giftbox_start_date').removeAttr('required');
+            $('#auto_giftbox_end_date').removeAttr('required');
+            $('#auto_giftbox_start_date').val('');
+            $('#auto_giftbox_end_date').val('');
+        }else{
+            $('.showhide_date').removeClass('hide');
+            $('#auto_giftbox_start_date').attr('required',true);
+            $('#auto_giftbox_end_date').attr('required',true);
+        }
+    });
+
+    $("*").keypress(function(event){  
+         if(event.keyCode==13){  
+            return false;  
+         }  
+    });
+
+    $('.number').keypress(function(event) {
+        if (event.which != 46 && (event.which < 47 || event.which > 59))
+        {
+            event.preventDefault();
+            if ((event.which == 46) && ($(this).indexOf('.') != -1)) {
+                event.preventDefault();
+            }
+        }
+    });
+       
+});
+
+function initSelectProduct(){
+    $(document).off('change', '.cat_id, .good_id')
+    .on('change', '.cat_id, .good_id', function(e) {
+        $('button[type=submit]').prop('disabled', true);
+        $('form').bind('submit',function(e){e.preventDefault();});
+
+        $('.loading').remove();
+        $(this).after('<span class="loading"></span>');
+        var div_parent = $(this).parent().parent().parent();
+        var _self = $(this);
+        var cat_id = div_parent.find('.cat_id').val();
+        
+        if (_self.hasClass('cat_id'))
+            div_parent.find('.good_id').find('option:not(:first)').remove();
+
+        var good_id = div_parent.find('.good_id').val();
+
+        div_parent.find('.good_color').find('option:not(:first)').remove();
+
+        $.get("/get/load",
+            {cat_id: cat_id, good_id: good_id}
+            ,function(data,status){
+                var data = $.parseJSON( data );
+                if (data.goods){
+                    var obj = data.goods;
+                    for (var i = 0; i < obj.length; i++) {
+                         div_parent.find('.good_id').append('<option value="'+obj[i]['id']+'">'+obj[i]['name']+'</option>');
+                    }
+                }
+                if (data.colors){
+                    var obj = data.colors;
+                    for (var i = 0; i < obj.length; i++) {
+                         div_parent.find('.good_color').append('<option value="'+obj[i]['id']+'">'+obj[i]['name']+'</option>');
+                    }
+                }
+                $('button[type=submit]').prop('disabled', false);
+                $('form').unbind('submit');
+                _self.nextAll('.loading').remove();
+            });
+
+    });
+
+    $(document).off('change', '.cat_id_give, .good_id_give')
+    .on('change', '.cat_id_give, .good_id_give', function(e) {
+        $('button[type=submit]').prop('disabled', true);
+        $('form').bind('submit',function(e){e.preventDefault();});
+
+        $('.loading').remove();
+        $(this).after('<span class="loading"></span>');
+        var div_parent = $(this).parent().parent().parent();
+        var _self = $(this);
+        var cat_id_give = div_parent.find('.cat_id_give').val();
+        
+        if (_self.hasClass('cat_id_give'))
+            div_parent.find('.good_id_give').find('option:not(:first)').remove();
+
+        var good_id_give = div_parent.find('.good_id_give').val();
+
+        div_parent.find('.good_color_give').find('option:not(:first)').remove();
+
+        $.get("/get/load",
+            {cat_id: cat_id_give, good_id: good_id_give}
+            ,function(data,status){
+                var data = $.parseJSON( data );
+                if (data.goods){
+                    var obj = data.goods;
+                    for (var i = 0; i < obj.length; i++) {
+                         div_parent.find('.good_id_give').append('<option value="'+obj[i]['id']+'">'+obj[i]['name']+'</option>');
+                    }
+                }
+                if (data.colors){
+                    var obj = data.colors;
+                    for (var i = 0; i < obj.length; i++) {
+                         div_parent.find('.good_color_give').append('<option value="'+obj[i]['id']+'">'+obj[i]['name']+'</option>');
+                    }
+                }
+                $('button[type=submit]').prop('disabled', false);
+                $('form').unbind('submit');
+                _self.nextAll('.loading').remove();
+            });
+
+    });
+
+    $(document).off('change', '.cat_id_give2, .good_id_give2')
+    .on('change2', '.cat_id_give2, .good_id_give2', function(e) {
+        $('button[type=submit]').prop('disabled', true);
+        $('form').bind('submit',function(e){e.preventDefault();});
+
+        $('.loading').remove();
+        $(this).after('<span class="loading"></span>');
+        var div_parent = $(this).parent().parent().parent();
+        var _self = $(this);
+        var cat_id_give = div_parent.find('.cat_id_give2').val();
+        
+        if (_self.hasClass('cat_id_give2'))
+            div_parent.find('.good_id_give2').find('option:not(:first)').remove();
+
+        var good_id_give = div_parent.find('.good_id_give2').val();
+
+        div_parent.find('.good_color_give2').find('option:not(:first)').remove();
+
+        $.get("/get/load",
+            {cat_id: cat_id_give, good_id: good_id_give}
+            ,function(data,status){
+                var data = $.parseJSON( data );
+                if (data.goods){
+                    var obj = data.goods;
+                    for (var i = 0; i < obj.length; i++) {
+                         div_parent.find('.good_id_give2').append('<option value="'+obj[i]['id']+'">'+obj[i]['name']+'</option>');
+                    }
+                }
+                if (data.colors){
+                    var obj = data.colors;
+                    for (var i = 0; i < obj.length; i++) {
+                         div_parent.find('.good_color_give2').append('<option value="'+obj[i]['id']+'">'+obj[i]['name']+'</option>');
+                    }
+                }
+                $('button[type=submit]').prop('disabled', false);
+                $('form').unbind('submit');
+                _self.nextAll('.loading').remove();
+            });
+
+    });
+
+}
+</script>

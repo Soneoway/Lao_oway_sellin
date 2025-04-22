@@ -1,0 +1,21 @@
+<link rel="stylesheet" type="text/css" href="<?php echo HOST ?>css/bootstrap.min.css">
+<style type="text/css">
+    body {
+        background: #f9f6f1;
+        font: 14px/1.7em 'Open Sans';
+    }
+</style>
+<?php if (isset($this->result) && $this->result == 'Success'): ?>
+    <div class="alert alert-success">Success</div>
+    <script type="text/javascript">parent.window.location = '<?php echo $this->back_url ?>'</script>
+<?php endif ?>
+
+<?php if (isset($this->error) && $this->error): ?>
+    <div class="alert alert-error"><?php echo $this->error ?></div>
+
+    <script type="text/javascript">
+        parent.$('input, select, textarea').prop('readonly', false);
+        parent.$('button').show();
+        parent.$('.loading').remove();
+    </script>
+<?php endif ?>

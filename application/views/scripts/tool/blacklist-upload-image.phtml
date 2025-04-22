@@ -1,0 +1,256 @@
+<style type="text/css">
+    .formrule {
+        /*margin-left:auto;*/
+        /*margin-right:auto;*/
+        height: 100%;
+
+        /*max-width: 500px;*/
+        background: #FFF;
+        padding: 30px 30px 20px 30px;
+        box-shadow: rgba(187, 187, 187, 1) 0 0px 20px -1px;
+        -webkit-box-shadow: rgba(187, 187, 187, 1) 0 0px 20px -1px;
+        font: 12px Arial, Helvetica, sans-serif;
+        color: #666;
+        border-radius: 10px;
+        -webkit-border-radius: 10px;
+    }
+
+    .formselect {
+        /*margin-left:auto;*/
+        /*margin-right:auto;*/
+        /*max-width: 500px;*/
+        background: #FFF;
+        padding: 30px 30px 20px 30px;
+        box-shadow: rgba(187, 187, 187, 1) 0 0px 20px -1px;
+        -webkit-box-shadow: rgba(187, 187, 187, 1) 0 0px 20px -1px;
+        font: 12px Arial, Helvetica, sans-serif;
+        color: #666;
+        border-radius: 10px;
+        -webkit-border-radius: 10px;
+    }
+
+    .white-pink h1 {
+        font: 25px "Trebuchet MS", Arial, Helvetica, sans-serif;
+        padding: 0px 0px 10px 40px;
+        display: block;
+        border-bottom: 1px solid #F5F5F5;
+        margin: -10px -30px 10px -30px;
+        color: #969696;
+    }
+
+    h2 {
+        font: 20px "Trebuchet MS", Arial, Helvetica, sans-serif;
+        padding: 0px 0px 10px 40px;
+        display: block;
+        border-bottom: 1px solid #F5F5F5;
+        margin: -30px  -30px -18px -30px;
+        color: #969696;
+    }
+    h3 {
+        font: 15px "Trebuchet MS", Arial, Helvetica, sans-serif;
+        padding: 3px 0px 25px 26px;
+        display: block;
+        margin: -25px  -27px -18px -30px;
+        color: #333333;
+    }
+    h4 {
+        font: 25px "Trebuchet MS", Arial, Helvetica, sans-serif;
+        padding: 3px 0px 25px 26px;
+        display: block;
+        margin: -25px  -27px -18px -30px;
+        color: #333333;
+    }
+    p {
+        font: 13px "Trebuchet MS", Arial, Helvetica, sans-serif;
+        padding: 4px 0px 19px 35px;
+        display: block;
+        margin: -24px  -26px -19px -29px;
+        color: #333333;
+    }
+
+    .buttonsave{
+        text-align: right;
+    }
+   .add-img{
+    float: right;
+    margin-top: 4px;
+   }
+    
+    .uploadpdf{
+        display: block;
+        widows: 100px;
+        padding: 7px 0;
+        text-align: center;
+        background: #333333;
+        border-bottom: 0px solid #DDD;
+        color: #FFF;
+    }
+
+    .form-group{
+        border: 2px solid #ccc;
+        padding: 30px 30px 20px 30px;
+        width: 50%;
+        border-radius: 5px;
+        margin: 20px 0 ;
+    }
+    .qq-uploader {
+        position: relative;
+        width: 92% !important;
+        } 
+    .input-file-add{
+            margin-top: 2px;
+    }
+
+</style>
+<div class="page-header">
+    <h1>Blacklist Upload Image</h1>
+</div>
+
+<div class="row ">
+    <div style="width: 100%;">
+        <div class="formselect">
+           
+            <form class="form-horizontal" action="<?php echo HOST ?>tool/blacklist-upload-image" name="form" id="form" method="post" enctype="multipart/form-data"> 
+
+                <div class="form-group" >
+                    <h3>หลักฐานการเเจ้ง Backlist</h3>
+                    <input type="hidden" class="selectxx" name="select[]" value="1"> 
+                    <div class="upload" >
+                            <div class="file-uploader" ></div>
+                            <input type="hidden"  name="photo[1][]" id="photo"  />
+                            <input type="hidden" class="onprogress" />
+                            <div class="buttonupload">
+                            <button type="button" class="btn btn-success add-img" value="1">เพิ่ม Upload</button></div>
+                        </div>
+                </div>
+                <div class="form-group" >
+                    <h3>Memo</h3>
+                    <input type="hidden" class="selectxx" name="select[]" value="2"> 
+                    <div class="upload" >
+                            <div class="file-uploader" ></div>
+                            <input type="hidden"  name="photo[2][]" id="photo"  />
+                            <input type="hidden" class="onprogress" />
+                            <div class="buttonupload">
+                            
+                            </div>
+                            <button type="button" class="btn btn-success add-img" value="2">เพิ่ม Upload</button>
+                    </div>
+                </div>
+                <div class="form-group" >
+                    <h3>หลักฐานการโอนเงินค่าปรับ</h3>
+                    <input type="hidden" class="selectxx" name="select[]" value="3">
+                    <div class="upload" >
+                            <div class="file-uploader" ></div>
+                            <input type="hidden"  name="photo[3][]" id="photo"  />
+                            <input type="hidden" class="onprogress" />
+                            <div class="buttonupload">
+                            <button type="button" class="btn btn-success add-img" value="3">เพิ่ม Upload</button></div>
+                        </div>
+                </div>
+                
+               <input type="hidden" class="d_id" name="d_id" value="<?=$_GET['d_id']?>">
+
+            <div class="" style="margin-top: 30px;">
+                <button type="submit" class="btn btn-primary">Save</button>
+                <a href="/tool/blacklist-image?d_id=<?=$_GET['d_id']?>" class="btn btn-danger go-back">Go back</a>
+            </div>
+        </div>
+        </from>
+    </div>
+</div> 
+<br />
+
+<div style="display: none " class="input-file-add div-img-add">
+    <div class="upload" >
+        <div class="delete">
+        <button type="button" class="btn btn-danger remove-img" style="float:right;" ><i class="icon-minus"></i></button>
+        </div>
+        <div class="file-uploader" ></div>
+        <input type="hidden"  name="photo[]" id="photo" disabled />
+        <input type="hidden" class="onprogress" />
+        
+    </div>
+</div>
+
+<link rel="stylesheet" type="text/css" href="/js/file-uploader/fileuploader.css"/>
+<script src="/js/file-uploader/fileuploader.js" type="text/javascript"></script>
+
+<script type="text/javascript">
+    $(document).ready(function () {
+        createUploader ($('form'));
+        initRemoveImages();
+        AddImages();
+    });
+
+    function AddImages(){
+        $('.add-img').click(function(e){
+            var id = $(this).parent().parent().parent().find('.add-img').val();
+            
+            var old_add = $('.div-img-add');
+            var new_add = old_add.clone();
+            new_add.removeClass('div-img-add').find('input').removeAttr('disabled');
+            new_add.find('.add-img').remove();
+            
+            new_add.find('#photo').attr('name','photo['+id+'][]');
+           
+            new_add.insertBefore($(this)).show();
+            createUploader (new_add);
+         
+            initRemoveImages();
+
+            return false;
+        });
+    }
+
+    function initRemoveImages(){
+        $('.remove-img').click(function(e){
+            $(this).parent().parent().remove();
+            return false;
+        });
+    }
+
+    function createUploader(selector){
+        selector.find('.file-uploader').each(function (){
+            var _self = $(this);
+            var uploader = new qq.FileUploader({
+                element: _self[0],
+                action: '/sales/upload-blacklist',
+                multiple: false,
+                // ex. ['jpg', 'jpeg', 'png', 'gif'] or []
+                allowedExtensions: ['jpg', 'jpeg', 'pdf'],
+                sizeLimit: 2 * 1024 * 1024,
+                onProgress: function(id, fileName, loaded, total){
+                    $('.fix-msg').addClass('show');
+
+                    $('#btn_submit').attr('disabled', 'disabled');
+                    $("form").submit(function (e) {
+                        e.preventDefault();
+                    });
+
+                    $(window).on('beforeunload', function() {
+                        return 'Please wait your upload proccess complete!';
+                    });
+                },
+                onComplete: function(id, fileName, responseJSON){
+                    if ( responseJSON.success==true ){
+                        _self.next().val( responseJSON.uniqid + '_located_' + fileName );
+                    }
+
+                    $("#btn_submit").removeAttr("disabled");
+
+                    $("form").unbind('submit');
+                    var x = parseInt(document.getElementById("uploaded_before").value);
+                
+                $('#uploaded_before').val(x+=1);
+                    window.onbeforeunload = null;
+
+                },
+                onCancel: function(id, fileName){},
+                onError: function(id, fileName, xhr){}
+            });
+        });
+    }
+
+   
+
+</script>

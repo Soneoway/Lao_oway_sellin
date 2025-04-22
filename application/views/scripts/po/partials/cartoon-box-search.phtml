@@ -1,0 +1,72 @@
+<link rel="stylesheet" type="text/css" href="/css/jquery-ui-1.8.12.custom.css"/>
+
+<style type="text/css">
+    form textarea {
+        max-width: 100%;
+        max-height: 300px;
+    }
+</style>
+
+<form class="form-horizontal form-search" method="get" action="<?php echo HOST ?>po/cartoon-box">
+    <div class="row">
+        <div class="span5">
+            <div class="control-group">
+                <label class="control-label">Cartoon Box Number</label>
+                <div class="controls">
+                    <textarea name="cartoon_box_number"><?php if (isset($this->params['cartoon_box_number']) && $this->params['cartoon_box_number']) echo trim($this->params['cartoon_box_number']) ?></textarea>
+                </div>
+            </div>
+            <div class="control-group">
+                <label class="control-label">IMEI</label>
+                <div class="controls">
+                    <textarea name="imei"><?php if (isset($this->params['imei']) && $this->params['imei']) echo trim($this->params['imei']) ?></textarea>
+                </div>
+            </div>
+            <div class="control-group">
+                <label class="control-label">PO SN</label>
+                <div class="controls">
+                    <textarea name="po_sn"><?php if (isset($this->params['po_sn']) && $this->params['po_sn']) echo trim($this->params['po_sn']) ?></textarea>
+                </div>
+            </div>
+        </div>
+        <div class="span5">
+            <div class="control-group">
+                <label class="control-label">Shipping Time From</label>
+                <div class="controls">
+                    <input type="text" name="shipping_from" value="<?php if (isset($this->params['shipping_from']) && $this->params['shipping_from']) echo $this->params['shipping_from'] ?>" class="date">
+                </div>
+            </div>
+            <div class="control-group">
+                <label class="control-label">Shipping Time To</label>
+                <div class="controls">
+                    <input type="text" name="shipping_to" value="<?php if (isset($this->params['shipping_to']) && $this->params['shipping_to']) echo $this->params['shipping_to'] ?>" class="date">
+                </div>
+            </div>
+            <div class="control-group">
+                <label class="control-label">PO Time From</label>
+                <div class="controls">
+                    <input type="text" name="po_from" value="<?php if (isset($this->params['po_from']) && $this->params['po_from']) echo $this->params['po_from'] ?>" class="date">
+                </div>
+            </div>
+            <div class="control-group">
+                <label class="control-label">PO Time To</label>
+                <div class="controls">
+                    <input type="text" name="po_to" value="<?php if (isset($this->params['po_to']) && $this->params['po_to']) echo $this->params['po_to'] ?>" class="date">
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="control-group">
+        <div class="controls">
+            <button class="btn btn-primary" type="submit">Search</button>
+            <button class="btn btn-warning" type="reset">Reset</button>
+            <!-- <button class="btn btn-success" name="export" value="1" type="submit">Export</button> -->
+        </div>
+    </div>
+</form>
+
+<script type="text/javascript" src="/js/jquery-ui-1.8.12.custom.min.js"></script>
+
+<script type="text/javascript">
+    $( '.date' ).datepicker({ dateFormat: "dd/mm/yy" });
+</script>

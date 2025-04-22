@@ -1,0 +1,44 @@
+<style type="text/css">
+    textarea {
+        max-width: 100%;
+    }
+</style>
+
+<div class="page-header">
+    <h1>Delivery Man <small><?php if(isset($this->man)) echo "Edit"; else echo "Create"; ?></small></h1>
+</div>
+<?php
+    if (isset($this->messages_success) and $this->messages_success)
+        foreach ($this->messages_success as $message):
+            echo '<div class="alert alert-success">'.$message.'</div>';
+        endforeach;
+
+    if (isset($this->messages) and $this->messages)
+        foreach ($this->messages as $message):
+            echo '<div class="alert alert-error">'.$message.'</div>';
+        endforeach;
+?>
+<form class="form-horizontal" action="<?php echo HOST ?>delivery/man-save" method="post">
+    <div class="control-group">
+        <label class="control-label">Name</label>
+        <div class="controls">
+            <input type="text" placeholder="Name" id="name" name="name" value="<?php if(isset($this->man['name'])) echo $this->man['name'] ?>">
+        </div>
+    </div>
+    
+    <div class="control-group">
+        <label class="control-label">Note</label>
+        <div class="controls">
+            <textarea id="note" name="note" placeholder="Note"><?php if(isset($this->man['note'])) echo trim($this->man['note']) ?></textarea>
+        </div>
+    </div>
+
+    <div class="control-group">
+        <div class="controls">
+            <input type="hidden" name="id" value="<?php if(isset($this->man['id'])) echo $this->man['id'] ?>">
+            <input type="hidden" name="refer" value="<?php if(isset($this->refer)) echo $this->refer ?>">
+            <button class="btn btn-primary">Save</button>
+            <a href="<?php echo My_Url::refer('delivery/man') ?>" class="btn btn-default">Cancel</a>
+        </div>
+    </div>
+</form>

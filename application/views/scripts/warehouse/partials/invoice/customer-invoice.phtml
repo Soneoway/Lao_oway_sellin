@@ -1,0 +1,349 @@
+
+<form class="form-horizontal" action="<?php echo HOST ?>warehouse/customer-print" method="post" target="_blank">
+    <div class="row">
+        <div class="span12">
+            <h2>Invoice</h2>
+            <input type="hidden" name="service_id" value="<?php if(isset($this->data['service_id']) and $this->data['service_id']) echo $this->data['service_id'] ?>" />
+            <input type="hidden" name="user_id" value="<?php if(isset($this->data['user_id']) and $this->data['user_id']) echo $this->data['user_id'] ?>" />
+            <p class="pull-right"><button class="btn btn-primary">Print</button></p>
+        </div>
+    </div>
+
+    <legend>Customer Information</legend>
+    <div class="row">
+        <div class="span5">
+            <div class="control-group">
+                <label class="control-label">Customer Name</label>
+                <div class="controls">
+                    <input type="text" name="name" value="<?php if(isset($this->data) and $this->data['customer_name']) echo $this->data['customer_name'] ?>" />
+                </div>
+            </div>
+            <div class="control-group">
+                <label class="control-label">Tax Number</label>
+                <div class="controls">
+                    <input type="text" name="tax" value="<?php if(isset($this->data) and $this->data['tax_number']) echo $this->data['tax_number'] ?>" />
+                </div>
+            </div>
+        </div>
+
+        <div class="span5">
+            <div class="control-group">
+                <label class="control-label">Address</label>
+                <div class="controls">
+                    <textarea name="address" ><?php if(isset($this->data['address']) and $this->data['address']) echo $this->data['address'] ?></textarea>
+                </div>
+            </div>
+            <div class="control-group">
+                <label class="control-label">Delivery Address</label>
+                <div class="controls">
+                    <textarea name="delivery_address"><?php if(isset($this->data['delivery_address']) and $this->data['delivery_address']) echo $this->data['delivery_address'] ?></textarea>
+                </div>
+            </div>
+            <div class="control-group">
+                <label class="control-label">Invoice Number</label>
+                <div class="controls">
+                    <input type="text" class="invoice_number" name="invoice_number" value="<?php if(isset($this->data) and $this->data['invoice_number']) echo $this->data['invoice_number'] ?>">
+                </div>
+            </div>
+
+            <div class="control-group">
+                <label class="control-label">Invoice Date</label>
+                <div class="controls">
+                    <input type="text" class="invoice_date date" required="required" name="invoice_date" value="<?php if(isset($this->data['invoice_date']) and $this->data['invoice_date']) echo $this->data['invoice_date'] ?>">
+                </div>
+            </div>
+
+
+            <div class="control-group">
+                <label class="control-label">PO</label>
+                <div class="controls">
+                    <input type="text" class="po" name="po" value="<?php if(isset($this->data['po']) and $this->data['po']) echo $this->data['po'] ?>">
+                </div>
+            </div>
+
+            <div class="control-group">
+                <label class="control-label">Service</label>
+                <div class="controls">
+                    <input type="checkbox" class="service_change" name="service" <?php if(isset($this->data['service']) and $this->data['service']) echo "checked";?> >
+                </div>
+            </div>
+
+            <div class="control-group">
+                <label class="control-label">Service Center</label>
+                <div class="controls">
+
+                    <select class="service_select" name="service" />
+                    <option value="0">Please select service showroom</option>
+                    <?php if(isset($this->services) and $this->services): ?>
+                        <?php foreach($this->services as $k => $v): ?>
+                            <option value="<?php echo $k ?>"><?php echo $v; ?></option>
+                        <?php endforeach;endif; ?>
+                    </select>
+
+                </div>
+            </div>
+
+            <div class="control-group">
+                <label class="control-label">Invoice Prefix</label>
+                <div class="controls">
+
+                    <select class="invoice_prefix" name="invoice_prefix" >
+                        <?php if(isset($this->invoice_prefixs) and $this->invoice_prefixs): ?>
+                        <?php foreach($this->invoice_prefixs as $k => $v) : ?>
+                                <option value="<?php if(isset($v['id']) and $v['id'])  echo $v['id'] ?>"><?php if(isset($v['name']) and $v['name']) echo $v['name']; ?></option>
+                            <?php endforeach;endif; ?>
+                    </select>
+
+                </div>
+            </div>
+
+
+
+
+
+        </div>
+    </div>
+    
+    <legend>Item List</legend>
+
+    <?php if(isset($this->data['product']) and $this->data['product']) : ?>
+          <?php foreach($this->data['product'] as $k => $product) :  ?>
+
+    <div class="row numbering">
+        <div class="span5 item">
+            <div class="control-group">
+                <label class="control-label num"></label>
+            </div>
+            <div class="control-group">
+                <label class="control-label">Tên hàng hóa</label>
+                <div class="controls">
+                    <input type="text" name="product[]" value="<?php if(isset($product['name']) and $product['name']) echo $product['name']  ?>" />
+                </div>
+            </div>
+            <div class="control-group">
+                <label class="control-label">Đơn vị tính</label>
+                <div class="controls">
+                    <input type="text" name="unit[]" value="<?php if(isset($product['unit']) and $product['unit']) echo $product['unit']  ?>" />
+                </div>
+            </div>
+            <div class="control-group">
+                <label class="control-label">Số lượng</label>
+                <div class="controls">
+                    <input type="text" name="quantity[]" value="<?php if(isset($product['value']) and $product['value']) echo $product['value']  ?>" />
+                </div>
+            </div>
+
+            <div class="control-group">
+                <label class="control-label">Đơn giá</label>
+                <div class="controls">
+                    <input type="text" name="price[]" value="<?php if(isset($product['price']) and $product['price']) echo $product['price']  ?>" />
+                </div>
+            </div>
+
+            <div class="control-group">
+                <label class="control-label">Thành tiền</label>
+                <div class="controls">
+                    <input type="text" name="total[]" value="<?php if(isset($product['total']) and $product['total']) echo $product['total']  ?>" />
+                </div>
+            </div>
+
+            <div class="control-group">
+                <label class="control-label">Chiết khấu</label>
+                <div class="controls">
+                    <input type="text" name="ck[]" <?php if(isset($product['ck']) and $product['ck']) echo $product['ck']  ?> />
+                </div>
+            </div>
+
+            <div class="control-group">
+                <div class="controls">
+                    <button class="btn btn-default btn-small remove_btn" type="button">&times;</button>
+                </div>
+            </div>
+
+
+
+        </div>
+    </div>
+    <?php endforeach;endif ?>
+
+    <div class="row list numbering">
+        <div class="span5 item">
+            <div class="control-group">
+                <label class="control-label num"></label>
+            </div>
+            <div class="control-group">
+                <label class="control-label">Tên hàng hóa</label>
+                <div class="controls">
+                    <input type="text" name="product[]" />
+                </div>
+            </div>
+            <div class="control-group">
+                <label class="control-label">Đơn vị tính</label>
+                <div class="controls">
+                    <input type="text" name="unit[]" />
+                </div>
+            </div>
+            <div class="control-group">
+                <label class="control-label">Số lượng</label>
+                <div class="controls">
+                    <input type="text" name="quantity[]" />
+                </div>
+            </div>
+            <div class="control-group">
+                <label class="control-label">Đơn giá</label>
+                <div class="controls">
+                    <input type="text" name="price[]" />
+                </div>
+            </div>
+            <div class="control-group">
+                <label class="control-label">Thành tiền</label>
+                <div class="controls">
+                    <input type="text" name="total[]" />
+                </div>
+            </div>
+
+            <div class="control-group">
+                <label class="control-label">Chiết khấu</label>
+                <div class="controls">
+                    <input type="text" name="ck[]" />
+                </div>
+            </div>
+
+
+
+            <div class="control-group">
+                <div class="controls">
+                    <button class="btn btn-default btn-small remove_btn" type="button">&times;</button>
+                </div>
+            </div>
+
+
+
+        </div>
+    </div>
+
+
+    <div class="row">
+        <div class="span12">
+            <p><button class="btn btn-success btn-small add_btn_invoice" type="button">+</button></p>
+        </div>
+    </div>
+</form>
+<script type="text/javascript" src="/js/jquery-ui-1.8.12.custom.min.js"></script>
+<link rel="stylesheet" type="text/css" href="/css/jquery-ui-1.8.12.custom.css"/>
+<script type="text/javascript">
+    item_div_invoice = '<div class="span5 item">'+
+            '<div class="control-group">'+
+                '<label class="control-label num"></label>'+
+            '</div>'+
+            '<div class="control-group">'+
+                '<label class="control-label">Tên hàng hóa</label>'+
+                '<div class="controls">'+
+                    '<input type="text" name="product[]" />'+
+                '</div>'+
+            '</div>'+
+            '<div class="control-group">'+
+                '<label class="control-label">Đơn vị tính</label>'+
+                '<div class="controls">'+
+                    '<input type="text" name="unit[]" />'+
+                '</div>'+
+            '</div>'+
+            '<div class="control-group">'+
+                '<label class="control-label">Số lượng</label>'+
+                '<div class="controls">'+
+                    '<input type="text" name="quantity[]" />'+
+                '</div>'+
+            '</div>'+
+            '<div class="control-group">'+
+                '<label class="control-label">Đơn giá</label>'+
+                '<div class="controls">'+
+                    '<input type="text" name="price[]" />'+
+                '</div>'+
+            '</div>'+
+            '<div class="control-group">'+
+                '<label class="control-label">Thành tiền</label>'+
+                '<div class="controls">'+
+                    '<input type="text" name="total[]" />'+
+                '</div>'+
+            '</div>'+
+
+            '<div class="control-group">'+
+                '<label class="control-label">CK</label>'+
+                '<div class="controls">'+
+                '<input type="text" name="ck[]" />'+
+                '</div>'+
+            '</div>'+
+
+
+            '<div class="control-group">'+
+                '<div class="controls">'+
+                    '<button class="btn btn-default btn-small remove_btn new" type="button">&times;</button>'+
+                '</div>'+
+            '</div>'+
+        '</div>';
+
+    $(document).ready(function() {
+
+        $( '.date' ).datepicker({ dateFormat: "dd/mm/yy" });
+
+        $('.add_btn_invoice').click(add_div_invoice);
+        $('.remove_btn').click(remove_div);
+        $(".service_change").change(function() {
+            if(this.checked) {
+                serviceChange($(this));
+            }
+        });
+    });
+
+    function add_div_invoice(e) {
+        $('.list').append(item_div_invoice);
+        $('.remove_btn.new').click(remove_div).removeClass('new');
+    }
+
+    function remove_div(e) {
+        _self = $(e.target);
+        _self.parents('.item').remove();
+    }
+
+    function serviceChange(e)
+    {
+        var url     = "<?php echo HOST ?>get/invoice-service";
+        var _self   = $(e.target);
+        var service = $('.service_select').val();
+        var invoice_prefix = $('.invoice_prefix').val();
+
+        if(!service)
+        {
+            alert('Please select service');
+            return false;
+        }
+
+        $.post(url,
+            {
+               service : service , invoice_prefix : invoice_prefix
+            }, function(data) {
+
+                var text = '';
+                var object = $.parseJSON(data);
+                console.log(object.invoice_number);
+                console.log(object.code);
+
+                switch (object.code) {
+                    case -1:
+                        text = 'Error when loading service invoice number';
+                        break;
+                    case -2:
+                        text = 'Please check service';
+                        break;
+
+                    case 0:
+                        $('.invoice_number').val(object.invoice_number);
+                        break;
+                }
+                if(text)
+                     alert(text);
+
+
+            });
+    }
+</script>

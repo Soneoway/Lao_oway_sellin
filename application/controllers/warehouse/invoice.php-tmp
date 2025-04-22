@@ -1,0 +1,28 @@
+<?php
+
+set_time_limit(0);
+ini_set('memory_limit', -1);
+$this->_helper->layout->disableLayout();
+$sn = $this->getRequest()->getParam('sn');
+
+$QMarket = new Application_Model_Market();
+
+$params = array(
+	'sn' => $sn
+);
+
+// I will up to server 30.09.2019
+
+$page  = 1;
+$limit = 15;
+$total = 0;
+
+$distributor_details = $QMarket->getInvoiceDistributorDetails($params);
+$getInvoiceDetails   = $QMarket->getInvoiceDetails($params);
+
+$this->view->distributor_details = $distributor_details;
+$this->view->getInvoiceDetails   = $getInvoiceDetails;
+
+$total     = 30;
+$show_item = 12;
+$totalpage = $total/$show_item;

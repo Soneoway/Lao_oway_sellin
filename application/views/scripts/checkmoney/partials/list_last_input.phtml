@@ -1,0 +1,112 @@
+<table class="table table-bordered">
+    <thead>
+        <tr>
+          
+            <?php echo $this->sorting(array(  
+            		'',        		
+            		'Retailer',
+        			'Bank',          		
+            		'In',
+            		'Time',
+            		'Content',
+            		'Note',         
+            		'Action',       
+                ),
+                $this->url, $this->sort, $this->desc); ?>
+        </tr>
+        
+    </thead>
+    <tbody>
+    	<?php 
+    		if(isset($this->list) AND $this->list){
+				foreach ($this->list as $item){	
+    	?>
+       <tr class='main'>	
+        	<td>
+        		<button class='coll btn' id='<?php echo 'd_'.$item['d_id']?>'>-</button>
+        	</td>
+        	<td><?php echo $item['title']?></td>
+        	<td></td>
+        	<td></td>
+        	<td></td>
+        	<td></td>
+        	<td></td>
+        	<td></td>
+        	
+        </tr>
+        
+        	<?php
+        		if( isset($item['transaction']) AND $item['transaction'] ){
+					foreach( $item['transaction'] as $t){
+        	?>
+        <tr class='<?php echo 'sub_d_'.$item['d_id']?>'>	
+        	<td>
+        		
+        	</td>
+        	<td></td><!-- retailer -->
+        	<td><?php echo $t['bank_name']?></td>
+        	<td class='text-right'><?php echo number_format($t['pay_money'],2)?></td>
+        	<td><?php echo $t['pay_time']?></td>
+        	<td><?php echo $t['content']?></td>
+        	<td><?php echo $t['note']?></td>
+        	<td>
+        		<?php if($this->access('checkmoney','view')):?>
+					<a href="/checkmoney/view?id=<?php echo $t['id']?>" target="_blank"><i class="icon-eye-open"></i></a>
+
+                 <?php 
+                    endif;
+                    if($this->access('checkmoney','edit')):
+                 ?>
+            		<a title="Edit" href="/checkmoney/edit?id=<?php echo $t['id'];?>" target="_blank"> 
+                        <i class="icon-edit"></i>
+                    </a>
+                <?php 
+                    endif;
+                    if($this->access('checkmoney','del')):
+                ?>
+               		<a title="Delete" class="confirmLink" href="/checkmoney/del?id=<?php echo $t['id'];?>"> <i class="icon-trash"></i>
+                    </a>
+                <?php 
+                    endif;
+                ?>
+        	</td>
+        </tr>
+        	<?php 
+	        		}
+				}
+        	?>	
+        </tr>
+        <?php 
+        		}
+            }    
+        ?>
+    </tbody>
+</table>
+
+<div class="paging">
+	<?php echo $this->paging($this->total, $this->limit, $this->offset, $this->url);?>
+</div>
+
+<style>
+tr.main{
+	background: #e5e5e5!important;
+}
+</style>
+<script>
+	$(document).ready(function(){
+		$('.main .coll').click(function(){
+			var _this = $(this);
+			var text = _this.html();
+			var d_id = _this.attr('id');
+			if(text == '-'){
+				_this.html('+');
+				$('.sub_'+d_id).hide();	
+			}	
+			else{
+				_this.html('-');
+				$('.sub_'+d_id).show();
+			}
+		});	
+	});
+</script>
+

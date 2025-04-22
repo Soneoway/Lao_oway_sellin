@@ -1,0 +1,44 @@
+<form class="form-search form-horizontal" method="get" action="/tool/scanout">
+    <div class="row">
+        <div class="span5">
+<!--             <div class="control-group">
+                <label for="user" class="span2">User</label>
+                <input id="user" name="user" type="text" class="input-medium search-query form-control" value="<?php isset($this->params['user']) and printf($this->params['user']);?>">
+            </div>
+ -->
+            <div class="control-group">
+                <label for="scan_at_from" class="span2">Scan Time From</label>
+                <input type="text" class="input-medium search-query form-control  date" id="scan_at_from" name="scan_at_from" value="<?php isset($this->params['invoice_time_from']) and printf($this->params['invoice_time_from']);?>">
+            </div>
+
+            <div class="control-group">
+                <label for="scan_at_to" class="span2">Scan Time To</label>
+                <input type="text" class="input-medium search-query form-control date" id="scan_at_to" name="scan_at_to" value="<?php isset($this->params['invoice_time_to']) and printf($this->params['invoice_time_to']);?>">
+            </div>
+           <div class="control-group">
+                <label for="warehouse_id" class="span2">Warehouse</label>
+                <select id="warehouse_id" class="span3" name="warehouse_id">
+                    <option value="">Choose</option>
+                    <?php if ($this->warehouses_cached): foreach ($this->warehouses_cached as $id=>$name):?>
+                        <option value="<?php echo $id;?>" <?php if (isset($this->params['warehouse_id']) and $id==$this->params['warehouse_id']):?> selected<?php endif;?>><?php echo $name;?></option>
+                    <?php endforeach; endif;?>
+                </select>
+            </div>
+        </div>
+    </div>
+
+    <button type="submit" class="btn btn-primary">Search</button>
+    <button type="reset" onclick="reset2()" class="btn btn-warning">Reset</button>
+   
+</form>
+
+<script>
+    $(document).ready(function () {
+        $( '.date' ).datepicker({ dateFormat: "dd/mm/yy" });
+
+       
+    });
+   function reset2() {
+    window.location.assign("<?php echo HOST ?>tool/scanout")
+}
+</script>

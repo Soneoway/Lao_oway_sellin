@@ -1,0 +1,79 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <div class="page-header">
+        <h1>Close Distributor</h1>
+    </div>
+    <!-- // -->
+    <style type="text/css">
+        iframe {
+        width: 100%;
+        height: 500px;
+        }
+        .bar {
+            line-height: 18px;
+        }
+    </style>
+    <!-- // -->
+    <?php
+        if (isset($this->messages_success) and $this->messages_success)
+            foreach ($this->messages_success as $message):
+                echo '<div class="alert alert-success">'.$message."</div>";
+            endforeach;
+
+        if (isset($this->messages) and $this->messages)
+            foreach ($this->messages as $message):
+                echo '<div class="alert alert-error">'.$message."</div>";
+            endforeach;
+    ?>
+</head>
+<body>
+
+    <div class="well">
+        <div class="row-fluid">
+            <div class="span4">
+                <h3>Download Template</h3>
+                <br>
+                 Template ID Distributor <a class="btn btn-success btn-mini" href="<?php echo HOST ?>upload/close_distributor/template_ID-distributor.xlsx">Download File</a></p>
+            </div>
+        </div>
+    </div>
+
+    <form role="form" id="form" action="<?php echo HOST.'sales/close-distributor';?>" target="iframe" class="form-inline" method="post"  enctype="multipart/form-data">
+        <div class="span6">
+            <div class="form-group">
+                <label for="" class="span4">File <span style="color: red">*</span>
+                    <input type="file" class="span4" name="file" required />
+                </label>
+            </div>
+        </div>
+        </br></br></br>
+        <div class="row">
+            <div class="span6">
+                <button type="submit" class="btn btn-primary">Save</button>
+                <button type="button" class="btn btn-danger go-back">Go back</button>
+            </div>
+        </div>
+    </form>
+
+    <div class="row">
+        <div class="span12">
+            <div class="progress progress-striped active">
+                <div class="bar" style="width: 0%;"></div>
+            </div>
+        </div>
+        <iframe src="" frameborder="0" name="iframe" id="iframe"></iframe>
+    </div>
+</body>
+</html>
+
+<script type="text/javascript">
+
+    function set_progress(percent) {
+        $('.bar').css('width', percent+'%');
+        $('.bar').html(percent+'%');
+    }
+
+</script>
+
+

@@ -1,0 +1,739 @@
+<style>
+body {
+    font-family: 'Noto Sans Lao', sans-serif;
+}
+</style>
+<div class="page-header">
+    <?php if (isset($this->staff) and $this->staff):?>
+    <h1>Edit Staff</h1>
+    <?php else:?>
+    <h1>Create Staff ເພິ່ມພະນັກງານ</h1>
+    <?php endif;?>
+</div>
+
+<?php
+    if (isset($this->messages) and $this->messages)
+        foreach ($this->messages as $message):
+            echo '<div class="alert alert-error">'.$message.'</div>';
+        endforeach;
+        ?>
+
+<div class="row">
+
+    <form role="form" id="form" action="<?php echo HOST.'staff/create';?>" method="post" class="form-horizontal"
+        enctype="multipart/form-data">
+        <divc class="row">
+            <div class="span6">
+
+                <div class="control-group">
+                    <label for="staff_code" class="control-label">Staff code</label>
+                    <div class="controls">
+                        <input type="staff_code" autocomplete="off" required="required" class="form-control"
+                            id="staff_code" placeholder="Enter Staff code" name="staff_code"
+                            value="<?php isset($this->staff) and $this->staff and printf($this->staff->staff_code);?>">
+                    </div>
+                </div>
+
+                <div class="control-group">
+                    <label for="firstname" class="control-label">First name</label>
+                    <div class="controls">
+                        <input type="text" class="form-control" id="firstname" placeholder="Enter First name"
+                            name="firstname"
+                            value="<?php isset($this->staff) and $this->staff and printf($this->staff->firstname);?>">
+                    </div>
+                </div>
+
+                <div class="control-group">
+                    <label for="lastname" class="control-label">Last name</label>
+                    <div class="controls">
+                        <input type="text" class="form-control" id="lastname" placeholder="Enter Last name"
+                            name="lastname"
+                            value="<?php isset($this->staff) and $this->staff and printf($this->staff->lastname);?>">
+                    </div>
+                </div>
+
+                <div class="control-group">
+                    <label for="phone_number" class="control-label">Phone number</label>
+                    <div class="controls">
+                        <input type="tel" class="form-control" id="phone_number" placeholder="Enter Phone number"
+                            name="phone_number"
+                            value="<?php isset($this->staff) and $this->staff and printf($this->staff->phone_number);?>">
+                    </div>
+                </div>
+
+                <div class="control-group">
+                    <label for="gender_1" class="control-label">Gender</label>
+                    <div class="controls">
+                        <input type="radio" class="form-control" id="gender_1" name="gender" value="1"
+                            <?php if (!isset($this->staff)):?>checked
+                            <?php else: isset($this->staff) and $this->staff->gender==1 and printf('checked'); endif;?>><span>Male</span>
+                        <input type="radio" class="form-control" id="gender_2" name="gender" value="0"
+                            <?php isset($this->staff) and $this->staff->gender==0 and printf('checked');?>><span>Female</span>
+                    </div>
+                </div>
+
+                <div class="control-group" class="span2">
+                    <label for="note" class="control-label">Note</label>
+                    <div class="controls">
+                        <textarea class="" style="height: 194px;" name="note"
+                            id="note"><?php isset($this->staff) and $this->staff and printf($this->staff->note);?></textarea>
+                    </div>
+                </div>
+
+            </div>
+
+            <div class="span6">
+                <div class="control-group">
+                    <label for="email" class="control-label">Email</label>
+                    <div class="controls">
+                        <input type="email" autocomplete="off" required="required" class="form-control" id="email"
+                            placeholder="Enter email" name="email"
+                            value="<?php isset($this->staff) and $this->staff and printf($this->staff->email);?>">
+                    </div>
+                </div>
+                <div class="control-group">
+                    <label for="username" class="control-label">Username</label>
+                    <div class="controls">
+                        <input type="username" autocomplete="off" required="required" class="form-control" id="username"
+                            placeholder="Enter username" name="username"
+                            value="<?php isset($this->staff) and $this->staff and printf($this->staff->username);?>">
+                    </div>
+                </div>
+                <div class="control-group">
+                    <?php if ( isset($this->staff) and $this->staff ):?>
+                    <a href="javascript:void(0);" id="btn-change-pass" title="Change password"
+                        class="control-label">Change Password</a>
+                    <div class="controls">
+                        <input type="hidden" name="change-pass" id="change-pass" value="0">
+                        <input type="password" autocomplete="off" class="form-control hidden" id="exampleInputPassword1"
+                            placeholder="Password" name="password">
+                    </div>
+                    <?php else: ?>
+                    <label for="password" class="control-label">Password</label>
+                    <div class="controls">
+                        <input id="password" type="password" autocomplete="off" required="required" class="form-control"
+                            id="exampleInputPassword1" placeholder="Password" name="password">
+                    </div>
+                    <?php endif; ?>
+                </div>
+
+
+                <div class="control-group">
+                    <label for="position" class="control-label" style="color: green">Check Sale</label>
+                    <div class="controls">
+                        <input type="radio" class="form-control" id="position_1" name="position" value="1"
+                            <?php if (!isset($this->staff)):?>checked
+                            <?php else: isset($this->staff) and $this->staff->position==1 and printf('checked'); endif;?>><span>
+                            Sales</span>
+                        <input type="radio" class="form-control" id="position_2" name="position" value="0"
+                            <?php isset($this->staff) and $this->staff->position== '' and printf('checked');?>><span>
+                            Defualt </span>
+                    </div>
+                </div>
+
+                <div class="control-group">
+                    <label class="control-label"> Company </label>
+                    <div class="controls">
+                        <select name="company">
+                            <option value=""> Please Select </option>
+                            <option value="1" <?php if(!isset($this->staff)): ?> selected <?php else: isset($this->staff) and $this->staff->company == 1 and printf('selected'); endif; ?> > OPPO </option>
+                            <option value="2" <?php if(!isset($this->staff)): ?> selected <?php else: isset($this->staff) and $this->staff->company == 2 and printf('selected'); endif; ?>> Realme </option>
+                        </select>
+                    </div>
+                </div>
+
+                <!-- Staff Area -->
+                <div class="control-group">
+                    <label for="areaInputGroup" class="control-label">Area</label>
+                    <div class="controls">
+                        <div id="area_id">
+                            <?php if (isset($this->staff['area_id']) && $this->staff['area_id']): ?>
+                            <?php $areas = explode(',', $this->staff['area_id']) ?>
+                            <?php foreach ($areas as $key => $value): ?>
+                            <div class="list_item">
+                                <select id="areaInputGroup" class="" name="area_id[]">
+                                    <option>----</option>
+                                    <?php foreach ($this->areas as $item):?>
+                                    <option value="<?php echo $item['id'];?>"
+                                        <?php if ($item['id']==$value):?>selected<?php endif;?>>
+                                        <?php echo $item['name'];?></option>
+                                    <?php endforeach;?>
+                                </select>
+                            </div>
+                            <?php endforeach ?>
+                            <?php else: ?>
+                            <div class="list_item">
+                                <select id="areaInputGroup" class="" name="area_id[]">
+                                    <option>----</option>
+                                    <?php foreach ($this->areas as $item):?>
+                                    <option value="<?php echo $item['id'];?>"><?php echo $item['name'];?></option>
+                                    <?php endforeach;?>
+                                </select>
+                            </div>
+                            <?php endif ?>
+
+                        </div>
+                    </div>
+                </div>
+                <!-- end --->
+
+                <div class="control-group">
+                    <label for="exampleInputGroup" class="control-label">Group</label>
+                    <div class="controls">
+                        <div id="group_list">
+                            <?php if (isset($this->staff['group_id']) && $this->staff['group_id']): ?>
+                            <?php $groups = explode(',', $this->staff['group_id']) ?>
+                            <?php foreach ($groups as $key => $value): ?>
+                            <div class="list_item">
+                                <select id="exampleInputGroup" class="" name="group_id[]">
+                                    <option>----</option>
+                                    <?php foreach ($this->groups as $item):?>
+                                    <option value="<?php echo $item['id'];?>"
+                                        <?php if ($item['id']==$value):?>selected<?php endif;?>>
+                                        <?php echo $item['name'];?></option>
+                                    <?php endforeach;?>
+                                </select>
+                            </div>
+                            <?php endforeach ?>
+                            <?php else: ?>
+                            <div class="list_item">
+                                <select id="exampleInputGroup" class="" name="group_id[]">
+                                    <option>----</option>
+                                    <?php foreach ($this->groups as $item):?>
+                                    <option value="<?php echo $item['id'];?>"><?php echo $item['name'];?></option>
+                                    <?php endforeach;?>
+                                </select>
+                            </div>
+                            <?php endif ?>
+
+                        </div>
+                    </div>
+                </div>
+
+                <div class="control-group">
+                    <label for="DistributorGroup" class="control-label">Distributor Group</label>
+                    <div class="controls">
+                        <div id="distributor_group_list">
+
+                            <?php if (isset($this->currentDistributorGroup) && $this->currentDistributorGroup):
+                                              foreach ($this->currentDistributorGroup as $key => $value):?>
+
+                            <div class="list_item">
+                                <select id="DistributorGroup" class="" name="distributor_group_id[]">
+                                    <option>----</option>
+                                    <?php foreach ($this->distributor_group as $item):?>
+                                    <option value="<?php echo $item['group_id'];?>"
+                                        <?php if ($item['group_id']==$value['group_id']):?>selected<?php endif;?>>
+                                        <?php echo $item['group_name'];?></option>
+                                    <?php endforeach;?>
+                                </select>
+                            </div>
+
+                            <?php endforeach ?>
+                            <?php else: ?>
+
+                            <div class="list_item">
+                                <select id="DistributorGroup" class="" name="distributor_group_id[]">
+                                    <option>----</option>
+                                    <?php foreach ($this->distributor_group as $item):?>
+                                    <option value="<?php echo $item['group_id'];?>"><?php echo $item['group_name'];?>
+                                    </option>
+                                    <?php endforeach;?>
+                                </select>
+                            </div>
+
+                            <?php endif ?>
+
+                        </div>
+                    </div>
+                </div>
+
+                <div class="control-group">
+                    <label for="warehouse_type" class="control-label">Warehouse Type</label>
+                    <div class="controls">
+                        <div id="warehouse_type_list">
+                            <?php if (isset($this->staff['warehouse_type']) && $this->staff['warehouse_type']): ?>
+                            <?php $groups = explode(',', $this->staff['warehouse_type']) ?>
+                            <?php foreach ($groups as $key => $value): ?>
+                            <div class="list_item">
+                                <select id="warehouse_type" class="" name="warehouse_type[]">
+                                    <option>----</option>
+                                    <?PHP foreach ($this->warehouse_type as $key2 => $value2):?>
+                                    <option value="<?=$key2?>" <?php if ($value==$key2):?>selected<?php endif;?>>
+                                        <?=$value2?></option>
+                                    <?PHP endforeach; ?>
+
+                                </select>
+                            </div>
+                            <?php endforeach ?>
+                            <?php else: ?>
+                            <div class="list_item">
+                                <select id="warehouse_type" class="" name="warehouse_type[]">
+                                    <option>----</option>
+
+                                    <?PHP foreach ($this->warehouse_type as $key => $value):?>
+                                    <option value="<?=$key?>" <?php if ($warehouse_type==$key):?>selected<?php endif;?>>
+                                        <?=$value?></option>
+                                    <?PHP endforeach; ?>
+                                </select>
+                            </div>
+                            <?php endif ?>
+
+                        </div>
+                    </div>
+                </div>
+
+                <div class="control-group">
+                    <label for="warehouse_list" class="control-label">Warehouse Name</label>
+                    <div class="controls">
+                        <div id="warehouse_name_list">
+                            <?php if (isset($this->currentWarehouseGroupUserList) && $this->currentWarehouseGroupUserList):
+                                                    foreach ($this->currentWarehouseGroupUserList as $key => $value):?>
+                            <div class="list_item">
+                                <select id="warehouse_list" class="" name="warehouse_group_id[]">
+                                    <option>----</option>
+                                    <?PHP foreach ($this->warehouses as $key2 => $value2):?>
+                                    <option value="<?=$key2?>"
+                                        <?php if ($value['warehouse_id']==$key2):?>selected<?php endif;?>><?=$value2?>
+                                    </option>
+                                    <?PHP endforeach; ?>
+
+                                </select>
+                            </div>
+                            <?php endforeach ?>
+                            <?php else: ?>
+                            <div class="list_item">
+                                <select id="warehouse_list" class="" name="warehouse_group_id[]">
+                                    <option>----</option>
+
+                                    <?PHP foreach ($this->warehouses as $key => $value):?>
+                                    <option value="<?=$key?>" <?php if ($warehouse_id==$key):?>selected<?php endif;?>>
+                                        <?=$value?></option>
+                                    <?PHP endforeach; ?>
+                                </select>
+                            </div>
+                            <?php endif ?>
+
+                        </div>
+                    </div>
+                </div>
+
+                <?php
+                     // print_r($this->cattystaff);
+                                        ?>
+                <div class="control-group">
+                    <label for="cmb_catty_staff_id" class="control-label">Catty Staff<span style="color: red">
+                            *</span></label>
+                    <div class="controls">
+                        <div id="catty_staff_id_list">
+                            <?php if (isset($this->staff['catty_staff_id']) && $this->staff['catty_staff_id']): ?>
+                            <?php $cattystaff = explode(',', $this->staff['catty_staff_id']) ?>
+                            <?php foreach ($cattystaff as $key => $value): 
+                           // print_r($value);
+                                                      ?>
+                            <div class="list_item">
+                                <select id="cmb_catty_staff_id" class="cmb_catty_staff_id" required
+                                    name="cmb_catty_staff_id[]">
+                                    <option value="0">----</option>
+                                    <?php foreach ($this->cattystaff as $item):?>
+                                    <option value="<?php echo $item['id'];?>"
+                                        <?php if($item['id']==$value){?>selected<?php }else{ echo ''; };?>>
+                                        <?php echo trim($item['fullname']);?>
+                                    </option>
+                                    <?php endforeach;?>
+                                </select>
+                            </div>
+                            <?php endforeach ?>
+                            <?php else: ?>
+                            <div class="list_item">
+                                <select id="cmb_catty_staff_id" lass="cmb_catty_staff_id" name="cmb_catty_staff_id[]">
+                                    <option value="0">----</option>
+                                    <?php foreach ($this->cattystaff as $item):?>
+                                    <option value="<?php echo $item['id'];?>">
+                                        <?php echo trim($item['fullname']);?></option>
+                                    <?php endforeach;?>
+                                </select>
+                            </div>
+                            <?php endif ?>
+
+                        </div>
+                    </div>
+                </div>
+
+
+                <div class="control-group">
+                    <label for="status_1" class="control-label">Status</label>
+                    <div class="controls">
+                        <input type="radio" class="form-control" id="status_1" name="status" value="1"
+                            <?php if (!isset($this->staff)):?>checked
+                            <?php else: isset($this->staff) and $this->staff->status==1 and printf('checked'); endif;?>><span>Enabled</span>
+                        <input type="radio" class="form-control" id="status_2" name="status" value="0"
+                            <?php isset($this->staff) and $this->staff->status==0 and printf('checked');?>><span>Disabled</span>
+                    </div>
+                </div>
+
+            </div>
+</div>
+<div class="row">
+    <div class="control-group">
+        <input type="hidden" name="id" id="id"
+            value="<?php isset($this->staff) and $this->staff and printf($this->staff->id);?>">
+        <input type="hidden" name="back_url" id="back_url" value="/staff">
+        <div class="controls">
+            <button type="submit" class="btn btn-primary">Submit</button>
+            <button type="button" class="btn btn-danger go-back">Go back</button>
+        </div>
+    </div>
+</div>
+</form>
+
+</div>
+
+
+<script type="text/javascript" src="/js/jquery-ui-1.8.12.custom.min.js"></script>
+<script type="text/javascript" src="/js/jquery-ui.js"></script>
+<link rel="stylesheet" type="text/css" href="/css/jquery-ui-1.8.12.custom.css" />
+<link rel="stylesheet" href="/css/style_ui.css">
+<link rel="stylesheet" href="/css/themes/smoothness/jquery-ui.css">
+
+
+<style>
+.custom-cmb_catty_staff_id {
+    position: relative;
+    display: inline-block;
+}
+
+.custom-cmb_catty_staff_id-toggle {
+    position: absolute;
+    top: 0;
+    bottom: 0;
+    margin-left: -1px;
+    padding: 0;
+}
+
+.custom-cmb_catty_staff_id-input {
+    margin: 0;
+    padding: 5px 10px;
+}
+</style>
+<script>
+(function($) {
+    $.widget("custom.combobox", {
+        _create: function() {
+            this.wrapper = $("<span>")
+                .addClass("custom-cmb_catty_staff_id")
+                .insertAfter(this.element);
+
+            this.element.hide();
+            this._createAutocomplete();
+            this._createShowAllButton();
+        },
+
+        _createAutocomplete: function() {
+            var selected = this.element.children(":selected"),
+                value = selected.val() ? selected.text() : "";
+            this.input = $("<input>")
+                .appendTo(this.wrapper)
+                .val($.trim(value))
+                .attr("fullname", "")
+                .addClass(
+                    "custom-cmb_catty_staff_id-input ui-widget ui-widget-content ui-state-default ui-corner-left"
+                    )
+                .autocomplete({
+                    delay: 0,
+                    minLength: 0,
+                    source: $.proxy(this, "_source")
+                })
+                .tooltip({
+                    tooltipClass: "ui-state-highlight"
+                });
+
+            this._on(this.input, {
+                autocompleteselect: function(event, ui) {
+                    ui.item.option.selected = true;
+                    this._trigger("select", event, {
+                        item: ui.item.option
+                    });
+                },
+
+                autocompletechange: "_removeIfInvalid"
+            });
+        },
+
+        _createShowAllButton: function() {
+            var input = this.input,
+                wasOpen = false;
+
+            $("<a>")
+                .attr("tabIndex", -1)
+                .attr("title", "Show All Items")
+                .tooltip()
+                .appendTo(this.wrapper)
+                .button({
+                    icons: {
+                        primary: "ui-icon-triangle-1-s"
+                    },
+                    text: false
+                })
+                .removeClass("ui-corner-all")
+                .addClass("custom-cmb_catty_staff_id-toggle ui-corner-right")
+                .mousedown(function() {
+                    wasOpen = input.autocomplete("widget").is(":visible");
+                })
+                .click(function() {
+                    input.focus();
+
+                    // Close if already visible
+                    if (wasOpen) {
+                        return;
+                    }
+
+                    // Pass empty string as value to search for, displaying all results
+                    input.autocomplete("search", "");
+                });
+        },
+
+        _source: function(request, response) {
+            var matcher = new RegExp($.ui.autocomplete.escapeRegex(request.term), "i");
+            response(this.element.children("option").map(function() {
+                var text = $(this).text();
+                if (this.value && (!request.term || matcher.test(text)))
+                    return {
+                        label: text,
+                        value: $.trim(text),
+                        option: this
+                    };
+            }));
+        },
+
+        _removeIfInvalid: function(event, ui) {
+
+            // Selected an item, nothing to do
+            if (ui.item) {
+                return;
+            }
+
+            // Search for a match (case-insensitive)
+            var value = this.input.val(),
+                valueLowerCase = value.toLowerCase(),
+                valid = false;
+            this.element.children("option").each(function() {
+                if ($(this).text().toLowerCase() === valueLowerCase) {
+                    this.selected = valid = true;
+                    return false;
+                }
+            });
+
+            // Found a match, nothing to do
+            if (valid) {
+                return;
+            }
+
+            // Remove invalid value
+            this.input
+                .val("")
+                .attr("title", value + " didn't match any item")
+                .tooltip("open");
+            this.element.val("");
+            this._delay(function() {
+                this.input.tooltip("close").attr("title", "");
+            }, 2500);
+            this.input.autocomplete("instance").term = "";
+        },
+
+        _destroy: function() {
+            this.wrapper.remove();
+            this.element.show();
+        }
+    });
+})(jQuery);
+
+$(function() {
+    $("#cmb_catty_staff_id").combobox();
+    //$("#cmb_catty_staff_id select").val("3228");
+    //$(".cmb_catty_staff_id").val("3228");
+
+
+    $("#toggle").click(function() {
+        $("#cmb_catty_staff_id").toggle();
+    });
+});
+</script>
+
+<script type="text/javascript">
+$.fn.extend({
+    ajax_validate: function(url, param,
+    form) { // param: [{name:'param_name', element: form_element}, {name:'param_name', element: form_element}]
+        _self = $(this);
+        is_checking = false;
+
+        _self.blur(function(e) {
+            if (is_checking || _self.val() == '') return;
+            is_checking = true;
+
+            _s = $(e.target);
+
+            var get_url = '';
+            get_url = url;
+            get_url += '?';
+
+            for (var i = 0; i < param.length; i++) {
+                get_url += param[i].name + '=' + param[i].element.val() + '&';
+            };
+
+            if (_s.next('.loading').length == 0) {
+                _s.after('<span class="loading"></span>');
+                _s.parent().removeClass('error');
+                _s.nextAll('.help-inline').remove();
+            }
+
+            $.get(get_url, function(data, status) {
+                _s.nextAll('.loading').remove();
+                if (data == 1 || data == -1) {
+                    _s.parent().addClass('error');
+                    _s.after('<span class="help-inline">Invalid</span>');
+                    form.bind("submit", function() {
+                        return false;
+                    });
+                } else {
+                    form.unbind("submit");
+                }
+                is_checking = false;
+            });
+        });
+    }
+});
+
+select_cbb_html = '<div class="list_item new">' +
+    '<select id="exampleInputGroup" class="" name="group_id[]">' +
+    '<option>----</option>' +
+    '<?php foreach ($this->groups as $item):?>' +
+    '<option value="<?php echo $item['id'];?>"><?php echo $item['name'];?></option>' +
+    '<?php endforeach;?>' +
+    '</select> ' +
+    '</div>';
+
+select_cbb_dg_html = '<div class="list_item new">' +
+    '<select id="DistributorGroup" class="" name="distributor_group_id[]">' +
+    '<option>----</option>' +
+    '<?php foreach ($this->distributor_group as $item):?>' +
+    '<option value="<?php echo $item['group_id'];?>"><?php echo $item['group_name'];?></option>' +
+    '<?php endforeach;?>' +
+    '</select> ' +
+    '</div>';
+
+select_cbb_wh_html = '<div class="list_item new">' +
+    '<select id="warehouse_type" class="" name="warehouse_type[]">' +
+    '<option>----</option>' +
+    '<?PHP foreach ($this->warehouse_type as $key => $value):?>' +
+    '<option value="<?=$key?>" <?php if ($warehouse_type==$key):?>selected<?php endif;?>><?=$value?></option>' +
+    '<?PHP endforeach; ?>' +
+    '</select> ' +
+    '</div>';
+
+select_cbb_wh_list_html = '<div class="list_item new">' +
+    '<select id="warehouse_list" class="" name="warehouse_group_id[]">' +
+    '<option>----</option>' +
+    '<?PHP foreach ($this->warehouses as $key => $value):?>' +
+    '<option value="<?=$key?>" <?php if ($warehouse_id==$key):?>selected<?php endif;?>><?=$value?></option>' +
+    '<?PHP endforeach; ?>' +
+    '</select> ' +
+    '</div>';
+
+select_aaa_html = '<div class="list_item new">' +
+    '<select id="areaInputGroup" class="" name="area_id[]">' +
+    '<option>----</option>' +
+    '<?php foreach ($this->areas as $item):?>' +
+    '<option value="<?php echo $item['id'];?>"><?php echo $item['name'];?></option>' +
+    '<?php endforeach;?>' +
+    '</select> ' +
+    '</div>';
+
+$(document).ready(function() {
+    $('#group_list').addMore({
+        select_html: select_cbb_html
+    });
+
+    $('#distributor_group_list').addMore({
+        select_html: select_cbb_dg_html
+    });
+
+    $('#warehouse_type_list').addMore({
+        select_html: select_cbb_wh_html
+    });
+
+    $('#warehouse_name_list').addMore({
+        select_html: select_cbb_wh_list_html
+    });
+
+    $('#area_id').addMore({
+        select_html: select_aaa_html
+    });
+
+    //$(".cmb_catty_staff_id").val("3228");
+
+    $('.go-back').click(function(e) {
+        window.location.href = $('#back_url').val();
+
+        return false;
+    });
+
+    $('.date').datepicker({
+        dateFormat: "dd/mm/yy"
+    });
+
+    $('#btn-change-pass').click(function() {
+        $('#exampleInputPassword1').toggleClass('hidden');
+        if ($('#change-pass').val() == 1) {
+            $('#change-pass').val(0);
+            $('#exampleInputPassword1').removeAttr('required');
+        } else {
+            $('#change-pass').val(1);
+            $('#exampleInputPassword1').attr('required', 'required');
+        }
+    });
+
+    var url = "<?php echo HOST.'staff/check' ?>";
+    var codes1 = [{
+            name: 'id',
+            element: $('#id')
+        },
+        {
+            name: 'username',
+            element: $('#username')
+        }
+    ];
+    var codes2 = [{
+            name: 'id',
+            element: $('#id')
+        },
+        {
+            name: 'email',
+            element: $('#email')
+        }
+    ];
+    var codes3 = [{
+            name: 'id',
+            element: $('#id')
+        },
+        {
+            name: 'staff_code',
+            element: $('#staff_code')
+        }
+    ];
+
+    $('#staff_code').change(function(event) {
+        $('#staff_code').ajax_validate(url, codes3, $('#form'));
+    });
+
+    $('#email').change(function(event) {
+        $('#email').ajax_validate(url, codes2, $('#form'));
+    });
+
+    $('#username').change(function(event) {
+        $('#username').ajax_validate(url, codes1, $('#form'));
+    });
+
+});
+</script>
+<?php echo $this->load('combobox');?>

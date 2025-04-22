@@ -1,0 +1,375 @@
+<style type="text/css">
+    .input{
+        margin-top: 15px;
+        margin-bottom: 15px;
+    }
+
+    .div-form{
+        margin-left: 50px;
+        margin-bottom: 50px;
+    }
+
+    .div-btn{
+        margin-left: 35px;
+    }
+
+    /* The switch - the box around the slider */
+    .switch {
+      position: relative;
+      display: inline-block;
+      width: 60px;
+      height: 34px;
+    }
+
+    /* Hide default HTML checkbox */
+    .switch input {display:none;}
+
+    /* The slider */
+    .slider {
+      position: absolute;
+      cursor: pointer;
+      top: 0;
+      left: 0;
+      right: 0;
+      bottom: 0;
+      background-color: #ccc;
+      -webkit-transition: .4s;
+      transition: .4s;
+    }
+
+    .slider:before {
+      position: absolute;
+      content: "";
+      height: 26px;
+      width: 26px;
+      left: 4px;
+      bottom: 4px;
+      background-color: white;
+      -webkit-transition: .4s;
+      transition: .4s;
+    }
+
+    input:checked + .slider {
+      background-color: green;
+    }
+
+    input:focus + .slider {
+      box-shadow: 0 0 1px green;
+    }
+
+    input:checked + .slider:before {
+      -webkit-transform: translateX(26px);
+      -ms-transform: translateX(26px);
+      transform: translateX(26px);
+    }
+
+    /* Rounded sliders */
+    .slider.round {
+      border-radius: 34px;
+    }
+
+    .slider.round:before {
+      border-radius: 50%;
+    }
+</style>
+
+<div class="page-header">
+	<?php if (isset($this->member_brandshop_id) && $this->member_brandshop_id): ?>
+		<h1>Edit Member Brand Shop</h1>
+	<?php else: ?>
+		<h1>Create Member Brand Shop</h1>
+	<?php endif ?>
+    
+</div>
+<?php
+    if (isset($this->messages) and $this->messages)
+        foreach ($this->messages as $message):
+            echo '<div class="alert alert-error">'.$message.'</div>';
+        endforeach;
+?>
+
+<form name="form" id="form">
+
+    <div class="div-form">
+
+        <div class="form-group input">
+          <label for="code">Code <span style="color: red">*</span></label>
+          <input type="text" class="form-control" name="code" id="code" value="<?php if (isset($this->getMemberBrandshop['code']) && $this->getMemberBrandshop['code']){ echo $this->getMemberBrandshop['code'];} ?>" <?php if(isset($this->member_brandshop_id) && $this->member_brandshop_id){echo 'readonly';}?> required>
+        </div>
+        
+        <div class="form-group input">
+          <label for="customer_name">Customer Name <span style="color: red">*</span></label>
+          <input type="text" minlength="3" class="form-control" name="customer_name" id="customer_name" value="<?php if (isset($this->getMemberBrandshop['customer_name']) && $this->getMemberBrandshop['customer_name']){ echo $this->getMemberBrandshop['customer_name'];} ?>" required>
+        </div>
+
+        <div class="form-group input">
+          <label for="phone">Phone Number <span style="color: red">*</span></label>
+          <input type="text" minlength="9" maxlength="10" class="form-control" name="phone_number" id="phone_number" value="<?php if (isset($this->getMemberBrandshop['phone_number']) && $this->getMemberBrandshop['phone_number']){ echo $this->getMemberBrandshop['phone_number'];} ?>" required>
+        </div>
+
+        <div class="form-group input">
+          <label for="tax_number">Tax Number <span style="color: red">*</span></label>
+          <input type="text" minlength="13" maxlength="13" class="form-control" name="tax_number" id="tax_number" value="<?php if (isset($this->getMemberBrandshop['tax_number']) && $this->getMemberBrandshop['tax_number']){ echo $this->getMemberBrandshop['tax_number'];} ?>" required>
+        </div>
+
+        <div class="form-group input">
+          <label for="tex_addtes">Tax Address <span style="color: red">*</span></label>
+          <textarea name="tax_address" id="tax_address" cols="30" rows="5" required><?php if (isset($this->getMemberBrandshop['tax_address']) && $this->getMemberBrandshop['tax_address']){ echo $this->getMemberBrandshop['tax_address'];} ?></textarea>
+        </div>
+
+        <div class="control-group">    
+          <label class="control-label" for="ship_province">Province<span style="color: red">*</span></label>
+          <div class="controls">
+          ​<select name="province_id" id="ship_province" class="ship_province" required>
+              <option value="0"></option>
+              <?PHP foreach ($this->province as $key => $value) :?>
+                 <option value="<?=$key?>" <?php if( isset($this->getMemberBrandshop['province_id']) && $this->getMemberBrandshop['province_id'] == $key ) echo "selected='selected'" ?>><?=$value?></option>
+             <?PHP endforeach; ?>
+               
+          </select>
+          </div>
+      </div>
+      <div class="control-group">
+          <label class="control-label" for="add">Amphure<span style="color: red">*</span>  </label>
+          <div class="controls">
+          <input type="hidden" name="hid_amphures_id" class="hid_amphures_id" value="<?php if( isset($this->getMemberBrandshop) && isset($this->getMemberBrandshop['amphures_id']) ) echo $this->getMemberBrandshop['amphures_id'] ?>">
+          <select name="amphures_id" id="amphures" required>
+              <option value>---</option>
+               <?php if (isset( $this->amphures ) && $this->amphures): ?>
+                  <?php foreach ($this->amphures as $key => $region): ?>
+                      <option value="<?php echo $key ?>" <?php if( isset($this->getMemberBrandshop['amphures_id']) && $this->getMemberBrandshop['amphures_id'] == $key ) echo "selected='selected'" ?>><?php echo $region['name'] ?></option>
+                  <?php endforeach ?>
+              <?php endif ?>
+          </select>
+          </div>
+      </div>
+      <div class="control-group">
+          <label class="control-label" for="add">District<span style="color: red">*</span></label>
+          <div class="controls">
+          <input type="hidden" name="hid_districts_id" class="hid_districts_id" value="<?php if( isset($this->getMemberBrandshop) && isset($this->getMemberBrandshop['districts_id']) ) echo $this->getMemberBrandshop['districts_id'] ?>">
+          <select name="districts_id" id="districts_sipping" required>
+              <option value>---</option>
+              <?php if (isset( $this->districts ) && $this->districts): ?>
+                  <?php foreach ($this->districts as $key => $region): ?>
+                      <option value="<?php echo $key ?>" <?php if( isset($this->getMemberBrandshop['districts_id']) && $this->getMemberBrandshop['districts_id'] == $key ) echo "selected='selected'" ?>><?php echo $region['name'] ?></option>
+                  <?php endforeach ?>
+              <?php endif ?>
+          </select>
+          </div>
+      </div>
+      <div class="control-group">
+          <label class="control-label" for="add">Zipcode<span style="color: red">*</span></label>
+          <div class="controls">
+          <input type="text" name="zipcodes" id="zip_code" value="<?php if( isset($this->getMemberBrandshop) && isset($this->getMemberBrandshop['zipcodes']) ) echo $this->getMemberBrandshop['zipcodes'] ?>" readonly>
+          <input type="hidden" name="zipcodes_id" id="zip_id" readonly>
+          </div>
+      </div>
+
+        <div class="form-group input <?php if(isset($this->member_brandshop_id) && $this->member_brandshop_id){}else{echo 'hide';}?>">
+          <label for="tex_addtes">Status</label>
+            <label class="switch">
+              <input type="checkbox" name="status" value="1" <?php if (isset($this->getMemberBrandshop['status']) && $this->getMemberBrandshop['status']){ echo 'checked';} ?>>
+              <span class="slider round"></span>
+            </label>
+        </div>
+
+    </div>
+
+	<input type="hidden" id="member_brandshop_id" name="member_brandshop_id" value="<?php if( isset($this->member_brandshop_id) && isset($this->member_brandshop_id)) echo $this->member_brandshop_id ?>" />
+	<div class="div-btn">
+        <input type="hidden" name="back_url" id="back_url" value="<?php echo $this->back_url?>">
+        
+        <button type="submit" class="btn btn-primary">Submit</button>
+        <button type="button" class="btn btn-danger go-back">Go back</button>
+	</div>
+</form>
+
+
+<script>
+
+    $(document).ready(function () {
+
+        var province = $('#ship_province').val();
+        var districts_id = $('.hid_districts_id').val();
+        var districts_sipping = $('#districts_sipping').val();
+        var amphures_id = $('.hid_amphures_id').val();
+        if(province!=''){
+            $(this).after('<span class="loading"></span>');
+
+            var _self = $(this);
+            var province = province;
+            $.get("/get/amphures",
+                {province: province}
+                ,function(data,status){
+                    var data = $.parseJSON( data );
+
+                    for (var i = 0; i < data.length; i++) {
+                        $('#amphures').append('<option value="'+data[i]['amphur_id']+'">'+data[i]['amphur_name']+'</option>');
+                    }
+                    //find("option[value='theValueYouWantSelected']").attr("selected",true)
+                    $('#amphures').find('option[value='+amphures_id+']').attr("selected",true);
+                    _self.nextAll('.loading').remove();
+                });
+
+        }
+
+        if (districts_id!='') {
+                        $(this).after('<span class="loading"></span>');
+           
+            $.get("/get/districts",
+                {amphures: amphures_id}
+                ,function(data,status){
+                    var data = $.parseJSON( data );
+
+                    for (var i = 0; i < data.length; i++) {
+                        $('#districts_sipping').append('<option value="'+data[i]['district_code']+'">'+data[i]['district_name']+'</option>');
+                    }
+                    $('#districts_sipping').find('option[value='+districts_id+']').attr("selected",true);
+
+                    _self.nextAll('.loading').remove();
+                });
+        }    
+        if(amphures_id!=''){
+            $(this).after('<span class="loading"></span>');
+
+            $.get("/get/zipcode",
+                {districts: districts_id}
+                ,function(data,status){
+                    var data = $.parseJSON( data );
+                 
+                    $('#zip_code').val(data[0]['zipcode']);
+                    $('#zip_id').val(data[0]['zip_id']);
+                    // for (var i = 0; i < data.length; i++) {
+                    //     // $('#districts_sipping').append('<option value="'+data[i]['DISTRICT_ID']+'">'+data[i]['DISTRICT_NAME']+'</option>');
+                    //     data[i]['zipcode'];
+                    // }
+
+                    _self.nextAll('.loading').remove();
+                });
+        }
+
+        $('#form').submit(function(event) {
+
+          if($('#phone_number').val().length != 10){
+            alert('Please check phone number.');
+            $('#phone_number').focus();
+            return false;
+          }
+
+          if($('#tax_number').val().length != 13){
+            alert('Please check tax number.');
+            $('#tax_number').focus();
+            return false;
+          }
+            
+            $.ajax({
+                url: '<?php echo HOST.'sales/save-member-brandshop';?>',
+                type: 'POST',
+                data: $("#form").serialize(),
+            })
+            .done(function(response) {
+                var obj_response = jQuery.parseJSON(response);
+                console.log("success");
+
+                 switch(obj_response.status) {
+                    case 200:
+                        console.log('done');
+                        window.location.href = obj_response.url;
+                        break;
+                    case 400:
+                        alert(obj_response.message);
+                        break;
+                    default:
+                        location.reload();
+                }
+                
+            });
+
+            event.preventDefault();
+
+        });
+
+        $('.go-back').click(function(event) {
+            var url = $('#back_url').val();
+            window.location.href = url;
+        });
+
+        $('#ship_province').change(function(){
+            $(this).after('<span class="loading"></span>');
+            var _self = $(this);
+            var province = _self.val();
+            // var area_id = _self.find('option:selected').data('area');
+
+            // $('#area').val(area_id);
+
+            $('#amphures').find('option:not(:first)').remove();
+            $('#districts_sipping').find('option:not(:first)').remove();
+            $('#zip_code').val('');
+            $('#zip_id').val('');
+            $.get("/get/amphures",
+                {province: province}
+                ,function(data,status){
+                    var data = $.parseJSON( data );
+
+                    for (var i = 0; i < data.length; i++) {
+                        $('#amphures').append('<option value="'+data[i]['amphur_id']+'">'+data[i]['amphur_name']+'</option>');
+                    }
+
+                    _self.nextAll('.loading').remove();
+                });
+        });
+
+        $('#amphures').change(function(){
+            $(this).after('<span class="loading"></span>');
+            var _self = $(this);
+            var amphures = _self.val();
+            // var area_id = _self.find('option:selected').data('area');
+
+            // $('#area').val(area_id);
+
+            $('#districts_sipping').find('option:not(:first)').remove();
+
+            $.get("/get/districts",
+                {amphures: amphures}
+                ,function(data,status){
+                    var data = $.parseJSON( data );
+
+                    for (var i = 0; i < data.length; i++) {
+                        $('#districts_sipping').append('<option value="'+data[i]['district_code']+'">'+data[i]['district_name']+'</option>');
+                    }
+
+                    _self.nextAll('.loading').remove();
+                });
+        });
+        $('#districts_sipping').change(function(){
+            $(this).after('<span class="loading"></span>');
+            var _self = $(this);
+            var districts = _self.val();
+            // var area_id = _self.find('option:selected').data('area');
+
+            // $('#area').val(area_id);
+
+            // $('#districts_sipping').find('option:not(:first)').remove();
+            $('#zip_code').empty();
+            $('#zip_id').empty();
+            $.get("/get/zipcode",
+                {districts: districts}
+                ,function(data,status){
+                    var data = $.parseJSON( data );
+                 
+                    $('#zip_code').val(data[0]['zipcode']);
+                    $('#zip_id').val(data[0]['zip_id']);
+                    // for (var i = 0; i < data.length; i++) {
+                    //     // $('#districts_sipping').append('<option value="'+data[i]['DISTRICT_ID']+'">'+data[i]['DISTRICT_NAME']+'</option>');
+                    //     data[i]['zipcode'];
+                    // }
+
+                    _self.nextAll('.loading').remove();
+                });
+          });
+
+    });
+        
+</script>
+
+

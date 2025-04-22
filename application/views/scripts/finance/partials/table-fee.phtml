@@ -1,0 +1,34 @@
+<?php 
+    if(isset($this->order_fee) AND $this->order_fee):
+?>
+<table class="table table-bordered span12">
+    <thead>
+        <tr>
+            <th>Fee</th>
+            <th>Price</th>
+        </tr>
+    </thead>
+    <tbody>
+        <?php                      
+            $sum = 0;
+            foreach($this->order_fee as $item):
+                $sum += $item['value'];
+        ?>
+            <tr>
+                <td><?php echo My_Sale_Order_Fee::$name[ $item['fee_id'] ] ?></td>
+                <td><?php echo My_Number::f($item['value']) ?></td>
+            </tr>
+        <?php
+                endforeach;
+        ?>
+    </tbody>
+    <tfoot>
+        <tr>
+            <td><b>Total Fee:</b></td>
+            <td><?php echo My_Number::f($sum);?></td>
+        </tr>
+    </tfoot>
+</table>
+<?php 
+    endif;
+?>

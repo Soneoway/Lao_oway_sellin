@@ -1,0 +1,186 @@
+<div class="page-header">
+    <h1>Confirm Creditnote No</h1>
+</div>
+<style>
+    tr td:first-child {
+        width: 20%;
+    }
+    .address_textarea{
+        width: 350px;
+        height: 50px;
+
+    }
+    .modal{
+        margin-left: 9%;
+    }
+
+    .modal.fade.in{
+        top: 40% !important;
+        margin-left: -20% !important;
+    }
+    .modal-backdrop.fade.in{
+        opacity: 0 !important;
+    }
+</style>
+<?php
+    if (isset($this->messages_success) and $this->messages_success)
+        foreach ($this->messages_success as $message):
+            echo '<div class="alert alert-success">'.$message.'</div>';
+        endforeach;
+
+    if (isset($this->messages) and $this->messages)
+        foreach ($this->messages as $message):
+            echo '<div class="alert alert-error">'.$message.'</div>';
+        endforeach;
+?>
+<?php if (isset($this->error) && $this->error): ?>
+        <div class="alert alert-error">
+            <button type="button" class="close" data-dismiss="alert">&times;</button>
+            <strong>ERROR!</strong> <?php echo $this->error ?>
+        </div>
+ <?php endif ?>       
+<?php
+    if (isset($this->warning) and $this->warning)
+        foreach ($this->warning as $message):
+            echo '<div class="alert alert-block">'.$message.'</div>';
+        endforeach;
+
+    if (isset($this->error) and $this->error)
+        foreach ($this->error as $message):
+            echo '<div class="alert alert-error">'.$message.'</div>';
+        endforeach;
+?>
+<div class="row">
+    <div class="span12">
+        <form role="form" id="form" action="<?php echo HOST.'finance/creditnote-manual-confirm';?>" enctype="multipart/form-data" method="post" class="form-horizontal">
+            <div class="row">
+                <div class="span6">
+                        <label class="span2" for="creditnote_sn">Creditnote No </label>   
+                        <input type="text" required="required" readonly="true" value="<?php echo $this->get_resule[0]['creditnote_sn']?>"  class="creditnote_sn" name="creditnote_sn" />
+                    </label>
+                </div>
+            </div>
+            </br>
+
+            <div class="row">
+                <div class="span6">
+                        <label class="span2" >Distributor name</label> 
+                        <label  ><?=$this->get_resule[0]['distributor_name']?></label>
+                </div>
+            </div>
+            </br>
+
+             <div class="row">
+                <div class="span6">
+
+                <label class="span2" for="rank">Chanel <span style="color: red">*</span></label>    
+                    <select id="chanel" name="chanel" required="required" disabled="true" >
+                        <option value="">กรุณาเลือกช่องทาง</option>
+                        <option value="reward" <?php if( isset($this->get_resule[0]['chanel']) and $this->get_resule[0]['chanel']=="reward") { ?> selected<?php }?>>ส่งเสริมการขาย OPPO Club</option>
+                        <option value="oppo_sis" <?php if( isset($this->get_resule[0]['chanel']) and $this->get_resule[0]['chanel']=="oppo_sis") { ?> selected<?php }?>>ส่งเสริมการขาย OPPO SIS</option>
+                        <option value="return" <?php if( isset($this->get_resule[0]['chanel']) and $this->get_resule[0]['chanel']=="return") { ?> selected<?php }?>>คืนสินค้า</option>
+                        <option value="price" <?php if( isset($this->get_resule[0]['chanel']) and $this->get_resule[0]['chanel']=="price") { ?> selected<?php }?>>ปรับราคาสินค้า</option>
+                        <option value="service" <?php if( isset($this->get_resule[0]['chanel']) and $this->get_resule[0]['chanel']=="service") { ?> selected<?php }?>>ค่าบริการ</option>
+                        <option value="top_green" <?php if( isset($this->get_resule[0]['chanel']) and $this->get_resule[0]['chanel']=="top_green") { ?> selected<?php }?>>ส่งเสริมการขาย OPPO Top Green</option>
+                        <option value="oppo_all_green" <?php if( isset($this->get_resule[0]['chanel']) and $this->get_resule[0]['chanel']=="oppo_all_green") { ?> selected<?php }?>>ส่งเสริมการขาย OPPO All Green</option>
+                        <option value="cn_service" <?php if( isset($this->get_resule[0]['chanel']) and $this->get_resule[0]['chanel']=="cn_service") { ?> selected<?php }?>>CN Service</option>
+                        <option value="rent" <?php if( isset($this->get_resule[0]['chanel']) and $this->get_resule[0]['chanel']=="rent") { ?> selected<?php }?>>ค่าเช่า</option>
+                        <option value="promotion" <?php if( isset($this->get_resule[0]['chanel']) and $this->get_resule[0]['chanel']=="promotion") { ?> selected<?php }?>>ส่งเสริมการขาย</option>
+                    </select>
+                    
+                </div>
+            </div>
+            </p>
+          
+
+            <div class="row">
+                <div class="span6">
+                        <label class="span2" for="rank">Price <span style="color: red">*</span></label>   
+                        <input type="text" required="required" readonly="true" value="<?php echo $this->get_resule[0]['total_amount']?>"  class="price" name="price" />
+                    
+                </div>
+            </div>
+            </br>
+            <div class="row">
+                <div class="span6">
+                        <label class="span2" >Request By</label> 
+                        <label  ><?=$this->get_resule[0]['staff_name']?> (<?=$this->get_resule[0]['email']?>)</label>
+                </div>
+            </div>
+            </br>
+            <div class="row">
+                <div class="span6">
+                        <label class="span2" >Request Date</label> 
+                        <label>
+                        <?php
+                            $date=date_create($this->get_resule[0]['create_date']);
+                            echo date_format($date,"d/m/Y H:i:s");      
+                        ?>
+                        </label>
+                </div>
+            </div>
+            </br>
+            <div class="row">
+                <div class="span6">
+                        <label class="span2" >Confirm Date</label> 
+                        <label>
+                        <?php
+                            $date=date_create($this->get_resule[0]['confirm_date']);
+                            echo date_format($date,"d/m/Y H:i:s");      
+                        ?>
+                        </label>
+                </div>
+            </div>
+            </br>
+            <div class="row">
+                <div class="span6">
+                        <label class="span2" >Last Update Date</label> 
+                        <label>
+                        <?php
+                            $date=date_create($this->get_resule[0]['update_date']);
+                            echo date_format($date,"d/m/Y H:i:s");      
+                        ?>
+                        </label>
+                </div>
+            </div>
+            </br>
+
+            <div class="row">
+                <div class="span6">
+                        <label class="span2" for="rank">เปิดใช้งาน </label>   
+                        <input type="checkbox" id="status" name="status" value="1" <?php if( isset($this->get_resule[0]['manual_active']) and $this->get_resule[0]['manual_active']=="1" ) { ?> checked<?php }?> />
+                    
+                </div>
+            </div>
+            </br> 
+
+            <div id="modal" class="modal hide fade" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+            </div>    
+	        <div class="row">
+		        <div class="span6">
+                    <input type="hidden" id="creditnote_status" name="creditnote_status" value="<?php echo $this->get_resule[0]['manual_active']; ?>">
+		            <input type="hidden" id="back_url" name="back_url" value="/finance/creditnote-manual-confirm-list?view_status=1">
+		            <button type="submit" class="btn btn-primary">Save</button>
+		            <button type="button" class="btn btn-danger go-back">Go back</button>
+		        </div>
+	        </div>
+        </form>
+    </div>
+
+</div>
+</div>
+<link rel="stylesheet" type="text/css" href="/css/bootstrap-modal.css"/>
+<script type="text/javascript" src="/js/bootstrap-modal.js"></script>
+<script type="text/javascript" src="/js/bootstrap-modalmanager.js"></script>
+<script async="async">
+    <?php if(isset($this->rank)) { ?>
+            $('#rank').val(<?= $this->rank ?>);
+            get_distributor_cached_for_search(<?= $this->rank ?>);
+    <?php }?>
+
+
+    //------------View Pay Slip------------------
+        
+        $modal = $('#modal');
+</script>    
+<?php echo $this->render('finance/partials/creditnote_manual_confirm_script.phtml'); ?>

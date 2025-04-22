@@ -1,0 +1,79 @@
+<style type="text/css">
+    .invoice {
+        position: relative;
+        top: 0px;
+        z-index: 9999;
+        top: -601px;
+        height: 400px;
+        margin-bottom: -400px;
+    }
+  </style>
+<table class="tbllist invoice" cellspacing="1" cellpadding="5">
+    <?php
+    $count = 0;
+    $num_total = $price_before_vat = 0;
+    $total = $totalPri = 0;
+    if (isset($this->product) && is_array($this->product)):
+        $i = 1;
+
+		foreach ($this->product as $k => $v)
+					$totalPri += intval($this->total[ $k ]);
+					
+		if (count($this->product) <= 15) {
+			foreach ($this->product as $k => $v):
+					$total += intval($this->total[ $k ]);
+					 //đơn giá
+	?>
+				<tr class="sp none">
+					<td class="abc"><span><?php echo $i++ ?></span></td>
+					<td class="productname" style="width: 368px;">
+						<?php echo $v ?>
+					</td>
+					<td class="mst" style="width: 83px;    text-align: center;" ><?php if(isset($this->mst[ $k ]) && $this->mst[ $k ]) echo $this->mst[ $k ] ?></td>
+
+					<td class="unit" style="width: 79px;" ><?php if(isset($this->unit[ $k ]) && $this->unit[ $k ]) echo $this->unit[ $k ] ?></td>
+					<td class="in" style="    width: 136px;    text-align: center;"><?php if(isset($this->in[ $k ]) && !empty($this->in[ $k ])) echo intval($this->in[ $k ]) ?></td>
+					<td class="out" style="    width: 145px;    text-align: center;"><?php if(isset($this->out[ $k ]) && !empty($this->out[ $k ])) echo intval($this->out[ $k ]);  ?></td>
+
+
+					<td class="price" style="    position: relative;    left: 30px;"><?php if(isset($this->price[ $k ]) && !empty($this->price[ $k ])) echo number_format((float)$this->price[$k], 2, ',', '.');  ?></td>
+					<td class="total"><?php  if(isset($this->total[ $k ]) && !empty($this->total[ $k ])) echo number_format((float)$this->total[$k], 2, ',', '.');  ?></td>
+				</tr>
+				<input type="hidden" name="invoice_price[]" value="<?php echo '_' . $after_vat ; ?>" />
+
+			<?php endforeach;
+		} else { ?>
+			<tr class="sp none">
+				<td class="abc"><span><?php echo $i++ ?></span></td>
+				<td class="productname" style="width: 368px;">
+					Xuất luân chuyển hàng theo bảng kê đính kèm
+				</td>
+				<td class="mst" style="width: 83px;    text-align: center;" ></td>
+
+				<td class="unit" style="width: 79px;" >Thùng</td>
+				<td class="in" style="    width: 136px;    text-align: center;">1</td>
+				<td class="out" style="    width: 145px;    text-align: center;"></td>
+
+
+				<td class="price" style="    position: relative;    left: 30px;"></td>
+				<td class="total"><?php echo My_Number::product_price((float)$totalPri);  ?></td>
+			</tr>
+		<?php }
+    endif; ?>
+    <tr></tr>
+
+
+
+</table>
+
+<?php
+
+$this->vat = $vat = round($price_before_vat * 0.1);
+$this->price_before_vat = $price_before_vat = round($price_before_vat);
+$this->total_price = $total;
+
+
+
+
+
+?>

@@ -1,0 +1,241 @@
+<style type="text/css">
+.invoice{position:relative;top:0;z-index:9999;top:-486px;height:440px;margin-bottom:-440px}
+  </style>
+<table class="tbllist invoice" cellspacing="1" cellpadding="5">
+    <?php
+    $distributor_name = $this->distributor['unames'];
+
+
+
+
+    $fpt  = 'FPT';
+    $pos = strpos($distributor_name, $fpt);
+    if ($pos and $this->distributor['id'] != 1030) $fpt=1;
+    $count = 0;
+    $text_km = 'Hàng khuyến mãi không thu tiền';
+    $num_total = $price_before_vat = $price_after_vat = 0;
+    $hot_guys_sex = array_filter($arrayName = array(KA_VIETTEL ,KA_TGDD ,KA_VTA));
+
+    if (isset($this->market) && $this->market && isset($this->mk_goods) && $this->mk_goods):
+        $i = 1;
+        foreach ($this->mk_goods as $k => $v):
+            if ($v['cat_id'] == PHONE_CAT_ID and !in_array($this->distributor['parent'], $hot_guys_sex))
+            {
+                $this->all_goods[$v['good_id']]['name'] = 'Điện thoại di động OPPO '.($this->goods_cached[$v['good_id']] ? $this->goods_cached[$v['good_id']] : '');
+                $count++;
+            }
+            if ($v['cat_id'] == PHONE_CAT_ID)
+            {
+              $good_color = $this->good_colors[$v['good_color']]['name'];
+                 $good_color_short_name = $this->good_colors[$v['good_color']]['short_name'];
+                 $this->all_goods[$v['good_id']]['name'] = 'Điện thoại di động OPPO '.$this->all_goods[$v['good_id']]['desc'] . ' ' . $good_color.'_'.$this->goods_cached[$v['good_id']] .$good_color_short_name;
+
+                 if($v['good_id'] == 405 and $v['good_color'] == 10)
+                 {
+                    $this->all_goods[$v['good_id']]['name'] = 'Điện thoại di động OPPO Joy 3 Trắng (16GB) _ A11w-16GW';
+                 }
+
+                 if($v['good_id'] == 405 and $v['good_color'] == 25)
+                 {
+                    $this->all_goods[$v['good_id']]['name'] = 'Điện thoại di động OPPO Joy 3 Xám (16GB) _ A11w-16GG';
+                 }
+
+                 if($v['good_id'] == 404 and $v['good_color'] == 9)
+                 {
+                    $this->all_goods[$v['good_id']]['name'] = 'Điện thoại di động OPPO Neo 5-16G Đen_1201-16GB';
+                 }
+
+                 if($v['good_id'] == 404 and $v['good_color'] == 10)
+                 {
+                    $this->all_goods[$v['good_id']]['name'] = 'Điện thoại di động OPPO Neo 5-16G Trắng_1201-16GW';
+                 }
+
+                
+
+            }
+            if ($v['cat_id'] != PHONE_CAT_ID)
+            {
+                $good_color = $this->good_colors[$v['good_color']]['name'];
+                $this->all_goods[$v['good_id']]['name'] = $this->all_goods[$v['good_id']]['desc_name'];
+            }
+                
+
+
+            
+                    
+
+             
+
+            $v['price'] = round($v['price'] / 1.1);
+
+
+            if(isset($v['sale_off_percent'])&& $v['sale_off_percent'] !=0)
+                $v['price'] = intval($v['price']*$v['sale_off_percent']/100);
+
+            $price_after_vat += $v['total_price'];
+            $type = $v['type'];
+            $sale_off = $v['sale_off_percent'];
+            $tt = round($v['total_price'] / 1.1,2);            //đơn giá
+            $dg = round($tt/$v['num'],2);
+
+            $tt = $dg * $v['num'];
+
+            if($this->distributor['parent'] == 2363 and $v['price'] == 0)
+             {
+                $dg = $this->all_goods[$v['good_id']]['price_5'];
+                $tt = 0;
+             }
+
+            $price_before_vat +=  $tt;
+
+
+
+            if($v['cat_id'] == PHONE_CAT_ID || $fpt!=1 && $this->all_goods[$v['good_id']]['id']!=176 && $this->all_goods[$v['good_id']]['id']!=166):?>
+                <tr class="sp none">
+                    <td class="abc"><span><?php echo $i++ ?></span></td>
+                    <td class="productname">
+                        <?php if(isset($this->all_goods) && $this->all_goods && isset($this->all_goods[$v['good_id']])) echo $this->all_goods[$v['good_id']]['name'] ?>
+                    </td>
+                    <td class="unit">Chiếc</td>
+                    <td class="quantity" ><?php echo $v['num']; $num_total += $v['num']; ?></td>
+                    <?php if (intval($dg)==0):?>
+                        <td colspan="2" class="hangkhuyenmai"><?php if(empty($this->khuyenmai)) echo $text_km;  ?></td>
+                    <?php else:?>
+                        <td class="price"><?php echo My_Number::product_price($dg , 2);  ?></td>
+                        <td class="total"><?php echo My_Number::product_price($tt , 2); ?></td>
+                    <?php endif;?>
+                </tr>
+
+                       <?php if(isset($this->khuyenmai)): ?>
+                         <tr class="sp none">
+                            <td class="abc"><span></span></td>
+                             <td class="productname">
+                                 <?php echo '(' . $text_km . ')';  ?>
+                             </td>
+                         </tr>
+                     <?php endif; ?>
+
+
+            <?php else:
+                if( 1 == 1 ):   ?>
+                    <tr  class="sp none">
+                        <td class="abc"><span><?php echo $i++ ?></span></td>
+                        <td class="productname">
+                            <?php if(isset($this->all_goods) && $this->all_goods && isset($this->all_goods[$v['good_id']])) echo $this->all_goods[$v['good_id']]['name'] ?>
+                        </td>
+                        <td class="unit">Chiếc</td>
+                        <td class="quantity" ><?php echo $v['num']; $num_total += $v['num']; ?></td>
+                        <?php if (intval($dg)==0):?>
+                            <td colspan="2" class="hangkhuyenmai"></td>
+                        <?php else:?>
+                            <td class="price"><?php echo My_Number::product_price($dg , 2);  ?></td>
+                            <td class="total"><?php echo My_Number::product_price($tt , 2); ?></td>
+                        <?php endif;?>
+                    </tr>
+
+                  
+
+                <?php endif;?>
+            <?php endif;?>
+
+        
+
+            <input type="hidden" name="invoice_price[]" value="<?php echo $v['id'] . '_' . $tt ; ?>" />
+            <?php $this->all_goods[$v['good_id']]['name'] = '';?>
+
+
+
+        <?php endforeach;
+    endif; ?>
+
+    <?php  if(isset($type)&& $type==2) : ?>
+
+        <tr class="sp none">
+            <td class="abc"><span><?php echo $i ?></span></td>
+            <td class="name" >
+                <?php if(isset($type)&& $type==2) echo ' Máy mẫu trưng bày';?>
+            </td>
+            <td></td>
+            <td></td>
+            <td></td>
+            <td></td>
+        </tr>
+    <?php endif ?>
+    <!--
+     <?php  if(isset($this->market['invoice_note']) && $this->market['invoice_note']!= NULL && trim($this->market['invoice_note'])) : ?>
+
+        <tr class="sp none">
+            <td class="abc"><span></span></td>
+            <td class="productname" >
+                <?php echo '(' . $this->market['invoice_note'] . ')';?>
+            </td>
+            <td></td>
+            <td></td>
+            <td></td>
+            <td></td>
+        </tr>
+    <?php endif ?>
+-->
+
+    <?php  if(isset($this->market['campaign']) && $this->market['campaign']!= NULL && intval($this->market['campaign']) == 99) : ?>
+
+        <tr class="sp none">
+            <td class="abc"><span></span></td>
+            <td class="productname" >
+               (Xuất bù sim 3G_hàng tồn OPPO Neo 5 & OPPO Joy 3 tính đến ngày 28/11/2015 theo thông báo số TB số 684/2015/TB-KD)
+            </td>
+            <td></td>
+            <td></td>
+            <td></td>
+            <td></td>
+        </tr>
+    <?php endif ?>
+
+   
+
+    <?php if(isset($this->event) and $this->event): ?>
+        <tr class="sp none">
+            <td><span></span></td>
+            <td  class="productname" >
+                ( Hàng tặng không thu tiền )
+            </td>
+        </tr>
+    <?php endif; ?>
+
+    <!--
+    <?php if(isset($this->payment_method) and $this->payment_method): ?>
+        <tr class="sp none">
+            <td><span></span></td>
+            <td  class="productname" >
+                <strong><?php echo $this->payment_method ?></strong>
+            </td>
+        </tr>
+    <?php endif; ?>
+    -->
+
+    <?php if(isset($this->fee) and $this->fee): ?>
+        <tr class="sp">
+            <td><span><?php echo $i ?></span></td>
+            <td  class="name" >
+                <?php echo $this->fee[0]['desc']; ?>
+            </td>
+            <td class="tdnum"></td>
+            <td class="tdright"></td>
+            <td class="total fee"><?php echo My_Number::product_price(round($this->fee[0]['total_price'] / 1.1,2)); ?></td>
+        </tr>
+    <?php endif; ?>
+
+    <tr></tr>
+
+</table>
+
+<?php
+if(isset($this->fee[0]['total_price']))
+{
+    $price_before_vat = $price_before_vat + round($this->fee[0]['total_price'] / 1.1,2);
+}
+$this->vat = $vat = round($price_before_vat * 0.1);
+$this->price_before_vat = $price_before_vat = round($price_before_vat);
+$this->price_after_vat = intval($vat) + intval($price_before_vat);
+
+?>

@@ -1,0 +1,87 @@
+<link rel="stylesheet" href="<?php echo HOST?>css/select2.css" />
+<script src="<?php echo HOST?>js/select2.js"></script>
+
+<form class="form-search form-horizontal" method="get">
+	<div class="row">
+
+		<div class="span5">
+
+			<div class="control-group">
+				<label for="dis_id" class="control-label">Distributor(My Side) : </label>
+				<div class="controls">
+					<select class="span3" name="dis_id" id="dis_id">
+						<option value=""> Please Selected </option>
+						<?php foreach ($this->distributor as $value) : ?>
+							<option value="<?php echo $value['id'] ?>" <?php if(isset($this->params['dis_id']) && $this->params['dis_id'] == $value['id']) : ?> selected <?php endif; ?>><?php echo $value['title'] ?></option>
+						<?php endforeach; ?>
+					</select>
+				</div>
+			</div>
+
+			<div class="control-group">
+				<label for="cost_name" class="control-label">Name of Cost Item</label>
+				<div class="controls">
+					<input type="text" name="cost_name" id="cost_name" class="span3" value="<?php isset($this->params['cost_name']) and printf($this->params['cost_name']);?>">
+				</div>
+			</div>
+
+			<div class="control-group">
+				<label for="remind_code" class="control-label">Remind Code : </label>
+				<div class="controls">
+					<input type="text" name="remind_code" id="remind_code" class="span3" value="<?php isset($this->params['remind_code']) and printf($this->params['remind_code']);?>">
+				</div>
+			</div>
+
+			<div class="control-group">
+				<label for="status" class="control-label">initiate mode : </label>
+				<div class="controls">
+					<select class="span3" name="status" id="status">
+						<option value=""> Please Selected </option>
+						<option value="1" <?php if(isset($this->params['status']) && $this->params['status'] == 1) : ?> selected  <?php endif; ?> > On </option>
+						<option value="2" <?php if(isset($this->params['status']) && $this->params['status'] == 2) : ?> selected  <?php endif; ?> > Off </option>
+					</select>
+				</div>
+			</div>
+
+		</div>
+
+		<div class="span5">
+
+			<div class="control-group">
+				<label for="category_id" class="control-label" style="width: 180px; padding-right: 20px;">Category of expenses : </label>
+				<div class="controls">
+					<select class="span3" name="category_id" id="category_id">
+						<option value=""> Please Selected </option>
+						<option value="1" <?php if(isset($this->params['category_id']) && $this->params['category_id'] == 1) : ?> selected  <?php endif; ?> > ADJUST </option>
+						<option value="2" <?php if(isset($this->params['category_id']) && $this->params['category_id'] == 2) : ?> selected  <?php endif; ?> > DEPOSIT </option>
+						<option value="3" <?php if(isset($this->params['category_id']) && $this->params['category_id'] == 3) : ?> selected  <?php endif; ?> > DOWN_PAYMENT </option>
+						<option value="4" <?php if(isset($this->params['category_id']) && $this->params['category_id'] == 4) : ?> selected  <?php endif; ?> > OTHERS </option>
+					</select>
+				</div>
+			</div>
+
+			<div class="control-group">
+				<label for="subject_code" class="control-label" style="padding-right: 20px;">Subject Code : </label>
+				<div class="controls">
+					<input type="text" name="subject_code" id="subject_code" class="span3" value="<?php isset($this->params['subject_code']) and printf($this->params['subject_code']);?>" />
+				</div>
+			</div>
+
+		</div>
+
+		<div class="span2">
+			<button type="submit" class="btn btn-primary">Search</button>
+			<button type="reset" class="btn btn-warning">Reset</button>
+
+			<div style="padding-top: 5px">
+				<button type="submit" class="btn btn-success" name="export" value="1"> Export </button>
+			</div>
+			
+		</div>
+
+	</div>
+</form>
+
+<script type="text/javascript">
+	$('#dis_id').select2();
+</script>

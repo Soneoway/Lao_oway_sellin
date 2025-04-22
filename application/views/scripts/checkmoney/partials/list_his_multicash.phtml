@@ -1,0 +1,135 @@
+<?php
+    if( isset($this->transactions) AND $this->transactions):
+?>
+
+<div class="controller">
+    <button id='hide' class='btn btn-success pull-left'>Hide</button>
+</div>
+
+<table class="table table-bordered" id='main-table'>
+    <thead>
+        <tr>
+            <?php echo $this->sorting(array(
+                    'Retailer',
+                    'Content',
+            		'Bank',
+            		'pay_money'	=>'In / Out money',
+            		'pay_time'	=>'In / Out time',
+            		'type'		=>'Type',
+            		'Company',
+                    'Orders number',
+                    'Bank Transaction code',
+            		'Note',
+					'Action'
+                ),
+                $this->url, $this->sort, $this->desc); ?>
+        </tr>
+    </thead>
+    <tbody>
+        <?php
+        if (isset($this->transactions) and $this->transactions)
+        	$count = 0;
+            foreach ($this->transactions as $item): 
+            	$count+=1;
+        ?>    	
+		        <tr>
+                    <td class="visibility"><?php echo $this->dealer;?></td>
+                    <td class="visibility">
+                        <?php echo $item['content'];?>
+                    </td>
+		  			<td><?php echo $item['bank_name']?></td>
+		  			<td class='text-right'>
+                        <?php
+                            if($item['type'] == 2){
+                                $output = $item['output']+$item['pay_banktransfer']+$item['pay_servicecharge']+$item['pay_service'];
+                                echo number_format($output*-1,2);  
+                            }else{
+                                $pay_money = $item['pay_money']+$item['pay_banktransfer']+$item['pay_servicecharge']+$item['pay_service'];
+                                echo number_format($pay_money,2);   
+                            }
+                        ?>
+		  			</td>
+		  			<td>
+                        <?php
+		  					echo $item['pay_time'];
+		  				?>
+		  			</td>
+                    <td>
+                        <?php
+                            if(isset($item['type']) AND isset($this->money_types[$item['type']])){
+                                echo $this->money_types[$item['type']];
+                            }
+                        ?>
+                    </td>
+                    <td>
+                    	<?php 
+                    		if($item['company_id'] == COMPANY_OPPO){
+                    			echo 'OPPO';
+                    		}//elseif($item['company_id'] == COMPANY_SMARTMOILE) {
+                    		//	echo 'SMARTMOBILE';
+                    		//}
+                    	?>
+                    </td>
+		  			<td>
+                        <?php 
+                        $sn_ref = $item['sn_ref'];
+                        //print_r($item);
+                        if($sn_ref==''){
+                            $sn_ref = $item['sn'];
+                        }
+                        if($sn_ref):?>
+                        <a href='/sales/view/?sn=<?php echo $item['sn']?>' target="_blank"><?php echo $sn_ref?></a>
+                        <?php echo 'Total: '.number_format($item['total_sn'],2)?>
+                        <?php endif;?>
+									
+		  			</td>
+
+		  			<td>
+		  				<?php echo $item['bank_transaction_code'] ?>
+		  			</td>
+
+					<td>
+		  				<?php 
+							echo $item['note'];
+							
+						?>
+		  			</td>
+					<td>
+                        <?php
+                        if($this->access('checkmoney','view')):
+                        ?>
+                             <a title="View" href="/checkmoney/view?id=<?php echo $item['ch_id'];?>&is_credit=MULTICASH" target='_blank'>
+                                <i class="icon-eye-open"></i>
+                             </a>
+                         <?php
+                            endif;
+                            if($this->access('checkmoney','add')):
+								if($item['type'] != 2 ):
+                         ?>
+                            <a title="Edit" href="/checkmoney/add?id=<?php echo $item['ch_id'];?>" target='_blank'>
+                                <i class="icon-edit"></i>
+                            </a>
+                        <?php
+                        		endif;
+                            endif;
+                            if($this->access('checkmoney','del')):
+                            	if($item['type'] != 2 ):
+                        ?>
+                            <a title="Delete" class="confirmLink" href="/checkmoney/del?id=<?php echo $item['ch_id'];?>&is_credit=MULTICASH"> <i class="icon-trash"></i>
+                            </a>
+                        <?php
+                        		endif;
+                            endif;
+                        ?>
+					</td>
+		        </tr>
+        <?php endforeach;?>
+
+    </tbody>
+</table>
+<div class="paging">
+    <?php  echo $this->paging($this->total, $this->limit, $this->offset, $this->url);?>
+</div>
+<?php
+    endif;
+?>

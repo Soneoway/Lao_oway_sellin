@@ -1,0 +1,209 @@
+<style type="text/css">
+    textarea {
+        width: 100%;
+        max-width: 100%;
+        max-height: 100px;
+    }
+
+    .numbering {
+        counter-reset: rowNumber;
+    }
+
+    .numbering .item {
+        counter-increment: rowNumber;
+        border-bottom: 1px solid #dadada;
+        margin-bottom: 10px;
+    }
+
+    .numbering .item:nth-child(2n) {
+        background: #fafafa;
+    }
+
+    .numbering .item .num:first-child::before {
+        content: counter(rowNumber);
+        min-width: 1em;
+        margin-right: 0.5em;
+        font-weight: bold;
+    }
+
+</style>
+
+<div class="page-header">
+    <h1>Invoice <small>Print</small></h1>
+</div>
+
+<form class="form-horizontal" action="<?php echo HOST ?>tool/invoice-print" method="post" target="_blank">
+    <div class="row">
+        <div class="span12">
+            <p class="pull-right"><button class="btn btn-primary">Print</button></p>
+        </div>
+    </div>
+
+    <legend>Customer Information</legend>
+    <div class="row">
+        <div class="span5">
+            <div class="control-group">
+                <label class="control-label">Customer Name</label>
+                <div class="controls">
+                    <input type="text" name="name" />
+                </div>
+            </div>
+            <div class="control-group">
+                <label class="control-label">Tax Number</label>
+                <div class="controls">
+                    <input type="text" name="tax" />
+                </div>
+            </div>
+        </div>
+
+        <div class="span5">
+            <div class="control-group">
+                <label class="control-label">Address</label>
+                <div class="controls">
+                    <textarea name="address"></textarea>
+                </div>
+            </div>
+            <div class="control-group">
+                <label class="control-label">Delivery Address</label>
+                <div class="controls">
+                    <textarea name="delivery_address"></textarea>
+                </div>
+            </div>
+            <div class="control-group">
+                <label class="control-label">Invoice Number</label>
+                <div class="controls">
+                    <input type="text" name="invoice_number">
+                </div>
+            </div>
+
+
+
+        </div>
+    </div>
+    
+    <legend>Item List</legend>
+    <div class="row list numbering">
+        <div class="span5 item">
+            <div class="control-group">
+                <label class="control-label num"></label>
+            </div>
+            <div class="control-group">
+                <label class="control-label">Tên hàng hóa</label>
+                <div class="controls">
+                    <input type="text" name="product[]" />
+                </div>
+            </div>
+            <div class="control-group">
+                <label class="control-label">Đơn vị tính</label>
+                <div class="controls">
+                    <input type="text" name="unit[]" />
+                </div>
+            </div>
+            <div class="control-group">
+                <label class="control-label">Số lượng</label>
+                <div class="controls">
+                    <input type="text" name="quantity[]" />
+                </div>
+            </div>
+            <div class="control-group">
+                <label class="control-label">Đơn giá</label>
+                <div class="controls">
+                    <input type="text" name="price[]" />
+                </div>
+            </div>
+            <div class="control-group">
+                <label class="control-label">Thành tiền</label>
+                <div class="controls">
+                    <input type="text" name="total[]" />
+                </div>
+            </div>
+
+            <div class="control-group">
+                <label class="control-label">Chiết khấu</label>
+                <div class="controls">
+                    <input type="text" name="ck[]" />
+                </div>
+            </div>
+
+
+
+            <div class="control-group">
+                <div class="controls">
+                    <button class="btn btn-default btn-small remove_btn" type="button">&times;</button>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="row">
+        <div class="span12">
+            <p><button class="btn btn-success btn-small add_btn" type="button">+</button></p>
+        </div>
+    </div>
+</form>
+
+<script type="text/javascript">
+    item_div = '<div class="span5 item">'+
+            '<div class="control-group">'+
+                '<label class="control-label num"></label>'+
+            '</div>'+
+            '<div class="control-group">'+
+                '<label class="control-label">Tên hàng hóa</label>'+
+                '<div class="controls">'+
+                    '<input type="text" name="product[]" />'+
+                '</div>'+
+            '</div>'+
+            '<div class="control-group">'+
+                '<label class="control-label">Đơn vị tính</label>'+
+                '<div class="controls">'+
+                    '<input type="text" name="unit[]" />'+
+                '</div>'+
+            '</div>'+
+            '<div class="control-group">'+
+                '<label class="control-label">Số lượng</label>'+
+                '<div class="controls">'+
+                    '<input type="text" name="quantity[]" />'+
+                '</div>'+
+            '</div>'+
+            '<div class="control-group">'+
+                '<label class="control-label">Đơn giá</label>'+
+                '<div class="controls">'+
+                    '<input type="text" name="price[]" />'+
+                '</div>'+
+            '</div>'+
+            '<div class="control-group">'+
+                '<label class="control-label">Thành tiền</label>'+
+                '<div class="controls">'+
+                    '<input type="text" name="total[]" />'+
+                '</div>'+
+            '</div>'+
+
+            '<div class="control-group">'+
+                '<label class="control-label">CK</label>'+
+                '<div class="controls">'+
+                '<input type="text" name="ck[]" />'+
+                '</div>'+
+            '</div>'+
+
+
+            '<div class="control-group">'+
+                '<div class="controls">'+
+                    '<button class="btn btn-default btn-small remove_btn new" type="button">&times;</button'+
+                '</div>'+
+            '</div>'+
+        '</div>';
+
+    $(document).ready(function() {
+        $('.add_btn').click(add_div);
+        $('.remove_btn').click(remove_div);
+    });
+
+    function add_div(e) {
+        $('.list').append(item_div);
+        $('.remove_btn.new').click(remove_div).removeClass('new');
+    }
+
+    function remove_div(e) {
+        _self = $(e.target);
+        _self.parents('.item').remove();
+    }
+</script>

@@ -1,0 +1,263 @@
+<div class="page-header">
+    <h1>Update Deposit No</h1>
+</div>
+<style>
+    tr td:first-child {
+        width: 20%;
+    }
+    .address_textarea{
+        width: 350px;
+        height: 50px;
+
+    }
+    .modal{
+        margin-left: 9%;
+    }
+
+    .modal.fade.in{
+        top: 40% !important;
+        margin-left: -20% !important;
+    }
+    .modal-backdrop.fade.in{
+        opacity: 0 !important;
+    }
+</style>
+<?php
+    if (isset($this->messages_success) and $this->messages_success)
+        foreach ($this->messages_success as $message):
+            echo '<div class="alert alert-success">'.$message.'</div>';
+        endforeach;
+
+    if (isset($this->messages) and $this->messages)
+        foreach ($this->messages as $message):
+            echo '<div class="alert alert-error">'.$message.'</div>';
+        endforeach;
+?>
+<?php if (isset($this->error) && $this->error): ?>
+        <div class="alert alert-error">
+            <button type="button" class="close" data-dismiss="alert">&times;</button>
+            <strong>ERROR!</strong> <?php echo $this->error ?>
+        </div>
+ <?php endif ?>       
+<?php
+    if (isset($this->warning) and $this->warning)
+        foreach ($this->warning as $message):
+            echo '<div class="alert alert-block">'.$message.'</div>';
+        endforeach;
+
+    if (isset($this->error) and $this->error)
+        foreach ($this->error as $message):
+            echo '<div class="alert alert-error">'.$message.'</div>';
+        endforeach;
+?>
+<div class="row">
+    <div class="span12">
+        <form role="form" id="form" action="<?php echo HOST.'finance/deposit-confirm';?>" method="post" class="form-horizontal">
+            <div class="row">
+                <div class="span6">
+                        <label class="span2" for="deposit_sn">Deposit No </label>   
+                        <input type="text" required="required" readonly="true" value="<?php echo $this->get_resule[0]['deposit_sn']?>"  class="deposit_sn" name="deposit_sn" />
+                    </label>
+                </div>
+            </div>
+            </br>
+
+            <div class="row">
+                <div class="span6">
+                        <label class="span2" >Distributor name</label> 
+                        <label  ><?=$this->get_resule[0]['distributor_name']?></label>
+                </div>
+            </div>
+            </br>
+
+             <div class="row">
+                <div class="span6">
+
+                    <label class="span2" for="rank">Type </label>    
+                        <select id="deposit_type" name="deposit_type" required="required">
+                            <option value="">กรุณาเลือกประเภท DP</option>
+                            <option value="DP" <?php if( isset($this->get_resule[0]['deposit_type']) and $this->get_resule[0]['deposit_type']=="DP" ) { ?> selected<?php }?> >มัดจำเงินล่วงหน้า</option>
+                        </select>
+                    
+                </div>
+            </div>
+            </p>
+          
+
+            <div class="row">
+                <div class="span6">
+                        <label class="span2" for="rank">Price </label>   
+                        <input type="text" required="required" readonly="true" value="<?php echo $this->get_resule[0]['total_amount']?>"  class="price" name="price" />
+                    
+                </div>
+            </div>
+            </br>
+            <div class="row">
+                <div class="span6">
+                        <label class="span2" >Request By</label> 
+                        <label  ><?=$this->get_resule[0]['staff_name']?> (<?=$this->get_resule[0]['email']?>)</label>
+                </div>
+            </div>
+            </br>
+            <div class="row">
+                <div class="span6">
+                        <label class="span2" >Request Date</label> 
+                        <label>
+                        <?php
+                            $date=date_create($this->get_resule[0]['create_date']);
+                            echo date_format($date,"d/m/Y H:i:s");      
+                        ?>
+                        </label>
+                </div>
+            </div>
+            </br>
+            <div class="row">
+                <div class="span6">
+                        <label class="span2" >Confirm Date</label> 
+                        <label>
+                        <?php
+                            $date=date_create($this->get_resule[0]['confirm_date']);
+                            echo date_format($date,"d/m/Y H:i:s");      
+                        ?>
+                        </label>
+                </div>
+            </div>
+            </br>
+            <div class="row">
+                <div class="span6">
+                        <label class="span2" >Last Update Date</label> 
+                        <label>
+                        <?php
+                            $date=date_create($this->get_resule[0]['update_date']);
+                            echo date_format($date,"d/m/Y H:i:s");      
+                        ?>
+                        </label>
+                </div>
+            </div>
+            </br>
+            <div class="row">
+                <div class="span6">
+                        <label class="span2" for="rank">File Pay Slip </label>   
+                        
+                    
+                </div>
+            </div>
+            </br>
+
+            <div class="row">
+                <div class="span6">
+                        <label class="span2" for="rank">เปิดใช้งาน </label>   
+                        <input type="checkbox" id="deposit_status" name="deposit_status" value="1" <?php if( isset($this->get_resule[0]['status']) and $this->get_resule[0]['status']=="1" ) { ?> checked<?php }?>  />
+                    
+                </div>
+            </div>
+            </br> 
+            <table id="table-invoice" style="position: absolute;margin-left: 600px;margin-top: -480px;">
+                    <!-- <tr> -->
+
+                <?php 
+                $uploaded_dir = HOST . 'public' . DIRECTORY_SEPARATOR . 'files'
+                                    . DIRECTORY_SEPARATOR . 'sales';
+                for($i=0;$i<count($this->get_resule[0]['file_pay_slip']);$i++){$file_pay_slip = $uploaded_dir.$this->get_resule[0]['file_pay_slip'];
+                    ?>
+                <span class="span6">
+                    <tr>
+                        <td>
+                            <div class="control-group">
+                                <label class="span3">
+                                    <div class="span6" style="height: 400px;width: 400px;">
+                                        <img id="img-slip_<?=$i;?>" class="form-control img-slip badge badge-default" data-file-pay-slip="<?php echo $this->get_resule[0]['file_pay_slip']; ?>" alt="Payment Slip" src="<?php echo $file_pay_slip; ?>" style="width: 100%;height: 100%;object-fit: contain; margin-top: 15px;margin-bottom: 15px;">
+                                    </div>
+                                </label>
+
+                                <div class="span6" align="center" style="margin-bottom: 25px;margin-top: 30px;position: relative;">
+                                    <div class="control-group">
+                                        <span><i class="icon-imge icon-mail-reply icon-3x" id="icon-imge-l_<?=$i;?>"></i></span>
+                                        <span><i class="icon-imge icon-mail-forward icon-3x" id="icon-imge-r_<?=$i;?>"></i></span>
+                                    </div>
+                                </div>
+                            </div>
+                        </td>
+                    </tr>
+                    
+                </span>
+
+                <?php } ?>
+                <!-- </tr> -->
+
+                </table>
+            <div id="modal" class="modal hide fade" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+            </div>    
+	        <div class="row">
+		        <div class="span6">
+		            <input type="hidden" id="back_url" name="back_url" value="/finance/deposit-confirm-list?view_status=1">
+		            <button type="submit" class="btn btn-primary">Save</button>
+		            <button type="button" class="btn btn-danger go-back">Go back</button>
+		        </div>
+	        </div>
+        </form>
+    </div>
+
+</div>
+</div>
+<link rel="stylesheet" type="text/css" href="/css/bootstrap-modal.css"/>
+<script type="text/javascript" src="/js/bootstrap-modal.js"></script>
+<script type="text/javascript" src="/js/bootstrap-modalmanager.js"></script>
+<script async="async">
+    <?php if(isset($this->rank)) { ?>
+            $('#rank').val(<?= $this->rank ?>);
+            get_distributor_cached_for_search(<?= $this->rank ?>);
+    <?php }?>
+
+    <?php for($i=0;$i<count($this->get_resule[0]['file_pay_slip']);$i++){?>
+        var retate_current_<?=$i;?> = 0;
+        var retate_<?=$i;?> = 90;
+
+        $('#icon-imge-l_<?=$i;?>').click(function(event) {
+            retate_current_<?=$i;?> = retate_current_<?=$i;?>-retate_<?=$i;?>;
+
+            $('#img-slip_<?=$i;?>').css({
+                 '-moz-transform':'rotate('+retate_current_<?=$i;?>+'deg)',
+                 '-webkit-transform':'rotate('+retate_current_<?=$i;?>+'deg)',
+                 '-o-transform':'rotate('+retate_current_<?=$i;?>+'deg)',
+                 '-ms-transform':'rotate('+retate_current_<?=$i;?>+'deg)',
+                 'transform':'rotate('+retate_current_<?=$i;?>+'deg)'
+            });
+        });
+
+        $('#icon-imge-r_<?=$i;?>').click(function(event) {
+            retate_current_<?=$i;?> = retate_current_<?=$i;?>+retate_<?=$i;?>;
+
+            $('#img-slip_<?=$i;?>').css({
+                 '-moz-transform':'rotate('+retate_current_<?=$i;?>+'deg)',
+                 '-webkit-transform':'rotate('+retate_current_<?=$i;?>+'deg)',
+                 '-o-transform':'rotate('+retate_current_<?=$i;?>+'deg)',
+                 '-ms-transform':'rotate('+retate_current_<?=$i;?>+'deg)',
+                 'transform':'rotate('+retate_current_<?=$i;?>+'deg)'
+            });
+        });
+
+    <?php } ?>
+
+    //------------View Pay Slip------------------
+        
+        $modal = $('#modal');
+        $('.badge.badge-default').click(function(){
+            _self = $(this);
+            $('body').modalmanager('loading');
+            $.post('<?php echo HOST ?>finance/view-deposit-pay-slip',
+                {
+                    file_pay_slip : _self.data('file-pay-slip')
+                },
+                function(data){
+                    //alert(data);
+                    $modal.html(data);
+                    $modal.modal();
+                    // var name = _self.parents('tr').children('td:nth-child(1)').html();
+                    // $modal.find('h3').append(' <small>&bull; '+name+'</small>');
+                    // $modal.css('margin-left', '-120px');
+            });
+            
+        });
+</script>    
+<?php echo $this->render('finance/partials/deposit_confirm_script.phtml'); ?>

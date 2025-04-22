@@ -1,0 +1,95 @@
+<table class="table table-bordered">
+    <thead>
+        <tr>
+            <?php echo $this->sorting(array(
+   					'#',
+            		"ch_id"=>'Transacton ID',
+            		'pay_time'=>'Time',
+            		'Money',
+            		'Orders number',
+                ),
+                $this->url, $this->sort, $this->desc); ?>
+        </tr>
+    </thead>
+    <tbody>
+        <?php
+        if (isset($this->transactions) and $this->transactions)
+        	$count = 0;
+            foreach ($this->transactions as $item): 
+            	$count+=1;
+        ?>    	
+		        <tr>
+		  			<td><?php echo $count;?></td>
+		  			<td><?php echo $item['ch_id']?></td>
+		  			<td>
+		  				<a href='/checkmoney/view?id=<?php echo $item["ch_id"]?>' title='view'>
+		  					<?php echo $item['pay_time']?>
+		  				</a> 
+		  			</td>
+		  			<td class='text-right'><?php echo number_format($item['pay_money'],2)?></td>
+		  			<td>
+							<table class='table-sub'>
+								<tbody>
+									<?php 
+										if(is_array($item['sn'])):
+											foreach($item['sn'] as $sn):
+									?>
+									<tr>
+										<td><?php echo $sn['sn']?></td>
+										<td><?php echo number_format($sn['total_sn'],2)?></td>
+									</tr>
+									<?php 
+											endforeach;
+										endif;
+									?>
+								</tbody>
+							</table>
+							<?php 
+							if(is_array($item['sn']) AND count($item['sn'])>1):
+							?>
+							<p class='text-right'><button id='collapse' class='btn btn-success btn-collapse'>+</button></p>
+							<?php 
+							endif;
+							?>
+		  			</td>
+		        </tr>
+        <?php endforeach;?>
+
+    </tbody>
+</table>
+<div class="paging">
+    <?php  echo $this->paging($this->total, $this->limit, $this->offset, $this->url);?>
+</div>
+
+<script type="text/javascript" src="/js/jquery-ui-1.8.12.custom.min.js"></script>
+<link rel="stylesheet" type="text/css" href="/css/jquery-ui-1.8.12.custom.css"/>
+<?php echo $this->load();?>
+<?php echo $this->confirm();?>
+<script>
+	$(document).ready(function(){
+
+		initCollapse(1);
+		function initCollapse(status){
+			if(status == 1){
+				$(".btn-collapse").parent().parent().find('table tbody tr:not(:first-child)').toggle('fast','linear');
+				$(".btn-collapse").html('+');
+			}
+			$(".btn-collapse").click(function(){
+				var _this = $(this);
+				var char = _this.html();
+				if(char == '+'){
+					_this.html('-');
+				}else{
+					_this.html('+');
+				}				
+				var node = _this.parent().parent().find('table tbody tr:not(:first-child)').toggle('fast','linear');
+				
+			});
+		}
+		$('.lock').click(function(e){
+	        e.preventDefault();
+	        alert('Sorry,This information is blocked...You can not delete payment has been made or has been the storage of information!');
+	    });
+	});							
+    
+</script>

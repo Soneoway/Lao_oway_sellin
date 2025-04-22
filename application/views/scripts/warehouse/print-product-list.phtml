@@ -1,0 +1,118 @@
+<link href="<?php echo HOST ?>css/bootstrap.min.css" rel="stylesheet">
+<style>
+    .note {
+        width: 40%;
+    }
+
+    h1 {
+        padding-top: 50px;
+        margin-bottom: 40px;
+    }
+
+    .barcode {
+        margin-bottom: 20px;
+    }
+
+    @media print {
+        h1 {page-break-before: always;}
+    }
+
+    .company {
+        font-size: 48px;
+        margin-top: 0.25em;
+        font-weight: bold;
+    }
+</style>
+        
+<?php if (isset($this->phones) && $this->phones): ?>
+    <?php foreach ($this->phones as $key => $phone): ?>
+        <h1>Product List</h1>
+       
+        <div class="row">
+            <div class="span12">
+                    <hr>
+                        <table class="table table-bordered">
+                            <legend>Phone List</legend>
+                            <thead>
+                                <tr>
+                                    <th>Category</th>
+                                    <th>Product Name</th>
+                                    <th>Color</th>
+                                    <th>Description</th>
+                                    <th>Quantity</th>
+                                    
+                                
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <?php foreach ($phone as $k => $v): ?>
+                                    <tr>
+                                        <td><?php if (isset($this->good_categories[$v['cat_id']])) echo $this->good_categories[$v['cat_id']] ?></td>
+                                      
+                                        <td><?php if (isset($this->goods[$v['good_id']])) echo $this->goods[$v['good_id']] ?></td>
+                                        <td><?php if (isset($this->goodColors[$v['good_color']])) echo $this->goodColors[$v['good_color']] ?></td>
+                                        <td><?php if (isset($this->pname[ $v['good_id'] ])) echo $this->pname[ $v['good_id'] ] ?></td>
+                                        <td><?php echo $v['total_qty'] ?></td>
+                                    </tr>
+                                <?php endforeach ?>
+                            </tbody>
+                        </table>
+            </div>
+
+        </div>        
+    
+    <?php endforeach ?>    
+<?php endif ?> 
+
+<?php if (isset($this->accessories) && $this->accessories): ?>
+    <?php foreach ($this->accessories as $key => $acc): ?>
+        <h1>Product List</h1>
+       
+        <div class="row">
+            <div class="span12">
+                    <hr>
+                        <table class="table table-bordered">
+                            <legend>Accessories List</legend>
+                            <thead>
+                                <tr>
+                                    <th>Category</th>
+                                    
+                                    <th>Product Name</th>
+                                    <th>Color</th>
+                                    <th>Description</th>
+                                    <th>Quantity</th>
+                                    
+                                
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <?php foreach ($acc as $k => $v): ?>
+                                    <tr>
+                                        <td><?php if (isset($this->good_categories[$v['cat_id']])) echo $this->good_categories[$v['cat_id']] ?></td>
+                                      
+                                        <td><?php if (isset($this->goods[$v['good_id']])) echo $this->goods[$v['good_id']] ?></td>
+                                        <td><?php if (isset($this->goodColors[$v['good_color']])) echo $this->goodColors[$v['good_color']] ?></td>
+                                        <td><?php if (isset($this->pname[ $v['good_id'] ])) echo $this->pname[ $v['good_id'] ] ?></td>
+                                        <td><?php echo $v['total_qty'] ?></td>
+                                    </tr>
+                                <?php endforeach ?>
+                            </tbody>
+                        </table>
+            </div>
+
+        </div>        
+    
+    <?php endforeach ?>    
+<?php endif ?> 
+<script src="<?php echo HOST ?>js/jquery-1.7.2.min.js"></script>
+<script>
+    try {
+        $(document).ready(function() {
+            parent.set_as_printed('<?php echo $tmp_sn ?>');
+            parent.window.frames['picking_list'].focus();
+            parent.window.frames['picking_list'].print();
+        });
+    } catch (err) {
+
+    }
+</script>

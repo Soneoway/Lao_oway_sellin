@@ -1,0 +1,152 @@
+<link rel="stylesheet" href="<?php echo HOST?>css/select2.css" />
+<script src="<?php echo HOST?>js/select2.js"></script>
+
+<style type="text/css">
+	@media screen and (min-width: 900px) {
+		.span5 {
+			padding-left: 80px;
+		}
+	}
+
+</style>
+
+<form class="form-search form-horizontal" method="get">
+	<div class="row">
+
+		<div class="span5">
+
+			<div class="control-group">
+				<label for="dis_id" class="control-label">Distributor(My Side) : </label>
+				<div class="controls">
+					<select class="span3" name="dis_id" id="dis_id">
+						<option value=""> Please Selected </option>
+
+						<?php if(isset($this->distributor) && $this->distributor) : ?>
+							<?php foreach ($this->distributor as $value) : ?>
+								<option value="<?php echo $value['id'] ?>" <?php if(isset($this->params['distributor_id']) && $this->params['distributor_id'] == $value['id']) : ?> selected <?php endif; ?> ><?php echo $value['title'] ?></option>
+							<?php endforeach; ?>
+						<?php endif; ?>
+					</select>
+				</div>
+			</div>
+
+			<div class="control-group">
+				<label for="finance_client" class="control-label">Finance Client : </label>
+				<div class="controls">
+					<select class="span3" name="finance_client" id="finance_client">
+						<option value=""> Please Selected </option>
+
+						<?php if(isset($this->financeclient_arr) && $this->financeclient_arr) : ?>
+							<?php foreach($this->financeclient_arr as $value) : ?>
+								<option value="<?php echo $value['id'] ?>" <?php if(isset($this->params['finance_client']) && $this->params['finance_client'] == $value['id']) : ?> selected <?php endif; ?> ><?php echo $value['name'] ?></option>
+							<?php endforeach; ?>
+						<?php endif; ?>
+					</select>
+				</div>
+			</div>
+
+			<div class="control-group">
+				<label for="quota_type" class="control-label">Quota Type : </label>
+				<div class="controls">
+					<select class="span3" name="quota_type" id="quota_type">
+						<option value=""> Please Selected </option>
+						<option value="1" <?php if(isset($this->params['quota_type']) && $this->params['quota_type'] == 1) : ?> selected <?php endif; ?> > Finished Product Quota </option>
+					</select>
+				</div>
+			</div>
+
+			<div class="control-group">
+				<label for="area_id" class="control-label">Organization : </label>
+				<div class="controls">
+					<select class="span3" name="area_id" id="area_id">
+						<option value=""> Please Selected </option>
+
+						<?php if(isset($this->area) && $this->area) : ?>
+							<?php foreach($this->area as $key => $value) : ?>
+								<option value="<?php echo $key ?>" <?php if(isset($this->params['area_id']) && $this->params['area_id'] == $key) : ?> selected <?php endif; ?> ><?php echo $value ?></option>
+							<?php endforeach; ?>
+						<?php endif; ?>
+					</select>
+				</div>
+			</div>
+
+		</div>
+
+		<div class="span5">
+
+			<div class="control-group">
+				<label for="effective_status" class="control-label">Effective Status : </label>
+				<div class="controls">
+					<select class="span3" name="effective_status" id="effective_status">
+						<option value=""> Please Selected </option>
+						<option value="3" <?php if(isset($this->params['effective_status']) && $this->params['effective_status'] == 3) : ?> selected <?php endif; ?> > Unvalid </option>
+						<option value="1" <?php if(isset($this->params['effective_status']) && $this->params['effective_status'] == 1) : ?> selected <?php endif; ?> > Valid </option>
+						<option value="2" <?php if(isset($this->params['effective_status']) && $this->params['effective_status'] == 2) : ?> selected <?php endif; ?> > Invalid </option>
+					</select>
+				</div>
+			</div>
+
+			<div class="control-group">
+				<label for="status" class="control-label">Review Status : </label>
+				<div class="controls">
+					<select class="span3" name="status" id="status">
+						<option value=""> Please Selected </option>
+						<option value="1" <?php if(isset($this->params['status']) && $this->params['status'] == 1) : ?> selected <?php endif; ?> > Pending Review </option>
+						<option value="2" <?php if(isset($this->params['status']) && $this->params['status'] == 2) : ?> selected <?php endif; ?> > Approved </option>
+						<option value="3" <?php if(isset($this->params['status']) && $this->params['status'] == 3) : ?> selected <?php endif; ?> > Re-review </option>
+						<option value="4" <?php if(isset($this->params['status']) && $this->params['status'] == 4) : ?> selected <?php endif; ?> > Closed </option>
+					</select>
+				</div>
+			</div>
+
+			<div class="control-group">
+				<label for="effective_from" class="control-label">Effective Date From :</label>
+				<div class="controls">
+					<input type="text" name="effective_from" id="effective_from" class="span3 date" value="<?php isset($this->params['effective_from']) && printf($this->params['effective_from']) ?>">
+				</div>
+			</div>
+
+			<div class="control-group">
+				<label for="effective_to" class="control-label">Effective Date To :</label>
+				<div class="controls">
+					<input type="text" name="effective_to" id="effective_to" class="span3 date" value="<?php isset($this->params['effective_to']) && printf($this->params['effective_to']) ?>">
+				</div>
+			</div>
+
+		</div>
+
+		<div class="span12">
+			<button type="submit" class="btn btn-primary">Search</button>
+			<button type="reset" class="btn btn-warning">Reset</button>
+		</div>
+
+	</div>
+</form>
+
+<script type="text/javascript" src="/js/jquery-ui-1.8.12.custom.min.js"></script>
+<link rel="stylesheet" type="text/css" href="/css/jquery-ui-1.8.12.custom.css"/>
+
+<script type="text/javascript">
+	$(document).ready(function () {
+		$( '.date' ).datepicker({ dateFormat: "yy-mm-dd" });
+
+		$("#dis_id").change(function(){
+			var distributor_id = $("#dis_id").val();
+
+			$.get("/finance/load-bank-account-my",
+				{distributor_id : distributor_id}
+				,function(data,status){
+					var data = $.parseJSON( data );
+
+					if (data.financeClient){
+						var obj = data.financeClient;
+						$('#finance_client').html('<option value="0"> Please Selected </option>');
+						for (var i = 0; i < obj.length; i++) {
+							$('#finance_client').append('<option value="'+obj[i]['id']+'">'+obj[i]['name']+'</option>');
+						}
+					}
+
+				});
+		});
+	})
+</script>

@@ -1,0 +1,691 @@
+<style>
+    .blockOverlay{
+        z-index: 10000 !important;
+    }
+    .blockPage{
+        z-index: 10001 !important;
+    }
+    .color-red{
+        color: red;
+    }
+    .icon-imge{
+        padding: 0 20px;
+        cursor: pointer;
+    }
+    .img-borrowing{
+        cursor: -webkit-zoom-in;
+    }
+</style>
+
+<div class="page-header">
+    <h1>Borrowing Details</h1>
+</div>
+<?php
+    if (isset($this->messages) and $this->messages)
+        foreach ($this->messages as $message):
+            echo '<div class="alert alert-error">'.$message.'</div>';
+        endforeach;
+?>
+
+<div class="modal fade" id="modal-show-borrowing" role="dialog">
+      <div class="modal-header" align="center">
+      <button type="button" class="close" data-dismiss="modal" aria-hidden="true">×</button>
+      <h3 id="myModalLabel">Image</h3>
+    </div>
+    <div id="show-img" class="modal-body">
+    
+    </div>
+    <div class="modal-footer">
+      <button class="btn" data-dismiss="modal" aria-hidden="true">Close</button>
+    </div>
+</div>
+
+<div class="row">
+    <div class="span12">
+
+        <div class="span5">
+
+            <!-- <div class="row">
+                <div class="span6">
+                    <label class="span2">Requert SN : </label>
+                    <span class="span3"><strong><?php echo $this->getDetailsReport[0]['sn'];?></strong></span>
+                </div>
+            </div> -->
+
+            <div class="row">
+                <div class="span6">
+                    <label class="span2">CO Number : </label>
+                    <span class="span3"><strong><?php echo $this->getDetailsReport[0]['sn_ref'];?></strong></span>
+                </div>
+            </div>
+
+            <div class="row">
+                <div class="span6">
+                    <label class="span2">Request Number : </label>
+                    <span class="span3"><strong><?php echo $this->getDetailsReport[0]['rq'];?></strong></span>
+                </div>
+            </div>
+
+            <div class="row">
+                <div class="span6">
+                    <label class="span2">Product Grade : </label>
+                    <span class="span3"><strong><?php
+                    switch ($this->getDetailsReport[0]['product_grade']) {
+                        case '1':
+                            echo 'A';
+                            break;
+                        case '2':
+                            echo 'B';
+                            break;
+                        case '3':
+                            echo 'Demo';
+                            break;
+                        case '4':
+                            echo 'APK';
+                            break;
+                        case '5':
+                            echo 'Prototype';
+                            break;
+                    }
+                    ?></strong></span>
+                </div>
+            </div>
+
+            <!-- <div class="row">
+                <div class="span6">
+                    <label class="span2">Borrow Type : </label>
+                    <span class="span3"><strong><?php
+                    // switch ($this->getDetailsReport[0]['borrowing_type']) {
+                    //     case '1':
+                    //         // echo 'Demo for Event';
+                    //         echo 'เบิกยืมพนักงาน';
+                    //         break;
+                    //     case '2':
+                    //         // echo 'Complimentary';
+                    //         echo 'อภินันทนาการ';
+                    //         break;
+                    //     case '3':
+                    //         // echo 'Replace Customer Service';
+                    //         echo 'เบิกเปลี่ยนเครื่องลูกค้า';
+                    //         break;
+                    //     case '4':
+                    //         echo 'Prototype';
+                    //         break;
+                    // }
+                    ?></strong></span>
+                </div>
+            </div> -->
+
+            <div class="row">
+                <div class="span6">
+                    <label class="span2">Type : </label>
+                    <span class="span3"><strong><?php echo $this->getDetailsReport[0]['hrs_department_name'];?></strong></span>
+                </div>
+            </div>
+
+            <div class="row <?php if(!$this->getDetailsReport[0]['org_full_name']){echo 'hide';}?>">
+                <div class="span6">
+                    <label class="span2">ORG Full Name : </label>
+                    <span class="span3"><strong><?php echo $this->getDetailsReport[0]['org_full_name'];?></strong></span>
+                </div>
+            </div>
+
+            <div class="row">
+                <div class="span6">
+                    <label class="span2">Event Program Name : </label>
+                    <span class="span3"><strong><?php echo $this->getDetailsReport[0]['event_program_name'];?></strong></span>
+                </div>
+            </div>
+
+            <div class="row">
+                <div class="span6">
+                    <label class="span2">Event Program Start Period Date : </label>
+                    <span class="span3"><strong><?php echo $this->getDetailsReport[0]['event_program_start_period_date'];?></strong></span>
+                </div>
+            </div>
+
+            <div class="row">
+                <div class="span6">
+                    <label class="span2">Event Program End Period Date : </label>
+                    <span class="span3"><strong><?php 
+                    // if($this->getDetailsReport[0]['borrowing_type'] == 2){
+                    //     echo 'No Return';
+                    // }else{
+                    //     echo $this->getDetailsReport[0]['return_date'];
+                    // }
+                    if(!$this->getDetailsReport[0]['return_date']){
+                        echo 'No Return';
+                    }else{
+                        echo $this->getDetailsReport[0]['return_date'];
+                    }
+                    ?></strong></span>
+                </div>
+            </div>
+            
+            <div class="row">
+                <div class="span6">
+                    <label class="span2">Remark : </label>
+                    <span class="span3"><strong><?php echo $this->getDetailsReport[0]['remark'];?></strong></span>
+                </div>
+            </div>
+
+            <div class="row">
+                <div class="span6">
+                    <label class="span2">Address : </label>
+                    <span class="span3"><strong><?php 
+                    switch ($this->getDetailsReport[0]['delivery']) {
+                        case '1': ?>
+                        คลังสินค้าเคอรี่ บางนา โลจิสติกส์ เซ็นเตอร์ <br/>เลขที่ 33/2 หมู่ 7 บางปลา บางพลี สมุทรปราการ 10540 ติดต่อคุณศริญญา เกตุเขียว 0657174931
+                        <?php break;
+                        case '2': ?>
+                            บจก.ไทย ออปโป้ เลขที่230 ถ.บางขุนเทียน <br/>-ชายทะเล แขวงแสมดำ เขตบางขุนเทียน กรุงเทพฯ 10150 ติดต่อคุณหนึ่ง  0835527645 หรือ คุณเอ๋ 0958250441
+                            <?php break;
+                        case '3':
+                            echo $this->getDetailsReport[0]['address'];
+                            break;
+                        case '4': ?>
+                            บริษัท ไทย ออปโป้ จำกัด <br/>อาคาร AIA Capital Center รัชดา เลขที่ 89 ชั้น 31 ห้อง 5-7 ถนน รัชดาภิเษก เขตดินแดง กทม. 10400 <br/>โทรศัพท์ : 02- 013-1810 แฟ็กซ์: 02-013–1820
+                            <?php break;
+                    }
+                    ?></strong></span>
+                </div>
+            </div>
+
+            <div class="row">
+                <div class="span6">
+                    <label class="span2">Product Type : </label>
+                    <span class="span3"><strong><?php 
+                    switch ($this->getDetailsReport[0]['type']) {
+                        case '1':
+                            echo 'Normal';
+                            break;
+                        case '2':
+                            echo 'Demo';
+                            break;
+                        case '5':
+                            echo 'APK';
+                            break;
+                    }
+                    ?></strong></span>
+                </div>
+            </div>
+
+            <div class="row">
+                <div class="span6">
+                    <label class="span2">Old Warehouse : </label>
+                    <span class="span3"><strong><?php echo $this->warehouse_cache[$this->getDetailsReport[0]['old_id']];?></strong></span>
+                </div>
+            </div>
+
+            <div class="row">
+                <div class="span6">
+                    <label class="span2">Current Warehouse : </label>
+                    <span class="span3"><strong><?php echo $this->warehouse_cache[$this->getDetailsReport[0]['new_id']];?></strong></span>
+                </div>
+            </div>
+
+        </div>
+
+        <div class="span5">
+
+            <div class="row">
+                <div class="span7">
+                    <label class="span3">Area : </label>
+                    <span class="span3"><strong><?php echo $this->getDetailsReport[0]['area_name'];?></strong></span>
+                </div>
+            </div>
+
+            <div class="row">
+                <div class="span7">
+                    <label class="span3">Request By : </label>
+                    <span class="span3"><strong><?php echo $this->getDetailsReport[0]['fullname'];?></strong></span>
+                </div>
+            </div>
+
+            <div class="row">
+                <div class="span7">
+                    <label class="span3">Position : </label>
+                    <span class="span3"><strong><?php echo $this->getDetailsReport[0]['position_name'];?></strong></span>
+                </div>
+            </div>
+
+            <div class="row">
+                <div class="span7">
+                    <label class="span3">Request Date : </label>
+                    <span class="span3"><strong><?php echo $this->getDetailsReport[0]['created_date'];?></strong></span>
+                </div>
+            </div>
+
+            <div class="row <?php if(!$this->getDetailsReport[0]['mg_fullname']){echo 'hide';}?>">
+                <div class="span7">
+                    <label class="span3">Manager Approved By : </label>
+                    <span class="span3"><strong><?php echo $this->getDetailsReport[0]['mg_fullname'];?></strong></span>
+                </div>
+            </div>
+
+            <div class="row <?php if(!$this->getDetailsReport[0]['manager_approved_date']){echo 'hide';}?>">
+                <div class="span7">
+                    <label class="span3">Manager Approved Date : </label>
+                    <span class="span3"><strong><?php echo $this->getDetailsReport[0]['manager_approved_date'];?></strong></span>
+                </div>
+            </div>
+
+            <div class="row">
+                <div class="span7">
+                    <label class="span3">Admin Approved By : </label>
+                    <span class="span3"><strong><?php echo $this->getDetailsReport[0]['admin_fullname'];?></strong></span>
+                </div>
+            </div>
+
+            <div class="row">
+                <div class="span7">
+                    <label class="span3">Admin Approved Date : </label>
+                    <span class="span3"><strong><?php echo $this->getDetailsReport[0]['admin_approved_date'];?></strong></span>
+                </div>
+            </div>
+
+            <!-- <div class="row">
+                <div class="span7">
+                    <label class="span3">ASM Approved By : </label>
+                    <span class="span3"><strong><?php echo $this->getDetailsReport[0]['asm_fullname'];?></strong></span>
+                </div>
+            </div>
+
+            <div class="row">
+                <div class="span7">
+                    <label class="span3">ASM Approved Date : </label>
+                    <span class="span3"><strong><?php echo $this->getDetailsReport[0]['asm_approved_date'];?></strong></span>
+                </div>
+            </div> -->
+
+            <div class="row <?php if(!$this->getDetailsReport[0]['rm_fullname']){echo 'hide';}?>">
+                <div class="span7">
+                    <label class="span3">RD Approved By : </label>
+                    <span class="span3"><strong><?php echo $this->getDetailsReport[0]['rm_fullname'];?></strong></span>
+                </div>
+            </div>
+
+            <div class="row <?php if(!$this->getDetailsReport[0]['rm_approved_date']){echo 'hide';}?>">
+                <div class="span7">
+                    <label class="span3">RD Approved Date : </label>
+                    <span class="span3"><strong><?php echo $this->getDetailsReport[0]['rm_approved_date'];?></strong></span>
+                </div>
+            </div>
+
+            <!-- <div class="row">
+                <div class="span7">
+                    <label class="span3">Area Director Approved By : </label>
+                    <span class="span3"><strong><?php echo $this->getDetailsReport[0]['area_fullname'];?></strong></span>
+                </div>
+            </div>
+
+            <div class="row">
+                <div class="span7">
+                    <label class="span3">Area Director Approved Date : </label>
+                    <span class="span3"><strong><?php echo $this->getDetailsReport[0]['area_director_approved_date'];?></strong></span>
+                </div>
+            </div> -->
+
+            <div class="row">
+                <div class="span7">
+                    <label class="span3">Operation Director Approved By : </label>
+                    <span class="span3"><strong><?php echo $this->getDetailsReport[0]['op_fullname'];?></strong></span>
+                </div>
+            </div>
+
+            <div class="row">
+                <div class="span7">
+                    <label class="span3">Operation Director Approved Date : </label>
+                    <span class="span3"><strong><?php echo $this->getDetailsReport[0]['operation_director_approved_date'];?></strong></span>
+                </div>
+            </div>
+
+            <div class="row <?php if(!$this->getDetailsReport[0]['completed_date']){echo 'hide';}?>">
+                <div class="span7">
+                    <label class="span3">Received Date : </label>
+                    <span class="span3"><strong><?php echo $this->getDetailsReport[0]['completed_date'];
+                    ?></strong></span>
+                </div>
+            </div>
+
+            <div class="row <?php if($this->getDetailsReport[0]['status'] != '14'){echo 'hide';}?>">
+                <div class="span7">
+                    <label class="span3">Actual Return Date : </label>
+                    <span class="span3"><strong><?php
+                    if($this->getDetailsReport[0]['status'] == '14'){
+                        echo $this->getDetailsReport[0]['update_datetime'];
+                    }else{
+                        echo '-';
+                    }
+                    ?></strong></span>
+                </div>
+            </div>
+
+            <div class="row">
+                <div class="span7">
+                    <label class="span3">Status : </label>
+                    <span class="span3"><strong><?php 
+                    switch ($this->getDetailsReport[0]['status']) {
+                        case '1':
+                            if($this->getDetailsReport[0]['wms_status'] == 1){
+                                echo 'Prepare product';
+                            }else{
+                                echo 'Waiting approval from Finance';
+                            }
+                            break;
+                        case '2':
+                            echo 'Waiting approval from Admin';
+                            break;
+                        case '3':
+                            echo 'Waiting approval from ASM';
+                            break;
+                        case '4':
+                            echo 'Waiting approval from RD';
+                            break;
+                        case '5':
+                            echo 'Waiting approval from Area Director';
+                            break;
+                        case '6':
+                            echo 'Waiting approval from Operation Director';
+                            break;
+                        case '7':
+                            echo 'Waiting approval from Manager';
+                            break;
+                        case '8':
+                            echo '';
+                            break;
+                        case '9':
+                            echo 'No Approved';
+                            break;
+                        case '10':
+                            echo '';
+                            break;
+                        case '11':
+                            echo 'Ready to shipping';
+                            break;
+                        case '12':
+                            echo 'WMS no appoved';
+                            break;
+                        case '13':
+                            echo 'Received product';
+                            break;
+                        case '14':
+                            echo 'Return product';
+                            break;
+                        default:
+                                echo '-';
+                            break;
+                    }
+
+                    if(isset($this->getDetailsReport[0]['missing']) && $this->getDetailsReport[0]['missing'] > 0){
+                        echo ' <span class="color-red">(Lost : ' . $this->getDetailsReport[0]['missing'] . ')</span';
+                    }
+
+                    ?></strong></span>
+                </div>
+            </div>
+
+        </div>
+
+        <div class="row">
+            <div class="span12" style="margin-top: 30px;margin-bottom: 30px;">
+                <table class="table table-bordered span12">
+                    <thead>
+                        <tr>
+                            <th>No</th>
+                            <th>Products Code</th>
+                            <th>Product Name</th>
+                            <th>Color Name</th>
+                            <th>Quantity</th>
+                            <th>Action</th>
+                        </tr>
+                    </thead>
+
+                    <tbody>
+
+                    <?php
+                    $total = 0;
+                    $class_h_color_red = '';
+                    foreach ($this->getDetailsReport as $key => $item):
+                        $total += $item['total_qty'];
+
+                        foreach ($this->imei[$key] as $key_sub => $value) :
+
+                            if(in_array($value['imei'], $this->imeiMissing) and !$class_h_color_red){
+                                $class_h_color_red = 'color-red';
+                            }
+
+                        endforeach
+                    ?>
+
+                        <tr class="<?=$class_h_color_red;?>">
+                            <td><?php echo $key+1;?></td>
+                            <td><?php echo $item['good_name'];?></td>
+                            <td><?php echo $item['good_main_name'];?></td>
+                            <td><?php echo $item['color_name'];?></td>
+                            <td><?php echo $item['total_qty'];?></td>
+                            <td ><center><button class="btn btn-success showHideDetails" id="btn-showHideDetails-<?=$key;?>" type="button" value="<?=$key?>"><i class="icon-plus" id="icon-showHideDetails-<?=$key;?>"></i></button></center></td>
+                        </tr>
+
+                        <?php
+                        foreach ($this->imei[$key] as $key_sub => $value) :
+
+                            $class_color_red = '';
+                            $textMissing = '';
+
+                            if(in_array($value['imei'], $this->imeiMissing)){
+                                $class_color_red = 'color-red';
+                                $textMissing = ' (เครื่องศูนย์หาย)';
+                            }
+
+                        ?>
+
+                        <tr class="details-<?=$key;?> <?=$class_color_red;?> hide">
+                            <td>IMEI No.<?=$key_sub+1;?></td>
+                            <td colspan="5"><?=$value['imei'] . $textMissing;?></td>
+                        </tr>
+
+                        <?php endforeach ?>
+
+                    <?php endforeach;?>
+
+                    </tbody>
+
+                    <tfoot>
+                        <tr>
+                            <td colspan="4"><strong>SUMMARY</strong></td>
+                            <td><strong><?php echo $total;?></strong></td>
+                            <td style="text-align: center;">
+                                <button class="btn <?php if(!$this->getDetailsReport[0]['image_name']){echo 'hide';}?>" id="btn-image" data-rq="<?=$this->getDetailsReport[0]['rq']?>">Image</button>
+                            </td>
+                        </tr>
+                    </tfoot>
+                </table>
+            </div>
+        </div>
+
+        <div class="" style="margin-left: 30px;margin-bottom: 30px;">
+            <button type="button" class="btn btn-warning" onclick="window.location.href='<?=HOST."warehouse/borrowing-report"?>'">Back</button>
+        </div>
+
+    </div>
+</div>
+
+<link href="../css/select2.css" rel="stylesheet"/>
+<script src="../js/select2.js"></script>
+<script src="/js/jquery.blockUI.js"></script>
+<script>
+
+    $(document).ajaxStart(function(){
+        $.blockUI({ css: { 
+            border: 'none', 
+            padding: '15px', 
+            backgroundColor: '#000', 
+            '-webkit-border-radius': '10px', 
+            '-moz-border-radius': '10px', 
+            opacity: .5, 
+            color: '#fff' 
+        } });
+    });
+
+    $(document).ajaxStop(function(){
+        $.unblockUI();
+    });
+
+    $(document).ready(function () {
+
+        var arrShowHideDetails = [];
+
+        $('.showHideDetails').click(function(event) {
+
+            var id = $(this).val();
+
+            console.log(arrShowHideDetails[id]);
+
+            if(arrShowHideDetails[id]){
+
+                arrShowHideDetails[id] = false;
+                
+                $('.details-' + id).addClass('hide');
+
+                $('#icon-showHideDetails-' + id).removeClass('icon-minus');
+                $('#icon-showHideDetails-' + id).addClass('icon-plus');
+
+                $('#btn-showHideDetails-' + id).removeClass('btn-danger');
+                $('#btn-showHideDetails-' + id).addClass('btn-success');
+
+            }else{
+
+                arrShowHideDetails[id] = true;
+
+                $('.details-' + id).removeClass('hide');
+
+                $('#icon-showHideDetails-' + id).removeClass('icon-plus');
+                $('#icon-showHideDetails-' + id).addClass('icon-minus');
+
+                $('#btn-showHideDetails-' + id).removeClass('btn-success');
+                $('#btn-showHideDetails-' + id).addClass('btn-danger');
+            }
+        });
+
+        <?php for($i=0;$i<=10;$i++){ ?>
+        var retate_current_<?=$i;?> = 0;
+        var retate_<?=$i;?> = 90;
+
+        var zoom_status_<?=$i;?> = 'IN';
+
+        $('#img-borrowing_<?=$i;?>').live('click',function(event) {
+            if(zoom_status_<?=$i;?> == 'IN'){
+                zoom_status_<?=$i;?> = 'OUT';
+                var width = $('#img-borrowing_<?=$i;?>').width()+zoom;
+                var modal_width = $('#modal-show-borrowing').width()+zoom;
+                $('#modal-show-borrowing').animate({width: modal_width+"px"}, 'slow');
+                $('#img-borrowing_<?=$i;?>').animate({width: width+"px"}, 'slow');
+                $('#img-borrowing_<?=$i;?>').css({'cursor':'-webkit-zoom-out'});
+                return false;
+            }
+
+            if(zoom_status_<?=$i;?> == 'OUT'){
+                zoom_status_<?=$i;?> = 'IN';
+                var width = $('#img-borrowing_<?=$i;?>').width()-zoom;
+                var modal_width = $('#modal-show-borrowing').width()-zoom;
+                $('#modal-show-borrowing').animate({width: modal_width+"px"}, 'slow');
+                $('#img-borrowing_<?=$i;?>').css({'cursor':'-webkit-zoom-in'});
+                $('#img-borrowing_<?=$i;?>').animate({width: width+"px"}, 'slow');
+                return false;
+            }
+
+        });
+
+        $('#icon-imge-l_<?=$i;?>').live('click',function(event) {
+            retate_current_<?=$i;?> = retate_current_<?=$i;?>-retate_<?=$i;?>;
+
+            $('#img-borrowing_<?=$i;?>').css({
+                 '-moz-transform':'rotate('+retate_current_<?=$i;?>+'deg)',
+                 '-webkit-transform':'rotate('+retate_current_<?=$i;?>+'deg)',
+                 '-o-transform':'rotate('+retate_current_<?=$i;?>+'deg)',
+                 '-ms-transform':'rotate('+retate_current_<?=$i;?>+'deg)',
+                 'transform':'rotate('+retate_current_<?=$i;?>+'deg)'
+            });
+        });
+
+        $('#icon-imge-r_<?=$i;?>').live('click',function(event) {
+            retate_current_<?=$i;?> = retate_current_<?=$i;?>+retate_<?=$i;?>;
+
+            $('#img-borrowing_<?=$i;?>').css({
+                 '-moz-transform':'rotate('+retate_current_<?=$i;?>+'deg)',
+                 '-webkit-transform':'rotate('+retate_current_<?=$i;?>+'deg)',
+                 '-o-transform':'rotate('+retate_current_<?=$i;?>+'deg)',
+                 '-ms-transform':'rotate('+retate_current_<?=$i;?>+'deg)',
+                 'transform':'rotate('+retate_current_<?=$i;?>+'deg)'
+            });
+        });
+
+        $('#img-borrowing_<?=$i;?>').error(function() {
+        $(this).attr('src', 'http://www.nosun.co.za/wp-content/themes/sistina/core/assets/images/no-featured-175.jpg');
+
+        });
+
+        <?php } ?>
+        var zoom = 350;
+
+        var old_width = $('.img-borrowing').width();
+        var old_modal_width = $('#modal-show-borrowing').width();
+
+        $('#btn-image').click(function(event) {
+
+            $('#show-img').empty();
+
+            <?php for($i=0;$i<=10;$i++){ ?>
+
+            if(zoom_status_<?=$i;?> == 'OUT'){
+                zoom_status_<?=$i;?> = 'IN';
+                var width_<?=$i;?> = $('#img-borrowing_<?=$i;?>').width()-zoom;
+                var modal_width_<?=$i;?> = $('#modal-show-borrowing').width()-zoom;
+                $('#modal-show-borrowing').css({width: modal_width_<?=$i;?>+"px"});
+                $('#img-borrowing_<?=$i;?>').css({'cursor':'-webkit-zoom-in'});
+                $('#img-borrowing_<?=$i;?>').css({width: width_<?=$i;?>+"px"});
+              }
+
+              retate_current_<?=$i;?> = 0;
+
+              $('#modal').css({width: old_modal_width+"px"});
+              $('#img-borrowing_<?=$i;?>').css({width: old_width+"px"});
+
+              $('#img-borrowing_<?=$i;?>').css({
+                 '-moz-transform':'rotate('+retate_current_<?=$i;?>+'deg)',
+                 '-webkit-transform':'rotate('+retate_current_<?=$i;?>+'deg)',
+                 '-o-transform':'rotate('+retate_current_<?=$i;?>+'deg)',
+                 '-ms-transform':'rotate('+retate_current_<?=$i;?>+'deg)',
+                 'transform':'rotate('+retate_current_<?=$i;?>+'deg)'
+                });
+
+              <?php } ?>
+  
+            var rq = $(this).data('rq');
+            
+            $('#modal-show-borrowing').modal();
+
+            $.ajax({
+                url: '<?php echo HOST.'warehouse/ajaxgetimgborrowing';?>',
+                type: 'POST',
+                data: {rq:rq},
+            })
+            .done(function(response) {
+                var obj_response = jQuery.parseJSON(response);
+                console.log("success");
+
+                var count_index = 0;
+                $.each(obj_response['img_borrowing'], function( index, value ) {
+                    // alert( index + ": " + value );
+                    console.log(value);
+                    $('#show-img').append('<table border=0 width="100%"><tr><td style="text-align:center"><img id="img-borrowing_'+count_index+'" class="img-borrowing" src="'+value+'" alt="Image" height="400" width="400"></td></tr></table><div align="center"><span><i class="icon-imge icon-mail-reply icon-3x" id="icon-imge-l_'+count_index+'"></i></span><span><i class="icon-imge icon-mail-forward icon-3x" id="icon-imge-r_'+count_index+'"></i></span></div><br/>');
+
+                    count_index++;
+
+                });
+            });
+        });
+
+    });
+</script>

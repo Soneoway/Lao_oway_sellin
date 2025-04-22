@@ -1,0 +1,40 @@
+<form class="form-search form-horizontal" method="get" action="">
+    <div class="row">
+        <div class="span5">
+            <div class="control-group">
+                <label class="span2">
+                    Type
+                </label>
+                <select name='type'>
+                    <option value=''>
+                        All
+                    </option>
+                    <?php 
+						$arr = array(
+							1 => 'Only input',
+							2 => 'Only payment confirm'
+						);
+						foreach($arr as $key => $value):
+							$selected = '';
+							if(	isset($this->params['type']) AND $this->params['type'] AND ( $key == $this->params['type'] )	){
+								$selected = 'selected="selected"';
+							}
+							echo '<option value="'.$key.'" '.$selected.'>'.$value.'</option>';
+						endforeach;
+					?>
+                </select>     
+            </div>
+            <input type='hidden' name='d_id' value="<?php if( isset($this->params['d_id']) AND $this->params['d_id'] ) echo $this->params['d_id']?>" />
+        </div>    
+    </div>
+        
+   
+	<div class="row">
+        <div class="span5">
+   			<button type="submit" class="btn btn-primary">Search</button>
+		    <button type="reset" class="btn btn-warning">Reset</button>
+		    <!-- <button type="submit" name="export" value="1" class="btn btn-success">Export</button>  -->
+       	</div>
+    </div>
+   
+</form>

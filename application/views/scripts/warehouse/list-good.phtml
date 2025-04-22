@@ -1,0 +1,70 @@
+﻿<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
+<html>
+   <head>
+      <meta http-equiv="Pragma" content="no-cache">
+      <meta http-equiv="Expires" content="-1">
+      <meta charset="UTF-8">
+      <title>Print</title>
+      <script src="//ajax.googleapis.com/ajax/libs/jquery/1.10.2/jquery.min.js"></script>
+     <style>
+.titlep{text-indent:.5in;margin:0 0 6pt 4.5in}span{font-size:11pt}h2{margin-bottom:6pt;text-align:center;text-indent:.5in;text-align:center}.titlep1{margin-bottom:6pt;text-align:center;text-indent:.5in;text-align:center}body{font-family:arial}p{margin-bottom:6pt;text-align:justify;text-indent:.5in;font-size:13px}.info{margin:20px 0}table{border-collapse:collapse;border:none;margin-left:6.75pt;margin-right:6.75pt;width:361px;border:1px solid #000;  margin-left: 47px;
+  margin-top: 15px;}td{padding:5px;font-size:13px}.right{text-align:right}.assign-left{width:300px;float:left;margin-left:30px;margin-top:80px;font-weight:700}.assign-left span{font-weight:400;position:relative;top:50px}.assign-right{width:300px;float:right;margin-right:-30px;margin-top:60px;font-weight:700;text-align:center}.assign-right span{font-weight:400}td{border: 1px solid black;}
+   </style>
+   </head>
+   <body>
+   
+      <?php
+
+         if(isset($this->add_time) and $this->add_time)
+            $add_time =$this->add_time;
+            
+         ?>
+    <div class="container">
+        <div class="title">
+        <p class="titlep" ><b><span >Số: TT<?php if(isset($this->invoice) and $this->invoice) echo $this->invoice; ?> </span></b></p>
+            <h2>BẢNG KÊ HÀNG HÓA</h2>
+            <p class="titlep1">(Kèm theo hóa đơn số <?php if(isset($this->invoice) and $this->invoice) echo $this->invoice; ?> ngày <?php echo date("d",strtotime($this->invoice_time)); ?> tháng <?php echo date("m",strtotime($this->invoice_time)); ?> năm <?php echo date("Y",strtotime($this->invoice_time)); ?>)</p>          
+        </div>
+        <?php if(isset($this->warehouse) and $this->warehouse == 1) : ?>        
+        <div class="info">
+           <p>Người bán hàng : CÔNG TY TNHH MTV KỸ THUẬT & KHOA HỌC OPPO</p>
+           <p>Địa chỉ : Tòa nhà SCB , 242 Cống Quỳnh P.Phạm Ngũ Lão Q.1 Tp.HCM</p>
+           <p>MST: 0312059023</p>
+        </div>       
+         <?php elseif(isset($this->warehouse) and $this->warehouse == 2) : ?>        
+        <div class="info">
+           <p>Người bán hàng : Chi nhánh Công ty TNHH MTV Kỹ Thuật & Khoa Học Oppo</p>
+           <p>Địa chỉ : Tầng 8, tòa nhà 148 Tower, số 148 Hoàng Quốc Việt, phường Nghĩa Tân, quận Cầu Giấy, Thành Phố Hà Nội, VN.</p>
+           <p>MST: 0312059023-001</p>
+        </div>
+         <?php elseif(isset($this->warehouse) and $this->warehouse == 3) : ?>
+          <div class="info">
+           <p>Người bán hàng : Chi nhánh Công ty TNHH MTV Kỹ Thuật & Khoa Học Oppo tại Đà Nẵng</p>
+           <p>Địa chỉ : 118 Hàm Nghi , Phường Thạc Gián , Quận Thanh Khê , TP Đà nẵng</p>
+           <p>MST: 0312059023-006</p>
+        </div>
+        <?php endif; ?>
+        <div class="info">
+           <p>Người mua hàng : <?php echo $this->distributor['unames'] ?></p>
+           <p>Địa chỉ : <?php echo $this->distributor['add'] ?></p>
+           <p>MST: <?php echo $this->distributor['mst_sn'] ?></p>
+        </div>
+        
+        <div class="info">
+
+          <?php  echo $this->render('warehouse/partials/invoice/list-good-detail.phtml'); ?>
+            
+        </div>
+   
+    </div>
+    
+     <div style="clear: both;"></div>
+        
+    <div class="assign-left">    Người mua hàng     <br />
+                             <span>Bán hàng qua điện thoại</span>
+    </div>
+    <div class="assign-right"> <span>Ngày <?php echo date("d",strtotime($this->invoice_time))?> tháng <?php echo date("m",strtotime($this->invoice_time)) ?> năm <?php echo date("Y",strtotime($this->invoice_time)) ?></span> <br />   Người bán hàng    </div>
+    </div>
+    
+   </body>
+</html>

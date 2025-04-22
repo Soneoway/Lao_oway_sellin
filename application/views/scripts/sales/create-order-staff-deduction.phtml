@@ -1,0 +1,238 @@
+<style type="text/css">
+    .blockOverlay{
+        z-index: 10000 !important;
+    }
+    .blockPage{
+        z-index: 10001 !important;
+    }
+    .span3{ width: 150px; }
+</style>
+
+<div class="page-header">
+        <h1>Create Order Staff</h1>
+</div>
+
+<?php
+if (isset($this->messages) and $this->messages)
+    foreach ($this->messages as $message):
+        echo '<div class="alert alert-error">'.$message.'</div>';
+    endforeach;
+
+    if (isset($this->messages_success) and $this->messages_success)
+    foreach ($this->messages_success as $message):
+        echo '<div class="alert alert-success">'.$message.'</div>';
+    endforeach;
+?>
+
+<link href="https://cdnjs.cloudflare.com/ajax/libs/select2/4.0.6-rc.0/css/select2.min.css" rel="stylesheet" />
+<script src="https://cdnjs.cloudflare.com/ajax/libs/select2/4.0.6-rc.0/js/select2.min.js"></script>
+
+<div class="row">
+
+        <form role="form" id="form" class="form-horizontal" method="post" action="">
+            <div class="row">
+                <div class="span6">
+
+                    <div class="control-group">
+                        <label for="text" class="span2">Staff ID<span style="color: red">*</span></label>
+                        <input type="text" name="staff_code" id="staff_code" required="required" style="width: 70px"
+                        value="<?php echo $this->params['staff_code']; ?>"/>
+                    </div>
+                    
+                    <div class="control-group">
+                        <label for="text" class="span2">RD Name<span style="color: red">*</span></label>
+                        <input type="text" name="r_name" id="r_name" required="required"
+                        value="<?php echo $this->params['r_name']; ?>"/>
+                    </div>
+
+                    <div class="control-group">
+                        <label for="shipping_address" class="span2">Shipping address <span style="color: red">*</span></label>
+                        <select id="shipping_address" class="select_2" name="shipping_address" required="required">
+                            <option value="">Please select</option>
+                            <option value="<?php echo $this->params['shipping_address']; ?>"></option>
+                        </select>
+                    </div>
+
+                    <div class="control-group">
+                        <label for="cat_id" class="span2">Category <span style="color: red">*</span></label>
+                        <select id="cat_id" class="span3" name="cat_id" required="required" disabled>
+                            <option value="">Please select</option>
+                            <?php if ($this->goodCategories): foreach ($this->goodCategories as $id=>$name):?>
+                            <option value="<?php echo $id;?>" <?php if (isset($this->params['cat_id']) and $id==$this->params['cat_id']):?> selected<?php endif;?>><?php echo $name;?></option>
+                            <?php endforeach; endif;?>
+                        </select>
+                    </div>
+
+                    <div class="control-group">
+                        <label for="good_id" class="span2">Model <span style="color: red">*</span></label>
+                        <select id="good_id" class="span3" name="good_id" required="required">
+                            <option value="">Please select</option>
+                              <!-- /ล็อค กำหนด product ที่ต้องการ -->
+                              <?php if (isset($this->goods_acc) and $this->goods_acc):
+                                foreach ($this->goods_acc as $item): ?>
+                                    <option value="<?php echo $item['id'];?>" <?php if (isset($this->params['good_id']) and $item['id']==$this->params['good_id']):?> selected<?php endif;?>><?php echo $item['name'];?></option>
+                              <?php   endforeach; ?>
+                              <!-- //////////////////////////////////////// -->
+                            <?php elseif($this->goods_cached): foreach ($this->goods_cached as $id=>$item):?>
+                            <option value="<?php echo $id;?>" <?php if(isset($this->params['good_id']) and $id==$this->params['good_id']):?> selected<?php endif;?> ><?php echo $item;?></option>
+                            <?php endforeach; endif;?>
+                        </select>
+                    </div>
+
+                    <div class="control-group">
+                        <label for="good_color_id" class="span2">Color <span style="color: red">*</span></label>
+                        <select id="good_color_id" class="span3" name="good_color_id" required="required">
+                            <option value="">Please select</option>
+                               <?php if ($this->goodColors):foreach($this->goodColors as $id=>$item):?>
+                            <option value="<?php echo $id;?>"<?php if (isset($this->params['good_color_id']) and $id==$this->params['good_color_id']):?> selected<?php endif;?>><?php echo $item;?></option>
+                            <?php endforeach; endif; ?>
+                        </select>
+                    </div>
+
+                    <div class="control-group">
+                        <label class="span2 quantity">Quantity <span style="color: red">*</span>
+                        <input type="number" min="1" class="span1 num" name="num" required="required" maxlength="5" style="width: 50px" value="<?php echo $this->params['num']; ?>" />
+                        </label>
+
+                        <label>Sale off <span style="color: red">*</span>
+                         <select class="span1 sale_off_percent" name="sale_off_percent" required="required">
+                            <option value="">Please select</option>
+                            <option value="0" <?php if (isset($this->params['sale_off_percent']) and $this->params['sale_off_percent']==0):?> selected <?php endif;?>>0%</option>
+                            <option value="30" <?php if (isset($this->params['sale_off_percent']) and $this->params['sale_off_percent']==30):?> selected <?php endif;?>>30%</option>
+                            <option value="40" <?php if (isset($this->params['sale_off_percent']) and $this->params['sale_off_percent']==40):?> selected <?php endif;?>>40%</option>
+                            <option value="50" <?php if (isset($this->params['sale_off_percent']) and $this->params['sale_off_percent']==50):?> selected <?php endif;?>>50%</option>
+                         </select>
+                        </label>
+
+                    </div>
+
+                    <input type="hidden" name="ids[]" class="ids" value="">
+                </div>
+            </div>
+            <div class="row">
+                <div class="span6">
+                    <div class="control-group">
+                        <input type="hidden" name="sn" id="sn" value="<?php isset($this->sales) and $this->sales and printf($this->sales[0]['sale']->sn);?>">
+                        <input type="hidden" name="payment_type" class ="payment_type" id="payment_type" value="">
+                        <div class="span4">
+                            <button type="submit"class="btn btn-primary">Create</button>
+                            <a href="create-order-staff-deduction" class="btn btn-warning">Reset</a>
+                            <!-- <input type="hidden" name="back_url" id="back_url" value="/sales/create-auto-so">
+                            <button type="button" class="btn btn-danger go-back">Go back</button> -->
+                        </div>
+                    </div>
+                    <div class="clearfix"></div>
+                </div>
+            </div>
+        </form>
+</div>
+
+<script type="text/javascript" src="/js/jquery-ui-1.8.12.custom.min.js"></script>
+<link rel="stylesheet" type="text/css" href="/css/jquery-ui-1.8.12.custom.css"/>
+<script src="/js/jquery.blockUI.js"></script>
+<script type="text/javascript">
+
+$(document).ajaxStart(function(){
+    $.blockUI({ css: { 
+        border: 'none', 
+        padding: '15px', 
+        backgroundColor: '#000', 
+        '-webkit-border-radius': '10px', 
+        '-moz-border-radius': '10px', 
+        opacity: .5, 
+        color: '#fff' 
+    } });
+});
+
+$(document).ajaxStop(function(){
+    $.unblockUI();
+});
+
+$(document).ready(function () {
+      // $('.go-back').click(function(e){
+      //       window.location.href = $('#back_url').val();
+      //       return false;
+      //   });
+
+        $('#cat_id, #good_id').change(function(){
+            $(this).after('<span class="loading"></span>');
+            var _self = $(this);
+            var cat_id = $('#cat_id').val();
+
+            if (_self.attr('id')=='cat_id')
+                $('#good_id').find('option:not(:first)').remove();
+
+            var good_id = $('#good_id').val();
+
+            $('#good_color_id').find('option:not(:first)').remove();
+
+            $('#num, #price').val('');
+
+            $.get("/get/load",
+                {cat_id: cat_id, good_id: good_id}
+                ,function(data,status){
+                    var data = $.parseJSON( data );
+                    if (data.goods){
+                        var obj = data.goods;
+                        for (var i = 0; i < obj.length; i++) {
+                            $('#good_id').append('<option value="'+obj[i]['id']+'">'+obj[i]['name']+'</option>');
+                        }
+                    }
+                    if (data.colors){
+                        var obj = data.colors;
+                        for (var i = 0; i < obj.length; i++) {
+                            $('#good_color_id').append('<option value="'+obj[i]['id']+'">'+obj[i]['name']+'</option>');
+                        }
+                    }
+                    _self.nextAll('.loading').remove();
+                });
+        });
+     // แสดง shipping address
+     $('#staff_code').change(function(e) 
+    {
+        // console.log('test');
+        // return false;
+        $('#shipping_address').empty(); //cler
+        $('#shipping_address').append('<option value="">Please select</option>');
+       
+      var staff_code = $(this).val();
+    
+      //alert(sn);
+      $.ajax({
+          url: '<?php echo HOST.'sales/get-shippingaddress-by-staffcode';?>',
+          type: 'POST',
+          data: {staff_code: staff_code},
+      })
+      .done(function(result) {
+        //  console.log('test');
+        // return false;
+          var obj_response = jQuery.parseJSON(result);
+          //console.log(obj_response);
+          if(obj_response.status ==200){
+            // console.log(obj_response.data); 
+             $.each( obj_response.data, function( key, value ) {
+              $('#shipping_address').append('<option value="'+value.id+'">'+value.address_full+'</option>');
+            });
+             if(obj_response.staff){
+                    $('#r_name').val(obj_response.staff);
+             }
+             
+          }else{
+           alert('ไม่สามารถเช็คที่อยู่จัดส่งได้');
+          }
+            
+      })
+      .fail(function() {
+          console.log("error");
+      });
+          
+    });
+
+
+  });
+
+$(document).ready(function() {
+    $('.select_2').select2();
+});
+
+</script>

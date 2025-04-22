@@ -1,0 +1,68 @@
+<form class="form-search form-horizontal" method="post" action="<?php echo HOST ?>sales/cp-auto-check-imei-list">
+    <div class="row">
+        <div class="span6">
+
+            
+            <div class="control-group">
+            <label for="lot_number" class="span2">Lot Number</label>
+            <input id="lot_number" name="lot_number" type="text" class="input-medium search-query form-control" value="<?php isset($this->params['lot_number']) and printf($this->params['lot_number']);?>">
+            </div>
+
+            <div class="control-group">
+            <label for="good_id" class="span2">สินค้า</label>
+              <select id="good_id" class="span2" name="good_id">
+                  <option value="">Choose</option>
+                  <?php if ($this->goods): foreach ($this->goods as $key):?>
+                      <option value="<?php echo $key->id;?>" required="required" <?php if (isset($this->params['good_id']) and $key->id==$this->params['good_id']):?> selected<?php endif;?>><?php echo $key->name;?></option>
+                  <?php endforeach; endif;?>
+              </select>
+            </div>
+
+            <div class="control-group">
+            <label for="start_date" class="span2">วันที่บันทึกข้อมูล</label>
+                <input type="text" class="span1 start_date" name="start_date" id="start_date" value="<?php isset($this->params['start_date']) and printf($this->params['start_date']);?>" /> - <input type="text" class="span1 end_date" name="end_date" id="end_date" value="<?php isset($this->params['end_date']) and printf($this->params['end_date']);?>" />
+            </div>
+
+            
+            <div class="control-group" ">
+            <label for="view_status" class="span2">สถานะ</label>
+                <select id="view_status" name="view_status" >
+                    <option value="0" <?php if (isset($this->params['view_status']) and $this->params['view_status']==0):?> selected<?php endif;?>>-ทั้งหมด-</option>
+                    <option value="1" <?php if (isset($this->params['view_status']) and $this->params['view_status']==1):?> selected<?php endif;?>>รอดำเนินการ</option>
+                    <option value="2" <?php if (isset($this->params['view_status']) and $this->params['view_status']==2):?> selected<?php endif;?>>Admin ยืนยันแล้ว</option>
+                    <option value="3" <?php if (isset($this->params['view_status']) and $this->params['view_status']==3):?> selected<?php endif;?>>Finance ยืนยันแล้ว</option>
+                </select>
+            </div>
+        </div>
+        <div class="span5">
+
+        </div>
+    </div>
+
+    
+    <input type="hidden" name="counter" value="<?=$this->counter;?>">
+    <button type="submit" class="btn btn-primary">Search</button>
+    <button type="reset" class="btn btn-warning">Reset</button>
+    <button type="submit" name="export" value="1" class="btn btn-success">Export</button>
+</form>
+
+<script type="text/javascript" src="/js/jets.js"></script>
+<script type="text/javascript" src="/js/jquery-ui-1.8.12.custom.min.js"></script>
+
+<script async="async">
+
+        //alert(1);
+        
+        $(document).on('focus',".start_date", function(){ 
+            $(this).datepicker({ dateFormat: "dd/mm/yy" });
+        });
+
+        $(document).on('focus',".end_date", function(){ 
+            $(this).datepicker({ dateFormat: "dd/mm/yy" });
+        });
+
+
+         
+
+        
+</script>

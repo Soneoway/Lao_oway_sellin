@@ -1,0 +1,46 @@
+<form class="form-search form-horizontal" method="get" action="/checkmoney/payment-order">
+    <div class="row">
+        <div class="span5">
+
+            <div class="control-group">
+                <label for="d_id" class="span2">Retailer Name:
+					<input type="text" class="span3" name="SearchBox" id="SearchBox" placeholder="Search" autocomplete="off" />
+					<select name="d_id" id="d_id" class="span3" size="5">
+						<option value="">Choose</option>
+						<?php
+						foreach($this->distributors_cached as $id=>$item):
+							$selected = '';
+							if(isset($this->params['d_id']) and $id == $this->params['d_id']){
+								$selected = 'selected="selected"';
+							}
+							echo "<option value='".$id."' $selected>".$item."</option>";
+						endforeach;
+						?>
+					</select>
+				</label>
+            </div>
+
+        </div><!--  End span -->
+
+        <div class="span5">
+            <div class="control-group">
+                <label for="status" class="span2">Status:
+                    <select name="status" id="status" class="span3">
+                        <option value="">Choose</option>
+                        <option value="0" <?php if(isset($this->params['status']) and 0 == $this->params['status']) {?> selected="selected" <?php }?>>Pending</option>
+                        <option value="1" <?php if(isset($this->params['status']) and 1 == $this->params['status']) {?> selected="selected" <?php }?>>Confirmed</option>
+                    </select>
+                </label>
+            </div>
+        </div>
+    </div>
+   
+	<div class="row">
+        <div class="span5">
+   			 <button type="submit" class="btn btn-primary">Search</button>
+		     <button type="reset" class="btn btn-warning">Reset</button>
+		     <!-- <button type="submit" name="export" value="1" class="btn btn-success">Export</button> -->
+       	</div>
+    </div>
+   
+</form>

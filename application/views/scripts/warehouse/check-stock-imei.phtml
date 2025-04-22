@@ -1,0 +1,177 @@
+<style>
+    iframe {
+        width: 100%;
+        height: 500px;
+    }
+
+    .bar {
+        line-height: 18px;
+    }
+    .modal-scrollable
+    {
+        position: absolute;
+        z-index: 9999;
+    }
+</style>
+<div class="page-header">
+    <h1>Imei Upload For Check Stock</h1>
+</div>
+
+<?php
+if (isset($this->messages_success) and $this->messages_success)
+    foreach ($this->messages_success as $message):
+        echo '<div class="alert alert-success">'.$message."</div>";
+    endforeach;
+
+if (isset($this->messages) and $this->messages)
+    foreach ($this->messages as $message):
+        echo '<div class="alert alert-error">'.$message."</div>";
+    endforeach;
+
+
+$path_protection_price = realpath(APPLICATION_PATH . '/../public/upload/check_imei_stock/check_imei_stock.xlsx');    
+/*header("Content-type: public/files/protection_price_template");
+header("Content-Disposition: attachment; filename=protection_price_template.xlsx"); 
+$pdfiledata = file_get_contents($filename);
+echo $pdfiledata;
+*/
+
+?>
+<div class="well">
+    <div class="row-fluid">
+
+        <div class="span4">
+            List of uploaded files <a class="btn btn-success btn-mini" href="<?php echo HOST ?>sales/mou-log">View Logs</a></p>
+            File Template Check Imei Stock <a class="btn btn-success btn-mini" href="<?php echo HOST ?>upload/check_imei_stock/check_imei_stock.xlsx">Download File</a></p>
+
+
+        </div>
+
+    </div>
+</div>
+
+<form action="<?php echo HOST ?>warehouse/save-check-stock-imei" id="form" target="iframe" class="form-inline" method="post" enctype="multipart/form-data">
+
+<div class="row">
+        <div class="span6">
+            <div class="form-group">
+                <label for="warehouse_id" class="control-label">Warehouse <span style="color: red"> *</span>
+                    <div class="controls">
+                    <select id="warehouse_id" name="warehouse_id[]" required class="multiselect" multiple="multiple">
+                        <?php
+                        if ($this->warehouse) :
+                            foreach ($this->warehouse as $warehouse):?>
+                                <option value="<?php echo $warehouse->id;?>" <?php if (isset($this->params['warehouse_id']) and ( (is_array($this->params['warehouse_id']) && in_array($warehouse['id'], $this->params['warehouse_id']) || $warehouse['id']==$this->params['warehouse_id'])) ):?>selected<?php endif;?>><?php echo $warehouse->name;?></option>
+                            <?php
+                            endforeach;
+                        endif;
+                        ?>
+                    </select>
+                </div>
+                    </select>
+                </label>
+            </div>
+        </div>
+    </div>
+
+    <div class="row">
+        <div class="span6">
+            <div class="form-group">
+                <label for="good_id" class="control-label">Product
+                    <select id="good_id" name="good_id[]" class="multiselect" multiple="multiple" >
+                        <?php
+                        if ($this->goods) :
+                            foreach ($this->goods as $goods):?>
+                                <option value="<?php echo $goods->id;?>" <?php if (isset($this->params['good_id']) and ( (is_array($this->params['good_id']) && in_array($goods['id'], $this->params['good_id']) || $goods['id']==$this->params['good_id'])) ):?>selected<?php endif;?>><?php echo $goods->name;?></option>
+                            <?php
+                            endforeach;
+                        endif;
+                        ?>
+                    </select>
+                </label>
+            </div>
+        </div>
+    </div>
+ </br>
+    <div class="row">
+        <div class="span6">
+            <div class="form-group">
+                <label for="" class="span4">File Check Imei Stock <span style="color: red"> *</span>
+                    <input type="file" class="span4" name="file" required />
+                </label>
+            </div>
+        </div>
+    </div>
+
+    <div class="clearfix"></div>
+    </br>
+    <div class="form-group">
+        <button type="submit" class="form-control btn btn-primary">Check Data</button>
+        <a href="/bvg" class="btn btn-danger">Go back</a>
+    </div>
+</form>
+
+<div class="row">
+    <div class="span12">
+        <div class="progress progress-striped active">
+            <div class="bar" style="width: 0%;"></div>
+        </div>
+    </div>
+</div>
+
+<iframe src="" frameborder="0" name="iframe" id="iframe"></iframe>
+<script src="<?php echo HOST ?>js/jquery-ui.js"></script>
+<script src="<?php echo HOST ?>js/bootstrap-modal.js"></script>
+<script src="<?php echo HOST ?>js/bootstrap-modalmanager.js"></script>
+<script type="text/javascript" src="<?php echo HOST ?>js/sales.po.js"></script>
+<link rel="stylesheet" href="<?php echo HOST ?>css/bootstrap-multiselect.css" type="text/css"/>
+<script type="text/javascript" src="<?php echo HOST ?>js/bootstrap-multiselect.js"></script>
+<script>
+    options = {
+        selectAllText: 'Select All',
+        includeSelectAllOption: true,
+        includeSelectAllIfMoreThan: 3,
+        disableIfEmpty: true
+    };
+    function confirmExit() {
+        return "Orders are being processed.";
+    }
+
+    function multi() {
+        $('.multiselect').multiselect(options);
+    }
+
+    function set_progress(percent) {
+        $('.bar').css('width', percent+'%');
+        $('.bar').html(percent+'%');
+    }
+
+
+    $(document).ready(function () {
+        multi();
+        $('form').bind('submit',function(e){
+            $('.bar').css('width', '0%');
+            $('.bar').html('');
+            $('#iframe').get(0).contentWindow.clear_content();
+            $('form button, form input, form select').prop('readonly', true);
+            $('#good_id').multiselect("destroy").multiselect(options);
+            $('.loading').remove();
+            $(this).after('<span class="pre_loading">Processing <span><span class="loading"></span>');
+            window.onbeforeunload = confirmExit;
+        });
+       // $('#add_po_btn').click(show_add_joint_modal);
+      // alert(1);
+       $('.view_export').click(function() {
+            alert(1);
+            $self = $(this);
+            temp = $self.data('export');
+            alert(temp);
+            loc = '<?php echo HOST ?>warehouse/check-stock-imei?export='+temp;
+            window.open(loc, '_self');
+        });     
+
+
+    });
+
+    
+</script>

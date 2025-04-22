@@ -1,0 +1,97 @@
+<div class="page-header">
+    <h1>Delivery Fee <small><?php if (isset($this->fee)): ?>
+        Edit
+    <?php else: ?>
+        Create
+    <?php endif ?></small></h1>
+</div>
+
+<form class="form-horizontal" method="post" action="<?php echo HOST ?>warehouse/delivery-fee-save">
+    <div class="control-group">
+        <label class="control-label" for="province">Province</label>
+        <div class="controls">
+            <select name="province" id="province" required>
+                <option value>---</option>
+                <?php if (isset($this->provinces) && $this->provinces): ?>
+                    <?php foreach ($this->provinces as $_id => $_name): ?>
+                        <option value="<?php echo $_id ?>"
+                            <?php if (isset($this->fee['district_id']) 
+                                && $this->province_id == $_id) 
+                                    echo "selected" ?>><?php echo $_name ?></option>
+                    <?php endforeach ?>
+                <?php endif ?>
+            </select>
+        </div>
+    </div>
+
+    <div class="control-group">
+        <label class="control-label" for="district">District</label>
+        <div class="controls">
+            <select name="district" id="district" required>
+                <option value>---</option>
+                <?php if (isset($this->districts) && $this->districts): ?>
+                    <?php foreach ($this->districts as $_id => $_district): ?>
+                        <option value="<?php echo $_id ?>"
+                            <?php if (isset($this->fee['district_id']) && $this->fee['district_id'] == $_id) 
+                                echo "selected" ?>><?php echo $_district['name'] ?></option>
+                    <?php endforeach ?>
+                <?php endif ?>
+            </select>
+        </div>
+    </div>
+
+    <div class="control-group">
+        <label class="control-label" for="value">Fee</label>
+        <div class="controls">
+            <input type="number" id="value" name="value" value="<?php if (isset($this->fee['value'])) echo $this->fee['value']; else echo '0'; ?>" required>
+        </div>
+    </div>
+
+    <div class="control-group">
+        <label class="control-label" for="additional_value">Additional Fee</label>
+        <div class="controls">
+            <input type="number" id="additional_value" name="additional_value" value="<?php if (isset($this->fee['additional_value'])) echo $this->fee['additional_value']; else echo '0'; ?>" required>
+        </div>
+    </div>
+
+    <div class="control-group">
+        <label class="control-label" for="no_delivery">No Delivery</label>
+        <div class="controls">
+            <input type="checkbox" id="no_delivery" name="no_delivery" value="1" <?php if(isset($this->fee['no_delivery']) && $this->fee['no_delivery']) echo "checked" ?>>
+        </div>
+    </div>
+
+    <div class="control-group">
+        <div class="controls">
+            <input type="hidden" name="id" value="<?php if (isset($this->fee['id'])) echo $this->fee['id'] ?>">
+            <button class="btn btn-primary">Save</button>
+            <a href="<?php echo HOST ?>warehouse/delivery-fee" class="btn btn-default">Cancel</a>
+        </div>
+    </div>
+</form>
+
+<script>
+    $(document).ready(function () {
+
+        $('#province').change(function(){
+
+            $(this).after('<span class="loading"></span>');
+            var _self = $(this);
+            var region = _self.val();
+
+            $('#district').find('option:not(:first)').remove();
+
+            $.get("/get/district",
+                {region: region}
+                ,function(data,status){
+                    var data = $.parseJSON( data );
+
+                    for (var i = 0; i < data.length; i++) {
+                        $('#district').append('<option value="'+data[i]['id']+'">'+data[i]['name']+'</option>');
+                    }
+
+                    _self.nextAll('.loading').remove();
+                });
+        });
+    });
+</script>

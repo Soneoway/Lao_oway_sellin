@@ -1,0 +1,364 @@
+<link rel="stylesheet" href="<?php echo HOST ?>css/jquery-ui.css">
+<link href="<?php echo HOST ?>css/jquery.tagit.css" rel="stylesheet" type="text/css">
+<link href="<?php echo HOST ?>css/tagit.ui-zendesk.css" rel="stylesheet" type="text/css">
+<link href="<?php echo HOST ?>css/bootstrap-modal.css" rel="stylesheet" type="text/css">
+<style>
+    .imei_list {
+        resize: none;
+    }
+
+    #btn-calculate{margin-top:20px;}
+
+    .distributor-info{
+        padding: 10px;
+        border: 1px solid #ccc;
+        margin-left: 30px;
+    }
+    .distributor-info label{
+        font-weight: bold;
+
+    }
+    label input,
+    label select {
+        margin-right: 25px;
+    }
+
+    #myTags{
+        display: block;
+        margin: 0px;
+        min-width: 400px;
+    }
+
+    #qs_retailer{
+        width: 100px!important;
+    }
+    .loading-mask{display: none;}
+
+    #object_id{
+        position: relative;
+        border-top: none;
+        top: -20px;
+        left: -20px;
+        -webkit-appearance: button;
+        -webkit-border-radius: 2px;
+        -webkit-box-shadow: 0px 1px 3px rgba(0, 0, 0, 0.1);
+        -webkit-padding-end: 20px;
+        -webkit-padding-start: 2px;
+        -webkit-user-select: none;
+        background-image: -webkit-linear-gradient(#fafafa, #f4f4f4 40%, #e5e5e5);
+        /* background-position: 97% center; */
+        background-repeat: no-repeat;
+        border: 1px solid #AAA;
+        color: #555;
+        font-size: inherit;
+        margin: 20px;
+        overflow: hidden;
+        padding: 5px 10px;
+        text-overflow: ellipsis;
+        white-space: nowrap;
+        overflow-y: scroll;
+    }
+    .payment_date{
+        width: 100px!important;
+    }
+</style>
+
+<div class="page-header">
+    <?php if (isset($this->sales) and $this->sales):?>
+        <h1>Edit Stock order</h1>
+    <?php else:?>
+        <h1>Create Stock order</h1>
+    <?php endif;?>
+</div>
+
+<?php
+if (isset($this->messages) and $this->messages)
+    foreach ($this->messages as $message):
+        echo '<div class="alert alert-error">'.$message.'</div>';
+    endforeach;
+?>
+
+<form role="form" id="form" action="<?php echo HOST.'sales/save-stock';?>" method="post" class="form-inline">
+<?php if (isset($this->sales) and $this->sales):?>
+    <div class="row">
+        <div class="span6">
+            <label class="span2">Sales order number</label>
+            <span class="span3"><strong><?php isset($this->sales) and $this->sales and isset($this->sales[0]['sale']->sn) and printf($this->sales[0]['sale']->sn);?></strong></span>
+        </div>
+    </div>
+    <div class="row">
+        <div class="span6">
+            <label class="span2">Order Maker</label>
+            <span class="span3"><strong><?php isset($this->sales) and $this->sales and isset($this->staffs_cached[ $this->sales[0]['sale']->user_id]) and printf($this->staffs_cached[ $this->sales[0]['sale']->user_id]);?></strong></span>
+        </div>
+    </div>
+    <div class="row">
+        <div class="span6">
+            <label class="span2">Order Time</label>
+            <span class="span3"><strong><?php isset($this->sales) and $this->sales and isset( $this->sales[0]['sale']->add_time) and printf( $this->sales[0]['sale']->add_time );?></strong></span>
+        </div>
+    </div>
+<?php endif;?>
+
+<div class="row">
+    <div class="span6">
+        <div id="tooltip_type" style="display: none">
+            <p>For Retailer: Đơn hàng xuất cho đại lý</p>
+            <p>For Demo: Đơn hàng trải nghiệm</p>
+            <p>For Staffs: Đơn hàng cho nhân viên</p>
+            <p>For Lending: Đơn hàng cho mượn</p>
+        </div>
+        <label class="span4 tooltip-r" for="type" data-toggle="tooltip">Order Type <span style="color: red">*</span>
+            <select id="type" class="span4 type" name="type" required="required">
+                <option value="1" <?php if ( isset($this->sales[0]['sale']) and $this->sales[0]['sale']->type==1):?> selected<?php endif;?>>For Retailer</option>
+            </select>
+        </label>
+
+        <label class="span4" for="salesman">Salesman <span style="color: red">*</span>
+            <select id="salesman" class="span4" name="salesman" required>
+                <option value="">Please select</option>
+                <?php foreach ($this->salesmans as $_id => $salesman): ?>
+                    <option value="<?php echo $_id;?>"
+                        <?php
+                            if (( isset($this->sales) and $_id == $this->sales[0]['sale']->salesman )
+                              or ( !isset($this->sales) and $_id == 152 )
+                            ) echo "selected"
+                        ?>
+                    ><?php echo $salesman;?></option>
+                <?php endforeach;?>
+            </select>
+        </label>
+        <label class="span4" >Retailer name<span style="color: red">*</span>
+            <input type='text' class="span4" name='SearchBox' id="SearchBox" placeholder="Search" autocomplete="off" />
+            <select name="distributor_id" class="span4" id="distributor_id" required="required" size="5">
+                <option value="">Please select</option>
+                <?php
+                    foreach($this->distributors as $distributor):
+                        $selected = '';
+                        if(isset($this->sales[0]['sale']) and $distributor['id'] == $this->sales[0]['sale']->d_id){
+                            $selected = 'selected';
+                        }
+                        echo '<option '.$selected.' value="'.$distributor['id'].'">'.$distributor['title'].'</option>';
+                    endforeach;
+                ?>
+            </select>
+        </label>
+    </div>
+    <div class="span6">
+        <div class="control-group">
+            <label for="myTags" class="span2">Tags
+				<ul class="form-control span3" id="myTags"><?php
+                if (isset($this->a_tags) and $this->a_tags):
+                    foreach ($this->a_tags as $ta)
+                        echo '<li>'.$ta.'</li>';
+                endif;
+                ?></ul>
+			</label>
+        </div>
+
+        <label class="span4" for="warehouse_id">Warehouse <span style="color: red">*</span>
+            <select id="warehouse_id" class="span4" name="warehouse_id" required="required">
+                <option value="">Please select</option>
+                <?php foreach ($this->warehouses as $warehouse):?>
+                    <option value="<?php echo $warehouse->id;?>" <?php if (isset($this->sales) and $warehouse->id == $this->sales[0]['sale']->warehouse_id):?> selected<?php endif;?>><?php echo $warehouse->name;?></option>
+                <?php endforeach;?>
+            </select>
+        </label>
+        <div class="clearfix"></div>
+    </div>
+</div>
+
+<br />
+
+<div class="row">
+    <div class="span12">
+        <label class="span2" for="life_time">Order Life time <span style="color: red">*</span>
+        </label>
+
+        <div class="span4">
+            <input class="span1" type="number" name="life_time" maxlength="3" max="5" min="1" id="life_time" required="required" <?php if (! $this->life_time_editable) {?> disabled<?php }?> value="<?php if ( isset($this->sales[0]['sale']) and $this->sales[0]['sale']->life_time ) echo $this->sales[0]['sale']->life_time / ( 24*60*60 ); else echo 2;?>"><span class="1">day(s)</span>
+        </div>
+    </div>
+</div>
+
+<br />
+
+<?php if ($this->sales):?>
+
+    <?php foreach ($this->sales as $item):
+        $sale = $item['sale'];
+        $goods = $item['goods'];
+        $colors = $item['colors'];
+    ?>
+
+        <div class="row">
+            <div class="span12">
+
+                <label class="span1">Category <span style="color: red">*</span>
+                    <select class="span1 cat_id" name="cat_id[]" required="required">
+                        <option value="">Please select</option>
+                        <?php foreach ($this->good_categories as $good_category):?>
+                            <option value="<?php echo $good_category->id;?>" <?php if ($good_category->id == $sale->cat_id):?> selected<?php endif;?>><?php echo $good_category->name;?></option>
+                        <?php endforeach;?>
+                    </select>
+                </label>
+
+                <label class="span1">Product <span style="color: red">*</span>
+                    <select class="span1 good_id" name="good_id[]" required="required">
+                        <option value="">Please select</option>
+                        <?php foreach ($goods as $good):?>
+                            <option value="<?php echo $good->id;?>" <?php if ($good->id == $sale->good_id):?> selected<?php endif;?>><?php echo $good->name;?></option>
+                        <?php endforeach;?>
+                    </select>
+                </label>
+
+                <label class="span1">Color <span style="color: red">*</span>
+                    <select class="span1 good_color" name="good_color[]" required="required">
+                        <option value="">Please select</option>
+                        <?php foreach ($colors as $color):?>
+                            <option value="<?php echo $color->id;?>" <?php if ($color->id == $sale->good_color):?> selected<?php endif;?>><?php echo $color->name;?></option>
+                        <?php endforeach;?>
+                    </select>
+                </label>
+
+                <label class="span1">Quantity <span style="color: red">*</span>
+                    <input type="number" min="1" class="span1 num" name="num[]" required="required" maxlength="5" style="width: 50px" value="<?php printf($sale->num);?>" />
+                </label>
+
+                <label class="span1">Price <span style="color: red">*</span>
+                    <input type="text" min="1" required="required" readonly class="span1 price" name="price[]" value="<?php printf(My_Number::f($sale->price));?>" />
+                </label>
+
+                <label class="span1">Sale off <span style="color: red">*</span>
+                    <select class="span1 sale_off_percent" name="sale_off_percent[]" required="required">
+                        <option value="0" <?php if ($sale->sale_off_percent == 0){?> selected<?php }?>>0%</option>
+                        <option value="10" <?php if ($sale->sale_off_percent == 10){?> selected<?php }?>>10%</option>
+                        <option value="15" <?php if ($sale->sale_off_percent == 15){?> selected<?php }?>>15%</option>
+                        <option value="25" <?php if ($sale->sale_off_percent == 25){?> selected<?php }?>>25%</option>
+                        <option value="30" <?php if ($sale->sale_off_percent == 30){?> selected<?php }?>>30%</option>
+                        <option value="40" <?php if ($sale->sale_off_percent == 40){?> selected<?php }?>>40%</option>
+                        <option value="50" <?php if ($sale->sale_off_percent == 50){?> selected<?php }?>>50%</option>
+                        <option value="70" <?php if ($sale->sale_off_percent == 70){?> selected<?php }?>>70%</option>
+                    </select>
+                </label>
+
+                <label class="span2">Total<span style="color: red">*</span>
+                    <input type="text" min="0" required="required" class="span2 total" name="total[]" value="<?php printf(My_Number::f($sale->total));?>" />
+                </label>
+
+                <label class="span2">Remark
+                    <textarea name="text[]" class="span2 text"><?php if(isset($sale->text)) echo $sale->text;?></textarea>
+                </label>
+
+                <label class="span1">&nbsp;<button type="button" class="btn-danger remove-sales"><i class="icon-minus"></i></button></label>
+
+                <input type="hidden" name="ids[]" class="ids" value="<?php if(isset($sale->id)) echo $sale->id;?>">
+            </div>
+        </div>
+<?php endforeach;?>
+
+<?php else:?>
+    <div class="row">
+        <div class="span12">
+
+            <label class="span1">Category <span style="color: red">*</span>
+                <select class="span1 cat_id" name="cat_id[]" required="required">
+                    <option value="">Please select</option>
+                    <?php foreach ($this->good_categories as $good_category):?>
+                        <?php if ($good_category['id'] == PHONE_CAT_ID): ?>
+                            <option value="<?php echo $good_category->id;?>"><?php echo $good_category->name;?></option>
+                        <?php endif ?>
+                    <?php endforeach;?>
+                </select>
+            </label>
+
+            <label class="span1">Product <span style="color: red">*</span>
+                <select class="span1 good_id" name="good_id[]" required="required">
+                    <option value="">Please select</option>
+                </select>
+            </label>
+
+            <label class="span1">Color <span style="color: red">*</span>
+                <select class="span1 good_color" name="good_color[]" required="required">
+                    <option value="">Please select</option>
+                </select>
+            </label>
+
+            <label class="span1">Quantity <span style="color: red">*</span>
+                <input type="number" min="1" class="span1 num" name="num[]" required="required" maxlength="5" style="width: 50px" />
+            </label>
+
+            <label class="span1">Price <span style="color: red">*</span>
+                <input type="text" min="1" required="required" readonly class="span1 price" name="price[]" />
+            </label>
+
+            <label class="span1">Sale off <span style="color: red">*</span>
+                <select class="span1 sale_off_percent" name="sale_off_percent[]" required="required">
+                    <option value="0">0%</option>
+                    <option value="10">10%</option>
+                    <option value="15">15%</option>
+                    <option value="25">25%</option>
+                    <option value="30">30%</option>
+                    <option value="40">40%</option>
+                    <option value="50">50%</option>
+                    <option value="70">70%</option>
+                </select>
+            </label>
+
+            <label class="span2">Total<span style="color: red">*</span>
+                <input type="text" min="0" required="required" class="span2 total" name="total[]" />
+            </label>
+
+            <label class="span2">Remark
+                <textarea name="text[]" class="span2 text"></textarea>
+            </label>
+
+            <label class="span1">&nbsp;<button type="button" class="btn-danger remove-sales"><i class="icon-minus"></i></button></label>
+
+            <input type="hidden" name="ids[]" class="ids" />
+        </div>
+    </div>
+<?php endif;?>
+
+<div class="row">
+    <div class="span12">
+        <label class="span3"><button type="button" class="btn-success add-sales"><i class="icon-plus"></i></button></label>
+    </div>
+</div>
+
+<div class="row">
+    <div class="span12">
+        <label class="span2">IMEI List
+            <textarea rows="10" required class="span2 imei_list" name="imei_list"><?php if (isset($this->imei_list) && count($this->imei_list)): ?><?php echo $this->imei_list ?><?php endif ?></textarea>
+        </label>
+    </div>
+</div>
+
+<br>
+
+<div class="row">
+    <div class="span6">
+        <div class="control-group">
+            <input type="hidden" name="sn" value="<?php isset($this->sales) and $this->sales and printf($this->sales[0]['sale']->sn);?>">
+            <input type="hidden" name="market_general_id" value="<?php echo (isset($this->sales[0]['sale']->market_general_id) ? $this->sales[0]['sale']->market_general_id : 0);?>">
+            <div class="span4">
+                <button type="submit" class="btn btn-primary" id="submit_btn">Submit</button>
+                <button type="submit" style="display:none;"></button>
+                <button type="reset" id='reset' class="btn btn-warning">Reset</button>
+                <input type="hidden" name="back_url" id="back_url" value="/sales">
+                <button type="button" class="btn btn-danger go-back">Go back</button>
+            </div>
+        </div>
+        <div class="clearfix"></div>
+    </div>
+</div>
+</form>
+
+<?php echo $this->render('sales/partials/common-clone-stock.phtml'); ?>
+
+<div id="dialog" title="Confirmation"></div>
+<div id="dialog1" title="Confirmation"></div>
+
+<?php echo $this->render('sales/partials/common-script-stock.phtml'); ?>
+
+

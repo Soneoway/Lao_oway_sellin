@@ -1,0 +1,58 @@
+<div style="display: none" class="row div-add">
+    <div class="span12">
+        <label class="span1">Category <span style="color: red">*</span>
+            <select class="span1 cat_id" name="cat_id[]" required="required" disabled>
+                <option value="">Please select</option>
+                <?php foreach ($this->good_categories as $good_category):?>
+                    <option value="<?php echo $good_category->id;?>"><?php echo $good_category->name;?></option>
+                <?php endforeach;?>
+            </select>
+        </label>
+
+        <label class="span1">Product <span style="color: red">*</span>
+            <select class="span1 good_id" name="good_id[]" required="required" disabled>
+                <option value="">Please select</option>
+            </select>
+        </label>
+
+        <label class="span1">Color <span style="color: red">*</span>
+            <select class="span1 good_color" name="good_color[]" required="required" disabled>
+                <option value="">Please select</option>
+            </select>
+        </label>
+
+        <label class="span1">Quantity <span style="color: red">*</span>
+            <input type="number" min="1" class="span1 num" name="num[]" required="required" maxlength="5" style="width: 50px" disabled />
+        </label>
+
+        <label class="span1">Price <span style="color: red">*</span>
+            <input type="text" min="1" required="required" readonly class="span1 price" name="price[]" disabled />
+        </label>
+
+        <label class="span1">Sale off<span style="color: red">*</span>
+            <select class="span1 sale_off_percent" name="sale_off_percent[]" required="required" disabled>
+                <option value="0">0%</option>
+                <option value="10">10%</option>
+                <option value="15">15%</option>
+                <option value="25">25%</option>
+                <option value="30">30%</option>
+                <option value="40">40%</option>
+                <option value="50">50%</option>
+                <option value="70">70%</option>
+            </select>
+        </label>
+
+
+        <label class="span2">Total<span style="color: red">*</span>
+            <input type="text" min="0" required="required" class="span2 total total_new" name="total[]" disabled />
+        </label>
+
+        <label class="span2">Remark
+            <textarea name="text[]" class="span2 text" disabled></textarea>
+        </label>
+
+        <label class="span1">&nbsp;<button type="button" class="btn-danger remove-sales"><i class="icon-minus"></i></button></label>
+
+        <input type="hidden" name="ids[]" class="ids" disabled />
+    </div>
+</div>

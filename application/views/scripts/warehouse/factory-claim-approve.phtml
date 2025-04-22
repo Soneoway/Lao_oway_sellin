@@ -1,0 +1,242 @@
+<style>
+    .blockOverlay{
+        z-index: 10000 !important;
+    }
+    .blockPage{
+        z-index: 10001 !important;
+    }
+
+    hr{
+        width: 220px;
+    }
+</style>
+
+<!-- Modal -->
+<div class="modal fade" id="myModal" role="dialog">
+<div class="modal-dialog">
+
+  <!-- Modal content-->
+  <div class="modal-content">
+    <div class="modal-header">
+      <button type="button" class="close" data-dismiss="modal">&times;</button>
+      <h4 class="modal-title">Cancel</h4>
+    </div>
+    <div class="modal-body">
+      Remark : <input type="text" id="modal-remark">
+      <input type="hidden" id="modal-id" value="">
+    </div>
+    <div class="modal-footer">
+      <button type="button" class="btn btn-info" id="modal-btn-cancel" data-dismiss="modal">Save</button>
+      <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+    </div>
+  </div>
+  
+</div>
+</div>
+
+<div class="page-header">
+    <h1>Confirm Service Factory Claim</h1>
+</div>
+<?php
+    if (isset($this->messages) and $this->messages)
+        foreach ($this->messages as $message):
+            echo '<div class="alert alert-error">'.$message.'</div>';
+        endforeach;
+?>
+
+<div class="row" style="margin-left: 30px;">
+    <form action="factory-claim-approve" method="post">
+
+    <div>
+        <span>Request By : <?php if(isset($this->get_factory_claim['fullname']) and $this->get_factory_claim['fullname']){ echo $this->get_factory_claim['fullname']; }?></span>
+    </div>
+    <div>
+        <span>Request Date : <?php if(isset($this->get_factory_claim['created_date']) and $this->get_factory_claim['created_date']){ echo $this->get_factory_claim['created_date']; }?></span>
+    </div>
+
+    <hr>
+
+    <div>
+        <span><span style="color: red">*</span>Old IMEI : </span>
+    </div>
+    <div>
+        <input type="text" id="old_imei" name="old_imei" minlength="15" maxlength="15" value="<?php if(isset($this->get_factory_claim['old_imei']) and $this->get_factory_claim['old_imei']){ echo $this->get_factory_claim['old_imei']; }?>" readonly required>
+    </div>
+    <div>
+        <span style="margin-left: 15px;">Old Product Model : <?php if(isset($this->get_factory_claim['old_good_model']) and $this->get_factory_claim['old_good_model']){ echo $this->get_factory_claim['old_good_model']; }?></span>
+    </div>
+    <div>
+        <span style="margin-left: 15px;">Old Product Name : <?php if(isset($this->get_factory_claim['old_good']) and $this->get_factory_claim['old_good']){ echo $this->get_factory_claim['old_good']; }?></span>
+    </div>
+    <div>
+        <span style="margin-left: 15px;">Old Product Color : <?php if(isset($this->get_factory_claim['old_good_color']) and $this->get_factory_claim['old_good_color']){ echo $this->get_factory_claim['old_good_color']; }?></span>
+    </div>
+
+    <hr>
+
+    <div>
+        <span><span style="color: red">*</span>New IMEI : </span>
+    </div>
+    <div>
+        <input type="text" id="new_imei" name="new_imei" minlength="15" maxlength="15" value="<?php if(isset($this->get_factory_claim['new_imei']) and $this->get_factory_claim['new_imei']){ echo $this->get_factory_claim['new_imei']; }?>" readonly required>
+    </div>
+    <div>
+        <span style="margin-left: 15px;">New Product Model : <?php if(isset($this->get_factory_claim['new_good_model']) and $this->get_factory_claim['new_good_model']){ echo $this->get_factory_claim['new_good_model']; }?></span>
+    </div>
+    <div>
+        <span style="margin-left: 15px;">New Product Name : <?php if(isset($this->get_factory_claim['new_good']) and $this->get_factory_claim['new_good']){ echo $this->get_factory_claim['new_good']; }?></span>
+    </div>
+    <div>
+        <span style="margin-left: 15px;">New Product Color : <?php if(isset($this->get_factory_claim['new_good_color']) and $this->get_factory_claim['new_good_color']){ echo $this->get_factory_claim['new_good_color']; }?></span>
+    </div>
+
+    <hr>
+
+    <div>
+        <span><span style="color: red">*</span>Warehouse : </span>
+    </div>
+    <div>
+        <input type="hidden" name="warehouse" value="<?php if(isset($this->get_factory_claim['warehouse']) and $this->get_factory_claim['warehouse']){ echo $this->get_factory_claim['warehouse']; }?>">
+        <select title="<?=$this->warehouse_all[$this->get_factory_claim['warehouse']];?>" id="warehouse" disabled required>
+            <option value="">-----</option>
+            <?php
+            
+             $userStorage = Zend_Auth::getInstance()->getStorage()->read();
+
+             if (My_Staff_Group::inGroup($userStorage->group_id, array(ADMINISTRATOR_ID))){
+
+                foreach ($this->warehouse_all as $key => $value) {
+                    ?>
+                    <option value="<?=$key;?>" <?php if(isset($this->get_factory_claim['warehouse']) and $this->get_factory_claim['warehouse'] == $key){ echo 'selected'; } ?>><?=$value;?></option>
+                <?php
+                }
+            }else{ 
+
+                foreach ($this->get_warehouse as $key) {
+                    ?>
+                    <option value="<?=$key['warehouse_id'];?>" <?php if(isset($this->get_factory_claim['warehouse']) and $this->get_factory_claim['warehouse'] == $key){ echo 'selected'; }?><?=$this->warehouse_all[$key['warehouse_id']];?></option>
+                <?php
+                }
+            } ?>
+        </select>
+    </div>
+
+    <hr>
+
+    <div>
+        <span><span style="color: red">*</span>Job Number : </span>
+    </div>
+    <div>
+        <input type="text" id="job_number" name="job_number" minlength="22" maxlength="22" value="<?php if(isset($this->get_factory_claim['job_number']) and $this->get_factory_claim['job_number']){ echo $this->get_factory_claim['job_number']; }?>" readonly required>
+    </div>
+
+    <hr>
+
+    <div>
+        <span><span style="color: red">*</span>Remark</span>
+    </div>
+    <div>
+        <textarea id="remark" name="remark" cols="30" rows="3" readonly required><?php if(isset($this->get_factory_claim['remark']) and $this->get_factory_claim['remark']){ echo $this->get_factory_claim['remark']; }?></textarea>
+    </div>
+
+    <hr>
+
+    <div>
+        <span><span style="color: red">*</span>รูปบัตรประชาชน</span>
+    </div>
+    <div>
+        <img style="width: 500px;" src="<?=$this->img_id_card;?>" alt="รูปบัตรประชาชน">
+    </div>
+
+    <hr>
+
+    <div>
+        <span><span style="color: red">*</span>รูปสภาพเครื่อง</span>
+    </div>
+    <div>
+        <img style="width: 500px;" src="<?=$this->img_broken;?>" alt="รูปสภาพเครื่อง">
+    </div>
+
+    <hr>
+
+    <div class="" style="margin-bottom: 50px;">
+        <input type="hidden" name="id" value="<?=$this->id;?>">
+        <button style="margin-right: 15px;" type="button" class="btn btn-default" onclick="window.location.href='<?=HOST."warehouse/factory-claim-approve-list"?>'">Back</button>
+        <button style="margin-right: 15px;" type="button" class="btn btn-warning" id="btn-cancel">Cancel</button>
+        <button type="submit" class="btn btn-primary" id="btn-submit">Confirm</button>
+
+    </div>
+
+        
+    </form>
+</div>
+
+<script src="/js/jquery.blockUI.js"></script>
+<script>
+
+    $(document).on("submit", "form", function(e){
+
+        $.blockUI({ css: { 
+            border: 'none', 
+            padding: '15px', 
+            backgroundColor: '#000', 
+            '-webkit-border-radius': '10px', 
+            '-moz-border-radius': '10px', 
+            opacity: .5, 
+            color: '#fff' 
+        } });
+    });
+
+    $(document).ajaxStart(function(){
+        $.blockUI({ css: { 
+            border: 'none', 
+            padding: '15px', 
+            backgroundColor: '#000', 
+            '-webkit-border-radius': '10px', 
+            '-moz-border-radius': '10px', 
+            opacity: .5, 
+            color: '#fff' 
+        } });
+    });
+
+    $(document).ajaxStop(function(){
+        $.unblockUI();
+    });
+
+    $(document).ready(function () {
+        
+        $("#btn-cancel").click(function(){
+
+            $("#myModal").modal();
+            $('#modal-id').val('<?=$this->id;?>');
+        });
+
+        $('#modal-btn-cancel').click(function(event) {
+            
+            $.ajax({
+                url: '<?php echo HOST.'warehouse/cancel-factory-claim';?>',
+                type: 'POST',
+                data: {'id':$('#modal-id').val(),'remark':$('#modal-remark').val()},
+            })
+            .done(function(response) {
+                var obj_response = jQuery.parseJSON(response);
+                console.log("success");
+
+                 switch(obj_response.status) {
+                    case 200:
+                        console.log('done');
+                        window.location.href = '<?php echo HOST.'warehouse/factory-claim-approve-list';?>';
+                        break;
+                    case 400:
+                        alert(obj_response.message);
+                        break;
+                    default:
+                        location.reload();
+                }
+                
+            });
+            
+        });
+
+    });
+</script>

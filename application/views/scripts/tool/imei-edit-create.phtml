@@ -1,0 +1,104 @@
+<div class="page-header">
+    <?php if (isset($this->imeiupdates) and $this->imeiupdates):?>
+        <h1>Edit IMEI <small><?php echo $this->imeiupdates['imei_sn'] ?></small></h1>
+    <?php else:?>
+        <h1>Create IMEI</h1>
+    <?php endif;?>
+</div>
+<form action="<?php echo HOST ?>tool/imei-edit-save" method="post" class="form-horizontal">
+    <?php if (isset($this->imeiupdates) && $this->imeiupdates) ?> 
+    <br>
+    <div class="row">
+        <div class="span5 offset1">
+            <div class="control-group">
+                <label for="sn" class="control-label">ຮ້ານ</label>
+                <div class="controls">
+                    <input type="text"  class="" name="distributor_id" 
+                    value="<?php echo $this->imeiupdates['distributor_id'];?>">
+                </div>
+            </div>
+
+            <div class="control-group">
+                <label for="user_id" class="control-label">ວັນທີຂາຍ</label>
+                <div class="controls">
+                    <input type="text"  class="" name="out_date"
+                    value="<?php echo $this->imeiupdates['out_date'];?>">
+                </div>
+            </div>
+
+            <div class="control-group">
+                <label for="cat_id" class="control-label">ເລກທີຂາຍ</label>
+                <div class="controls">
+                    <input type="number"  class="" name="sales_sn"
+                    value="<?php echo $this->imeiupdates['sales_sn'];?>">
+                </div>
+            </div>
+           
+
+        </div>
+        <div class="span5">
+            <div class="control-group">
+            <label for="warehouse" class="control-label">ໄອດີເຊວ</label>
+                <div class="controls">
+                    <input type="text"  class="" name="sales_id"
+                    value="<?php echo $this->imeiupdates['sales_id'];?>">
+                </div>
+            </div>         
+        <div class="retailer_name_list"></div>
+
+            <div class="control-group">
+                <label for="warehouse" class="control-label">ລາຄາຂາຍ</label>
+                <div class="controls">
+                    <input type="number"  class="" name="out_price"
+                    value="<?php echo $this->imeiupdates['out_price'];?>">
+                </div>
+            </div>
+
+            <div class="control-group">
+                <label for="area" class="control-label">ຜູ້ຂາຍ</label>
+                <div class="controls">
+                    <input type="text"  class="" name="out_user"
+                    value="<?php echo $this->imeiupdates['out_user'];?>">
+                </div>
+            </div>
+
+            <div class="control-group">
+                <label for="area" style="color:red" class="control-label">ລຸ້ນ</label>
+                <div class="controls">
+                    <select name="good_id" id="good_id" required>
+                        <option value>---</option>
+                        <?php if (isset($this->goods) && $this->goods): ?>
+                            <?php foreach ($this->goods as $key => $value): ?>
+                                <option value="<?php echo $value['good_id'] ?>"
+                                    <?php if (isset($this->imeiupdates['good_id']) && $value['good_id'] == $this->imeiupdates['good_id']) 
+                                            echo "selected" ?>><?php echo $value['good_name'] ?></option>
+                            <?php endforeach ?>
+                        <?php endif ?>
+                    </select>
+                </div>
+            </div>
+
+            <div class="control-group">
+                <label for="area" style="color:red" class="control-label">ສີ</label>
+                <div class="controls">
+                    <select name="good_color" id="good_color" required>
+                        <option value>---</option>
+                        <?php if (isset($this->colors) && $this->colors): ?>
+                            <?php foreach ($this->colors as $key => $value): ?>
+                                <option value="<?php echo $value['color_id'] ?>"
+                                    <?php if (isset($this->imeiupdates['good_color']) && $value['color_id'] == $this->imeiupdates['good_color']) 
+                                            echo "selected" ?>><?php echo $value['color_name'] ?></option>
+                            <?php endforeach ?>
+                        <?php endif ?>
+                    </select>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="control-group">
+        <div class="controls">
+            <input type="hidden" name="id" value="<?php echo $this->imeiupdates['id'];?>">
+            <button type="submit" class="btn btn-primary">Update</button>
+        </div>
+    </div>
+</form>

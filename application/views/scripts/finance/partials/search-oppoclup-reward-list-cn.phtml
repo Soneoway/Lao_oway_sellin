@@ -1,0 +1,136 @@
+<link href="../css/select2.css" rel="stylesheet"/>
+<script src="../js/select2.js"></script>
+<form class="form-search form-horizontal" method="get" action="<?php echo HOST ?>finance/oppoclup-reward-list-cn">
+    <div class="row">
+        <div class="span5">
+            <div class="control-group">
+                <label for="creditnote_sn" class="span2">Credit Note No</label>
+                <input id="creditnote_sn" name="creditnote_sn" type="text" class="input-medium search-query form-control" value="<?php isset($this->params['creditnote_sn']) and printf($this->params['creditnote_sn']);?>">
+            </div>
+
+            <div class="control-group">
+            <?php 
+                $year_now = date('Y'); 
+                $year_prev = date('Y')-6; 
+            ?>
+
+                <label for="quater_year" class="span2">Year Quater</label>
+                <select id="quater_year" name="quater_year">
+                    <option value="">-- Select Year --</option>
+                    <?php for($y=$year_now;$y>=$year_prev;$y--){ 
+                        $selected="";
+                        if (isset($this->params['quater_year']) and $y==$this->params['quater_year'])
+                            {$selected="selected";}
+                    ?>
+                    <option value="<?=$y?>" <?=$selected?>><?=$y?></option>
+                    <?php } ?>
+                </select>
+            </div>
+
+            <div class="control-group">
+                <label for="quater_no" class="span2">Quater No.</label>
+                <select id="quater_no" name="quater_no">
+                    <option value="">-- Select Quater --</option>
+                    <?php for($i=1;$i<=4;$i++){ 
+                        $quater_no = "Quater_0".$i;
+                        $quater_no_name = "Quater 0".$i;
+
+                        $selected="";
+                        if (isset($this->params['quater_no']) and $quater_no==$this->params['quater_no'])
+                            {$selected="selected";}
+                    ?>
+                        <option value="<?=$quater_no?>"<?=$selected?> ><?=$quater_no_name?></option>
+                    <?php } ?>
+                </select>
+            </div>
+
+            <div class="control-group" style="display: none;">
+                <label for="decorate_status" class="span2">Trade Decorate Status</label>
+                <select id="decorate_status" class="decorate_status" name="decorate_status">
+                    <option value="1" <?php if (isset($this->params['decorate_status']) and 1==$this->params['decorate_status'])
+                            {echo "selected";} ?> >Approve</option>
+                    <option value="0" <?php if (isset($this->params['decorate_status']) and 0==$this->params['decorate_status'])
+                            {echo "selected";} ?> >Wait To Check</option>
+                </select>
+            </div>
+
+            <div class="control-group">
+                <label for="level_name" class="span2">Level Name</label>
+                <select id="level_name" class="level_name" name="level_name">
+                    <option value="All" <?php if (isset($this->params['level_name']) and 'All'==$this->params['level_name'])
+                            {echo "selected";} ?> >-- ALL --</option>
+                    <option value="Platinum" <?php if (isset($this->params['level_name']) and 'Platinum'==$this->params['level_name'])
+                            {echo "selected";} ?> >Platinum</option>
+                    <option value="Gold" <?php if (isset($this->params['level_name']) and 'Gold'==$this->params['level_name'])
+                            {echo "selected";} ?> >Gold</option>
+                    <option value="Silver" <?php if (isset($this->params['level_name']) and 'Silver'==$this->params['level_name'])
+                            {echo "selected";} ?> >Silver</option>        
+                </select>
+            </div>
+
+            <div class="control-group">
+                <label for="status_cn" class="span2">Reward CN Status</label>
+                <select id="status_cn" class="status_cn" name="status_cn">
+                    <option value="0" <?php if (isset($this->params['status_cn']) and 0==$this->params['status_cn'])
+                            {echo "selected";} ?> >Wait To Confirm</option>
+                    <option value="1" <?php if (isset($this->params['status_cn']) and 1==$this->params['status_cn'])
+                            {echo "selected";} ?> >Confirmed</option>
+                </select>
+            </div>
+
+        </div>
+        <div class="span5">
+            <div class="control-group">
+                <label for="d_id" class="span2">Retailer Name</label>
+				<input type='text' class="span3" name='SearchBox' id="SearchBox" placeholder="Search" autocomplete="off" />
+                <select name="d_id" id="d_id" class="span3" size='5'>
+                    <option value="">Choose</option>
+                    <?php if (isset($this->distributors) && $this->distributors): foreach ($this->distributors as $id=>$name):?>
+                        <option value="<?php echo $id;?>" <?php if (isset($this->params['d_id']) and $id==$this->params['d_id']):?> selected="selected"<?php endif;?>><?php echo $name;?></option>
+                    <?php endforeach; endif;?>
+                </select>
+            </div>
+
+        </div>
+    </div>
+
+    <button type="submit" class="btn btn-primary">Search</button>
+    <button type="reset" class="btn btn-warning">Reset</button>
+    <button type="submit"  name="gen_reward" value="1" class="btn btn-danger">Get Reward Data From Catty</button>
+    <button type="submit" id="status_cn_0" name="export" value="1" class="btn btn-info">Export Wait Confirm</button>
+    <button type="submit" id="status_cn_1" name="export" value="2" class="btn btn-success">Export Confirmed</button>
+    <button type="submit" id="status_cn_0" name="export" value="3" class="btn btn-info">Export Imei</button>
+</form>
+<script>
+    $(document).ready(function () {
+        initStatusConfirm();
+        initSearchOptionDistributor('d_id', 'SearchBox');
+        var status_cn = $('.status_cn option:selected').val();
+        if(status_cn==1){
+             $("#status_cn_0").hide();
+             $("#status_cn_1").show();
+        }else{
+             $("#status_cn_0").show();
+             $("#status_cn_1").hide();
+        }
+        //$( '.date' ).datepicker({ dateFormat: "dd/mm/yy" }); 
+
+
+    });
+
+    function initStatusConfirm(){//change StatusConfirm
+
+        $('#status_cn').live('change', function(e) {
+           var status_cn = $('.status_cn option:selected').val();
+           if(status_cn==1){
+             $("#status_cn_0").hide();
+             $("#status_cn_1").show();
+           }else{
+             $("#status_cn_0").show();
+             $("#status_cn_1").hide();
+           }
+        });
+
+    }
+
+</script>

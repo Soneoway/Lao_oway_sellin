@@ -1,0 +1,75 @@
+<table class="table table-bordered">
+    <thead>
+        <tr>
+            <?php echo $this->sorting(array(
+                    '#',
+                    'sn'             => 'Delivery Order SN',
+                    'Sell Order SN',
+                    'carrier'        => 'Carrier',
+                    'distributor'    => 'Distributor',
+                    'receiver'       => 'Receiver',
+                    'phone_number'   => 'Phone Number',
+                    'address'        => 'Address',
+                    'province'       => 'Province',
+                    'district'       => 'District',
+                    'created_at'     => 'Created At',
+                    'delivered_time' => 'Delivered At',
+                    'Action'
+                ),
+                $this->url, $this->sort, $this->desc); ?>
+        </tr>
+    </thead>
+    <tbody>
+        <?php
+        if (isset($this->order_list) and $this->order_list)
+            foreach ($this->order_list as $k => $_order): ?>
+        <tr>
+            <td>
+                <?php
+                    $inc = $this->offset + $k + 1;
+                    echo $inc;
+                ?>
+            </td>
+            <td><?php echo $_order['sn'] ?></td>
+            <td><button class="btn btn-default btn-mini get_sn_btn" data-id="<?php echo $_order['id'] ?>">View SN</button></td>
+            <td><?php if (isset(My_Carrier::$name[$_order['carrier_id']])) echo My_Carrier::$name[$_order['carrier_id']] ?></td>
+            <td><?php if (isset($this->distributor_cache[$_order['distributor_id']])) echo $this->distributor_cache[$_order['distributor_id']] ?></td>
+            <td><?php echo $_order['receiver'] ?></td>
+            <td><?php echo $_order['phone_number'] ?></td>
+            <td><?php echo $_order['address'] ?></td>
+            <td><?php if(isset($_order['district'])) echo My_Region::getValue($_order['district'], My_Region::Province) ?></td>
+            <td><?php if(isset($_order['district'])) echo My_Region::getValue($_order['district'], My_Region::District) ?></td>
+            <td><?php if(isset($_order['created_at'])) echo date('d/m/Y H:i:s', strtotime($_order['created_at'])) ?></td>
+            <td>
+                <?php if (isset($_order['delivered_time'])): ?>
+                    <strong><?php echo date('d/m/Y H:i:s', strtotime($_order['delivered_time'])) ?></strong>
+                <?php elseif($_order['del']): ?>
+                    deleted
+                <?php else: ?>
+                    <i>processing</i>
+                <?php endif ?>
+            </td>
+            <td class="">
+                <?php if ($this->access('warehouse', 'delivery-delivered') && null === $_order['delivered_time'] && !$_order['del']): ?>
+                <p>
+                    <a title="Mark as delivered" class="btn btn-info btn-mini confirmLink" href="/warehouse/delivery-delivered?id=<?php echo $_order['id'];?>"> <i class="icon-ok"></i></a>
+                </p>
+                <?php endif; ?>
+
+                <?php if ($this->access('warehouse', 'delivery-delete') && null === $_order['delivered_time'] && !$_order['del']): ?>
+                <p>
+                    <a title="Delete" class="btn btn-danger btn-mini confirmLink" href="/warehouse/delivery-delete?id=<?php echo $_order['id'];?>"> <i class="icon-trash"></i></a>
+                </p>
+                <?php endif ?>
+            </td>
+        </tr>
+        <?php endforeach;?>
+
+    </tbody>
+</table>
+<div class="paging">
+    <?php echo $this->paging($this->total, $this->limit, $this->offset, $this->url);?>
+</div>
+<script type="text/javascript" src="/js/jquery-ui-1.8.12.custom.min.js"></script>
+<link rel="stylesheet" type="text/css" href="/css/jquery-ui-1.8.12.custom.css"/>
+<?php echo $this->confirm();?>

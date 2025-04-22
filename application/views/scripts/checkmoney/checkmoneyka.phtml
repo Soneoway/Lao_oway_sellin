@@ -1,0 +1,104 @@
+<div class="page-header">
+    <h1>Money check KA</h1>
+</div>
+
+<?php
+    if (isset($this->messages_success) and $this->messages_success)
+        foreach ($this->messages_success as $message):
+            echo '<div class="alert alert-success">'.$message.'</div>';
+        endforeach;
+
+    if (isset($this->messages) and $this->messages)
+        foreach ($this->messages as $message):
+            echo '<div class="alert alert-error">'.$message.'</div>';
+        endforeach;
+?>
+
+<div class="row">
+    <div class="span12">
+        <a href="#" id="add" class="btn btn-success pull-right"><i class="icon-plus"></i></a>
+    </div>
+</div>
+
+<div class="accordion" id="accordion2">
+    <div class="accordion-group">
+        <div class="accordion-heading">
+            <a class="accordion-toggle collapsed" data-toggle="collapse" data-parent="#accordion2" href="#collapseTwo">
+                Search
+            </a>
+        </div>
+        <div id="collapseTwo" class="accordion-body collapse" style="height: 0px;">
+            <div class="accordion-inner">
+                <?php
+                    //echo $this->render('checkmoney/partials/search_by_retailer.phtml');
+                ?>
+            </div>
+        </div>
+    </div>
+</div>
+
+<div class="table-responsive">
+    <?php
+        echo $this->render('checkmoney/partials/list_checkmoneyka.phtml');
+    ?>
+</div>
+
+<link rel="stylesheet" href="<?php echo HOST?>css/jquery-ui-1.8.12.custom.css" />
+<link rel="stylesheet" href="<?php echo HOST?>css/checkmoney.css" />
+<link rel="stylesheet" href="<?php echo HOST?>js/chosen.css" />
+<script src="<?php echo HOST?>js/jquery-ui-1.8.12.custom.min.js"></script>
+<script src="<?php echo HOST?>js/numeral.min.js"></script>
+<script src="<?php echo HOST?>js/chosen.jquery.js"></script>
+
+<!-- Modal -->
+<div id="myModal" class="modal hide fade" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+    <div class="modal-header">
+        <button type="button" class="close" data-dismiss="modal" aria-hidden="true">×</button>
+        <h3 id="myModalLabel">Add dealer</h3>
+    </div>
+    <form action="/checkmoney/save-checkmoney-ka" method="post" id='frmAdd'>
+    <div class="modal-body">
+        
+            <label>Retailer Name:
+                <input type="text" class="span3" name="SearchBox" id="SearchBox" placeholder="Search" autocomplete="off" />
+                <select name="d_id" id="d_id2" class="span3" size="5">
+                    <option value="">Choose</option>
+                    <?php
+                        foreach($this->distributors as $item):
+                            $selected = '';
+                            if($item['id'] == $this->params['d_id']){
+                                $selected = 'selected="selected"';
+                            }
+                            echo "<option value='".$item['id']."' $selected>".(isset($item['store_code']) ? $item['store_code'].' - ' : '').$item['title']."</option>";
+                        endforeach;
+                    ?>
+                </select>
+            </label>
+        
+    </div>
+    <div class="modal-footer">
+        <button class="btn" data-dismiss="modal" aria-hidden="true">Close</button>
+        <input type="submit" name="Save" value="Save" class="btn btn-primary">
+    </div>
+    </form>
+</div>
+
+<style>
+
+</style>
+<script>
+	 $(document).ready(function () {
+         $( ".datepicker" ).datepicker({ dateFormat: "yy-mm-dd" });
+         $('.form-search button:reset').click(function (e){
+            $('.form-search input, .form-search select').val('');
+            $('textarea').val('');
+            $('.form-search').submit();
+            return false;
+        });
+        initSearchOptionDistributor('d_id2', 'SearchBox');
+        $("#add").click(function(){
+            $('#myModal').modal('show')    
+        })
+        
+    });
+</script>

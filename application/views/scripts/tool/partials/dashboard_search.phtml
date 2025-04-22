@@ -1,0 +1,138 @@
+
+<script type="text/javascript" src="<?php echo HOST ?>js/jquery-ui-1.8.12.custom.min.js"></script>
+<link rel="stylesheet" type="text/css" href="<?php echo HOST ?>css/jquery-ui-1.8.12.custom.css"/>
+<link rel="stylesheet" href="<?php echo HOST ?>css/bootstrap-multiselect.css" type="text/css"/>
+<script type="text/javascript" src="<?php echo HOST ?>js/bootstrap-multiselect.js"></script>
+
+<form class="form-search form-horizontal" method="get" action="<?php echo HOST ?>tool/dashboard">
+    <div class="row">
+        <div class="span5">
+            <div class="control-group">
+            	<?php  
+                $userStorage = Zend_Auth::getInstance()->getStorage()->read();
+                // echo $userStorage->group_id
+                ?>
+                <label for="warehouse_id" class="span2">Warehouse</label>
+	       			<select name="warehouse_id" id="warehouse_id" class="form-control">
+	       				<option value="">---select---</option>
+	       				<?php if ($this->warehouses): foreach ($this->warehouses as $id=>$name):?>
+                        
+                        <?php  
+                            if (My_Staff_Group::inGroup($userStorage->group_id, array(SALES_ADMIN_REGIONAL)) && $id != 36){
+                        ?>
+	                    <option value="<?php echo $id; ?>" <?php if(isset($this->params['warehouse_id']) and $id==$this->params['warehouse_id']):?> selected <?php endif;?> ><?php echo $name ?></option>
+	                   <?php
+                            }else if (!My_Staff_Group::inGroup($userStorage->group_id, array(SALES_ADMIN_REGIONAL))){
+                        ?>
+                        <option value="<?php echo $id;?>" <?php if (isset($this->params['warehouse_id']) and $id==$this->params['warehouse_id']):?> selected<?php endif;?>><?php echo $name?></option>
+                        
+	                    <?php } ?>
+	                    <?php endforeach; endif; ?>
+	                </select>
+            </div>
+
+            <div class="control-group">
+                <label for="cat_id" class="span2">Product Category</label>
+                 <select id="cat_id" class="form-control" name="cat_id" disabled>
+                        <option value="">---select---</option>
+                        <?php if ($this->goodCategories): foreach ($this->goodCategories as $id=>$name):?>
+                            <option value="<?php echo $id;?>" <?php if (isset($this->params['cat_id']) and $id==$this->params['cat_id']):?> selected<?php endif;?>><?php echo $name;?></option>
+                        <?php endforeach; endif;?>
+                </select>
+            </div>
+            <div class="control-group">
+                <label for="good_id" class="span2">Product</label>
+                <select name="good_id" id="good_id" class="form-control">
+                        <option value="">---select---</option>
+                        <!-- /ล็อค กำหนด product ที่ต้องการ -->
+                          <?php if (isset($this->goods_acc) and $this->goods_acc):
+                            foreach ($this->goods_acc as $item): ?>
+                                <option value="<?php echo $item['id'];?>" <?php if (isset($this->params['good_id']) and $item['id']==$this->params['good_id']):?> selected<?php endif;?>><?php echo $item['name'];?></option>
+                    <?php   endforeach; ?>
+                    <!-- //////////////////////////////////////// -->
+                        <?php elseif($this->goods_cached): foreach ($this->goods_cached as $id=>$item):?>
+                        <option value="<?php echo $id;?>" <?php if(isset($this->params['good_id']) and $id==$this->params['good_id']):?> selected<?php endif;?> ><?php echo $item;?></option>
+                        <?php endforeach; endif;?>
+                    </select>
+            </div>
+        </div>
+
+        <div class="span5">
+            <div class="control-group">
+                <label for="good_color_id" class="span2">Color</label>
+                	<select name="good_color_id" id="good_color_id" class="form-control">
+	                    <option value="">---select---</option>
+	                 	<?php if ($this->goodColors):foreach($this->goodColors as $id=>$item):?>
+	                    <option value="<?php echo $id;?>"<?php if (isset($this->params['good_color_id']) and $id==$this->params['good_color_id']):?> selected<?php endif;?>><?php echo $item;?></option>
+	                  	<?php endforeach; endif; ?>
+	                </select>
+            </div>
+            <div class="control-group">
+                <label for="order_type" class="span2">Order Type</label>
+                	<select id="order_type" name="order_type" class="form-control">
+               			 <option value="">---select---</option>
+                         <option value="1" <?php if (isset($this->params['order_type']) and $this->params['order_type']==1):?> selected <?php endif;?>>FOR RETAILER</option>
+
+                         <option value="2" <?php if (isset($this->params['order_type']) and $this->params['order_type']==2):?> selected <?php endif;?>>FOR DEMO</option>
+
+                         <option value="3" <?php if (isset($this->params['order_type']) and $this->params['order_type']==3):?> selected <?php endif;?>>FOR STAFF</option>
+
+                         <option value="4" <?php if (isset($this->params['order_type']) and $this->params['order_type']==4):?> selected <?php endif;?>>FOR LENDING</option>
+
+                         <option value="5" <?php if (isset($this->params['order_type']) and $this->params['order_type']==5):?> selected <?php endif;?>>FOR APK</option>
+                    </select>
+            </div>
+        </div>
+    </div>
+          
+     	<div class="clearfix"></div>
+
+	<div class="row"> 
+		<div class="span10"> 
+			<div class="control-group">  	
+			    <button name="search" value="1" type="submit" class="btn btn-primary">Search</button>
+			    <button type="reset" class="btn btn-warning">Reset</button>
+                <button type="submit" value="1" name="btn_sync" class="btn btn-danger">Sync</button>
+			</div>
+		</div>
+	</div>
+</form>
+
+<script type="text/javascript" src="/js/jquery-ui-1.8.12.custom.min.js"></script>
+<link rel="stylesheet" type="text/css" href="/css/jquery-ui-1.8.12.custom.css"/>
+<script type="text/javascript">
+      
+        $('#cat_id, #good_id').change(function(){
+            $(this).after('<span class="loading"></span>');
+            var _self = $(this);
+            var cat_id = $('#cat_id').val();
+
+            if (_self.attr('id')=='cat_id')
+                $('#good_id').find('option:not(:first)').remove();
+
+            var good_id = $('#good_id').val();
+
+            $('#good_color_id').find('option:not(:first)').remove();
+
+            $('#num, #price').val('');
+
+            $.get("/get/load",
+                {cat_id: cat_id, good_id: good_id}
+                ,function(data,status){
+                    var data = $.parseJSON( data );
+                    if (data.goods){
+                        var obj = data.goods;
+                        for (var i = 0; i < obj.length; i++) {
+                            $('#good_id').append('<option value="'+obj[i]['id']+'">'+obj[i]['name']+'</option>');
+                        }
+                    }
+                    if (data.colors){
+                        var obj = data.colors;
+                        for (var i = 0; i < obj.length; i++) {
+                            $('#good_color_id').append('<option value="'+obj[i]['id']+'">'+obj[i]['name']+'</option>');
+                        }
+                    }
+                    _self.nextAll('.loading').remove();
+                });
+        });
+</script> 

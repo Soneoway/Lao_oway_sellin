@@ -1,0 +1,76 @@
+<table class="table table-bordered">
+    <thead>
+        <tr>
+            <th>#</th>
+            <th>Code</th>
+            <th>Staff name</th>
+            <th>ID number</th>
+            <th>Area</th>
+            <th>Type</th>
+            <th>Date buy</th>
+            <th>Good name</th>
+            <th>Good color</th>
+            <th>Imei</th>
+            <th>SN</th>
+            <th>Company</th>
+<!--            <th>Action</th>-->
+        </tr>
+    </thead>
+    <tbody>
+        <?php 
+            if(isset($this->list) AND $this->list):
+                $stt = $this->offset + 1;
+                foreach($this->list as $item):
+        ?>
+        <tr>
+
+            <td><?php echo $stt++;?></td>
+            <td><?php echo $item['staff_code']?></td>
+            <td>
+                <?php echo $item['staff_name'];?>
+            </td>
+            <td>
+                <?php echo $item['id_number'];?>
+            </td>
+            <td>
+                <?php echo $item['area_name'];?>
+            </td>
+            <td>
+                <?php echo $this->staff_order_types[$item['type']]; ?>
+            </td>
+            <td>
+                <?php echo date('d/m/Y',strtotime($item['date_buy']));?>
+            </td>
+            <td><?php echo $item['good_name'];?></td>
+            <td><?php echo $item['good_color_name'];?></td>
+            <td>
+                <?php echo str_replace(',',', ',$item['imei']);?>
+            </td>
+            <td><?php echo $item['sn']?></td>
+            <td><?php echo $item['company_name'];?></td>
+<!--            <td></td>-->
+        </tr>
+        <?php 
+                    endforeach;
+            endif;
+        ?>
+    </tbody>
+</table>
+
+<div class="paging">
+    <?php echo $this->paging($this->total, $this->limit, $this->offset, $this->url);?>
+</div>
+
+<script src="<?php echo HOST?>js/jquery-ui-1.8.12.custom.min.js"></script>
+<link rel="stylesheet" href="<?php echo HOST?>css/jquery-ui-1.8.12.custom.css" />
+<?php echo $this->load();?>
+<?php echo $this->confirm();?>
+<script>
+    $(document).ready(function(){
+        $( ".date" ).datepicker({ dateFormat: "dd/mm/yy" });
+		$('.confirmLink').bind("contextmenu",function(e){
+		    return false;
+		});
+
+    })
+</script>

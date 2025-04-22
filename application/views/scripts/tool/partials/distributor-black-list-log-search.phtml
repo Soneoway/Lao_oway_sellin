@@ -1,0 +1,60 @@
+<form class="form-search form-horizontal" method="get" action="/tool/black-list-distributor-log">
+    <div class="row">
+        <div class="span5">
+
+            <div class="control-group">
+                <label for="dis_id" class="span2">Distributor ID</label>
+                <input type="text" name="dis_id" id="dis_id" value="<?php echo (isset($this->params['dis_id']) AND $this->params['dis_id']) ? $this->params['dis_id'] : ''?>"/>
+            </div>
+
+            <div class="control-group">
+                <label for="distributor" class="span2">Distributor Name</label>
+                <input type="text" name="distributor" id="distributor" value="<?php echo (isset($this->params['distributor']) AND $this->params['distributor']) ? $this->params['distributor'] : ''?>"/>
+            </div>
+
+            <div class="control-group">
+                <label for="type" class="span2">Type</label>
+                <select name="type" id="type">
+                    <option value="" <?php echo (isset($this->params['type']) AND $this->params['type'] == '') ? 'selected':'' ?>></option>
+                    <option value="1" <?php echo (isset($this->params['type']) AND $this->params['type'] == '1') ? 'selected':'' ?>>FOR RETAILER</option>
+                    <option value="2" <?php echo (isset($this->params['type']) AND $this->params['type'] == '2') ? 'selected':'' ?>>FOR DEMO</option>
+                    <option value="3" <?php echo (isset($this->params['type']) AND $this->params['type'] == '3') ? 'selected':'' ?>>FOR STAFF</option>
+                    <option value="4" <?php echo (isset($this->params['type']) AND $this->params['type'] == '4') ? 'selected':'' ?>>FOR LENDING</option>
+                    <option value="5" <?php echo (isset($this->params['type']) AND $this->params['type'] == '5') ? 'selected':'' ?>>FOR APK</option>
+                </select>
+            </div>
+
+            <div class="control-group">
+                <label for="reason" class="span2">Resoen</label>
+                <select name="reason" id="reason">
+                    <option value=""></option>
+                    <?php
+                        
+                        foreach($this->reason as $key => $option){
+                    ?>
+                            <option value="<?php echo $key;?>" <?php echo (isset($this->params['reason']) AND $this->params['reason'] == $key) ? 'selected':'' ?>><?php echo $option;?></option>
+                    <?php
+                        }
+                    ?>
+                </select>
+            </div>
+
+        </div>
+    </div><!-- end row -->
+    <button type="submit" class="btn btn-primary">Search</button>
+    <button type="reset" class="btn btn-warning">Reset</button>
+</form>
+
+<style>
+    #d_id{
+        margin-left: 0px!important;
+        left: 0px!important;
+        width: 370px;
+    }
+</style>
+
+<script>
+    $(document).ready(function () {
+        initSearchOptionDistributor('d_id', 'SearchBox');
+    });
+</script>

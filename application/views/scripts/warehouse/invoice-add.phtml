@@ -1,0 +1,98 @@
+<div class="page-header" xmlns="http://www.w3.org/1999/html">
+    <h1>Import Invoice Number</h1>
+</div>
+<style>
+    tr td:first-child {
+        width: 40%;
+    }
+</style>
+<form role="form" id="form" action="<?php echo HOST.'warehouse/invoice-add';?>" method="post" class="form-horizontal">
+<div class="row">
+    <div class="span6">
+	        <label class="span6">
+                <label for="number" class="">Number Invoice Add</label>
+                <input type="number" min="1" placeholder="Please input number for add" class="form-control" name="number" id="number" class="number">
+	        </label>
+    </div>
+</div>
+
+<div class="row">
+    <div class="span6">
+        <label class="span6">
+            <label for="number" class="">From</label>
+            <input type="number" min="1" placeholder="Please input invoice from" class="form-control" name="from" id="number" class="number">
+        </label>
+    </div>
+</div>
+
+<div class="row">
+    <div class="span6">
+        <label class="span6">
+            <label for="number" class="">To</label>
+            <input type="number" min="1" placeholder="Please input invoice to" class="form-control" name="to" id="number" class="number">
+        </label>
+    </div>
+</div>
+
+<div class="row">
+    <div class="span6">
+        <label class="span6">
+            <label for="number" class="">Invoice Prefix</label>
+            <select class="" name="prefix" />
+            <option value="0">Please select invoice prefix</option>
+            <?php if(isset($this->invoice_prefixs) and $this->invoice_prefixs): ?>
+            <?php foreach($this->invoice_prefixs as $k => $v): ?>
+                <option value="<?php echo $v['id'] ? $v['id'] : '' ?>"><?php echo $v['name'] ? $v['name'] : ''; ?></option>
+            <?php endforeach;endif; ?>
+            </select>
+        </label>
+    </div>
+</div>
+
+<div class="row">
+    <div class="span6">
+        <label class="span6">
+            <label for="number" class="">Service Showroom</label>
+            <select class="" name="service" />
+            <option value="0">Please select service showroom</option>
+            <?php if(isset($this->services) and $this->services): ?>
+                <?php foreach($this->services as $k => $v): ?>
+                    <option value="<?php echo $k ?>"><?php echo $v; ?></option>
+                <?php endforeach;endif; ?>
+            </select>
+        </label>
+    </div>
+</div>
+
+<div class="row">
+    <div class="span4">
+        <input type="hidden" id="back_url" name="back_url" value="/warehouse/product-out">
+        <button type="submit" class="btn btn-primary">Submit</button>
+        <button type="button" class="btn btn-danger go-back">Go back</button>
+    </div>
+</div>
+</form>
+<script>
+    $(document).ready(function () {
+        $('.go-back').click(function(e){
+            window.location.href = $('#back_url').val();
+            return false;
+        });
+
+        initShowIMEINum();
+    });
+
+    function initShowIMEINum(){
+        $('#imei').keyup(function (e){
+
+            var inputnum = 0;
+
+            if ($(this).val() != '')
+                inputnum = ($(this).val().split("\n").length).toString();
+
+
+            $('#num_imei').html(inputnum);
+
+        });
+    }
+</script>

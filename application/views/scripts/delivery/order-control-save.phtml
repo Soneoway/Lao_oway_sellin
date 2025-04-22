@@ -1,0 +1,52 @@
+<link href="<?php echo HOST ?>css/bootstrap.min.css" rel="stylesheet" />
+<link href="<?php echo HOST ?>css/default.css" rel="stylesheet" />
+<style type="text/css">
+    body {
+        background-color: transparent;
+    }
+</style>
+
+<?php if (!isset($this->error) || !$this->error): ?>
+    <p>Saved successfully.</p>
+<?php else: ?>
+    <div class="alert alert-danger"><?php echo $this->error ?></div>
+    <script type="text/javascript">
+    elm = parent.window.document.getElementsByClassName('hide_in_frame');
+    elm[0].setAttribute('style', 'display: inline-block');
+    elm[1].setAttribute('style', 'display: inline-block');
+    parent.window.document.getElementById('delivery_sn').removeAttribute('readonly')
+    parent.window.document.getElementById('number_of_package').removeAttribute('readonly')
+    parent.window.document.getElementById('weight').removeAttribute('readonly')
+    </script>
+<?php endif ?>
+
+<?php if (isset($this->order_id) && $this->order_id): ?>
+    <button class="btn btn-inverse" 
+        id="print_btn" target="_blank">Print Delivery Order</button>
+    <a href="<?php echo $this->refer ?>" class="btn btn-default" target="_parent">Back</a>
+    <script type="text/javascript">
+    btn = document.getElementById("print_btn");
+    btn.addEventListener('click', function() {
+        url = "<?php echo HOST ?>delivery/order-control-print?id=<?php echo $this->order_id ?>"
+        ref(url, function() {
+            window.top.open(url, "_blank");
+        })
+    }, false);
+
+    function ref(url, callback) {
+        callback();
+        window.top.location.href =  '<?php echo $this->refer ?>';
+    }
+    </script>
+<?php endif ?>
+
+<?php if (isset($this->no_print) && $this->no_print): ?>
+    <script type="text/javascript">
+    window.top.location.href = '<?php echo $this->refer ?>';
+    </script>
+<?php endif ?>
+
+<script type="text/javascript">
+    elm = parent.window.document.getElementsByClassName('loading')[0];
+    elm.parentNode.removeChild(elm);
+</script>

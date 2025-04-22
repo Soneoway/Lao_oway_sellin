@@ -1,0 +1,198 @@
+<style>
+    iframe {
+        width: 100%;
+        height: 300px;
+    }
+
+    .bar {
+        line-height: 18px;
+    }
+    .modal-scrollable
+    {
+        position: absolute;
+        z-index: 9999;
+    }
+</style>
+<div class="page-header">
+    <h1>Upload Quota Products</h1>
+</div>
+<?php
+    if (isset($this->messages_success) and $this->messages_success)
+        foreach ($this->messages_success as $message):
+            echo '<div class="alert alert-success">'.$message.'</div>';
+        endforeach;
+
+    if (isset($this->messages) and $this->messages)
+        foreach ($this->messages as $message):
+            echo '<div class="alert alert-error">'.$message.'</div>';
+        endforeach;
+?>
+<div class="well">
+    <div class="row-fluid">
+
+        <div class="span4">
+            List of uploaded files <a class="btn btn-success btn-mini" href="<?php echo HOST ?>file-log/oppo-all-green">View Logs</a></p>
+            Quota Products Template <a class="btn btn-success btn-mini" href="<?php echo HOST ?>upload/file_template/quota_template.xlsx">Download File</a></p>
+
+
+        </div>
+
+    </div>
+</div>
+
+<form action="<?php echo HOST ?>tool/oppo-upload-quota-products-save" id="form" target="iframe" class="form-inline" method="post" enctype="multipart/form-data">
+
+    <div class="row">
+        <div class="span6">
+            
+
+            <div class="control-group">
+                <label for="cat_id" class="span2">Product Category</label>
+                <select id="cat_id" class="span3 cat_id" name="cat_id" required>
+                    <option value="">Choose</option>
+                    <?php if ($this->good_categories): foreach ($this->good_categories as $id=>$name):?>
+                        <option value="<?php echo $id;?>" <?php if (isset($this->params['cat_id']) and $id==$this->params['cat_id']):?> selected<?php endif;?>><?php echo $name;?></option>
+                    <?php endforeach; endif;?>
+                </select>
+            </div>
+
+            <div class="control-group">
+                <label for="good_id" class="span2">Product</label>
+                <select id="good_id" class="span3 good_id" name="good_id" required>
+                    <option value="">Choose</option>
+                    <?php if ($this->goods): foreach ($this->goods as $key=> $item):?>
+                        <option value="<?php echo $key;?>" <?php if (isset($this->params['good_id']) and $key==$this->params['good_id']):?> selected<?php endif;?>><?php echo $item;?></option>
+                    <?php endforeach; endif;?>
+                </select>
+            </div>
+
+            <div class="control-group">
+                <label for="good_color" class="span2">Color</label>
+                <select id="good_color" class="span3 good_color" name="good_color" required>
+                    <option value="">Choose</option>
+                    <?php if ($this->goodColors): foreach ($this->goodColors as $key=>$item):?>
+                        <option value="<?php echo $key;?>" <?php if (isset($this->params['good_color']) and $key==$this->params['good_color']):?> selected<?php endif;?>><?php echo $item;?></option>
+                    <?php endforeach; endif;?>
+                </select>
+            </div>
+
+            <div class="control-group">
+                <label for="" class="span2">Date Quota</label>
+                <input type="text" class="date" name="date_quota" required>
+            </div>
+
+            <div class="control-group">
+                <label for="good_color" class="span2">File Upload<span style="color: red">*</span></label>
+                <input type="file" class="span4" name="file" id="file" required />
+            </div>       
+               
+            
+        </div>
+    </div>
+
+    <div class="clearfix"></div>
+
+    <div class="form-group">
+        <button type="submit" class="form-control btn btn-primary" id="submit">Save</button>
+        <a href="/tool/quota-upload" class="btn btn-danger">Go back</a>
+    </div>
+</form>
+
+<div class="row">
+    <div class="span12">
+        <div class="progress progress-striped active">
+            <div class="bar" style="width: 0%;"></div>
+        </div>
+    </div>
+</div>
+
+<iframe src="" frameborder="0" name="iframe" id="iframe"></iframe>
+
+
+<script src="<?php echo HOST ?>js/jquery-ui.js"></script>
+<link rel="stylesheet" type="text/css" href="/css/jquery-ui-1.8.12.custom.css"/>
+<script src="<?php echo HOST ?>js/bootstrap-modal.js"></script>
+<script src="<?php echo HOST ?>js/bootstrap-modalmanager.js"></script>
+<script type="text/javascript" src="<?php echo HOST ?>js/sales.po.js"></script>
+<script type="text/javascript" src="<?php echo HOST ?>js/jets.js"></script>
+<script>
+function set_progress(percent) {
+        $('.bar').css('width', percent+'%');
+        $('.bar').html(percent+'%');
+    }
+    $(document).ready(function () {
+        initSelectProduct();
+        $( '.date' ).datepicker({ dateFormat: "dd/mm/yy" });
+        $("#submit").click(function(){
+            if( $('#file').val() != ""){
+               $( ".form-inline" ).hide();
+           }
+        });
+
+        $('form').bind('submit',function(e){
+            $('.bar').css('width', '0%');
+            $('.bar').html('');
+            $('#iframe').get(0).contentWindow.clear_content();
+            $('form button, form input, form select').prop('readonly', true);
+            $('.loading').remove();
+            $(this).after('<span class="pre_loading">Processing <span><span class="loading"></span>');
+            window.onbeforeunload = confirmExit;
+        });
+        $('#add_po_btn').click(show_add_joint_modal);
+    });
+    function initSelectProduct(){
+        
+            $(document).off('change', '.cat_id, .good_id')
+            .on('change', '.cat_id, .good_id', function(e) {
+                $('button[type=submit]').prop('disabled', true);
+                $('form').bind('submit',function(e){e.preventDefault();});
+
+                $('.loading').remove();
+                $(this).after('<span class="loading"></span>');
+                var div_parent = $(this).parent().parent().parent();
+                var _self = $(this);
+                var cat_id = div_parent.find('.cat_id').val();
+                var distributor_id    = $('#d_id').val();
+                var rank    = $('.rank').val();
+
+                // if (distributor_id == "" || distributor_id == null) {
+                //   alert('Please select Retailer name..');
+                //   $('#d_id').focus();
+                // $('.good_id').find('option:not(:first)').remove();
+                // $('.good_color').find('option:not(:first)').remove();
+                // $('.quantity').val('');
+                // }
+                if (_self.hasClass('cat_id'))
+                    div_parent.find('.good_id').find('option:not(:first)').remove();
+
+                var good_id = div_parent.find('.good_id').val();
+
+                div_parent.find('.good_color').find('option:not(:first)').remove();
+
+                div_parent.find('.quantity').val('');
+
+                //alert(cat_id);alert(good_id);
+                $.get("/get/load",
+                    {cat_id: cat_id, good_id: good_id}
+                    ,function(data,status){
+                        var data = $.parseJSON( data );
+                        if (data.goods){
+                            var obj = data.goods;
+                            for (var i = 0; i < obj.length; i++) {
+                                 div_parent.find('.good_id').append('<option value="'+obj[i]['id']+'">'+obj[i]['name']+'</option>');
+                            }
+                        }
+                        if (data.colors){
+                            var obj = data.colors;
+                            for (var i = 0; i < obj.length; i++) {
+                                 div_parent.find('.good_color').append('<option value="'+obj[i]['id']+'">'+obj[i]['name']+'</option>');
+                            }
+                        }
+                        $('button[type=submit]').prop('disabled', false);
+                        $('form').unbind('submit');
+                        _self.nextAll('.loading').remove();
+                    });
+
+            });
+        }
+</script>

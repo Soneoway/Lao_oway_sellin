@@ -1,0 +1,99 @@
+
+<div class="list">
+    <div class="list-co">
+        <table id="example1" class="table table-bordered">
+            <thead>
+                <tr><th colspan="5" style="text-align: center;">Change Order</th></tr>
+                <tr>
+                    <th>No.</th>
+                    <th>Change Order number</th>
+                    <th>Receive</th>
+                    <th>Date receive</th>   
+                    <th>Action</th>                     
+                </tr>
+            </thead>
+            <tbody>
+               <?php for($i = 0;$i<$this->totalCO;$i++){?>
+                <tr>
+                  <td><?php echo ($i+1); ?></td>
+                  <td><?=$this->warrantyCO[$i]["sn_ref"];?></td>
+                  <td><?=$this->warrantyCO[$i]["total_qty_product_receive"];?></td>
+                  <td><?=$this->warrantyCO[$i]["completed_date"];?></td>
+                  <td>
+                      <div class="btn-group">
+                            <a class="btn dropdown-toggle" data-toggle="dropdown" href="#">
+                                Action
+                                <span class="caret"></span>
+                            </a>
+                            <ul class="dropdown-menu">
+                                <li><a title="View" href="/warehouse/product-warranty-show-imei?sn=<?=$this->warrantyCO[$i]["changed_sn"];?>&type=co"> <i class="icon-eye-open"></i> View</a></li>                               
+                            </ul>
+                        </div>
+                  </td>
+                </tr>   
+                <?php } ?>    
+            </tbody>
+        </table>
+    </div>
+    <div class="list-po">
+        <table id="example2" class="table table-bordered">
+            <thead>
+             <tr><th colspan="5" style="text-align: center;">Purchase Order</th></tr>
+                <tr>
+                    <th>No.</th>
+                    <th>Purchase Order number</th>
+                    <th>NUM</th>
+                    <th>Purchase Order Date</th> 
+                     <th>Action</th>                          
+                </tr>
+            </thead>
+            <tbody>
+               <?php for($i = 0;$i< $this->totalPO;$i++){?>
+               <tr>
+                  <td><?php echo ($i+1); ?></td>
+                  <td><?=$this->warrantyPO[$i]["sn_ref"];?></td>
+                  <td><?=$this->warrantyPO[$i]["num"];?></td>
+                  <td><?=$this->warrantyPO[$i]["mysql_time"];?></td>
+                   <td>
+                        <div class="btn-group">
+                            <a class="btn dropdown-toggle" data-toggle="dropdown" href="#">
+                                Action
+                                <span class="caret"></span>
+                            </a>
+                            <ul class="dropdown-menu">
+                                <li><a title="View" href="/warehouse/product-warranty-show-imei?sn=<?=$this->warrantyPO[$i]["sn"];?>&type=po"> <i class="icon-eye-open"></i> View</a></li>                               
+                            </ul>
+                        </div>
+                   </td>
+                </tr>   
+                <?php } ?>    
+            </tbody>
+        </table>
+    </div>
+</div>
+
+
+
+<script type="text/javascript" src="/js/jquery-ui-1.8.12.custom.min.js"></script>
+<link rel="stylesheet" type="text/css" href="/css/jquery-ui-1.8.12.custom.css"/>
+<link rel="stylesheet" type="text/css" href="https://cdn.datatables.net/1.10.15/css/jquery.dataTables.min.css"/>
+<script type="text/javascript" src="https://cdn.datatables.net/1.10.15/js/jquery.dataTables.min.js"></script>
+
+<script type="text/javascript">
+    $(document).ready(function() {
+        $('#example1').DataTable( {
+            "pageLength": 20,
+            "lengthChange": false,
+            "searching": false
+            // "order": [[ 3, "desc" ]]
+        } );
+          $('#example2').DataTable( {
+            "pageLength": 20,
+            "lengthChange": false,
+            "searching": false
+            // "order": [[ 3, "desc" ]]
+        } );
+    });
+</script>
+
+<?php echo $this->load();?>

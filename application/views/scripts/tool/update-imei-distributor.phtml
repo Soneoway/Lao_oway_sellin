@@ -1,0 +1,60 @@
+<style type="text/css">
+    #SearchBox {
+        display: block;
+    }
+
+    textarea {
+        resize: none;
+    }
+</style>
+
+<div class="page-header">
+    <h1>Update IMEI Distributor</h1>
+</div>
+
+<iframe src="" style="background: #f9f6f1;height: 70px;border: none; width: 100%" name="iframe"></iframe>
+
+<form target="iframe" method="post" action="<?php echo HOST ?>tool/update-imei-distributor-save" class="form-horizontal">
+    <div class="control-group">
+        <label class="control-label">Distributor</label>
+        <div class="controls">
+            <input type="text" name='SearchBox' id="SearchBox">
+            <select name="distributor" required id="distributor" size="5">
+                <option value>---</option>
+                <?php if (isset($this->distributor_list) && $this->distributor_list): ?>
+                    <?php foreach ($this->distributor_list as $key => $value): ?>
+                        <option value="<?php echo $key ?>"><?php echo $value ?></option>
+                    <?php endforeach ?>
+                <?php endif ?>
+            </select>
+        </div>
+    </div>
+    <div class="control-group">
+        <label class="control-label">IMEI list</label>
+        <div class="controls">
+            <textarea name="imeis" required rows="10"></textarea>
+        </div>
+    </div>
+    
+    <div class="control-group">
+        <div class="controls">
+            <p>Cập nhật các IMEI trên thuộc đại lý đã chọn.</p>
+        </div>
+    </div>
+
+    <div class="control-group">
+        <div class="controls">
+            <button type="submit" class="btn btn-primary">Submit</button>
+        </div>
+    </div>
+</form>
+
+<script type="text/javascript" src="<?php echo HOST ?>js/jets.js"></script>
+<script type="text/javascript">
+    $(document).ready(function() {
+        var jets = new Jets({
+            searchTag: '#SearchBox',
+            contentTag: '#distributor'
+        });
+    });
+</script>

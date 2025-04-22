@@ -1,0 +1,28 @@
+<div class="page-header">
+    <h1><?php echo ( isset($this->mapping) && $this->mapping ? 'Edit' : 'Create' ) ?> Warehouse Mapping <small>For FPT</small></h1>
+</div>
+<div class="row">
+    <div class="span12">
+        <form action="<?php echo HOST ?>mapping/fpt-warehouse-save" class="form-inline" method="post">
+            <input type="text" class="input-small" placeholder="FPT Area Name" name="area_name" 
+                    value="<?php if(isset($this->mapping['name'])) echo trim($this->mapping['name']) ?>">
+
+            <select name="warehouse_id" id="warehouse_id">
+                <option value>---</option>
+                <?php if (isset($this->warehouses) && $this->warehouses): ?>
+                    <?php foreach ($this->warehouses as $key => $value): ?>
+
+                        <option value="<?php echo $key ?>"
+                            <?php if(isset($this->mapping['warehouse_id']) && $key == $this->mapping['warehouse_id']) 
+                                    echo 'selected' ?>><?php echo $value ?></option>
+
+                    <?php endforeach ?>
+                <?php endif ?>
+            </select>
+
+            <input type="hidden" name="id" value="<?php if(isset($this->mapping) && $this->mapping) echo $this->mapping['id'] ?>">
+            <button class="btn btn-success">Save</button>
+            <button class="btn btn-danger" type="button" onclick="window.location='<?php echo HOST ?>mapping/fpt-warehouse'">Go Back</button>
+        </form>
+    </div>
+</div>

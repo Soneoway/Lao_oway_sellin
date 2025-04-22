@@ -1,0 +1,105 @@
+<div class="page-header">
+    <h1>SQL Script</h1>
+</div>
+<?php
+if (isset($this->messages_success) and $this->messages_success)
+    foreach ($this->messages_success as $message):
+        echo '<div class="alert alert-success">'.$message.'</div>';
+    endforeach;
+
+if (isset($this->messages) and $this->messages)
+    foreach ($this->messages as $message):
+        echo '<div class="alert alert-error">'.$message.'</div>';
+    endforeach;
+?>
+
+<div class="row-fluid">
+    <form role="form" method="post" class="row-fluid">
+        <div class="span9">
+
+        	<label for="" class="">SQL</label>
+        	<textarea cols="50" rows="20" id="sql" name="sql" required="required"></textarea>
+        	<div class="clearfix"></div>
+        	<button type="submit" class="btn btn-primary">Run</button>
+        	<span></span>
+        </div>
+
+        <div class="span3">
+            <p>
+                <label for="sql_script1">Rollback Sales Order</label>
+                <input name="sql_script" id="sql_script1" type="radio" value="1" />
+                <textarea style="display: none" cols="50" rows="20" id="sql_script1_val" name="sql_script1_val">
+
+
+                    UPDATE
+                        `imei`
+                    SET
+                        sales_sn = null,
+                        price_date = null,
+                        out_user = null,
+                        out_price = null,
+                        distributor_id = null,
+                        out_date = null
+                    WHERE sales_sn = ?;
+
+                    UPDATE
+                        `warehouse_product` wp,
+                        `market` m
+                    SET
+                        wp.quantity = wp.quantity + IF ( m.outmysql_time IS NOT NULL OR m.outmysql_time <> 0 OR m.outmysql_time <> '', m.num,0 )
+                    WHERE
+                        wp.cat_id = m.cat_id
+                        AND wp.good_id = m.good_id
+                        AND wp.good_color = m.good_color
+                        AND wp.warehouse_id = m.warehouse_id
+                        AND m.`sn` = ?
+                    ;
+
+                    UPDATE
+                    `market`
+                    SET
+                        outmysql_time = null,
+                        outmysql_user = null
+                    WHERE sn = ?;
+
+                    insert into log(user_id, info, time) values(1, 'Rollback SN: ?', NOW());
+                </textarea>
+            </p>
+            <p>
+                <label for="sql_script2">Rollback Changed Order</label>
+                <input name="sql_script" id="sql_script2" type="radio" value="2" />
+                <textarea style="display: none" cols="50" rows="20" id="sql_script2_val" name="sql_script2_val">
+                    update
+                        warehouse_product wp,
+                        change_sales_product csp
+                    set wp.quantity = wp.quantity + csp.num
+                    where wp.cat_id = csp.cat_id
+                        and wp.good_id = csp.good_id
+                        and wp.good_color = csp.good_color
+                        and wp.warehouse_id = csp.old_id
+                        and csp.changed_sn = ?;
+
+                    UPDATE imei i
+                    SET i.changed_sn = NULL,
+                        i.`status` = IFNULL( ( SELECT old_status FROM imei_status_log isl WHERE isl.imei_sn = i.imei_sn ORDER BY id DESC LIMIT 1 ), 1 )
+                    WHERE
+                        i.changed_sn = ?;
+
+                    insert into log(user_id, info, time) values(1, 'Delete changed SN: ?', NOW());
+
+                    DELETE FROM `change_sales_order` WHERE (`changed_sn`=?);
+                    DELETE FROM `change_sales_product` WHERE (`changed_sn`=?);
+                    DELETE FROM `change_sales_imei` WHERE (`changed_sn`=?);
+                </textarea>
+            </p>
+        </div>
+        
+    </form>
+</div>
+<script>
+    $(document).ready(function(){
+        $('input[name=sql_script]').click(function(){
+            $('#sql').text($(this).next().text());
+        });
+    });
+</script>

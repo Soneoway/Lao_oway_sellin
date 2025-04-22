@@ -1,0 +1,7 @@
+<?php if (isset($this->list) && $this->list): ?>
+    <?php foreach ($this->list as $key => $value): ?>
+        <option value="<?php echo $value['id'] ?>" title="<?php echo $value['title'] ?>"><?php echo $value['title'] ?></option>
+    <?php endforeach ?>
+<?php else: ?>
+    <option value>---</option>
+<?php endif ?>

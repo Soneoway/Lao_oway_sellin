@@ -1,0 +1,50 @@
+<style>
+.red
+{
+    background: #1B8324;
+    color:white;
+}
+.red:hover
+{
+    color:black;
+}
+
+.hilight
+{
+    background: #E8ADAA;
+    /*color:white;*/
+}
+.hilight:hover
+{
+    /*color:black;*/
+}
+</style>
+<table class="table table-bordered">
+    <thead>
+        <tr>
+            <?php echo $this->sorting(array(
+                'Stock Date From',
+                'Stock Date To',
+                'Report',
+            ),
+            $this->url, $this->sort, $this->desc); ?>
+        </tr>
+    </thead>
+    <tbody>
+        <a href=""></a>
+        <?php $main_part ="/finance/report-in-out-stock?doc_created_at_from=".$this->params['doc_created_at_from']."&doc_created_at_to=".$this->params['doc_created_at_to']."&good_id=".$this->params['good_id']."&good_color=".$this->params['good_color'];
+        if (isset($this->data) and $this->data) :
+                ?>
+                <tr>
+                    <td class="span2"><?php if(isset($this->doc_created_at_from) && $this->doc_created_at_from){ echo $this->doc_created_at_from; }else{ echo '-';} ?></td>
+                    <td class="span2"><?php if(isset($this->doc_created_at_to) && $this->doc_created_at_to){ echo $this->doc_created_at_to; }else{ echo '-';} ?></td>
+                    <td class="span2">
+                        <a target="_blank" title="View Stock" href="<?php echo $main_part ?>"> <i class="icon-file-text-alt"></i></a>
+                    </td>
+                </tr>
+        <?php endif; ?>
+    </tbody>
+</table>
+<div class="paging">
+    <?php echo $this->paging($this->total, $this->limit, $this->offset, $this->url);?>
+</div>

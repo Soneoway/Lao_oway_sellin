@@ -1,0 +1,175 @@
+<script type="text/javascript" src="<?php echo HOST ?>js/jquery-ui-1.8.12.custom.min.js"></script>
+<link rel="stylesheet" type="text/css" href="<?php echo HOST ?>css/jquery-ui-1.8.12.custom.css"/>
+<link rel="stylesheet" href="<?php echo HOST ?>css/bootstrap-multiselect.css" type="text/css"/>
+<script type="text/javascript" src="<?php echo HOST ?>js/bootstrap-multiselect.js"></script>
+
+<form class="form-search form-horizontal" method="get" action="/warehouse/transaction-stock">
+    <div class="row">
+        <div class="span5">
+            <div class="control-group">
+                <label for="cat_id" class="control-label">Product Category</label>
+                <div class="controls">
+                    <select id="cat_id" name="cat_id[]" class="span3 multiselect" multiple="multiple">
+                        <?php
+                        if ($this->catagory) :
+                            foreach ($this->catagory as $catagory):
+                        ?>
+                                <option value="<?php echo $catagory->id;?>" <?php if (isset($this->params['cat_id']) and ( (is_array($this->params['cat_id']) && in_array($catagory['id'], $this->params['cat_id']) || $catagory['id']==$this->params['cat_id'])) ):?>selected<?php endif;?>><?php echo $catagory->name;?></option>
+                        <?php
+                            endforeach;
+                        endif;
+                        ?>
+                    </select>
+                </div>
+            </div>
+
+            <div class="control-group">
+                <label for="good_id" class="control-label">Product</label>
+                <div class="controls">
+                    <select id="good_id" name="good_id[]" class="multiselect" multiple="multiple" >
+                        <?php
+                        if ($this->goods) :
+                            foreach ($this->goods as $goods):?>
+                                <option value="<?php echo $goods->id;?>" <?php if (isset($this->params['good_id']) and ( (is_array($this->params['good_id']) && in_array($goods['id'], $this->params['good_id']) || $goods['id']==$this->params['good_id'])) ):?>selected<?php endif;?>><?php echo $goods->name;?></option>
+                            <?php
+                            endforeach;
+                        endif;
+                        ?>
+                    </select>
+                </div>
+            </div>
+
+            <div class="control-group">
+                <label for="color_id" class="control-label">Color</label>
+                <div class="controls">
+                    <select id="color_id" name="color_id[]" class="multiselect" multiple="multiple">
+                        <?php
+                        if ($this->colors) :
+                            foreach ($this->colors as $colors):?>
+                                <option value="<?php echo $colors->id;?>" <?php if (isset($this->params['color_id']) and ( (is_array($this->params['color_id']) && in_array($colors['id'], $this->params['color_id']) || $colors['id']==$this->params['color_id'])) ):?>selected<?php endif;?>><?php echo $colors->name;?></option>
+                            <?php
+                            endforeach;
+                        endif;
+                        ?>
+                    </select>
+                </div>
+            </div>
+
+        </div>
+
+        <div class="span5">
+            <div class="control-group">
+                <label for="out_time_from" class="control-label">From</label>
+                <div class="controls">
+                    <input type="text" class="date" id="out_time_from" name="out_time_from" value="<?php isset($this->params['from']) and printf($this->params['from']);?>">
+                </div>
+            </div>
+            <div class="control-group">
+                <label for="out_time_to" class="control-label">To</label>
+                <div class="controls">
+                    <input type="text" class="date" id="out_time_to" name="out_time_to" value="<?php isset($this->params['to']) and printf($this->params['to']);?>">
+                </div>
+            </div>
+
+            <div class="control-group">
+                <label for="warehouse_id" class="control-label">Warehouse</label>
+                <div class="controls">
+                    <select id="warehouse_id" name="warehouse_id[]" class="multiselect" multiple="multiple">
+                        <?php
+                        if ($this->warehouse) :
+                            foreach ($this->warehouse as $warehouse):?>
+                                <option value="<?php echo $warehouse->id;?>" <?php if (isset($this->params['warehouse_id']) and ( (is_array($this->params['warehouse_id']) && in_array($warehouse['id'], $this->params['warehouse_id']) || $warehouse['id']==$this->params['warehouse_id'])) ):?>selected<?php endif;?>><?php echo $warehouse->name;?></option>
+                            <?php
+                            endforeach;
+                        endif;
+                        ?>
+                    </select>
+                </div>
+            </div>
+            
+        </div>
+    </div>
+    
+    <div class="control-group">
+        <div class="controls">
+            <button type="submit" class="btn btn-primary">Search</button>
+            <button type="reset" class="btn btn-warning">Reset</button>
+            <!-- <button type="submit" name="export" value="1" class="btn btn-success">Export</button> -->
+        </div>
+    </div>
+
+</form>
+
+
+<script>
+
+options = {
+    selectAllText: 'Select All',
+    includeSelectAllOption: true,
+    includeSelectAllIfMoreThan: 3,
+    disableIfEmpty: true
+};
+
+function multi() {
+    $('.multiselect').multiselect(options);
+}
+
+$(document).ready(function () {
+    multi();
+
+    $('.date' ).datepicker({ dateFormat: "dd/mm/yy" });
+    
+
+    $('#cat_id').change(function(){
+        $('.loading').remove();
+        $(this).after('<span class="loading"></span>');
+        var _self = $(this);
+        var cat_id = $(this).val();
+        $('button, .btn, input').prop('disabled', true);
+        $.get("<?php echo HOST ?>/get/good-by-catagory",
+            {cat_id: cat_id}
+            ,function(data,status){
+                
+            var obj = $.parseJSON( data );
+            $('#good_id').find('option').remove();
+            $('#color_id').find('option').remove();
+
+            for (var i = 0; i < obj.length; i++) {
+                $('#good_id').append('<option value="'+obj[i]['id']+'">'+obj[i]['name']+'</option>');
+            }
+
+            $('button, .btn, input').prop('disabled', false);
+            $('#good_id, #color_id').multiselect("destroy").multiselect(options);
+            $('.loading').remove();
+        });
+    });
+
+    $('#good_id').change(function(){
+        $('.loading').remove();
+        $(this).after('<span class="loading"></span>');
+        var _self = $(this);
+        var good_id = $(this).val();
+        $('button, .btn, input').prop('disabled', true);
+        $.get("<?php echo HOST ?>/get/color-by-good",
+            {good_id: good_id}
+            ,function(data,status){
+
+            var obj = $.parseJSON( data );
+            $('#color_id').find('option').remove();
+
+            for (var i = 0; i < obj.length; i++) {
+                $('#color_id').append('<option value="'+obj[i]['id']+'">'+obj[i]['name']+'</option>');
+            }
+
+            $('button, .btn, input').prop('disabled', false);
+            $('#color_id').multiselect("destroy").multiselect(options);
+            $('.loading').remove();
+        });
+    });
+
+    
+});
+
+
+
+</script>

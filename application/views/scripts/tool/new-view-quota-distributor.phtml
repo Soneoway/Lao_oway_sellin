@@ -1,0 +1,222 @@
+<link href="<?=HOST?>public/css/bootstrap.modi.min.css" rel="stylesheet">
+ <style type="text/css">
+    input{
+        width: 70px
+    }
+</style> 
+
+<div class="page-header">
+    <h1>New View Quota Distributor</h1>
+</div>
+<?php
+if (isset($this->messages_success) and $this->messages_success)
+    foreach ($this->messages_success as $message):
+        echo '<div class="alert alert-success">'.$message.'</div>';
+    endforeach;
+
+if (isset($this->messages) and $this->messages)
+    foreach ($this->messages as $message):
+        echo '<div class="alert alert-error">'.$message.'</div>';
+    endforeach;
+?>
+<div class="container">
+    <br />
+    <form role="form" id="form" action="<?php echo HOST.'tool/new-save-quota-distributor';?>" method="post" >
+        <div class="col-md-6"> 
+          
+            <div class="control-group">  
+                <label class="span3">Warehouse</label>
+                <div class="controls">
+                    <p><?='('.$this->get_quota['warehouse_id'].')'.$this->warehouse[$this->get_quota['warehouse_id']]?></p>
+                    <p class="help-block"></p>
+                </div>
+            </div>
+
+            <div class="control-group">
+                <label class="span3">Type</label>
+                <div class="controls">
+                   <p><?php 
+
+                   $good_type = '';
+
+                    switch ($this->get_quota['good_type']) {
+                        case '1':
+                            $good_type = 'Normal';
+                            break;
+                        
+                        case '2':
+                            $good_type = 'Demo';
+                            break;
+
+                        case '5':
+                            $good_type = 'APK';
+                            break;
+                    }
+
+                    echo '('.$this->get_quota['good_type'].')'.$good_type;
+
+                   ?></p>
+                </div>
+               
+            </div>
+           
+            <div class="control-group">
+                <label class="span3">Product Category</label>
+                <div class="controls">
+                   <p><?='('.$this->good_product_color[0]['cat_id'].')'.$this->good_categories[$this->good_product_color[0]['cat_id']]?></p>
+                </div>
+           
+            </div>
+
+            <div class="control-group">
+                <label class="span3">Product</label>
+                <div class="controls">
+                   <p><?='('.$this->good_product_color[0]['id'].')[' . $this->good_product_color[0]['name'].'] '.$this->good_product_color[0]['desc']?></p>
+                </div>
+               
+            </div>
+            
+            <div class="control-group">
+                <label class="span3">Quota Date</label>
+                <div class="controls">
+                    <p style="font-size: 20px;"><?=$this->get_quota['quota_date']?></p>
+                </div>
+            </div> 
+          
+        </div>
+         <div class="col-md-5">
+            <?php
+
+            switch ($this->get_quota['status']) {
+                case '0':
+                    ?>
+                    <a class="btn btn-large btn-success" href="javascript:onclick=disable('<?=$this->get_quota['id']?>','enable')" style="float: right;    width: 120px;"><i class="icon-ok icon-3x pull-left"></i> Enable<br/>Quota</a>
+                    <?php
+                    break;
+
+                case '1':
+                    ?>
+                    <a class="btn btn-large btn-danger" href="javascript:onclick=disable('<?=$this->get_quota['id']?>','disable')" style="float: right;    width: 120px;"><i class="icon-remove icon-3x pull-left"></i> Disable<br/>Quota</a>
+                    <?php
+                    break;
+                
+                default:
+                    break;
+
+            } ?>
+         
+         </div>
+        <div style="clear: both;height: 20px"></div>
+   
+        
+      
+       <div class="type_dealer">
+        <table class="table table-hover" id="bootstrap-table">
+            <thead>
+                <tr>
+                    <td width="5%"><center>Over Quota</center></td>
+                    <td width="50%"><center>Distributor</center></td>
+                    <td width="15%"><center>Product Color</center></td>
+                    <td width="10%"><center>Quota Quantity</center></td>
+                    <td width="10%"><center>Order</center></td>
+                    <td width="10%"><center>Balance</center></td>
+                </tr>
+            </thead>
+            <tbody>
+           
+            <?php foreach ($this->good_product_color as $key => $value) {
+                $quota_num = 0;
+                $quota_current = 0;
+                $status_over_quota = 0;
+                if(isset($this->quota_color[$this->get_quota['id']][$value['color_id']])){
+
+                    $quota_num = $this->quota_color[$this->get_quota['id']][$value['color_id']]['num'];
+
+                    $status_over_quota = $this->quota_color[$this->get_quota['id']][$value['color_id']]['status'];
+                }
+
+                if(isset($this->quota_current[$this->get_quota['id']][$value['color_id']])){
+
+                    $quota_current = $this->quota_current[$this->get_quota['id']][$value['color_id']]['current_quota'];
+                }
+            ?>
+            <tr>
+                <td><center><input class="checkbox_over_quota" type="checkbox" name="check_over_quota[]" value="<?=$value['color_id']?>" <?php if($status_over_quota == 2){echo 'checked';}?>></center></td>
+                <td><?='('.$this->get_quota['d_id'].')['.$this->get_quota['store_code'].']  '.$this->get_quota['d_name']?>
+                </td>
+                 <td><center>(<?=$value['color_id']?>)<?=$value['color_name']?></center></td>
+                <td><center><input type="text" class="number qty" required name="quota_qty[]" value="<?=$quota_num?>"></center></td>
+                 <td><center><p class="order_qty"><?=$quota_current?></p></center></td>
+                 <td><center><p class="balance_qty"><?=$quota_num-$quota_current?></p></center></td>
+            </tr>
+            <input type="hidden" name="c_id[]" class="c_id" value="<?=$value['color_id']?>">
+            <?php } ?>
+            <input type="hidden" name="d_id" class="d_id" value="<?=$this->get_quota['d_id']?>">
+            <input type="hidden" name="id" class="id" value="<?=$this->get_quota['id']?>">
+            <input type="hidden" name="g_id" class="g_id" value="<?=$this->get_quota['good_id']?>">
+            <input type="hidden" name="warehouse_id" class="warehouse_id" value="<?=$this->get_quota['warehouse_id']?>">
+            <input type="hidden" name="good_type" class="good_type" value="<?=$this->get_quota['good_type']?>">
+            </tbody>
+        </table>
+       </div>
+     
+        <div class="row">
+            <div class="control-group">
+                <br>
+                <div class="span4">         
+                    <button type="submit" class="btn btn-primary" >Confirm</button>
+                    <a href="new-quota-manage-distributor" class="btn btn-danger go-back">Go back</a>
+                </div>
+            </div>
+            <div class="clearfix"></div>
+        </div>
+    </form>
+</div>
+     
+<script type="text/javascript" src="/js/jquery-ui-1.8.12.custom.min.js"></script>
+<link rel="stylesheet" type="text/css" href="/css/jquery-ui-1.8.12.custom.css"/>
+<script type="text/javascript">
+ 
+function disable(id,act) {
+     if (confirm("Press Confirm!") == true) {
+            window.location.assign("/tool/new-disable-quota-distributor?id="+id+"&act="+act);
+        }
+}
+$(document).ready(function () {
+
+    $("*").keypress(function(event){  
+         if(event.keyCode==13){  
+            return false;  
+         }
+    });
+
+    $('.number').keypress(function(event) {
+        if (event.which != 46 && (event.which < 47 || event.which > 59))
+        {
+            event.preventDefault();
+            if ((event.which == 46) && ($(this).indexOf('.') != -1)) {
+                event.preventDefault();
+            }
+        }
+    });
+
+    // $('.checkbox_over_quota').click(function(event) {
+    //     var div_parent = $(this).parent().parent().parent();
+    // });
+
+    $('.qty').change(function(event) {
+        var div_parent = $(this).parent().parent().parent();
+        var qty = $(this).val();
+        var order_qty = div_parent.find('.order_qty').html();
+        var balance_qty = qty-order_qty;
+
+        if(balance_qty < 0){
+            $(this).val('');
+            alert('Quota Quantity Invalid.');
+        }
+        div_parent.find('.balance_qty').html(balance_qty);
+    });
+
+});
+
+</script>

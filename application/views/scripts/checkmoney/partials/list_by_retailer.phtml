@@ -1,0 +1,101 @@
+<table class="table table-bordered">
+    <thead>
+        <tr>
+            <?php echo $this->sorting(array(
+            		'',
+            		'Retailer',
+        			'Bank',          		
+            		'Input/Out Money',
+            		'Input/Out time/Create at',
+            		'Type',
+            		'Order number',
+            		'Bank transaction code',
+            		'Content',
+            		'Note',
+            		'Balance',       
+            		'Action'
+            		
+                ),
+                $this->url, $this->sort, $this->desc); ?>
+        </tr>
+    </thead>
+    <tbody>
+        <?php
+        if (isset($this->list) and $this->list):
+        	
+            foreach ($this->list as $item):
+            ?>	
+            <tr class='main-row'>
+            	<td>
+            		<button class="collapse_a btn btn-default btn-small" id="d_<?php echo $item['d_id'] ?>">+</button>
+            		<input type='hidden' name='page' class="p_<?php echo $item['d_id'] ?>" value='1'/> 	
+            	</td>        	
+            	<td>
+            		<?php 
+            			if($item['d_id'] == 0){
+							echo "UNKNOWN";
+						}else{
+							echo $item['title'];	
+						}
+            		?>
+            	</td>
+            	<td class="col_bank">
+            		<span class='bank_id' style="visibility: hidden;"><?php echo $item['bank_id']?></span>
+            	</td>	<!--  bank -->
+            	<td></td><!-- input -->
+            	<td></td><!-- pay time -->
+            	<td></td><!-- Type -->
+            	<td></td><!-- sn -->
+            	<td></td> <!-- Bank transaction code  -->
+            	<td></td><!-- content -->
+            	<td></td><!-- Note -->
+            	<td>	
+<!--            		<label>Current: --><?php //echo number_format($item['balance'])?><!--</label>-->
+            		<label for="">
+            			Total oppo: <?php echo number_format($item['total_balance'],2);?>
+            		</label>
+                    <label for="">
+                        Total TM: <?php echo number_format($item['total_balance_smartmobile'],2);?>
+                    </label>
+            	</td>
+            	<td>
+					<?php 
+						if($this->access('checkmoney','history')):
+					?>
+						<a title="history" href="/checkmoney/history?d_id=<?php echo $item['d_id'];?>" target="_blank">
+							<img src='<?php echo HOST.'img/historical.png'?>' width='12'/>
+						 </a>
+					<?php 
+						endif;
+					?>
+                    <?php
+                    if($this->access('checkmoney','payment-order')):
+                        ?>
+                        <a title="Payment Order" href="/checkmoney/payment-order?d_id=<?php echo $item['d_id'];?>" target="_blank">
+                            <i class="icon-dollar"></i>
+                        </a>
+                    <?php
+                    endif;
+                    ?>
+                    <a title="Payment Slip Cash" href="/checkmoney/payment-slip?d_id=<?php echo $item['d_id'];?>" target="_blank">
+                        <i class="icon-money"></i>
+                    </a>
+            	</td>
+            </tr>
+        <?php 
+        	endforeach;
+        endif;
+        ?>
+    </tbody>
+</table>
+
+<div class="paging">
+<?php echo $this->paging($this->total, $this->limit, $this->offset, $this->url);?>
+</div>
+<p id='loading'><img src='<?php echo HOST?>img/ajax-loader.gif' style="position: fixed; left: 50%; top:40%" /></p>
+
+<div id="modal" class="modal hide fade" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+
+</div>
+
+<div id='dialog'></div>

@@ -1,0 +1,627 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="utf-8">
+<title>Print : Weekly Stock Aging (3 Week)</title>
+</head>
+<style type="text/css">
+body {
+  font-family: "Times New Roman", Times, serif;
+  background: white; 
+  font-size:12px;
+  margin: 0px;
+}
+page {
+  background: white;
+  display: block;
+  margin: 0 auto;
+  /*margin-bottom: 0.5cm;*/
+  /*box-shadow: 0 0 0.5cm rgba(0,0,0,0.5);*/
+  padding-left:0.5cm;
+  padding-right:0.5cm;
+}
+page[size="A4"] {  
+  width: 21cm;
+  height: 29.7cm;
+}
+#sales-info{
+  text-align: center;
+  height:2cm;
+}
+table {
+    border-collapse: collapse;
+    width:100%;
+}
+
+table, th, td {
+    border: 1px solid black;
+}
+table.nb, table.nb th, table.nb td{
+  border: none;
+}
+.txthead{
+    text-align: center;
+    background-color: #b1a7a7;
+    height: 20px;
+    font-weight: bold;
+}
+.txtleft{
+    text-align: left;
+    background-color: #ddd;
+    height: 30px
+}
+.bgrey{
+    background-color: #ddd;
+    height: 60px;
+    text-align: left;
+    vertical-align: top;
+}
+.zc-ref {
+  display: none;
+}
+</style>
+
+<body>
+<page size="A4">
+    <div class="details-head-page-none" style="display: none;">
+      <div align="right" style="margin-right: 30px;padding-top: 160px;"><?php echo "$current_page/$total_page";?></div>
+    </div>
+
+    <div class="details-head-page">
+      <img style="width: 100%" src='<?php echo HOST.'img/oppo_header.png'?>'>
+    </div>
+      <table id="sales-info" style="margin-top:0.2cm;">
+        <?php
+            $currentTime = date('Y-m-d H:i:s');
+         ?>
+         <tr>
+          <th width="100%" colspan="12" style="padding: 5px;" class='txtleft'>Print : Weekly Stock Aging (3 Week)</th>
+         </tr>
+         <tr>
+          <th width="100%" colspan="12" style="padding: 5px;" class='txtleft'>Data Date : <?=$currentTime?></th>
+         </tr>
+        
+      </table>
+      <table id="sales-info" style="margin-top:-0.2cm;">
+         <tr>
+          <td width="100%" class="txthead">
+            <div id="myChart_1"></div>
+          </td>
+         </tr>
+      </table>
+      <br>
+      <table id="sales-info" style="margin-top:-0.2cm;">
+         <tr>
+          <td width="100%" class="txthead">
+            <div id="myChart_2"></div>
+          </td>
+         </tr>
+      </table>
+      <br>
+      <table id="sales-info" style="margin-top:-0.2cm;">
+         <tr>
+          <td width="100%" class="txthead">
+            <div id="myChart_3"></div>
+          </td>
+         </tr>
+      </table>
+      <br>
+</page>
+</body>
+</html>
+
+<?php
+
+
+
+$scale1_x_values = [];
+$series1_total_cost_price_m2 = [];$series1_total_cost_price_m6 = [];$series1_total_cost_price_m12 = [];
+
+$scale2_x_values = [];
+$series2_total_cost_price_m2 = [];$series2_total_cost_price_m6 = [];$series2_total_cost_price_m12 = [];
+
+$scale3_x_values = [];
+$series3_total_cost_price_m2 = [];$series3_total_cost_price_m6 = [];$series3_total_cost_price_m12 = [];
+
+
+foreach ($this->get_resule1 as $id=>$item)
+{
+    $text = str_replace('Warehouse', '', $item['warehouse_name']);
+    array_push($scale1_x_values, $text);
+    array_push($series1_total_cost_price_m2, $item['total_cost_price_m2']);
+    array_push($series1_total_cost_price_m6, $item['total_cost_price_m6']);
+    array_push($series1_total_cost_price_m12, $item['total_cost_price_m12']);
+}
+
+$scale1_x_values = json_encode($scale1_x_values,JSON_NUMERIC_CHECK);
+$series1_total_cost_price_m2 = json_encode($series1_total_cost_price_m2,JSON_NUMERIC_CHECK);
+$series1_total_cost_price_m6 = json_encode($series1_total_cost_price_m6,JSON_NUMERIC_CHECK);
+$series1_total_cost_price_m12 = json_encode($series1_total_cost_price_m12,JSON_NUMERIC_CHECK);
+
+foreach ($this->get_resule2 as $id=>$item)
+{
+    $text = str_replace('Warehouse', '', $item['warehouse_name']);
+    array_push($scale2_x_values, $text);
+    array_push($series2_total_cost_price_m2, $item['total_cost_price_m2']);
+    array_push($series2_total_cost_price_m6, $item['total_cost_price_m6']);
+    array_push($series2_total_cost_price_m12, $item['total_cost_price_m12']);
+}
+
+$scale2_x_values = json_encode($scale2_x_values,JSON_NUMERIC_CHECK);
+$series2_total_cost_price_m2 = json_encode($series2_total_cost_price_m2,JSON_NUMERIC_CHECK);
+$series2_total_cost_price_m6 = json_encode($series2_total_cost_price_m6,JSON_NUMERIC_CHECK);
+$series2_total_cost_price_m12 = json_encode($series2_total_cost_price_m12,JSON_NUMERIC_CHECK);
+
+foreach ($this->get_resule3 as $id=>$item)
+{
+    $text = str_replace('Warehouse', '', $item['warehouse_name']);
+    array_push($scale3_x_values, $text);
+    array_push($series3_total_cost_price_m2, $item['total_cost_price_m2']);
+    array_push($series3_total_cost_price_m6, $item['total_cost_price_m6']);
+    array_push($series3_total_cost_price_m12, $item['total_cost_price_m12']);
+}
+
+$scale3_x_values = json_encode($scale3_x_values,JSON_NUMERIC_CHECK);
+$series3_total_cost_price_m2 = json_encode($series3_total_cost_price_m2,JSON_NUMERIC_CHECK);
+$series3_total_cost_price_m6 = json_encode($series3_total_cost_price_m6,JSON_NUMERIC_CHECK);
+$series3_total_cost_price_m12 = json_encode($series3_total_cost_price_m12,JSON_NUMERIC_CHECK);
+
+
+?>
+
+
+<script src= "https://cdn.zingchart.com/zingchart.min.js"></script>
+<script> zingchart.MODULESDIR = "https://cdn.zingchart.com/modules/";
+    ZC.LICENSE = ["569d52cefae586f634c54f86dc99e6a9","ee6b7db5b51705a13dc2339db3edaf6d"];</script>  
+<script src='//code.jquery.com/jquery-2.1.4.min.js'></script>
+
+<script>
+ 
+var scale1_x_values = '<?php echo $scale1_x_values; ?>';
+var series1_total_cost_price_m2 = '<?php echo $series1_total_cost_price_m2; ?>';
+var series1_total_cost_price_m6 = '<?php echo $series1_total_cost_price_m6; ?>';
+var series1_total_cost_price_m12 = '<?php echo $series1_total_cost_price_m12; ?>';
+
+var scale2_x_values = '<?php echo $scale2_x_values; ?>';
+var series2_total_cost_price_m2 = '<?php echo $series2_total_cost_price_m2; ?>';
+var series2_total_cost_price_m6 = '<?php echo $series2_total_cost_price_m6; ?>';
+var series2_total_cost_price_m12 = '<?php echo $series2_total_cost_price_m12; ?>';
+
+var scale3_x_values = '<?php echo $scale3_x_values; ?>';
+var series3_total_cost_price_m2 = '<?php echo $series3_total_cost_price_m2; ?>';
+var series3_total_cost_price_m6 = '<?php echo $series3_total_cost_price_m6; ?>';
+var series3_total_cost_price_m12 = '<?php echo $series3_total_cost_price_m12; ?>';
+
+
+var myConfig_1 = {
+"graphset":[
+    {
+        "type":"mixed",
+         "plotarea":{
+            "margin-bottom":"30%",
+            "margin-left":"10%"
+        },
+        "title":{
+            "text":"Weekly Stock Aging (3 Week)",
+            "align":"left",
+            "font-size":14,
+            "background-color":"#BDBDBD",
+            "height":"5%"
+        },
+        "scale-x":{
+            "values": JSON.parse(scale1_x_values),
+            "zooming":true,
+            "guide":{
+                "line-style":"solid",
+                "line-color":"#BDBDBD"
+            },
+            "item": {
+                "color": "#606060",
+                "angle":-80,
+                "font-size":10
+            } 
+        },
+        "scale-y":{
+            "zooming":true,
+            "guide":{
+                "visible":false
+            },
+        },
+         "scale-y-2":{
+            "zooming":true,
+            "guide":{
+                "line-style":"solid"
+            },
+            "label":{
+                "text":"Inventory"
+            },
+            "minor-ticks":3,
+            "minor-tick":{
+                "placement":"cross",
+                "size":6
+            },
+            "minor-guide":{
+                "line-width":"1px",
+                "line-style":"dashed",
+                "line-segement-size":"1px",
+                "line-gap-size":"6px",
+                "alpha":0.7
+            }
+        },
+        "series":[
+            
+            {
+                "type":"bar",
+                "text": "Aging less than 2 Week",
+                "values": JSON.parse(series1_total_cost_price_m2),
+                "scales":"scale-x,scale-y",
+                "background-color":"#1B5E20",
+                "tooltip":{
+                    "thousands-separator":"," , 
+                    "text":"Aging less than 2 Week %v",
+                    "width":"200px",
+                    "wrap-text":1
+                },
+                "value-box":{
+                    "thousands-separator":"," , 
+                    "placement":"top",
+                    "offset-y":5,
+                    "font-color":"black",
+                    "text":"%v",
+                    "decimals":0,
+                    "font-angle":270,
+                    "offset-y":-10
+                }
+            }
+            ,
+            {
+                "type":"bar",
+                "text": "Aging less than 6 Week",
+                "values": JSON.parse(series1_total_cost_price_m6),
+                "scales":"scale-x,scale-y",
+                "background-color":"#F7DC6F",
+                "tooltip":{
+                    "thousands-separator":"," , 
+                    "text":"Aging less than 6 Week %v",
+                    "width":"200px",
+                    "wrap-text":1
+                    
+                },
+                "value-box":{
+                    "thousands-separator":"," , 
+                    "placement":"top",
+                    "offset-y":5,
+                    "font-color":"black",
+                    "text":"%v",
+                    "decimals":0,
+                    "font-angle":270,
+                    "offset-y":-10
+                }
+            }
+            ,
+            {
+                "type":"bar",
+                "text": "Aging less than 12 Week",
+                "values": JSON.parse(series1_total_cost_price_m12),
+                "scales":"scale-x,scale-y",
+                "background-color":"#E65100",
+                "tooltip":{
+                    "thousands-separator":"," , 
+                    "text":"Aging less than 12 Week %v",
+                    "width":"200px",
+                    "wrap-text":1
+                    
+                },
+                "value-box":{
+                    "thousands-separator":"," , 
+                    "placement":"top",
+                    "offset-y":5,
+                    "font-color":"black",
+                    "text":"%v",
+                    "decimals":0,
+                    "font-angle":270,
+                    "offset-y":-10
+                }
+            }
+
+        ]
+    }
+],
+"background-color":"white"
+};
+
+var myConfig_2 = {
+"graphset":[
+    {
+        "type":"mixed",
+         "plotarea":{
+            "margin-bottom":"28%",
+            "margin-left":"10%"
+        },
+        "title":{
+            "text":"Weekly Stock Aging (3 Week)",
+            "align":"left",
+            "font-size":14,
+            "background-color":"#BDBDBD",
+            "height":"5%"
+        },
+        "scale-x":{
+            "values": JSON.parse(scale2_x_values),
+            "zooming":true,
+            "guide":{
+                "line-style":"solid",
+                "line-color":"#BDBDBD"
+            },
+            "item": {
+                "color": "#606060",
+                "angle":-80,
+                "font-size":10
+            } 
+        },
+        "scale-y":{
+            "zooming":true,
+            "guide":{
+                "visible":false
+            },
+        },
+         "scale-y-2":{
+            "zooming":true,
+            "guide":{
+                "line-style":"solid"
+            },
+            "label":{
+                "text":"Inventory"
+            },
+            "minor-ticks":3,
+            "minor-tick":{
+                "placement":"cross",
+                "size":6
+            },
+            "minor-guide":{
+                "line-width":"1px",
+                "line-style":"dashed",
+                "line-segement-size":"1px",
+                "line-gap-size":"6px",
+                "alpha":0.7
+            }
+        },
+        "series":[
+            
+            {
+                "type":"bar",
+                "text": "Aging less than 2 Week",
+                "values": JSON.parse(series2_total_cost_price_m2),
+                "scales":"scale-x,scale-y",
+                "background-color":"#1B5E20",
+                "tooltip":{
+                    "thousands-separator":"," , 
+                    "text":"Aging less than 2 Week %v",
+                    "width":"200px",
+                    "wrap-text":1
+                },
+                "value-box":{
+                    "thousands-separator":"," , 
+                    "placement":"top",
+                    "offset-y":5,
+                    "font-color":"black",
+                    "text":"%v",
+                    "decimals":0,
+                    "font-angle":270,
+                    "offset-y":-10
+                }
+            }
+            ,
+            {
+                "type":"bar",
+                "text": "Aging less than 6 Week",
+                "values": JSON.parse(series2_total_cost_price_m6),
+                "scales":"scale-x,scale-y",
+                "background-color":"#F7DC6F",
+                "tooltip":{
+                    "thousands-separator":"," , 
+                    "text":"Aging less than 6 Week %v",
+                    "width":"200px",
+                    "wrap-text":1
+                    
+                },
+                "value-box":{
+                    "thousands-separator":"," , 
+                    "placement":"top",
+                    "offset-y":5,
+                    "font-color":"black",
+                    "text":"%v",
+                    "decimals":0,
+                    "font-angle":270,
+                    "offset-y":-10
+                }
+            }
+            ,
+            {
+                "type":"bar",
+                "text": "Aging less than 12 Week",
+                "values": JSON.parse(series2_total_cost_price_m12),
+                "scales":"scale-x,scale-y",
+                "background-color":"#E65100",
+                "tooltip":{
+                    "thousands-separator":"," , 
+                    "text":"Aging less than 12 Week %v",
+                    "width":"200px",
+                    "wrap-text":1
+                    
+                },
+                "value-box":{
+                    "thousands-separator":"," , 
+                    "placement":"top",
+                    "offset-y":5,
+                    "font-color":"black",
+                    "text":"%v",
+                    "decimals":0,
+                    "font-angle":270,
+                    "offset-y":-10
+                }
+            }
+
+        ]
+    }
+],
+"background-color":"white"
+};
+
+var myConfig_3 = {
+"graphset":[
+    {
+        "type":"mixed",
+         "plotarea":{
+            "margin-bottom":"28%",
+            "margin-left":"10%"
+        },
+        "title":{
+            "text":"Weekly Stock Aging (3 Week)",
+            "align":"left",
+            "font-size":14,
+            "background-color":"#BDBDBD",
+            "height":"5%"
+        },
+        "scale-x":{
+            "values": JSON.parse(scale3_x_values),
+            "zooming":true,
+            "guide":{
+                "line-style":"solid",
+                "line-color":"#BDBDBD"
+            },
+            "item": {
+                "color": "#606060",
+                "angle":-80,
+                "font-size":10
+            } 
+        },
+        "scale-y":{
+            "zooming":true,
+            "guide":{
+                "visible":false
+            },
+        },
+         "scale-y-2":{
+            "zooming":true,
+            "guide":{
+                "line-style":"solid"
+            },
+            "label":{
+                "text":"Inventory"
+            },
+            "minor-ticks":3,
+            "minor-tick":{
+                "placement":"cross",
+                "size":6
+            },
+            "minor-guide":{
+                "line-width":"1px",
+                "line-style":"dashed",
+                "line-segement-size":"1px",
+                "line-gap-size":"6px",
+                "alpha":0.7
+            }
+        },
+        "series":[
+            
+            {
+                "type":"bar",
+                "text": "Aging less than 2 Week",
+                "values": JSON.parse(series3_total_cost_price_m2),
+                "scales":"scale-x,scale-y",
+                "background-color":"#1B5E20",
+                "tooltip":{
+                    "thousands-separator":"," , 
+                    "text":"Aging less than 2 Week %v",
+                    "width":"200px",
+                    "wrap-text":1
+                },
+                "value-box":{
+                    "thousands-separator":"," , 
+                    "placement":"top",
+                    "offset-y":5,
+                    "font-color":"black",
+                    "text":"%v",
+                    "decimals":0,
+                    "font-angle":270,
+                    "offset-y":-10
+                }
+            }
+            ,
+            {
+                "type":"bar",
+                "text": "Aging less than 6 Week",
+                "values": JSON.parse(series3_total_cost_price_m6),
+                "scales":"scale-x,scale-y",
+                "background-color":"#F7DC6F",
+                "tooltip":{
+                    "thousands-separator":"," , 
+                    "text":"Aging less than 6 Week %v",
+                    "width":"200px",
+                    "wrap-text":1
+                    
+                },
+                "value-box":{
+                    "thousands-separator":"," , 
+                    "placement":"top",
+                    "offset-y":5,
+                    "font-color":"black",
+                    "text":"%v",
+                    "decimals":0,
+                    "font-angle":270,
+                    "offset-y":-10
+                }
+            }
+            ,
+            {
+                "type":"bar",
+                "text": "Aging less than 12 Week",
+                "values": JSON.parse(series3_total_cost_price_m12),
+                "scales":"scale-x,scale-y",
+                "background-color":"#E65100",
+                "tooltip":{
+                    "thousands-separator":"," , 
+                    "text":"Aging less than 12 Week %v",
+                    "width":"200px",
+                    "wrap-text":1
+                    
+                },
+                "value-box":{
+                    "thousands-separator":"," , 
+                    "placement":"top",
+                    "offset-y":5,
+                    "font-color":"black",
+                    "text":"%v",
+                    "decimals":0,
+                    "font-angle":270,
+                    "offset-y":-10
+                }
+            }
+
+        ]
+    }
+],
+"background-color":"white"
+};
+
+zingchart.render({ 
+  id : 'myChart_1', 
+  data : myConfig_1
+});
+
+zingchart.render({ 
+    id : 'myChart_2', 
+    data : myConfig_2, 
+    height: 600, 
+    width: "100%" 
+});
+
+zingchart.render({ 
+    id : 'myChart_3', 
+    data : myConfig_3, 
+    height: 600, 
+    width: "100%" 
+});
+
+
+</script>

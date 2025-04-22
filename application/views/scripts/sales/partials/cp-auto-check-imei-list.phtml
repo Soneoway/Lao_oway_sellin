@@ -1,0 +1,194 @@
+<style>
+
+a{
+    margin-right: 2.5px;
+    margin-left: 2.5px;
+}
+.status_enable{
+    width: 70px;
+    background: #99ff66;
+    text-align: center;
+}
+.status_disable{
+    width: 70px;
+    background: #ff8c66;
+    text-align: center;
+}
+.hilight
+{
+    background: #E8ADAA;
+    /*color:white;*/
+}
+.hilight:hover
+{
+    /*color:black;*/
+}
+</style>
+<?php 
+    $userStorage = Zend_Auth::getInstance()->getStorage()->read();
+    if (My_Staff_Group::inGroup($userStorage->group_id, array(ADMINISTRATOR_ID, FINANCE_CONFIRM_PRICE_PROTECTION)) or ($exception_case and in_array
+        ($userStorage->id, $exception_case))){
+        $cp_confirm="";
+    }else{
+        $cp_confirm="disabled='true'";
+    }
+
+    if (My_Staff_Group::inGroup($userStorage->group_id, array(ADMINISTRATOR_ID, FINANCE_CONFIRM_PRICE_PROTECTION,SALES_ADMIN_CONFIRM_PRICE_PROTECTION)) or ($exception_case and in_array
+        ($userStorage->id, $exception_case))){
+        $view_by_user="0";
+    }else{
+        $view_by_user="1";
+    }
+?>
+<div class="table-responsive">
+    <span class="pull-left">
+        <button class="btn btn-success" <?php echo $cp_confirm; ?> type="button" onclick="window.location='<?php echo HOST ?>sales/cp-auto-check-imei?act=new'">
+            Create Price Protection Lot Number Imei
+        </button>
+
+    </span>
+
+</div>
+<br><br>
+<table class="table table-bordered">
+    <thead>
+        <tr>
+
+            <?php 
+                    echo $this->sorting(array(
+                        '#',
+                        'lot_number'  => 'Lot Number',
+                        'detail'  => 'รายละเอียด',
+                        'good_name'  => 'ชื่อสินค้า',
+                        'finance_group'  => 'Finance Group',
+                        'check_cost'  => 'การคำนวน',
+                        'total_scan'  => 'Total Scan',
+                        'total_error'  => 'Imei Error',
+                        'total_imei'  => 'Total Imei CP',
+                        'total_sales_confirm_imei'  => 'Admin Confirm',
+                        'total_finance_confirm_imei'  => 'Finance Confirm',
+                        'box_status' => 'Status',
+                        'create_date'  => 'วันที่รับเข้าระบบ',
+                        'create_by' => 'ผู้บันทึกข้อมูล',  
+                        'remark'  => 'หมายเหตุ (แสดงในรายงาน)',                 
+                        'Action',
+                        'ลบข้อมูล'
+                    ),
+                    $this->url, $this->sort, $this->desc); 
+                
+            ?>
+        </tr>
+    </thead>
+    <tbody>
+        <?php
+        $statuses = unserialize(DISCOUNT_STATUS);
+        if (isset($this->get_resule) and $this->get_resule) :
+            $row=1;
+            //print_r($this->get_resule);
+            foreach ($this->get_resule as $k=>$m):
+
+                $box_status = false;
+                $textBox_status = 'รอดำเนินการ';
+                if($m['total_sales_confirm_imei'] > 0 && $m['total_finance_confirm_imei']<=0){
+                    $box_status=true;
+                    $textBox_status = 'Admin ยืนยันแล้ว';
+                }else if($m['total_sales_confirm_imei'] > 0 && $m['total_finance_confirm_imei']>0){
+                    $box_status=true;
+                    $textBox_status = 'Finance ยืนยันแล้ว';
+                }else if($m['total_sales_confirm_imei'] <= 0 && $m['total_finance_confirm_imei']<=0){
+                    $box_status=false;
+                    $textBox_status = 'รอดำเนินการ';
+                }
+
+                /*if($m['total_imei'] > $m['total_finance_confirm_imei'] || $m['total_imei']<=0){
+                    $box_status=false;
+                    $textBox_status = 'ดำเนินการ';
+                }else if($m['total_imei'] == $m['total_finance_confirm_imei']){
+                    $box_status=true;
+                    $textBox_status = 'เรียบร้อย';
+                }else{
+                    $box_status=false;
+                    $textBox_status = 'ไม่พบสถานะ';
+                }*/
+
+
+                if($m['total_sales_confirm_imei'] > 0){
+                    $delete_cn_active="disabled='true'";
+                }else{
+                    $delete_cn_active="";
+                }
+
+                if($view_by_user==1){
+                    $total_imei = $m['total_imei_by_user'];
+                }else{
+                    $total_imei = $m['total_imei'];
+                }
+
+                if($m['check_cost'] == 1){
+                    $check_cost="คำนวนแบบต้นทุน";
+                }else{
+                    $check_cost="";
+                }
+
+                ?>
+                <tr>
+                    <td><?php echo $row; ?></td>
+                    <td><?php echo $m['lot_number'] ?></td>
+                    <td><?php echo $m['detail'] ?></td>
+                    <td><?php echo $m['good_name'] ?></td>
+                    <td><?php echo $m['finance_group'] ?></td>
+                    <td><?php echo $check_cost ?></td>
+                    <td style="text-align: center;"><?php echo $total_imei+$m['total_error'] ?></td>
+                    <td style="text-align: center;"><?php echo $m['total_error'] ?></td>
+                    <td style="text-align: center;"><?php echo $total_imei ?></td>
+                    <td style="text-align: center;"><?php echo $m['total_sales_confirm_imei'] ?></td>
+                    <td style="text-align: center;"><?php echo $m['total_finance_confirm_imei'] ?></td>
+                    <td style="text-align: center;"><input readonly class="<?php if($box_status){echo 'status_enable';}else{echo 'status_disable';}?>" id="boxStatus-<?=$i;?>" type="text" value="<?=$textBox_status;?>"></td>
+                    <td><?php echo $m['create_date'] ?></td>
+                    <td><?php echo $m['staff_name'] ?></td>
+                    <td><?php echo $m['remark'] ?></td>
+                    <td style="text-align: center;">
+                        <a title="Check Imei"  href="/sales/cp-auto-check-imei?act=edit&lot_sn=<?php echo $m['lot_sn'];?>"> <i class="icon-qrcode" style="color: red;"></i></a> 
+                    </td>
+                    <td>
+                        <button  type="button" <?php echo $cp_confirm; ?> <?php echo $delete_cn_active; ?> value="<?php echo $m['lot_sn'];?>" name="delete_cn[]" id="delete_cn" style="text-align: right;" class="btn btn-danger delete_cn">ลบ</button>
+                    </td>                    
+                </tr>
+                <?php 
+                $row +=1;
+            endforeach;
+            ?>
+        <?php endif; ?>
+    </tbody>
+</table>
+<div class="paging">
+    <?php echo $this->paging($this->total, $this->limit, $this->offset, $this->url);?>
+</div>
+
+<script type="text/javascript" src="/js/jets.js"></script>
+<script type="text/javascript" src="/js/jquery-ui-1.8.12.custom.min.js"></script>
+<script src="<?php echo HOST ?>js/tag-it.min.js" type="text/javascript" charset="utf-8"></script>
+
+<script>
+    
+    $('.delete_cn').click(function(event)
+        {
+            //$(this).find("td").eq(2).html(); 
+            if (confirm('ต้องการลบใช่หรือไม่ ?'))
+            {
+
+                    var lot_sn = $(this).val();
+                    //console.log(lot_sn);                    
+                    $.ajax({
+                        url: '<?php echo HOST.'sales/delete-cp-auto-check-imei-list';?>',
+                        type: 'POST',
+                        data: {'lot_sn':lot_sn},
+                    })
+                    .done(function(response) {
+                        window.location.href = "/sales/cp-auto-check-imei-list";
+                    });
+            }
+
+        }); 
+  
+</script>

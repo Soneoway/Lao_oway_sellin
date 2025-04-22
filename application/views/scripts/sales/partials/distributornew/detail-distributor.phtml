@@ -1,0 +1,203 @@
+<?php
+
+if($this->distributor['distributor_type'] == 1) {
+  $d_type = 'Regional Distributor';
+}elseif ($this->distributor['distributor_type'] == 2) {
+  $d_type = 'Affiliate';
+}elseif ($this->distributor['distributor_type'] == 3) {
+  $d_type = 'Retailer';
+}else {
+  $d_type = 'Exclusive Distributor';
+}
+
+if($this->distributor['status'] == 1) {
+  $status = 'In Cooperation';
+}elseif ($this->distributor['status'] == 2) {
+  $status = 'Suspend Cooperation';
+}else {
+  $status = 'Close';
+}
+?>
+
+<ul class="breadcrumb" style="margin-top: 20px;">
+  <li><a href="/">Home</a> <span class="divider">/</span></li>
+  <li><a href="/sales/distributor">Distributor Management</a> <span class="divider">/</span></li>
+  <li class="active">Distributor Detail</li>
+</ul>
+
+
+<div class="container" style="padding-bottom: 300px; padding-top: 30px;">
+  <div class="card">
+    <div class="row-fluid">
+
+      <div class="span5">
+        <div class="control-group">
+          <label style="font-size: 28px; padding-bottom: 25px; font-weight: bold;"> <?php echo $this->distributor['title'] ?> </label>
+          <label style="font-size: 16px; font-weight: bold;">Code : <?php echo $this->distributor['distributor_code'] ?></label>
+          <label style="padding-top: 5px">Superior Distributor : </label>
+          <label>Distributor Type : <?php echo $d_type ?></label>
+          <label>Affiliated Clients : <?php echo $this->client_cache[$this->distributor['client_code']] ?></label>
+          <label>Creator : <?php echo $this->distributor['create_by'] ?></label>
+
+        </div>
+      </div>
+
+      <div class="span5">
+        <div class="control-group">
+          <label style="padding-bottom: 70px"></label>
+          <label>Price System : <?php echo $this->distributor['rank'] ?></label>
+          <label>Office : <?php echo $this->regional_cache[$this->distributor['region']] ?></label>
+          <label>Store Quantity : </label>
+          <label>Creation Time : <?php echo $this->distributor['create_date'] ?></label>
+
+        </div>
+      </div>
+
+      <div class="span2">
+        <div class="control-group">
+          <button class="btn" type="submit" onclick="window.history.go(-1); return false;"> Back </button>
+          <label style="padding-top: 20px;"> Status </label>
+          <label style="font-weight: bold; font-size: 20px;"><?php echo $status ?></label>
+
+        </div>
+      </div>
+
+
+    </div>
+
+    <hr>
+
+    <ul class="nav nav-tabs" id="myTab">
+      <li class="active"><a href="#basicinfo">Basic Info.</a></li>
+      <li><a href="#operation">Operation Record</a></li>
+    </ul>
+
+
+    <div class="tab-content">
+
+      <div class="tab-pane active" id="basicinfo" >
+
+        <div class="row-fluid" style="border-style: solid; padding: 20px; border-color: lavender;">
+          <h3 style="padding-bottom: 10px"> Basic Info </h3>
+          <hr>
+
+          <div class="span3">
+            <div class="control-group">
+              <label>Leader : <?php echo $this->distributor['name'] ?></label>
+              <label>Tag : </label>
+
+            </div>
+          </div>
+
+          <div class="span3">
+            <div class="control-group">
+              <label>Leader ID Card（Fece Side）:</label>
+              <label>External Serial Number : </label>
+
+            </div>
+          </div>
+
+          <div class="span3">
+            <div class="control-group">
+              <label>Leader ID Card（Reverse Side）: </label>
+            </div>
+          </div>
+
+        </div>
+
+        <div class="row-fluid" style="border-style: solid; padding: 20px; border-color: lavender; margin-top: 20px;">
+
+          <ul class="nav nav-tabs" id="myTab">
+            <li class="active"><a href="#store">Store List.</a></li>
+            <li><a href="#warehouse">Warehouse List</a></li>
+            <li><a href="#finance">Finance Client</a></li>
+          </ul>
+
+
+          <div class="tab-content">
+            <div class="tab-pane active" id="store" >
+              <table class="table table-bordered">
+                <thead>
+                  <tr>
+                    <th>Store</th>
+                    <th>Affiliated Agency</th>
+                    <th>Administrative Attribute</th>
+                    <th>Receiver</th>
+                    <th>Tel.</th>
+                    <th>Status</th>
+                    <th>Action</th>
+                  </tr>
+                </thead>
+              </table>
+              
+            </div>
+
+            <div class="tab-pane" id="warehouse">
+              <table class="table table-bordered">
+                <thead>
+                  <tr>
+                    <th>Warehouse</th>
+                    <th>Affiliated Agency</th>
+                    <th>Warehouse Type</th>
+                    <th>Receiver</th>
+                    <th>Tel.</th>
+                    <th>Status</th>
+                  </tr>
+                </thead>
+              </table>
+            </div>
+
+            <div class="tab-pane" id="finance" >
+              <table class="table table-bordered">
+                <thead>
+                  <tr>
+                    <th>Finance Client Code</th>
+                    <th>Finance Client</th>
+                    <th>Finance Client Code</th>
+                    <th>Company(Our Side)</th>
+                    <th>Company(Your Side)</th>
+                    <th>Remarks</th>
+                  </tr>
+                </thead>
+              </table>
+            </div>
+
+          </div>
+
+        </div>
+
+
+      </div>
+
+      <div class="tab-pane" id="operation">
+        <div class="row-fluid" style="border-style: solid; padding: 20px; border-color: lavender;">
+          <h3 style="padding-bottom: 10px"> Record List </h3>
+          <hr>
+
+          <table class="table table-bordered">
+            <thead>
+              <tr>
+                <th>Operation Item</th>
+                <th>Operator</th>
+                <th>Operation Time</th>
+                <th>Remarks</th>
+              </tr>
+            </thead>
+          </table>
+
+
+        </div>
+
+      </div>
+
+    </div>
+
+  </div>
+</div>
+
+<script>
+  $('#myTab a').click(function (e) {
+    e.preventDefault();
+    $(this).tab('show');
+  })
+</script>

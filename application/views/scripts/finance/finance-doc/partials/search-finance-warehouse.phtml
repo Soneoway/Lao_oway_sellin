@@ -1,0 +1,64 @@
+<link rel="stylesheet" href="<?php echo HOST?>css/select2.css" />
+<script src="<?php echo HOST?>js/select2.js"></script>
+
+<form class="form-search form-horizontal" method="get">
+    <div class="row">
+
+        <div class="span5">
+            <div class="control-group">
+                <label for="dis_id" class="control-label"> Distributor(My Side) : </label>
+                <div class="controls">
+                    <select class="span3" id="dis_id" name="dis_id">
+                        <option value=""> Please Selected </option>
+                        <?php if(isset($this->distributor) && $this->distributor) : ?>
+                            <?php foreach ($this->distributor as $value) : ?>
+                                <option value="<?php echo $value['id'] ?>" <?php if(isset($this->params['dis_id']) && $this->params['dis_id'] == $value['id'] ) : ?> selected <?php endif; ?> ><?php echo $value['title'] ?></option>
+                            <?php endforeach; ?>
+                        <?php endif; ?>
+                    </select>
+                </div>
+            </div>
+
+            <div class="control-group">
+               <label for="warehouse_id" class="control-label"> Warehouse Name : </label>
+               <div class="controls">
+                  <select class="span3" name="warehouse_id" id="warehouse_id">
+                     <option value=""> Please Selected </option>
+                     <?php if(isset($this->warehouse) && $this->warehouse) : ?>
+                        <?php foreach($this->warehouse as $key => $value): ?>
+                            <option value="<?php echo $key ?>" <?php if(isset($this->params['warehouse_id']) && $this->params['warehouse_id'] == $key ) : ?> selected <?php endif; ?> ><?php echo $value ?></option>
+                        <?php endforeach; ?>
+                    <?php endif; ?>
+                </select>
+            </div>
+        </div>
+
+    </div>
+
+    <div class="span5">
+       <div class="control-group">
+          <label for="finance_warehouse" class="control-label"> Finance Warehouse Name : </label>
+          <div class="controls">
+             <input type="text" name="finance_warehouse" id="finance_warehouse" class="span3" value="<?php isset($this->params['finance_warehouse']) and printf($this->params['finance_warehouse']);?>">
+         </div>
+     </div>
+
+     <div class="control-group">
+      <label for="mnemonic_code" class="control-label"> Mnemonic code : </label>
+      <div class="controls">
+         <input type="text" name="mnemonic_code" id="mnemonic_code" class="span3" value="<?php isset($this->params['mnemonic_code']) and printf($this->params['mnemonic_code']);?>">
+     </div>
+ </div>
+
+</div>
+
+<button type="submit" class="btn btn-primary">Search</button>
+<button type="reset" class="btn btn-warning">Reset</button>
+<button type="submit" class="btn btn-success" name="export" value="1"> Export </button>
+
+</div>
+</form>
+
+<script type="text/javascript">
+    $('#dis_id, #warehouse_id').select2();
+</script>

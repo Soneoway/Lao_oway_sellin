@@ -1,0 +1,120 @@
+<meta http-equiv="refresh" content="10"/>
+
+<style>
+
+</style>
+
+<div class="page-header">
+    <h1>Monitoring Check Line Warehouse</h1>
+    <br/>
+    <button type="button" id="btn-back" class="btn btn-danger" onclick="location.href='<?php echo HOST.'warehouse/check-warehouse-create-line';?>';">Back</button>
+</div>
+
+<button class="btn btn-warning pull-right" id="btn-export" style="margin-bottom: 15px;">Export</button>
+
+<div class="table-responsive">
+    <table id="table-check-warehouse-line" class="table dataTable" style="margin-top: 30px;margin-bottom: 50px;">
+        <tr>
+            <th>Line Name</th>
+            <th>Warehouse</th>
+            <th>Product</th>
+            <th>Color</th>
+            <th>Storage</th>
+            <th>Scanned</th>
+            <th>Remaining</th>
+        </tr>
+
+        <?php foreach ($this->arrData as $key) { ?>
+            <tr>
+                <td><?=$key['line_name']?></td>
+                <td><?=$key['warehouse_name']?></td>
+                <td><?=$key['good_name']?></td>
+                <td><?=$key['good_color_name']?></td>
+                <td><?=$key['total_storage']?></td>
+                <td><?=$key['scanned_count']?> (<?=number_format(($key['scanned_count']*100)/$key['total_storage'],2)?>%)</td>
+                <td><?=($key['total_storage']-$key['scanned_count'])?> (<?=number_format((($key['total_storage']-$key['scanned_count'])*100)/$key['total_storage'],2)?>%)</td>
+            </tr>
+        <?php } ?>
+    </table>
+</div>
+
+
+<script src="<?php echo HOST ?>js/jquery-ui.js"></script>
+<script type="text/javascript" src="/js/jquery-ui-1.8.12.custom.min.js"></script>
+<link rel="stylesheet" type="text/css" href="/css/jquery-ui-1.8.12.custom.css"/>
+
+<script>
+
+    $(document).ready(function () {
+        
+        $('#btn-export').click(function(event) {
+
+            var titles = [];
+            var data = [];
+
+            $('.dataTable th').each(function() {
+                titles.push($(this).text());
+            });
+
+            $('.dataTable td').each(function() {
+                data.push($(this).text());
+            });
+
+            var CSVString = prepCSVRow(titles, titles.length, '');
+            CSVString = prepCSVRow(data, titles.length, CSVString);
+
+            var downloadLink = document.createElement("a");
+            var blob = new Blob(["\ufeff", CSVString]);
+            var url = URL.createObjectURL(blob);
+            downloadLink.href = url;
+            downloadLink.download = "monitoring_check_line_warehouse_"+$.now()+".csv";
+
+            document.body.appendChild(downloadLink);
+            downloadLink.click();
+            document.body.removeChild(downloadLink);
+            
+        });
+
+        function prepCSVRow(arr, columnCount, initial) {
+              var row = ''; // this will hold data
+              var delimeter = ','; // data slice separator, in excel it's `;`, in usual CSv it's `,`
+              var newLine = '\r\n'; // newline separator for CSV row
+
+              /*
+               * Convert [1,2,3,4] into [[1,2], [3,4]] while count is 2
+               * @param _arr {Array} - the actual array to split
+               * @param _count {Number} - the amount to split
+               * return {Array} - splitted array
+               */
+              function splitArray(_arr, _count) {
+                var splitted = [];
+                var result = [];
+                _arr.forEach(function(item, idx) {
+                  if ((idx + 1) % _count === 0) {
+                    splitted.push(item);
+                    result.push(splitted);
+                    splitted = [];
+                  } else {
+                    splitted.push(item);
+                  }
+                });
+                return result;
+              }
+              var plainArr = splitArray(arr, columnCount);
+              // don't know how to explain this
+              // you just have to like follow the code
+              // and you understand, it's pretty simple
+              // it converts `['a', 'b', 'c']` to `a,b,c` string
+              plainArr.forEach(function(arrItem) {
+                arrItem.forEach(function(item, idx) {
+                  row += item + ((idx + 1) === arrItem.length ? '' : delimeter);
+                });
+                row += newLine;
+              });
+              return initial + row;
+            }
+
+    });
+
+    
+</script>

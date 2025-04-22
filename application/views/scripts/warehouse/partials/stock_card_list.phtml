@@ -1,0 +1,179 @@
+<table class="table table-bordered">
+    <thead>
+        <tr>
+            <th rowspan="2"><div align="center">#</div></th>
+            <th rowspan="2"><div align="center">Date</div></th>
+            <th rowspan="2"><div align="center">Category</div></th>
+            <th rowspan="2"><div align="center">Product Name</div></th>
+            <th rowspan="2"><div align="center">Product Color</div></th>
+            <th rowspan="2"><div align="center">Document Number</div></th>
+            <th rowspan="2"><div align="center">Type</div></th>
+            <th colspan="2"><div align="center">Warehouse</div></th>
+            <th colspan="3"><div align="center">IN</div></th>
+            <th colspan="3"><div align="center">OUT</div></th>
+            <th colspan="3"><div align="center">Stock</div></th>
+            <!-- <th colspan="3"><div align="center">Remain Amount</div></th> -->
+        </tr>
+        <tr >
+            <th><div align="center">FROM</div></th>
+            <th><div align="center">TO</div></th>
+            <th><div align="center">Quantity</div></th>
+            <th><div align="center">Unit Cost</div></th>
+            <th><div align="center">Amount</div></th>
+            <th><div align="center">Quantity</div></th>
+            <th><div align="center">Unit Cost</div></th>
+            <th><div align="center">Amount</div></th>
+            <th><div align="center">Balance</div></th>
+            <th><div align="center">Imei</div></th>
+            <!-- 
+            <th>Amount</th>
+            <th>Cost</th>
+            <th>Total Cost</th>
+            -->
+        </tr>
+    </thead>
+    <tbody>
+        <?php
+           // print_r($this->stocks);
+
+            $balance_amount=0;$in_amount=0;$out_amount=0;
+
+            if (isset($this->stocks) and $this->stocks) {
+                $stocks = $this->stocks;
+                
+                for ($i=0;$i<count($stocks);$i++) {
+                    $cnt = $i + 1;
+
+                    $sales_sn ="";
+                    if ($stocks[$i]['document_type'] == "PO") {
+                        if (is_null($stocks[$i]['document_ref']) || $stocks[$i]['document_ref'] == '') { 
+                            $document_number = $stocks[$i]['document_number']; 
+                        }
+                        else { $document_number = $stocks[$i]['document_ref']; }
+                    } else {
+                        if (is_null($stocks[$i]['document_ref']) || $stocks[$i]['document_ref'] == '') { 
+                            $document_number = $stocks[$i]['document_number']; 
+                        } 
+                        else { $document_number = $stocks[$i]['document_ref']; }
+                        $sales_sn = $stocks[$i]['document_number'].',';  
+                    }    
+
+                    if ($stocks[$i]['document_type']=='SO') 
+                    {
+                       $document_number = $document_number.' / '.$stocks[$i]['invoice_number'];
+                    }
+                    
+                    //$document_number = $stocks[$i]['document_ref'];
+
+                    echo "<tr>";
+                    echo "  <td>".$cnt."</td>";
+                    echo "  <td>".$stocks[$i]['created_date']."</td>";
+                    echo "  <td>".$stocks[$i]['category']."</td>";
+                    echo "  <td>".$stocks[$i]['product_name']."</td>";
+                    echo "  <td>".$stocks[$i]['product_color']."</td>";
+                    echo "  <td>".$document_number."</td>";
+                    //echo "  <td>".$stocks[$i]['document_number']."</td>";
+                    echo "  <td>".$stocks[$i]['document_type']."</td>";
+                    echo "  <td>".$stocks[$i]['wh_from']."</td>";
+                    echo "  <td>".$stocks[$i]['wh_to']."</td>";
+                    
+                    if (!isset($stocks[$i]['in_amount'])) { echo "<td>-</td>"; } 
+                    else { echo "<td>".number_format($stocks[$i]['in_amount'])."</td>"; }
+                    if (!isset($stocks[$i]['in_cost'])) { echo "<td>-</td>"; } 
+                    else { echo "<td>".number_format($stocks[$i]['in_cost'],2)."</td>"; }
+                    if (!isset($stocks[$i]['in_total_cost'])) { echo "<td>-</td>"; } 
+                    else { echo "<td>".number_format($stocks[$i]['in_amount']*$stocks[$i]['in_cost'],2)."</td>"; }
+
+                    if (!isset($stocks[$i]['out_amount'])) { echo "<td>-</td>"; } 
+                    else { echo "<td>".number_format($stocks[$i]['out_amount'])."</td>"; }
+                    if (!isset($stocks[$i]['out_cost'])) { echo "<td>-</td>"; } 
+                    else { echo "<td>".number_format($stocks[$i]['out_cost'],2)."</td>"; }
+                    if (!isset($stocks[$i]['out_total_cost'])) { echo "<td>-</td>"; } 
+                    else { echo "<td>".number_format($stocks[$i]['out_amount']*$stocks[$i]['out_cost'],2)."</td>"; }
+
+                    /*---In Stock----*/
+                    if ($stocks[$i]['document_type']=='PO') {
+                        if (isset($stocks[$i]['in_amount'])) { $in_amount +=$stocks[$i]['in_amount'];} 
+                    }
+
+                    /*---Out Stock----*/
+                    if ($stocks[$i]['document_type']=='SO') {
+                        if (isset($stocks[$i]['out_amount'])) { $out_amount +=$stocks[$i]['out_amount'];}  
+                    }
+
+                    /*---Out Stock----*/
+                    if ($stocks[$i]['document_type']=='Transfer') {
+
+                       if($stocks[$i]['warehouse_id']==$stocks[$i]['wh_to_id']){
+                         
+                       }else{
+                         if (isset($stocks[$i]['in_amount'])) { $in_amount +=$stocks[$i]['in_amount'];} 
+                       }                     
+                    }
+
+                    /*---Show Balance Stock----*/
+                    $balance_amount = $in_amount-$out_amount;
+
+                    $good_id=$stocks[$i]['good_id'];
+                    $good_color=$stocks[$i]['good_color'];
+
+                    echo "<td>".number_format($balance_amount)."</td>"; 
+
+                    if ($stocks[$i]['document_type']=='SO') 
+                    {
+                        echo "<td>";
+                            echo "<span title='View Imei List' class='badge badge-default' 
+                            data-sales-sn='".$sales_sn."' data-good-id='".$good_id."' data-good-color='".$good_color."' ?>Imei</span>";
+                        echo "</td>"; 
+                    }else{
+                        echo "<td></td>";
+                    }
+                    
+                    echo "</tr>";
+                }
+            } 
+        ?>
+
+    </tbody>
+</table>
+<div class="paging">
+    <?php echo $this->paging($this->total, $this->limit, $this->offset, $this->url);?>
+</div>
+
+<div id="modal" class="modal hide fade" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+
+</div>
+
+<script type="text/javascript" src="/js/jquery-ui-1.8.12.custom.min.js"></script>
+<script type="text/javascript" src="/js/bootstrap-modal.js"></script>
+<script type="text/javascript" src="/js/bootstrap-modalmanager.js"></script>
+<link rel="stylesheet" type="text/css" href="/css/jquery-ui-1.8.12.custom.css"/>
+<link rel="stylesheet" type="text/css" href="/css/bootstrap-modal.css"/>
+
+<script>
+    $(document).ready(function(){
+        
+        $modal = $('#modal');
+        $('.badge.badge-default').click(function(){
+
+            _self = $(this);
+            //alert(_self.data('good-color'));
+            $('body').modalmanager('loading');
+            $.post('<?php echo HOST ?>finance/view-imei-list',
+                {
+                    sales_sn : _self.data('sales-sn'),
+                    good_id : _self.data('good-id'),
+                    good_color : _self.data('good-color')
+                },
+                function(data){
+                    //alert(data);
+                    $modal.html(data);
+                    $modal.modal();
+                    var name = _self.parents('tr').children('td:nth-child(6)').html();
+                    $modal.find('h3').append(' <small>&bull; '+name+'</small>');
+            });
+            
+        });
+
+    })
+</script>

@@ -1,0 +1,124 @@
+<?php
+function product_price($priceFloat) {
+$symbol_thousand = '.';
+$decimal_place = 0;
+$price = number_format($priceFloat, $decimal_place, '', $symbol_thousand);
+return $price;
+}
+?>
+<table class="table table-bordered">
+    <thead>
+        <tr>
+            <?php echo $this->sorting(array(
+					'#',
+                    'sn'            => 'Sales Order Number',
+                    'Product Category',
+                    'Product',
+                    'Color',
+                    'num'           => 'Quantity',
+                    'price'         => 'Price',
+                    'Invoice'       => 'Invoice',
+                    'd_id'          => 'Retailer',
+                    'area'          => 'Area',
+                    'region'        => 'Province',
+                    'district'      => 'District',
+                    'outmysql_time' => 'OUT Time',
+					'Action'
+                ),
+                $this->url, $this->sort, $this->desc); ?>
+        </tr>
+    </thead>
+    <tbody>
+        <?php
+        if (isset($this->markets) and $this->markets)
+            foreach ($this->markets as $k=>$PO): ?>
+        <tr>
+        	<td><a href="#id" class="collapse_a btn btn-default btn-small" id="m_<?php echo $PO['sn'] ?>">+</a></td>
+            <td><?php echo $PO['sn'];?></td>
+            <td></td>
+            <td></td>
+            <td></td>
+            <td><?php echo $PO['total_qty'];?></td>
+            <td><?php echo product_price($PO['total_price']);?></td>
+            <td><?php if(isset($PO['invoice_number']))echo $PO['invoice_number'];?></td>
+            <td><?php if(isset($this->distributors) && isset($this->distributors[$PO['d_id']])) echo $this->distributors[$PO['d_id']]['title'];?></td>
+           
+            <td><?php if (isset($PO['district'])) echo My_Region::getValue($PO['district'], My_Region::Area) ?></td>
+            <td><?php if (isset($PO['district'])) echo My_Region::getValue($PO['district'], My_Region::Province) ?></td>
+            <td><?php if (isset($PO['district'])) echo My_Region::getValue($PO['district'], My_Region::District) ?></td>
+
+            <td><?php echo $PO['outmysql_time'];?></td>
+           <td class="">
+            	<a href="<?php echo HOST ?>warehouse/product-out-print?sn=<?php echo $PO['sn'];?>" class="btn <?php if(isset($this->prints) && isset($this->prints[$PO['sn']]) && $this->prints[$PO['sn']]) echo 'btn-info'; else echo 'btn-default'; ?> btn-small" target="_blank"><?php if(isset($this->prints) && isset($this->prints[$PO['sn']]) && $this->prints[$PO['sn']]) echo $this->prints[$PO['sn']]; else echo "Print" ?></a>
+  <!-- print invoice -->
+    <div class="btn-group">
+          <a class="btn dropdown-toggle btn-warning" data-toggle="dropdown" href="#">
+            Print Invoice
+            <span class="caret"></span>
+          </a>
+          
+            <ul class="dropdown-menu" role="menu" aria-labelledby="dropdownMenu3">
+                  <li role="presentation"><a role="menuitem" tabindex="-1" target="_blank" href="<?php echo HOST ?>warehouse/invoice?sn=<?php echo $PO['sn'];?>">Invoice</a></li>
+                  <li role="presentation"><a role="menuitem" tabindex="-1" target="_blank" href="<?php echo HOST ?>warehouse/invoice-no-accessories?sn=<?php echo $PO['sn'];?>">Invoice no Accessories</a></li>
+                  <li role="presentation"><a role="menuitem" tabindex="-1" target="_blank" href="<?php echo HOST ?>warehouse/invoice-vt?sn=<?php echo $PO['sn'];?>">Viettel</a></li>
+                  <li role="presentation"><a role="menuitem" tabindex="-1" target="_blank" href="<?php echo HOST ?>warehouse/invoice?sn=<?php echo $PO['sn'];?>&type=fpt">FPT</a></li>
+                  <li role="presentation"><a role="menuitem" tabindex="-1" target="_blank" href="<?php echo HOST ?>warehouse/invoice?sn=<?php echo $PO['sn'];?>&type=nk">Nguyễn  Kim</a></li>
+                  <li role="presentation"><a role="menuitem" tabindex="-1" target="_blank" href="<?php echo HOST ?>warehouse/invoice-dmcl?sn=<?php echo $PO['sn'];?>">Điện máy chợ lớn</a></li>
+                    <li role="presentation"><a role="menuitem" tabindex="-1" target="_blank" href="<?php echo HOST ?>warehouse/invoice?sn=<?php echo $PO['sn'];?>&type=campuchia">Campuchia</a></li>
+                  <li role="presentation"><a role="menuitem" tabindex="-1" target="_blank" href="<?php echo HOST ?>warehouse/invoice?sn=<?php echo $PO['sn'];?>&type=custom">Custom</a></li>
+                  <li role="presentation"><a role="menuitem" tabindex="-1" target="_blank" href="<?php echo HOST ?>warehouse/invoice?sn=<?php echo $PO['sn'];?>&type=digital">Digital</a></li>
+                  <li role="presentation"><a role="menuitem" tabindex="-1" target="_blank" href="<?php echo HOST ?>warehouse/invoice?sn=<?php echo $PO['sn'];?>&type=bkhh">BVG kèm bảng kê</a></li>                  
+                   <li role="presentation"><a role="menuitem" tabindex="-1" target="_blank" href="<?php echo HOST ?>warehouse/invoice?sn=<?php echo $PO['sn'];?>&type=ck">Chiết khấu kèm bảng kê</a></li>                  
+                  <li role="presentation"><a role="menuitem" tabindex="-1" target="_blank" href="<?php echo HOST ?>warehouse/invoice?sn=<?php echo $PO['sn'];?>&type=accessories-fpt">Phụ kiện cho FPT</a></li>
+            </ul>
+    </div>
+    
+     <!-- print invoice -->
+            </td>
+        </tr>
+        	<?php if (isset($this->mk_goods) && $this->mk_goods && isset($this->mk_goods[$PO['sn']])): ?>
+        		<?php foreach ($this->mk_goods[$PO['sn']] as $key => $value): ?>
+        			<tr class="m_<?php echo $PO['sn'] ?> accordion-body collapse" style="display:none;">
+        				<td></td>
+			            <td></td>
+			            <td><?php if(isset($this->good_categories) && $this->good_categories) echo $this->good_categories[$value['cat_id']];?></td>
+			            <td><?php if(isset($this->all_goods) && $this->all_goods) echo $this->all_goods[$value['good_id']];?></td>
+			            <td><?php if(isset($this->colors_list) && $this->colors_list && isset($this->colors_list[$value['good_color']]) && $this->colors_list[$value['good_color']]) echo $this->colors_list[$value['good_color']];?></td>
+			            <td><?php echo $value['num'];?></td>
+			            <td><?php echo product_price($value['price']);?></td>
+			            <td></td>
+                        <td></td>
+			            <td></td>
+			            <td></td>
+			            <td></td>
+			            <td></td>
+        			</tr>
+        		<?php endforeach ?>
+        	<?php endif ?>
+        <?php endforeach;?>
+
+    </tbody>
+</table>
+<div class="paging">
+    <?php echo $this->paging($this->total, $this->limit, $this->offset, $this->url);?>
+</div>
+
+<script type="text/javascript" src="/js/jquery-ui-1.8.12.custom.min.js"></script>
+<link rel="stylesheet" type="text/css" href="/css/jquery-ui-1.8.12.custom.css"/>
+<?php echo $this->load();?>
+<?php echo $this->confirm();?>
+<script>
+    $('.collapse_a').each(function(){
+    	var _this = $(this);
+    	var _this_id = _this.attr('id');
+    	var $coll = $('.'+_this_id);
+
+    	_this.click(function(){
+
+    		$coll.toggle();
+    		if ($coll.is(':visible'))
+	    		_this.html('-');
+	    	else _this.html('+');
+    	});
+    });
+</script>

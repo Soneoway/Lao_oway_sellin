@@ -1,0 +1,72 @@
+<link rel="stylesheet" href="<?php echo HOST?>css/select2.css" />
+<script src="<?php echo HOST?>js/select2.js"></script>
+
+<form class="form-search form-horizontal" method="get" action="#">
+    <div class="row">
+
+        <div class="span5">
+            <div class="control-group">
+                <label for="dis_id" class="control-label">Distributor(My Side) : </label>
+                <div class="controls">
+                    <select class="span3" id="dis_id" name="dis_id">
+                        <option value=""> Please Selected </option>
+                        <?php if(isset($this->distributor) && $this->distributor) : ?>
+                            <?php foreach ($this->distributor as $value) : ?>
+                                <option value="<?php echo $value['id'] ?>" <?php if(isset($this->params['dis_id']) && $this->params['dis_id'] == $value['id'] ) : ?> selected <?php endif; ?> ><?php echo $value['title'] ?></option>
+                            <?php endforeach; ?>
+                        <?php endif; ?>
+                    </select>
+                </div>
+            </div>
+
+            <div class="control-group">
+                <label for="mnemonic_code" class="control-label">Mnemonic code : </label>
+                <div class="controls">
+                    <input type="text" name="mnemonic_code" id="mnemonic_code" class="span3" value="<?php isset($this->params['mnemonic_code']) and printf($this->params['mnemonic_code']);?>" />
+                </div>
+            </div>
+
+            <div class="control-group">
+                <label for="corporation_type" class="control-label">Corporation Type : </label>
+                <div class="controls">
+                    <select class="span3" id="corporation_type" name="corporation_type">
+                        <option value=""> Please Selected </option>
+                        <option value="1" <?php if(isset($this->params['corporation_type']) && $this->params['corporation_type'] == 1) : ?> selected <?php endif; ?>> Corporation </option>
+                        <option value="2" <?php if(isset($this->params['corporation_type']) && $this->params['corporation_type'] == 2) : ?> selected <?php endif; ?>> Profit Center </option>
+                    </select>
+                </div>
+            </div>
+
+        </div>
+
+        <div class="span6">
+            <div class="control-group">
+                <label for="d_id_range" class="control-label">Distributor Visibility Range : </label>
+                <div class="controls">
+                    <select class="span3" id="d_id_range" name="d_id_range">
+                        <option value=""> Please Selected </option>
+                        <option value="1" <?php if(isset($this->params['d_id_range']) && $this->params['d_id_range'] == 1) : ?> selected <?php endif; ?>> in data permissions </option>
+                        <option value="2" <?php if(isset($this->params['d_id_range']) && $this->params['d_id_range'] == 2) : ?> selected <?php endif; ?>> out data permissions </option>
+                    </select>
+                </div>
+            </div>
+
+            <div class="control-group">
+                <label for="account_org" class="control-label">Accounting organization : </label>
+                <div class="controls">
+                    <input id="account_org" name="account_org" type="text" class="span3" value="<?php isset($this->params['account_org']) and printf($this->params['account_org']);?>" />
+                </div>
+            </div>
+        </div>
+
+
+        <button type="submit" class="btn btn-primary">Search</button>
+        <button type="reset" class="btn btn-warning">Reset</button>
+        <button type="submit" class="btn btn-success" name="export" value="1"> Export </button>
+
+    </div>
+</form>
+
+<script type="text/javascript">
+    $('#dis_id').select2();
+</script>

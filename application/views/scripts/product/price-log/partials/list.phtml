@@ -1,0 +1,50 @@
+<table class="table table-bordered">
+    <thead>
+        <tr>
+            <?php echo $this->sorting(array(
+                    '#',
+                    'Product',
+                    'Color',
+                    'Price',
+                    'From',
+                    'To',
+                    'Action'
+                ),
+                $this->url, $this->sort, $this->desc); ?>
+        </tr>
+    </thead>
+    <tbody>
+        <?php
+        if (isset($this->logs) and $this->logs)
+            foreach ($this->logs as $k => $log): ?>
+        <tr>
+            <td>
+                <?php
+                    $inc = $this->offset + $k + 1;
+                    echo $inc;
+                ?>
+            </td>
+            <td><?php echo $log['good_name'] ?></td>
+            <td>
+                <?php if(!empty($log['color_name'])) : ?>
+                    <span class="label label-success"><?php echo $log['color_name'] ?></span>
+                <?php endif; ?>
+            </td>
+            
+            <td><?php echo $log['price'] ?></td>
+            <td><?php if(isset($log['from_date']) && strtotime($log['from_date'])) echo date('d/m/Y', strtotime($log['from_date'])) ?></td>
+            <td><?php if(isset($log['to_date']) && strtotime($log['to_date'])) echo date('d/m/Y', strtotime($log['to_date'])) ?></td>
+            <td class="">
+                <a title="Edit" href="/product/price-log-edit?id=<?php echo $log['id'];?>"> <i class="icon-edit"></i></a>
+                <a title="Delete" class="confirmLink" href="/product/price-log-delete?id=<?php echo $log['id'];?>"> <i class="icon-trash"></i></a>
+            </td>
+        </tr>
+        <?php endforeach;?>
+
+    </tbody>
+</table>
+<div class="paging">
+    <?php echo $this->paging($this->total, $this->limit, $this->offset, $this->url);?>
+</div>
+
+<?php echo $this->confirm();?>

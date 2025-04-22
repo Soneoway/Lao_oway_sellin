@@ -1,0 +1,110 @@
+<table class="table table-bordered">
+    <thead>
+        <tr>
+            <?php echo $this->sorting(array(
+				'#', 
+                'id'    => 'ID',
+                'store_code'     => 'Code',
+                'title'    => 'Retailer Name',
+                
+                'unames'   => 'Company Name',
+                'spc_discount'   => 'Special Discount (%)',
+                'credit_status'   => 'Credit Status',
+                'credit_amount'   => 'Maximum Credit',
+                'Use Credit',
+                'Balance',
+   
+                'add_tax'  => 'Delivery Address',
+                'area'     => 'Area',
+                'region'   => 'Province',
+                'district' => 'District',
+				'Action'
+                ),
+            $this->url, $this->current_col, $this->desc); ?>
+        </tr>
+    </thead>
+    <tbody>
+        <?php
+        if (isset($this->distributors) and $this->distributors) :
+            foreach ($this->distributors as $k => $distributor): ?>
+        <tr>
+            <td>
+                <?php
+                    $inc = $this->offset + $k + 1;
+                	echo $inc;
+                ?>
+            </td>
+            <td><?php echo $distributor['id'] ?></td>
+            <td><?php echo $distributor['store_code'] ?></td>
+            <td>
+                <?php if (isset($distributor['is_ka']) && $distributor['is_ka']): ?>
+                    <span class="label label-success">KA</span>                    
+                <?php endif ?>
+                <?php if (isset($distributor['is_internal']) && $distributor['is_internal']): ?>
+                    <span class="label label-inverse">Internal</span>                    
+                <?php endif ?>
+            	<?php if (isset($distributor['del']) && $distributor['del'] == 1): ?>
+            		<strike><?php echo $distributor['title'] ?></strike>
+            	<?php else: ?>
+            		<a title="Edit" href="<?php echo HOST ?>sales/create-distributor?id=<?php echo $distributor['id'];?>">
+                        <?php echo $distributor['title'] ?>
+                    </a>
+            	<?php endif ?>
+            </td>
+
+            
+            <td><?php echo $distributor['unames'] ?></td>
+            <?php 
+                $credit_status=$distributor['credit_status']; 
+                if($credit_status==1){
+                    $credit_status="ใช้ได้";
+                }else{
+                    $credit_status="-";
+                }
+
+                $QStoreAccount  = new Application_Model_Storeaccount();
+                $q_total_credit_all  = $QStoreAccount->getMainDistributorBalance($distributor['id']); 
+                $total_credit_all = $q_total_credit_all['credit_amount'];
+                $total_use_credit_all = $q_total_credit_all['use_credit'];
+                $total_balance_all = $q_total_credit_all['balance'];
+               // $credit_amount=$distributor['credit_amount'];
+                $credit_amount=$total_credit_all;
+                $credit_use=($distributor['balance']); 
+                /*
+                if($credit_use > 0){
+                    $balance = $credit_amount-$credit_use;
+                }else{
+                    $balance = 0;
+                }
+                */
+            ?>
+            <td style="text-align: center;"><?php echo $distributor['spc_discount'];?></td>
+            <td style="text-align: center;"><?php echo $credit_status;?></td>
+            <td><?php echo number_format($credit_amount,2) ?></td>
+            <td><?php echo number_format($credit_use,2) ?></td>
+            <td><?php echo number_format(($total_balance_all),2) ?></td>
+
+            <td><?php echo $distributor['add_tax'] ?></td>
+            <td><?php if (isset($distributor['district'])) echo My_Region::getValue($distributor['district'], My_Region::Area) ?></td>
+            <td><?php if (isset($distributor['district'])) echo My_Region::getValue($distributor['district'], My_Region::Province) ?></td>
+            <td><?php if (isset($distributor['district'])) echo My_Region::getValue($distributor['district'], My_Region::District) ?></td>
+            <td class="">
+                <?php if ($this->access('sales', 'delete-distributor') && ( !isset($distributor['del']) || !$distributor['del'] )): ?>
+                    <a title="Delete" class="confirmLink" href="/sales/delete-distributor?id=<?php echo $distributor['id'];?>"> <i class="icon-trash"></i></a>
+                    <a title="Shipping Address" class="" href="/sales/shipping-address?id=<?php echo $distributor['id'];?>"> <i class="icon-truck"></i></a>
+                <?php endif ?>
+
+                <?php if ($this->access('sales', 'undelete-distributor') && ( isset($distributor['del']) && $distributor['del'] )): ?>
+                    <a title="Undelete" class="confirmLink" href="/sales/undelete-distributor?id=<?php echo $distributor['id'];?>"> <i class="icon-refresh"></i></a>
+                <?php endif ?>
+            </td>
+        </tr>
+        <?php endforeach;?>
+		<?php endif; ?>
+    </tbody>
+</table>
+<div class="paging">
+    <?php echo $this->paging($this->total, $this->limit, $this->offset, $this->url);?>
+</div>
+<?php echo $this->load();?>
+<?php echo $this->confirm();?>

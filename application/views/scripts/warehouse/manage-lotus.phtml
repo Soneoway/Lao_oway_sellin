@@ -1,0 +1,173 @@
+<style>
+    .blockOverlay{
+        z-index: 10000 !important;
+    }
+    .blockPage{
+        z-index: 10001 !important;
+    }
+
+    hr{
+        width: 220px;
+    }
+</style>
+
+<div class="page-header">
+    <h1>Manage Lotus</h1>
+</div>
+<?php
+    if (isset($this->messages) and $this->messages)
+        foreach ($this->messages as $message):
+            echo '<div class="alert alert-error">'.$message.'</div>';
+        endforeach;
+?>
+
+<div class="row" style="margin-left: 30px;">
+    <form action="manage-lotus" method="post">
+    
+    <div>
+        <span>Enter IMEI</span>
+    </div>
+    <div>
+        <textarea name="imei" id="imei" cols="30" rows="10"></textarea>
+        <input type="hidden" name="temp_imei" id="temp_imei">
+        <br>
+        <button type="button" class="btn btn-default" id="imei-check">Check Imei</button>
+    </div>
+
+    <hr>
+
+    <div class="">
+        <button style="margin-right: 15px;" type="button" class="btn btn-warning" onclick="window.location.href='<?=HOST."warehouse/manage-lotus-list"?>'">Back</button>
+        <button type="submit" class="btn btn-primary" id="btn-submit" disabled>Submit</button>
+
+    </div>
+
+    <hr>
+
+    <div class="div-details" id="div-details-invalid">
+        
+    </div>
+
+    <div class="div-details" id="div-details-valid">
+        
+    </div>
+
+        
+    </form>
+</div>
+
+<script src="/js/jquery.blockUI.js"></script>
+<script>
+
+    $(document).on("submit", "form", function(e){
+
+        $.blockUI({ css: { 
+            border: 'none', 
+            padding: '15px', 
+            backgroundColor: '#000', 
+            '-webkit-border-radius': '10px', 
+            '-moz-border-radius': '10px', 
+            opacity: .5, 
+            color: '#fff' 
+        } });
+    });
+
+    $(document).ajaxStart(function(){
+        $.blockUI({ css: { 
+            border: 'none', 
+            padding: '15px', 
+            backgroundColor: '#000', 
+            '-webkit-border-radius': '10px', 
+            '-moz-border-radius': '10px', 
+            opacity: .5, 
+            color: '#fff' 
+        } });
+    });
+
+    $(document).ajaxStop(function(){
+        $.unblockUI();
+    });
+
+    $(document).ready(function () {
+
+        $('#imei-check').click(function(event) {
+
+            $('#temp_imei').val($('#imei').val());
+
+            $('#btn-submit').attr('disabled','disabled');
+            
+            $.ajax({
+                url: '<?php echo HOST.'warehouse/ajax-check-imei-details-have-sale-out';?>',
+                type: 'POST',
+                data: {'imei' : $('#imei').val()},
+            })
+            .done(function(response) {
+                var obj_response = jQuery.parseJSON(response);
+                console.log("success");
+
+                 switch(obj_response.status) {
+                    case 200:
+                        
+                    $('.div-details').empty();
+
+                    var template_valid_head = '<h2 style="color:green">IMEI Valid</h2><table class="table table-bordered" style="margin-top: 15px; margin-bottom: 30px;" border="1"><tr><td>IMEI</td><td>Product Model</td><td>Product Name</td><td>Product Color</td><td>Message</td></tr>';
+                    var template_valid_body = '';
+                    var template_valid_foot = '</table>';
+
+                    jQuery.each( obj_response.valid, function( i, val ) {
+                        template_valid_body = template_valid_body + '<tr><td>'+val.imei+'</td><td>'+val.good_model+'</td><td>'+val.good_name+'</td><td>'+val.good_color+'</td><td><span style="color:green">Correct</span></td></tr>';
+                    });
+
+                    $('#div-details-valid').append(template_valid_head + template_valid_body + template_valid_foot);
+
+                    $('#btn-submit').removeAttr('disabled');
+
+                        break;
+                    case 400:
+
+                        $('.div-details').empty();
+
+                        var template_invalid_head = '<h2 style="color:red">IMEI Invalid</h2><table class="table table-bordered" style="margin-top: 15px; margin-bottom: 30px;" border="1"><tr><td>IMEI</td><td>Product Model</td><td>Product Name</td><td>Product Color</td><td>Message</td></tr>';
+                        var template_invalid_body = '';
+                        var template_invalid_foot = '</table>';
+
+                        var template_valid_head = '<h2 style="color:green">IMEI Valid</h2><table class="table table-bordered" style="margin-top: 15px; margin-bottom: 30px;" border="1"><tr><td>IMEI</td><td>Product Model</td><td>Product Name</td><td>Product Color</td><td>Message</td></tr>';
+                        var template_valid_body = '';
+                        var template_valid_foot = '</table>';
+
+                        var have_invalid = 0;
+                        var have_valid = 0;
+
+                        jQuery.each( obj_response.invalid, function( i, val ) {
+
+                            have_invalid++;
+
+                            template_invalid_body = template_invalid_body + '<tr><td>'+val.imei+'</td><td>'+val.good_model+'</td><td>'+val.good_name+'</td><td>'+val.good_color+'</td><td>'+obj_response.message+'</td></tr>';
+                        });
+
+                        if(have_invalid){
+                            $('#div-details-invalid').append(template_invalid_head + template_invalid_body + template_invalid_foot);
+                        }
+
+                        jQuery.each( obj_response.valid, function( i, val ) {
+
+                            have_valid++;
+
+                            template_valid_body = template_valid_body + '<tr><td>'+val.imei+'</td><td>'+val.good_model+'</td><td>'+val.good_name+'</td><td>'+val.good_color+'</td><td><span style="color:green">Correct</span></td></tr>';
+                        });
+
+                        if(have_valid){
+                            $('#div-details-valid').append(template_valid_head + template_valid_body + template_valid_foot);
+                        }
+
+                        break;
+                    default:
+                        location.reload();
+                }
+                
+            });
+
+        });
+        
+    });
+</script>

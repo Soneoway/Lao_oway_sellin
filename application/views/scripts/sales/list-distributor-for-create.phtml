@@ -1,0 +1,37 @@
+<?php 
+
+$userStorage = Zend_Auth::getInstance()->getStorage()->read();
+
+?>
+
+<label class="span4" >Retailer name<span style="color: red">*</span>
+            <input type='text' class="span4" name='SearchBox' id="SearchBox" placeholder="Search" autocomplete="off" />
+            <select name="distributor_id" class="span4 " id="distributor_id" required="required" size="5">
+                <option value="">Please select</option>
+                <?php if (isset($this->distributors) and $this->distributors) {
+                 foreach($this->distributors as $distributor):
+                        $selected = '';
+                        if(isset($this->sales[0]['sale']) and $distributor['id'] == $this->sales[0]['sale']->d_id){
+                            $selected = 'selected';
+                        }
+
+                        if($userStorage->id == 446){
+                            if($distributor['id'] == 45020){
+                                echo '<option '.$selected.' value="'.$distributor['id'].'">'.$distributor['id'].' - '.$distributor['title'].'</option>';
+                            }
+                        }else{
+                            echo '<option '.$selected.' value="'.$distributor['id'].'">'.$distributor['id'].' - '.$distributor['title'].'</option>';
+                        }
+
+                    endforeach;
+                }
+                    
+                ?>
+            </select> 
+
+            <?php if(isset($this->distributors) && count($this->distributors) == 1){?>
+                <input type="hidden" id="temp_d_id" name="temp_d_id" value="<?=$this->distributors[0]['id']?>">
+            <?php }else{ ?>
+                <input type="hidden" id="temp_d_id" name="temp_d_id" value="">
+            <?php } ?>
+</label>

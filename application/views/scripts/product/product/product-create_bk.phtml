@@ -1,0 +1,239 @@
+<div class="page-header">
+	<?php if (isset($this->good) && $this->good): ?>
+		<h1>Edit Product</h1>
+	<?php else: ?>
+		<h1>Create Product</h1>
+	<?php endif ?>
+    
+</div>
+<?php
+    if (isset($this->messages) and $this->messages)
+        foreach ($this->messages as $message):
+            echo '<div class="alert alert-error">'.$message.'</div>';
+        endforeach;
+?>
+<form class="form-horizontal" action="<?php echo HOST ?>product/product-save" name="form" id="form" method="post">
+	<div class="row-fluid">
+		<div class="span4">
+			<div class="control-group">
+			    <label class="control-label" for="name">Product Code</label>
+			    <div class="controls">
+			    	<input type="text" id="name" name="name" placeholder="Product Name" required="required" value="<?php if( isset($this->good) && isset($this->good['name']) ) echo $this->good['name'] ?>" />
+			    	<p class="help-block"></p>
+			    </div>
+			</div>
+
+			<div class="control-group">
+			    <label class="control-label" for="details_desc">Product Code Invoice</label>
+			    <div class="controls">
+			    	<input type="text" id="details_desc" name="details_desc" placeholder="Invoice Description" value="<?php if( isset($this->good) && isset($this->good['desc_name']) ) echo $this->good['desc_name'] ?>" />
+			    </div>
+			</div>
+
+			<div class="control-group">
+                <label class="control-label" for="details">Product Name Details</label>
+                <div class="controls">
+                    <input type="text" id="details" name="details" placeholder="Product Details" value="<?php if( isset($this->good) && isset($this->good['desc']) ) echo $this->good['desc'] ?>" />
+                </div>
+            </div>
+
+			<div class="control-group">
+			    <label class="control-label" for="color">Color</label>
+			    <div class="controls">
+			    	<?php 
+			    		if (isset($this->good) && $this->good)
+			    			$colors = explode(',', $this->good['color']);
+			    	?>
+			    	<div class="control-group">
+				    	<select name="color" id="color" multiple="multiple">
+				    		<?php if (isset($colors) && $colors): ?>
+				    			<?php foreach ($colors as $color): ?>
+				    				<option value="<?php echo $color ?>"><?php echo $this->goodColors[$color] ?></option>
+				    			<?php endforeach ?>
+				    		<?php endif ?>
+				    	</select>
+			    	</div>
+
+			    	<div class="control-group">
+				    	<select name="color_list" id="color_list">
+				    		<option value="0">-- Choose Color and click Add --</option>
+				    		<?php if (isset($this->goodColors) && $this->goodColors): ?>
+				    			<?php foreach ($this->goodColors as $key => $color): ?>
+				    				<option value="<?php echo $key ?>"><?php echo $color ?></option>
+				    			<?php endforeach ?>
+				    		<?php endif ?>
+				    	</select>
+			    	</div>
+			    	<div class="control-group">
+				    	<button type="button" id="remove_color_btn" class="btn btn-danger">Remove Color</button>
+				    	<button type="button" id="add_color_btn" class="btn btn-info pull-right">Add</button>
+				    </div>
+			    </div>
+			</div>
+			<div class="control-group">
+			    <label class="control-label" for="category">Category</label>
+			    <div class="controls">
+			    	<select name="category" id="category">
+			    		<?php if ( isset($this->goodCategories) && $this->goodCategories ): ?>
+		    				<?php foreach ($this->goodCategories as $key => $goodCategory): ?>
+		    					<option value="<?php echo $key ?>" <?php if( $key == $this->good['cat_id'] ) echo 'selected="selected"' ?>><?php echo $goodCategory ?></option>
+		    				<?php endforeach ?>
+			    		<?php endif ?>
+			    	</select>
+			    </div>
+			</div>
+			<div class="control-group">
+			    <label class="control-label" for="brand">Brand</label>
+			    <div class="controls">
+			    	<select name="brand" id="brand">
+			    		<?php if ( isset($this->brands) && $this->brands ): ?>
+		    				<?php foreach ($this->brands as $key => $brand): ?>
+		    					<option value="<?php echo $key ?>" <?php if( $key == $this->good['brand_id'] ) echo 'selected="selected"' ?>><?php echo $brand ?></option>
+		    				<?php endforeach ?>
+			    		<?php endif ?>
+			    	</select>
+			    </div>
+			</div>
+			<div class="control-group">
+			    <label class="control-label" for="no_kpi">No KPI</label>
+			    <div class="controls">
+			    	<input type="checkbox" id="no_kpi" name="no_kpi" placeholder="Product Details"  value="1" <?php if (isset($this->good['no_kpi']) && $this->good['no_kpi']) echo "checked" ?>/>
+			    </div>
+			</div>
+		</div>
+
+		<div class="span4">
+            <div class="control-group">
+                <label class="control-label" for="price_1">1. ORG-WDS</label>
+                <div class="controls">
+                    <input type="text" id="price_1" name="price_1" placeholder="1 - 10% (For ORG)" value="<?php if( isset($this->good) && isset($this->good['price_1']) ) echo  $this->good['price_1'] ?>" />
+                </div>
+            </div>
+            <div class="control-group">
+                <label class="control-label" for="price_2">2. ORG</label>
+                <div class="controls">
+                    <input type="text" id="price_2" name="price_2" placeholder="2 - 15% (For ORG)" value="<?php if( isset($this->good) && isset($this->good['price_2']) ) echo  $this->good['price_2'] ?>" />
+                </div>
+            </div>
+            <div class="control-group">
+                <label class="control-label" for="price_5">3. ORG-Dtac/Advice</label>
+                <div class="controls">
+                    <input type="text" id="price_5" name="price_5" placeholder="3 - 17% (For ORG)" value="<?php if( isset($this->good) && isset($this->good['price_5']) ) echo  $this->good['price_5'] ?>" />
+                </div>
+            </div>
+            <div class="control-group">
+                <label class="control-label" for="price_6">4. ORG-Lotus/Power by</label>
+                <div class="controls">
+                    <input type="text" id="price_6" name="price_6" placeholder="4 - 10% (For Dealer Lotus)" value="<?php if( isset($this->good) && isset($this->good['price_6']) ) echo  $this->good['price_6'] ?>" />
+                </div>
+            </div>
+            <div class="control-group">
+                <label class="control-label" for="price_7">5. Dealer</label>
+                <div class="controls">
+                    <input type="text" id="price_7" name="price_7" placeholder="5 - 10% Dealer" value="<?php if( isset($this->good) && isset($this->good['price_7']) ) echo  $this->good['price_7']  ?>" />
+                </div>
+            </div>
+            <div class="control-group">
+                <label class="control-label" for="price_8">6. HUB</label>
+                <div class="controls">
+                    <input type="text" id="price_8" name="price_8" placeholder="6 - 15% (For HUB)" value="<?php if( isset($this->good) && isset($this->good['price_8']) ) echo  $this->good['price_8']  ?>" />
+                </div>
+            </div>
+			<div class="control-group">
+			    <label class="control-label" for="price_9">7 - Laos</label>
+			    <div class="controls">
+			    	<input type="text" id="price_9" name="price_9" placeholder="7 - Laos" value="<?php if( isset($this->good) && isset($this->good['price_9']) ) echo $this->good['price_9'] ?>" />
+			    </div>
+			</div>
+			`
+			<div class="control-group">
+			    <label class="control-label" for="price_3">Retail Price</label>
+			    <div class="controls">
+			    	<input type="text" id="price_3" name="price_3" placeholder="Retail Price" value="<?php if( isset($this->good) && isset($this->good['price_3']) ) echo $this->good['price_3']  ?>" />
+			    </div>
+			</div>
+			<div class="control-group">
+			    <label class="control-label" for="price_4">Import Price</label>
+			    <div class="controls">
+			    	<input type="text" id="price_4" name="price_4" placeholder="Import Price" value="<?php if( isset($this->good) && isset($this->good['price_4']) ) echo $this->good['price_4'] ?>" />
+			    </div>
+			</div>
+			<div class="control-group">
+			    <label class="control-label" for="">Add Time</label>
+			    <div class="controls">
+			    	<input type="text" disabled="disabled" value="<?php if( isset($this->good) && isset($this->good['add_time']) ) echo $this->good['add_time'] ?>" />
+			    </div>
+			</div>
+            
+                                                            
+		</div>
+	</div>
+	<input type="hidden" name="good_color" id="good_color" />
+	<input type="hidden" name="id" value="<?php if( isset($this->good) && isset($this->good['id']) ) echo $this->good['id'] ?>" />
+	<div class="row-fluid">
+		<div class="span8">
+			<div class="pull-right">
+				<button type="submit" id="submit_btn" class="btn btn-primary">Submit</button>
+				<button type="button" id="cancel_btn" class="btn btn-warning">Cancel</button>
+			</div>
+		</div>
+	</div>
+</form>
+<script>
+	$('#add_color_btn').click(function(){
+        _self = $('#color_list');
+        item = _self.children('option:selected').clone();
+        list = $(item);
+
+        for (var i = 0; i < item.length; i++) {
+        	val = $(item[i]).attr('value');
+            if ( ! is_exists( val ) && val != 0 ) {
+                _des = $('#color');
+                _des.append(item[i]);
+            }
+        }
+
+        change_size($('#color'));
+    });
+
+    $('#remove_color_btn').click(function(){
+        _self = $('#color');
+        item = _self.children('option:selected').remove();
+        change_size(_self);
+    });
+
+    $('#form').submit(function(){
+        _name = $('#color option');
+        id_str = '';
+        
+        for(var i = 0; i < _name.length; i++) {
+            id_str += $(_name[i]).attr('value') + ',';
+        }
+        
+        id_str = id_str.replace(/\,$/, '');
+        id_str = id_str.replace(/^\,/, '');
+        $('#good_color').val(id_str);
+        return true;
+    });
+
+    $('#cancel_btn').click(function(){
+    	window.location = '<?php echo HOST ?>product/list';
+    });
+
+    function is_exists(id) {
+        _des = $('#color');
+        items = _des.children('option');
+        for(var i = 0; i < items.length; i++) {
+            if ($(items[i]).attr('value') == id) {
+                return true;
+            }
+        }
+        return false;
+    }
+
+    function change_size(elm) {
+        var len = parseInt(elm.find('option').length);
+        len = len > 3 ? len : 3;
+        elm.css("height", (len*20));
+    }
+</script>

@@ -1,0 +1,261 @@
+<!-- <meta http-equiv="refresh" content="30"/> -->
+
+<style>
+  .blockOverlay{
+      z-index: 10000 !important;
+  }
+  .blockPage{
+      z-index: 10001 !important;
+  }
+</style>
+
+<div class="page-header">
+    <h1>Monitoring Check Line Warehouse</h1>
+    <br/>
+    <button type="button" id="btn-back" class="btn btn-danger" onclick="location.href='<?php echo HOST.'warehouse/check-warehouse-create-line';?>';">Back</button>
+
+    <button type="button" class="pull-right btn btn-sync" id="btn-sync-all">Sync All</button>
+</div>
+
+<form method="get">
+
+<label class="">Warehouse Name</label>
+<select id="warehouse_id" name="warehouse_id" style="width: auto">
+    <option value>All</option>
+    <?php
+    if ($this->warehouse) :
+        foreach ($this->warehouse as $warehouse):?>
+            <option value="<?php echo $warehouse->id;?>" <?php if (isset($this->warehouse_id) &&  $this->warehouse_id == $warehouse->id){ echo 'selected'; }?> ><?php echo $warehouse->name . ' (' . $warehouse->id . ')';?></option>
+        <?php
+        endforeach;
+    endif;
+    ?>
+</select>
+
+<input type="hidden" id="temp_warehouse" name="temp_warehouse" value="<?=$this->warehouse_id?>">
+
+<button style="margin-top: -10px; margin-left: 15px;" type="submit" class="btn btn-info">Search</button>
+
+</form>
+
+<button class="btn btn-warning pull-right" id="btn-export" style="margin-bottom: 15px;">Export</button>
+
+<div class="table-responsive">
+    <table id="table-check-warehouse-line" class="table dataTable" style="margin-top: 30px;margin-bottom: 50px;">
+        <tr>
+            <th>Line Name</th>
+            <th>Warehouse</th>
+            <th>Product</th>
+            <th>Color</th>
+            <th>Storage</th>
+            <th>On Changing</th>
+            <th>Scanned</th>
+            <th>Remaining</th>
+            <th>Total Remaining</th>
+            <th>Sync Date</th>
+            <th>Action</th>
+        </tr>
+
+        <?php foreach ($this->arrData as $key) { ?>
+            <tr>
+                <td><?=$key['line_name']?></td>
+                <td><?=$key['warehouse_name']?></td>
+                <td><?=$key['good_name']?></td>
+                <td><?=$key['good_color_name']?></td>
+                <td><?=$key['total_storage']?></td>
+                <td><?=$key['total_on_changing']?></td>
+                <td><?=$key['scanned_count']?> (<?=number_format(($key['scanned_count']*100)/$key['total_storage'],2)?>%)</td>
+                <td><?=($key['total_storage']-$key['scanned_count'])?> (<?=number_format((($key['total_storage']-$key['scanned_count'])*100)/$key['total_storage'],2)?>%)</td>
+                <td><?=($key['total_storage']-$key['scanned_count']-$key['total_on_changing'])?> (<?=number_format((($key['total_storage']-$key['scanned_count']-$key['total_on_changing'])*100)/($key['total_storage']-$key['total_on_changing']),2)?>%)</td>
+                <td><?=$key['sync_date']?></td>
+                <td><button type="button" class="btn btn-sync" onclick="sync_data('<?=$key['warehouse_id']?>','<?=$key['good_id']?>','<?=$key['good_color_id']?>');">Sync</button></td>
+            </tr>
+        <?php } ?>
+    </table>
+</div>
+
+
+<script src="<?php echo HOST ?>js/jquery-ui.js"></script>
+<script type="text/javascript" src="/js/jquery-ui-1.8.12.custom.min.js"></script>
+<link rel="stylesheet" type="text/css" href="/css/jquery-ui-1.8.12.custom.css"/>
+
+<script src="/js/jquery.blockUI.js"></script>
+
+<script>
+
+  $(document).ajaxStart(function(){
+        $.blockUI({ css: { 
+            border: 'none', 
+            padding: '15px', 
+            backgroundColor: '#000', 
+            '-webkit-border-radius': '10px', 
+            '-moz-border-radius': '10px', 
+            opacity: .5, 
+            color: '#fff' 
+        } });
+    });
+
+    $(document).ajaxStop(function(){
+        $.unblockUI();
+    });
+
+    var time_refresh_page = 0;
+
+    $(document).ready(function () {
+
+        onRefreshPage();
+        
+        $('#btn-export').click(function(event) {
+
+            var titles = [];
+            var data = [];
+
+            $('.dataTable th').each(function() {
+                titles.push($(this).text());
+            });
+
+            $('.dataTable td').each(function() {
+                data.push($(this).text());
+            });
+
+            var CSVString = prepCSVRow(titles, titles.length, '');
+            CSVString = prepCSVRow(data, titles.length, CSVString);
+
+            var downloadLink = document.createElement("a");
+            var blob = new Blob(["\ufeff", CSVString]);
+            var url = URL.createObjectURL(blob);
+            downloadLink.href = url;
+            downloadLink.download = "monitoring_check_line_warehouse_"+$.now()+".csv";
+
+            document.body.appendChild(downloadLink);
+            downloadLink.click();
+            document.body.removeChild(downloadLink);
+            
+        });
+
+        $('#btn-sync-all').click(function(event) {
+          
+          if (!confirm('You confirm to sync all')) {
+                  return false;
+          }
+
+          offRefreshPage();
+
+          $('.btn-sync').attr("disabled", true);
+
+          var warehouse_id = $('#temp_warehouse').val();
+
+          $.ajax({
+                url: '<?php echo HOST.'warehouse/sync-check-warehouse-line';?>',
+                type: 'POST',
+                data: {'type':'ALL', warehouse_id:warehouse_id},
+            })
+            .done(function(response) {
+                var obj_response = jQuery.parseJSON(response);
+                console.log("success");
+
+             switch(obj_response.status) {
+                case 200:
+                    console.log('done');
+                    location.reload();
+                    break;
+                case 400:
+                    alert(obj_response.message);
+                    $('.btn-sync').attr("disabled", false);
+                    onRefreshPage();
+                    break;
+                default:
+                location.reload();
+              }
+                
+          });
+
+        });
+
+        function prepCSVRow(arr, columnCount, initial) {
+          var row = ''; // this will hold data
+          var delimeter = ','; // data slice separator, in excel it's `;`, in usual CSv it's `,`
+          var newLine = '\r\n'; // newline separator for CSV row
+
+          /*
+           * Convert [1,2,3,4] into [[1,2], [3,4]] while count is 2
+           * @param _arr {Array} - the actual array to split
+           * @param _count {Number} - the amount to split
+           * return {Array} - splitted array
+           */
+          function splitArray(_arr, _count) {
+            var splitted = [];
+            var result = [];
+            _arr.forEach(function(item, idx) {
+              if ((idx + 1) % _count === 0) {
+                splitted.push(item);
+                result.push(splitted);
+                splitted = [];
+              } else {
+                splitted.push(item);
+              }
+            });
+            return result;
+          }
+          var plainArr = splitArray(arr, columnCount);
+          // don't know how to explain this
+          // you just have to like follow the code
+          // and you understand, it's pretty simple
+          // it converts `['a', 'b', 'c']` to `a,b,c` string
+          plainArr.forEach(function(arrItem) {
+            arrItem.forEach(function(item, idx) {
+              row += item.replace(',', '') + ((idx + 1) === arrItem.length ? '' : delimeter);
+            });
+            row += newLine;
+          });
+          return initial + row;
+        }
+
+    });
+
+    function sync_data(warehouse_id,good_id,good_color_id){
+
+      if (!confirm('You confirm to sync')) {
+        return false;
+      }
+
+      offRefreshPage();
+
+      $(this).attr("disabled", true);
+
+      $.ajax({
+            url: '<?php echo HOST.'warehouse/sync-check-warehouse-line';?>',
+            type: 'POST',
+            data: {warehouse_id:warehouse_id,good_id:good_id,good_color_id:good_color_id},
+        })
+        .done(function(response) {
+            var obj_response = jQuery.parseJSON(response);
+            console.log("success");
+
+             switch(obj_response.status) {
+                case 200:
+                    console.log('done');
+                    location.reload();
+                    break;
+                case 400:
+                    alert(obj_response.message);
+                    $(this).attr("disabled", false);
+                    onRefreshPage();
+                    break;
+                default:
+                location.reload();
+            }
+            
+        });
+
+    }
+
+    function onRefreshPage(){
+          time_refresh_page = setTimeout(function(){ location.reload(); }, 30000);
+        }
+
+    function offRefreshPage(){
+      clearTimeout(time_refresh_page);
+    }
+    
+</script>

@@ -1,0 +1,138 @@
+<div class="page-header">
+	<?php if(isset($this->costItem) && $this->costItem) : ?>
+		<h1 style="font-family: Times New Roman;">Edit Cost Item</h1>
+	<?php else: ?>
+		<h1 style="font-family: Times New Roman;">Add Cost Item</h1>
+	<?php endif; ?>
+</div>
+
+<form class="form-horizontal" action="<?php echo HOST ?>finance/save-cost-item" method="post">
+	<div class="row" style="border-style: solid; padding: 30px 10px 10px 10px; border-color: lavender;">
+
+		<div class="span6">
+
+			<div class="control-group">
+				<label for="dis_id_m" class="control-label" style="width: 180px; padding-right: 20px;"><span style="color: red">*</span> Distributor(My Side) : </label>
+				<div class="controls">
+					<select class="span3" name="dis_id" id="dis_id" required <?php if(isset($this->costItem) && $this->costItem ) : ?> disabled <?php endif; ?> >
+						<option value=""> Please Selected </option>
+
+						<?php foreach ($this->distributor as $value) : ?>
+							<option value="<?php echo $value['id'] ?>" <?php if(isset($this->costItem['d_id']) && $this->costItem['d_id'] == $value['id']) : ?> selected <?php endif; ?> ><?php echo $value['title'] ?></option>
+						<?php endforeach; ?>
+					</select>
+				</div>
+			</div>
+
+			<div class="control-group">
+				<label for="" class="control-label" style="width: 180px; padding-right: 20px;"><span style="color: red">*</span> Category of expenses : </label>
+				<div class="controls">
+					<select class="span3" name="category_id" id="category_id" required <?php if(isset($this->costItem) && $this->costItem ) : ?> disabled <?php endif; ?> >
+						<option value=""> Please Selected </option>
+						<option value="1" <?php if(isset($this->costItem['category_id']) && $this->costItem['category_id'] == 1) : ?> selected <?php endif; ?> > ADJUST </option>
+						<option value="2" <?php if(isset($this->costItem['category_id']) && $this->costItem['category_id'] == 2) : ?> selected <?php endif; ?> > DEPOSIT </option>
+						<option value="3" <?php if(isset($this->costItem['category_id']) && $this->costItem['category_id'] == 3) : ?> selected <?php endif; ?> > DOWN_PAYMENT </option>
+						<option value="4" <?php if(isset($this->costItem['category_id']) && $this->costItem['category_id'] == 4) : ?> selected <?php endif; ?> > OTHERS </option>
+					</select>
+				</div>
+			</div>
+
+			<div class="control-group">
+				<label for="cost_name" class="control-label" style="width: 180px; padding-right: 20px;"><span style="color: red">*</span> Name of Cost Item : </label>
+				<div class="controls">
+					<input type="text" name="cost_name" id="cost_name" class="span3" required value="<?php isset($this->costItem['cost_name']) and printf($this->costItem['cost_name']);?>">
+				</div>
+			</div>
+
+			<div class="control-group deposit_project" style="display: none;">
+				<label for="deposit_project" class="control-label" style="width: 180px; padding-right: 20px"><span style="color: red">*</span> Deposit Project : </label>
+				<div class="controls">
+					<select class="span3" name="deposit_project" id="deposit_project">
+						<option value=""> Please Selected </option>
+						<option value="1" <?php if(isset($this->costItem['deposit_project']) && $this->costItem['deposit_project'] == 1) : ?> selected <?php endif; ?> > Market Deposit </option>
+						<option value="2" <?php if(isset($this->costItem['deposit_project']) && $this->costItem['deposit_project'] == 2) : ?> selected <?php endif; ?> > Ad Deposit </option>
+						<option value="3" <?php if(isset($this->costItem['deposit_project']) && $this->costItem['deposit_project'] == 3) : ?> selected <?php endif; ?> > Deposit for finished products </option>
+						<option value="4" <?php if(isset($this->costItem['deposit_project']) && $this->costItem['deposit_project'] == 4) : ?> selected <?php endif; ?> > Other deposits </option>
+					</select>
+				</div>
+			</div>
+
+			<div class="control-group">
+				<label for="remind_code" class="control-label" style="width: 180px; padding-right: 20px;"><span style="color: red">*</span> Remind Code : </label>
+				<div class="controls">
+					<input type="text" name="remind_code" id="remind_code" class="span3" required value="<?php isset($this->costItem['remind_code']) and printf($this->costItem['remind_code']);?>">
+				</div>
+			</div>
+
+		</div>
+
+		<div class="span6">
+
+			<div class="control-group">
+				<label for="subject_code" class="control-label" style="width: 180px; padding-right: 20px;"> Auxiliary Subject Code : </label>
+				<div class="controls">
+					<input type="text" name="subject_code" id="subject_code" class="span3" value="<?php isset($this->costItem['subject_code']) and printf($this->costItem['subject_code']);?>">
+				</div>
+			</div>
+
+			<div class="control-group">
+				<label for="status" class="control-label" style="width: 180px; padding-right: 20px;"> initiate mode : </label>
+				<div class="controls">
+					<select class="span3" id="status" name="status" required>
+						<option value="1" <?php if(isset($this->costItem['status']) && $this->costItem['status'] == 1) : ?> selected <?php endif; ?> > On </option>
+						<option value="2" <?php if(isset($this->costItem['status']) && $this->costItem['status'] == 2) : ?> selected <?php endif; ?> > Off </option>
+					</select>
+				</div>
+			</div>
+
+			<div class="control-group">
+				<label for="remark" class="control-label" style="width: 180px; padding-right: 20px;"> Remark : </label>
+				<div class="controls">
+					<textarea class="span3" rows="2" cols="2" name="remark"><?php isset($this->costItem['remark']) and printf($this->costItem['remark']);?></textarea>
+				</div>
+			</div>
+
+		</div>
+
+		<div class="span12" style="padding-bottom: 400px; padding-left: 50px; padding-top: 20px;">
+			<div class="control-group">
+				<input type="hidden" name="id" value="<?php isset($this->costItem['id']) and printf($this->costItem['id']);?>">
+				<input type="hidden" id="back_url" name="back_url" value="/finance/cost-item">
+				<button type="submit" class="btn btn-success"> Save </button>
+				<button type="button" class="btn btn-danger go-back"> Back </button>
+			</div>
+		</div>
+
+
+	</div>
+</form>
+
+<script type="text/javascript">
+
+	$(document).ready(function () {
+
+		initGoBack();
+
+	});
+
+	$(function() {
+		$('.deposit_project').hide(); 
+		$('#category_id').change(function(){
+			if($('#category_id').val() == '2') {
+				$('.deposit_project').show();
+				$('#deposit_project').prop('required', true);
+			} else {
+				$('.deposit_project').hide();
+				$('#deposit_project').removeAttr('required'); 
+			} 
+		});
+	});
+	
+	function initGoBack(){
+		$('.go-back').click(function(e){
+			window.location.href = $('#back_url').val();
+			return false;
+		});
+	}
+
+</script>

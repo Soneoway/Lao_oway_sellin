@@ -1,0 +1,182 @@
+<link href="<?php echo HOST ?>css/bootstrap.min.css" rel="stylesheet">
+<style>
+    .note {
+        width: 40%;
+    }
+
+    h1 {
+        padding-top: 50px;
+        margin-bottom: 40px;
+    }
+
+    .barcode {
+        margin-bottom: 20px;
+    }
+    .badge-default,
+.label-default  {
+  background-color: #aaa  !important;
+}
+
+.badge-primary,
+.label-primary {
+  background-color: #428bca !important;
+}
+
+.label-success, 
+.badge-success {
+  background-color: #3cc051;
+  background-image: none !important;
+}
+
+.label-warning, 
+.badge-warning {
+  background-color: #fcb322;
+  background-image: none !important;
+}
+
+.label-danger, 
+.badge-danger {
+  background-color: #fb0000;
+  background-image: none !important;
+}
+
+.label-info, 
+.badge-info {
+  background-color: #57b5e3;
+  background-image: none !important;
+}
+.get_header{
+        float: right;
+    font-size: 50px;
+}
+._header{
+    width: 520px;
+}
+    @media print {
+        h1 {page-break-before: always;}
+    }
+
+    .company {
+        font-size: 48px;
+        margin-top: 0.25em;
+        font-weight: bold;
+    }
+</style>
+<?php $tmp_sn = '' ?>        
+<?php if (isset($this->orders) && $this->orders): ?>
+    <?php foreach ($this->orders as $key => $order): ?>
+        
+        <?php $tmp_sn = $order['sn'] ?>
+        <?php
+            $sn_ref = $order['sales_out']['sn_ref'];
+            if($sn_ref==''){
+                $sn_ref = $order['sales_out']['sn'];
+            }
+          $barcode=$sn_ref;  
+        ?>
+        <div class="_header">
+        <h1>Picking List   <?php echo My_Sale_Order_Type::getHeader($order['sales_out']['type']) ?></h1>
+        </div>
+        <div class="row">
+            <div class="span5">
+            
+           
+                <p class="barcode"><img  src="<?=HOST?>public/barcodegen/BCGcode39.php?code=<?=$sn_ref?>" style="margin-top:5px; color:#000"/></p>
+            </div>
+            <div class="span5">
+                <p class="pull-right company"><?php if (isset($this->warehouse_cached[ $this->warehouse_id ]) && $this->warehouse_cached[ $this->warehouse_id ]) {
+                     $match_result = array();
+                     preg_match('/^([A-Za-z]+)Warehouse/', $this->warehouse_cached[ $this->warehouse_id ], $match_result);
+                     if (isset($match_result[1])) echo $match_result[1];
+                } ?></p>
+            </div>
+        </div>
+
+        <div class="row">
+            <div class="span12">
+                    <?php if (isset($order['sales_out']) && $order['sales_out'] ): 
+                    $payment_order = $order['sales_out']['payment_order'];
+                    if($payment_order<=0){
+                        $payment_type = "เครดิต";
+                    }else{
+                        $payment_type = "ขายสด";
+                    }
+                                ?>
+                    <div class="row">
+                        <div class="span6">
+                            <p><strong>Sales Order Number</strong> :<?=$sn_ref?></p>
+                            <p><strong>Total Quantity</strong> : <?php if( isset($order['sales_out']['total_qty']) && $order['sales_out']['total_qty']) echo $order['sales_out']['total_qty']; else echo "0"; ?></p>
+                            <p><strong>Order Type</strong> : <?php echo My_Sale_Order_Type::getLabel($order['sales_out']['type']) ?></p>
+                            <p><strong>Retailer</strong> : <?php if( isset($this->distributors) && isset($this->distributors[$order['sales_out']['d_id']]) && $this->distributors[$order['sales_out']['d_id']]) echo $this->distributors[$order['sales_out']['d_id']]['title'].' ( ID : '.$order['sales_out']['d_id'].' )'; ?></p>
+                            <p><strong>Payment Type</strong> : <?=$payment_type?></p>
+                        </div>
+
+                        <div class="span6">
+                            <p><strong>Order By</strong> : <?php if( isset($this->info_data[$tmp_sn]['created_by_name']) && $this->info_data[$tmp_sn]['created_by_name']) echo $this->info_data[$tmp_sn]['created_by_name']; ?></p>
+                            <p><strong>Order Time</strong> : <?php if( isset($order['sales_out']['add_time']) && $order['sales_out']['add_time']) echo $order['sales_out']['add_time']; ?></p>
+                            <p><strong>Total Price</strong> : XXXXX<?php //if( isset($order['sales_out']['total_price']) && $order['sales_out']['total_price']) echo $order['sales_out']['total_price']; ?></p>
+                            <p><strong>Address</strong> : 
+                            <?php 
+                             //print_r($order['sales_out']);
+                               //print_r($this->services);
+                                $delivery_address = $order['sales_out']['delivery_address'];
+                                if($delivery_address==''){
+                                    $delivery_address = $order['sales_out']['add_tax'];
+                                }
+                                echo $delivery_address;
+                          ?></p>
+                        </div>
+                    </div>
+                        
+                    <?php endif ?>
+
+                    <hr>
+
+                    <?php if (isset($order['sales_list']) && $order['sales_list']): ?>
+                        <table class="table table-bordered">
+                            <legend>Sales List</legend>
+                            <thead>
+                                <tr>
+                                    <th>Category</th>
+                                    <th>Product Name</th>
+                                    <th>Color</th>
+                                    <th>Description</th>
+                                    <th>Quantity</th>
+                                    <th>Price</th>
+                                    <th>Total Price</th>
+                                    <th>Remark</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <?php foreach ($order['sales_list'] as $k => $v): ?>
+                                    <tr>
+                                        <td><?php if (isset($this->good_categories[$v['cat_id']])) echo $this->good_categories[$v['cat_id']] ?></td>
+                                        <td><?php if (isset($this->goods[$v['good_id']])) echo $this->goods[$v['good_id']] ?></td>
+                                        <td><?php if (isset($this->goodColors[$v['good_color']])) echo $this->goodColors[$v['good_color']] ?></td>
+                                        <td><?php if (isset($this->pname[ $v['good_id'] ])) echo $this->pname[ $v['good_id'] ] ?></td>
+                                        <td><?php echo $v['num'] ?></td>
+                                        <td>XXXXX<?php //echo $v['price'] ?></td>
+                                        <td>XXXXX<?php //echo $v['total'] ?></td>
+                                        <td><?php echo $v['text'] ?></td>
+                                    </tr>
+                                <?php endforeach ?>
+                            </tbody>
+                        </table>
+                    <?php endif ?>
+            </div>
+        </div>        
+    
+    <?php endforeach ?>    
+<?php endif ?>
+<script src="<?php echo HOST ?>js/jquery-1.7.2.min.js"></script>
+<script>
+    try {
+        $(document).ready(function() {
+            parent.set_as_printed('<?php echo $tmp_sn ?>');
+            parent.window.frames['picking_list'].focus();
+            parent.window.frames['picking_list'].print();
+        });
+    } catch (err) {
+
+    }
+</script>

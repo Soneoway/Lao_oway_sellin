@@ -1,0 +1,54 @@
+<table class="table table-bordered">
+    <thead>
+        <tr>
+            <?php echo $this->sorting(array(
+//            		'',
+            		'Retailer',
+        			'Payment Order',
+            		'Created At',
+            		'Created By',
+            		'Status',
+            		'Action'
+            		
+                ),
+                $this->url, $this->sort, $this->desc); ?>
+        </tr>
+    </thead>
+    <tbody>
+        <?php
+        if (isset($this->list) and $this->list):
+        	
+            foreach ($this->list as $item):
+            ?>	
+            <tr class='main-row'>
+            	<td><?php echo isset($this->distributors_cached[$item['d_id']]) ? $this->distributors_cached[$item['d_id']] : '';?></td>
+            	<td><?php echo $item['payment_order'];?></td>
+                <td><?php echo $item['created_at'];?></td>
+                <td><?php echo isset($this->staffs_cached[$item['created_by']]) ? $this->staffs_cached[$item['created_by']] : '';?></td>
+                <td><?php echo ($item['status'] == 1 ? 'Confirmed' : 'Pending');?></td>
+            	<td>
+					<?php 
+						if($this->access('checkmoney','confirm-payment-order')){
+                            if ($item['status']==0){
+					?>
+                            <a title="Confirm" href="/checkmoney/confirm-payment-order?id=<?php echo $item['id'];?>" rel="<?php echo $item['id'];?>" class="confirmPayment">
+                                <i class="icon-ok"></i>
+                             </a>
+					<?php 
+                            } else { ?>
+                                <i class="icon-ok"></i>
+                            <?php }
+                        }
+					?>
+            	</td>
+            </tr>
+        <?php 
+        	endforeach;
+        endif;
+        ?>
+    </tbody>
+</table>
+
+<div class="paging">
+<?php echo $this->paging($this->total, $this->limit, $this->offset, $this->url);?>
+</div>

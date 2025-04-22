@@ -1,0 +1,1026 @@
+<style>
+    iframe {
+        width: 100%;
+        height: 500px;
+    }
+
+    .bar {
+        line-height: 18px;
+    }
+    .modal-scrollable
+    {
+        position: absolute;
+        z-index: 9999;
+    }
+    .blockOverlay{
+        z-index: 10000 !important;
+    }
+    .blockPage{
+        z-index: 10001 !important;
+    }
+</style>
+<div class="page-header">
+    <h1>Check Warehouse</h1>
+</div>
+
+<?php
+if (isset($this->messages_success) and $this->messages_success)
+    foreach ($this->messages_success as $message):
+        echo '<div class="alert alert-success">'.$message."</div>";
+    endforeach;
+
+if (isset($this->messages) and $this->messages)
+    foreach ($this->messages as $message):
+        echo '<div class="alert alert-error">'.$message."</div>";
+    endforeach;
+
+?>
+
+<!-- Modal -->
+<div id="modal-check-imei" class="modal fade" role="dialog" data-backdrop="static">
+  <div class="modal-dialog">
+
+    <!-- Modal content-->
+    <div class="modal-content">
+      <div class="modal-header">
+        <h4 class="modal-title">Check Warehouse : <span id="detail-wahouse"></span> | Total Storage : <span class="total-storage">0</span></h4>
+      </div>
+      <div class="modal-body">
+      <table style="width: 100%">
+          <tr >
+              <td style="width: 50%;vertical-align:top">
+              <div>
+                IMEI : <input type="text" class="clear-data" id="modal-input-imei" maxlength="15" style="width: 170px;">
+                <br/>
+                Status : 
+                <b>
+                <span class="modal-text-status" id="modal-text-status-none">NONE</span>
+                <span class="modal-text-status hide" id="modal-text-status-correct" style="color: green">CORRECT</span>
+                <span class="modal-text-status hide" id="modal-text-status-incorrect" style="color: red">INCORRECT</span>
+                </b>
+                <br/>
+                Count : <span class="modal-count" id="modal-count-correct">0</span>
+                <br/>
+                <textarea id="modal-textarea-correct" class="clear-data" disabled rows="15" style="resize: none;"></textarea>
+              </div>
+                  
+              </td>
+              <td style="width: 50%;vertical-align:top">
+                <span style="color: red"><b>INCORRECT LOG</b></span>
+                <br/>
+                Count : <span class="modal-count" id="modal-count-incorrect">0</span>
+                <br/>
+                <textarea style="resize: none;color: red" id="modal-textarea-incorrect" class="clear-data" disabled rows="17"></textarea>
+              </td>
+          </tr>
+      </table>
+        
+      </div>
+      <div class="modal-footer">
+      <button type="button" id="modal-btn-clear" class="btn btn-default pull-left">Clear</button>
+      <!-- <button type="button" class="btn btn-info" id="modal-btn-savelog" data-dismiss="modal">Save Log</button> -->
+        <button type="button" class="btn btn-danger" data-dismiss="modal">Close</button>
+      </div>
+    </div>
+
+  </div>
+</div>
+
+
+<!-- Modal -->
+<div id="modal-check-imei-qr" class="modal fade" role="dialog" data-backdrop="static">
+  <div class="modal-dialog">
+
+    <!-- Modal content-->
+    <div class="modal-content">
+      <div class="modal-header">
+        <h4 class="modal-title">Check Warehouse QR : <span id="detail-wahouse-qr"></span> | Total Storage : <span class="total-storage">0</span></h4>
+      </div>
+      <div class="modal-body">
+      <table style="width: 100%">
+          <tr >
+              <td style="width: 50%;vertical-align:top">
+              <div>
+                IMEI : <!-- <input type="text" class="clear-data" id="modal-input-imei" maxlength="15" style="width: 170px;"> -->
+                <textarea id="modal-textarea-imei-qr" class="clear-data-qr" rows="1" style="resize: none;width: 170px;"></textarea>
+                <br/>
+                Status : 
+                <b>
+                <span class="modal-text-status-qr" id="modal-text-status-none-qr">NONE</span>
+                <span class="modal-text-status-qr hide" id="modal-text-status-correct-qr" style="color: green">CORRECT</span>
+                <span class="modal-text-status-qr hide" id="modal-text-status-incorrect-qr" style="color: red">INCORRECT</span>
+                </b>
+                <br/>
+                Package Count : <span class="modal-count-qr" id="modal-packcount-correct-qr">0</span><br/>
+                IMEI Count : <span class="modal-count-qr" id="modal-count-correct-qr">0</span>
+                <br/>
+                <textarea id="modal-textarea-correct-qr" class="clear-data-qr" disabled rows="15" style="resize: none;"></textarea>
+                <textarea id="modal-textarea-correct-qr-val" class="clear-data-qr hide" disabled rows="15" style="resize: none;"></textarea>
+              </div>
+                  
+              </td>
+              <td style="width: 50%;vertical-align:top">
+                <span style="color: red"><b>INCORRECT LOG</b></span>
+                <br/>
+                Package Count : <span class="modal-count-qr" id="modal-packcount-incorrect-qr">0</span><br/>
+                IMEI Count : <span class="modal-count-qr" id="modal-count-incorrect-qr">0</span>
+                <br/>
+                <textarea style="resize: none;color: red" id="modal-textarea-incorrect-qr" class="clear-data-qr" disabled rows="17"></textarea>
+              </td>
+          </tr>
+      </table>
+        
+      </div>
+      <div class="modal-footer">
+      <button type="button" id="modal-btn-clear-qr" class="btn btn-default pull-left">Clear</button>
+      <!-- <button type="button" class="btn btn-info" id="modal-btn-savelog-qr" data-dismiss="modal">Save Log</button> -->
+        <button type="button" class="btn btn-danger" data-dismiss="modal">Close</button>
+      </div>
+    </div>
+
+  </div>
+</div>
+
+<!-- Modal -->
+<div id="modal-export" class="modal fade" role="dialog" data-backdrop="static">
+  <div class="modal-dialog">
+
+    <!-- Modal content-->
+    <div class="modal-content">
+      <div class="modal-header">
+        <h4 class="modal-title">Export History Log : <span id="detail-wahouse-export"></span> | Total Storage : <span class="total-storage">0</span></h4>
+      </div>
+      <div class="modal-body">
+
+      <form id="modal-form-export" method="post" action="<?php echo HOST.'warehouse/btn-export-check-imei-warehouse';?>">
+
+        <div class="control-group">
+            <label for="warehouse_id" class="span2">Warehouse : </label>
+                    <select id="export_warehouse_id" name="export_warehouse_id[]" class="multiselect" multiple="multiple">
+                    <!-- <select id="export_warehouse_id" name="export_warehouse_id"> -->
+                        <?php
+                        if ($this->warehouse) :
+                            foreach ($this->warehouse as $warehouse):?>
+                                <option value="<?php echo $warehouse->id;?>" <?php if (isset($this->params['warehouse_id']) and ( (is_array($this->params['warehouse_id']) && in_array($warehouse['id'], $this->params['warehouse_id']) || $warehouse['id']==$this->params['warehouse_id'])) ):?>selected<?php endif;?>><?php echo $warehouse->name . ' (' . $warehouse->id . ')';?></option>
+                            <?php
+                            endforeach;
+                        endif;
+                        ?>
+                    </select>
+            
+        </div>
+
+        <div class="control-group">
+            <label for="good_id" class="span2">Product : </label>
+                    <select id="export_good_id" name="export_good_id[]" class="multiselect" multiple="multiple" >
+                    <!-- <select id="export_good_id" name="export_good_id"> -->
+                        <?php
+                        if ($this->goods) :
+                            foreach ($this->goods as $goods):?>
+                                <option value="<?php echo $goods->id;?>" <?php if (isset($this->params['good_id']) and ( (is_array($this->params['good_id']) && in_array($goods['id'], $this->params['good_id']) || $goods['id']==$this->params['good_id'])) ):?>selected<?php endif;?>><?php echo $goods->name . ' (' . $goods->id . ')'; ?></option>
+                            <?php
+                            endforeach;
+                        endif;
+                        ?>
+                    </select>
+            
+        </div>
+
+        <div class="control-group">
+            <label for="color_id" class="span2">Color : </label>
+                    <select id="export_color_id" name="export_color_id[]" class="multiselect" multiple="multiple" >
+                    <!-- <select id="export_color_id" name="export_color_id"> -->
+                        <?php
+                        if ($this->colors) :
+                            foreach ($this->colors as $colors):?>
+                                <option value="<?php echo $colors->id;?>" <?php if (isset($this->params['color_id']) and ( (is_array($this->params['color_id']) && in_array($colors['id'], $this->params['color_id']) || $colors['id']==$this->params['color_id'])) ):?>selected<?php endif;?>><?php echo $colors->name . ' ('. $colors->id . ')';?></option>
+                            <?php
+                            endforeach;
+                        endif;
+                        ?>
+                    </select>
+            
+        </div>
+          
+        <div class="control-group">
+            <label for="log_at_from" class="span2">Log From : </label>
+            <input type="text" class="form-control search-query date" id="log_at_from" name="log_at_from" value="<?php echo date('d/m/Y');?>">
+        </div>
+
+        <div class="control-group">
+                <label for="log_at_to" class="span2">Log To : </label>
+                <input type="text" class="form-control search-query date" id="log_at_to" name="log_at_to" value="<?php echo date('d/m/Y');?>">
+        </div>      
+        
+        
+        </div>
+          <div class="modal-footer">
+            <button type="submit" class="btn btn-success" id="btn-modal-export">Export</button>
+            <button type="button" class="btn btn-danger" data-dismiss="modal">Close</button>
+          </div>
+        </div>
+
+      </form>
+
+  </div>
+</div>
+
+
+<form id="form" class="form-inline" method="post">
+
+<div class="row">
+    <div class="span12">
+        <div class="form-group">
+            <label for="warehouse_id" class="control-label">Warehouse <span style="color: red"> *</span>
+                <div class="controls">
+                    <!-- <select id="warehouse_id" name="warehouse_id[]" required class="multiselect" multiple="multiple"> -->
+                    <select id="warehouse_id" name="warehouse_id" required>
+                        <?php
+                        if ($this->warehouse) :
+                            foreach ($this->warehouse as $warehouse):?>
+                                <option value="<?php echo $warehouse->id;?>" <?php if (isset($this->params['warehouse_id']) and ( (is_array($this->params['warehouse_id']) && in_array($warehouse['id'], $this->params['warehouse_id']) || $warehouse['id']==$this->params['warehouse_id'])) ):?>selected<?php endif;?>><?php echo $warehouse->name . ' (' . $warehouse->id . ')';?></option>
+                            <?php
+                            endforeach;
+                        endif;
+                        ?>
+                    </select>
+                </div>
+            </label>
+
+
+            <label for="good_id" class="control-label">Product <span style="color: red"> *</span>
+                <div class="controls">
+                    <!-- <select id="good_id" name="good_id[]" required class="multiselect" multiple="multiple" > -->
+                    <select id="good_id" name="good_id" required>
+                        <?php
+                        if ($this->goods) :
+                            foreach ($this->goods as $goods):?>
+                                <option value="<?php echo $goods->id;?>" <?php if (isset($this->params['good_id']) and ( (is_array($this->params['good_id']) && in_array($goods['id'], $this->params['good_id']) || $goods['id']==$this->params['good_id'])) ):?>selected<?php endif;?>><?php echo $goods->name . ' (' . $goods->id . ')'; ?></option>
+                            <?php
+                            endforeach;
+                        endif;
+                        ?>
+                    </select>
+                </div>
+            </label>
+
+            <label for="color_id" class="control-label">Color <span style="color: red"> *</span>
+                <div class="controls">
+                    <!-- <select id="color_id" name="color_id[]" required class="multiselect" multiple="multiple" > -->
+                    <select id="color_id" name="color_id" required>
+                        <?php
+                        if ($this->colors) :
+                            foreach ($this->colors as $colors):?>
+                                <option value="<?php echo $colors->id;?>" <?php if (isset($this->params['color_id']) and ( (is_array($this->params['color_id']) && in_array($colors['id'], $this->params['color_id']) || $colors['id']==$this->params['color_id'])) ):?>selected<?php endif;?>><?php echo $colors->name . ' ('. $colors->id . ')';?></option>
+                            <?php
+                            endforeach;
+                        endif;
+                        ?>
+                    </select>
+                </div>
+            </label>
+
+
+        </div>
+    </div>
+</div>
+
+</br>
+<h2>Total Storage : <span class="total-storage">0</span></h2>
+</br>
+    
+
+    <div class="clearfix"></div>
+    </br>
+    <div class="form-group">
+        <button type="button" id="btn-check-imei" class="btn btn-warning" data-toggle="modal" data-target="#modal-check-imei">Check Warehouse</button>
+        <button type="button" id="btn-check-imei-qr" class="btn btn-warning" data-toggle="modal" data-target="#modal-check-imei-qr">Check Warehouse QR</button>
+        <button type="button" id="btn-saveall-history-log" class="btn btn-info">Save History Log</button>
+        <button type="button" id="btn-export" class="btn btn-success" data-toggle="modal" data-target="#modal-export">Export History Log</button>
+    </div>
+</form>
+
+<script src="<?php echo HOST ?>js/jquery-ui.js"></script>
+<link rel="stylesheet" href="<?php echo HOST ?>css/bootstrap-multiselect.css" type="text/css"/>
+<script type="text/javascript" src="<?php echo HOST ?>js/bootstrap-multiselect.js"></script>
+<script type="text/javascript" src="/js/jquery-ui-1.8.12.custom.min.js"></script>
+<script type="text/javascript" src="/js/jquery.ui.timepicker.js"></script>
+<link rel="stylesheet" type="text/css" href="/css/jquery-ui-1.8.12.custom.css"/>
+<link rel="stylesheet" type="text/css" href="/css/jquery.ui.timepicker.css"/>
+
+<!-- include BlockUI -->
+<script src="/js/jquery.blockUI.js"></script>
+
+<script>
+
+    $(document).ajaxStart(function(){
+        $.blockUI({ css: { 
+            border: 'none', 
+            padding: '15px', 
+            backgroundColor: '#000', 
+            '-webkit-border-radius': '10px', 
+            '-moz-border-radius': '10px', 
+            opacity: .5, 
+            color: '#fff'
+        } });
+    });
+
+    $(document).ajaxStop(function(){
+        $.unblockUI();
+    });
+
+    options = {
+        selectAllText: 'Select All',
+        includeSelectAllOption: true,
+        includeSelectAllIfMoreThan: 3,
+        disableIfEmpty: true
+    };
+
+    function multi() {
+        $('.multiselect').multiselect(options);
+    }
+
+
+    $(document).ready(function () {
+        multi();
+
+        $('.date').datepicker({ dateFormat: "dd/mm/yy" });
+
+        var count_correct = 0;
+        var count_incorrect = 0;
+
+        var count_correct_qr = 0;
+        var count_incorrect_qr = 0;
+
+        var package = 0;
+
+        var packcount_corrent = 0;
+        var packcount_incorrent = 0;
+
+        var condition = 0;
+
+        $('#modal-btn-clear').click(function(e){
+            if (confirm('You confirm to clear this checking')) {
+                $('.clear-data').val('');
+                $('.modal-text-status').addClass('hide');
+                $('#modal-text-status-none').removeClass('hide');
+
+                count_correct = 0;
+                count_incorrect = 0;
+                $('.modal-count').html(0);   
+            }
+        });
+
+        $('#modal-btn-clear-qr').click(function(e){
+
+            if (confirm('You confirm to clear this checking')) {
+                $('.clear-data-qr').val('');
+                $('.modal-text-status-qr').addClass('hide');
+                $('#modal-text-status-none-qr').removeClass('hide');
+
+                package = 0;
+
+                count_correct_qr = 0;
+                count_incorrect_qr = 0;
+
+                packcount_corrent = 0;
+                packcount_incorrent = 0;
+
+                $('.modal-count-qr').html(0);
+            }
+        });
+
+        $('#btn-check-imei').click(function(event) {
+            var text = $("#warehouse_id option:selected").text() + ' | ' + $("#good_id option:selected").text() + ' | ' + $("#color_id option:selected").text();
+            $('#detail-wahouse').html(text);
+        });
+
+        $('#btn-check-imei-qr').click(function(event) {
+            var text = $("#warehouse_id option:selected").text() + ' | ' + $("#good_id option:selected").text() + ' | ' + $("#color_id option:selected").text();
+            $('#detail-wahouse-qr').html(text);
+        });
+
+        $('#btn-export').click(function(event) {
+            var text = $("#warehouse_id option:selected").text() + ' | ' + $("#good_id option:selected").text() + ' | ' + $("#color_id option:selected").text();
+            $('#detail-wahouse-export').html(text);
+        });
+
+        $('#modal-input-imei').keyup(function(e) {
+
+            if(e.which != 13){
+                return false;
+            }
+
+            var get_input = $('#modal-input-imei');
+            var get_textarea_correct = $('#modal-textarea-correct');
+            var get_textarea_incorrect = $('#modal-textarea-incorrect');
+
+            var get_textarea_correct_qr = $('#modal-textarea-correct-qr');
+
+            var size = 15;
+            var input_length = get_input.val().length;
+
+            if(input_length == size){
+
+                if(get_textarea_correct.val().indexOf(get_input.val()) != -1 || get_textarea_correct_qr.val().indexOf(get_input.val()) != -1){
+                    
+                    if(get_textarea_incorrect.val().length < 1){
+                        get_textarea_incorrect.val(get_input.val() + ' | Duplicate Checking');
+
+                        count_incorrect++;
+                        $('#modal-count-incorrect').html(count_incorrect);
+                    }else{
+                        get_textarea_incorrect.val(get_input.val()  + ' | Duplicate Checking' + '\n' +get_textarea_incorrect.val());
+
+                        count_incorrect++;
+                        $('#modal-count-incorrect').html(count_incorrect);
+                    }
+
+                    $('.modal-text-status').addClass('hide');
+                    $('#modal-text-status-incorrect').removeClass('hide');
+
+                    get_input.val('');
+                    return false;
+                }
+
+                var warehouse_id = $('#warehouse_id').val();
+                var good_id = $('#good_id').val();
+                var color_id = $('#color_id').val();
+
+                $.ajax({
+                    url: '<?php echo HOST.'warehouse/btn-check-imei-warehouse';?>',
+                    type: 'POST',
+                    data: {'type':'normal', 'warehouse_id': warehouse_id, 'good_id': good_id, 'color_id': color_id, 'imei': get_input.val()},
+                })
+                .done(function(response) {
+                    var obj_response = jQuery.parseJSON(response);
+                    console.log("success");
+
+                    switch(obj_response.status) {
+                        case 200:
+                            if(get_textarea_correct.val().length < 1){
+                                get_textarea_correct.val(get_input.val());
+
+                                count_correct++;
+                                $('#modal-count-correct').html(count_correct);
+                            }else{
+                                get_textarea_correct.val(get_input.val() + '\n' + get_textarea_correct.val());
+
+                                count_correct++;
+                                $('#modal-count-correct').html(count_correct);
+                            }
+
+                            $('.modal-text-status').addClass('hide');
+                            $('#modal-text-status-correct').removeClass('hide');
+
+                            break;
+                        case 400:
+                            if(get_textarea_incorrect.val().length < 1){
+                                get_textarea_incorrect.val(get_input.val() + obj_response.message);
+
+                                count_incorrect++;
+                                $('#modal-count-incorrect').html(count_incorrect);
+                            }else{
+                                get_textarea_incorrect.val(get_input.val() + obj_response.message + '\n' + get_textarea_incorrect.val());
+
+                                count_incorrect++;
+                                $('#modal-count-incorrect').html(count_incorrect);
+                            }
+
+                            $('.modal-text-status').addClass('hide');
+                            $('#modal-text-status-incorrect').removeClass('hide');
+
+                            break;
+                        default:
+                            console.log('status : ' + obj_response.status + ' | ' + obj_response.message);
+
+                            $('.modal-text-status').addClass('hide');
+                            $('#modal-text-status-none').removeClass('hide');
+                    }
+
+                    get_input.val('');
+                });
+
+            }else if(input_length > size){
+                get_input.val('');
+            }
+        });
+
+        var enter = 0;
+        var space = 0;
+
+        $('#modal-textarea-imei-qr').keyup(function(e) {
+
+            // if(e.which == 13 || e.which == 32){
+
+            //     if(e.which == 13){
+            //         enter++;
+            //         condition++;
+            //     }
+
+            //     if(enter == 1 && e.which == 32){
+            //         space++;
+            //         condition++;
+            //     }
+
+
+            //     if(enter > 2 || space > 1){
+            //         enter = 0;
+            //         space = 0;
+            //         condition = 0;
+
+            //         return false;
+            //     }
+
+            // }else{
+            //     enter = 0;
+            //     space = 0;
+            //     condition = 0;
+
+            //     return false;
+            // }
+
+            // if(condition < 3){
+            //     return false;
+            // }
+
+
+            if(e.which == 13 || e.which == 32){
+
+                if(e.which == 13){
+                    enter++;
+                    condition++;
+                }
+
+                if(enter == 1 && e.which == 32){
+                    space++;
+                }
+
+                if(enter > 2 && space > 0){
+                    enter = 0;
+                    space = 0;
+                    condition = 0;
+
+                    return false;
+                }
+
+            }else{
+                condition = 0;
+                enter = 0;
+                space = 0;
+                return false;
+            }
+
+            if(condition < 2){
+                return false;
+            }
+
+            if(condition > 2){
+                condition = 0;
+                enter = 0;
+                space = 0;
+                return false;
+            }
+
+            condition = 0;
+            enter = 0;
+            space = 0;
+
+            package++;
+
+            var get_input = $('#modal-textarea-imei-qr');
+            var get_textarea_correct = $('#modal-textarea-correct-qr');
+            var get_textarea_correct_val = $('#modal-textarea-correct-qr-val');
+            var get_textarea_incorrect = $('#modal-textarea-incorrect-qr');
+
+            var get_textarea_correct_noqr = $('#modal-textarea-correct');
+
+            var get_input_temp = get_input.val();
+
+            var line = get_input.val().split(/\n/);
+
+            var correct_text = '';
+            var incorrect_text = '';
+
+            var temp_count_corrent = 0;
+            var temp_count_incorrent = 0;
+
+            var package_text = 'Package : ' + package + '\n';
+
+            $.each(line, function(index, el) {
+
+                if(el == '' || el == ' '){
+                    get_input_temp = get_input_temp.replace(el+'', '');
+                    return false;
+                }
+
+                if(get_textarea_correct_val.val().indexOf(el) != -1 || get_textarea_correct_noqr.val().indexOf(el) != -1){
+
+                    temp_count_incorrent++;
+                    incorrect_text = incorrect_text + el + ' | Duplicate Checking' + '\n';
+
+                    get_input_temp = get_input_temp.replace(el+'\n', '');
+                }
+
+            });
+
+            if(get_input_temp.length <= 1){
+                packcount_incorrent++;
+                if(get_textarea_incorrect.val().length < 1){
+                    get_textarea_incorrect.val(package_text+correct_text+incorrect_text);
+
+                    count_incorrect_qr = count_incorrect_qr+temp_count_corrent+temp_count_incorrent;
+                    $('#modal-count-incorrect-qr').html(count_incorrect_qr);
+                }else{
+                    get_textarea_incorrect.val(package_text+correct_text+incorrect_text + '\n' + get_textarea_incorrect.val());
+
+                    count_incorrect_qr = count_incorrect_qr+temp_count_corrent+temp_count_incorrent;
+                    $('#modal-count-incorrect-qr').html(count_incorrect_qr);
+                }
+
+                $('.modal-text-status-qr').addClass('hide');
+                $('#modal-text-status-incorrect-qr').removeClass('hide');
+                $('#modal-packcount-incorrect-qr').html(packcount_incorrent);
+
+
+                get_input.val('');
+
+                return false;
+            }
+
+            var warehouse_id = $('#warehouse_id').val();
+            var good_id = $('#good_id').val();
+            var color_id = $('#color_id').val();
+            
+            $.ajax({
+                url: '<?php echo HOST.'warehouse/btn-check-imei-warehouse';?>',
+                type: 'POST',
+                data: {'type':'qr', 'warehouse_id': warehouse_id, 'good_id': good_id, 'color_id': color_id, 'imei': get_input_temp},
+            })
+            .done(function(response) {
+                var obj_response = jQuery.parseJSON(response);
+                console.log("success");
+
+                switch(obj_response.status) {
+                    case 200:
+
+                    $.each(obj_response.data.success, function(index, el) {
+                        temp_count_corrent++;
+                        correct_text = correct_text + el + '\n';
+                    });
+
+                    $.each(obj_response.data.error, function(index, el) {
+                        temp_count_incorrent++;
+                        incorrect_text = incorrect_text + el + '\n';
+                    });
+
+                    // if(correct_text.length > 0 && incorrect_text.length < 1){
+                    //     packcount_corrent++;
+                    //     if(get_textarea_correct.val().length < 1){
+                    //         get_textarea_correct.val(package_text+correct_text);
+                    //         get_textarea_correct_val.val(correct_text);
+
+                    //         count_correct_qr = count_correct_qr+temp_count_corrent;
+                    //         $('#modal-count-correct-qr').html(count_correct_qr);
+                    //         $('#modal-packcount-correct-qr').html(packcount_incorrent);
+                    //     }else{
+                    //         get_textarea_correct.val(package_text+correct_text + '\n' + get_textarea_correct.val());
+                    //         get_textarea_correct_val.val(correct_text + '\n' + get_textarea_correct_val.val());
+
+                    //         count_correct_qr = count_correct_qr+temp_count_corrent;
+                    //         $('#modal-count-correct-qr').html(count_correct_qr);
+                    //     }
+
+                    //     $('.modal-text-status-qr').addClass('hide');
+                    //     $('#modal-text-status-correct-qr').removeClass('hide');
+
+                    //     $('#modal-packcount-correct-qr').html(packcount_corrent);
+
+                    // }else{
+                    //     packcount_incorrent++;
+
+                    //     if(get_textarea_incorrect.val().length < 1){
+                    //         get_textarea_incorrect.val(package_text+correct_text+incorrect_text);
+
+                    //         count_incorrect_qr = count_incorrect_qr+temp_count_corrent+temp_count_incorrent;
+                    //         $('#modal-count-incorrect-qr').html(count_incorrect_qr);
+                    //     }else{
+                    //         get_textarea_incorrect.val(package_text+correct_text+incorrect_text + '\n' + get_textarea_incorrect.val());
+
+                    //         count_incorrect_qr = count_incorrect_qr+temp_count_corrent+temp_count_incorrent;
+                    //         $('#modal-count-incorrect-qr').html(count_incorrect_qr);
+                    //     }
+
+                    //     $('.modal-text-status-qr').addClass('hide');
+                    //     $('#modal-text-status-incorrect-qr').removeClass('hide');
+
+                    //     $('#modal-packcount-incorrect-qr').html(packcount_incorrent);
+
+                    // }
+
+                    if(correct_text.length > 0){
+                        packcount_corrent++;
+                        if(get_textarea_correct.val().length < 1){
+                            get_textarea_correct.val(package_text+correct_text);
+                            get_textarea_correct_val.val(correct_text);
+
+                            count_correct_qr = count_correct_qr+temp_count_corrent;
+                            $('#modal-count-correct-qr').html(count_correct_qr);
+                            $('#modal-packcount-correct-qr').html(packcount_incorrent);
+                        }else{
+                            get_textarea_correct.val(package_text+correct_text + '\n' + get_textarea_correct.val());
+                            get_textarea_correct_val.val(correct_text + '\n' + get_textarea_correct_val.val());
+
+                            count_correct_qr = count_correct_qr+temp_count_corrent;
+                            $('#modal-count-correct-qr').html(count_correct_qr);
+                        }
+
+                        $('.modal-text-status-qr').addClass('hide');
+                        $('#modal-text-status-correct-qr').removeClass('hide');
+
+                        $('#modal-packcount-correct-qr').html(packcount_corrent);
+
+                    }
+
+                    if(incorrect_text.length > 0){
+                        packcount_incorrent++;
+
+                        if(get_textarea_incorrect.val().length < 1){
+                            get_textarea_incorrect.val(package_text+incorrect_text);
+
+                            count_incorrect_qr = count_incorrect_qr+temp_count_incorrent;
+                            $('#modal-count-incorrect-qr').html(count_incorrect_qr);
+                        }else{
+                            get_textarea_incorrect.val(package_text+incorrect_text + '\n' + get_textarea_incorrect.val());
+
+                            count_incorrect_qr = count_incorrect_qr+temp_count_incorrent;
+                            $('#modal-count-incorrect-qr').html(count_incorrect_qr);
+                        }
+
+                        $('.modal-text-status-qr').addClass('hide');
+                        $('#modal-text-status-incorrect-qr').removeClass('hide');
+
+                        $('#modal-packcount-incorrect-qr').html(packcount_incorrent);
+
+                    }
+
+                        break;
+                    case 400:
+
+                        packcount_incorrent++;
+                        if(get_textarea_incorrect.val().length < 1){
+                            get_textarea_incorrect.val(package_text + obj_response.message);
+
+                            count_incorrect_qr++;
+                            $('#modal-count-incorrect-qr').html(count_incorrect_qr);
+                        }else{
+                            get_textarea_incorrect.val(package_text + obj_response.message + '\n\n' + get_textarea_incorrect.val());
+
+                            count_incorrect_qr++;
+                            $('#modal-count-incorrect-qr').html(count_incorrect_qr);
+                        }
+
+                        $('.modal-text-status-qr').addClass('hide');
+                        $('#modal-text-status-incorrect-qr').removeClass('hide');
+
+                        $('#modal-packcount-incorrect-qr').html(packcount_incorrent);
+
+                        break;
+                    default:
+                        console.log('status : ' + obj_response.status + ' | ' + obj_response.message);
+
+                        $('.modal-text-status-qr').addClass('hide');
+                        $('#modal-text-status-none-qr').removeClass('hide');
+                }
+
+                get_input.val('');
+            });
+
+        });
+
+        $('#modal-btn-savelog').click(function(event) {
+
+            var warehouse_id = $('#warehouse_id').val();
+            var good_id = $('#good_id').val();
+            var color_id = $('#color_id').val();
+
+            var count_corrent = $('#modal-count-correct').html();
+            var count_incorrent = $('#modal-count-incorrect').html();
+
+            var data_corrent = $('#modal-textarea-correct').val();
+            var data_incorrent = $('#modal-textarea-incorrect').val();
+            
+            $.ajax({
+                url: '<?php echo HOST.'warehouse/btn-savelog-check-imei-warehouse';?>',
+                type: 'POST',
+                data: {'type':'normal', 'warehouse_id': warehouse_id,'good_id': good_id,'color_id': color_id,'count_corrent': count_corrent,'count_incorrent': count_incorrent,'data_corrent': data_corrent,'data_incorrent': data_incorrent},
+            })
+            .done(function(response) {
+                var obj_response = jQuery.parseJSON(response);
+                console.log("success");
+
+                 switch(obj_response.status) {
+                    case 200:
+                        console.log('done');
+                        clearAll();
+                        break;
+                    case 400:
+                        alert(obj_response.message);
+                        break;
+                    default:
+                        location.reload();
+                }
+                
+            });
+            
+        });
+
+        $('#modal-btn-savelog-qr').click(function(event) {
+
+            var warehouse_id = $('#warehouse_id').val();
+            var good_id = $('#good_id').val();
+            var color_id = $('#color_id').val();
+
+            var count_corrent_qr = $('#modal-count-correct-qr').html();
+            var count_incorrent_qr = $('#modal-count-incorrect-qr').html();
+
+            var data_corrent_qr = $('#modal-textarea-correct-qr').val();
+            var data_incorrent_qr = $('#modal-textarea-incorrect-qr').val();
+            
+            $.ajax({
+                url: '<?php echo HOST.'warehouse/btn-savelog-check-imei-warehouse';?>',
+                type: 'POST',
+                data: {'type':'qr', 'warehouse_id': warehouse_id,'good_id': good_id,'color_id': color_id, 'count_corrent_qr': count_corrent_qr,'count_incorrent_qr': count_incorrent_qr,'data_corrent_qr': data_corrent_qr,'data_incorrent_qr': data_incorrent_qr},
+            })
+            .done(function(response) {
+                var obj_response = jQuery.parseJSON(response);
+                console.log("success");
+
+                switch(obj_response.status) {
+                    case 200:
+                        console.log('done');
+                        clearAll();
+                        break;
+                    case 400:
+                        alert(obj_response.message);
+                        break;
+                    default:
+                        location.reload();
+                }
+
+            });
+        });
+
+        $('#btn-saveall-history-log').click(function(event) {
+
+            var person = prompt("กรุณาใส่เลขที่กรง (Please enter cage number)");
+
+            if (person == null || person == "") {
+
+            } else {
+
+                var bucket_name = person;
+
+                var warehouse_id = $('#warehouse_id').val();
+                var good_id = $('#good_id').val();
+                var color_id = $('#color_id').val();
+
+                var warehouse_name = $('#warehouse_id option:selected').text();
+                var good_name = $('#good_id option:selected').text();
+                var color_name = $('#color_id option:selected').text();
+
+                var count_corrent = $('#modal-count-correct').html();
+                var count_incorrent = $('#modal-count-incorrect').html();
+
+                var data_corrent = $('#modal-textarea-correct').val();
+                var data_incorrent = $('#modal-textarea-incorrect').val();
+
+                var count_corrent_qr = $('#modal-count-correct-qr').html();
+                var count_incorrent_qr = $('#modal-count-incorrect-qr').html();
+
+                var data_corrent_qr = $('#modal-textarea-correct-qr').val();
+                var data_incorrent_qr = $('#modal-textarea-incorrect-qr').val();
+                
+                $.ajax({
+                    url: '<?php echo HOST.'warehouse/btn-savelog-check-imei-warehouse';?>',
+                    type: 'POST',
+                    data: {'type':'all', 'warehouse_id': warehouse_id,'good_id': good_id,'color_id': color_id, 'count_corrent': count_corrent,'count_incorrent': count_incorrent,'data_corrent': data_corrent,'data_incorrent': data_incorrent, 'count_corrent_qr': count_corrent_qr,'count_incorrent_qr': count_incorrent_qr,'data_corrent_qr': data_corrent_qr,'data_incorrent_qr': data_incorrent_qr,'bucket_name': bucket_name},
+                })
+                .done(function(response) {
+                    var obj_response = jQuery.parseJSON(response);
+                    console.log("success");
+
+                    switch(obj_response.status) {
+                        case 200:
+                            console.log('done');
+
+                            var data = data_corrent+data_corrent_qr;
+
+                            var data_split = data.split('\n');
+
+                            var data_export = [['IMEI','Warehouse','Product','Color','Cage Number']];
+
+                            // console.log(data_split);
+
+                            $.each(data_split, function( key, value ) {
+                              // console.log( key + ": " + value );
+                              // console.log((value.trim()).length);
+                              // console.log(((value.trim()).replace(/[^0-9]/gi, '')).length);
+
+                                if(((value.trim()).replace(/[^0-9]/gi, '')).length == 15){
+                                    data_export.push([value.trim(),warehouse_name,good_name,color_name,bucket_name]);
+                                }
+                            });
+
+                            var CSV = data_export.join('\n');
+
+                            window.URL = window.webkitURL || window.URL;
+
+                            var contentType = 'text/csv';
+
+                            var csvFile = new Blob([CSV], {type: contentType});
+
+                            var a = document.createElement('a');
+                            a.download = 'Check_Warehouse_'+$.now()+'.csv';
+                            a.href = window.URL.createObjectURL(csvFile);
+                            a.textContent = 'Download CSV';
+
+                            a.dataset.downloadurl = [contentType, a.download, a.href].join(':');
+
+                            a.click();
+                            // document.body.appendChild(a);
+                            
+                            clearAll();
+                            alert(obj_response.message);
+                            break;
+                        case 400:
+                            alert(obj_response.message);
+                            break;
+                        default:
+                            location.reload();
+                    }
+
+                });
+
+            }
+
+        });
+
+        $('#warehouse_id,#good_id,#color_id').change(function(event) {
+            console.log('clear');
+            clearAll();
+
+            $('.total-storage').html('Please wait...');
+
+            var warehouse_id = $('#warehouse_id').val();
+            var good_id = $('#good_id').val();
+            var color_id = $('#color_id').val();
+            
+            $.ajax({
+                url: '<?php echo HOST.'warehouse/get-total-storage-for-check-warehouse';?>',
+                type: 'POST',
+                data: {'warehouse_id': warehouse_id,'good_id': good_id,'color_id': color_id},
+            })
+            .done(function(response) {
+                var obj_response = jQuery.parseJSON(response);
+                console.log("success");
+
+                if(obj_response > 0){
+                    $('.total-storage').html(obj_response);
+                }else{
+                    $('.total-storage').html('0');
+                }
+
+            });
+            
+        });
+
+        function clearAll(){
+            $('.clear-data').val('');
+            $('.modal-text-status').addClass('hide');
+            $('#modal-text-status-none').removeClass('hide');
+
+            count_correct = 0;
+            count_incorrect = 0;
+            $('.modal-count').html(0);
+
+            $('.clear-data-qr').val('');
+            $('.modal-text-status-qr').addClass('hide');
+            $('#modal-text-status-none-qr').removeClass('hide');
+
+            package = 0;
+
+            count_correct_qr = 0;
+            count_incorrect_qr = 0;
+
+            packcount_corrent = 0;
+            packcount_incorrent = 0;
+
+            $('.modal-count-qr').html(0);
+        }
+
+
+    });
+
+    
+</script>

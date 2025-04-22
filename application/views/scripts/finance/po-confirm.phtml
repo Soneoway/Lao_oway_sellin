@@ -1,0 +1,140 @@
+<div class="page-header">
+    <h1>Audited Purchase Order</h1>
+</div>
+<style>
+    tr td:first-child {
+        width: 20%;
+    }
+</style>
+<?php
+    $sn_ref=$this->PO->sn_ref;
+    if($sn_ref==''){
+        $sn_ref=$this->PO->sn;
+    }
+?>
+<div class="row">
+    <div class="span12">
+
+        <table class="table table-bordered">
+            <tbody>
+                <form role="form" id="form" action="<?php echo HOST.'finance/po-confirm';?>" method="post" class="form-horizontal">
+                    <tr>
+                        <td>Purchase order ID</td>
+                        <td><strong><?php isset($this->PO) and $this->PO and printf($this->PO->id);?></strong></td>
+                    </tr>
+
+                    <tr>
+                        <td>Purchase order number</td>
+                        <td><strong><?php isset($this->PO) and $this->PO and printf($sn_ref);?></strong></td>
+                    </tr>
+                    <tr>
+                        <td>Purchase order Type</td>
+                        <td><?php if (isset($this->PO['type'])) echo My_Po_Type::getLabel($this->PO['type']) ?></td>
+                    </tr>
+
+                    <tr>
+                        <td>Purchase order name</td>
+                        <td><?php printf($this->created_by_name);?></td>
+                    </tr>
+
+                    <tr>
+                        <td>Purchase Model</td>
+                        <td style="color:blue; font-size:16px; font-weight:bold;"><?php isset($this->good) and $this->good and printf($this->good);?></td>
+                    </tr>
+
+                    <tr>
+                        <td>Purchase Color</td>
+                        <td style="color:blue; font-size:16px; font-weight:bold;"><?php isset($this->good_color) and $this->good_color and printf($this->good_color);?></td>
+                    </tr>
+
+                    <tr>
+                        <td>Purchase Quantity</td>
+                        <td style="color:blue; font-size:16px; font-weight:bold;"><?php isset($this->PO) and $this->PO and printf($this->PO->num);?></td>
+                    </tr>
+
+                    <tr>
+                        <td>Purchase price</td>
+                        <td><?php isset($this->PO) and $this->PO and printf($this->PO->price);?></td>
+                    </tr>
+
+                    <tr>
+                        <td>Purchase time</td>
+                        <td><?php isset($this->PO) and $this->PO and printf($this->PO->created_at);?></td>
+                    </tr>
+
+                    <tr>
+                        <td>Purchaser</td>
+                        <td><?php isset($this->warehouse) and $this->warehouse and printf($this->warehouse);?></td>
+                    </tr>
+
+                    <tr>
+                        <td>Purchase payment</td>
+                        <td><?php if ($this->PO->flow):?><i class="icon-ok"></i><?php else:?><i class="icon-remove"></i><?php endif;?></td>
+                    </tr>
+
+                    <!-- <tr>
+                        <td>Payer</td>
+                        <td><?php echo $this->payer_name;?></td>
+                    </tr>
+
+                    <tr>
+                        <td>Time of payment</td>
+                        <td><?php if ($this->PO->flow):?><?php echo $this->PO->flow_time;?><?php else:?>-<?php endif;?></td>
+                    </tr> -->
+
+                    <tr>
+                        <td>Whether to enter the warehouse</td>
+                        <td><?php if ($this->PO->mysql_user):?><i class="icon-ok"></i><?php else:?><i class="icon-remove"></i><?php endif;?></td>
+                    </tr>
+
+                    <tr>
+                        <td>Warehousing people</td>
+                        <td><?php echo $this->warehousing_name;?></td>
+                    </tr>
+
+                    <!-- <tr>
+                        <td>Time input warehousing</td>
+                        <td><?php if ($this->PO->mysql_time):?><?php echo $this->PO->mysql_time;?><?php else:?>-<?php endif;?></td>
+                    </tr> -->
+
+                    <!-- <tr>
+                        <td>Purchase remark</td>
+                        <td><strong><?php isset($this->PO) and $this->PO and printf($this->PO->text);?></strong></td>
+                    </tr> -->
+
+                    <tr>
+                        <td>Payment Notes <span style="color: red">*</span></td>
+                        <td>
+                            <div class="span4">
+                                <div class="control-group">
+                                    <div class="controls">
+                                        <textarea id="pay_user" name="pay_user" required="required"></textarea>
+                                    </div>
+                                    <!-- <span style="color: red">* Please confirm information,This action can not be reversed!!...</span> -->
+                                </div>
+                            </div>
+                            <div class="span4">
+                                <input type="hidden" name="id" value="<?php isset($this->PO) and $this->PO and printf($this->PO->id);?>">
+                                <input type="hidden" name="back_url" value="/finance/po"></input>
+                                <button type="submit" class="btn btn-primary">Confirm</button>
+                                <button type="button" class="btn btn-danger go-back">Go back</button>
+                            </div>
+                        </td>
+                    </tr>
+                </form>
+            </tbody>
+        </table>
+    </div>
+</div>
+<script>
+    $(document).ready(function () {
+        $('#form').submit(function (e){
+            if (!confirm('Are you sure this purchase order is paid?'))
+                return false;
+        });
+        $('.go-back').click(function(e){
+            window.location.href = '/finance/po';
+            return false;
+        });
+    });
+</script>

@@ -1,0 +1,465 @@
+<link rel="stylesheet" type="text/css" href="/css/datatables.css" />
+<style>
+.red
+{
+background: #1B8324;color:red;
+}
+.show_item{
+background-color:#32CD32;
+}
+.show_item_select{
+background-color:#FFA500;
+}
+</style>
+<!-- <div class="row">
+  <div class="span12">
+    <button class="btn btn-success btn-mini pull-right" id="attach-payment">Attach Payment</button>
+    <button class="btn btn-success btn-mini pull-right" id="create-payment-group">Create Payment Group</button>
+  </div>
+</div> -->
+<div class="pull-right">
+  <!-- <?php
+  $product_qty        = $m['total_qty'];                //>> Product sale out
+  $total_product_qty += $product_qty;                   //>> Total Sale out
+  ?> -->
+  <b>
+  Total of sell out :  <b style="color: blue" class="total"></b>&nbsp; || &nbsp;
+  Total of order list:  <b style="color: blue"><?php echo $this->total;?> </b>&nbsp; &nbsp;
+ <!--  <?php $userStorage = Zend_Auth::getInstance()->getStorage()->read(); ?>
+  <?php if($userStorage->id == 1): ?>
+      <button class="btn btn-danger" onclick="bulk_delete()"><i class="glyphicon glyphicon-trash"></i> Bulk Delete</button>
+  <?php endif; ?>  <br> -->
+  <hr />
+  </b>
+</div>
+<table class="table table-bordered">
+  <thead>
+    <tr>
+      <?php echo $this->sorting(array(
+      '#',
+      'sn'            => 'Sale Order Number',
+      'invoice_number'            => 'Invoice Number',
+      'd_id'          => 'Retailer Name',
+      'good_id'       => 'Product Name',
+      'good_color'    => 'Product Color',
+      'num'           => 'Sales Quantity',
+      'price'         => 'Sales Price',
+      'total'         => 'Total<br/>(Exclude vat)',
+      'pay_time'      => 'Payment or Not',
+      'shipping_yes_time'      => 'Shipping',
+      'outmysql_time' => 'Out of Warehouse',
+      'warehouse_id'  => 'Warehouse',
+      'salesman'      =>'Order Maker',
+      'p.id'          => 'Order Time',
+      'Finance Confirm',
+      'Action',
+      ),
+      $this->url, $this->sort, $this->desc); ?>
+    </tr>
+  </thead>
+  <tbody>
+    <?php
+    function cal_sale_off_percent($percent_sale_off,$price,$num,$price_total){
+    if($percent_sale_off>0){
+    $price_sale_off=$price_total/$num;
+    }else{
+    $price_sale_off = $price;
+    }
+    return $price_sale_off;
+    }
+    function ext_vat($num){
+    return $num/1.07;
+    }
+    function format_number_4($num){
+    return decimal_remove_comma(number_format($num, 4));
+    }
+    function format_number_2($num){
+    return decimal_remove_comma(number_format($num, 2));
+    }
+    function decimal_remove_comma($priceFloat)
+    {
+    $price = str_replace(",","",$priceFloat);;
+    return $price;
+    }
+    function getDatetimeNow() {
+    $tz_object = new DateTimeZone('Asia/Bangkok');
+    $datetime = new DateTime();
+    $datetime->setTimezone($tz_object);
+    return $datetime->format('Y\-m\-d\ h:i:s');
+    }
+    $percent_sale_off=0;
+    $gran_total=0;
+    $statuses = unserialize(DISCOUNT_STATUS);
+    $QMarketSplitOrder = new Application_Model_MarketSplitOrder();
+    $userStorage = Zend_Auth::getInstance()->getStorage()->read();
+    $QStaff = new Application_Model_Staff();
+    $staff = $QStaff->get_cache();
+    if (isset($this->markets_sn) and $this->markets_sn) :
+    // print_r($this->$markets_sn);
+    foreach ($this->markets_sn as $k=>$m):
+    $dt = DateTime::CreateFromFormat("Y-m-d H:i:s", isset($m['last_updated_at']) ? $m['last_updated_at'] : $m['add_time']);
+    $h = $dt->format('H');
+    $i = $dt->format('i');
+    $d = $dt->format('d');
+    $date = date('d');
+    //print_r($m);
+    
+    if (My_Staff_Group::inGroup($userStorage->group_id, array(ADMINISTRATOR_ID,SPLIT_GIFBOX))){
+    $sn_ref_split = $QMarketSplitOrder->getSplitOrder($m['sn']);
+    //print_r($sn_ref_split);die;
+    if($sn_ref_split !=''){
+    $sn_ref = $m['sn_ref']."/".$sn_ref_split['sales_order_split'];
+    }else{
+    $sn_ref = $m['sn_ref'];
+    }
+    }else{
+    $sn_ref = $m['sn_ref'];
+    }
+    if($sn_ref==''){
+    $sn_ref = $m['sn'];
+    }
+    $product_unit_price = $m['price'];//print_r($m);
+    $product_qty        = $m['total_qty'];                //>> Product sale
+    $price_total        = $m['total_price_amount'];
+    $price_total_invat  = $m['total_price_amount_invat'];
+    $sale_off_percent   = isset($m['sale_off_percent'])?$m['sale_off_percent']:'0';
+    $product_unit_price = cal_sale_off_percent($sale_off_percent,$product_unit_price,$product_qty,$price_total);
+    $total_price = ext_vat($product_unit_price);
+    $product_unit_price_4 = format_number_4($total_price);
+    $product_amount_4 =format_number_2($product_unit_price_4) * $product_qty;
+    $total_amount = $product_amount_4*1.07;
+    $total_product_qty += $product_qty;   //>> Total Sale out
+    //3025 บริษัท คอมเซเว่น จำกัด (มหาชน)
+    ////3691 OP19 - บริษัท บุญชัยค้าส่ง จำกัด (สำนักงานใหญ่)
+    $total_amount = ($m['total_price_amount']);
+    $delivery_fee = $m['delivery_fee']/1.07;
+    if($m['rank'] == 9){
+    $total_amount = $price_total_invat;
+    }
+    $special_discount = 0;
+    date_default_timezone_set('Asia/Bangkok');
+    $date = new DateTime('2017-01-04 00:00:00');
+    $date_start= date_format($date,"Y-m-d H:i:s");
+    $date_order = $m['add_time'];
+    if($date_order < $date_start){
+    if ($m['d_id'] == 3025 || $m['d_id'] == 3691) {
+    $special_discount = format_number_2(($total_amount*1/100));
+    }
+    }else{
+    $special_discount = ($m['total_spc_discount']);
+    }
+    $d_id = $m['d_id'];
+    if ($d_id=='25760' || $d_id=='21088' || $d_id=='25550'){
+    $total_amount_in_vat = (($total_amount+$delivery_fee-$special_discount));
+    }else{
+    $total_amount_in_vat = (($total_amount+$delivery_fee-$special_discount)*1.07);
+    }
+    $gran_total  = ($total_amount_in_vat - $m['total_discount'] - $m['total_deposit']);
+    if ($gran_total <= 0) {
+    $gran_total = 0;
+    }
+    if($m['delivery_fee']>0){
+    $delivery_fee ="Delivery fee = ".$m['delivery_fee'];
+    }else{
+    $delivery_fee ="";
+    }
+    $userStorage = Zend_Auth::getInstance()->getStorage()->read();
+    ?>
+    <tr class="<?php
+      if(isset($h) and isset($i) and ($h >= 16))
+      {
+      if($date == $d)
+      {
+      if($h==16 and $i>=30){
+      echo 'show_item';
+      }
+      else if($h > 16){
+      echo 'show_item';
+      }
+      }
+      }
+      ?>">
+      <td><a href="#id" rel="<?php echo $m['sn'] ?>" class="collapse_a btn btn-default btn-small" id="m_<?php echo $m['sn'] ?>"><span class="col-sign">+</span><img class="img-loading" src="<?php echo HOST?>img/ajax-loader.gif" style="display: none" /></a></td>
+      <td>
+        <a href="/sales/order-detail?sn=<?php echo $m['sn'];?>">
+          <?php echo $sn_ref ?>
+        </a>
+      </td>
+      <td><?php echo $m['invoice_number']; ?></td>
+      <!-- <td><?php echo $m['payment_no']; ?></td>
+      <td><?php echo $m['tracking_no']; ?></td> -->
+
+      <td>
+          <?php 
+          if($m['store_id'] != 0) :
+            echo $this->store[$m['store_id']];
+          else:
+            echo $this->distributors2[$m['d_id']]['title'];;
+          endif; 
+          ?>
+
+
+        <!-- <?php if (isset($this->distributors2) && $this->distributors2 && isset($this->distributors2[$m['d_id']])) echo $this->distributors2[$m['d_id']]['title']; ?> -->
+          
+        </td>
+
+      <td></td>
+      <td></td>
+      <td class="valor"><?php echo $m['total_qty'] ?></td>
+      <td></td>
+      <td><?php echo My_Number::f($total_amount, 0, ',', '.'); ?></td>
+      <!-- <td><?php echo My_Number::f($special_discount, 0, ',', '.'); ?></td> -->
+      
+      
+      <!-- <td title='<?=$delivery_fee?>'><?php echo My_Number::f($total_amount_in_vat, 0, ',', '.'); ?></td> -->
+      <!-- <td><?php echo My_Number::f($m['total_discount'], 0, ',', '.'); ?></td>
+      <td><?php echo My_Number::f($m['total_deposit'], 0, ',', '.'); ?></td> -->
+      <!-- <td><?php echo My_Number::f($gran_total, 0, ',', '.'); ?></td> -->
+      <td><?php if ($m['pay_time']):?><i style="color:green"  class="icon-ok"></i><?php else:?><i style="color:red" class="icon-remove"></i><?php endif;?></td>
+      <td><?php if ($m['shipping_yes_time']):?><i style="color:green"  class="icon-ok"></i><?php else:?><i style="color:red" class="icon-remove"></i><?php endif;?></td>
+      <td><?php if ($m['outmysql_time']):?><i style="color:green"  class="icon-ok"></i><?php else:?><i style="color:red" class="icon-remove"></i><?php endif;?></td>
+      <td><?php if (isset($this->warehouses_cached[$m['warehouse_id']])) echo $this->warehouses_cached[$m['warehouse_id']] ?></td>
+      <!-- <td><?php if ($m['status']==1):?>Active<?php else:?>Expired<?php endif;?></td> -->
+      <td><?php echo $staff[$m['salesman']]; ?></td>
+      <td><?php echo $m['add_time'] ?></td>
+      <td><?php echo $m['pay_time'] ?></td>
+      <td>
+        <a title="View" href="/sales/view?sn=<?php echo $m['sn'];?>"> <i class="icon-eye-open"></i></a>
+        <?php if ($m['status']==1): ?>
+        <?php if (!$m['pay_time'] and !$m['outmysql_time']): ?>
+        <?php if ($m['confirm_so'] != 1): ?>
+        <?php
+        $hide_edit = '';
+        if($m['quota_id'] && $m['add_time'] < date('Y-m-d')){
+        $hide_edit = 'hide';
+        }
+        ?>
+        <?php if ($m['warehouse_id'] == 71){ ?>
+        <a class="<?=$hide_edit;?>" title="Edit" href="/sales/create-digital?sn=<?php echo $m['sn'];?>&sn_ref=<?php echo $m['sn_ref'];?>"> <i class="icon-edit"></i></a>
+        
+        <?php }else{ ?>
+        <a class="<?=$hide_edit;?>" title="Edit" href="/sales/create?sn=<?php echo $m['sn'];?>&sn_ref=<?php echo $m['sn_ref'];?>"> <i class="icon-edit"></i></a>
+        <?php } ?>
+        <?php endif;?>
+        <a title="Delete" class="swal" id="id" data-id="<?php echo $m['sn'];?>&action_frm=list;?"> <i class="icon-trash"></i></a>
+        <!-- <input type="checkbox" class="data-check" value="<?php echo $m['sn'];?>"> -->
+        <?php else:?>
+        <a class="lock" title="Lock" href="javascript:void(0);"> <i class="icon-lock"></i></a>
+        <?php if (!$m['canceled']):?>
+        <?PHP if ($m['user_id'] == $userStorage->id || $userStorage->group_id==ADMINISTRATOR_ID || My_Staff_Group::inGroup($userStorage->group_id, CANCEL_ORDER)):  ?>
+        <!-- allow cancel order to branshop and service -->
+        <?php if((isset($m['group_type_id']) && in_array($m['group_type_id'], ['9','10'])) || $userStorage->group_id==ADMINISTRATOR_ID){ ?>
+        <a data-toggle="modal" data-sn="'<?php echo $m['sn'];?>'" title="Mark Canceled" class="open-cancel" href="#cancelSO"><i class="icon-eraser"></i></a>
+        <?php } ?>
+        <?php endif; ?>
+        <?php else:?>
+        <a data-toggle="modal" data-sn="'<?php echo $m['sn'];?>'"  class="open-remark" href="#canceRemark"><span style="color: red">Canceled</span></a>
+        <?php endif;?>
+        <?php endif;?>
+        <a title="Print" target="_blank" href="/sales/print-sale?sn=<?php echo $m['sn'];?>"> <i class="icon-print"></i></a>
+        <?php
+        if (My_Staff_Group::inGroup($userStorage->group_id, array(ADMINISTRATOR_ID,CHECK_MONEY))) {
+        ?>
+        <a title="Proforma Invoice" target="_blank" href="/warehouse/print-invoice-new?sn=<?=$m['sn'];?>&type_inv=7"> <i class="icon-file-text-alt"></i></a>
+        <?php } ?>
+        
+        <?php if ($m['confirm_so'] == 0): ?>
+        <a title="Confirming" href="/sales/sales-confirm-order?sn=<?php echo  $m['sn'];?>">
+        <i class="icon-ok"></i></a>
+        <?php endif;?>
+        <?php if ($m['invoice_number'] != ''): ?>
+        <a title="Invoice" target="_blank" href="/warehouse/invoice?sn=<?=$m['sn'];?>&inv_sn=<?=$m['invoice_number'];?>"> <i class="icon-file"></i></a>
+        <!-- <a title="Invoice A4" value="12" data_sn="<?php echo $m['sn'];?>" name="invoice_etax" id="invoice_etax" class="invoice_etax" target="_blank" href=""> <i class="icon-file-text-alt"></i></a> -->
+        <?php endif;?>
+        <?php
+        if ($m['rank']==10) :
+        if ($m['user_id'] == $userStorage->id || My_Staff_Group::inGroup($userStorage->group_id, array(ADMINISTRATOR_ID,4,25,41,28)))://41=Update Customer Brand shop ?>
+        <a data-toggle="modal" data-snf="'<?php echo $m['sn_ref'];?>'"  class="open-customer" href="#editCustomer"> <i class="icon-user"></i></a>
+        <?php endif; endif; ?>
+        <?php endif;?>
+        <?php if ($m['confirm_so'] != 0): ?>
+        <a class="show-payment-slip getImgPaymentOne" data-toggle="modal" data-sn="'<?php echo $m['sn'];?>'" data-payment_no="<?php echo $m['payment_no'];?>" href="#" title="Show Image Payslip"> <i class="icon-book"></i></a>
+        <?php endif;?>
+        <?php if($m['confirm_so'] != 0 && $m['payment_no'] != '' && $m['pay_group'] == '1'): ?><a href="<?php echo HOST ?>sales/show-payment-group?paygroup=<?php echo $m['payment_no'];?>" target="_blank" title="Show Details Payment Group"> <i class="icon-file-text"></i></a><?php endif;?>
+        <!-- <?php echo $m['confirm_so'] . '|' . $m['payment_no'] . '|' . $m['pay_group'];?> -->
+        <?php
+        if (My_Staff_Group::inGroup($userStorage->group_id, array(ADMINISTRATOR_ID,64,98)))://64,98=Edit Sale PO ?>
+        <a data-toggle="modal" data-sn="'<?php echo $m['sn'];?>'" data-po="<?php echo $m['tax_po'];?>" title="Edit PO" class="edit-po" href="#editPO"><i class="icon-edit-sign"></i></a>
+        <?php endif;?>
+
+        <?php if ($m['outmysql_time'] == '' && $m['shipping_yes_time'] != ''): ?>
+        <a class="swal_cancel" id="id" data-id="<?php echo $m['sn'];?>&action_frm=out_list;?>" style="color: red"> Cancel </a>
+        <?php endif; ?>
+      </td>
+     
+    </tr>
+    <?php endforeach;?>
+    <?php endif; ?>
+  </tbody>
+</table>
+
+ <div class="paging">
+  <?php echo $this->paging($this->total, $this->limit, $this->offset, $this->url);?>
+</div>
+<br />
+<br />
+
+<script type="text/javascript" src="/js/jets.js"></script>
+<script type="text/javascript" src="/js/jquery-ui-1.8.12.custom.min.js"></script>
+<script type="text/javascript" src="/js/dataTables.min.js"></script>
+<script>
+$(document).ready(function () {
+initInvEtax();
+});
+function initInvEtax()
+{
+$(document).off('click', '.invoice_etax')
+.on('click', '.invoice_etax', function(e) {
+var data_sn = $(this).attr('data_sn');
+$.get("/sales/view-invoice-pdf-file",
+{data_sn:data_sn}
+,function(data){
+window.open(data, '_blank');
+});
+return false;
+});
+}
+</script>
+<!-- <div class="pull-left">
+  <b>
+  Total of sell out :  <b style="color: blue"><?php echo $total_product_qty ?> </b>&nbsp; || &nbsp;
+  Total of order sell out list:  <b style="color: blue"><?php echo $this->total;?> </b>&nbsp; &nbsp;
+  <br>
+  <b>==========================================</b>
+  </b>
+</div>
+<br><br><br><br> -->
+<script>
+$(document).ready(function () {
+var $rows = $(".table tbody tr");
+var $totalElement = $(".total");
+var total = 0;
+$rows.each(function () {
+total += getPriceForRow(this);
+});
+displayTotal(total);
+
+
+/*  $("#myInput").keyup(function () {
+total = 0;
+var filtertext = $(this).val();
+var regex = new RegExp(filtertext, 'i');
+$rows.hide().filter(function () {
+return regex.test($(this).text());
+}).show();
+$(".table tbody tr:visible").each(function () {
+total += getPriceForRow(this);
+});
+displayTotal(total);
+});
+*/
+
+$(document).on('click', '.swal', function(e) {
+    var id = $(this).data('id');
+    Swal.fire({
+        title: '<font style="font-family: Noto Sans Lao">ທ່ານຕ້ອງການລົບບິນສັ່ງຊື້ຫຼືບໍ່?</font>',
+        text: "Are you sure?",
+        icon: 'warning',
+        showCancelButton: true,
+        confirmButtonColor: '#ed9a03',
+        cancelButtonColor: '#ababab',
+        confirmButtonText: '<font style="font-family: Noto Sans Lao">ຢືນຢັ້ນ</font>',
+        cancelButtonText: '<font style="font-family: Noto Sans Lao">ຍົກເລີກ</font>'
+    }).then((result) => {
+        if (result.isConfirmed) {
+              window.location.href="/sales/del?sn="+id;
+        }else{
+            Swal.fire('Cancel !', '<font style="font-family: Noto Sans Lao">ທ່ານໄດ້ຍົກເລົກການຢືນຢັ້ນ.</font>','error');
+        }
+    });
+});
+
+function getPriceForRow(row) {
+$valor = $(row).find(".valor");
+if ($valor.length) {
+return parseFloat($valor.text().replace(/\./g, "").replace(","));
+}
+}
+function formatTotal(num) {
+var parts = num.toString().split(".");
+return parts.join("");
+}
+function displayTotal(total) {
+$totalElement.html(formatTotal(total.toFixed(0)));
+}
+});
+//----------------------------------
+    $("#check-all").click(function () {
+        $(".data-check").prop('checked', $(this).prop('checked'));
+    });
+//----------------------------------
+function bulk_delete()
+{
+    var list_id = [];
+    $(".data-check:checked").each(function() {
+            list_id.push(this.value);
+    });
+    if(list_id.length > 0)
+    {
+        Swal.fire({
+        title: '<font style="font-family: Noto Sans Lao">ທ່ານຕ້ອງການລົບບິນສັ່ງຊື້ຫຼືບໍ່?</font>',
+        text: "Are you sure delete this "+list_id.length+" data?",
+        icon: 'warning',
+        showCancelButton: true,
+        confirmButtonColor: '#ed9a03',
+        cancelButtonColor: '#ababab',
+        confirmButtonText: '<font style="font-family: Noto Sans Lao">ຢືນຢັ້ນ</font>',
+        cancelButtonText: '<font style="font-family: Noto Sans Lao">ຍົກເລີກ</font>'
+        }).then((result) => {
+        if (result.isConfirmed) {
+            location.reload();
+            $.ajax({
+                type: "POST",
+                data: {id:list_id},
+                url: "/sales/del2",
+                dataType: "JSON",
+            });
+        }else{
+        Swal.fire("Error","no data selected", "error");
+        }
+    });
+
+    }
+    else
+    {
+        Swal.fire("Error","no data selected", "error");
+    }
+}
+
+$(document).on('click', '.swal_cancel', function(e) {
+    var id = $(this).data('id');
+    Swal.fire({
+        title: '<font style="font-family: phetsarath ot">ທ່ານຕ້ອງການຍົກເລີກບິນສັ່ງຊື້ຫຼືບໍ່?</font>',
+        text: "Are you sure?",
+        icon: 'warning',
+        showCancelButton: true,
+        confirmButtonColor: '#ed9a03',
+        cancelButtonColor: '#ababab',
+        confirmButtonText: '<font style="font-family: phetsarath ot">ຢືນຢັ້ນ</font>',
+        cancelButtonText: '<font style="font-family: phetsarath ot">ຍົກເລີກ</font>'
+    }).then((result) => {
+        if (result.isConfirmed) {
+              window.location.href="/warehouse/rollback?sn="+id;
+        }else{
+            Swal.fire('Cancel !', '<font style="font-family: phetsarath ot">ທ່ານໄດ້ຍົກເລົກການຢືນຢັ້ນ.</font>','error');
+        }
+    });
+});
+
+</script>
+
+<!-- <script type="text/javascript">
+  $(document).ready( function () {
+    $('#myTable').DataTable();
+} );
+</script> -->

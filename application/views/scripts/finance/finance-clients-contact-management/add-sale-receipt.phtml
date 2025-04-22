@@ -1,0 +1,615 @@
+<link rel="stylesheet" href="<?php echo HOST?>css/select2.css" />
+<script src="<?php echo HOST?>js/select2.js"></script>
+<link rel="stylesheet" href="<?php echo HOST?>css/dropzone.css" />
+
+<style>
+	.image-preview {
+		display: flex;
+		flex-wrap: wrap;
+		margin-bottom: 10px;
+	}
+	.image-preview .preview-image {
+		margin: 5px;
+		width: 100px;
+		height: 100px;
+		border: 1px solid #ddd;
+		overflow: hidden;
+	}
+
+	.image-preview .remove-btn {
+		cursor: pointer;
+		padding: 5px;
+		background-color: #ddd;
+		border: none;
+	}
+
+	.preview-image img {
+		width: 150px;
+		height: 150px;
+		margin: 5px;
+		object-fit: cover;
+		border: 1px solid #ddd;
+		cursor: pointer;
+	}
+
+
+	.hidden {
+		display: none;
+	}
+
+	#add-more-btn {
+		padding-left: 20px;
+		padding-right: 20px;
+/*		margin-left: 35px;*/
+}
+
+.remove-btn {
+	padding-left: 20px;
+	padding-right: 20px;
+/*		margin-left: 40px;*/
+margin-bottom: 5px;
+}
+
+.input-upload {
+	border-style: solid;
+	padding: 2px 2px 2px 2px;
+	border-color: lightgrey;
+}
+
+.modal-view {
+	display: none;
+	position: fixed;
+	z-index: 1;
+	left: 0;
+	top: 0;
+	width: 100%;
+	height: 100%;
+	overflow: auto;
+	background-color: rgba(0,0,0,0.4);
+	margin: 0;
+}
+
+.modal-view-content {
+	margin: 7% auto;
+	padding: 20px;
+	border: 1px solid #888;
+	width: 80%;
+	background-color: rgba(0,0,0,0.4);
+/*		background-color: white;*/
+}
+
+
+.modal-view img {
+	padding-left: 500px;
+	display: block;
+	width: 30%;
+	height: auto;
+}
+</style>
+
+<?php 
+if(isset($this->type) && $this->type == 1 || $this->type == 3) { 
+
+	$select2_input_status = 'disabled';
+	$input_status = 'disabled';
+	$button_status = 'hidden';
+
+}
+
+?>
+
+<div class="page-header">
+	<h1 style="font-family: Times New Roman;">
+
+		<?php if(isset($this->type) && $this->type == 1): ?> 
+			Detail 
+		<?php elseif($this->type == 2): ?> 
+			Edit 
+		<?php elseif($this->type == 3) : ?>
+
+		<?php else: ?> 
+			Add
+			<?php endif; ?> Sale Receipt 
+
+			<?php if(isset($this->is_dealer) && $this->is_dealer) : ?> 
+
+				<span style="color: red; font-family: Times New Roman;"> Dealer </span> 
+
+			<?php else: ?> 
+
+				<span style="color: green; font-family: Times New Roman;"> Store </span> 
+
+			<?php endif; ?>
+		</h1>
+	</div>
+
+	<form class="form-horizontal" method="post" action="<?php echo HOST ?>finance/save-sale-receipt" enctype="multipart/form-data" >
+		<div class="row" style="border-style: solid; padding: 30px 10px 10px 10px; border-color: lavender; margin-right: 0px">
+
+			<div class="span12" style="display: flex; justify-content: end; padding-bottom: 20px;">
+				<input type="hidden" name="id" value="<?php if(isset($this->saleReceipt) && printf($this->saleReceipt->id)) ?>">
+
+				<?php if(isset($this->type) && $this->type == 3) : ?>
+
+					<button type="button" class="btn btn-success" data-toggle="modal" data-target="#myModal"> Approved </button> &nbsp;
+
+				<?php else: ?>	
+
+					<button type="submit" class="btn btn-success <?php echo $button_status; ?>"> Save </button> &nbsp;
+
+				<?php endif; ?>
+
+				<button type="button" class="btn btn-danger" onclick="history.back()"> Cancel </button>
+
+			</div>
+
+			<div class="span6">
+				<?php if(isset($this->is_dealer) && $this->is_dealer) : ?> 
+					<div class="control-group">
+						<label for="warehouse_id" class="control-label" style="width: 180px; padding-right: 20px;">Warehouse : <span style="color: red">*</span></label>
+						<div class="controls">
+							<select class="span3" name="warehouse_id" id="warehouse_id" required <?php echo $select2_input_status ?> >
+								<option value=""> Please Selected </option>
+								<?php foreach($this->warehouse as $value) : ?>
+									<option value="<?php echo $value['id'] ?>" <?php if(isset($this->saleReceipt->warehouse_id) && $this->saleReceipt->warehouse_id == $value['id']) :?> selected <?php endif; ?>><?php echo $value['name'] ?></option>
+								<?php endforeach; ?>
+							</select>
+						</div>
+					</div>
+				<?php else: ?>
+					<div class="control-group">
+						<label for="store_id" class="control-label" style="width: 180px; padding-right: 20px;">Store : <span style="color: red">*</span></label>
+						<div class="controls">
+							<select class="span3" name="store_id" id="store_id" required <?php echo $select2_input_status ?> >
+								<option value=""> Please Selected </option>
+								<?php foreach($this->store as $value): ?>
+									<option value="<?php echo $value['id'] ?>" <?php if(isset($this->saleReceipt->store_id) && $this->saleReceipt->store_id == $value['id']) :?> selected <?php endif; ?> ><?php echo $value['name'] ?></option>
+								<?php endforeach; ?>
+							</select>
+						</div>
+					</div>
+				<?php endif; ?>
+
+				<div class="control-group">
+					<label for="finance_client" class="control-label" style="width: 180px; padding-right: 20px;">Finance Client : <span style="color: red">*</span></label>
+					<div class="controls">
+						<select class="span3" name="finance_client" id="finance_client" required <?php echo $input_status ?> >
+							<option value=""> Please Selected </option>
+
+							<?php if(isset($this->financeClient) && $this->financeClient) : ?>
+								<?php foreach($this->financeClient as $value) : ?>
+									<option value="<?php echo $value['id'] ?>" <?php if(isset($this->saleReceipt->finance_client) && $this->saleReceipt->finance_client == $value['id']) : ?> selected <?php endif; ?> ><?php echo $value['name'] ?></option>
+								<?php endforeach; ?>
+							<?php endif; ?>
+
+						</select>
+					</div>
+				</div>
+
+				<div class="control-group">
+					<label for="stm_type" class="control-label" style="width: 180px; padding-right: 20px">Settlement Type : <span style="color: red">*</span></label>
+					<div class="controls">
+						<select class="span3" name="stm_type" id="stm_type" required <?php echo $input_status ?> >
+							<option value=""> Please Selected </option>
+
+							<?php if(isset($this->accountType) && $this->accountType) : ?>
+								<?php foreach($this->accountType as $key => $value) : ?>
+									<option value="<?php echo $key ?>" <?php if(isset($this->saleReceipt->stm_type) && $this->saleReceipt->stm_type == $key) : ?> selected <?php endif; ?> ><?php echo $value ?></option>
+								<?php endforeach; ?>
+							<?php endif; ?>
+
+						</select>
+					</div>
+				</div>
+
+				<?php if(isset($this->saleReceipt->stm_type) && $this->saleReceipt->stm_type == 1) : ?>
+
+					<div class="control-group">
+						<label for="bank_account" class="control-label" style="width: 180px; padding-right: 20px">Bank Account : <span style="color: red">*</span></label>
+						<div class="controls">
+							<select class="span3" name="bank_account" id="bank_account" required <?php echo $input_status ?>>
+								<option value=""> Please Selected </option>
+
+								<?php if(isset($this->bankaccount) && $this->bankaccount) : ?>
+									<?php foreach($this->bankaccount as $value) : ?>
+										<option value="<?php echo $value['id'] ?>" <?php if(isset($this->saleReceipt->bank_account) && $this->saleReceipt->bank_account == $value['id']) : ?> selected <?php endif; ?> ><?php echo $value['bank_account'] ?></option>
+									<?php endforeach; ?>
+								<?php endif; ?>
+
+							</select>
+						</select>
+					</div>
+				</div>
+
+			<?php else: ?>
+
+				<div class="control-group bank_account">
+					<label for="bank_account" class="control-label" style="width: 180px; padding-right: 20px">Bank Account : <span style="color: red">*</span></label>
+					<div class="controls">
+						<select class="span3" name="bank_account" id="bank_account">
+							<option value=""> Please Selected </option>
+						</select>
+					</select>
+				</div>
+			</div>
+
+		<?php endif; ?>
+
+		<div class="control-group">
+			<label for="transfer_type" class="control-label" style="width: 180px; padding-right: 20px">Transfer Type : </label>
+			<div class="controls">
+				<select class="span3" name="transfer_type" id="transfer_type" <?php echo $input_status ?>>
+					<option value=""> Please Selected </option>
+					<option value="1" <?php if(isset($this->saleReceipt->transfer_type) && $this->saleReceipt->transfer_type == 1) : ?> selected <?php endif; ?> > Individual-To-Company </option>
+					<option value="2" <?php if(isset($this->saleReceipt->transfer_type) && $this->saleReceipt->transfer_type == 2) : ?> selected <?php endif; ?> > Individual-To-Individual </option>
+					<option value="3" <?php if(isset($this->saleReceipt->transfer_type) && $this->saleReceipt->transfer_type == 3) : ?> selected <?php endif; ?> > Company-To-Company </option>
+				</select>
+			</div>
+		</div>
+
+		<div class="control-group">
+			<label for="remitted_by" class="control-label" style="width: 180px; padding-right: 20px">Remitted By : <span style="color: red">*</span></label>
+			<div class="controls">
+				<input type="text" name="remitted_by" id="remitted_by" class="span3" <?php echo $input_status ?> required value="<?php if(isset($this->saleReceipt->remitted_by) && printf($this->saleReceipt->remitted_by)) ?>">
+			</div>
+		</div>
+
+		<div class="control-group">
+			<label for="amount" class="control-label" style="width: 180px; padding-right: 20px">Amount : <span style="color: red">*</span></label>
+			<div class="controls">
+				<input type="number" class="span3" name="amount" id="amount" <?php echo $input_status ?> required value="<?php if(isset($this->saleReceipt->amount) && printf($this->saleReceipt->amount)) ?>">
+			</div>
+		</div>
+
+		<div class="control-group">
+			<label for="" class="control-label" style="width: 180px; padding-right: 20px">Serial Number : </label>
+			<div class="controls">
+				<input type="text" class="span3" name="serial_number" id="serial_number" <?php echo $input_status ?> value="<?php if(isset($this->saleReceipt->serial_number) && printf($this->saleReceipt->serial_number)) ?>">
+			</div>
+		</div>
+
+		<div class="control-group" >
+			<label for="" class="control-label" style="width: 180px; padding-right: 20px; height: 700px;"> Attatchment :</label>
+			<div class="controls">
+
+				<?php if(isset($this->slip) && $this->slip) : ?>
+					<?php foreach($this->slip as $value) : ?>
+
+						<div id="image-upload-container <?php echo $value['id'] ?>">
+							<div class="image-upload">
+								<div class="preview-image">
+									<img class="img-polaroid" src="<?php echo HOST ?><?php echo $value['parth'] ?><?php echo $value['photo'] ?> " alt="Selected Image">
+									<input type="hidden" name="images[]" value="<?php echo $value['photo'] ?>" />
+									<button type="button" data-id="<?php echo $value['id']; ?>" data-url="<?php echo $this->back_url ?>" class="remove-btn btn btn-danger <?php echo $button_status; ?>"><i class="icon icon-trash"></i> Remove</button>
+								</div>
+							</div>
+						</div>
+
+					<?php endforeach; ?>
+				<?php endif; ?>
+
+				<div id="image-upload-container">
+					<div class="image-upload">
+						<div class="preview-image"></div>
+					</div>
+				</div>
+
+				<div id="modal-view" class="modal-view">
+					<div class="modal-view-content">
+						<img id="modal-view-image" src="#" alt="Selected Image">
+					</div>
+				</div>
+
+				<button type="button" id="add-more-btn" class="btn btn-success <?php echo $button_status; ?>"><i class="icon icon-upload"></i> Add Photo </button>
+
+
+			</div>
+		</div>
+
+	</div>
+
+	<div class="span6">
+
+		<div class="control-group">
+			<label for="distributor_my" class="control-label" style="width: 180px; padding-right: 20px">Distributor(My Side) : </label>
+			<div class="controls">
+				<span class="span3" style="padding-top: 5px; font-size: 14px;" id="distributor_my"> <?php if(isset($this->suppy) && printf($this->suppy->title)) ?> </span>
+			</div>
+		</div>
+
+		<div class="control-group">
+			<label for="distributor_you" class="control-label" style="width: 180px; padding-right: 20px">Distributor(Your Side) : </label>
+			<div class="controls">
+				<span class="span3" style="padding-top: 5px; font-size: 14px;" id="distributor_you"> <?php if(isset($this->distributor) && printf($this->distributor->title)) ?> </span>
+			</div>
+		</div>
+
+		<div class="control-group">
+			<label for="" class="control-label" style="width: 250px; padding-right: 20px">Accounting organization(My Side) : </label>
+			<div class="controls">
+				<span class="span3" style="padding-top: 5px; font-size: 14px;" id="org_my"><?php if(isset($this->accountOrgMy) && printf($this->accountOrgMy->name)) ?></span>
+			</div>
+		</div>
+
+		<div class="control-group">
+			<label for="" class="control-label" style="width: 250px; padding-right: 20px">Accounting organization(Your Side) : </label>
+			<div class="controls">
+				<span class="span3" style="padding-top: 5px; font-size: 14px;" id="org_you"><?php if(isset($this->accountOrgYou) && printf($this->accountOrgYou->name)) ?></span>
+			</div>
+		</div>
+
+		<div class="control-group">
+			<label for="" class="control-label" style="width: 180px; padding-right: 20px">Finance Client Code : </label>
+			<div class="controls">
+				<input type="text" class="span3" name="finance_client_code" id="finance_client_code" readonly value="<?php if(isset($this->financeClient) && printf($this->financeClient[0]['mnemonic_code'])) ?>">
+			</div>
+		</div>
+
+		<div class="control-group">
+			<label for="" class="control-label" style="width: 180px; padding-right: 20px">Business Date : <span style="color: red">*</span></label>
+			<div class="controls">
+				<input type="text" class="span3 date" name="business_date" id="business_date" placeholder="Select Date" <?php echo $input_status ?> required value="<?php if(isset($this->saleReceipt->business_date) && printf($this->saleReceipt->business_date)) ?>">
+			</div>
+		</div>
+
+		<div class="control-group">
+			<label for="" class="control-label" style="width: 180px; padding-right: 20px">The settlement : </label>
+			<div class="controls">
+				<input type="text" class="span3" name="settlement" id="settlement" <?php echo $input_status ?> value="<?php if(isset($this->saleReceipt->settlement) && printf($this->saleReceipt->settlement)) ?>">
+			</div>
+		</div>
+
+		<div class="control-group">
+			<label for="" class="control-label" style="width: 180px; padding-right: 20px">Payment Date : <span style="color: red">*</span></label>
+			<div class="controls">
+				<input type="text" class="span3 date" name="pay_date" id="pay_date" placeholder="Select Date" <?php echo $input_status ?> required value="<?php if(isset($this->saleReceipt->pay_date) && printf($this->saleReceipt->pay_date)) ?>">
+			</div>
+		</div>
+
+		<div class="control-group">
+			<label for="" class="control-label" style="width: 180px; padding-right: 20px">Remarks : </label>
+			<div class="controls">
+				<textarea cols="2" rows="2" class="span3" name="remark" id="remark" <?php echo $input_status ?> ><?php if(isset($this->saleReceipt->remark) && printf($this->saleReceipt->remark)) ?></textarea>
+			</div>
+		</div>
+
+	</div>
+
+</div>
+</form>
+
+
+<div id="myModal" class="modal hide fade" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+	<div class="modal-header">
+		<button type="button" class="close" data-dismiss="modal" aria-hidden="true">×</button>
+		<h3 id="myModalLabel">Approved</h3>
+	</div>
+
+	<div class="modal-body" style="display: flex; justify-content: center;">
+		<form method="post" id="modalForm">
+			<div class="row">
+				<div class="control-group">
+					<label class="">Finance Date <span style="color: red;">*</span> : </label>
+					<div class="controls">
+						<input type="text" name="finance_date" class="span3 date" id="finance_date" required />
+					</div>
+				</div>
+
+				<div class="control-group">
+					<label class="">Review Remarks : </label>
+					<div class="controls">
+						<textarea cols="2" rows="5" class="span3" name="remark"></textarea>
+					</div>
+				</div>
+			</div>
+
+
+		</div>
+
+		<div class="modal-footer">
+			<input type="hidden" name="id" value="<?php if(isset($this->saleReceipt) && printf($this->saleReceipt->id)) ?>">
+			<input type="hidden" name="action_type" value="1">
+			<button class="btn" data-dismiss="modal" aria-hidden="true">Close</button>
+			<button type="submit" class="btn btn-success" id="approved">Approved</button>
+		</div>
+	</form>
+</div>
+
+<script type="text/javascript" src="/js/jquery-ui-1.8.12.custom.min.js"></script>
+<link rel="stylesheet" type="text/css" href="/css/jquery-ui-1.8.12.custom.css"/>
+<script type="text/javascript" src="/js/dropzone.js"></script>
+
+<script type="text/javascript" src="/js/test.js"></script>
+
+<script type="text/javascript">
+
+	$(document).ready(function () {
+
+		$('#modalForm').submit(function(event) {
+			event.preventDefault();
+
+			var data = $(this).serialize();
+
+			$.ajax({
+				url: '/finance/approved-sale-receipt',
+				type: 'POST',
+				data: data,
+				success: function(response) {
+					Swal.fire({
+						title: 'Deleted!',
+						text: 'Your data has been deleted.',
+						icon: 'success',
+						showConfirmButton: false
+					});
+                // Reload page after 2 seconds (optional)
+					setTimeout(function(){ window.location.href ='/finance/sale-receipt' }, 2000);
+				},
+				error: function(error) {
+        // Handle the error response
+					alert('Error submitting data!');
+				}
+			});
+		});
+
+
+		$(".remove-btn").click(function() {
+			var id = $(this).data("id");
+
+			Swal.fire({
+				title: "Are you sure?",
+				text: "You won't be able to revert this!",
+				icon: 'warning',
+				showCancelButton: true,
+				confirmButtonColor: '#3085d6',
+				cancelButtonColor: '#d33',
+				confirmButtonText: 'Yes, delete!'
+			}).then((result) => {
+				if (result.value) {
+          // Send AJAX request to delete script (explained later)
+					$.ajax({
+						url: "/finance/delete-pay-slip",
+						type: "POST",
+						data: { id: id },
+						success: function(data) {
+							if (data == "success") {
+								Swal.fire({
+									title: 'Deleted!',
+									text: 'Your data has been deleted.',
+									icon: 'success',
+									showConfirmButton: false
+								});
+                // Reload page after 2 seconds (optional)
+								setTimeout(function(){ location.reload(); }, 2000);
+							} else {
+								Swal.fire("Error!", data, "error");
+							}
+						}
+					});
+				}
+			});
+		});
+
+
+		$('#warehouse_id, #store_id').select2();
+		$( '.date' ).datepicker({ dateFormat: "yy-mm-dd" });
+
+		$(function() {
+			$('.bank_account').hide();
+			$("#stm_type").change(function(){
+
+				if($('#stm_type').val() == '1') {
+					$('.bank_account').show();
+					$('#bank_account').prop('required', true);
+				} else {
+					$('.bank_account').hide();
+					$('#bank_account').removeAttr('required'); 
+				} 
+			})
+		});
+
+		$("#store_id").change(function(){
+			var store_id = $("#store_id").val();
+
+			$.get("/finance/load-finance-account-by-store",
+				{store_id : store_id}
+				,function(data,status){
+					var data = $.parseJSON( data );
+
+					// console.log(data);
+
+					if (data.financeclient){
+						var obj = data.financeclient;
+						$('#finance_client').html('<option value="0"> Please Selected </option>');
+						for (var i = 0; i < obj.length; i++) {
+							$('#finance_client').append('<option value="'+obj[i]['id']+'">'+obj[i]['name']+'</option>');
+						}
+					}
+
+					if (data.bankaccount){
+						var obj = data.bankaccount;
+						$('#bank_account').html('<option value="0"> Please Selected </option>');
+						for (var i = 0; i < obj.length; i++) {
+							$('#bank_account').append('<option value="'+obj[i]['id']+'">'+obj[i]['bank_account']+'</option>');
+						}
+					}
+
+					if (data.supre_distributor){
+						var obj = data.supre_distributor;
+						$('#distributor_my').html(obj.title);
+					}
+
+					if (data.distributor){
+						var obj = data.distributor;
+						$('#distributor_you').html(obj.title);
+					}
+
+				});
+		});
+
+		$("#warehouse_id").change(function(){
+			var warehouse_id = $("#warehouse_id").val();
+
+			$.get("/finance/load-finance-account-by-warehouse",
+				{warehouse_id : warehouse_id}
+				,function(data,status){
+					var data = $.parseJSON( data );
+
+					if (data.financeclient){
+						var obj = data.financeclient;
+						$('#finance_client').html('<option value="0"> Please Selected </option>');
+						for (var i = 0; i < obj.length; i++) {
+							$('#finance_client').append('<option value="'+obj[i]['id']+'">'+obj[i]['name']+'</option>');
+						}
+					}
+
+					if (data.supre_distributor){
+						var obj = data.supre_distributor;
+						$('#distributor_my').html(obj.title);
+					}
+
+
+					if (data.bankaccount){
+						var obj = data.bankaccount;
+						$('#bank_account').html('<option value="0"> Please Selected </option>');
+						for (var i = 0; i < obj.length; i++) {
+							$('#bank_account').append('<option value="'+obj[i]['id']+'">'+obj[i]['bank_account']+'</option>');
+						}
+					}
+
+					if (data.distributor){
+						var obj = data.distributor;
+						$('#distributor_you').html(obj.title);
+					}
+
+				});
+		});
+
+		$("#finance_client").change(function(){
+			var finance_client = $("#finance_client").val();
+			var store_id = $("#store_id").val();
+
+			$.get("/finance/load-account-org-by-finance-client",
+				{finance_client : finance_client, store_id : store_id}
+				,function(data,status){
+					var data = $.parseJSON( data );
+
+					if(data.financeClient) {
+						var obj = data.financeClient;
+						$('#finance_client_code').val(obj.mnemonic_code);
+					}
+
+					if (data.accountOrgMy) {
+						var obj = data.accountOrgMy;
+						$('#org_my').html(obj.name);
+					}
+
+					if (data.accountOrgYou) {
+						var obj = data.accountOrgYou;
+						$('#org_you').html(obj.name);
+					}
+
+				});
+		});
+
+	});
+</script>

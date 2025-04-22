@@ -1,0 +1,130 @@
+<?php 
+
+// print_r($this->proceed);
+
+if(isset($this->proceed) && $this->proceed == 1) {
+
+	$header = '<h1 style="font-family: Times New Roman;">Edit Accounting Organization</h1>';
+	$edit = 'disabled';
+
+} elseif(isset($this->proceed) && $this->proceed == 2) {
+
+	$header = '<h1 style="font-family: Times New Roman;">Accounting Organization Detail</h1>';
+	$detail = 'disabled';
+	$button = 'hidden';
+
+} else{
+
+	$header = '<h1 style="font-family: Times New Roman;">Add Accounting Organization</h1>';
+}
+
+?>
+
+<div class="page-header">
+
+	<?php echo $header; ?>
+
+</div>
+
+<form class="form-horizontal" action="<?php echo HOST.'finance/save-accounting-organization' ?>" method="post">
+	<div class="row" style="border-style: solid; padding: 30px 10px 10px 10px; border-color: lavender;">
+
+		<div class="span6">
+
+			<div class="control-group">
+				<label for="dis_id" class="control-label" style="width: 180px; padding-right: 20px;">Distributor(My Side) : <span style="color: red">*</span></label>
+				<div class="controls">
+					<select class="span3" name="dis_id" id="dis_id" <?php echo $edit; ?> <?php echo $detail; ?> required>
+						<option value=""> Please Select </option>
+						<?php foreach ($this->distributor as $value) : ?>
+							<option value="<?php echo $value['id'] ?>" <?php if($this->account->d_id == $value['id']) { ?> selected <?php } ?>><?php echo $value['title'] ?></option>
+						<?php endforeach; ?>
+					</select>
+				</div>
+			</div>
+
+			<div class="control-group">
+				<label for="corporation_type" class="control-label" style="width: 180px; padding-right: 20px;">Corporation Type : <span style="color: red">*</span></label>
+				<div class="controls">
+					<select class="span3" name="corporation_type" id="corporation_type" <?php echo $detail; ?> required>
+						<option value=""> Please Selected </option>
+						<option value="1" <?php if($this->account->corporation_type == 1) { ?> selected <?php } ?> > Corporation </option>
+						<option value="2" <?php if($this->account->corporation_type == 2) { ?> selected <?php } ?> > Profit Center </option>
+					</select>
+				</div>
+			</div>
+
+			<div class="control-group">
+				<label for="taxpayer_identification" class="control-label" style="width: 180px; padding-right: 20px;">Identification No. : <span style="color: red">*</span></label>
+				<div class="controls">
+					<input type="text" name="taxpayer_identification" id="taxpayer_identification" class="span3" required value="<?php echo $this->account->identification_no ?>" <?php echo $detail; ?>/>
+				</div>
+			</div>
+
+			<div class="control-group">
+				<label for="mnemonic_code" class="control-label" style="width: 180px; padding-right: 20px;">Mnemonic code. : <span style="color: red">*</span></label>
+				<div class="controls">
+					<input type="text" name="mnemonic_code" id="mnemonic_code" class="span3" required value="<?php echo $this->account->mnemonic_code ?>" <?php echo $detail; ?>/>
+				</div>
+			</div>
+
+		</div>
+
+		<div class="span6">
+
+			<div class="control-group">
+				<label for="accounting_organization" class="control-label" style="width: 250px; padding-right: 20px;">Accounting organization : <span style="color: red">*</span></label>
+				<div class="controls">
+					<input type="text" name="accounting_organization" id="accounting_organization" class="span3" required value="<?php echo $this->account->name ?>" <?php echo $detail; ?>/>
+				</div>
+			</div>
+
+			<div class="control-group">
+				<label for="credit_code" class="control-label" style="width: 250px; padding-right: 20px;">Enterprise unified credit code. : </label>
+				<div class="controls">
+					<input type="text" name="credit_code" id="credit_code" class="span3" value="<?php echo $this->account->credit_code ?>" <?php echo $detail; ?>/>
+				</div>
+			</div>
+
+			<div class="control-group">
+				<label for="remark" class="control-label" style="width: 250px; padding-right: 20px;"> Remark : </label>
+				<div class="controls">
+					<textarea name="remark" cols="2" rows="3" class="span3" <?php echo $detail; ?>> <?php echo $this->account->credit_code ?> </textarea>
+				</div>
+			</div>
+
+		</div>
+
+
+		<div class="span12" style="padding-bottom: 400px; padding-left: 50px; padding-top: 20px;">
+			<div class="control-group">
+				<input type="hidden" id="back_url" name="back_url" value="/finance/accounting-organization">
+				<input type="hidden" name="id" value="<?php echo $this->account->id ?>" />
+
+				<button type="submit" class="btn btn-success <?php echo $button ?>"> Save </button>
+
+				<button type="button" class="btn btn-danger go-back"> Back </button>
+			</div>
+		</div>
+
+
+	</div>
+
+
+</form>
+
+<script type="text/javascript">
+
+	$(document).ready(function () {
+
+		initGoBack();
+	});
+	
+	function initGoBack(){
+		$('.go-back').click(function(e){
+			window.location.href = $('#back_url').val();
+			return false;
+		});
+	}
+
+</script>

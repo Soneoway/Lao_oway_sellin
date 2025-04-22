@@ -1,0 +1,1133 @@
+<?php
+$user_agent = getenv("HTTP_USER_AGENT");
+$os = '';
+if(strpos($user_agent, "Win") !== FALSE)
+    $os = "Windows";
+elseif(strpos($user_agent, "Mac") !== FALSE)
+    $os = "Mac";
+?>
+
+
+<?php
+
+function convert_date_thai($strDate)
+{
+    $strYear = date("Y",strtotime($strDate))+543;
+    $strMonth= date("n",strtotime($strDate));
+    $strDay= date("j",strtotime($strDate));
+    $strHour= date("H",strtotime($strDate));
+    $strMinute= date("i",strtotime($strDate));
+    $strSeconds= date("s",strtotime($strDate));
+    $strMonthCut = Array("","ม.ค.","ก.พ.","มี.ค.","เม.ย.","พ.ค.","มิ.ย.","ก.ค.","ส.ค.","ก.ย.","ต.ค.","พ.ย.","ธ.ค.");
+    $strMonthThai=$strMonthCut[$strMonth];
+    return "$strDay $strMonthThai $strYear";
+}
+
+function convert_number($number){ 
+    $txtnum1 = array('ศูนย์','หนึ่ง','สอง','สาม','สี่','ห้า','หก','เจ็ด','แปด','เก้า','สิบ'); 
+    $txtnum2 = array('','สิบ','ร้อย','พัน','หมื่น','แสน','ล้าน','สิบ','ร้อย','พัน','หมื่น','แสน','ล้าน'); 
+    $number = str_replace(",","",$number); 
+    $number = str_replace(" ","",$number); 
+    $number = str_replace("บาท","",$number); 
+    $number = explode(".",$number); 
+    if(sizeof($number)>2){ 
+        return 'ทศนิยมหลายตัวนะจ๊ะ'; 
+        exit; 
+    } 
+    $strlen = strlen($number[0]); 
+    $convert = ''; 
+    for($i=0;$i<$strlen;$i++){ 
+        $n = substr($number[0], $i,1); 
+        if($n!=0){ 
+            if($i==($strlen-1) AND $n==1){ $convert .= 'เอ็ด'; } 
+            elseif($i==($strlen-2) AND $n==2){  $convert .= 'ยี่'; } 
+            elseif($i==($strlen-2) AND $n==1){ $convert .= ''; } 
+            else{ $convert .= $txtnum1[$n]; } 
+            $convert .= $txtnum2[$strlen-$i-1]; 
+        } 
+    } 
+
+    $convert .= 'บาท'; 
+    if($number[1]=='0' OR $number[1]=='00' OR 
+        $number[1]==''){ 
+        $convert .= 'ถ้วน'; 
+}else{ 
+    $strlen = strlen($number[1]); 
+    for($i=0;$i<$strlen;$i++){ 
+        $n = substr($number[1], $i,1); 
+        if($n!=0){ 
+            if($i==($strlen-1) AND $n==1){$convert 
+                .= 'เอ็ด';} 
+                elseif($i==($strlen-2) AND 
+                    $n==2){$convert .= 'ยี่';} 
+                    elseif($i==($strlen-2) AND 
+                        $n==1){$convert .= '';} 
+                        else{ $convert .= $txtnum1[$n];} 
+                    $convert .= $txtnum2[$strlen-$i-1]; 
+                } 
+            } 
+            $convert .= 'สตางค์'; 
+        } 
+        return $convert; 
+    } 
+
+      //  print_r($this->market);
+    ?>
+
+
+
+    <!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
+    <html>
+    <head>
+        <meta http-equiv="Content-Type" content="text/html; charset=utf-8">
+        <title>Print</title>
+        <script src="//ajax.googleapis.com/ajax/libs/jquery/1.10.2/jquery.min.js"></script>
+        <style type="text/css">   
+        @media print
+        {
+          #print {display: none;}
+          .alert{display: none;}
+          .page-break { display:block;height:1px; page-break-before:always; }
+          .page-break-no{ display:block;height:1px; page-break-after:avoid; } 
+      }
+      body{margin:0 auto;width:595px;font-size:10px;font-family:Times New Roman;padding-bottom:}.top{width:595px;text-align:right}.top p{height:24px;line-height:24px;margin:0}.textbox{width:600px;border:1px solid black;height:70px}.blank10{height:10px;clear:both}.title{width:600px;text-align:center;height:30px;font-size:15px;line-height:30px;background-:#fabf8f;font-weight:bold}.tbl,.tbllist{width:600px;background-:#ccc;text-align:center;font-weight:bold}.tbl tr{margin:0}.tbl tr td,.tbllist tr td{background-:#fff}.tbl .firsttd{width:145px}.tbl .secondtd{width:100px}.tbl .thirdtd{width:36px}.tbl .forthtd{width:65px}.assign{width:100px;font-weight:bold;float:left;height:100px;margin-top:10px;border-bottom:1px solid black;margin-right:20px}.note{border-bottom:1px dotted #ccc;width:300px;float:left;margin:9px 0 0 25px}.green{text-align:center}.green td{background-:#ccffcc!important}#logo{float:left;display:block}#logo img{width:136px;margin-top:10px}.trcenter{text-align:center}
+      .invoice{width:453px;display:block;clear:both;margin-left:119px}
+      .invoice-number{float:left;padding-left:37px;}
+      .order-type{float:right;text-align:right}
+      .right{text-align:right}
+      .detail{width:587px}
+      .detail .col1{width:140px;float:left;}
+      .detail .col1-1{width:70px;float:left;}
+      .detail .col2{width:374px;float:left}
+      .detail .col2 span{font-weight:bold}
+      .detail .col2-1{width:140px;float:left}
+      .detail .col2-1 span{font-weight:bold}
+      .detail .col2-2{width:230px;float:left}
+      .detail .col2-2 span{font-weight:bold}
+      .detail .col3{width:150px;float:left}
+      .detail .col3 span{font-weight:bold;}
+      .clear{clear:both}
+      .colleft{float:left;width:300px;}
+      .colright{float:right;width:165px}
+      .vat{width:435px!important;float:right!important}#vatnumber{clear:both}#vatnumber .sn{width:54px;border:1px solid black;height:14px;float:left}.marksn{float:left;border-left:1px solid black;font-weight:bold;padding-left:3px}.order{float:left;margin-left:10px}.order .sn{width:5px;height:10px;border:1px solid black;float:left;margin-left:5px}.order .alert{margin-left:16px;margin-bottom:4px}
+      .title small {
+        float: right;
+        font-weight: normal;
+        font-size: 8px;
+        padding-right: 2em;
+    }
+    .not_show{}
+    .not_show_sumary{display: none;}
+    input[type="text"]
+    {
+        display: block;
+        margin: 0px;
+        font-family: time new roman;
+        font-weight: bold;
+        text-align: center;
+        font-size: 10px;
+        border: none;
+    }
+    .model
+    {font-size: 8px !important;
+        text-transform:uppercase;
+    }
+    .imgbutton{width:40px !important;cursor:pointer;}
+    .print{width:20px !important;}
+    .scroll{overflow:hidden;}
+    .number{width:10px;}
+    .total_price{width:265px;margin-left: 330px;}
+    .alert{color:red;font-size: 18px}
+
+    .blockOverlay{
+        z-index: 10000 !important;
+    }
+    .blockPage{
+        z-index: 10001 !important;
+    }
+
+    .fontsize18{
+        font-size: 18px;
+        font-weight: bold;
+    }
+    .fontsize12{
+        font-size: 12px;
+        /*font-weight: bold;*/
+    }
+
+    .fontsize11{
+        font-size: 11px;
+    }
+
+    span{
+        margin-left: 10px;
+        margin-right: 10px;
+    }
+
+</style>
+
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
+
+<script type="text/javascript">
+    var i=0;
+    var soluong=0;
+    var tSoluong=0;
+    var tTotal=0;
+    var dongia=0;
+    function expand(id) {
+        var len = document.getElementById(id).value.length;
+        document.getElementById(id).size = len + 1;
+    }
+    function number(value)
+    {
+        soluong=value;
+        tSoluong =parseInt(tSoluong)+parseInt(soluong);
+    }
+    function price(value)
+    {
+        dongia=value;
+
+        var total=dongia*soluong;
+        tTotal =parseInt(tTotal)+parseInt(total);
+        document.getElementById('price'+i).value = total;
+        document.getElementById('subNumber').value = tSoluong;
+        document.getElementById('subTotal').value = tTotal;
+    }
+    function displayResult()
+    {
+        var table=document.getElementById("myTable");
+        var row=table.insertRow(i+1);
+        var cell1=row.insertCell(0);
+        var cell2=row.insertCell(1);
+        var cell3=row.insertCell(2);
+        var cell4=row.insertCell(3);
+        var cell5=row.insertCell(4);
+        var cell6=row.insertCell(5);
+        var cell7=row.insertCell(6);
+        var cell8=row.insertCell(7);
+
+        cell1.innerHTML=i+1;i++;
+        cell2.innerHTML='<input type="text" name="goods_name" value="" style="width:95px;overflow:hidden;font-size:8px;" onkeyup = "expand(this.id)" >';
+        cell3.innerHTML='<input class="model" type="text" name="goods_name" value="" style="width:113px;">';
+        cell4.innerHTML='<input type="text" name="goods_name" value="" style="width:36px;" >';
+        cell5.innerHTML='<input type="text" name="goods_name" class="number"  value="" style="width:18px;margin: auto;" onblur="number(this.value);" >';
+        cell6.innerHTML='<input type="text" name="goods_name" id="dongia'+i+'" value="" onblur="price(this.value);" style="width:45px;" >';
+        cell7.innerHTML='<input type="text" name="goods_name" id="price'+i+'"   style="width:50px;margin:auto;" >';
+        cell8.innerHTML='<input type="text" name="goods_name" value="" style="width:86px;" >';
+    }
+    function Print()
+    {
+        $( ".imgbutton" ).remove();
+        window.print();
+    }
+
+</script>
+</head>
+<body>
+    <div id="print" >
+        <br>
+        <img src="<?php echo HOST ?>img/print.png" title="Print" class="imgbutton print" onclick="Print()" id=""  />
+        <img src="<?php echo HOST ?>img/return_box.png" title="Return To List" class="imgbutton print" onclick="close_back()" id="close"  />
+        <br>
+        <br>
+    </div>
+
+    <?php
+    if (isset($this->get_resule) and $this->get_resule){
+        foreach ($this->get_resule as $k=>$m)
+        {
+
+            $textFlag = $m['wht_running_no'];
+            $textFlag = strtoupper($textFlag);
+            $wo = false;
+
+            if (strpos($textFlag, 'WO') !== false) {
+                $wo = true;
+            }
+
+            ?>
+            <div class="page-break">&nbsp;</div>
+            <div style="margin-left: -60px;margin-right: -60px; margin-top: <?php if(!$wo){echo '20';}else{echo '10';}?>px;">
+                <span class="fontsize12" style="display: none;" >
+                    ฉบับที่ 3 (สำหรับผู้หักภาษี ณ ที่จ่าย เก็บไว้เป็นหลักฐาน) (บัญชี)
+                </span>
+                <br>
+                <span class="fontsize18">
+                    หนังสือรับรองการหักภาษี ณ ที่จ่าย
+                </span>
+                <span style="margin-left: <?php if($os==="Mac"){echo '20';}else{echo '5';}?>px;">
+                    ตามมาตรา 50 ทวิ แห่งประมวลรัษฎากร
+                </span>
+                <span class="fontsize12" style="margin-left: <?php if($os==="Mac"){echo '20';}else{echo '5';}?>px;">
+                    เล่มที่
+                </span>
+                <span class="fontsize12" style="margin-left: 50px;">
+                    เลขที่ &nbsp<?=$m['wht_running_no']?>
+                </span>
+                <div class="fontsize12" style="margin-left: 510px;margin-top: -9px;">.................&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp...................................</div>
+                <table style="border-collapse: collapse; width: 100%; border-color: black;" border="1">
+                    <tr>
+                        <td>
+                            <span class="fontsize18">
+                                ผู้มีหน้าที่หักภาษี ณ ที่จ่าย :
+                            </span>
+                            <span class="fontsize12" style="margin-left: 40px;">
+                                เลขที่ประจำตัวผู้เสียภาษีอากร
+                            </span>
+                            <div style="position: absolute;margin-top: -22px;margin-left: 445px;">
+                                <table style="border-collapse: collapse;height: <?php if(!$wo){echo '30';}else{echo '20';}?>px;" border="1">
+                                    <tr align="center" class="fontsize12">
+                                        <td style="width: 17px;">0</td>
+                                        <td style="width: 17px;">7</td>
+                                        <td style="width: 17px;">4</td>
+                                        <td style="width: 17px;">5</td>
+                                        <td style="width: 17px;">5</td>
+                                        <td style="width: 17px;">5</td>
+                                        <td style="width: 17px;">2</td>
+                                        <td style="width: 17px;">0</td>
+                                        <td style="width: 17px;">0</td>
+                                        <td style="width: 17px;">0</td>
+                                        <td style="width: 17px;">8</td>
+                                        <td style="width: 17px;">6</td>
+                                        <td style="width: 17px;">6</td>
+                                    </tr>
+                                </table>
+                            </div>
+                            <br>
+                            <br>
+                            <span class="fontsize12">
+                                ชื่อ
+                            </span>
+                            <span class="fontsize18">
+                                <?php if($m['create_date'] < '2019/02/01') { ?>
+                                    บริษัท ไทย ออปโป้ จำกัด (สำนักงานใหญ่)
+                                <?php }else{ ?>
+                                    บริษัท โพสเซฟี่ กรุ๊ป จำกัด (สำนักงานใหญ่)
+                                <?php } ?>
+                            </span>
+                            <div class="fontsize12" style="margin-left: 25px;margin-top: -10px;">.................................................................................................................................................................................................................</div>
+                            <?php if(!$wo){ ?>
+                                <span style="margin-left: 100px;">
+                                    (ให้ระบุว่าเป็น บุคคล นิติบุคคล บริษัท สมาคม หรือคณะบุคคล)
+                                </span>
+                                <br>
+                                <br>
+                            <?php } ?>
+                            <span class="fontsize12">
+                                ที่อยู่
+                            </span>
+                            <span class="fontsize12" style="margin-left: -5px;">
+                             89 อาคารเอไอเอ แคปปิตอล เซ็นเตอร์ ชั้น 31 ห้องเลขที่ 5-7 ถนนรัชดาภิเษก แขวงดินแดง เขตดินเเดง กรุงเทพมหานคร 10400
+                         </span>
+                         <div class="fontsize12" style="margin-left: 33px;margin-top: -10px;">..............................................................................................................................................................................................................</div>
+                         <?php if(!$wo){ ?>
+                            <span style="margin-left: 100px;">
+                                (ให้ระบุ เลขที่ ตรอก/ซอย หมู่ที่ ถนน ตำบล/แขวง อำเภอ/เขต จังหวัดและโทรศัพท์)
+                            </span>
+                        <?php } ?>
+                    </td>
+                </tr>
+                <tr>
+                    <td>
+                        <span class="fontsize18">
+                            ผู้ถูกหักภาษี ณ ที่จ่าย :
+                        </span>
+                        <span class="fontsize12" style="margin-left: 75px;">
+                            เลขที่ประจำตัวผู้เสียภาษีอากร
+                        </span>
+                        <?php
+                    //0135557003494
+                    //echo "->>".$m['wht_type'];
+                        if(strlen($m['distributor_tax_no'])==15){
+                            $running_no00 = substr($m['distributor_tax_no'],0,-14);
+                            $running_no01 = substr($m['distributor_tax_no'],1,-13);
+                            $running_no02 = substr($m['distributor_tax_no'],2,-12);
+                            $running_no03 = substr($m['distributor_tax_no'],3,-11);
+                            $running_no04 = substr($m['distributor_tax_no'],4,-10);
+                            $running_no05 = substr($m['distributor_tax_no'],5,-9);
+                            $running_no06 = substr($m['distributor_tax_no'],6,-8);
+                            $running_no07 = substr($m['distributor_tax_no'],7,-7);
+                            $running_no08 = substr($m['distributor_tax_no'],8,-6);
+                            $running_no09 = substr($m['distributor_tax_no'],9,-5);
+                            $running_no10 = substr($m['distributor_tax_no'],10,-4);
+                            $running_no11 = substr($m['distributor_tax_no'],11,-3);
+                            $running_no12 = substr($m['distributor_tax_no'],12,-2);
+                        }else{
+                        //echo $m['distributor_tax_no'];
+                            $running_no00 = substr($m['distributor_tax_no'],0,-12);
+                            $running_no01 = substr($m['distributor_tax_no'],1,-11);
+                            $running_no02 = substr($m['distributor_tax_no'],2,-10);
+                            $running_no03 = substr($m['distributor_tax_no'],3,-9);
+                            $running_no04 = substr($m['distributor_tax_no'],4,-8);
+                            $running_no05 = substr($m['distributor_tax_no'],5,-7);
+                            $running_no06 = substr($m['distributor_tax_no'],6,-6);
+                            $running_no07 = substr($m['distributor_tax_no'],7,-5);
+                            $running_no08 = substr($m['distributor_tax_no'],8,-4);
+                            $running_no09 = substr($m['distributor_tax_no'],9,-3);
+                            $running_no10 = substr($m['distributor_tax_no'],10,-2);
+                            $running_no11 = substr($m['distributor_tax_no'],11,-1);
+                            $running_no12 = substr($m['distributor_tax_no'],12,13);
+                        }
+
+                        ?>
+                        <div style="position: absolute;margin-top: -22px;margin-left: 445px;">
+                            <table style="border-collapse: collapse;height: <?php if(!$wo){echo '30';}else{echo '20';}?>px;" border="1">
+                                <tr align="center" class="fontsize12">
+                                    <td style="width: 17px;"><?php echo $running_no00?></td>
+                                    <td style="width: 17px;"><?php echo $running_no01?></td>
+                                    <td style="width: 17px;"><?php echo $running_no02?></td>
+                                    <td style="width: 17px;"><?php echo $running_no03?></td>
+                                    <td style="width: 17px;"><?php echo $running_no04?></td>
+                                    <td style="width: 17px;"><?php echo $running_no05?></td>
+                                    <td style="width: 17px;"><?php echo $running_no06?></td>
+                                    <td style="width: 17px;"><?php echo $running_no07?></td>
+                                    <td style="width: 17px;"><?php echo $running_no08?></td>
+                                    <td style="width: 17px;"><?php echo $running_no09?></td>
+                                    <td style="width: 17px;"><?php echo $running_no10?></td>
+                                    <td style="width: 17px;"><?php echo $running_no11?></td>
+                                    <td style="width: 17px;"><?php echo $running_no12?></td>
+                                </tr>
+                            </table>
+                        </div>
+                        <br>
+                        <br>
+                        <span class="fontsize12">
+                            ชื่อ
+                        </span>
+                        <span class="fontsize12">
+                            <?=$m['distributor_name']?>
+                        </span>
+                        <div class="fontsize12" style="margin-left: 25px;margin-top: -10px;">.................................................................................................................................................................................................................</div>
+                        <?php if(!$wo){ ?>
+                            <span style="margin-left: 100px;">
+                                (ให้ระบุว่าเป็น บุคคล นิติบุคคล บริษัท สมาคม หรือคณะบุคคล)
+                            </span>
+                            <br>
+                            <br>
+                        <?php } ?>
+                        <span class="fontsize12" style="float: left;">
+                            ที่อยู่
+                        </span>
+                        <div class="fontsize12" style="margin-left: 45px; width: 350px;">
+                         <?=$m['address_tax']?>
+                     </div>
+                     <div class="fontsize12" style="margin-left: 33px;margin-top: -10px;">..............................................................................................................................................................................................................</div>
+                     <?php if(!$wo){ ?>
+                        <span style="margin-left: 100px;">
+                            (ให้ระบุ เลขที่ ตรอก/ซอย หมู่ที่ ถนน ตำบล/แขวง อำเภอ/เขต จังหวัดและโทรศัพท์)
+                        </span>
+                    <?php } ?>
+                </td>
+            </tr>
+            <tr>
+                <td>
+                    <table style="border-collapse: collapse;width: 100%;">
+                        <tr style="padding-top: 50px;">
+                            <td style="width: 250px; height: 40px;">
+                                <span class="fontsize18">
+                                    ลำดับที่*
+                                </span>
+                                <div style="border-style: solid; border-width: 1px; height: 25px; width: 110px; position: absolute; margin-top: -25px; margin-left: 80px;">
+                                </div>
+                                <span class="fontsize12" style="margin-left: 105px;">
+                                    ในแบบ
+                                </span>
+                            </td>
+                            <td>
+                                <?php 
+                                $show_payment_type_wht_vat_53 = 'class="fa fa-square-o"';
+                                $show_payment_type_wht_vat_3 = 'class="fa fa-square-o"';
+
+                                if(in_array($m['payment_type_wht_vat_01'], ['ภ.ง.ด.53','ภ.ง.ด. 53','ภ.ง.ด53','ภ.ง.ด 53']))
+                                {
+                                    $show_payment_type_wht_vat_53 = 'class="fa fa-check-square-o"';
+                                }
+
+                                if(in_array($m['payment_type_wht_vat_01'], ['ภ.ง.ด.3','ภ.ง.ด. 3','ภ.ง.ด3','ภ.ง.ด 3']))
+                                {
+                                    $show_payment_type_wht_vat_3 = 'class="fa fa-check-square-o"';
+                                }
+
+                                if(in_array($m['payment_type_wht_vat_02'], ['ภ.ง.ด.53','ภ.ง.ด. 53','ภ.ง.ด53','ภ.ง.ด 53']))
+                                {
+                                    $show_payment_type_wht_vat_53 = 'class="fa fa-check-square-o"';
+                                }
+
+                                if(in_array($m['payment_type_wht_vat_02'], 'ภ.ง.ด.3','ภ.ง.ด. 3','ภ.ง.ด3','ภ.ง.ด 3'))
+                                {
+                                    $show_payment_type_wht_vat_3 = 'class="fa fa-check-square-o"';
+                                }
+
+                                if(in_array($m['payment_type_wht_vat_03'], ['ภ.ง.ด.53','ภ.ง.ด. 53','ภ.ง.ด53','ภ.ง.ด 53']))
+                                {
+                                    $show_payment_type_wht_vat_53 = 'class="fa fa-check-square-o"';
+                                }
+
+                                if(in_array($m['payment_type_wht_vat_03'], ['ภ.ง.ด.3','ภ.ง.ด. 3','ภ.ง.ด3','ภ.ง.ด 3']))
+                                {
+                                    $show_payment_type_wht_vat_3 = 'class="fa fa-check-square-o"';
+                                }
+
+                                if(in_array($m['payment_type_wht_vat_04'], ['ภ.ง.ด.53','ภ.ง.ด. 53','ภ.ง.ด53','ภ.ง.ด 53']))
+                                {
+                                    $show_payment_type_wht_vat_53 = 'class="fa fa-check-square-o"';
+                                }
+
+                                if(in_array($m['payment_type_wht_vat_04'], ['ภ.ง.ด.3','ภ.ง.ด. 3','ภ.ง.ด3','ภ.ง.ด 3']))
+                                {
+                                    $show_payment_type_wht_vat_3 = 'class="fa fa-check-square-o"';
+                                }
+
+                                if(in_array($m['payment_type_wht_vat_05'], ['ภ.ง.ด.53','ภ.ง.ด. 53','ภ.ง.ด53','ภ.ง.ด 53']))
+                                {
+                                    $show_payment_type_wht_vat_53 = 'class="fa fa-check-square-o"';
+                                }
+
+                                if(in_array($m['payment_type_wht_vat_05'], ['ภ.ง.ด.3','ภ.ง.ด. 3','ภ.ง.ด3','ภ.ง.ด 3']))
+                                {
+                                    $show_payment_type_wht_vat_3 = 'class="fa fa-check-square-o"';
+                                }
+
+                                if(in_array($m['payment_type_wht_vat_06'], ['ภ.ง.ด.53','ภ.ง.ด. 53','ภ.ง.ด53','ภ.ง.ด 53']))
+                                {
+                                    $show_payment_type_wht_vat_53 = 'class="fa fa-check-square-o"';
+                                }
+
+                                if(in_array($m['payment_type_wht_vat_06'], ['ภ.ง.ด.3','ภ.ง.ด. 3','ภ.ง.ด3','ภ.ง.ด 3']))
+                                {
+                                    $show_payment_type_wht_vat_3 = 'class="fa fa-check-square-o"';
+                                }
+
+                                if(in_array($m['payment_type_wht_vat_07'], ['ภ.ง.ด.53','ภ.ง.ด. 53','ภ.ง.ด53','ภ.ง.ด 53']))
+                                {
+                                    $show_payment_type_wht_vat_53 = 'class="fa fa-check-square-o"';
+                                }
+
+                                if(in_array($m['payment_type_wht_vat_07'], ['ภ.ง.ด.3','ภ.ง.ด. 3','ภ.ง.ด3','ภ.ง.ด 3']))
+                                {
+                                    $show_payment_type_wht_vat_3 = 'class="fa fa-check-square-o"';
+                                }
+
+                                if(in_array($m['payment_type_wht_vat_08'], ['ภ.ง.ด.53','ภ.ง.ด. 53','ภ.ง.ด53','ภ.ง.ด 53']))
+                                {
+                                    $show_payment_type_wht_vat_53 = 'class="fa fa-check-square-o"';
+                                }
+
+                                if(in_array($m['payment_type_wht_vat_08'], ['ภ.ง.ด.3','ภ.ง.ด. 3','ภ.ง.ด3','ภ.ง.ด 3']))
+                                {
+                                    $show_payment_type_wht_vat_3 = 'class="fa fa-check-square-o"';
+                                }
+
+                                if(in_array($m['payment_type_wht_vat_09'], ['ภ.ง.ด.53','ภ.ง.ด. 53','ภ.ง.ด53','ภ.ง.ด 53']))
+                                {
+                                    $show_payment_type_wht_vat_53 = 'class="fa fa-check-square-o"';
+                                }
+
+                                if(in_array($m['payment_type_wht_vat_09'], ['ภ.ง.ด.3','ภ.ง.ด. 3','ภ.ง.ด3','ภ.ง.ด 3']))
+                                {
+                                    $show_payment_type_wht_vat_3 = 'class="fa fa-check-square-o"';
+                                }
+
+                                if(in_array($m['payment_type_wht_vat_10'], ['ภ.ง.ด.53','ภ.ง.ด. 53','ภ.ง.ด53','ภ.ง.ด 53']))
+                                {
+                                    $show_payment_type_wht_vat_53 = 'class="fa fa-check-square-o"';
+                                }
+
+                                if(in_array($m['payment_type_wht_vat_10'], ['ภ.ง.ด.3','ภ.ง.ด. 3','ภ.ง.ด3','ภ.ง.ด 3']))
+                                {
+                                    $show_payment_type_wht_vat_3 = 'class="fa fa-check-square-o"';
+                                }
+
+                                ?>
+                                <i class="fa fa-square-o" style="font-size: 13px;"></i><span class="fontsize11">(1) ภ.ง.ด. 1ก</span>
+                                <br>
+                                <i class="fa fa-square-o" style="font-size: 13px;"></i><span class="fontsize11">(5) ภ.ง.ด. 2ก</span>
+                            </td>
+                            <td>
+                                <i class="fa fa-square-o" style="font-size: 13px;"></i><span class="fontsize11">(2) ภ.ง.ด. 1ก พิเศษ</span>
+                                <br>
+                                <i class="fa fa-square-o" style="font-size: 13px;"></i><span class="fontsize11">(6) ภ.ง.ด. 3ก</span>
+                            </td>
+                            <td>
+                                <i class="fa fa-square-o" style="font-size: 13px;"></i><span class="fontsize11">(3) ภ.ง.ด. 2</span>
+                                <br>
+                                <i <?php echo $show_payment_type_wht_vat_53;?> style="font-size: 13px;"></i><span class="fontsize11">(7) ภ.ง.ด. 53</span>
+                            </td>
+                            <td>
+                                <i <?php echo $show_payment_type_wht_vat_3;?> style="margin-top: -30px; font-size: 13px;"></i><span class="fontsize11">(4) ภ.ง.ด. 3</span>
+                                <br>
+                                <br>
+                            </td>
+                        </tr>
+                    </table>
+                </td>
+            </tr>
+            <tr>
+                <td>
+                    <table style="border-collapse: collapse;width: 100%;">
+                        <tr>
+                            <td style="width: 370px; border-bottom: 1px solid; border-right: 1px solid;" align="center">
+                                <span class="fontsize18">ประเภทเงินได้ที่จ่าย</span>
+                            </td>
+                            <td style="width: 100px; border-bottom: 1px solid; border-right: 1px solid;" align="center">
+                                <span class="fontsize12">วัน เดือน หรือ</span>
+                                <br>
+                                <span class="fontsize12">ปีภาษีที่จ่าย</span>
+                            </td>
+                            <td style="border-bottom: 1px solid; border-right: 1px solid;" align="center" colspan="2">
+                                <span class="fontsize12">จำนวนเงินที่จ่าย</span>
+                            </td>
+                            <td style="border-bottom: 1px solid;" align="center" colspan="2">
+                                <span class="fontsize12">ภาษีที่หัก</span>
+                                <br>
+                                <span class="fontsize12">และนำส่งไว้</span>
+                            </td>
+                        </tr>
+
+                        <?php
+                        $payment_name_01="";$payment_name_02="";$payment_name_03="";$payment_name_04="";$payment_name_05="";$payment_name_06="";$payment_name_07="";$payment_name_08="";$payment_name_09="";$payment_name_10="";
+                        $payment_date_01="";$payment_price_01="";$payment_wht_vat_01="";
+                        if($m['payment_price_01'] > 0){
+                            $payment_name_01=$m['payment_name_01'];
+                            $payment_date_01=convert_date_thai($m['payment_date_01']);
+                            $payment_price_01=number_format($m['payment_price_01'],2);
+                            $payment_wht_vat_01=number_format($m['payment_wht_vat_01'],2);
+                        }
+
+                        $payment_date_02="";$payment_price_02="";$payment_wht_vat_02="";
+                        if($m['payment_price_02'] > 0){
+                            $payment_name_02=$m['payment_name_02'];
+                            $payment_date_02=convert_date_thai($m['payment_date_02']);
+                            $payment_price_02=number_format($m['payment_price_02'],2);
+                            $payment_wht_vat_02=number_format($m['payment_wht_vat_02'],2);
+                        }
+
+                        $payment_date_03="";$payment_price_03="";$payment_wht_vat_03="";
+                        if($m['payment_price_03'] > 0){
+                            $payment_name_03=$m['payment_name_03'];
+                            $payment_date_03=convert_date_thai($m['payment_date_03']);
+                            $payment_price_03=number_format($m['payment_price_03'],2);
+                            $payment_wht_vat_03=number_format($m['payment_wht_vat_03'],2);
+                        }
+
+                        $payment_date_04="";$payment_price_04="";$payment_wht_vat_04="";
+                        if($m['payment_price_04'] > 0){
+                            $payment_name_04=$m['payment_name_04'];
+                            $payment_date_04=convert_date_thai($m['payment_date_04']);
+                            $payment_price_04=number_format($m['payment_price_04'],2);
+                            $payment_wht_vat_04=number_format($m['payment_wht_vat_04'],2);
+                        }
+
+                        $payment_date_05="";$payment_price_05="";$payment_wht_vat_05="";
+                        if($m['payment_price_05'] > 0){
+                            $payment_name_05=$m['payment_name_05'];
+                            $payment_date_05=convert_date_thai($m['payment_date_05']);
+                            $payment_price_05=number_format($m['payment_price_05'],2);
+                            $payment_wht_vat_05=number_format($m['payment_wht_vat_05'],2);
+                        }
+
+                        $payment_date_06="";$payment_price_06="";$payment_wht_vat_06="";
+                        if($m['payment_price_06'] > 0){
+                            $payment_name_06=$m['payment_name_06'];
+                            $payment_date_06=convert_date_thai($m['payment_date_06']);
+                            $payment_price_06=number_format($m['payment_price_06'],2);
+                            $payment_wht_vat_06=number_format($m['payment_wht_vat_06'],2);
+                        }
+
+                        $payment_date_07="";$payment_price_07="";$payment_wht_vat_07="";
+                        if($m['payment_price_07'] > 0){
+                            $payment_name_07=$m['payment_name_07'];
+                            $payment_date_07=convert_date_thai($m['payment_date_07']);
+                            $payment_price_07=number_format($m['payment_price_07'],2);
+                            $payment_wht_vat_07=number_format($m['payment_wht_vat_07'],2);
+                        }
+
+                        $payment_date_08="";$payment_price_08="";$payment_wht_vat_08="";
+                        if($m['payment_price_08'] > 0){
+                            $payment_name_08=$m['payment_name_08'];
+                            $payment_date_08=convert_date_thai($m['payment_date_08']);
+                            $payment_price_08=number_format($m['payment_price_08'],2);
+                            $payment_wht_vat_08=number_format($m['payment_wht_vat_08'],2);
+                        }
+
+                        $payment_date_09="";$payment_price_09="";$payment_wht_vat_09="";
+                        if($m['payment_price_09'] > 0){
+                            $payment_name_09=$m['payment_name_09'];
+                            $payment_date_09=convert_date_thai($m['payment_date_09']);
+                            $payment_price_09=number_format($m['payment_price_09'],2);
+                            $payment_wht_vat_09=number_format($m['payment_wht_vat_09'],2);
+                        }
+
+                        $payment_date_10="";$payment_price_10="";$payment_wht_vat_10="";
+                        if($m['payment_price_10'] > 0){
+                            $payment_name_10=$m['payment_name_10'];
+                            $payment_date_10=convert_date_thai($m['payment_date_10']);
+                            $payment_price_10=number_format($m['payment_price_10'],2);
+                            $payment_wht_vat_10=number_format($m['payment_wht_vat_10'],2);
+                        }
+                        ?>
+
+                        <tr style="height: 18px; border-bottom: 1px dotted;">
+
+                            <?php if($wo){ ?>
+                                <td style="border-right: 1px solid; border-bottom: 1px solid;" rowspan="22">
+                                <?php }else{ ?>
+                                    <td style="border-right: 1px solid; border-bottom: 1px solid;" rowspan="13">
+                                    <?php } ?>
+
+                                    <p style="margin-top: 5px;margin-bottom: 0px; margin-left: 5px; font-size: 11px;">1. เงินเดือน ค่าจ้าง เบี้ยเลี้ยง โบนัส ฯลฯ ตามมาตรา 40 (1)</p>
+                                    <p style="margin-top: 0px;margin-bottom: 0px; margin-left: 5px; font-size: 11px;">2. ค่าธรรมเนียม ค่านายหน้า ฯลฯ ตามมาตรา 40 (2)</p>
+                                    <p style="margin-top: 0px;margin-bottom: 0px; margin-left: 5px; font-size: 11px;">3. ค่าแห่งลิขสิทธิ์ ฯลฯ ตามมาตรา 40 (3)</p>
+                                    <p style="margin-top: 0px;margin-bottom: 0px; margin-left: 5px; font-size: 11px;">4. (1) ค่าดอกเบี้ย ฯลฯ ตามมาตรา 40 (4) (ก)</p>
+                                    <p style="margin-top: 0px;margin-bottom: 0px; margin-left: 5px; font-size: 11px;">&nbsp&nbsp&nbsp&nbsp(2) เงินปันผล เงินส่วนแบ่งของกำไร ฯลฯ ตามมาตรา 40 (4) (ข) ที่จ่ายจาก</p>
+                                    <p style="font-size: 10px;margin-left: 3px; margin-top: 0px;margin-bottom: 0px;"><i class="fa fa-square-o" style="margin-left: 0px; font-size: 13px;"></i> (ก) กิจการที่ต้องเสียภาษีเงินได้นิติบุคคลในอัตราร้อยละ 30 ของกำไรสุทธิ</p>
+                                    <p style="font-size: 10px;margin-left: 3px; margin-top: 0px;margin-bottom: 0px;"><i class="fa fa-square-o" style="margin-left: 0px; font-size: 13px;"></i> (ข) กิจการในเขตส่งเสริมการลงทุนตามมาตรา 35 (2) แห่ง พ.ร.บ. ส่งเสริมการลงทุน <br> &nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbspพ.ศ. 2520 ที่ต้องเสียภาษีเงินได้นิติบุคคลในอัตรากึ่งหนึ่ง ของอัตราตาม (ก)</p>
+                                    <p style="font-size: 10px;margin-left: 3px; margin-top: 0px;margin-bottom: 0px;"><i class="fa fa-square-o" style="margin-left: 0px; font-size: 13px;"></i> (ค) กิจการวิเทศธนกิจที่ต้องเสียภาษีเงินได้นิติบุคคลในอัตราร้อยละ 10 ของกำไรสุทธิ</p>
+                                    <p style="font-size: 10px;margin-left: 3px; margin-top: 0px;margin-bottom: 0px;"><i class="fa fa-square-o" style="margin-left: 0px; font-size: 13px;"></i> (ง) กิจการที่ต้องเสียภาษีเงินได้นิติบุคคลในอัตราอื่นนอกจาก (ก) (ข) หรือ (ค)</p>
+                                    <p style="margin-top: 0px;margin-bottom: 0px; margin-left: 5px; font-size: 11px;">5. การจ่ายเงินได้ที่ต้องหักภาษี ณ ที่จ่ายตามคำสั่งกรมสรรพากร ที่ออกตาม<br>&nbsp&nbsp&nbsp&nbspมาตรา 3 เตรส เช่น ค่าซื้อพืชผลทางการเกษตร (ยางพารา มันสำปะหลัง ข้าว <br> &nbsp&nbsp&nbsp&nbspฯลฯ) รางวัลในการประกวด การแข่งขัน การชิงโชค ร้องเพลง ค่าบริการ <br> &nbsp&nbsp&nbsp&nbspค่าแสดงภาพยนตร์ ดนตรี ค่าจ้างทำของ ค่าจ้างโฆษณา ค่าเช่า ฯลฯ</p>
+                                    <span style="margin-top: 0px;margin-bottom: 0px; margin-left: 5px; font-size: 11px;">6. <i class="fa fa-square-o" style="margin-left: 0px; font-size: 13px;"></i> ค้าจ้างขนส่ง</span>
+                                    <span style="margin-top: 0px;margin-bottom: 0px; margin-left: 5px; font-size: 11px;"><i class="fa fa-square-o" style="margin-left: 10px; font-size: 13px;"></i> ค่าเบี้ยประกันวินาศภัย</span>
+                                    <p style="margin-top: 5px;margin-bottom: 0px; margin-left: 5px; font-size: 11px;">7. อื่นๆ (ระบุ)<span class="fontsize11" style="margin-left: 35px;"><?=$payment_name_01?></span></p>
+                                    <div style="margin-left: 63px;margin-top: -10px;">.........................................................................................................................</div>
+                                    <p style="margin-top: 5px;margin-bottom: 0px; margin-left: 5px; font-size: 11px; height: 16px;">8. <span class="fontsize11" style="margin-left: 77px;"><?=$payment_name_02?></span></p>
+                                    <div style="margin-left: 20px;margin-top: -10px;">..........................................................................................................................................</div>
+
+                                    <?php if($wo){ ?>
+                                       <p style="margin-top: 5px;margin-bottom: 0px; margin-left: 5px; font-size: 11px; height: 16px;">9. <span class="fontsize11" style="margin-left: 77px;"><?=$payment_name_03?></span></p>
+                                       <div style="margin-left: 20px;margin-top: -10px;">..........................................................................................................................................</div>
+                                       <p style="margin-top: 5px;margin-bottom: 0px; margin-left: 5px; font-size: 11px; height: 16px;">10. <span class="fontsize11" style="margin-left: 77px;"><?=$payment_name_04?></span></p>
+                                       <div style="margin-left: 20px;margin-top: -10px;">..........................................................................................................................................</div>
+                                       <p style="margin-top: 5px;margin-bottom: 0px; margin-left: 5px; font-size: 11px; height: 16px;">11. <span class="fontsize11" style="margin-left: 77px;"><?=$payment_name_05?></span></p>
+                                       <div style="margin-left: 20px;margin-top: -10px;">..........................................................................................................................................</div>
+                                       <p style="margin-top: 5px;margin-bottom: 0px; margin-left: 5px; font-size: 11px; height: 16px;">12. <span class="fontsize11" style="margin-left: 77px;"><?=$payment_name_06?></span></p>
+                                       <div style="margin-left: 20px;margin-top: -10px;">..........................................................................................................................................</div>
+                                       <p style="margin-top: 5px;margin-bottom: 0px; margin-left: 5px; font-size: 11px; height: 16px;">13. <span class="fontsize11" style="margin-left: 77px;"><?=$payment_name_07?></span></p>
+                                       <div style="margin-left: 20px;margin-top: -10px;">..........................................................................................................................................</div>
+                                       <p style="margin-top: 5px;margin-bottom: 0px; margin-left: 5px; font-size: 11px; height: 16px;">14. <span class="fontsize11" style="margin-left: 77px;"><?=$payment_name_08?></span></p>
+                                       <div style="margin-left: 20px;margin-top: -10px;">..........................................................................................................................................</div>
+                                       <p style="margin-top: 5px;margin-bottom: 0px; margin-left: 5px; font-size: 11px; height: 16px;">15. <span class="fontsize11" style="margin-left: 77px;"><?=$payment_name_09?></span></p>
+                                       <div style="margin-left: 20px;margin-top: -10px;">..........................................................................................................................................</div>
+                                       <p style="margin-top: 5px;margin-bottom: 0px; margin-left: 5px; font-size: 11px; height: 16px;">16. <span class="fontsize11" style="margin-left: 77px;"><?=$payment_name_10?></span></p>
+                                       <div style="margin-left: 20px;margin-top: -10px;">..........................................................................................................................................</div>
+                                   <?php } ?>
+
+                               </td>
+                               <td style="border-right: 1px solid;"></td>
+                               <td style="border-right: 1px solid; width: 100px;"></td>
+                               <td style="border-right: 1px solid; width: 15px;"></td>
+                               <td style="border-right: 1px solid; width: 100px;"></td>
+                               <td style="width: 13px;"></td>
+                           </tr>
+
+                           <?php if($wo){ ?>
+
+                            <tr style="height: <?php if($os==="Mac"){echo '18';}else{echo '15';}?>px; border-bottom: 1px dotted;">
+                                <td style="border-right: 1px solid;"></td>
+                                <td style="border-right: 1px solid; width: 100px;"></td>
+                                <td style="border-right: 1px solid; width: 15px;"></td>
+                                <td style="border-right: 1px solid; width: 100px;"></td>
+                                <td style="width: 13px;"></td>
+                            </tr>
+
+                            <tr style="height: <?php if($os==="Mac"){echo '18';}else{echo '15';}?>px; border-bottom: 1px dotted;">
+                                <td style="border-right: 1px solid;"></td>
+                                <td style="border-right: 1px solid; width: 100px;"></td>
+                                <td style="border-right: 1px solid; width: 15px;"></td>
+                                <td style="border-right: 1px solid; width: 100px;"></td>
+                                <td style="width: 13px;"></td>
+                            </tr>
+
+                            <tr style="height: <?php if($os==="Mac"){echo '18';}else{echo '15';}?>px; border-bottom: 1px dotted;">
+                                <td style="border-right: 1px solid;"></td>
+                                <td style="border-right: 1px solid; width: 100px;"></td>
+                                <td style="border-right: 1px solid; width: 15px;"></td>
+                                <td style="border-right: 1px solid; width: 100px;"></td>
+                                <td style="width: 13px;"></td>
+                            </tr>
+
+                            <tr style="height: <?php if($os==="Mac"){echo '18';}else{echo '15';}?>px; border-bottom: 1px dotted;">
+                                <td style="border-right: 1px solid;"></td>
+                                <td style="border-right: 1px solid; width: 100px;"></td>
+                                <td style="border-right: 1px solid; width: 15px;"></td>
+                                <td style="border-right: 1px solid; width: 100px;"></td>
+                                <td style="width: 13px;"></td>
+                            </tr>
+
+                            <tr style="height: <?php if($os==="Mac"){echo '18';}else{echo '15';}?>px; border-bottom: 1px dotted;">
+                                <td style="border-right: 1px solid;"></td>
+                                <td style="border-right: 1px solid; width: 100px;"></td>
+                                <td style="border-right: 1px solid; width: 15px;"></td>
+                                <td style="border-right: 1px solid; width: 100px;"></td>
+                                <td style="width: 13px;"></td>
+                            </tr>
+
+                        <?php }else{ ?>
+
+                            <tr style="height: <?php if($os==="Mac"){echo '18';}else{echo '15';}?>px; border-bottom: 1px dotted;">
+                                <td style="border-right: 1px solid;"></td>
+                                <td style="border-right: 1px solid; width: 100px;"></td>
+                                <td style="border-right: 1px solid; width: 15px;"></td>
+                                <td style="border-right: 1px solid; width: 100px;"></td>
+                                <td style="width: 13px;"></td>
+                            </tr>
+
+                            <tr style="height: <?php if($os==="Mac"){echo '18';}else{echo '15';}?>px; border-bottom: 1px dotted;">
+                                <td style="border-right: 1px solid;"></td>
+                                <td style="border-right: 1px solid; width: 100px;"></td>
+                                <td style="border-right: 1px solid; width: 15px;"></td>
+                                <td style="border-right: 1px solid; width: 100px;"></td>
+                                <td style="width: 13px;"></td>
+                            </tr>
+
+                            <tr style="height: <?php if($os==="Mac"){echo '18';}else{echo '15';}?>px; border-bottom: 1px dotted;">
+                                <td style="border-right: 1px solid;"></td>
+                                <td style="border-right: 1px solid; width: 100px;"></td>
+                                <td style="border-right: 1px solid; width: 15px;"></td>
+                                <td style="border-right: 1px solid; width: 100px;"></td>
+                                <td style="width: 13px;"></td>
+                            </tr>
+
+                            <tr style="height: <?php if($os==="Mac"){echo '18';}else{echo '15';}?>px; border-bottom: 1px dotted;">
+                                <td style="border-right: 1px solid;"></td>
+                                <td style="border-right: 1px solid; width: 100px;"></td>
+                                <td style="border-right: 1px solid; width: 15px;"></td>
+                                <td style="border-right: 1px solid; width: 100px;"></td>
+                                <td style="width: 13px;"></td>
+                            </tr>
+
+                        <?php } ?>
+
+                        <tr style="height: <?php if($os==="Mac"){echo '18';}else{echo '15';}?>px; border-bottom: 1px dotted;">
+                            <td style="border-right: 1px solid;"></td>
+                            <td style="border-right: 1px solid; width: 100px;"></td>
+                            <td style="border-right: 1px solid; width: 15px;"></td>
+                            <td style="border-right: 1px solid; width: 100px;"></td>
+                            <td style="width: 13px;"></td>
+                        </tr>
+                        <tr style="height: <?php if($os==="Mac"){echo '18';}else{echo '15';}?>px; border-bottom: 1px dotted;">
+                            <td style="border-right: 1px solid;"></td>
+                            <td style="border-right: 1px solid; width: 100px;"></td>
+                            <td style="border-right: 1px solid; width: 15px;"></td>
+                            <td style="border-right: 1px solid; width: 100px;"></td>
+                            <td style="width: 13px;"></td>
+                        </tr>
+                        <tr style="height: <?php if($os==="Mac"){echo '18';}else{echo '15';}?>px; border-bottom: 1px dotted;">
+                            <td style="border-right: 1px solid;"></td>
+                            <td style="border-right: 1px solid; width: 100px;"></td>
+                            <td style="border-right: 1px solid; width: 15px;"></td>
+                            <td style="border-right: 1px solid; width: 100px;"></td>
+                            <td style="width: 13px;"></td>
+                        </tr>
+                        <tr style="height: <?php if($os==="Mac"){echo '18';}else{echo '15';}?>px; border-bottom: 1px dotted;">
+                            <td style="border-right: 1px solid;"></td>
+                            <td style="border-right: 1px solid; width: 100px;"></td>
+                            <td style="border-right: 1px solid; width: 15px;"></td>
+                            <td style="border-right: 1px solid; width: 100px;"></td>
+                            <td style="width: 13px;"></td>
+                        </tr>
+                        <tr style="height: <?php if($os==="Mac"){echo '18';}else{echo '15';}?>px; border-bottom: 1px dotted;">
+                            <td style="border-right: 1px solid;"></td>
+                            <td style="border-right: 1px solid; width: 100px;"></td>
+                            <td style="border-right: 1px solid; width: 15px;"></td>
+                            <td style="border-right: 1px solid; width: 100px;"></td>
+                            <td style="width: 13px;"></td>
+                        </tr>
+                        <tr style="height: <?php if($os==="Mac"){echo '18';}else{echo '15';}?>px; border-bottom: 1px dotted;">
+                            <td style="border-right: 1px solid;"></td>
+                            <td style="border-right: 1px solid; width: 100px;"></td>
+                            <td style="border-right: 1px solid; width: 15px;"></td>
+                            <td style="border-right: 1px solid; width: 100px;"></td>
+                            <td style="width: 13px;"></td>
+                        </tr>
+                        <tr style="height: <?php if($os==="Mac"){echo '20';}else{echo '20';}?>px; border-bottom: 1px dotted;" align="right">  
+                            <td style="border-right: 1px solid;"><span class="fontsize11"><?=$payment_date_01?></span></td>
+                            <td style="border-right: 1px solid; width: 100px;"><span class="fontsize11"><?php echo $payment_price_01;?></span></td>
+                            <td style="border-right: 1px solid; width: 15px;"><span class="fontsize11"></span></td>
+                            <td style="border-right: 1px solid; width: 100px;"><span class="fontsize11"><?php echo $payment_wht_vat_01;?></span></td>
+                            <td style="width: 13px;"><span class="fontsize11"></span></td>
+                        </tr>
+                        <tr style="height: <?php if($os==="Mac"){echo '22';}else{echo '22';}?>px; border-bottom: 1px dotted;" align="right">  
+                            <td style="border-right: 1px solid;"><span class="fontsize11"><?=$payment_date_02?></span></td>
+                            <td style="border-right: 1px solid; width: 100px;"><span class="fontsize11"><?php echo $payment_price_02;?></span></td>
+                            <td style="border-right: 1px solid; width: 15px;"><span class="fontsize11"></span></td>
+                            <td style="border-right: 1px solid; width: 100px;"><span class="fontsize11"><?php echo $payment_wht_vat_02;?></span></td>
+                            <td style="width: 13px;"><span class="fontsize11"></span></td>
+                        </tr>
+
+                        <?php if($wo){ ?>
+                            <tr style="height: <?php if($os==="Mac"){echo '20';}else{echo '21';}?>px; border-bottom: 1px dotted;" align="right">  
+                                <td style="border-right: 1px solid;"><span class="fontsize11"><?=$payment_date_03?></span></td>
+                                <td style="border-right: 1px solid; width: 100px;"><span class="fontsize11"><?php echo $payment_price_03;?></span></td>
+                                <td style="border-right: 1px solid; width: 15px;"><span class="fontsize11"></span></td>
+                                <td style="border-right: 1px solid; width: 100px;"><span class="fontsize11"><?php echo $payment_wht_vat_03;?></span></td>
+                                <td style="width: 13px;"><span class="fontsize11"></span></td>
+                            </tr>
+                            <tr style="height: <?php if($os==="Mac"){echo '20';}else{echo '21';}?>px; border-bottom: 1px dotted;" align="right">  
+                                <td style="border-right: 1px solid;"><span class="fontsize11"><?=$payment_date_04?></span></td>
+                                <td style="border-right: 1px solid; width: 100px;"><span class="fontsize11"><?php echo $payment_price_04;?></span></td>
+                                <td style="border-right: 1px solid; width: 15px;"><span class="fontsize11"></span></td>
+                                <td style="border-right: 1px solid; width: 100px;"><span class="fontsize11"><?php echo $payment_wht_vat_04;?></span></td>
+                                <td style="width: 13px;"><span class="fontsize11"></span></td>
+                            </tr>
+                            <tr style="height: <?php if($os==="Mac"){echo '20';}else{echo '21';}?>px; border-bottom: 1px dotted;" align="right">  
+                                <td style="border-right: 1px solid;"><span class="fontsize11"><?=$payment_date_05?></span></td>
+                                <td style="border-right: 1px solid; width: 100px;"><span class="fontsize11"><?php echo $payment_price_05;?></span></td>
+                                <td style="border-right: 1px solid; width: 15px;"><span class="fontsize11"></span></td>
+                                <td style="border-right: 1px solid; width: 100px;"><span class="fontsize11"><?php echo $payment_wht_vat_05;?></span></td>
+                                <td style="width: 13px;"><span class="fontsize11"></span></td>
+                            </tr>
+                            <tr style="height: <?php if($os==="Mac"){echo '20';}else{echo '21';}?>px; border-bottom: 1px dotted;" align="right">
+                                <td style="border-right: 1px solid;"><span class="fontsize11"><?=$payment_date_06?></span></td>
+                                <td style="border-right: 1px solid; width: 100px;"><span class="fontsize11"><?php echo $payment_price_06;?></span></td>
+                                <td style="border-right: 1px solid; width: 15px;"><span class="fontsize11"></span></td>
+                                <td style="border-right: 1px solid; width: 100px;"><span class="fontsize11"><?php echo $payment_wht_vat_06;?></span></td>
+                                <td style="width: 13px;"><span class="fontsize11"></span></td>
+                            </tr>
+                            <tr style="height: <?php if($os==="Mac"){echo '20';}else{echo '21';}?>px; border-bottom: 1px dotted;" align="right">
+                                <td style="border-right: 1px solid;"><span class="fontsize11"><?=$payment_date_07?></span></td>
+                                <td style="border-right: 1px solid; width: 100px;"><span class="fontsize11"><?php echo $payment_price_07;?></span></td>
+                                <td style="border-right: 1px solid; width: 15px;"><span class="fontsize11"></span></td>
+                                <td style="border-right: 1px solid; width: 100px;"><span class="fontsize11"><?php echo $payment_wht_vat_07;?></span></td>
+                                <td style="width: 13px;"><span class="fontsize11"></span></td>
+                            </tr>
+                            <tr style="height: <?php if($os==="Mac"){echo '20';}else{echo '21';}?>px; border-bottom: 1px dotted;" align="right">
+                                <td style="border-right: 1px solid;"><span class="fontsize11"><?=$payment_date_08?></span></td>
+                                <td style="border-right: 1px solid; width: 100px;"><span class="fontsize11"><?php echo $payment_price_08;?></span></td>
+                                <td style="border-right: 1px solid; width: 15px;"><span class="fontsize11"></span></td>
+                                <td style="border-right: 1px solid; width: 100px;"><span class="fontsize11"><?php echo $payment_wht_vat_08;?></span></td>
+                                <td style="width: 13px;"><span class="fontsize11"></span></td>
+                            </tr>
+                            <tr style="height: <?php if($os==="Mac"){echo '20';}else{echo '21';}?>px; border-bottom: 1px dotted;" align="right">
+                                <td style="border-right: 1px solid;"><span class="fontsize11"><?=$payment_date_09?></span></td>
+                                <td style="border-right: 1px solid; width: 100px;"><span class="fontsize11"><?php echo $payment_price_09;?></span></td>
+                                <td style="border-right: 1px solid; width: 15px;"><span class="fontsize11"></span></td>
+                                <td style="border-right: 1px solid; width: 100px;"><span class="fontsize11"><?php echo $payment_wht_vat_09;?></span></td>
+                                <td style="width: 13px;"><span class="fontsize11"></span></td>
+                            </tr>
+                            <tr style="height: <?php if($os==="Mac"){echo '23';}else{echo '24';}?>px; border-bottom: 1px solid" align="right">
+                                <td style="border-right: 1px solid;"><span class="fontsize11"><?=$payment_date_10?></span></td>
+                                <td style="border-right: 1px solid; width: 100px;"><span class="fontsize11"><?php echo $payment_price_10;?></span></td>
+                                <td style="border-right: 1px solid; width: 15px;"><span class="fontsize11"></span></td>
+                                <td style="border-right: 1px solid; width: 100px;"><span class="fontsize11"><?php echo $payment_wht_vat_10;?></span></td>
+                                <td style="width: 13px;"><span class="fontsize11"></span></td>
+                            </tr>
+                        <?php } ?>
+
+                        <tr align="right">
+                            <td colspan="2" style="border-right: 1px solid;">
+                                <span style="text-decoration: underline; font-size: 15px; font-weight: bold; margin-right: 20px;">รวมเงินที่จ่ายและภาษีที่หักนำส่ง</span>
+                            </td>
+                            <td style="border-right: 1px solid; border-bottom: 1px solid; width: 100px;"><span class="fontsize11"><?php echo number_format($m['payment_price_total'],2)?></span></td>
+                            <td style="border-right: 1px solid; border-bottom: 1px solid; width: 15px;"><span class="fontsize11"></span></td>
+                            <td style="border-right: 1px solid; border-bottom: 1px solid; width: 100px;"><span class="fontsize11"><?php echo number_format($m['payment_wht_vat_total'],2)?></span></td>
+                            <td style="border-bottom: 1px solid; width: 13px;"><span class="fontsize11"></span></td>
+                        </tr>
+                        <tr>
+                            <td style="height: 35px; border-bottom: 1px solid" colspan="6">
+                                <span style="text-decoration: underline; font-size: 13px; margin-right: 20px;">รวมเงินภาษีที่หักนำส่ง (ตัวอักษร)</span>
+                                <div style="position: absolute; margin-left: 245px; margin-top: -21px; height: 25px; width: 460px; background: lightgray; border: 1px solid;" align="center">
+                                    <div style="margin-top: 3px;">
+                                        <span style="margin-top: 5px;" class="fontsize12">(<?php echo convert_number($m['payment_wht_vat_total']);  ?>)</span>
+                                    </div>
+                                </div>
+                            </td>
+                        </tr>
+                        <tr>
+                            <td class="fontsize12" colspan="6" style="height: 35px;">
+                                <span>เงินสะสมจ่ายเข้ากองทุนสำรองเลี้ยงชีพใบอนุญาตเลขที่</span>
+                                <span style="margin-left: 150px;">จำนวนเงิน</span>
+                                <span style="margin-left: 145px;">บาท</span>
+                                <div style="margin-left: 295px;margin-top: -13px;">...................................................</div>
+                                <div style="margin-left: 513px;margin-top: -16px;">.................................................</div>
+                            </td>
+                        </tr>
+                        <tr>
+                            <td class="fontsize12" colspan="6"">
+                                <span>เงินสมทบจ่ายเข้ากองทุนประกันสังคม จำนวนเงิน</span>
+                                <span style="margin-left: 185px;">บาท</span>
+                                <div style="margin-left: 263px;margin-top: -13px;">.............................................................</div>
+                            </td>
+                        </tr>
+                        <tr>
+                            <td class="fontsize12" colspan="6">
+                                <span style="margin-left: 90px;">เลขที่บัญชีนายจ้าง</span>
+                                <span style="margin-left: 65px;">เลขที่บัตรประกันสังคม/เลขหมายบัตรประจำตัวประชาชน ของผู้ถูกหักภาษี ณ ที่จ่าย</span>
+                            </td>
+                        </tr>
+                        <tr>
+                            <td>
+                                <div style="margin-left: 15px;">
+                                    <table style="border-collapse: collapse;height: <?php if(!$wo){echo '30';}else{echo '20';}?>px;">
+                                       <tr align="center" class="fontsize12">
+                                        <td style="border: 1px solid; width: 17px;"></td>
+                                        <td style="border: 1px solid; width: 17px;"></td>
+                                        <td style="width: 13px;">
+                                            <div style="margin-top: -10px;">__</div>
+                                        </td>
+                                        <td style="border: 1px solid; width: 17px;"></td>
+                                        <td style="border: 1px solid; width: 17px;"></td>
+                                        <td style="border: 1px solid; width: 17px;"></td>
+                                        <td style="border: 1px solid; width: 17px;"></td>
+                                        <td style="border: 1px solid; width: 17px;"></td>
+                                        <td style="border: 1px solid; width: 17px;"></td>
+                                        <td style="border: 1px solid; width: 17px;"></td>
+                                        <td style="width: 13px;">
+                                            <div style="margin-top: -15px;">__</div>
+                                        </td>
+                                        <td style="border: 1px solid; width: 17px;"></td>
+                                    </tr>
+                                </table>
+                            </div>
+                            <div style="margin-left: 315px; position: absolute; margin-top: <?php if(!$wo){echo '-30';}else{echo '-20';}?>px;">
+                                <table style="border-collapse: collapse; height: <?php if(!$wo){echo '30';}else{echo '20';}?>px;">
+                                   <tr align="center" class="fontsize12">
+                                    <td style="border: 1px solid; width: 17px;"></td>
+                                    <td style="width: 13px;">
+                                        <div style="margin-top: -10px;">__</div>
+                                    </td>
+                                    <td style="border: 1px solid; width: 17px;"></td>
+                                    <td style="border: 1px solid; width: 17px;"></td>
+                                    <td style="border: 1px solid; width: 17px;"></td>
+                                    <td style="border: 1px solid; width: 17px;"></td>
+                                    <td style="width: 13px;">
+                                        <div style="margin-top: -10px;">__</div>
+                                    </td>
+                                    <td style="border: 1px solid; width: 17px;"></td>
+                                    <td style="border: 1px solid; width: 17px;"></td>
+                                    <td style="border: 1px solid; width: 17px;"></td>
+                                    <td style="border: 1px solid; width: 17px;"></td>
+                                    <td style="border: 1px solid; width: 17px;"></td>
+                                    <td style="width: 13px;">
+                                        <div style="margin-top: -15px;">__</div>
+                                    </td>
+                                    <td style="border: 1px solid; width: 17px;"></td>
+                                    <td style="border: 1px solid; width: 17px;"></td>
+                                    <td style="width: 13px;">
+                                        <div style="margin-top: -10px;">__</div>
+                                    </td>
+                                    <td style="border: 1px solid; width: 17px;"></td>
+                                </tr>
+                            </table>
+                        </div>
+                    </td>
+                </tr>
+            </table>
+        </td>
+    </tr>
+    <tr>
+        <td>
+            <table style="border-collapse: collapse; width: 100%">
+                <tr>
+                    <td style="border-right: 1px solid; width: 135px;" rowspan="13">
+                        <span class="fontsize11">ผู้จ่ายเงิน</span><br>
+                        <span class="fontsize11"><i class="fa fa-check-square-o" style="margin-right: 10px; font-size: 13px;"></i>หักภาษี ณ ที่จ่าย</span><br>
+                        <span class="fontsize11"><i class="fa fa-square-o" style="margin-right: 10px; font-size: 13px;"></i>ออกภาษีให้ตลอดไป</span><br>
+                        <span class="fontsize11"><i class="fa fa-square-o" style="margin-right: 10px; font-size: 13px;"></i>ออกภาษีให้ครั้งเดียว</span><br>
+                        <span class="fontsize11"><i class="fa fa-square-o" style="margin-right: 10px; font-size: 13px;"></i>อื่นๆให้ระบุ..........</span>
+                    </td>
+                    <td style="width: 450px;">
+                        <span class="fontsize12">
+                            ขอรับรองว่า ข้อความและตัวเลขดังกล่าวข้างต้นถูกต้องตรงกับความจริงทุกประการ
+                        </span>
+                    </td>
+                    <td align="center" rowspan="13" style="font-size: 8px; width: 125px;position: absolute;margin-left: -350px;margin-top: 30px;opacity: 0.7;">
+
+                        <?php if($m['create_date'] < '2019/02/01') { ?>
+                            <img width="100px" src="/img/logo_oppo_small.png">
+                            <br>
+                            <span>บริษัท ไทย ออปโป้ จำกัด</span>
+                            <br>
+                            <span>THAI OPPO CO., LTD</span>
+                        <?php }else{ ?>
+                            <img width="100px" src="/img/logo_possefy_small.png">
+                            <br>
+                            <span>บริษัท โพสเซฟี่ กรุ๊ป จำกัด</span>
+                            <br>
+                            <span>Possefy Group Co., Ltd.</span>
+                        <?php } ?>
+                        
+                    </td>
+                </tr>
+                <tr>
+                    <td style="width: 450px; height: 55px;" valign="bottom">
+                        <span class="fontsize12">(ลงชื่อ)</span>
+                        <span class="fontsize12" style="margin-left: 200px;">ผู้มีหน้าที่หักภาษี ณ ที่จ่าย</span>
+                        <div style="margin-left: 45px;margin-top: -10px;">.......................................................................................</div>
+                    </td>
+                </tr>
+                <tr>
+                    <td style="width: 450px; height: 30px;">
+                        <span class="fontsize12" style="margin-left: 260px;">วัน เดือน ปี ที่ออกหนังสือรับรองฯ</span>
+                        <?php
+
+                        $date_book = '';
+
+                        if($m['payment_date_01'] > 0){
+                            $data_book = $m['payment_date_01'];
+                        }
+                        if($m['payment_date_02'] > 0){
+                            $data_book = $m['payment_date_02'];
+                        }
+                        if($m['payment_date_03'] > 0){
+                            $data_book = $m['payment_date_03'];
+                        }
+                        if($m['payment_date_04'] > 0){
+                            $data_book = $m['payment_date_04'];
+                        }
+                        if($m['payment_date_05'] > 0){
+                            $data_book = $m['payment_date_05'];
+                        }
+                        if($m['payment_date_06'] > 0){
+                            $data_book = $m['payment_date_06'];
+                        }
+                        if($m['payment_date_07'] > 0){
+                            $data_book = $m['payment_date_07'];
+                        }
+                        if($m['payment_date_08'] > 0){
+                            $data_book = $m['payment_date_08'];
+                        }
+                        if($m['payment_date_09'] > 0){
+                            $data_book = $m['payment_date_09'];
+                        }
+                        if($m['payment_date_10'] > 0){
+                            $data_book = $m['payment_date_10'];
+                        }
+
+                        ?>
+                        <span class="fontsize12" style="margin-left: -320px;position: absolute;"><?=convert_date_thai($data_book)?></span>
+                        <div style="margin-left: 10px;margin-top: -10px;">.....................................................................................................</div>
+                    </td>
+                </tr>
+            </table>
+        </td>
+    </tr>
+    <tr>
+        <td style="font-size: 9.5px; width: bold; height: <?php if(!$wo){echo '45';}else{echo '30';}?>px;margin-right: 500px;">
+            <span style="margin-left: 1px;">หมายเหตุ * &nbsp&nbspให้สามารถอ้างอิงหรือสอบยันกันได้ระหว่างลำดับที่ตามหนังสือรับรองฯ กับแบบยื่นรายการภาษีหัก ณ ที่จ่าย</span>
+            <br>
+            <span style="margin-left: 1px;">คำเตือน &nbspผู้มีหน้าที่ออกหนังสือรับรองการหักภาษี ณ ที่จ่าย ฝ่าฝืนไม่ปฏิบัติตามมาตรา 50 ทวิ แห่งประมวลรัษฎากร ต้องรับโทษทางอาญาตามมาตรา 35 แห่งประมวลรัษฎากร ด้วย</span>
+        </td>
+    </tr>
+</table>
+</div>
+<?php
+}
+}
+?>
+</body>
+</br></br></br></br></br>
+
+<script src="/js/jquery.blockUI.js"></script>
+<script type="text/javascript">
+
+    $(document).ready(function() {
+
+    });
+
+    function Print(){window.print();}      
+
+    function close_back(){
+        window.location = "/sales/wht-manual-print-list";
+    }   
+</script> 
+</html>

@@ -1,0 +1,47 @@
+<style type="text/css">
+    .well {
+        text-align: center;
+        margin-top: 50px;
+    }
+
+    .well h3,
+    .well p {
+        text-align: center;
+    }
+
+    .well h3 {
+        margin-bottom: 1em;
+    }
+
+
+    .well span {
+        margin: auto;
+        display: inline-block;
+    }
+
+    .account-container {
+        margin-top: 10px;
+        margin-bottom: 10px;
+    }
+
+    .filename {
+        font-size: 32px;
+        padding: 0.5em;
+        background: #00925f;
+        color: white;
+        border-radius: 2px;
+    }
+</style>
+<div class="well">
+    <?php if (isset($this->error) && $this->error): ?>
+        <p class="alert alert-danger"><?php echo $this->error ?></p>
+    <?php elseif(isset($this->filename) && $this->filename): ?>
+        <p><span class="filename"><i class="icon-file"></i> <?php echo $this->filename ?></span></p>
+        <?php if (!isset($this->userStorage) || !$this->userStorage): ?>
+        <p><strong>Please Sign in to download</strong></p>
+            <?php echo $this->render("user/login.phtml") ?>
+        <?php else: ?>
+            <a href="<?php echo HOST ?>download/imei-po?id=<?php echo $this->id ?>&amp;check=<?php echo $this->check ?>" class="btn btn-info">Download <?php if (isset($this->filesize) && $this->filesize) printf("(%s)", My_String::humanFilesize($this->filesize)) ?></a>
+        <?php endif ?>
+    <?php endif ?>
+</div>

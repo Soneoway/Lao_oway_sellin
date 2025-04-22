@@ -1,0 +1,186 @@
+<?php
+function cal_sale_off_percent($percent_sale_off,$price,$num,$price_total){
+
+            if($percent_sale_off>0){
+                $price_sale_off=$price_total/$num;
+            }else{
+                $price_sale_off = $price;
+            }
+            return $price_sale_off;
+         }
+          function ext_vat($num){
+           return $num/1.07;
+        }
+         function format_number_4($num){
+           return decimal_remove_comma(number_format($num, 4));
+        }
+         function format_number_2($num){
+           return decimal_remove_comma(number_format($num, 2));
+        }
+
+         function decimal_remove_comma($priceFloat)
+         {
+            $price = str_replace(",","",$priceFloat);;
+            return $price;
+         }
+
+if ($this->markets){
+    $percent_sale_off=0;
+    foreach ($this->markets as $m){
+
+        $rank = $m['rank'];
+
+        $product_unit_price = $m['price'];
+        $product_qty        = $m['num'];
+        $price_total        = $m['total'];
+        $percent_sale_off   = isset($m['sale_off_percent'])?$m['sale_off_percent']:'0';
+
+        $product_unit_price = cal_sale_off_percent($percent_sale_off,$product_unit_price,$product_qty,$price_total);
+        $total_price = ext_vat($product_unit_price);
+        if($rank == 9){
+            $total_price = $product_unit_price;
+        }
+        $product_unit_price_4 = format_number_4($total_price);
+        $product_amount_4 =format_number_2($total_price) * $product_qty;
+        $total_amount = $product_amount_4*1.07;
+
+        $total_amount_ex_vat = format_number_2($total_price) * $product_qty;
+         // print_r($this->list);echo '++++';die;
+?>
+        <?php if ($this->list == 'finance'){?>
+            <tr class="m_<?php echo $this->sn;?> accordion-body collapse">
+                <!-- <td></td> -->
+                <td></td>
+                <td></td>
+                <td></td>
+                <td><?php if (isset($this->goods) && $this->goods && isset($this->goods[$m['good_id']])) echo $this->goods[$m['good_id']]; ?></td>
+                <td><?php if (isset($this->goodColors) && $this->goodColors && isset($this->goodColors[$m['good_color']])) echo $this->goodColors[$m['good_color']]; ?></td>
+                <td><?php echo $m['num']; ?></td>
+                <!-- <td><?php echo My_Number::f($m['price'], 0, ',', '.');?></td> -->
+                <!-- <td><?php echo My_Number::f($m['total'], 0, ',', '.'); ?></td> -->
+                <td></td>
+                <td></td>
+                <td></td>
+                <td></td>
+                <td></td>
+                <td></td>
+                <td></td>
+            </tr>
+
+        <?php } elseif ($this->list == 'out') { ?>
+            <tr class="m_<?php echo $this->sn;?> accordion-body collapse">
+                <td></td>
+                <td></td>
+                <td></td>
+                <td></td>
+                <td></td>
+          <!--      <td><?php if (isset($this->goodCategory) && $this->goodCategory && isset($this->goodCategory[$m['cat_id']])) echo $this->goodCategory[$m['cat_id']]; ?></td> -->
+                <td>
+                    <?php echo $this->brands[$m['brand_id']] ?>
+                    <?php if (isset($this->goods) && $this->goods && isset($this->goods[$m['good_id']])) echo $this->goods[$m['good_id']]; ?>
+                        
+                </td>
+                <td><?php if (isset($this->goodColors) && $this->goodColors && isset($this->goodColors[$m['good_color']])) echo $this->goodColors[$m['good_color']]; ?></td>
+                <td><?php echo $m['num']; ?></td>
+                <td><?php echo My_Number::f($m['total'], 0, ',', '.'); ?></td>
+                <td></td>
+                <td></td>
+                <td></td>
+                <td></td>
+                <td></td>
+                <td></td>
+                <td></td>
+                 </tr>
+        <?php } elseif ($this->list == 'product-out') { ?>
+            <tr class="m_<?php echo $this->sn;?> accordion-body collapse">
+                <td></td>
+                <td></td>
+                <td><?php if (isset($this->goodCategory) && $this->goodCategory && isset($this->goodCategory[$m['cat_id']])) echo $this->goodCategory[$m['cat_id']]; ?></td>
+                <td><?php if (isset($this->goods) && $this->goods && isset($this->goods[$m['good_id']])) echo $this->goods[$m['good_id']]; ?></td>
+                <td><?php if (isset($this->goodColors) && $this->goodColors && isset($this->goodColors[$m['good_color']])) echo $this->goodColors[$m['good_color']]; ?></td>
+                <td><?php echo $m['num']; ?></td>
+                <td><?php echo My_Number::f($m['total'], 0, ',', '.'); ?></td>
+                <td></td>
+                <td></td>
+                <td></td>
+                <td></td>
+                <td></td>
+                <td></td>
+                <td></td>
+            </tr>
+        <?php } elseif ($this->list == 'sales') { ?>
+
+            <tr class="m_<?php echo $this->sn;?> accordion-body collapse">
+                <td colspan="4"></td>
+
+                <td>
+                    <?php echo $this->brands[$m['brand_id']] ?>
+                    <?php if (isset($this->goods) && $this->goods && isset($this->goods[$m['good_id']])) echo $this->goods[$m['good_id']]; ?> 
+                </td>
+                <td><?php if (isset($this->goodColors) && $this->goodColors && isset($this->goodColors[$m['good_color']])) echo $this->goodColors[$m['good_color']]; ?></td>
+                <td><?php echo $m['num']; ?></td>
+                <td><?php echo My_Number::f($total_price, 0, ',', '.'); ?></td>
+                <td><?php echo My_Number::f($total_amount_ex_vat, 0, ',', '.'); ?></td>
+                <td colspan="11"></td>
+
+            </tr>
+
+        <?php } elseif ($this->list == 'cancel') { ?>
+            <tr class="m_<?php echo $this->sn;?> accordion-body collapse">
+                <td></td>
+                <td></td>
+                <td></td>
+                <td></td>
+                <td><?php if (isset($this->goods) && $this->goods && isset($this->goods[$m['good_id']])) echo $this->goods[$m['good_id']]; ?></td>
+                <td><?php if (isset($this->goodColors) && $this->goodColors && isset($this->goodColors[$m['good_color']])) echo $this->goodColors[$m['good_color']]; ?></td>
+                <td><?php echo $m['num']; ?></td>
+                <td><?php echo My_Number::f($total_price, 0, ',', '.'); ?></td>
+                <td><?php echo My_Number::f($total_amount, 0, ',', '.'); ?></td>
+                <td></td>
+                <td></td>
+                <td></td>
+                <td></td>
+            </tr>
+        <?php } elseif ($this->list == 'po') { ?>
+            <tr class="m_<?php echo $this->sn;?> accordion-body collapse">
+                <td></td>
+                <td></td>
+                <td></td>
+                <td></td>
+                <td><?php if (isset($this->goods) && $this->goods && isset($this->goods[$m['good_id']])) echo $this->goods[$m['good_id']]; ?></td>
+                <td><?php if (isset($this->goodColors) && $this->goodColors && isset($this->goodColors[$m['good_color']])) echo $this->goodColors[$m['good_color']]; ?></td>
+                <td><?php echo $m['num']; ?></td>
+                <td><?php echo My_Number::f($m['price'], 0, ',', '.'); ?></td>
+                <td><?php echo My_Number::f($m['total'], 0, ',', '.'); ?></td>
+                <td></td>
+                <td></td>
+                <td></td>
+                <td></td>
+                <td></td>
+                <td></td>
+            </tr>
+            <?php } elseif ($this->list == 'kerryreport') { ?>
+            <tr class="m_<?php echo $this->sn;?> accordion-body collapse">
+                <td></td>
+                <td></td>
+                <td></td>
+                <td></td>
+                <td></td>
+                <td><?php if (isset($this->goods) && $this->goods && isset($this->goods[$m['good_id']])) echo $this->goods[$m['good_id']]; ?></td>
+                <td><?php if (isset($this->goodColors) && $this->goodColors && isset($this->goodColors[$m['good_color']])) echo $this->goodColors[$m['good_color']]; ?></td>
+                <td><?php echo $m['num']; ?></td>
+                <td></td>
+                <td></td>
+                <td></td>
+                <td></td>
+                <td></td>
+                <td></td>
+                <td></td>
+                <td></td>
+                <td></td>
+                <td></td>
+                <td></td>
+            </tr>
+        <?php } ?>
+    <?php } ?>
+<?php } ?>

@@ -1,0 +1,81 @@
+<?php
+function product_price($priceFloat) {
+$symbol_thousand = '.';
+$decimal_place = 0;
+$price = number_format($priceFloat, $decimal_place, '', $symbol_thousand);
+return $price;
+}
+?>
+<table class="table table-bordered">
+    <thead>
+        <tr>
+            <?php echo $this->sorting(array(
+                    ''         => '#',
+                    'discount_product_type'         => 'ประเภทส่วนลด',
+                    'discount_type'         => 'ส่วนลด',
+                    'discount_per_year'         => 'จำนวนที่ใช้ได้ต่อปี',
+                    'discount_per_day'         => 'รอบการใช้ทุกๆ',
+                    'status_discount'       => 'สถานะ',
+                    'last_buy_date_name'         => 'วันที่ใช้สิทธิล่าสุด',
+                    'privileges_no'         => 'Privileges no',
+                    'next_buy_date_name'         => 'ใช้สิทธิ์ได้อีกครั้ง',
+                    'next_buy_day_name'         => 'จำนวนวันใช้สิทธิ์ครั้งต่อไป (วัน)',
+                    'staff_code'            => 'รหัสพนักงาน',
+                    'staff_name'            => 'ชื่อพนักงาน',
+                    'position_code'            => 'รหัสตำแหน่ง',
+                    'position_name'            => 'ตำแหน่ง',
+                    'province_id'            => 'รหัสจังหวัด',
+                    'province_name'            => 'จังหวัด',
+                    'shipping_province_id'   => 'จังหวัดจัดส่ง',
+                    'shipping_province_name'            => 'จังหวัดจัดส่ง',
+                ),
+                $this->url, $this->sort, $this->desc); ?>
+        </tr>
+    </thead>
+    <tbody>
+    <?php 
+        $i=1;
+        foreach ($this->privileges as $data): 
+            if($data['next_buy_days']==0){
+                $status_discount = "ใช้สิทธิ์ได้";
+            }else{
+                $status_discount = "ใช้สิทธิ์ไปแล้ว";
+            }
+    ?>
+        <tr>
+            <td style="text-align: center;"><?php echo $i;?></td>
+            <td style="text-align: center;"><?php echo $data['discount_product_type'];?></td>
+            <td style="text-align: center;"><?php echo $data['discount_type_name'];?></td>
+            <td style="text-align: center;"><?php echo $data['qty_per_year'];?></td>
+
+            <td style="text-align: center;"><?php echo $data['period_limit_day'];?></td>
+            <td style="text-align: center;"><?php echo $data['status_discount'];?></td>
+            
+            <td style="text-align: center;"><?php echo $data['last_buy_date_name'];?></td>
+            <td><?php echo $data['privileges_no'];?></td>
+            <td style="text-align: center;"><?php echo $data['next_buy_date_name'];?></td>
+            <td style="text-align: center;"><?php echo $data['next_buy_day_name'];?></td>
+            
+            <td><?php echo $data['staff_code'];?></td>
+            <td><?php echo $data['staff_name'];?></td>
+            <td><?php echo $data['position_code'];?></td>
+            <td><?php echo $data['position_name'];?></td>
+            <td><?php echo $data['province_id'];?></td>
+            <td><?php echo $data['province_name'];?></td>
+            <td><?php echo $data['shipping_province_id'];?></td>
+            <td><?php echo $data['shipping_province_name'];?></td>
+        </tr>
+    <?php 
+        $i+=1;
+    endforeach;
+    ?> 
+
+    </tbody>
+</table>
+
+<div class="paging">
+    <?php
+    // print_r($this->total.'- -'. $this->limit.'- -'.$this->offset.'- -'. $this->url) ;
+    echo $this->paging($this->total, $this->limit, $this->offset, $this->url);?>
+</div>
+

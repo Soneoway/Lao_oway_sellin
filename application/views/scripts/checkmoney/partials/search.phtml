@@ -1,0 +1,107 @@
+<form class="form-search form-horizontal" method="get" action="/checkmoney">
+    <div class="row">
+        <div class="span5">
+            
+            <div class="control-group">
+                <label for="d_id" class="span2">Dealer:
+					<select name="d_id" id="d_id">
+						<option value="">Please select</option>
+						<?php
+							foreach($this->distributors as $item):
+								$selected = '';
+								if($item['id'] == $this->params['d_id']){
+									$selected = 'selected="selected"';
+								}
+								echo "<option value='".$item['id']."' $selected>".$item['title']."</option>";
+							endforeach;
+						?>
+					</select> 
+				</label>
+            </div>
+			
+            <div class="control-group">
+                 <label for="created_by" class="span2">Bank
+					<select name='bank_id[]' multiple id='bank_id' >
+						<?php 
+							if( isset( $this->banks ) AND $this->banks    ):
+								foreach(  $this->banks as $item   ):
+									$selected = '';
+									if( in_array($item['id'],$this->params['bank_id']) ){
+										$selected = 'selected="selected"';
+									}
+									echo "<option value='".$item['id']."' $selected>".$item['name']."</option>";
+								endforeach;
+							endif;
+						?>
+					</select>
+				</label>
+            </div>
+             
+            <div class="control-group">
+                <label for="type" class="span2">Type:
+					<select name="type" id="type">
+						<option value="">Please select</option>
+						<?php 
+							$arrType = array(
+									'1' => 'Money Input',
+									'2' => 'Payment confirm',
+									'3'	=> 'Fee'
+							);
+							foreach($arrType as $key => $value):
+								$selected = '';
+								if($key == $this->params['type']){
+									$selected = 'selected="selected"';
+								}
+								echo "<option value='".$key."' $selected >$value</option>";
+							endforeach;
+						?>
+					</select> 
+				</label>
+            </div>
+			
+			<div class="control-group">
+                <label for="" class="span2">Bank serial:
+					<input type='text' name='bank_serial' value='<?php if(isset($this->params['bank_serial']) && $this->params['bank_serial'] ) echo $this->params['bank_serial']; ?>'> 
+				</label>
+            </div>
+            
+            <div class="control-group">
+                <label for="" class="span2">Bank transaction code:
+					<input type='text' name='bank_transaction_code' value='<?php if(isset($this->params['bank_transaction_code']) && $this->params['bank_transaction_code'] ) echo $this->params['bank_transaction_code']; ?>'> 
+				</label>
+            </div> 
+        </div><!-- End span-->
+        <div class="span5">
+            <div class="control-group">
+                <label for="created_by" class="span2">From: </label>
+                <input type='text' name='from' value="<?php (	isset($this->params['from']) AND $this->params['from']	) ? printf($this->params['from']) : '';?> " class='datepicker'/>
+            </div>
+            
+            <div class="control-group">
+                <label for="created_by" class="span2">To: </label>
+                <input type='text' name='to' value="<?php (	isset($this->params['to']) AND $this->params['to']	) ? printf($this->params['to']) : '';?> " class='datepicker'/>
+            </div>
+			
+            <div class="control-group">
+                <label for="created_by" class="span2">Note: </label>
+                <textarea name='note'><?php (   isset($this->params['note']) AND $this->params['note']  ) ? printf($this->params['note']) : '';?></textarea>
+            </div>
+ 
+            <div class="control-group">
+                <label for="created_by" class="span2">Content: </label>
+                <textarea name='content'><?php (   isset($this->params['content']) AND $this->params['content']  ) ? printf($this->params['content']) : '';?></textarea>
+            </div>
+       
+        </div>
+        
+    </div>
+   
+	<div class="row">
+        <div class="span5">
+   			 <button type="submit" class="btn btn-primary">Search</button>
+		    <button type="reset" class="btn btn-warning">Reset</button>
+		     <button type="submit" name="export" value="1" class="btn btn-success">Export</button> 
+       	</div>
+    </div>
+   
+</form>

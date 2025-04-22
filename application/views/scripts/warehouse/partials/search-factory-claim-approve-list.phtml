@@ -1,0 +1,122 @@
+<form class="form-search form-horizontal" method="get" action="/warehouse/factory-claim-approve-list">
+
+    <div class="row">
+
+        <div class="span5">
+            <div class="control-group">
+                <label for="job_number" class="span2">Job Number</label>
+                <input id="job_number" name="job_number" type="text" class="form-control" value="<?php isset($this->params['job_number']) and printf($this->params['job_number']);?>">
+            </div>
+
+            <div class="control-group">
+                <label for="old_imei" class="span2">Old IMEI</label>
+                <input id="old_imei" name="old_imei" type="text" class="form-control" value="<?php isset($this->params['old_imei']) and printf($this->params['old_imei']);?>">
+            </div>
+
+            <div class="control-group">
+                <label for="new_imei" class="span2">New IMEI</label>
+                <input id="new_imei" name="new_imei" type="text" class="form-control" value="<?php isset($this->params['new_imei']) and printf($this->params['new_imei']);?>">
+            </div>
+
+            <div class="control-group">
+                <label for="warehouse" class="span2">Warehouse</label>
+                <select class="form-control" name="warehouse">
+                    <option value>---</option>
+                    <?php
+            
+                     $userStorage = Zend_Auth::getInstance()->getStorage()->read();
+
+                     if (My_Staff_Group::inGroup($userStorage->group_id, array(ADMINISTRATOR_ID))){
+
+                        foreach ($this->warehouse_cache as $key => $value) {
+                            ?>
+                            <option value="<?=$key;?>" <?php if(isset($this->params['warehouse']) and $this->params['warehouse'] == $key){ echo 'selected'; }?>><?=$value;?> </option>
+                        <?php
+                        }
+                    }else{ 
+
+                        foreach ($this->get_warehouse as $key) {
+                            ?>
+                            <option value="<?=$key['warehouse_id'];?>" <?php if(isset($this->params['warehouse']) and $this->params['warehouse'] == $key){ echo 'selected'; }?>><?=$this->warehouse_cache[$key['warehouse_id']];?></option>
+                        <?php
+                        }
+                    } ?>
+                </select>
+            </div>
+            
+        </div>
+        
+        <div class="span5">
+
+            <div class="control-group">
+                <label for="request_at_from" class="span2">Request From</label>
+                <input type="text" class="form-control date" id="request_at_from" name="request_at_from" value="<?php isset($this->params['request_at_from']) and printf($this->params['request_at_from']);?>">
+            </div>
+
+            <div class="control-group">
+                <label for="request_at_to" class="span2">Request To</label>
+                <input type="text" class="form-control date" id="request_at_to" name="request_at_to" value="<?php isset($this->params['request_at_to']) and printf($this->params['request_at_to']);?>">
+            </div>
+            
+        </div>
+
+    </div>
+
+    <button style="margin-left: 30px;" type="submit" class="btn btn-primary">Search</button>
+</form>
+<script type="text/javascript" src="/js/jquery-ui-1.8.12.custom.min.js"></script>
+<script type="text/javascript" src="/js/jquery.ui.timepicker.js"></script>
+<link rel="stylesheet" type="text/css" href="/css/jquery-ui-1.8.12.custom.css"/>
+<link rel="stylesheet" type="text/css" href="/css/jquery.ui.timepicker.css"/>
+<style>
+.is_changed_wh1,.is_changed_wh0
+{
+    margin-left:0px;
+    margin-top: 5px;
+    margin-bottom:5px;
+}
+</style>
+<script>
+    $(document).ready(function () {
+       $( '.date' ).datepicker({ dateFormat: "dd/mm/yy" });
+        initSelectChangeType();
+    });
+
+    function palert(msg){
+        $('.page-header').next('.alert').remove();
+        $('.page-header').after('<div class="alert alert-error">'+msg+'</div>');
+
+    }
+
+    function psuccess(msg){
+        $('.page-header').next('.alert').remove();
+        $('.page-header').after('<div class="alert alert-success">'+msg+'</div>');
+
+    }
+
+    function perror(msg){
+        $('#div_error').html(msg);
+
+    }
+
+    function initSelectChangeType(){
+
+        $('input[name=is_changed_wh]').change(function (e){
+
+            var val = $('input:radio[name=is_changed_wh]:checked').val();
+
+            if (val > 0){
+                $('.is_changed_wh0').hide();
+                $('.is_changed_wh1').show();
+            }
+            else{
+
+                $('.is_changed_wh0').show();
+                $('.is_changed_wh1').hide();
+            }
+
+        });
+    }
+   
+
+</script>

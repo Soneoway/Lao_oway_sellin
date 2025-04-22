@@ -1,0 +1,119 @@
+<div class="page-header">
+    <h1>Price Log <small>List</small></h1>
+</div>
+
+<?php
+    if (isset($this->messages_success) and $this->messages_success)
+        foreach ($this->messages_success as $message):
+            echo '<div class="alert alert-success">'.$message.'</div>';
+        endforeach;
+
+    if (isset($this->messages) and $this->messages)
+        foreach ($this->messages as $message):
+            echo '<div class="alert alert-error">'.$message.'</div>';
+        endforeach;
+?>
+
+<div class="accordion" id="accordion2">
+    <div class="accordion-group">
+        <div class="accordion-heading">
+            <a class="accordion-toggle collapsed" data-toggle="collapse" data-parent="#accordion2" href="#collapseTwo">
+                Search
+            </a>
+        </div>
+        <div id="collapseTwo" class="accordion-body collapse" style="height: 0px;">
+            <div class="accordion-inner">
+                <form class="form-search form-horizontal" method="get">
+                    <div class="row">
+                        <div class="span5">
+                            <div class="control-group">
+                                <label for="from_date" class="span2">From</label>
+                                <input id="from_date" name="from_date" type="text" class="input-medium date search-query form-control span2" value="<?php isset($this->params['from_date']) and printf($this->params['from_date']);?>">
+                            </div>
+
+                            <div class="control-group">
+                                <label for="to_date" class="span2">To</label>
+                                <input id="to_date" name="to_date" type="text" class="input-medium date search-query form-control span2" value="<?php isset($this->params['to_date']) and printf($this->params['to_date']);?>">
+                            </div>
+                        </div>
+
+                        <div class="span5">
+                            <div class="control-group">
+                                <label for="cat_id" class="span2">Product Category</label>
+                                <select id="cat_id" class="span3" name="cat_id">
+                                    <option value="">Choose</option>
+                                    <?php if ($this->good_categories): foreach ($this->good_categories as $id=>$name):?>
+                                        <option value="<?php echo $id;?>" <?php if (isset($this->params['cat_id']) and $id==$this->params['cat_id']):?> selected<?php endif;?>><?php echo $name;?></option>
+                                    <?php endforeach; endif;?>
+                                </select>
+                            </div>
+
+                            <div class="control-group">
+                                <label for="good_id" class="span2">Product</label>
+                                <select id="good_id" class="span3" name="good_id">
+                                    <option value="">Choose</option>
+                                    <?php if ($this->goods): foreach ($this->goods as $key=> $item):?>
+                                        <option value="<?php echo $key;?>" <?php if (isset($this->params['good_id']) and $key==$this->params['good_id']):?> selected<?php endif;?>><?php echo $item;?></option>
+                                    <?php endforeach; endif;?>
+                                </select>
+                            </div>
+                        </div>
+                    </div>
+
+                    <button type="submit" class="btn btn-primary">Search</button>
+                    <a href="/product/price-log" class="btn btn-warning">Reset</a>
+
+                </form>
+
+            </div>
+        </div>
+    </div>
+</div>
+
+<div class="row">
+    <div class="span12">
+        <span class="pull-right">
+            <a class="btn btn-success" href="<?php echo HOST ?>product/price-log-create">
+                <i class="icon-plus"></i>
+            </a>
+        </span>
+    </div>
+</div>
+<div class="table-responsive load-ajax">
+    <?php
+        echo $this->render('product/price-log/partials/list.phtml');
+    ?>
+</div>
+
+<script type="text/javascript" src="/js/jquery-ui-1.8.12.custom.min.js"></script>
+<link rel="stylesheet" type="text/css" href="/css/jquery-ui-1.8.12.custom.css"/>
+<script>
+    $(document).ready(function () {
+        $( '.date' ).datepicker({ dateFormat: "dd/mm/yy" });
+
+        $('#cat_id').change(function(){
+            $(this).after('<span class="loading"></span>');
+            var _self = $(this);
+            var cat_id = $('#cat_id').val();
+
+            if (_self.attr('id')=='cat_id')
+                $('#good_id').find('option:not(:first)').remove();
+
+            var good_id = $('#good_id').val();
+
+            $.get("/get/load",
+                {cat_id: cat_id}
+                ,function(data,status){
+                    var data = $.parseJSON( data );
+                    if (data.goods){
+                        var obj = data.goods;
+                        for (var i = 0; i < obj.length; i++) {
+                            $('#good_id').append('<option value="'+obj[i]['id']+'">'+obj[i]['name']+'</option>');
+                        }
+                    }
+
+                    _self.nextAll('.loading').remove();
+                });
+        });
+    });
+</script>

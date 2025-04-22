@@ -1,0 +1,284 @@
+<?php $userStorage = Zend_Auth::getInstance()->getStorage()->read(); ?>
+<!-- <?php if($userStorage->id == 1): ?>
+  <button class="btn btn-danger pull-right" onclick="bulk_delete()"><i class="glyphicon glyphicon-trash"></i> Bulk Delete</button>
+  <?php endif; ?> -->
+  <div class="row">
+    <div class="span12">
+    </div>
+</div>
+<table class="table table-bordered">
+    <thead>
+        <tr>
+            <?php echo $this->sorting(array(
+                '#',
+                'Changed SN',
+                'RQ',
+                'Type',
+                'SENT',
+                'RECEIVED',
+                'Old',
+                'New',
+                'Status',
+                'Created by',
+                'created_at' => 'Created at',
+                'completed_date' => 'Receive at',
+                'confrimed_out_at' => 'Confirm out at',
+                'remark' => 'Remark',
+                'pay' => 'Paid',
+                'Action',
+            ),
+            $this->url, $this->sort, $this->desc); ?>
+        </tr>
+    </thead>
+    <tbody>
+        <?php
+        $statuses = unserialize(CHANGE_ORDER_STATUS);
+        if (isset($this->change_sales) and $this->change_sales) :
+            foreach ($this->change_sales as $k=>$m):
+               $sn_ref = $m['sn_ref'];
+               if($sn_ref==''){
+                $sn_ref = $m['changed_sn'];
+            }                 
+            ?>
+            <tr>
+                <td>
+                    <?php
+                    echo $this->offset + $k + 1;
+                    if($m['type']=="1"){
+                        $co_type="Normal";
+                    }else if($m['type']=="2"){
+                        $co_type="APK";
+                    }else if($m['type']=="5"){
+                        $co_type="DEMO";
+                    }
+                    
+                    ?>
+                </td>
+                <td><?php echo $sn_ref ?></td>
+                <td><?php echo $m['rq'] ?></td>
+                <td><?php echo $co_type ?></td>
+                <td><?php echo $m['total_qty_product'] ?></td>
+
+                <td><?php echo $m['total_qty_product_receive'] ?></td>
+                <td><?php echo ( $m['is_changed_wh']==1 ? ('WH: ' . ( isset( $this->warehouse_cached[$m['old_id']] ) ? $this->warehouse_cached[$m['old_id']] : '' ) ) : ( 'Retailer:' . ( isset( $this->distributor_cached[$m['old_id']] ) ? $this->distributor_cached[$m['old_id']] : '' ) ) ) ; ?></td>
+                <td><?php echo ( $m['is_changed_wh']==1 ? ('WH: ' . ( isset( $this->warehouse_cached[$m['new_id']] ) ? $this->warehouse_cached[$m['new_id']] : '' ) ) : ( 'Retailer:' . ( isset( $this->distributor_cached[$m['new_id']] ) ? $this->distributor_cached[$m['new_id']] : '' ) ) ) ; ?></td>
+
+
+                <td><?php echo ( isset($statuses[ $m['status'] ]) ? $statuses[ $m['status'] ] : '' ); ?></td>
+                <td><?php echo ( isset($this->staff_cached[ $m['created_by'] ]) ? $this->staff_cached[ $m['created_by'] ] : '' ); ?></td>
+                <td><?php echo $m['created_at']; ?></td>
+                <td><?php echo $m['completed_date']; ?></td>
+                <td><?php echo $m['confirmed_out_at']; ?></td>
+                <td><?php echo $m['remark']; ?></td>
+
+                <td> 
+                    <?php
+                    if($m['pay'] ==1){
+                        $payment_status = '<p style="color: red">NO';
+                    }else{
+                        $payment_status = '<p style="color: green">YES';
+                    }
+
+                    echo $payment_status;
+                    ?>  
+                </td>
+
+                <td class="">
+                    <?php if ($this->access('warehouse', 'change-sales-view')) {?>
+                        <a title="View" href="/warehouse/change-sales-view?id=<?php echo $m['id'];?>"> <i class="icon-eye-open"></i></a>
+                        <a title="Print List"
+                        href="<?php echo HOST ?>warehouse/print-change-sales?id=<?php echo $m['id'];?>"  
+                        target="picking_list"
+                        data-sn="<?php echo $m['id'] ?>">
+                        <i class="icon-print"></i></a>
+                        <?php if (isset($m['borrowing_id']) && $m['borrowing_id']){ ?>
+                            <a title="Print Address"
+                            href="<?php echo HOST ?>warehouse/print-change-sales-address-borrowing?id=<?php echo $m['id'];?>"  
+                            target="picking_address"
+                            data-sn="<?php echo $m['id'] ?>">
+                            <i class="icon-truck"></i></a>
+                        <?php } ?>
+                    <?php } ?>
+
+                    <?php if ($this->access('warehouse', 'change-sales-view')) {?>
+                        <?php if ( in_array($m['status'], array(CHANGE_ORDER_STATUS_PENDING)) AND $m['delete_status'] != 1 AND !$m['borrowing_id']):?>
+                            <a title="Edit" href="/warehouse/change-sales?id=<?php echo $m['id'];?>"> <i class="icon-edit"></i></a>
+                        <?php endif;?>
+                    <?php } ?>
+
+                    <?php if ($this->access('warehouse', 'change-sales-scan-out')) {?>
+                        <?php if ( in_array($m['status'], array(CHANGE_ORDER_STATUS_PENDING)) ):?>
+                            <a title="Scan OUT" href="/warehouse/change-sales-scan-out?id=<?php echo $m['id'];?>"> <i class="icon-tags"></i></a>
+                        <?php endif;?>
+                    <?php } ?>
+
+                    <?php if ($this->access('warehouse', 'change-sales-confirm')) {?>
+                        <?php if ( in_array($m['status'], array(CHANGE_ORDER_STATUS_SCANNED_OUT)) ):?>
+                            <a title="Confirm OUT" href="/warehouse/change-sales-confirm?id=<?php echo $m['id'];?>"> <i class="icon-road"></i></a>
+                        <?php endif;?>
+                    <?php } ?>
+
+                    <?php if ($this->access('warehouse', 'change-sales-receive')) {?>
+                        <?php if ( in_array($m['status'], array(CHANGE_ORDER_STATUS_ON_CHANGE, CHANGE_ORDER_STATUS_SCANNED_IN , CHANGE_ORDER_STATUS_PARTIALLY_RECEIVED)) ):?>
+                            <a title="Scan IN" href="/warehouse/change-sales-receive?id=<?php echo $m['id'];?>"> <i class="icon-qrcode"></i></a>
+                        <?php endif;?>
+                    <?php } ?>
+
+                    <?php if ($this->access('warehouse', 'change-sales-complete')) {?>
+                        <?php if ( in_array($m['status'], array(CHANGE_ORDER_STATUS_SCANNED_IN , CHANGE_ORDER_STATUS_FULL_RECEIVED , CHANGE_ORDER_STATUS_PARTIALLY_RECEIVED )) ):?>
+                            <a title="Complete IN" href="/warehouse/change-sales-complete?id=<?php echo $m['id'];?>"> <i class="icon-ok"></i></a>
+                        <?php endif;?>
+                    <?php } ?>
+                    
+                    <?php if($m['delete_status'] == 1){ ?>
+                        <a href="#" title="Info"  data-toggle="modal" 
+                        data-by="<?php echo $m['firstname'].'   '. $m['lastname'];?>" 
+                        data-date="<?php echo $m['delete_date'];?>"
+                        data-reason="<?php echo $m['delete_reason'];?>"
+                        class="info" data-target="#Cancel-info" style="color: red;">Canceled</a>
+                    <?php } 
+                    elseif ( in_array($m['status'], array(CHANGE_ORDER_STATUS_PENDING)) ) { ?>
+                       <a href="#" title="Cancel"  data-toggle="modal" data-id="<?php echo $m['id'];?>" class="cancel" data-target="#confirm-delete"><i class="icon-eraser"></i></a>
+                       <!-- <input type="checkbox" class="data-check" value="<?php echo $m['id'];?>"> -->
+                   <?php } ?>
+               </td>
+           </tr>
+       <?php endforeach;?>
+   <?php endif; ?>
+</tbody>
+</table>
+<form action="<?php echo HOST ?>warehouse/change-sales-delete" method="POST" >
+
+   <div class="modal fade" id="confirm-delete" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            
+            <div class="modal-header ui-dialog-titlebar ui-widget-header ui-corner-all ui-helper-clearfix">
+                <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
+                <h3 class="modal-title" id="myModalLabel">Confirmation Required</h3>
+            </div>
+            
+            <div class="modal-body">
+                <center><h3>Reason : <input type="text" name="reason" id="reason" style="width: 350px !important" required></h3>
+                    <input type="hidden" name="id" id="id" value="">
+                </div>
+                
+                <div class="modal-footer">
+                    <button type="submit" class="ui-button ui-widget ui-state-default ui-corner-all ui-button-text-only">
+                        <span class="ui-button-text">Confrim</span>
+                    </button>
+                    <button type="button" class="ui-button ui-widget ui-state-default ui-corner-all ui-button-text-only" data-dismiss="modal">
+                        <span class="ui-button-text">Cancel</span>
+                    </button>
+                    
+                </div>
+            </div>
+        </div>
+    </div>
+</form>
+<div class="modal fade" id="Cancel-info" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            
+            <div class="modal-header ui-dialog-titlebar ui-widget-header ui-corner-all ui-helper-clearfix">
+                <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
+                <h3 class="modal-title" id="myModalLabel">Canceled INFO</h3>
+            </div>
+            
+            <div class="modal-body">
+                <h3>
+                    By  :  <span id="by"></span><br>
+                    Reason  :  <span id="reason"></span><br>
+                    Date  :  <span id="date"></span><br>
+                </h3>
+            </div>
+            
+            <div class="modal-footer">
+                <button type="button" class="ui-button ui-widget ui-state-default ui-corner-all ui-button-text-only" data-dismiss="modal">
+                    <span class="ui-button-text">Close</span>
+                </button>
+                
+            </div>
+        </div>
+    </div>
+</div>
+
+<div class="paging">
+    <?php echo $this->paging($this->total, $this->limit, $this->offset, $this->url);?>
+</div>
+<iframe src="" class="print_frame" name="picking_list" frameborder="0" style="opacity: 0;height: 0px;width: 0px;"></iframe>
+
+<iframe src="" class="print_frame" name="picking_address" frameborder="0" style="opacity: 0;height: 0px;width: 0px;"></iframe>
+
+<script>
+    $('#confirm-delete').on('show.bs.modal', function(e) {
+        $(this).find('.btn-ok').attr('href', $(e.relatedTarget).data('href'));
+        
+        $('.debug-url').html('Delete URL: <strong>' + $(this).find('.btn-ok').attr('href') + '</strong>');
+    });
+    $(document).on("click", ".cancel", function () {
+        var Id = $(this).data('id');
+        $(".modal-body #id").val( Id );
+    });
+
+    $(document).on("click", ".info", function () {
+        var by = $(this).data('by');
+        var reason = $(this).data('reason');
+        var date = $(this).data('date');
+        $(".modal-body #by").text( by ) ;
+        $(".modal-body #reason").text( reason ) ;
+        $(".modal-body #date").text( date ) ;
+    });
+//----------------------------------
+    $("#check-all").click(function () {
+        $(".data-check").prop('checked', $(this).prop('checked'));
+    });
+//----------------------------------
+
+    function bulk_delete()
+    {
+        var list_id = [];
+        $(".data-check:checked").each(function() {
+            list_id.push(this.value);
+        });
+        if(list_id.length > 0)
+        {
+            Swal.fire({
+                title: '<font style="font-family: phetsarath ot">ທ່ານຕ້ອງການລົບບິນສັ່ງຊື້ຫຼືບໍ່?</font>',
+                text: "Are you sure delete this "+list_id.length+" data?",
+                icon: 'warning',
+                input: 'text',
+                showCancelButton: true,
+                confirmButtonColor: '#ed9a03',
+                cancelButtonColor: '#ababab',
+                confirmButtonText: '<font style="font-family: phetsarath ot">ຢືນຢັ້ນ</font>',
+                cancelButtonText: '<font style="font-family: phetsarath ot">ຍົກເລີກ</font>'
+            }).then((result) => {
+                if (result.isConfirmed) {
+                    if (result.value) {
+                        var reason = result.value;
+                        $.ajax({
+                            type: "POST",
+                            data: {id:list_id,reason:reason},
+                            url: "/warehouse/deleteco2",
+                            dataType: "JSON",
+                            success: function(data){        
+                                location.reload();
+                            }
+                        });
+                    }else{
+                        Swal.fire("Error","<font style='font-family: phetsarath ot'>ກະລຸນາໃສ່ໝາຍເຫດ!</font>", "warning");
+                    }
+                }else{
+                    Swal.fire("Error","no data selected", "error");
+                }
+            });
+
+        }
+        else
+        {
+            Swal.fire("Error","no data selected", "error");
+        }
+    }
+
+</script>

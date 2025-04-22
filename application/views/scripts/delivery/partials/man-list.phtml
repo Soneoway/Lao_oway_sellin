@@ -1,0 +1,55 @@
+<table class="table table-bordered">
+    <thead>
+        <tr>
+            <?php echo $this->sorting(array(
+                    '#',
+                    'name' => 'Name',
+                    'note' => 'Note',
+                    'Action',
+                ),
+                $this->url, $this->sort, $this->desc); ?>
+        </tr>
+    </thead>
+    <tbody>
+        <?php
+        if (isset($this->men) and $this->men)
+            foreach ($this->men as $k=>$_man): ?>
+        <tr>
+            <td>
+                <?php echo ($this->offset + $k + 1) ?>
+            </td>
+            <td>
+                <?php if (!isset($_man['status']) || is_null($_man['status']) || $_man['status'] == 0): ?>
+                    <del><?php echo $_man['name'];?></del>
+                <?php else: ?>
+                    <?php echo $_man['name'];?>
+                <?php endif ?>
+            </td>
+            <td><?php echo $_man['note'];?></td>
+            <td>
+                <?php if ($this->access('delivery', 'man-edit')): ?>
+                    <a href="<?php echo HOST ?>delivery/man-edit?id=<?php echo $_man['id'] ?>" class="btn btn-default btn-mini" title="Edit"><i class="icon-edit"></i></a>
+                <?php endif ?>
+
+                <?php if ($this->access('delivery', 'man-delete') && isset($_man['status']) && $_man['status'] == 1): ?>
+                    <a href="<?php echo HOST ?>delivery/man-delete?id=<?php echo $_man['id'] ?>" class="btn btn-danger btn-mini confirmLink" title="Delete"><i class="icon-trash"></i></a>
+                <?php endif ?>
+
+                <?php if ($this->access('delivery', 'man-undelete') && (!isset($_man['status']) || is_null($_man['status']) || $_man['status'] == 0)): ?>
+                    <a href="<?php echo HOST ?>delivery/man-undelete?id=<?php echo $_man['id'] ?>" class="btn btn-inverse btn-mini confirmLink" title="UnDelete"><i class="icon-refresh"></i></a>
+                <?php endif ?>
+            </td>
+        </tr>
+        <?php endforeach;?>
+
+    </tbody>
+</table>
+
+<div class="paging">
+    <?php echo $this->paging($this->total, $this->limit, $this->offset, $this->url);?>
+</div>
+
+<script type="text/javascript" src="/js/jquery-ui-1.8.12.custom.min.js"></script>
+<link rel="stylesheet" type="text/css" href="/css/jquery-ui-1.8.12.custom.css"/>
+<?php // echo $this->load();?>
+<?php echo $this->confirm();?>

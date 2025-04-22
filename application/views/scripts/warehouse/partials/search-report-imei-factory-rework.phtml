@@ -1,0 +1,81 @@
+<form class="form-search form-horizontal" method="get" action="/warehouse/report-imei-factory-rework">
+
+    <div class="row">
+
+        <div class="span5">
+            <div class="control-group">
+                <label for="imei" class="span2">Imei</label>
+                <input id="imei" name="imei" type="text" class="form-control" value="<?php isset($this->params['imei']) and printf($this->params['imei']);?>">
+            </div>
+            <div class="control-group">
+                <label for="imei_munti" class="span2">Imei Multi</label>
+                <ul class="form-control" id="imei_munti"><?php
+                    if (isset($this->params['imei_munti']) and $this->params['imei_munti']):
+                        foreach ($this->params['imei_munti'] as $imei_munti)
+                            echo '<li>'.$imei_munti.'</li>';
+                    endif;
+                ?></ul>
+            </div>
+        </div>
+        
+        <div class="span5">
+            <div class="control-group">
+                <label for="flag_rework_date_from" class="span2">Flag From</label>
+                <input type="text" class="form-control date" id="flag_rework_date_from" name="flag_rework_date_from" value="<?php isset($this->params['flag_rework_date_from']) and printf($this->params['flag_rework_date_from']);?>">
+            </div>
+            <div class="control-group">
+                <label for="flag_rework_date_to" class="span2">Flag To</label>
+                <input type="text" class="form-control date" id="flag_rework_date_to" name="flag_rework_date_to" value="<?php isset($this->params['flag_rework_date_to']) and printf($this->params['flag_rework_date_to']);?>">
+            </div>
+
+        </div>
+
+    </div>
+
+    <button type="submit" class="btn btn-primary">Search</button>
+    <!-- <button type="reset" class="btn btn-warning">Reset</button> -->
+    <button type="submit" name="export" value="1" class="btn btn-success">Export</button>
+</form>
+<script type="text/javascript" src="/js/jquery-ui-1.8.12.custom.min.js"></script>
+<script type="text/javascript" src="/js/jquery.ui.timepicker.js"></script>
+<link rel="stylesheet" type="text/css" href="/css/jquery-ui-1.8.12.custom.css"/>
+<link rel="stylesheet" type="text/css" href="/css/jquery.ui.timepicker.css"/>
+<script>
+    $(document).ready(function () {
+       $( '.date' ).datepicker({ dateFormat: "dd/mm/yy" });
+        
+    });
+
+    $('#imei_munti').keyup(function(event) {
+
+        var code = event.keyCode || event.which;
+        if(code == 13 || code == 32) { //Enter keycode,Spacebar
+
+            var text = $(this).text();
+
+            text = text.replace(/\×/g,'[|]');
+
+            var arr_text = text.split('[|]');     
+
+            $('#imei_munti').tagit('removeAll');
+
+            $.each(arr_text, function(index,value) {
+
+                if(value.length > 1){
+                    var arr_text_sub = value.split(' ');
+                    $.each(arr_text_sub, function(index_sub,value_sub) {
+                        $('#imei_munti').tagit('createTag',value_sub);
+                    });
+                }else{
+                    $('#imei_munti').tagit('createTag',value);
+                }
+
+            });
+
+         }
+
+    });
+
+   
+
+</script>

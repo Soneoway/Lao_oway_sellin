@@ -1,0 +1,44 @@
+<link href="../css/select2.css" rel="stylesheet"/>
+<script src="../js/select2.js"></script>
+<div class="page-header">
+    <h1>Financial Tools</h1>
+</div>
+<div class="row">
+	<div class="span12">
+		<form class="form-search form-horizontal" method="get" action="<?php echo HOST ?>tool/financial">
+		    <div class="row">
+		        <div class="span5">
+		            <div class="control-group">
+		                <label for="created_at_from" class="span2">Time From</label>
+		                <input type="text" class="form-control search-query date" id="from" name="from" value="<?php isset($this->params['from']) and printf($this->params['from']);?>">
+		            </div>
+		            <div class="control-group">
+		                <label for="created_at_to" class="span2">Time To</label>
+		                <input type="text" class="form-control search-query date" id="to" name="to" value="<?php isset($this->params['to']) and printf($this->params['to']);?>">
+		            </div>
+		            <div class="control-group">
+		                <label for="type" class="span2">Order Type</label>
+                        <select name="type" id="type">
+                            <option value="1">For Retailer</option>
+                            <option value="2">For Demo</option>
+                            <option value="3">For Staffs</option>
+                        </select>
+		            </div>
+		        </div>
+		    </div>
+		    <button type="submit" name="export_distributor" value="1" class="btn btn-success" data-toggle="tooltip" title="Báo cáo số máy xuất cho KHÁCH HÀNG, tính theo từng model">Export Distributor/Model</button>
+		    <button type="submit" name="export_warehouse" value="1" class="btn btn-success" title="Báo cáo số máy xuất ở từng KHO, tính theo từng model và lý do xuất">Export Warehouse/Model</button>
+		</form>
+	</div>
+</div>
+<script type="text/javascript" src="/js/jquery-ui-1.8.12.custom.min.js"></script>
+<link rel="stylesheet" type="text/css" href="/css/jquery-ui-1.8.12.custom.css"/>
+<script>
+    $(document).ready(function () {
+        $( '.date' ).datepicker({ dateFormat: "dd/mm/yy" });
+        $('.btn').popover({
+        	placement: 'bottom',
+        	trigger: 'hover'
+        });
+    });
+</script>

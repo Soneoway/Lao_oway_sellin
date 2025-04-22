@@ -1,0 +1,82 @@
+<div class="row-fluid">
+    <div class="span6">
+        <div class="accordion" id="search">
+            <div class="accordion-group">
+                <div class="accordion-heading">
+                    <a class="accordion-toggle collapsed" data-toggle="collapse" data-parent="#search" href="#searchCollapse">
+                        <span><i class="icon-search"></i></span> Search in this list
+                    </a>
+                </div>
+                <div id="searchCollapse" class="accordion-body collapse" style="height: 0px;">
+                    <div class="accordion-inner">
+                        <?php
+                        echo $this->render('mapping/distributor/partials/search-dealer.phtml');
+                        ?>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="span6">
+        <?php if($this->access('mapping','distributor-save')):?>
+        <div class="accordion" id="addmore">
+            <div class="accordion-group">
+                <div class="accordion-heading">
+                    <a class="accordion-toggle collapsed" data-toggle="collapse" data-parent="#addmore" href="#addmoreCollapse">
+                        <span><i class="icon-plus-sign"></i></span> Add more distributors
+                    </a>
+                </div>
+                <div id="addmoreCollapse" class="accordion-body collapse" style="height: 0px;">
+                    <div class="accordion-inner">
+                        <?php
+                            echo $this->render('mapping/distributor/partials/add-dealer.phtml');
+                        ?>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <?php endif;?>
+    </div>
+</div>
+<table class="table table-bordered numbering">
+    <thead>
+        <tr>
+            <th>#</th>
+            <th>Retailer Name</th>
+            <th>Company Name</th>
+            <th>Province</th>
+            <th>Area</th>
+            <th>Action</th>
+        </tr>
+    </thead>
+    <tbody class="store_list">
+        <?php if ($this->subs):?>
+        <?php foreach ($this->subs as $k => $sub):  ?>
+            <tr class="store"
+                data-id="<?php echo $sub['id'] ?>"
+                data-name="<?php echo $sub['title'] ?>" 
+                data-company-name="<?php echo $sub['unames'] ?>" 
+                data-area="<?php if(isset($this->regions[$sub['region']]['area_id']) 
+                                    && $this->regions[$sub['region']]['area_id']) 
+                                    echo $this->regions[$sub['region']]['area_id'] ?>" 
+                data-region="<?php echo $sub['region'] ?>">
+
+                <td></td>
+                <td><?php echo $sub['title'] ?></td>
+                <td><?php echo $sub['unames'] ?></td>
+
+                <td><?php if (isset($this->regions[$sub['region']]) && $this->regions[$sub['region']]) 
+                                echo $this->regions[$sub['region']]['name'] ?></td>
+
+                <td><?php if (isset($this->areas[$this->regions[$sub['region']]['area_id']]) && $this->areas[$this->regions[$sub['region']]['area_id']]) 
+                                echo $this->areas[$this->regions[$sub['region']]['area_id']] ?></td>
+                <td>
+                    <?php if($this->access('mapping','distributor-save')):?>
+                    <button class="btn btn-default btn-mini btn_remove">Remove</button>
+                    <?php endif;?>
+                </td>
+            </tr>
+        <?php endforeach ?>
+        <?php endif ?>
+    </tbody>
+</table>

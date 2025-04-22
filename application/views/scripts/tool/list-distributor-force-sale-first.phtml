@@ -1,0 +1,174 @@
+
+       <div class="col-md-12" style="display: flex;">
+            <div class="dual-list list-left-distributor col-md-5">
+                <div class="well-D">
+                    <div class="row tabLeft">
+                        <div class="col-md-7">
+                            <div class="input-prepend">
+                                <span class="add-on"><i class="icon icon-search"></i></span>
+                                <input type="text" name="SearchDualListDistributor" class="form-control" placeholder="Search" />
+                            </div>
+                        </div>
+                        <div class="col-md-2">
+                            <div class="btn-group">
+                                <a class="btn btn-default selectorD" title="select all"><i class="icon icon-circle-blank"></i></a>
+                            </div>
+                        </div>
+                    </div>
+                    <div>
+                         <span class="so-title">Distributor ID</span>
+                         <span class="price_ori">Distributor Name</span>
+                         
+                    </div>
+                    <ul class="list-group">
+                    <?PHP 
+                        $i = 1;
+                        foreach ($this->blacklist as $list) :
+                         
+                            ?>
+                        <li class="list-group-item item-distributor">
+                            <span class="so"><?=$list['id']?></span>
+                            <span class="price_ori "><?=$list['title']?>
+
+                            <input type="hidden" class="sn" name="d_id[]" disabled value="<?=$list['id']?>">
+                            </span>
+                           
+                        
+                            
+                        </li>
+                            
+                            
+                      <?PHP $i+=1; 
+                       
+                      endforeach; ?>  
+                        
+                    </ul>
+                </div>
+            </div>
+
+            <div class="list-arrows-distributor col-md-1 text-center">
+                <div class="but"><a class="btn btn-default btn-sm move-left">
+                    <span class="icon icon-chevron-left"></span>
+                </a>
+
+                <a class="btn btn-default btn-sm move-right">
+                    <span class="icon icon-chevron-right"></span>
+                </a>
+                </div>
+                
+            </div>
+
+            <div class="dual-list list-right-distributor col-md-5">
+                <div class="well-D">
+                    <div class="row tabLeft">
+                        
+                        <div class="col-md-7">
+                            <div class="input-prepend">
+                                <span class="add-on"><i class="icon icon-search"></i></span>
+                                <input type="text" name="SearchDualListDistributor" class="form-control" placeholder="Search" />
+                                
+                            </div>
+                        </div>
+                        <div class="col-md-2">
+                            <div class="btn-group">
+                                <a class="btn btn-default selectorD" title="select all"><i class="icon icon-circle-blank"></i></a>
+                            </div>
+                        </div>
+                    </div>
+                    <div>
+                         <span class="so-title">Distributor ID</span>
+                         <span class="price_ori">Distributor Name</span>
+                         
+                    </div>
+                    <ul class="list-group">
+                        <?PHP 
+                        $i = 1;
+                        foreach ($this->distributorSelect as $list ) :
+                         
+                            ?>
+                            <li class="list-group-item item-distributor">
+                                <span class="so"><?=$list['d_id']?></span>
+                                <span class="price_ori "><?=$list['d_name']?>
+
+                                <input type="hidden" class="sn" name="d_id[]" value="<?=$list['d_id']?>">
+                                </span>
+                               
+                            </li>
+                            
+                            
+                      <?PHP $i+=1; 
+                       
+                      endforeach; ?>  
+                    </ul>
+                
+                </div>
+            </div>
+        </div>
+        
+    <script type="text/javascript">
+    
+    $(document).ready(function () {
+          
+            $("*").keypress(function(event){  
+                 if(event.keyCode==13){  
+                    return false;  
+                 }  
+            });
+
+            $('body').on('click', '.list-group .item-distributor', function () {
+                $(this).toggleClass('activeD');
+            });
+          
+           
+
+          
+            $('.list-arrows-distributor a').click(function () {
+                var $button = $(this), actives = '';
+                if ($button.hasClass('move-left')) {
+                    actives = $('.list-right-distributor ul li.activeD');
+                    actives.removeClass('activeD');
+                   acc = actives.clone().appendTo('.list-left-distributor ul').find('span').addClass('none_price').find('input,textarea,select,hidden,number').attr('disabled','disabled');
+                    acc.parent().parent().find('.pay_ment').removeClass('pay_money_total');
+                    actives.remove();
+                    
+                  
+                } else if ($button.hasClass('move-right')) {
+                    actives = $('.list-left-distributor ul li.activeD');
+                    actives.removeClass('activeD');
+                    acc  =  actives.clone().appendTo('.list-right-distributor ul').find('span').removeClass('none_price').find('input,textarea,select,hidden,number').removeAttr('disabled');
+                    acc.parent().find('.pay_ment').addClass('pay_money_total');
+                    actives.remove();
+                   
+                    
+                    
+                }
+            });
+
+            $('.selectorD').click(function () {
+                
+                var $checkBox = $(this);
+                if (!$checkBox.hasClass('selected')) {
+                    $checkBox.addClass('selected').closest('.well-D').find('ul li:not(.activeD)').addClass('activeD');
+                    $checkBox.children('i').removeClass('icon icon-circle-blank').addClass('icon icon-ok');
+                } else {
+                    $checkBox.removeClass('selected').closest('.well-D').find('ul li.activeD').removeClass('activeD');
+                    $checkBox.children('i').removeClass('icon icon-ok').addClass('icon icon-circle-blank');
+                }
+            });
+           
+
+            
+
+            $(document).on("submit", "form", function(e)
+            {
+                 $('#form').submit();
+            });
+            
+        });
+
+        
+        function roundNumber(num, dec) {
+            var result = Math.round(num*Math.pow(10,dec))/Math.pow(10,dec);
+            return Number(result).toLocaleString('en',{ minimumFractionDigits: 2 });
+        }
+    </script>

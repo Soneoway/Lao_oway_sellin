@@ -1,0 +1,118 @@
+<style type="text/css">
+    .alert {
+    padding: 20px;
+    background-color: #f44336;
+    color: white;
+    opacity: 1;
+    transition: opacity 0.6s;
+    margin-bottom: 15px;
+    text-shadow: 0 0px 0 rgba(255, 255, 255, 0.5);
+}
+    h1 {
+        font: 20px "Trebuchet MS", Arial, Helvetica, sans-serif
+    }
+</style>
+
+<div class="page-header">
+   
+                
+    <h1>Distributor Document : <?= $this->distributor?></h1>
+    
+</div>
+
+<div class="row">
+        <button style="margin-left: 30px; margin-top: -10px;" type="button" class="btn btn-default" onclick="window.open('/tool/black-list-distributor','_self');">Back</button>
+        <button style="float: right;margin-bottom:10px;margin-right: 16px; margin-top: -6px;" type="button" class="btn btn-success" 
+        onclick="window.open('/tool/blacklist-upload-image?d_id=<?php echo $this->d_id; ?>','_self');"><i class="icon-plus"></i>Add Image</button>
+</div>
+
+<div class="table-responsive">
+    <table class="table table-bordered" >
+        <thead>
+            <tr>
+                <th style="text-align: center;">#</th>
+                <th style="text-align: center;">Topic</th>
+                <th style="text-align: center;">Image</th>
+                <th style="text-align: center;">Action</th>
+            </tr>
+        </thead>
+        <tbody>
+        <?php
+            if (isset($this->list) and $this->list) :   
+                foreach ($this->list as $k=> $m):?>
+                    <tr>
+                        <td style="text-align: center; width: 20px;">
+                            <?php
+                                $inc = $this->offset + $k + 1;
+                                echo $inc;
+                            ?>
+                        </td>
+                        <td><?php
+                            switch ($m['type']) {
+                                case '1':
+                                    echo 'หลักฐานการเเจ้ง Backlist';
+                                    break;
+                                case '2':
+                                    echo 'Memo';
+                                    break;
+                                case '3':
+                                    echo 'หลักฐานการโอนเงินค่าปรับ';
+                                    break;
+                                
+                                default:
+                                    echo '-';
+                                    break;
+                            }
+                        ?></td>
+                        <td style="width: 250px;">
+                            <?php 
+                                $info = pathinfo(HOST."/upload/blacklist_image/".$m['d_id']."/".$m['file_name']."");
+                                // echo $info['extension'];
+                                if ($info['extension'] == 'jpeg' || $info['extension'] == 'jpg'|| $info['extension'] == 'JPG')
+                                {
+                             ?>
+
+                                 <a href="/upload/blacklist_image/<?=$m['d_id']?>/<?=$m['file_name']?>"><img id="showpic"  style="width: 250px;  "  src="/upload/blacklist_image/<?=$m['d_id']?>/<?=$m['file_name']?>" /></a>
+                            <?php
+
+                                }elseif ($info['extension'] == 'pdf' || $info['extension'] == 'Pdf')
+                                {
+                            ?>
+                                <a href="<?=HOST?>/upload/blacklist_image/<?=$m['d_id']?>/<?=$m['file_name']?>">View document</a>
+                            <?php
+                                }
+
+                             ?>
+                           
+                            
+                        </td>
+                        <td style="width: 20px;">
+                            <?php 
+                            // $userStorage = Zend_Auth::getInstance()->getStorage()->read();
+                            //69=Distributor Approval
+                            // if(My_Staff_Group::inGroup($userStorage->group_id,array(ADMINISTRATOR_ID,69)) || $this->distributor_data['activate'] != '1'){ ?>
+                            <a role="menuitem" href="javascript:delete_item('<?php echo $m['id'];?>','<?php echo $m['d_id']?>','<?php echo $m['file_name']?>')" tabindex="-1" ><button type="button" class="btn btn-danger" style="width: 42px;"><i class="icon-trash"></i></button></a>
+                            </a>
+                            <?php //} ?>  
+                        </td>
+                    </tr>
+                <?php endforeach;?>
+        <?php endif; ?>
+        </tbody>
+    </table>
+        <div class="paging">
+            <?php echo $this->paging($this->total, $this->limit, $this->offset, $this->url);?>
+        </div>
+</div>
+
+<script type="text/javascript">
+    function delete_item(id,d_id){
+
+         if (confirm("Press Confirm delete ") == true) {
+               
+                window.location.assign("/tool/blacklist-delete-image?id="+id+"&d_id="+d_id);
+            }
+        
+         
+    }
+</script>

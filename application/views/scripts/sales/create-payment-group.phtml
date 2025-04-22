@@ -1,0 +1,654 @@
+<style type="text/css">
+    td{
+        padding-left: 30px;
+    }
+
+    .main{
+        border-bottom: 0px solid #000;
+    }
+
+    .blockOverlay{
+        z-index: 10000 !important;
+    }
+    .blockPage{
+        z-index: 10001 !important;
+    }
+</style>
+
+<div class="page-header">
+
+<h1 style="margin-top: 50px;">หน้าจอสร้างกลุ่มใบเปอิน</h1>
+
+<?php
+    $coun_message = 0;
+    if (isset($this->messages) and $this->messages)
+        foreach ($this->messages as $message):
+            echo '<div class="alert alert-error">'.$message.'</div>';
+        $coun_message++;
+        endforeach;
+
+
+    $sum_list_cn='';
+    $show_alert="";
+    $show_alert_total_cn="";
+    $check_cn_total=0;
+    //print_r($this->Credit_Note_All);
+    $QMarket = new Application_Model_Market();
+
+     foreach ($this->Credit_Note_All as $k => $datas) 
+     {
+        $creditnote_sn = $datas['creditnote_sn'];
+        $total_discount = $datas['total_discount'];
+        $g_total_discount += $datas['total_discount'];
+
+        if($creditnote_sn!=''){
+            
+            $res = $QMarket->CheckCredit_Note($creditnote_sn);
+            if($res[0]['creditnote_type']=='CN'){
+                if($res[0]['cn_total_amount'] !=$res[0]['total_amount']){
+                    $show_alert_total_cn="<span style='color: red;padding: 1px;background: #e3a8bb;'>  (ข้อมูล CN ผิดพลาด กรุณาตรวจสอบ !) </span>";
+                    $check_cn_total +=1;
+                }else{
+                    $show_alert_total_cn="<span ></span> ";
+                }
+            }
+
+            $date1 = date('Y-m-d');
+            $y = substr($datas['creditnote_sn'],2,2)+2500-543;//year 543
+            $m = substr($datas['creditnote_sn'],4,2);//month
+            $d = substr($datas['creditnote_sn'],6,2);//date
+            $date = DateTime::createFromFormat('d-m-Y', $d.'-'.$m.'-'.$y)->format('Y-m-d');
+            $date = strtotime($date);
+            
+            $date2 = date("Y-m-d", strtotime("+3 month", $date));
+            if($date1 > $date2){
+                $show_alert="<span style='color: red;padding: 1px;background: #BBE3A8;'>  * CN มีอายุมากกว่า 3 เดือน ! </span>";
+            }else{
+                $show_alert="";
+            }
+
+            $sum_list_cn .=$creditnote_sn.'='.number_format($total_discount,2).' B '.$show_alert." ".$show_alert_total_cn.'</br> ';
+        }
+     }    
+?>
+
+<form id="form">
+<!-- <form class="form-horizontal" action="<?php echo HOST ?>sales/create-payment-group" name="form" id="form" method="post" enctype="multipart/form-data"> -->
+
+<table id="add-sn-new" style="margin-top: 50px;">
+    <tr>
+        <td>SO number <span style="color: red"> * </span></td>
+        <td>Distributor Name <span style="color: red"> * </span></td>
+        <td style="text-align: right;">จำนวนเงิน <span style="color: red"> * </span></td>
+        <td></td>
+    </tr>
+
+    <?php foreach ($this->priceAndDetails as $key) { ?>
+
+    <tr class="main-add-sn">
+        <td><input class="so_text" type="text" name="so_text[]" minlength="14" maxlength="14" value="<?=$key['sn_ref'];?>" title="<?=$key['sn_ref'];?>" required readonly>
+        <input type="hidden" name="sn_text[]" value="<?=$key['sn'];?>">
+        <input type="hidden" name="d_id[]" value="<?=$key['d_id'];?>">
+
+        </td>
+        <td><input class="distributor" type="text" name="distributor[]" value="<?=$key['title'];?>" title="<?=$key['title'];?>" required readonly></td>
+        <td><input style="text-align: right;" class="money" step='0.01' min="0" type="number" name="money[]" onchange="lack_surplus();" onkeyup="lack_surplus();" value="<?=$key['total_price'];?>" title="<?=$key['total_price'];?>" required readonly></td>
+        <!-- <td><button class="btn btn-warning btn-add-sn-new" style="margin-left: 15px;" type="button"><i class="icon-plus"></i></button></td> -->
+    </tr>
+
+    <?php } ?>
+
+</table>
+
+<div style="margin-bottom: 50px;">
+    <span style="margin-left: 500px;">รวม</span><span style="margin-left: 9px;"><input style="text-align: right;" id="sum-so-money" type="number" value="0" readonly></span>
+</div>
+<div style="margin-left: 0px;" class="span6">
+    <label class="span3">Total Credit Note Discount List</label>
+    <span class="span6">
+        <?php
+            echo $sum_list_cn;
+        ?>
+    </span>
+</div>
+<table id="add-bank" style="margin-top: 50px;">
+    <tr>
+        <td>ธนาคาร <span style="color: red"> * </span></td>
+        <td>วันที่เปอิน <span style="color: red"> * </span></td>
+        <td style="text-align: right;width: 220px;">เงินที่บริษัทจะได้รับ (คือ เงินทั้งหมดที่นำฝากเข้าตู้ หักด้วยค่าธรรมเนียมธนาคารที่ออปโป้ต้องจ่ายด้านล่าง และภาษีหัก ณ ที่จ่ายที่ออปโป้ถูกหัก ด้านล่าง) <span style="color: red"> * </span></td>
+        <?php if($this->retailer_rank==10 || $this->show_cash_menu==1){  ?>
+        <td>จ่ายด้วยบัตรเครดิต</td>
+        <?php } ?>
+        <td>ใบเปอิน <span style="color: red"> * </span><br/>(ขนาดไฟล์ ไม่เกิน 2MB)<br/>(*.jpg,jpeg,gif,png)</td>
+        <td></td>
+    </tr>
+
+    <tr class="main-add-bank">
+        <td><select id="bank" name="bank[]" class="bank" onchange="no_payment();" required>
+            <option value="">Choose</option>
+            <?php foreach ($this->banks as $key) {?>
+                <option value="<?php echo $key['id'];?>"><?php echo $key['name'];?></option>
+           <?php } ?>
+        </select></td>
+        <td><input type="text" class="datepicker pay_date" id="pay_date" name="pay_date[]" required></td>
+        <td ><input style="text-align: right;" class="money_bank" step='0.01' min="0" type="number" name="money_bank[]" onchange="lack_surplus();" onkeyup="lack_surplus();" required></td>
+        <?php if($this->retailer_rank==10 || $this->show_cash_menu==1){  ?>
+        <td style="text-align:  center;"><input type="checkbox" class="use_credit_card" name="use_credit_card[]" value="0">
+        <input type="hidden" class="use_credit_card_input" name="use_credit_card_input[]" value="0"></td>
+        <?php } ?>
+        <td><input type="file" class="slip" id="file" name="file[]"  multiple /></td>
+        <td><button class="btn btn-warning btn-add-bank" style="margin-left: 15px;" type="button"><i class="icon-plus"></i></button></td>
+    </tr>
+    
+</table>
+
+<div style="margin-bottom: 50px;">
+    <span style="margin-left: 500px;">รวม</span><span style="margin-left: 9px;"><input style="text-align: right;" id="sum-bank-money" type="number" value="0" readonly></span>
+</div>
+
+<div class="row div-use-payment" style="margin-bottom: 15px;">
+    <div class="span12">
+        <span class="span5">ใช้ยอดเงินเหลือจากใบเปอินเก่า<input style="margin-left: 20px;" type="checkbox" id="checkbox-use-paygroup" name="checkbox_use_paygroup"></span>
+    </div>
+</div>
+
+<table class="add-use-paygroup hide" id="add-use-paygroup">
+    <tr>
+        <td>Paygroup number <span style="color: red"> * </span></td>
+        <td style="text-align: right;">จำนวนเงิน <span style="color: red"> * </span></td>
+        <td></td>
+    </tr>
+
+    <tr class="main-add-use-paygroup">
+        <td><select id="use_paygroup" name="use_paygroup[]" class="use-paygroup-required use_paygroup">
+            <option value="">Choose</option>
+            <?php foreach ($this->usePaygroup as $key) {?>
+                <option value="<?php echo $key['payment_id'];?>"><?php echo $key['payment_no'] . ' (' . $key['balance_total'] . ' Baht)';?></option>
+           <?php } ?>
+        </select></td>
+        <td ><input style="text-align: right;" class="use-paygroup-required money_use_paygroup" step='0.01' min="0" type="number" name="money_use_paygroup[]" onchange="lack_surplus();" onkeyup="lack_surplus();"></td>
+        <td><button class="btn btn-warning btn-add-use-paygroup" style="margin-left: 15px;" type="button"><i class="icon-plus"></i></button></td>
+    </tr>
+    
+</table>
+
+<div class="add-use-paygroup hide" style="margin-bottom: 50px;">
+    <span style="margin-left: 250px;">รวม</span><span style="margin-left: 9px;"><input style="text-align: right;" id="sum-use-paygroup-money" type="number" value="0" readonly></span>
+</div>
+
+<div class="row">
+    <div class="span12">
+        <label class="span5">ค่าธรรมเนียมธนาคารที่ออปโป้ต้องจ่าย<span style="color: red"> * </span></label><br/>
+        <span class="span5"><input style="text-align: right;" class="payment_bank_transfer" step='0.01' min="0" type="number" name="payment_bank_transfer" value="0" onchange="lack_surplus();" onkeyup="lack_surplus();" required></span>
+    </div>
+</div>
+
+<div class="row">
+    <div class="span12">
+        <label class="span5">ภาษีหัก ณ ที่จ่าย ที่ออปโป้ ถูกหัก<span style="color: red"> * </span></label><br/>
+        <span class="span5"><input style="text-align: right;" class="payment_servicecharge" step='0.01' min="0" type="number" name="payment_servicecharge" value="0" onchange="lack_surplus();" onkeyup="lack_surplus();" required></span>
+    </div>
+</div>
+
+<div class="row">
+    <div class="span12">
+        <label class="span5">เงินเกิน(ขาด)</label><br/>
+        <span class="span5"><input style="text-align: right;" type="number" step="0.01" class="lack-surplus" name="lacksurplus" min="-10" value="0" readonly required/>
+    </div>
+</div>
+
+<div class="row">
+    <div class="span12">
+        <label class="span5">หมายเหตุ</label><br/>
+        <span class="span5"><textarea name="paygroup_remark" id="paygroup_remark" cols="30" rows="5"></textarea></span>
+    </div>
+</div>
+
+<!-- <div class="row select_cause hide">
+    <div class="span12">
+        <label class="span5">สาเหตุ <span style="color: red"> * </span></label><br/>
+
+        <span class="span5">
+            <select id="select_cause" name="select_cause" class="select_cause" required>
+                <option value="">Choose</option>
+                <option value="1">เงินขาด/เกิน จริงๆ</option>
+                <option value="2">เงินขาดเพราะใช้ยอดเกินบิลเก่ามาปิด</option>
+            </select>
+        </span>
+    </div>
+</div>
+
+<div class="dis-hide hide">
+
+    <table id="add-cause-so">
+        <tr>
+            <td>เลขที่ SO <span style="color: red"> * </span></td>
+            <td></td>
+        </tr>
+
+        <tr class="main-add-cause-so" id="add-cause-so">
+            <td><input class="cause_so" id="cause_so" type="text" name="cause_so[]" minlength="14" maxlength="14" required></td>
+            <td><button class="btn btn-warning btn-add-cause-so" style="margin-left: 15px;" type="button"><i class="icon-plus"></i></button></td>
+        </tr>
+        
+    </table>
+
+</div> -->
+
+
+<div class="row" style="margin-top: 50px; margin-bottom: 50px;">
+    <div class="span6">
+        <div class="control-group">
+            <div class="span4">
+                <input type="hidden" name="check_cn_total[]" class="check_cn_total" value="<?=$check_cn_total;?>">
+                <button type="submit" class="btn btn-primary" id="submit_btn">บันทึก</button>
+                <button style="margin-left: 10px;" type="button" class="btn btn-danger" id="btn-back">กลับไปหน้าก่อนหน้า</button>
+            </div>
+        </div>
+        <div class="clearfix"></div>
+    </div>
+</div>
+    
+</form>
+
+<!-- <script type="text/javascript" src="http://code.jquery.com/jquery.js"></script> -->
+<script src="<?php echo HOST?>js/jquery.datetimepicker.js"></script>
+<link rel="stylesheet" href="<?php echo HOST?>css/jquery.datetimepicker.css" />
+
+<script src="/js/jquery.blockUI.js"></script>
+
+<script>
+
+    $(document).ready(function () {
+
+        initDatepicker();
+        lack_surplus();
+
+        $(document).on( "click", ".use_credit_card", function() {
+
+            if(this.checked) {
+                $(this).val(1);
+                $(this).parent().parent().find('.use_credit_card_input').val(1);
+            }else{
+                $(this).val(0);
+                $(this).parent().parent().find('.use_credit_card_input').val(0);
+            }
+        });
+
+        $(document).ajaxStart(function(){
+            $.blockUI({ css: { 
+                border: 'none', 
+                padding: '15px', 
+                backgroundColor: '#000', 
+                '-webkit-border-radius': '10px', 
+                '-moz-border-radius': '10px', 
+                opacity: .5, 
+                color: '#fff' 
+            } });
+        });
+
+        $(document).ajaxStop(function(){
+            $.unblockUI();
+        });
+
+        $('#btn-back').click(function(event) {
+            if (confirm('ต้องการกลับไปหน้าก่อนหน้าานี้ใช่หรือไม่ !!!')) {
+                window.location.href = '<?=$this->back_url;?>';
+            }
+        });
+
+        $('#checkbox-use-paygroup').change(function(event) {
+            if(this.checked) {
+                $('.add-use-paygroup').removeClass('hide');
+                $('.use-paygroup-required').attr('required', true);
+            }else{
+                $('.add-use-paygroup').addClass('hide');
+                $('.append-use-paygroup').remove();
+                $('.use_paygroup').val('');
+                $('.money_use_paygroup').val('');
+                $('.use-paygroup-required').attr('required', false);
+                lack_surplus();
+            }
+        });
+
+        function initDatepicker(){
+            $( ".datepicker" ).datetimepicker({
+                format:'Y-m-d H:i'
+            });
+        }
+
+        $(document).on("submit", "form", function(e){
+
+            var formData = new FormData($(this)[0]);
+
+            $.ajax({
+                url: '<?php echo HOST ?>sales/create-payment-group',
+                type: 'POST',
+                data: formData,
+                cache: false,
+                contentType: false,
+                processData: false
+            })
+            .done(function(response) {
+                var obj_response = jQuery.parseJSON(response);
+                console.log("success");
+
+                switch(obj_response.status) {
+                    case '400':
+                        alert(obj_response.message);
+                        console.log(obj_response.message);
+
+                        break;
+                    case '201':
+                        window.location.href = obj_response.url;
+                        break;
+                    default:
+                        console.log('ajax fail.');
+                }
+
+            });
+
+            console.log('done');
+            return false;
+                 
+            });
+
+        var count_add_sn = 0;
+        $(document).off('click', '.btn-add-sn-new').on('click', '.btn-add-sn-new', function(e) {
+
+            var newdiv = $('.main-add-sn').clone();
+
+            newdiv.removeClass('main-add-sn');
+
+            newdiv.attr('id', 'div-id-add-sn_'+count_add_sn);
+
+            newdiv.find('input').val('');
+
+            newdiv.append('<td><button class="btn btn-danger btn-remove-sn-new" type="button" value="div-id-add-sn_'+count_add_sn+'"><i class="icon-minus"></i></button></td>');
+
+            $('#add-sn-new').append(newdiv);
+
+            count_add_sn++;
+        });
+
+        $(document).off('click', '.btn-remove-sn-new').on('click', '.btn-remove-sn-new', function(e) {
+            count_add_sn--;
+            $('#'+$(this).val()).remove();
+            lack_surplus();
+        });
+
+        var count_add_bank = 0;
+        $(document).off('click', '.btn-add-bank').on('click', '.btn-add-bank', function(e) {
+
+            var newdiv = $('.main-add-bank').clone();
+
+            newdiv.removeClass('main-add-bank');
+
+            newdiv.attr('id', 'div-id-add-bank_'+count_add_bank);
+
+            newdiv.find('input').val('');
+
+            newdiv.find('.use_credit_card').attr('checked', false);
+            newdiv.find('.use_credit_card').val(0);
+            newdiv.find('.use_credit_card_input').val(0);
+
+            newdiv.append('<td><button class="btn btn-danger btn-remove-bank" type="button" value="div-id-add-bank_'+count_add_bank+'"><i class="icon-minus"></i></button></td>');
+
+            $('#add-bank').append(newdiv);
+
+            $('input.pay_date').datetimepicker("destroy");
+            $('input.pay_date').datetimepicker();
+
+            $( ".datepicker" ).datetimepicker({
+                format:'Y-m-d H:i'
+            });
+
+            count_add_bank++;
+        });
+
+        $(document).off('click', '.btn-remove-bank').on('click', '.btn-remove-bank', function(e) {
+            count_add_bank--;
+            $('#'+$(this).val()).remove();
+            lack_surplus();
+        });
+
+        var count_add_use_paygroup = 0;
+        $(document).off('click', '.btn-add-use-paygroup').on('click', '.btn-add-use-paygroup', function(e) {
+
+            var newdiv = $('.main-add-use-paygroup').clone();
+
+            newdiv.removeClass('main-add-use-paygroup');
+
+            newdiv.addClass('append-use-paygroup');
+
+            newdiv.attr('id', 'div-id-add-use-paygroup_'+count_add_use_paygroup);
+
+            newdiv.find('input').val('');
+
+            newdiv.append('<td><button class="btn btn-danger btn-remove-use-paygroup" type="button" value="div-id-add-use-paygroup_'+count_add_use_paygroup+'"><i class="icon-minus"></i></button></td>');
+
+            $('#add-use-paygroup').append(newdiv);
+
+            $('input.pay_date').datetimepicker("destroy");
+            $('input.pay_date').datetimepicker();
+
+            $( ".datepicker" ).datetimepicker({
+                format:'Y-m-d H:i'
+            });
+
+            count_add_use_paygroup++;
+        });
+
+        $(document).off('click', '.btn-remove-use-paygroup').on('click', '.btn-remove-use-paygroup', function(e) {
+            count_add_use_paygroup--;
+            $('#'+$(this).val()).remove();
+            lack_surplus();
+        });
+
+        var count_add_cause_so = 0;
+        $(document).off('click', '.btn-add-cause-so').on('click', '.btn-add-cause-so', function(e) {
+
+            var newdiv = $('.main-add-cause-so').clone();
+
+            newdiv.removeClass('main-add-cause-so');
+
+            newdiv.attr('class', 'div-id-add-cause-so');
+            newdiv.attr('id', 'div-id-add-cause-so_'+count_add_cause_so);
+
+            newdiv.find('input').val('');
+
+            newdiv.append('<td><button class="btn btn-danger btn-remove-cause-so" type="button" value="div-id-add-cause-so_'+count_add_cause_so+'"><i class="icon-minus"></i></button></td>');
+
+            console.log(newdiv);
+
+            $('#add-cause-so').append(newdiv);
+
+            count_add_cause_so++;
+        });
+
+        $(document).off('click', '.btn-remove-cause-so').on('click', '.btn-remove-cause-so', function(e) {
+            count_add_cause_so--;
+            $('#'+$(this).val()).remove();
+            lack_surplus();
+        });
+
+        $('#select_cause').change(function(event) {
+            if($(this).val() == 2){
+                $('.dis-hide').removeClass('hide');
+                $('#cause_so').attr('required', true);
+            }else{
+                $('.dis-hide').addClass('hide');
+                $('#cause_so').attr('required', false);
+                $('.div-id-add-cause-so').remove();
+            }
+        });
+
+        if ($('#s_total').html() > $('#s_amount').html()) {
+            $('#f_amount').attr('color','red');
+        }
+        
+
+    });
+
+    function no_payment(){
+        var get_bank = $("select[class='bank']").map(function(){return $(this).val();}).get();
+
+        if(get_bank.length == 1){
+            if(get_bank[0] == '10'){
+                $('.lack-surplus').val('0.00');
+                $('.div-use-payment').hide();
+                $('#checkbox-use-paygroup').attr('checked', false);
+                $('#checkbox-use-paygroup').change();
+                $('.btn-add-bank').hide();
+            }else if(get_bank[0] == '16'){
+                lack_surplus();
+                $('.div-use-payment').show();
+                $('.btn-add-bank').show();
+                $('.btn-add-bank').hide();
+            }else{
+                lack_surplus();
+                $('.div-use-payment').show();
+                $('.btn-add-bank').show();
+            }
+        }else{
+            lack_surplus();
+            $('.div-use-payment').show();
+            $('.btn-add-bank').show();
+        }
+    }
+
+    function lack_surplus(){
+
+        var arraySoMoney = $("input[class='money']").map(function(){return $(this).val();}).get();
+        var soMoney = 0;
+        for (var i = 0; i < arraySoMoney.length; i++) {
+            if(arraySoMoney[i]){
+                soMoney += parseFloat(arraySoMoney[i]);
+            }
+        }
+
+        var arrayBankMoney = $("input[class='money_bank']").map(function(){return $(this).val();}).get();
+        var bankMoney = 0;
+        for (var i = 0; i < arrayBankMoney.length; i++) {
+            if(arrayBankMoney[i]){
+                bankMoney += parseFloat(arrayBankMoney[i]);
+            }
+        }
+
+        var arrayUsePaygroup = $("input[class='use-paygroup-required money_use_paygroup']").map(function(){return $(this).val();}).get();
+        var usePaygroup = 0;
+        for (var i = 0; i < arrayUsePaygroup.length; i++) {
+            if(arrayUsePaygroup[i]){
+                usePaygroup += parseFloat(arrayUsePaygroup[i]);
+            }
+        }
+
+        var arrayFeeBankTransfer = $("input[class='payment_bank_transfer']").map(function(){return $(this).val();}).get();
+        var feeBankTransfer = 0;
+        for (var i = 0; i < arrayFeeBankTransfer.length; i++) {
+            if(arrayFeeBankTransfer[i]){
+                feeBankTransfer += parseFloat(arrayFeeBankTransfer[i]);
+            }
+        }
+
+        var arrayServiceCharge = $("input[class='payment_servicecharge']").map(function(){return $(this).val();}).get();
+        var serviceCharge = 0;
+        for (var i = 0; i < arrayServiceCharge.length; i++) {
+            if(arrayServiceCharge[i]){
+                serviceCharge += parseFloat(arrayServiceCharge[i]);
+            }
+        }
+
+        if(isNaN(soMoney)){
+            soMoney = 0;
+        }
+
+        if(isNaN(bankMoney)){
+            bankMoney = 0;
+        }
+
+        if(isNaN(usePaygroup)){
+            usePaygroup = 0;
+        }
+
+        if(isNaN(feeBankTransfer)){
+            feeBankTransfer = 0;
+        }
+
+        if(isNaN(serviceCharge)){
+            serviceCharge = 0;
+        }
+
+        $('#sum-so-money').val(soMoney.toFixed(2));
+        $('#sum-bank-money').val(bankMoney.toFixed(2));
+        $('#sum-use-paygroup-money').val(usePaygroup.toFixed(2));
+
+        $('.lack-surplus').val(parseFloat((bankMoney+usePaygroup-soMoney+feeBankTransfer+serviceCharge)).toFixed(2));
+
+        var get_bank = $("select[class='bank']").map(function(){return $(this).val();}).get();
+
+        if(get_bank.length == 1){
+            if(get_bank[0] == '10'){
+                $('.lack-surplus').val('0.00');
+            }
+        }
+
+        var allow_surplus = 'no';
+        <?php
+            $userStorage = Zend_Auth::getInstance()->getStorage()->read();
+            // brand shop & service
+            if (My_Staff_Group::inGroup($userStorage->group_id, array(25,28))){
+            ?>
+            allow_surplus = 'yes';
+        <?php } ?>
+
+        if($('.lack-surplus').val() < -10 && allow_surplus != 'yes'){
+            $('.lack-surplus').css('color', 'red');
+            $('#submit_btn').attr("disabled", "disabled");
+            //alert($('.check_cn_total').val());
+        }else{
+            $('.lack-surplus').css('color', '');
+
+            <?php if($coun_message == 0){ ?>
+                <?php if($check_cn_total == 0){ ?>
+                    $('#submit_btn').removeAttr("disabled");
+                <?php }else{ ?>
+                    $('.lack-surplus').css('color', 'red');
+                    $('#submit_btn').attr("disabled", "disabled");
+                <?php } ?>    
+            <?php } ?>
+        }
+
+        
+        /*if($('.chk_cn_total').val()==1){
+            $('.lack-surplus').css('color', 'red');
+            $('#submit_btn').attr("disabled", "disabled");
+        }else{
+            $('.lack-surplus').css('color', '');
+
+            <?php if($coun_message == 0){ ?>
+            $('#submit_btn').removeAttr("disabled");
+            <?php } ?>
+        }*/
+
+        // if($('.lack-surplus').val() >= -1 && $('.lack-surplus').val() <= 1){
+        if($('.lack-surplus').val() >= -10 || allow_surplus == 'yes'){
+            $('.select_cause').addClass('hide');
+            $('.dis-hide').addClass('hide');
+            $('.cause_so').attr('required', false);
+            $('.cause_so').val('');
+
+            $('#select_cause').attr('required', false);
+            $('#select_cause').val('');
+
+            $('.div-id-add-cause-so').remove();
+        }else{
+            $('.select_cause').removeClass('hide');
+            $('#select_cause').attr('required', true);
+        }
+
+    }
+        
+</script>
+
+

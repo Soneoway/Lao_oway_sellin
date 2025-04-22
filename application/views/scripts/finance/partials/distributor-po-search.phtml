@@ -1,0 +1,45 @@
+<form class="form-search form-horizontal" method="get" action="/finance/distributor-po">
+    <div class="row">
+        <div class="span5">
+            <div class="control-group">
+                <label for="po_name" class="span2"> PO name</label>
+                <input type="text" name="po_name" id="po_name" value="<?php echo (isset($this->params['po_name']) AND $this->params['po_name']) ? $this->params['po_name'] : ''?>"/>
+            </div>
+
+            <div class="control-group">
+                <label for="status" class="span2"> Status </label>
+                <select name="status" id="status">
+                    <option value="">choose a status</option>
+                    <?php
+                        $options = array(
+                            '1' => 'Not check',
+                            '2' => 'Checked'
+                        );
+                        foreach($options as $key => $option){
+                    ?>
+                            <option value="<?php echo $key;?>" <?php echo (isset($this->params['status']) AND $this->params['status'] == $key) ? 'selected':'' ?>><?php echo $option;?></option>
+                    <?php
+                        }
+                    ?>
+                </select>
+            </div>
+
+        </div>
+    </div><!-- end row -->
+    <button type="submit" class="btn btn-primary">Search</button>
+    <button type="reset" class="btn btn-warning">Reset</button>
+</form>
+
+<style>
+    #d_id{
+        margin-left: 0px!important;
+        left: 0px!important;
+        width: 370px;
+    }
+</style>
+
+<script>
+    $(document).ready(function () {
+        initSearchOptionDistributor('d_id', 'SearchBox');
+    });
+</script>

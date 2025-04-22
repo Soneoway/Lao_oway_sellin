@@ -1,0 +1,278 @@
+<form class="form-search form-horizontal" method="get" action="/warehouse/borrowing-return-imei-list">
+
+    <div class="row">
+
+        <div class="span5">
+            <div class="control-group">
+                <label for="imei" class="span2">Imei</label>
+                <input id="imei" name="imei" type="text" class="form-control" value="<?php isset($this->params['imei']) and printf($this->params['imei']);?>">
+            </div>
+            <div class="control-group">
+                <label for="imei_munti" class="span2">Imei Multi</label>
+                <ul class="form-control" id="imei_munti"><?php
+                    if (isset($this->params['imei_munti']) and $this->params['imei_munti']):
+                        foreach ($this->params['imei_munti'] as $imei_munti)
+                            echo '<li>'.$imei_munti.'</li>';
+                    endif;
+                ?></ul>
+            </div>
+            <div class="control-group">
+                <label for="rq" class="span2">Request Number</label>
+                <input id="rq" name="rq" type="text" class="form-control" value="<?php isset($this->params['rq']) and printf($this->params['rq']);?>">
+            </div>
+            <div class="control-group">
+                <label for="co" class="span2">CO Number</label>
+                <input id="co" name="co" type="text" class="form-control" value="<?php isset($this->params['co']) and printf($this->params['co']);?>">
+            </div>
+            <div class="control-group">
+                <label for="co_munti" class="span2">Co Number Multi</label>
+                <ul class="form-control" id="co_munti"><?php
+                    if (isset($this->params['co_munti']) and $this->params['co_munti']):
+                        foreach ($this->params['co_munti'] as $co_munti)
+                            echo '<li>'.$co_munti.'</li>';
+                    endif;
+                ?></ul>
+            </div>
+            <div class="control-group">
+                <label for="code" class="span2">Code</label>
+                <input id="code" name="code" type="text" class="form-control" value="<?php isset($this->params['code']) and printf($this->params['code']);?>">
+            </div>
+            <div class="control-group">
+                <label for="fullname" class="span2">Request By</label>
+                <input id="fullname" name="fullname" type="text" class=" form-control" value="<?php isset($this->params['fullname']) and printf($this->params['fullname']);?>">
+            </div>
+            <div class="control-group">
+                <label for="position" class="span2">Position</label>
+                <input id="position" name="position" type="text" class=" form-control" value="<?php isset($this->params['position']) and printf($this->params['position']);?>">
+            </div>
+            <!-- <div class="control-group">
+                <label for="rm_fullname" class="span2">RD Approved By</label>
+                <input id="rm_fullname" name="rm_fullname" type="text" class=" form-control" value="<?php isset($this->params['rm_fullname']) and printf($this->params['rm_fullname']);?>">
+            </div>
+            <div class="control-group">
+                <label for="mg_fullname" class="span2">Manager Approved By</label>
+                <input id="mg_fullname" name="mg_fullname" type="text" class=" form-control" value="<?php isset($this->params['mg_fullname']) and printf($this->params['mg_fullname']);?>">
+            </div> -->
+            <div class="control-group">
+                <label for="grade" class="span2">Grade</label>
+                <select class="form-control" name="grade" id="grade">
+                    <option value>---</option>
+                    <option <?php if(isset($this->params['grade']) and $this->params['grade'] == '1'){echo 'selected';} ?> value="1">A</option>
+                    <option <?php if(isset($this->params['grade']) and $this->params['grade'] == '2'){echo 'selected';} ?> value="2">B</option>
+                    <option <?php if(isset($this->params['grade']) and $this->params['grade'] == '3'){echo 'selected';} ?> value="3">Demo</option>
+                    <option <?php if(isset($this->params['grade']) and $this->params['grade'] == '4'){echo 'selected';} ?> value="4">APK</option>
+                    <option <?php if(isset($this->params['grade']) and $this->params['grade'] == '5'){echo 'selected';} ?> value="5">Prototype</option>
+                </select>
+            </div>
+
+            <!-- <div class="control-group">
+                <label for="type" class="span2">Type</label>
+                <select class="form-control" name="type" id="type">
+                    <option value>---</option>
+                    <option <?php if(isset($this->params['type']) and $this->params['type'] == '1'){echo 'selected';} ?> value="1">เบิกยืมพนักงาน</option>
+                    <option <?php if(isset($this->params['type']) and $this->params['type'] == '2'){echo 'selected';} ?> value="2">อภินันทนาการ</option>
+                    <option <?php if(isset($this->params['type']) and $this->params['type'] == '3'){echo 'selected';} ?> value="2">เบิกเปลี่ยนเครื่องลูกค้า</option>
+                    <option <?php if(isset($this->params['type']) and $this->params['type'] == '4'){echo 'selected';} ?> value="2">Prototype</option>
+                </select>
+            </div> -->
+
+            <div class="control-group">
+                <label for="hrs_department_id" class="span2">Type</label>
+                <select class="form-control" name="hrs_department_id" id="hrs_department_id">
+                    <option value>---</option>
+                    <?php foreach ($this->department as $key) { ?>
+                        <option value="<?=$key['id'];?>" <?php if(isset($this->params['hrs_department_id']) && $key['id'] == $this->params['hrs_department_id']){ echo 'selected'; } ?>><?=$key['name'];?></option>
+                    <?php } ?>
+                </select>
+            </div>
+            
+        </div>
+        
+        <div class="span5">
+            <div class="control-group">
+                <label for="created_at_from" class="span2">Request From</label>
+                <input type="text" class="form-control date" id="created_at_from" name="created_at_from" value="<?php isset($this->params['created_at_from']) and printf($this->params['created_at_from']);?>">
+            </div>
+            <div class="control-group">
+                <label for="created_at_to" class="span2">Request To</label>
+                <input type="text" class="form-control date" id="created_at_to" name="created_at_to" value="<?php isset($this->params['created_at_to']) and printf($this->params['created_at_to']);?>">
+            </div>
+
+            <div class="control-group">
+                <label for="return_at_from" class="span2">Return From</label>
+                <input type="text" class="form-control date" id="return_at_from" name="return_at_from" value="<?php isset($this->params['return_at_from']) and printf($this->params['return_at_from']);?>">
+            </div>
+            <div class="control-group">
+                <label for="return_at_to" class="span2">Return To</label>
+                <input type="text" class="form-control date" id="return_at_to" name="return_at_to" value="<?php isset($this->params['return_at_to']) and printf($this->params['return_at_to']);?>">
+            </div>
+
+            <div class="control-group">
+                <label for="status_return" class="span2">Status</label>
+                <select class="form-control" name="status_return" id="status_return">
+                    <option <?php if(isset($this->params['status_return']) and $this->params['status_return'] == '1'){echo 'selected';} ?> value="1">Open</option>
+                    <option <?php if(isset($this->params['status_return']) and $this->params['status_return'] == '2'){echo 'selected';} ?> value="2">Close</option>
+                </select>
+            </div>
+        </div>
+
+    </div>
+
+    <button type="submit" class="btn btn-primary">Search</button>
+    <!-- <button type="reset" class="btn btn-warning">Reset</button> -->
+    <button type="submit" name="export" value="1" class="btn btn-success">Export Return IMEI</button>
+</form>
+<script type="text/javascript" src="/js/jquery-ui-1.8.12.custom.min.js"></script>
+<script type="text/javascript" src="/js/jquery.ui.timepicker.js"></script>
+<link rel="stylesheet" type="text/css" href="/css/jquery-ui-1.8.12.custom.css"/>
+<link rel="stylesheet" type="text/css" href="/css/jquery.ui.timepicker.css"/>
+<style>
+.is_changed_wh1,.is_changed_wh0
+{
+    margin-left:0px;
+    margin-top: 5px;
+    margin-bottom:5px;
+}
+</style>
+<script>
+    $(document).ready(function () {
+       $( '.date' ).datepicker({ dateFormat: "dd/mm/yy" });
+        initSelectChangeType();
+    });
+
+    
+
+    function palert(msg){
+        $('.page-header').next('.alert').remove();
+        $('.page-header').after('<div class="alert alert-error">'+msg+'</div>');
+
+    }
+
+    function psuccess(msg){
+        $('.page-header').next('.alert').remove();
+        $('.page-header').after('<div class="alert alert-success">'+msg+'</div>');
+
+    }
+
+    function perror(msg){
+        $('#div_error').html(msg);
+
+    }
+
+  
+
+    function initSelectChangeType(){
+
+        $('input[name=is_changed_wh]').change(function (e){
+
+            var val = $('input:radio[name=is_changed_wh]:checked').val();
+
+            if (val > 0){
+                $('.is_changed_wh0').hide();
+                $('.is_changed_wh1').show();
+            }
+            else{
+
+                $('.is_changed_wh0').show();
+                $('.is_changed_wh1').hide();
+            }
+
+        });
+    }
+
+    $('#cat_id, #good_id').change(function(){
+            $(this).after('<span class="loading"></span>');
+            var _self = $(this);
+            var cat_id = $('#cat_id').val();
+
+            if (_self.attr('id')=='cat_id')
+                $('#good_id').find('option:not(:first)').remove();
+
+            var good_id = $('#good_id').val();
+
+            $('#good_color').find('option:not(:first)').remove();
+
+            $('#num, #price').val('');
+
+            $.get("/get/load",
+                {cat_id: cat_id, good_id: good_id}
+                ,function(data,status){
+                    var data = $.parseJSON( data );
+                    if (data.goods){
+                        var obj = data.goods;
+                        for (var i = 0; i < obj.length; i++) {
+                            $('#good_id').append('<option value="'+obj[i]['id']+'">'+obj[i]['name']+'</option>');
+                        }
+                    }
+                    if (data.colors){
+                        var obj = data.colors;
+                        for (var i = 0; i < obj.length; i++) {
+                            $('#good_color').append('<option value="'+obj[i]['id']+'">'+obj[i]['name']+'</option>');
+                        }
+                    }
+                    _self.nextAll('.loading').remove();
+                });
+        });
+
+    $('#imei_munti').keyup(function(event) {
+
+        var code = event.keyCode || event.which;
+        if(code == 13 || code == 32) { //Enter keycode,Spacebar
+
+            var text = $(this).text();
+
+            text = text.replace(/\×/g,'[|]');
+
+            var arr_text = text.split('[|]');     
+
+            $('#imei_munti').tagit('removeAll');
+
+            $.each(arr_text, function(index,value) {
+
+                if(value.length > 1){
+                    var arr_text_sub = value.split(' ');
+                    $.each(arr_text_sub, function(index_sub,value_sub) {
+                        $('#imei_munti').tagit('createTag',value_sub);
+                    });
+                }else{
+                    $('#imei_munti').tagit('createTag',value);
+                }
+
+            });
+
+         }
+
+    });
+
+    $('#co_munti').keyup(function(event) {
+
+        var code = event.keyCode || event.which;
+        if(code == 13 || code == 32) { //Enter keycode,Spacebar
+
+            var text = $(this).text();
+
+            text = text.replace(/\×/g,'[|]');
+
+            var arr_text = text.split('[|]');     
+
+            $('#co_munti').tagit('removeAll');
+
+            $.each(arr_text, function(index,value) {
+
+                if(value.length > 1){
+                    var arr_text_sub = value.split(' ');
+                    $.each(arr_text_sub, function(index_sub,value_sub) {
+                        $('#co_munti').tagit('createTag',value_sub);
+                    });
+                }else{
+                    $('#co_munti').tagit('createTag',value);
+                }
+
+            });
+
+         }
+
+    });
+   
+
+</script>

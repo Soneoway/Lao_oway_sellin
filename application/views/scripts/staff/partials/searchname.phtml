@@ -1,0 +1,21 @@
+<select class="span6 search_result" id="name_result" name="s_result" multiple="multiple" size="8">
+	<?php if (isset($this->staffs) and $this->staffs): ?>
+		<?php foreach ($this->staffs as $staff): ?>
+			<option 
+				value="<?php echo $staff['id'] ?>" 
+				<?php if(isset($this->rm_list) and $this->rm_list): ?>
+					title="<?php echo $this->rm_list[$staff['regional_market']] ?>" 
+				<?php endif ?>
+				>
+				<?php echo $staff['firstname'] . ' ' . $staff['lastname'] ?>
+			</option>
+		<?php endforeach ?>
+	<?php endif ?>
+</select>
+<script type="text/javascript">
+if ($('#staff_region').length > 0) {
+	$('#name_result').change(function(){
+		$('#staff_region').html($('#name_result option:selected').attr('title'));
+	});
+}
+</script>

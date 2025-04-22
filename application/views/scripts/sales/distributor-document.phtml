@@ -1,0 +1,169 @@
+<style type="text/css">
+    .alert {
+    padding: 20px;
+    background-color: #f44336;
+    color: white;
+    opacity: 1;
+    transition: opacity 0.6s;
+    margin-bottom: 15px;
+    text-shadow: 0 0px 0 rgba(255, 255, 255, 0.5);
+}
+    h1 {
+        font: 20px "Trebuchet MS", Arial, Helvetica, sans-serif
+        font-family: phetsarath ot; 
+    }
+    body{
+        font-family: phetsarath ot; 
+    }
+</style>
+
+<div class="page-header">
+   
+                
+    <h1>Distributor Document ເອກະສານປະກອບຂອງຮ້ານຄ້າ : <?= $this->distributor?></h1>
+    
+</div>
+<div class="container">
+    <?php 
+    $alert ="";
+    $flag1 = false;
+    $flag2 = false;
+    $flag3 = false;
+    $flag4 = false;
+    $flag4 = false;
+
+        foreach ($this->list as $k=> $m){
+            if($alert!=""){
+                $alert.=",";
+            }
+           
+            if($m['d_category']=="1"){
+                $flag1 = true; 
+
+            }
+            if($m['d_category']=="2"){
+                $flag2 = true; 
+
+            }
+            if($m['d_category']=="3"){
+                $flag3 = true; 
+
+            }
+            if($m['d_category']=="4"){
+                $flag4 = true; 
+
+            }
+            if($m['d_category']=="5"){
+                $flag5 = true; 
+
+            }
+        }
+
+        if(!$flag1){
+            $alert.=" - ບໍ່ມີປື້ມບັນຊີຂອງຮ້ານຄ້າ"."<br/>" ; 
+        }
+        if(!$flag2){
+            $alert.=" - ບໍ່ມີໃບສັນຍາຮ້ານຄ້າ"."<br/>";
+        }
+        if(!$flag3){
+            $alert.=" - ບໍ່ມີບິນຮັບເງິນ 2,500,000 ກີບ (ສອງລ້ານຫ້າແສນກີບ)"."<br/>";
+        }
+        if(!$flag4){ 
+            $alert.=" - ບໍ່ມີບັດປະຈຳຕົວຫຼືພັສປອດ"."<br/>";
+        }
+        if(!$flag5){ 
+            $alert.=" - ບໍ່ມີຮູບໜ້າຮ້ານ"."<br/>";
+        }
+
+        if($alert!=""){
+            ?>
+            <div class="alert alert-warning">
+                <h1>ຄຳເຕືອນ!</h1><?php echo ($alert); ?>
+            </div>
+            <?php
+        }
+
+
+    ?>
+</div>
+
+<div class="row">
+        <button style="margin-left: 30px; margin-top: -10px;" type="button" class="btn btn-default" onclick="window.open('distributor?id=<?=$_GET['id']?>','_self');">Back</button>
+        <button style="float: right;margin-bottom:10px;margin-right: 16px; margin-top: -6px;" type="button" class="btn btn-success" 
+        onclick="window.open('create-document?id=<?=$_GET['id']?>','_self');"><i class="icon-plus"></i>Add Document</button>
+</div>
+
+<div class="table-responsive">
+    <table class="table table-bordered" >
+        <thead>
+            <tr>
+                <th style="text-align: center;">#</th>
+                <th style="text-align: center;">Document type</th>
+                <th style="text-align: center;">Document</th>
+                <th style="text-align: center;">Action</th>
+            </tr>
+        </thead>
+        <tbody>
+        <?php
+            if (isset($this->list) and $this->list) :   
+                foreach ($this->list as $k=> $m):?>
+                    <tr>
+                        <td style="text-align: center; width: 20px;">
+                            <?php
+                                $inc = $this->offset + $k + 1;
+                                echo $inc;
+                            ?>
+                        </td>
+                        <td><?=$m['name_type']?></td>
+                        <td style="width: 250px;">
+                            <?php 
+                                $info = pathinfo(HOST."/upload/distributor_doc/".$m['d_id']."/".$m['d_document']."");
+                                // echo $info['extension'];
+                                if ($info['extension'] == 'jpeg' || $info['extension'] == 'jpg'|| $info['extension'] == 'JPG')
+                                {
+                             ?>
+
+                                 <a href="/upload/distributor_doc/<?=$m['d_id']?>/<?=$m['d_document']?>"><img id="showpic"  style="width: 250px;  "  src="/upload/distributor_doc/<?=$m['d_id']?>/<?=$m['d_document']?>" /></a>
+                            <?php
+
+                                }elseif ($info['extension'] == 'pdf' || $info['extension'] == 'Pdf')
+                                {
+                            ?>
+                                <a href="<?=HOST?>/upload/distributor_doc/<?=$m['d_id']?>/<?=$m['d_document']?>">View document</a>
+                            <?php
+                                }
+
+                             ?>
+                           
+                            
+                        </td>
+                        <td style="width: 20px;">
+                            <?php 
+                            $userStorage = Zend_Auth::getInstance()->getStorage()->read();
+                            //69=Distributor Approval
+                            if(My_Staff_Group::inGroup($userStorage->group_id,array(ADMINISTRATOR_ID,69)) || $this->distributor_data['activate'] != '1'){ ?>
+                            <a role="menuitem" href="javascript:delete_item('<?php echo $m['id'];?>','<?php echo $m['d_id']?>','<?php echo $m['d_document']?>')" tabindex="-1" ><button type="button" class="btn btn-danger" style="width: 42px;"><i class="icon-trash"></i></button></a>
+                            </a>
+                            <?php } ?>  
+                        </td>
+                    </tr>
+                <?php endforeach;?>
+        <?php endif; ?>
+        </tbody>
+    </table>
+        <div class="paging">
+            <?php echo $this->paging($this->total, $this->limit, $this->offset, $this->url);?>
+        </div>
+</div>
+
+<script type="text/javascript">
+    function delete_item(id,d_id,d_document){
+
+         if (confirm("Press Confirm delete ") == true) {
+               
+                window.location.assign("/sales/delete-document-distributor?id="+id+"&d_id="+d_id+"&d_document="+d_document);
+            }
+        
+         
+    }
+</script>

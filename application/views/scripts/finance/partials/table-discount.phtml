@@ -1,0 +1,34 @@
+<?php 
+    if(isset($this->detailDiscount) AND $this->detailDiscount):
+?>
+<table class="table table-bordered span12">
+    <thead>
+        <tr>
+            <th>Joint Circular</th>
+            <th>pirce</th>
+        </tr>
+    </thead>
+    <tbody>
+        <?php                      
+            $sumDiscount = 0;
+            foreach($this->detailDiscount as $item):
+                $sumDiscount += $item['price'];
+        ?>
+            <tr>
+                <td><?php echo $item['joint_name']?></td>
+                <td><?php echo number_format($item['price']) ?></td>
+            </tr>
+        <?php        
+                endforeach;
+        ?>
+    </tbody>
+    <tfoot>
+        <tr>
+            <td><b>Total discount:</b></td>
+            <td><?php echo number_format($sumDiscount);?></td>
+        </tr>
+    </tfoot>
+</table>
+<?php 
+    endif;
+?>

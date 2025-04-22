@@ -1,0 +1,16 @@
+<form class="form-inline form-search" method="get" action="<?php echo HOST ?>delivery/man">
+    <input type="text" name="name" value="<?php if(isset($this->params['name'])) echo $this->params['name'] ?>" placeholder="Name or Note" />
+    <button type="submit" class="btn btn-primary">Search</button>
+    <button type="reset" class="btn btn-danger">Reset</button>
+    <button type="submit" class="btn btn-success" name="export" value="1">Export</button>
+</form>
+<script type="text/javascript">
+    ;(function($) {
+        $('.form-search button:reset').click(function (e){
+            $('.form-search input, .form-search select').val('');
+            $('.form-search').submit();
+            return false;
+        });
+
+    })(jQuery);
+</script>

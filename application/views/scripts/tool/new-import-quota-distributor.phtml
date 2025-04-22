@@ -1,0 +1,91 @@
+<!-- <link href="//netdna.bootstrapcdn.com/bootstrap/3.2.0/css/bootstrap.min.css" rel="stylesheet" id="bootstrap-css"> -->
+
+<script type="text/javascript" src="<?php echo HOST ?>js/jquery-1.7.2.min.js"></script> 
+<script type="text/javascript" src="<?php echo HOST ?>js/jquery-ui-1.8.12.custom.min.js"></script>
+<link rel="stylesheet" type="text/css" href="<?php echo HOST ?>css/jquery-ui-1.8.12.custom.css"/>  
+<link rel="stylesheet" href="<?php echo HOST ?>css/bootstrap-multiselect.css" type="text/css"/>
+<script type="text/javascript" src="<?php echo HOST ?>js/bootstrap-multiselect.js"></script>
+<link href="<?=HOST?>public/css/bootstrap.modi.min.css" rel="stylesheet">
+
+<style type="text/css">
+
+</style> 
+
+<div class="page-header">
+  <h1>New Import Quota Distributor</h1>
+</div>
+<?php
+    if (isset($this->messages) and $this->messages)
+        foreach ($this->messages as $message):
+            echo '<div class="alert alert-error">'.$message.'</div>';
+        endforeach;
+?>
+
+<div class="alert alert-success hide">Success.</div>
+
+<div class="container">
+  <form role="form" id="form" action="<?php echo HOST.'tool/new-import-quota-distributor';?>" method="post" enctype="multipart/form-data" target="iframe"> <!-- savequotadistributor -->
+
+    <div class="well">
+      <div class="control-group">
+        <label class="">File Import | <a href="<?php echo HOST ?>upload/file_template/Template_New_Quota_Distributor.xlsx">Download Template</a></label>
+        <div class="controls">
+          <input type="file" name="file" id="file" required>
+        </div>
+      </div>
+
+      <div class="control-group">
+        <div class="progress progress-striped active">
+            <div class="bar" style="width: 0%;"></div>
+        </div>
+      </div>
+
+    </div>
+
+    <div class="row">
+      <div class="span6">
+        <div class="control-group">
+
+          <div class="span4">
+
+            <button type="submit" class="btn btn-primary" id="submit_btn">Confirm</button>
+            <a href="new-quota-manage-distributor" class="btn btn-danger go-back">Go back</a>
+          </div>
+        </div>
+        <div class="clearfix"></div>
+      </div>
+    </div>
+  </form>
+</div>
+
+<iframe src="" frameborder="0" name="iframe" id="iframe"></iframe>
+<script src="<?php echo HOST ?>js/jquery-ui.js"></script>
+<script src="<?php echo HOST ?>js/bootstrap-modal.js"></script>
+<script src="<?php echo HOST ?>js/bootstrap-modalmanager.js"></script>
+<script type="text/javascript" src="<?php echo HOST ?>js/sales.po.js"></script>
+<script type="text/javascript">
+
+  function set_progress(percent) {
+        $('.bar').css('width', percent+'%');
+        $('.bar').html(percent+'%');
+        if(percent == 100){
+          $('.alert').addClass('hide');
+          $('.alert-success').removeClass('hide');
+        }
+    }
+
+  $(document).ready(function () {
+
+    $('form').bind('submit',function(e){
+      $('.bar').css('width', '0%');
+      $('.bar').html('');
+      $('#iframe').get(0).contentWindow.clear_content();
+      $('form button, form input, form select').prop('readonly', true);
+      $('button,input').append
+      $('.loading').remove();
+      $(this).after('<span class="pre_loading">Processing <span><span class="loading"></span>');
+      window.onbeforeunload = confirmExit;
+    });
+    
+  });
+</script>

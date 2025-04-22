@@ -1,0 +1,139 @@
+<style type="text/css">
+    .input_group {
+        width: 200px;
+        float: left;
+        /*margin-right: 10px;*/
+    }
+
+    .input_group input,
+    .input_group select {
+        width: 100%;
+        box-sizing: border-box;
+        -moz-box-sizing: border-box;
+        -webkit-box-sizing: border-box;
+    }
+
+    .input_group input {
+        height: auto;
+    }
+</style>
+
+<div class="page-header">
+    <h1><?php echo ( isset($this->mapping) && $this->mapping ? 'Edit' : 'Create' ) ?> Product Code Mapping <small>For Mass Order Upload</small></h1>
+</div>
+<div class="row">
+    <div class="span12">
+        <form action="<?php echo HOST ?>mapping/fpt-product-save" class="form-horizontal" method="post">
+            <div class="control-group">
+                <label class="control-label" for="good_id">Product</label>
+                <div class="controls">
+                    <select name="good_id" id="good_id">
+                        <option value>---</option>
+                        <?php if (isset($this->goods) && $this->goods): ?>
+                            <?php foreach ($this->goods as $key => $value): ?>
+
+                                <option value="<?php echo $key ?>"
+                                    <?php if(isset($this->mapping['good_id']) && $key == $this->mapping['good_id'])
+                                            echo 'selected' ?>><?php echo $value ?></option>
+
+                            <?php endforeach ?>
+                        <?php endif ?>
+                    </select>
+                </div>
+            </div>
+            <div class="control-group">
+                <label class="control-label" for="color_id">Color</label>
+                <div class="controls">
+                    <select name="color_id" id="color_id">
+                        <option value>---</option>
+                        <?php if (isset($this->goodColors) && $this->goodColors): ?>
+                            <?php foreach ($this->goodColors as $key => $value): ?>
+
+                                <option value="<?php echo $key ?>"
+                                    <?php if(isset($this->mapping['color_id']) && $key == $this->mapping['color_id'])
+                                            echo 'selected' ?>><?php echo $value ?></option>
+
+                            <?php endforeach ?>
+                        <?php endif ?>
+                    </select>
+                </div>
+            </div>
+            <div class="control-group">
+                <label class="control-label" for="code">Product Code</label>
+                <div class="controls">
+                    <div class="input_group">
+                        <input type="text" class="" placeholder="Product Code" name="code" id="code"
+                            value="">
+                        <select size="7" id="code_list">
+                            <?php if (isset($this->code_list) && $this->code_list): ?>
+                                <?php foreach ($this->code_list as $_key => $_code): ?>
+                                    <option><?php echo $_code ?></option>
+                                <?php endforeach ?>
+                            <?php endif ?>
+                        </select>
+                    </div>
+                    <button type="button" class="btn btn-success btn-small" id="add_code_btn"><i class="icon-plus"></i></button>
+                    <button type="button" class="btn btn-default btn-small" id="remove_code_btn"><i class="icon-minus"></i></button>
+                </div>
+            </div>
+            <div class="control-group">
+                <div class="controls">
+                    <input type="hidden" name="code_list" id="code_array" value="<?php if(isset($this->code_list) && $this->code_list) echo implode(',', $this->code_list) ?>">
+                    <input type="hidden" name="id" value="<?php if(isset($this->mapping['id'])) echo $this->mapping['id'] ?>">
+                    <button class="btn btn-success">Save</button>
+                    <button class="btn btn-danger" type="button" onclick="window.location='<?php echo HOST ?>mapping/fpt-product'">Go Back</button>
+                </div>
+            </div>
+        </form>
+    </div>
+</div>
+
+<script type="text/javascript">
+;(function($) {
+    $('#add_code_btn').on('click', add_code);
+    $('#remove_code_btn').on('click', remove_code);
+
+    function add_code(e) {
+        code = $("#code").val().trim();
+
+        if (!is_exists(code))
+            $("#code_list").append("<option>"+code+"</option>");
+
+        $("#code").val('');
+        reload_list()
+    }
+
+    function remove_code(e) {
+        $("#code_list").find("option:selected").remove();
+        reload_list()
+    }
+
+    function is_exists(code) {
+        list = $("#code_list").find("option");
+        check = false;
+
+        if (!list.length) return check;
+
+        list.each(function(index, elm) {
+            if ($(elm).val() == code) {
+                check = true;
+                return false;
+            }
+        });
+
+        return check;
+    }
+
+    function reload_list() {
+        list = $("#code_list").find("option");
+        $("#code_array").val('');
+        code_array = [];
+
+        list.each(function(index, elm) {
+            code_array.push($(elm).val());
+        });
+
+        $("#code_array").val(code_array.join());
+    }
+})(jQuery);
+</script>

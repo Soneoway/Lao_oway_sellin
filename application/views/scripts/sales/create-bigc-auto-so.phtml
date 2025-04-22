@@ -1,0 +1,188 @@
+<style>
+    iframe {
+        width: 100%;
+        height: 500px;
+    }
+
+    .bar {
+        line-height: 18px;
+    }
+    .modal-scrollable
+    {
+        position: absolute;
+        z-index: 9999;
+    }
+    .span13 { 
+        margin-top: -125px; 
+        margin-left: 450px;
+    }
+</style>
+
+<div class="page-header">
+    <h1>Create Big-C Auto Order</h1>
+</div>
+
+<?php
+
+if (isset($this->messages_success) and $this->messages_success)
+    foreach ($this->messages_success as $message):
+        echo '<div class="alert alert-success">'.$message."</div>";
+    endforeach;
+    
+if (isset($this->messages) and $this->messages)
+    foreach ($this->messages as $message):
+        echo '<div class="alert alert-error">'.$message."</div>";
+    endforeach;
+
+
+$path_protection_price = realpath(APPLICATION_PATH . '/../public/files/create_so_auto/create_sales_order_auto_template.xlsx');    
+/*header("Content-type: public/files/protection_price_template");
+header("Content-Disposition: attachment; filename=protection_price_template.xlsx"); 
+$pdfiledata = file_get_contents($filename);
+echo $pdfiledata;
+*/
+?>
+<div class="well">
+    <div class="row-fluid">
+
+        <div class="span4">
+            List of uploaded files <a class="btn btn-success btn-mini" href="<?php echo HOST ?>sales/mou-log">View Logs</a></p>
+            Import Sales Order Big-C Template <a class="btn btn-success btn-mini" href="<?php echo HOST ?>upload/create_bigc_auto_so/create_bigc_auto_so_template.xlsx">Download File</a></p>
+
+        </div>
+
+        <div class="span4">
+            <span style="color: red">**</span> List key color <a class="btn btn-success btn-mini" href="<?php echo HOST ?>upload/list_key_color/list_color.xlsx">Download File</a></p>
+        
+            <span style="color: red">**</span> List shipping-address <a href="/sales/exportshipping" name="export" class="btn btn-success btn-mini">Export</a>
+            
+        </div>
+
+    </div>
+</div>
+
+<div class="row">
+    <div class="span12">
+        <form role="form" id="form" action="<?php echo HOST.'sales/save-create-bigc-auto-so';?>" target="iframe" class="form-inline" method="post"  enctype="multipart/form-data">
+
+            <div class="span6">
+                <div class="form-group">
+                    <label for="" class="span4">File <span style="color: red">*</span>
+                        <input type="file" class="span4" name="file" required />
+                    </label>
+                </div>
+            </div>
+            </br></br></br>
+	        <div class="row">
+		        <div class="span6">
+		            <button type="submit" class="btn btn-primary">Save</button>
+		            <button type="button" class="btn btn-danger go-back">Go back</button>
+		        </div>
+	        </div>
+        </form>
+    </div>
+
+    <div class="row">
+        <div class="span12">
+            <div class="progress progress-striped active">
+                <div class="bar" style="width: 0%;"></div>
+            </div>
+        </div>
+
+        <iframe src="" frameborder="0" name="iframe" id="iframe"></iframe>
+    </div>
+</div>
+
+
+
+<script src="<?php echo HOST ?>js/jquery-ui.js"></script>
+<script src="<?php echo HOST ?>js/bootstrap-modal.js"></script>
+<script src="<?php echo HOST ?>js/bootstrap-modalmanager.js"></script>
+<script type="text/javascript" src="<?php echo HOST ?>js/sales.po.js"></script>
+
+<script>
+    function confirmExit() {
+        return "Orders are being processed.";
+    }
+
+    function set_progress(percent) {
+        $('.bar').css('width', percent+'%');
+        $('.bar').html(percent+'%');
+    }
+
+
+    $(document).ready(function () {
+
+        $('form').bind('submit',function(e){
+            $('.bar').css('width', '0%');
+            $('.bar').html('');
+            $('#iframe').get(0).contentWindow.clear_content();
+            $('form button, form input, form select').prop('readonly', true);
+            $('.loading').remove();
+            $(this).after('<span class="pre_loading">Processing <span><span class="loading"></span>');
+            window.onbeforeunload = confirmExit;
+        });
+            $('#add_po_btn').click(show_add_joint_modal);
+    });
+
+     function show_add_joint_modal() {
+
+        $modal = $('#add_joint');
+
+        $modal.modal('show');
+
+        $modal.on('hidden', function () {
+            $('#save_joint').unbind('click');
+        })
+
+        $('#save_joint').click(save_joint);
+
+    }
+    /*save joint circular*/
+    function save_joint()
+    {
+        $('#info_modal').text('');
+        var joint_name = $('#joint_name_modal').val();
+        var joint_note = $('#note_modal').val();
+        var good       = $('#good_id').val();
+        var price      = $('#price').val();
+        var bvg        = 1;
+
+
+        if (!joint_name) {
+            $('#info_modal').text('Please fill in the Joint Circular.');
+            return false;
+        }
+
+        $.ajax({
+            url: '/get/joint-save',
+            type: 'post',
+            dataType: 'json',
+            processData: true,
+            data: {
+                joint_name : joint_name,
+                note : joint_note,
+                bvg : bvg,
+                good_id : good,
+                price : price
+            }
+        })
+            .done(function(data) {
+                console.log("success");
+
+                if (data) {
+                    if (data.code != 1 && data.error) {
+                        $('#info_modal').text(data.error);
+                        return false;
+                    } else {
+                        $('#info_modal').text('Done!!!');
+                        setTimeout(window.location.reload(), 300);
+                    }
+                } else {
+                    $('#info_modal').text('Error!!!');
+                    return false;
+                }
+            });
+    }
+    
+</script>

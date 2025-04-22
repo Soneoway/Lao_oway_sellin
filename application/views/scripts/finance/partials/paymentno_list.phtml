@@ -1,0 +1,54 @@
+<style>
+
+a{
+    margin-right: 2.5px;
+    margin-left: 2.5px;
+}
+
+.hilight
+{
+    background: #E8ADAA;
+    /*color:white;*/
+}
+.hilight:hover
+{
+    /*color:black;*/
+}
+</style>
+<table class="table table-bordered">
+    <thead>
+        <tr>
+            <?php echo $this->sorting(array(
+					'title'  => 'Retailer Name',
+					'total_amount'  => 'Total Amount',
+                    'use_total'  => 'Total Used',
+                    'balance_total' => 'Total Balance',
+					'Action'
+                ),
+                $this->url, $this->sort, $this->desc); ?>
+        </tr>
+    </thead>
+    <tbody>
+        <?php
+        $statuses = unserialize(DISCOUNT_STATUS);
+        if (isset($this->get_paymentno) and $this->get_paymentno) :
+            foreach ($this->get_paymentno as $k=>$m):
+            ?>
+            <tr>
+                <td><?php echo $m['title'] ?></td>
+                <td><?php echo $m['total_amount'] ?></td>
+                <td><?php echo $m['use_total'] ?></td>
+                <td><?php echo $m['balance_total'] ?></td>
+
+                <td style="text-align: center;">
+                    <a title="Manage Payment No" href="/finance/paymentno-manage?d_id=<?php echo $m['distributor_id'];?>"> <i class="icon-edit"></i></a>
+                    <a title="Show Log Payment No" href="/finance/paymentno-log?d_id=<?php echo $m['distributor_id'];?>"> <i class="icon-file-text-alt"></i></a>
+                </td>
+            </tr>
+        <?php endforeach;?>
+		<?php endif; ?>
+    </tbody>
+</table>
+<div class="paging">
+    <?php echo $this->paging($this->total, $this->limit, $this->offset, $this->url);?>
+</div>

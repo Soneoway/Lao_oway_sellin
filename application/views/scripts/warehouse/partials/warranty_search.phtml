@@ -1,0 +1,53 @@
+<form class="form-search form-horizontal warranty" method="post" action="/warehouse/product-warranty">
+    <div class="row">
+     <div class="span5">
+            <div class="control-group">
+                <label for="co" class="span2">Change Order Number</label>
+                <input id="co" name="co" type="text" class="input-medium search-query form-control" value="<?php isset($this->params['co']) and printf($this->params['co']);?>">
+            </div>
+        </div>
+        <div class="span5">
+
+            <div class="control-group">
+                <label for="po" class="span2">Purchase Order Number</label>
+                <input id="po" name="po" type="text" class="input-medium search-query form-control" value="<?php isset($this->params['po']) and printf($this->params['po']);?>">
+            </div>
+        </div>       
+    </div>
+    <div class="row">       
+        <div class="span5">
+           <div class="control-group">
+                <label for="created_at_from_co" class="span2">Change Order Date From</label>
+                <input type="text" class="form-control search-query date" id="created_at_from_co" name="created_at_from_co" value="<?php isset($this->params['created_at_from_co']) and printf($this->params['created_at_from_co']);?>">
+            </div>
+        </div>
+        <div class="span5">
+           <div class="control-group">
+                <label for="created_at_from_po" class="span2">Purchase Order Date From</label>
+                <input type="text" class="form-control search-query date" id="created_at_from_po" name="created_at_from_po" value="<?php isset($this->params['created_at_from_po']) and printf($this->params['created_at_from_po']);?>">
+            </div>
+        </div>
+    </div>
+    <div class="row">       
+        <div class="span5">
+           <div class="control-group">
+                <label for="created_at_to_co" class="span2">Change Order Date To</label>
+                <input type="text" class="form-control search-query date" id="created_at_to_co" name="created_at_to_co" value="<?php isset($this->params['created_at_to_co']) and printf($this->params['created_at_to_co']);?>">
+            </div>
+        </div>
+        <div class="span5">
+           <div class="control-group">
+                <label for="created_at_to_po" class="span2">Purchase Order Date to</label>
+                <input type="text" class="form-control search-query date" id="created_at_to_po" name="created_at_to_po" value="<?php isset($this->params['created_at_to_po']) and printf($this->params['created_at_to_po']);?>">
+            </div>
+        </div>
+    </div>
+
+    <button type="submit" class="btn btn-primary">Search</button>
+    <button type="reset" class="btn btn-warning">Reset</button>
+</form>
+<script>
+    $(document).ready(function () {
+        $( '.date' ).datepicker({ dateFormat: "dd/mm/yy" });        
+    });
+</script>

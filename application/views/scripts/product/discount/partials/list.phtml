@@ -1,0 +1,44 @@
+<table class="table table-bordered">
+    <thead>
+        <tr>
+            <?php echo $this->sorting(array(
+                    '#',
+                    'Product Name'  => 'Product Name',
+                    'Discount For' => 'Discount For',
+                    'Discount',
+                    'Action'
+                ),
+                $this->url, $this->sort, $this->desc); ?>
+        </tr>
+    </thead>
+    <tbody>
+        <?php
+        if (isset($this->discount) and $this->discount)
+            foreach ($this->discount as $k=>$good): ?>
+        <tr>
+            <td>
+                <?php
+                    $inc = $this->offset + $k + 1;
+                    echo $inc;
+                ?>
+            </td>
+            <td><?php echo (isset($this->goods[$good['good_id']]) && $this->goods[$good['good_id']] ? $this->goods[$good['good_id']] : '')  ?></td>
+            <td>
+                <?php echo (isset($good['name']) && $good['name'] ? $good['name'] :'') ?>
+            </td>
+            <td>
+                <?php echo (isset($good['discount']) && $good['discount'] ? $good['discount'] :'') ?> %
+            </td>
+            <td class="">
+                <a title="Edit" href="/product/discount-edit?id=<?php echo $good['id'];?>"> <i class="icon-edit"></i></a>
+                <a title="Delete" class="confirmLink" href="/product/discount-delete?id=<?php echo $good['id'];?>"> <i class="icon-trash"></i></a>
+            </td>
+        </tr>
+        <?php endforeach;?>
+
+    </tbody>
+</table>
+<div class="paging">
+    <?php echo $this->paging($this->total, $this->limit, $this->offset, $this->url);?>
+</div>
+<?php echo $this->confirm();?>

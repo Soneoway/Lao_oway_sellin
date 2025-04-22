@@ -1,0 +1,91 @@
+<table class="table table-bordered">
+	<thead>
+		<tr>
+			<th>Document No.</th>
+			<th>Store.</th>
+			<th>Finance Client.</th>
+			<th>Finance Client Code.</th>
+			<th>Bank Account</th>
+			<th>Finance Date</th>
+			<th>Amount</th>
+			<th>Settlement Type</th>
+			<th>Status</th>
+			<th>Transfer Type</th>
+			<th>Remarks</th>
+			<th>Creator</th>
+			<th>Creation Time</th>
+			<th>Action</th>
+		</tr>
+	</thead>
+	<tbody>
+
+		<?php if(isset($this->sale_receipt) && $this->sale_receipt) : ?>
+			<?php foreach ($this->sale_receipt as $value) : ?>
+
+				<?php 
+					if($value['status'] == 1) {
+						$sale_receipt_status = "<span style='color: blue'> Pending Review </span>";
+					}elseif($value['status'] == 2) {
+						$sale_receipt_status = "<span style='color: green'> Approved </span>";
+					}elseif($value['status'] == 3) {
+						$sale_receipt_status = "<span style='color: orange'> Re-review </span>";
+					}else{
+						$sale_receipt_status = "<span> Upapproved </span>";
+					}
+
+					if($value['transfer_type'] == 1) {
+						$transfer_type = 'Individual-To-Company';
+					}elseif($value['transfer_type'] == 2) {
+						$transfer_type = 'Individual-To-Individual';
+					}else{
+						$transfer_type = 'Company-To-Company';
+					}
+				?>
+
+				<tr>
+					<td><?php echo $value['document_no'] ?></td>
+					<td>
+						<?php if($value['store_id']){
+							echo $this->store[$value['store_id']];
+						}else{
+							echo $this->warehouse[$value['warehouse_id']];
+						}
+						?>
+					</td>
+					<td><?php echo $value['finance_client_name'] ?></td>
+					<td><?php echo $value['finance_client_code'] ?></td>
+					<td><?php echo $value['bank_account_name'] ?></td>
+					<td><?php echo $value['business_date'] ?></td>
+					<td><?php echo number_format($value['amount'],0) ?></td>
+					<td><?php echo $value['smt_name'] ?></td>
+					<td><?php echo $sale_receipt_status ?></td>
+					<td><?php echo $transfer_type ?></td>
+					<td><?php echo $value['remark'] ?></td>
+					<td><?php echo $this->staff[$value['created_by']] ?> </td>
+					<td><?php echo $value['created_at'] ?></td>
+					<td>
+						<a href="/finance/add-sale-receipt?id=<?php echo $value['id'] ?>&type=1"> Detail </a>
+
+						<?php if(in_array($value['status'], array(1,3))) : ?>
+							| <a href="/finance/add-sale-receipt?id=<?php echo $value['id'] ?>&type=3"> Approved </a>
+						<?php endif; ?>
+
+						<?php if(in_array($value['status'], array(2))) : ?>
+							| <a href="/finance/approved-sale-receipt=?id=<?php echo $value['id'] ?>&action_type=2" style="color: orange;"> Re-review </a>
+						<?php endif; ?>
+
+						<?php if(in_array($value['status'], array(1,3))) : ?>
+							| <a href="/finance/add-sale-receipt?id=<?php echo $value['id'] ?>&type=2"> Edit </a>
+						<?php endif; ?>
+
+						<?php if(in_array($value['status'], array(1,3))) : ?>
+							| <a href="/finance/approved-sale-receipt=?id=<?php echo $value['id'] ?>&action_type=3" style="color: red;"> Delete </a>
+						<?php endif; ?>
+					</td>
+				</tr>
+
+			<?php endforeach; ?>
+		<?php endif; ?>
+
+	</tbody>
+</table>

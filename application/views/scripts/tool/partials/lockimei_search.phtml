@@ -1,0 +1,66 @@
+<form class="form-search form-horizontal" method="get" action="">
+      <div class="row-fluid">
+          <div class="span5">
+            <label for="" class="">IMEI Code: <span><strong id="num_imei">0</strong> IMEI(s)</span></label>
+          </div>
+       </div>
+    <div class="row">
+        <div class="row-fluid">
+          <div class="span5">
+            <div class="control-group">
+                <label for="distributor" class="span2"></label>
+                <textarea name="imei" id="imei" cols="20" rows="10"><?php echo$this->params['imei'] ?></textarea>
+            </div>
+          </div>
+        </div>
+    </div><!-- end row -->
+    <button name="search" type="submit" value="1" class="btn btn-primary">Search</button>
+    <button name="export" type="submit" value="1" class="btn btn-success">Export</button>
+    <a href="lockimei" class="btn btn-warning">Reset</a>
+</form>
+<div class="row-fluid">
+    <div class="span12">
+        <div class="ajax-load">
+            
+        </div>
+    </div>
+</div>
+<script>
+    $(document).ready(function(){
+        $('#valid_btn').click(function(){
+            _self = $(this);
+            _self.nextAll('span').addClass('loading');
+            imei = $('#imei').val();
+            $.post(
+                "<?php echo HOST . 'tool/check-imei'?>",
+                {
+                    value : imei,
+                    is_check : 1
+                },
+                function(data){
+                    $('.ajax-load').html(data);
+                    _self.nextAll('span').removeClass('loading');
+            });
+        });
+
+        initShowIMEINum();
+        checkIMEI();
+    });
+    
+
+    function initShowIMEINum(){
+        $('#imei').keyup(function (e){
+
+            var inputnum = 0;
+
+            if ($(this).val() != '')
+                inputnum = ($(this).val().split("\n").length).toString();
+
+
+            $('#num_imei').html(inputnum);
+
+        });
+    }
+
+</script>
+

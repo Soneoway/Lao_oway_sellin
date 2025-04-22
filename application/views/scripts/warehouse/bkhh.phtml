@@ -1,0 +1,447 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
+<html>
+   <head>
+      <meta http-equiv="Pragma" content="no-cache">
+      <meta http-equiv="Expires" content="-1">
+      <meta http-equiv="Content-Type" content="text/html; charset=utf-8">
+      <title>Print</title>
+       <script src="//ajax.googleapis.com/ajax/libs/jquery/1.10.2/jquery.min.js"></script>
+       <link rel="stylesheet" href="//code.jquery.com/ui/1.11.3/themes/smoothness/jquery-ui.css">
+       <script src="//code.jquery.com/ui/1.11.3/jquery-ui.js"></script>
+      <style type="text/css">
+          #date{position: absolute;right: 200px;top: 0px;} .tdright{text-align:right}.tdnum{position:relative;left:12px}#frmInvoice{display:inline;position:absolute;margin-top:130px}#frmInvoice input{float:left}input[type="text"]{height:23px}@media print{.print,.no-print{display:none!important}}.fleft{float:left}.fright{float:right}body{margin:0 auto;width:595px;font-size:12px;font-family:Arial;margin-top:-60px}.top{text-align:center;float:left}.top p{height:24px;line-height:24px;margin:0}.textbox{width:600px;border:1px solid #000;height:70px}.blank10{height:10px;clear:both}.title{width:600px;text-align:center;height:30px;font-size:15px;line-height:30px;background-color:#fabf8f;font-weight:700}.tbl,.tbllist{width:600px;position:relative;top:33px;left:-60px;text-align:center}.tbl tr{margin:0}.tbl tr td,.tbllist tr td{background-color:#fff}.tbl .firsttd{width:145px}.tbl .secondtd{width:100px}.tbl .thirdtd{width:36px}.tbl .forthtd{width:65px}.assign{width:200px;font-weight:700;height:100px;margin-top:10px;text-align:center;margin-right:20px}.note{border-bottom:1px dotted #ccc;width:300px;float:left;margin:9px 0 0 25px}.green{text-align:center}.green td{background-color:#cfc!important}#logo{float:left;display:block;width:200px}#logo img{width:136px;margin-top:10px}.trcenter{text-align:center}.invoice{width:453px;display:block;clear:both;margin-left:119px}.invoice-number{float:left;padding-left:37px}.order-type{float:right;text-align:right}.right{text-align:right}.detail{width:587px}.detail .col1{width:109px;float:left}.detail .col2{width:224px;float:left}.detail .col2 span{font-weight:700}.detail .col3{width:100px;float:left}.detail .col3 span{font-weight:700}.clear{clear:both}.colleft{float:left;width:300px}.colright{float:right;width:165px}.vat{width:435px!important;float:right!important}#vatnumber{clear:both}#vatnumber .sn{width:54px;border:1px solid #000;height:14px;float:left}.marksn{float:left;border-left:1px solid #000;font-weight:700;padding-left:3px}.order{float:left;margin-left:10px}.order .sn{width:5px;height:10px;border:1px solid #000;float:left;margin-left:5px}.order .alert{margin-left:16px;margin-bottom:4px}.title small{float:right;font-weight:400;font-size:8px;padding-right:2em}.top1{text-align:left;float:left;height:54px;padding:5px;padding-left:42px}input[type="text"]{display:block;margin:0;font-family:time new roman;font-weight:700;text-align:center;font-size:10px;border:none}.model{font-size:8px!important;text-transform:uppercase}.imgbutton{width:40px!important;cursor:pointer}.print{width:20px!important}.scroll{overflow:hidden}.number{width:10px}h1{text-transform:uppercase;font-size:17px;margin-bottom:4px}strong{text-transform:uppercase}.casl{border-top:0 solid #000}.titlecompany{font-size:15px}.right{text-align:right}.left{text-align:left}.an{visibility:hidden}.hoa{text-transform:uppercase}.date{position:relative;top:25px;left:-83px}.vat1{top:621px;position:absolute;left:19px}.vat1 tr{height:21px}.tmck{visibility:visible!important;right:16px;position:relative;top:-11px}.name{padding-left:25px}.price-tt{left:10px;position:relative}.hangkhuyenmai{position:relative;left:4px}input[type="text"]{display:block;margin:0;font-family:Arial;font-weight:700;text-align:left;font-weight:normal;font-size:12px!important;border:none}.total_debate{padding-left:20px;width:270px;text-align:left;font-weight:400;font-size:13px;display:block;margin:0}.name{padding-left:0}.print{width:100px}.abc{text-align:left}.total{text-align:right}
+      </style>
+   </head>
+   <body>
+      <?php
+function VndText($amount)
+{
+    if ($amount <= 0) {
+        return $textnumber = "";
+    }
+    $Text = array(
+        "không",
+        "một",
+        "hai",
+        "ba",
+        "bốn",
+        "năm",
+        "sáu",
+        "bảy",
+        "tám",
+        "chín");
+    $TextLuythua = array(
+        "",
+        "nghìn",
+        "triệu",
+        "tỷ",
+        "ngàn tỷ",
+        "triệu tỷ",
+        "tỷ tỷ");
+    $textnumber = "";
+    $length = strlen($amount);
+
+    for ($i = 0; $i < $length; $i++)
+        $unread[$i] = 0;
+
+    for ($i = 0; $i < $length; $i++) {
+        $so = substr($amount, $length - $i - 1, 1);
+
+        if (($so == 0) && ($i % 3 == 0) && ($unread[$i] == 0)) {
+            for ($j = $i + 1; $j < $length; $j++) {
+                $so1 = substr($amount, $length - $j - 1, 1);
+                if ($so1 != 0)
+                    break;
+            }
+
+            if (intval(($j - $i) / 3) > 0) {
+                for ($k = $i; $k < intval(($j - $i) / 3) * 3 + $i; $k++)
+                    $unread[$k] = 1;
+            }
+        }
+    }
+
+    for ($i = 0; $i < $length; $i++) {
+        $so = substr($amount, $length - $i - 1, 1);
+        if ($unread[$i] == 1)
+            continue;
+
+        if (($i % 3 == 0) && ($i > 0))
+            $textnumber = $TextLuythua[$i / 3] . " " . $textnumber;
+
+        if ($i % 3 == 2)
+            $textnumber = 'trăm ' . $textnumber;
+
+        if ($i % 3 == 1)
+            $textnumber = 'mươi ' . $textnumber;
+
+
+        $textnumber = $Text[$so] . " " . $textnumber;
+    }
+
+    //Phai de cac ham replace theo dung thu tu nhu the nay
+    $textnumber = str_replace("không mươi", "lẻ", $textnumber);
+    $textnumber = str_replace("lẻ không", "", $textnumber);
+    $textnumber = str_replace("mươi không", "mươi", $textnumber);
+    $textnumber = str_replace("một mươi", "mười", $textnumber);
+    $textnumber = str_replace("mươi năm", "mươi lăm", $textnumber);
+    $textnumber = str_replace("mươi một", "mươi mốt", $textnumber);
+    $textnumber = str_replace("mười năm", "mười lăm", $textnumber);
+
+    return ucfirst($textnumber);
+}
+
+function product_price($priceFloat, $decimal_p = 0)
+{
+    $symbol = ' VND';
+    $symbol_thousand = '.';
+    $decimal_place = $decimal_p;
+    //$priceFloat=round($priceFloat, 0, PHP_ROUND_HALF_UP);
+    $price = number_format($priceFloat, $decimal_place, ',', $symbol_thousand);
+    return $price;
+}
+
+?>
+      <div class="an">
+         <div id="logo" >
+            <!--<img src="<?php /*echo HOST */ ?>img/logoprint.png" />-->
+            <br />
+            <!--<img src="./images/print-record.gif" class="imgbutton print" onclick="Print()" id="print"  />-->
+         </div>
+      </div>
+      <form id="frmInvoice" action="" class="print">
+          <input type="text" id="date" placeholder="click here to change date">
+          <input name="invoice_number" id="invoice_number" type="text" placeholder="Invoice number" class="no-print" value="<?php echo
+$this->market['invoice_number']; ?>"/>
+         <select name="prefix" id="prefix">
+              <?php if (isset($this->invoice_prefix) and $this->invoice_prefix): ?>
+              <?php foreach ($this->invoice_prefix as $k => $v): ?>
+                <option <?php if (isset($v['warehouse_id']) and $v['warehouse_id'] == $this->warehouse_id and $v['status'] == 1)
+            echo 'selected'; ?> value="<?php echo $v['id'] ?>"><?php echo $v['name']; ?></option>
+                <?php endforeach;
+                endif; ?>
+         </select>
+         <input type="hidden" name="sales_sn" id="sales_sn" value="<?php echo $this->
+market['sn']; ?>">
+         <input type="hidden" name="save_done" id="save_done" value="<?php echo ((isset
+($this->market['invoice_number'])) and $this->market['invoice_number'] ? 1 : 0); ?>">
+        
+          <?php if (isset($this->ck) and $this->ck): ?>
+           <input type="button" name="SaveCK" id="SaveInvoice" value="SaveCK" class="no-print" />        
+         <?php else: ?>
+          <input type="button" name="Save" id="Save" value="Save" class="no-print" />
+         <?php endif; ?>
+        
+        
+        
+       
+         <script type="text/javascript">
+            $(document).ready(function()
+            {
+                $( "#date" ).datepicker({ dateFormat: "dd/mm/yy" });
+                initUnload();
+            });
+            
+            function initUnload(){
+                window.onbeforeunload = function(event) {
+            
+                    if ($('#save_done').val()==0){
+                        event = event || window.event;
+            
+                        var confirmClose = 'Please input invoice number!';
+            
+                        // For IE and Firefox prior to version 4
+                        if (event) {
+                            event.returnValue = confirmClose;
+                        }
+            
+                        // For Safari
+                        return confirmClose;
+                    }
+            
+                }
+            }
+            
+            $('#SaveInvoice').click(function (){
+
+
+            });
+            
+            $('#SaveInvoice').click(function (){
+
+                $('#invoice_number').html('<span class="loading"></span>checking...');
+
+                $('.invoice_number').html($('#invoice_number').val());
+
+                var all_values = [];
+
+                $('input[name^="invoice_price"]').each(function() {
+                    all_values.push($(this).val());
+                });
+
+                var date = $('#date').val();
+
+                var dateTime = new Date($("#date").datepicker("getDate"));
+
+                var strDay =  dateTime.getDate();
+
+                if(strDay <= 9) strDay = '0' + strDay;
+
+                var strMonth = dateTime.getMonth()+1;
+
+                if(strMonth <= 9) strMonth = '0' + strMonth;
+
+                var strYear = dateTime.getFullYear();
+                if(strYear != '1970')
+                {
+                    $('.day').html(strDay) ;
+                    $('.month').html(strMonth) ;
+                    $('.year').html(strYear) ;
+                }
+                else{date = ''}
+
+                $.post('<?php echo HOST ?>get/invoice-deduction-save',
+                    {
+                        invoice_number: $('#invoice_number').val(),
+                        sales_sn: $('#sales_sn').val(),
+                        prefix: $('#prefix').val(),
+                        date : date,
+                        total_invoice_price: $('#total_invoice_price').val(),
+                        total_invoice_vat: $('#total_invoice_vat').val(),
+                        total_invoice_after_vat: $('#total_invoice_after_vat').val(),
+                        invoice_price: all_values
+                    }, function(data) {
+
+                        var text = '';
+
+                        switch (data) {
+                            case '-1':
+                                text = 'Please input Invoice number!';
+                                break;
+                            case '-2':
+                                text = 'Sales order number is invalid!';
+                                break;
+                            case '-3':
+                                text = 'This invoice number was used already!';
+                                break;
+                            case '-4':
+                                text = 'Cannot save invoice number, please try again!';
+                                break;
+                            case '0':
+                                text = 'Saving successfully!';
+                                $('#save_done').val(1);
+                                $('#invoice_number_span').text('TT' + $('#invoice_number').val());
+                                break;
+                        }
+            
+                        alert(text);
+                        initUnload();
+                    });
+            });
+         </script>
+      </form>
+      <div class="top">
+         <h1 class="an">Hoá đơn giá trị gia tăng</h1>
+         <p class="an">Liên 2: Giao cho người mua</p>
+          <p class="date"><span class="an">Ngày</span> <span class="day" id="day" style="position: relative;left: -18px;top: 0px;"><?php echo date("d"); ?></span><span class="an">tháng</span> <span class="month" id="month"><?php echo date("m"); ?></span> <span class="an">năm </span>
+          <div id="year" class="year" style="position: relative;left: 18px;top: 6px;"> <?php echo date("Y"); ?></div>
+         </p>
+      </div>
+      <div class="top1 an">
+         <p>Mẫu số: <strong>01GTKT3/003</strong></p>
+         <p>Ký hiệu: <strong> QQ/13P</strong></p>
+         <p>Số: <strong> </strong></p>
+      </div>
+      <div class="blank10"></div>
+      </div>
+      <div class="an">
+         <div class="casl">
+            <p>Đơn vị bán hàng :<strong class="titlecompany">Công ty TNHH Một Thành Viên Kỹ Thuật & Khoa Học OPPO</strong></p>
+            <p>Mã số thuế : <strong>0312059023</strong></p>
+            <p>Địa chỉ :<span>Toà nhà SCB, 242 Cống Quỳnh, Phường Phạm Ngũ Lão, Quận 1, Thành phố Hồ Chí Minh, Việt Nam</span></p>
+            <p>Điện thoại :<span>(08) 39202555 - Email: oppo@oppomobile.vn</span></p>
+            <p>Số tài khoản:</p>
+         </div>
+      </div>
+      <div class="casl" style="margin-top: -145px;position: relative;top: 20px;">
+         <p style="top: 5px; position: relative;"><span class="an">Họ tên người mua hàng :</span> <span class="hoa"></span></p>
+         <p><span class="an">Tên : </span><span class="hoa"><?php echo $this->
+distributor['unames'] ?></span></p>
+         <p style="top: -3px; position: relative;"><span class="an">Mã số thuế : </span><?php echo
+$this->distributor['mst_sn'] ?></p>
+         <p style="top: -8px; position: relative;"><?php echo $this->
+distributor['add'] ?></p>
+         <p><span class="an">Hình thức thanh toán </span><span class="tmck">TM/CK</span><span class="an">Số tài khoản:................</span></p>
+      </div>
+      <div class="blank10"></div>
+      <table class="tbllist" cellspacing="1" cellpadding="5">
+         <?php if (isset($this->total) and $this->total) {
+            $price_before_vat = $this->total;
+            $price_before_vat = round($price_before_vat / 1.1, 2);
+        }
+?>
+            
+         <tr>
+            <td class="abc"><span>01</span></td>
+            <?php if (isset($this->ck) and $this->ck): ?>	
+            
+             <td class="name" style="width: 217px;text-align: left;">
+          <?php if(isset($this->joint_circular) and $this->joint_circular) echo $this->joint_circular; ?> (Chi tiết theo bảng kê đính kèm số <span id="invoice_number_span"></span>ngày <?php echo
+date("d"); ?>/<?php echo
+date("m"); ?>/<?php echo
+date("Y"); ?>)
+            </td>
+     
+            <?php else: ?>
+            
+                   <td class="name" style="width: 217px;text-align: left;">
+          Điện thoại di động OPPO <br /> (Chi tiết theo bảng kê đính kèm số <span id="invoice_number_span"></span>ngày <?php echo
+date("d"); ?>/<?php echo
+date("m"); ?>/<?php echo
+date("Y"); ?>)
+            </td>
+            
+            <?php endif; ?>
+            <td></td>
+            <td></td>
+            <td class="tdnum" ></td>           
+            <td class="tdright"></td>
+            <td class="total"><?php echo product_price($price_before_vat, 2); ?></td>
+          
+         </tr>
+         
+        <?php foreach ($this->mk_goods as $k => $v):
+
+
+                $type = $v['type'];
+
+                $sale_off = $v['sale_off_percent'];
+
+                $tt = round($v['total_price'] / 1.1, 2);
+
+                //đơn giá
+                $dg = round($tt / $v['num'], 2);
+
+                $tt = $dg * $v['num']; ?>
+        
+             <input type="hidden" name="invoice_price[]" value="<?php echo $v['id'] .
+'_' . $tt; ?>" />
+             <input type="hidden" name="invoice_price_edit[]" value="<?php echo
+$v['id'] . '_' . $tt; ?>" />
+         
+          <?php endforeach; ?>
+         
+      </table>
+      <table class="tbllist vat1">
+         <tr>
+            <?php
+            $vat = round($price_before_vat * 0.1);
+            $price_before_vat = round($price_before_vat);
+            $price_after_vat = intval($vat) + intval($price_before_vat);
+            
+            if($price_after_vat > $this->total)
+            {
+                $vat = $vat - 1;
+                $price_after_vat = $price_after_vat - 1;  
+            }
+
+?>
+            <td class="right an price-tt" colspan="5">Cộng tiền hàng:</td>
+            <td class="price-tt"><?php echo product_price($price_before_vat); ?></td>
+          
+         </tr>
+         <tr>
+            <td class="right "  colspan="5">
+               <div style="float: left;position: relative; left:120px;"><?php echo
+10; ?></div>
+               <div class="an" style="float: right;">Tiền thuế GTGT:</div>
+            </td>
+            <td class="price-tt"><?php echo product_price($vat) ?></td>
+          
+         </tr>
+         <tr>
+            <td class="right an"  colspan="5"><span style="font-weight: bold;">Tổng cộng tiền thanh toán:</span></td>
+            <td class="price-tt"><?php echo product_price($price_after_vat) ?></td>
+         </tr>
+         <tr  style="height:30px;padding-bottom:30px;">
+            <td colspan="6" class="left"><span class="an">Số tiền viết bằng chữ:</span><span style="position: relative;top: 3px;left: 15px;"><?php echo
+ucfirst(VndText($price_after_vat) . ' đồng'); ?></span></td>
+         </tr>
+      </table>
+      <input type="hidden" id="total_invoice_price" name="total_invoice_price" value="<?php echo
+$price_before_vat; ?>" />
+      <input type="hidden" id="total_invoice_vat" name="total_invoice_vat" value="<?php echo
+$vat; ?>" />
+      <input type="hidden" id="total_invoice_after_vat" name="total_invoice_after_vat" value="<?php echo
+$price_after_vat; ?>" />
+      <input type="hidden" id="sn" name="sn" value="<?php if (isset($this->sn))
+                echo $this->sn ?>" />
+      <div class="blank10"></div>
+      <div style="position: absolute; top :30px">
+         <?php if (isset($this->ck) and $this->ck): ?>
+         <a target="_blank" href="<?php echo HOST ?>warehouse/list-invoice?sn=<?php echo
+$this->sn . '&total_price=' . $price_before_vat . '&vat=' . $vat . '&price_after_vat=' . $price_after_vat  ?>"><img src="<?php echo
+HOST ?>img/print.png" class="no-print print" /></a>
+         <?php else: ?>
+            <a target="_blank" href="<?php echo HOST ?>warehouse/list-good?sn=<?php echo
+$this->sn ?>"><img src="<?php echo
+HOST ?>img/print.png" class="no-print print" /></a>
+</div>
+
+         <?php endif; ?>
+      
+      <script type="text/javascript">
+       //  window.print();
+        
+         $( ".total_edit" ).change(function() {
+             $total = $.trim($(this).val());
+             $parent = $(this).parent().parent();         
+             $total_price = $parent.find('.total');
+             $total_price.html($total);
+          });
+          
+          $(".total_debate").change(function() {
+             
+                 $total_debate = $(this).val();
+                 
+                 var all_values = [];
+            
+                 $('.total_edit').each(function() {
+                    all_values.push($(this).val());
+                 });
+                 
+                 $.post('<?php echo HOST ?>get/bvg',
+                    {
+                        total_debate : $total_debate,
+                        sales_sn: $('#sn').val(),
+                        invoice_price: all_values
+                    }, function(data) {
+            
+                        var text = '';
+            
+                        switch (data) {
+                            case '-1':
+                                text = 'Sales order number is invalid!';
+                                alert(text);
+                                break;
+                           
+                            case '0':
+                                text = 'Update!';
+                                $('#save_done').val(1);
+                                break;
+                            
+                            case '-4':
+                                text = 'Error not detected';
+                                alert(text);
+                                break;
+                        }
+            
+                        
+            
+                        initUnload();
+                    });
+          });
+         
+      </script>
+   </body>
+</html>

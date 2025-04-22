@@ -1,0 +1,166 @@
+<style>
+.blockOverlay{
+    z-index: 10000 !important;
+}
+.blockPage{
+    z-index: 10001 !important;
+}
+body{
+    font-family: phetsarath ot;
+}
+</style>
+
+<div class="page-header">
+    <h1>Shipping Address ທີ່ຢູ່ຈັດສົ່ງ</h1>
+</div>
+<?php
+if (isset($this->messages_success) and $this->messages_success)
+    foreach ($this->messages_success as $message):
+        echo '<div class="alert alert-success">'.$message.'</div>';
+    endforeach;
+
+    if (isset($this->messages) and $this->messages)
+        foreach ($this->messages as $message):
+            echo '<div class="alert alert-error">'.$message.'</div>';
+        endforeach;
+        ?>
+        <div class="accordion" id="accordion2">
+            <div class="accordion-group">
+                <div class="accordion-heading">
+                    <a class="accordion-toggle collapsed" data-toggle="collapse" data-parent="#accordion2" href="#collapseTwo">
+                        Search
+                    </a>
+                </div>
+                <div id="collapseTwo" class="accordion-body collapse" style="height: 0px;">
+                    <div class="accordion-inner">
+                        <?php
+                        echo $this->render('sales/partials/search-shipping-address.phtml');
+                        ?>
+                    </div>
+                </div>
+            </div>
+        </div> 
+        <div class="row">
+            <?php if (isset($this->update_shipping_address) and $this->update_shipping_address == 1){?>
+                <button style="float: right;margin-bottom: 10px;margin-right: 15px;" type="button" class="btn btn-success" onclick="window.open('add-shipping-address?id=<?=$_GET['id']?>','_self');"><i class="icon-plus"></i>Add Shipping Address</button>
+            <?php }else{ ?>
+                <h3 style="color:red;">หากต้องการเปลี่ยนแปลงที่อยู่การจัดส่ง กรุณาติดต่อหัวหน้าแอดมิน</h3>
+            <?php } ?>
+        </div>
+
+        <div class="table-responsive">
+            <table class="table table-bordered">
+            <thead>
+                <tr>
+                    <?php echo $this->sorting(array(
+                      '#',
+                      'ID'            => 'Contract Name', 
+                      'sn'            => 'Address',
+                      'phone'         => 'Phone',
+                      'created_at'    => 'Created',
+                      'updated_at'    => 'Updated',
+                      'Action'
+                  ),
+                  $this->url, $this->sort, $this->desc); ?>
+              </tr>
+          </thead>
+          <tbody>
+            <?php
+
+
+
+            if (isset($this->ship_add) and $this->ship_add) :
+
+                foreach ($this->ship_add as $k=>$m):?>
+
+                   <td>
+                    <?php
+                    $inc = $this->offset + $k + 1;
+                    echo $inc;
+                    ?>
+                </td>
+                <td><?=$m['contact_name']?></td>
+                <td>
+                    <?=$m['address'].' '.$m['district_name'].' '.$m['amphure_name'].' '.$m['provice_name'].' '.$m['zipcode']?><br/>
+                    <?=$m['remark']?>
+                </td>
+                <td><?php echo $m['phone'] ?></td>
+                <td><?php if($m['created_at']){echo $m['created_at'];}else{echo '-';}; ?></td>
+                <td><?php if($m['updated_at']){echo $m['updated_at'];}else{echo '-';}; ?></td>
+
+                <td>
+                    <?php if (isset($this->update_shipping_address) and $this->update_shipping_address == 1){?>
+                        <a class="btn btn-success" title="View" href="/sales/add-shipping-address?id=<?=$_GET['id']?>&ship_id=<?=$m['id'];?>"><i class="icon-edit"></i></a>
+
+                        <a class="btn btn-danger" title="Remove"
+                        onclick="check_remove('/sales/remove-shipping-address?id=<?=$_GET['id']?>&ship_id=<?=$m['id'];?>');"><i class="icon-trash"></i></a>
+                    <?php } ?>
+                </td>
+            </tr>
+
+        <?php endforeach;?>
+    <?php endif; ?>
+</tbody>
+</table>
+<div class="paging">
+    <?php echo $this->paging($this->total, $this->limit, $this->offset, $this->url);?>
+</div>
+</div>
+
+<script src="/js/jquery.blockUI.js"></script>
+
+<script>
+
+    $(document).ajaxStart(function(){
+        $.blockUI({ css: { 
+            border: 'none', 
+            padding: '15px', 
+            backgroundColor: '#000', 
+            '-webkit-border-radius': '10px', 
+            '-moz-border-radius': '10px', 
+            opacity: .5, 
+            color: '#fff' 
+        } });
+    });
+
+    $(document).ajaxStop(function(){
+        $.unblockUI();
+    });
+
+    $(document).ready(function () {
+        $('.form-search button:reset').click(function (e){
+            $('.form-search input, .form-search select').val('');
+            $('.form-search').submit();
+            return false;
+        });
+    });
+
+    function check_remove(url){
+        if (confirm('You confirm to remove address')) {
+
+            $.ajax({
+                url: url,
+                type: 'GET'
+            })
+            .done(function(response) {
+                var obj_response = jQuery.parseJSON(response);
+                console.log("success");
+
+                switch(obj_response.status) {
+                    case 200:
+                    console.log('done');
+                    location.reload();
+                    break;
+                    case 400:
+                    alert(obj_response.message);
+                    break;
+                    default:
+                    location.reload();
+                }
+                
+            });
+
+        }
+    }
+
+</script>

@@ -1,0 +1,90 @@
+<link rel="stylesheet" href="<?php echo HOST?>css/select2.css" />
+<script src="<?php echo HOST?>js/select2.js"></script>
+
+<form class="form-search form-horizontal" method="get">
+	<div class="row">
+
+		<div class="span6" style="padding-left: 50px">
+
+			<div class="control-group">
+				<label for="distributor_ids" class="control-label">Distributor(My Side) : </label>
+				<div class="controls">
+					<select class="span3" name="distributor_ids" id="distributor_ids">
+						<option value=""> Please Selected </option>
+
+						<?php if(isset($this->distributor) && $this->distributor) : ?>
+							<?php foreach ($this->distributor as $value): ?>
+								<option value="<?php echo $value['id'] ?>" <?php if(isset($this->params['distributor_ids']) && $this->params['distributor_ids'] == $value['id']) : ?> selected <?php endif; ?> ><?php echo $value['title'] ?></option>
+							<?php endforeach; ?>
+						<?php endif; ?>
+					</select>
+				</div>
+			</div>
+
+			<div class="control-group">
+				<label for="status" class="control-label">Review Status : </label>
+				<div class="controls">
+					<select class="span3" name="status" id="status">
+						<option value=""> Please Selected </option>
+						<option value="1" <?php if(isset($this->params['status']) && $this->params['status'] == 1): ?> selected <?php endif; ?> > Pending Review </option>
+						<option value="2" <?php if(isset($this->params['status']) && $this->params['status'] == 2): ?> selected <?php endif; ?> > Approved </option>
+						<option value="3" <?php if(isset($this->params['status']) && $this->params['status'] == 3): ?> selected <?php endif; ?> > Unapproved </option>
+						<option value="4" <?php if(isset($this->params['status']) && $this->params['status'] == 4): ?> selected <?php endif; ?> > Re-review </option>
+					</select>
+				</div>
+			</div>
+
+		</div>
+
+		<div class="span6">
+
+			<div class="control-group">
+				<label for="finance_client" class="control-label">Financial customers : </label>
+				<div class="controls">
+					<select class="span3" name="finance_client" id="finance_client">
+						<option value=""> Please Selected </option>
+
+						<?php if(isset($this->financeclient) && $this->financeclient) : ?>
+							<?php foreach($this->financeclient as $value) : ?>
+								<option value="<?php echo $value['id'] ?>" <?php if(isset($this->params['finance_client']) && $this->params['finance_client'] == $value['id']) : ?> selected <?php endif; ?> ><?php echo $value['name'] ?></option>
+							<?php endforeach; ?>
+						<?php endif; ?>
+					</select>
+				</div>
+			</div>
+
+			<div class="control-group">
+				<label for="business_date_from" class="control-label">Business date(From):</label>
+				<div class="controls">
+					<input type="text" class="span3 date" name="business_date_from" id="business_date_from" value="<?php isset($this->params['from']) && printf($this->params['from']) ?>">
+				</div>
+			</div>
+
+			<div class="control-group">
+				<label for="business_date_to" class="control-label">Business date (To) : </label>
+				<div class="controls">
+					<input type="text" class="span3 date" name="business_date_to" id="business_date_to" value="<?php isset($this->params['to']) && printf($this->params['to']) ?>">
+				</div>
+			</div>
+
+		</div>
+
+		<div class="span12">
+			<button type="submit" class="btn btn-primary">Search</button>
+			<button type="reset" class="btn btn-warning">Reset</button>
+		</div>
+
+	</div>
+</form>
+
+<script type="text/javascript" src="/js/jquery-ui-1.8.12.custom.min.js"></script>
+<link rel="stylesheet" type="text/css" href="/css/jquery-ui-1.8.12.custom.css"/>
+
+
+<script type="text/javascript">
+
+	$(document).ready(function () {
+		$( '.date' ).datepicker({ dateFormat: "yy-mm-dd" });
+	})
+	
+</script>

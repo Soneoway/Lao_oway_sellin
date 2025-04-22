@@ -1,0 +1,130 @@
+<form class="form-search form-horizontal" method="get" action="/warehouse/report-imei-rework">
+
+    <div class="row">
+
+        <div class="span5">
+            <div class="control-group">
+                <label for="id" class="span2">Report ID</label>
+                <input id="id" name="id" type="text" class="form-control" value="<?php isset($this->params['id']) and printf($this->params['id']);?>">
+            </div>
+            <div class="control-group">
+                <label for="co_ref" class="span2">CO Swap</label>
+                <input id="co_ref" name="co_ref" type="text" class="form-control" value="<?php isset($this->params['co_ref']) and printf($this->params['co_ref']);?>">
+            </div>
+            <div class="control-group">
+                <label for="po_ref" class="span2">PO</label>
+                <input id="po_ref" name="po_ref" type="text" class="form-control" value="<?php isset($this->params['po_ref']) and printf($this->params['po_ref']);?>">
+            </div>
+            <div class="control-group">
+                <label for="co_end_ref" class="span2">CO End</label>
+                <input id="co_end_ref" name="co_end_ref" type="text" class="form-control" value="<?php isset($this->params['co_end_ref']) and printf($this->params['co_end_ref']);?>">
+            </div>
+        </div>
+        
+        <div class="span5">
+            <div class="control-group">
+                <label for="created_at_from" class="span2">Request From</label>
+                <input type="text" class="form-control date" id="created_at_from" name="created_at_from" value="<?php isset($this->params['created_at_from']) and printf($this->params['created_at_from']);?>">
+            </div>
+            <div class="control-group">
+                <label for="created_at_to" class="span2">Request To</label>
+                <input type="text" class="form-control date" id="created_at_to" name="created_at_to" value="<?php isset($this->params['created_at_to']) and printf($this->params['created_at_to']);?>">
+            </div>
+
+            <div class="control-group">
+
+                <label for="cat_id" class="span2">Category</label>
+                <select id="cat_id" class="form-control" name="cat_id">
+                    <option value="">Choose</option>
+                    <?php if ($this->goodCategories): foreach ($this->goodCategories as $id=>$name):?>
+                        <option value="<?php echo $id;?>" <?php if (isset($this->params['cat_id']) and $id==$this->params['cat_id']):?> selected<?php endif;?>><?php echo $name;?></option>
+                    <?php endforeach; endif;?>
+                </select>
+            </div>
+
+            <div class="control-group">
+                <label for="good_id" class="span2">Product</label>
+                <select id="good_id" class="form-control" name="good_id">
+                    <option value="">Choose</option>
+                    <?php if ($this->goods_cached): foreach ($this->goods_cached as $id=>$item):?>
+                        <option value="<?php echo $id;?>" <?php if (isset($this->params['good_id']) and $id==$this->params['good_id']):?> selected<?php endif;?>><?php echo $item;?></option>
+                    <?php endforeach; endif;?>
+                </select>
+            </div>
+
+            <div class="control-group">
+                <label for="good_color_id" class="span2">Color</label>
+                <select id="good_color_id" class="form-control" name="good_color_id">
+                    <option value="">Choose</option>
+                    <?php if ($this->goodColors): foreach ($this->goodColors as $id=>$item):?>
+                        <option value="<?php echo $id;?>" <?php if (isset($this->params['good_color_id']) and $id==$this->params['good_color_id']):?> selected<?php endif;?>><?php echo $item;?></option>
+                    <?php endforeach; endif;?>
+                </select>
+            </div>
+
+            <div class="control-group">
+                <label for="good_type" class="span2">Type</label>
+                <select id="good_type" class="form-control" name="good_type">
+                    <option value="">Choose</option>
+                    <?php if ($this->goodColors): ?>
+                        <option value="1" <?php if (isset($this->params['good_type']) and 1==$this->params['good_type']):?> selected<?php endif;?>>Normal</option>
+                        <option value="2" <?php if (isset($this->params['good_type']) and 2==$this->params['good_type']):?> selected<?php endif;?>>Demo</option>
+                        <option value="5" <?php if (isset($this->params['good_type']) and 3==$this->params['good_type']):?> selected<?php endif;?>>APK</option>
+                    <?php endif;?>
+                </select>
+            </div>
+
+        </div>
+
+    </div>
+
+    <button type="submit" class="btn btn-primary">Search</button>
+    <!-- <button type="reset" class="btn btn-warning">Reset</button> -->
+    <button type="submit" name="export" value="1" class="btn btn-success">Export</button>
+</form>
+<script type="text/javascript" src="/js/jquery-ui-1.8.12.custom.min.js"></script>
+<script type="text/javascript" src="/js/jquery.ui.timepicker.js"></script>
+<link rel="stylesheet" type="text/css" href="/css/jquery-ui-1.8.12.custom.css"/>
+<link rel="stylesheet" type="text/css" href="/css/jquery.ui.timepicker.css"/>
+<script>
+    $(document).ready(function () {
+       $( '.date' ).datepicker({ dateFormat: "dd/mm/yy" });
+        initSelectChangeType();
+    });
+
+    $('#cat_id, #good_id').change(function(){
+            $(this).after('<span class="loading"></span>');
+            var _self = $(this);
+            var cat_id = $('#cat_id').val();
+
+            if (_self.attr('id')=='cat_id')
+                $('#good_id').find('option:not(:first)').remove();
+
+            var good_id = $('#good_id').val();
+
+            $('#good_color').find('option:not(:first)').remove();
+
+            $('#num, #price').val('');
+
+            $.get("/get/load",
+                {cat_id: cat_id, good_id: good_id}
+                ,function(data,status){
+                    var data = $.parseJSON( data );
+                    if (data.goods){
+                        var obj = data.goods;
+                        for (var i = 0; i < obj.length; i++) {
+                            $('#good_id').append('<option value="'+obj[i]['id']+'">'+obj[i]['name']+'</option>');
+                        }
+                    }
+                    if (data.colors){
+                        var obj = data.colors;
+                        for (var i = 0; i < obj.length; i++) {
+                            $('#good_color').append('<option value="'+obj[i]['id']+'">'+obj[i]['name']+'</option>');
+                        }
+                    }
+                    _self.nextAll('.loading').remove();
+                });
+        });
+   
+
+</script>

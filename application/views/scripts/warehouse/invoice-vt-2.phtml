@@ -1,0 +1,14 @@
+<!DOCTYPE html>
+<html>
+<body>
+
+<h1>Invoice Note</h1>
+
+<form method="post">
+    <input required="required" name="invoice_note_input" id="invoice_note_input" />
+    <input type="hidden" name="sn" value="<?php echo $this->market[0]['sn'];?>">
+    <button type="submit">Save</button>
+</form>
+
+</body>
+</html>

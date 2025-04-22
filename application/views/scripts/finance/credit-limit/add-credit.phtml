@@ -1,0 +1,200 @@
+<link rel="stylesheet" href="<?php echo HOST?>css/select2.css" />
+<script src="<?php echo HOST?>js/select2.js"></script>
+
+<?php 
+if(isset($this->action_type) && in_array($this->action_type,array(1,3))) {
+	$input_status = 'disabled';
+}elseif(isset($this->action_type) && $this->action_type == 2) {
+	$edit_input_status = 'disabled';
+}
+?>
+
+<div class="page-header">
+	<?php if(isset($this->action_type) && $this->action_type == 1) : ?>
+		<h1 style="font-family: Times New Roman;">Detail Credit Limit</h1>
+	<?php elseif(isset($this->action_type) && $this->action_type == 2) : ?>
+		<h1 style="font-family: Times New Roman;">Edit Credit Limit</h1>
+	<?php elseif(isset($this->action_type) && $this->action_type == 3) : ?>
+		<h1 style="font-family: Times New Roman;">Approved Credit Limit</h1>
+	<?php else: ?>
+		<h1 style="font-family: Times New Roman;">Add Credit Limit</h1>
+	<?php endif; ?>
+</div>
+
+<form class="form-horizontal" method="post" action="<?php echo HOST ?>/finance/save-credit-limit" enctype="multipart/form-data" >
+	<div class="row" style="border-style: solid; padding: 30px 10px 300px 10px; border-color: lavender; margin-right: 0px">
+
+		<div class="span6">
+
+			<div class="control-group">
+				<label for="distributor_ids" class="control-label" style="width: 180px; padding-right: 20px;">Distributor(My Side) : <span style="color: red">*</span></label>
+				<div class="controls">
+					<select class="span3" name="distributor_ids" id="distributor_ids" required <?php echo $input_status ?> <?php echo $edit_input_status ?> >
+						<option value=""> Please Selected </option>
+
+						<?php if(isset($this->distributor) && $this->distributor) : ?>
+							<?php foreach ($this->distributor as $value) : ?>
+								<option value="<?php echo $value['id'] ?>" <?php if(isset($this->creditLimit->d_id) && $this->creditLimit->d_id == $value['id']) : ?> selected <?php endif; ?> ><?php echo $value['title'] ?></option>
+							<?php endforeach; ?>
+						<?php endif; ?>
+					</select>
+				</div>
+			</div>
+
+			<div class="control-group">
+				<label for="finance_client" class="control-label" style="width: 180px; padding-right: 20px;">Client Name : <span style="color: red">*</span></label>
+				<div class="controls">
+					<select class="span3" name="finance_client" id="finance_client" required <?php echo $input_status ?> >
+						<option value=""> Please Selected </option>
+
+						<?php if(isset($this->financeclient) && $this->financeclient) : ?>
+							<?php foreach($this->financeclient as $value) : ?>
+								<option value="<?php echo $value['id'] ?>" <?php if(isset($this->creditLimit->finance_client_id) && $this->creditLimit->finance_client_id == $value['id']) : ?> selected <?php endif; ?> ><?php echo $value['name'] ?></option>
+							<?php endforeach; ?>
+						<?php endif; ?>
+					</select>
+				</div>
+			</div>
+
+		</div>
+
+		<div class="span6">
+
+			<div class="control-group">
+				<label for="quota_type" class="control-label" style="width: 180px; padding-right: 20px">Quota Type : <span style="color: red">*</span></label>
+				<div class="controls">
+					<select class="span3" name="quota_type" id="quota_type" required <?php echo $input_status ?> >
+						<option value=""> Please Selected </option>
+						<option value="1" <?php if(isset($this->creditLimit->quota_type) && $this->creditLimit->quota_type == 1) : ?> selected <?php endif; ?> > Finished Products Quota </option>
+					</select>
+				</div>
+			</div>
+
+			<div class="control-group">
+				<label for="quota" class="control-label" style="width: 180px; padding-right: 20px">Quota : <span style="color: red">*</span></label>
+				<div class="controls">
+					<input type="number" name="quota" id="quota" class="span3" value="<?php isset($this->creditLimit->quota) && printf($this->creditLimit->quota) ?>" required <?php echo $input_status ?> >
+				</div>
+			</div>
+
+			<div class="control-group">
+				<label for="" class="control-label" style="width: 180px; padding-right: 20px; height: 40px;">Effective Date : <span style="color: red">*</span> </label>
+				<div class="controls">
+					<div>
+						<input type="text" name="effective_from" id="effective_from" class="span3 date" placeholder="Start Date" value="<?php isset($this->creditLimit->start_date) && printf($this->creditLimit->start_date) ?>" required <?php echo $input_status ?> >
+					</div>
+					<span> ~ </span>
+					<div>
+						<input type="text" name="effective_to" id="effective_to" class="span3 date" placeholder="End Date" value="<?php isset($this->creditLimit->end_date) && printf($this->creditLimit->end_date) ?>" required <?php echo $input_status ?> >
+					</div>
+				</div>
+			</div>
+
+			<div class="control-group">
+				<label for="" class="control-label" style="width: 180px; padding-right: 20px; height: 40px;">Remarks :</label>
+				<div class="controls">
+					<textarea class="span3" cols="3" rows="5" name="remark" <?php echo $input_status ?> > <?php isset($this->creditLimit->remark) && printf($this->creditLimit->remark) ?></textarea>
+				</div>
+			</div>
+
+		</div>
+
+		<div class="span12" style="display: flex; justify-content: center; padding-top: 30px;">
+			<input type="hidden" name="id" value="<?php isset($this->creditLimit->id) && printf($this->creditLimit->id) ?>">
+			<?php if(isset($this->action_type) && $this->action_type == 1) : ?>
+				<button type="button" class="btn btn-" onclick="history.back()"> Back </button>
+			<?php elseif(isset($this->action_type) && $this->action_type == 3) : ?>
+				<button type="button" class="btn btn-success" data-toggle="modal" data-target="#myModal"> Approved </button> &nbsp;
+				<button type="button" class="btn btn-danger" onclick="history.back()"> Back </button>
+			<?php else: ?>
+				<button type="submit" class="btn btn-success"> Save </button> &nbsp;
+				<button type="button" class="btn btn-danger" onclick="history.back()"> Cancel </button>
+			<?php endif; ?>
+		</div>
+
+	</div>
+</form>
+
+<div id="myModal" class="modal hide fade" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+	<div class="modal-header">
+		<button type="button" class="close" data-dismiss="modal" aria-hidden="true">×</button>
+		<h3 id="myModalLabel">Approved</h3>
+	</div>
+
+	<div class="modal-body" style="display: flex; justify-content: center;">
+		<form method="post" id="modalForm">
+			<div class="row">
+				<div class="control-group">
+					<label class="">Review Remarks : </label>
+					<div class="controls">
+						<textarea cols="2" rows="5" class="span3" name="remark"></textarea>
+					</div>
+				</div>
+			</div>
+
+
+		</div>
+
+		<div class="modal-footer">
+			<input type="hidden" name="id" value="<?php if(isset($this->creditLimit) && printf($this->creditLimit->id)) ?>">
+			<input type="hidden" name="action_type" value="3">
+			<button class="btn" data-dismiss="modal" aria-hidden="true">Close</button>
+			<button type="submit" class="btn btn-success" id="approved">Approved</button>
+		</div>
+	</form>
+</div>
+
+<script type="text/javascript" src="/js/jquery-ui-1.8.12.custom.min.js"></script>
+<link rel="stylesheet" type="text/css" href="/css/jquery-ui-1.8.12.custom.css"/>
+
+<script type="text/javascript">
+	$(document).ready(function () {
+
+		$('#modalForm').submit(function(event) {
+			event.preventDefault();
+
+			var data = $(this).serialize();
+
+			$.ajax({
+				url: '/finance/approved-credit-limit',
+				type: 'POST',
+				data: data,
+				success: function(response) {
+					Swal.fire({
+						title: 'Deleted!',
+						text: 'Your data has been deleted.',
+						icon: 'success',
+						showConfirmButton: false
+					});
+                // Reload page after 2 seconds (optional)
+					setTimeout(function(){ window.location.href ='/finance/credit-limit' }, 2000);
+				},
+				error: function(error) {
+        // Handle the error response
+					alert('Error submitting data!');
+				}
+			});
+		});
+
+
+		$( '.date' ).datepicker({ dateFormat: "yy-mm-dd" });
+
+		$("#distributor_ids").change(function(){
+			var distributor_id = $("#distributor_ids").val();
+
+			$.get("/finance/load-bank-account-my",
+				{distributor_id : distributor_id}
+				,function(data,status){
+					var data = $.parseJSON( data );
+
+					if (data.financeClient){
+						var obj = data.financeClient;
+						$('#finance_client').html('<option value="0"> Please Selected </option>');
+						for (var i = 0; i < obj.length; i++) {
+							$('#finance_client').append('<option value="'+obj[i]['id']+'">'+obj[i]['name']+'</option>');
+						}
+					}
+				})
+		})
+	})
+</script>

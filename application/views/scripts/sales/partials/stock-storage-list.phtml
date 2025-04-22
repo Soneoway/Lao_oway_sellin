@@ -1,0 +1,39 @@
+<table class="table table-bordered">
+    <thead>
+        <tr>
+            <th>#</th>
+            <th>Area</th>
+            <th>Model</th>
+            <th>Color</th>
+            <th>Stock</th>
+            <th>Sell In</th>
+            <th>Area Give</th>
+            <th>Area Receive</th>
+            <th>Return</th>
+            <th>Area Storage</th>
+            <th>Price</th>
+            <th>Value</th>
+        </tr>
+    </thead>
+    <tbody>
+        <?php if (isset($this->resultSet) && $this->resultSet): ?>
+            <?php $i = 1; ?>
+            <?php foreach ($this->resultSet as $key => $value): ?>
+            <tr>
+                <td><?php echo $i++; ?></td>
+                <td><?php if (isset($this->areas[ $value['area_id'] ]) && $this->areas[ $value['area_id'] ]) echo $this->areas[ $value['area_id'] ] ?></td>
+                <td><?php if (isset($this->goods[ $value['good_id'] ]) && $this->goods[ $value['good_id'] ]) echo $this->goods[ $value['good_id'] ] ?></td>
+                <td><?php if (isset($this->good_colors[ $value['good_color'] ]) && $this->good_colors[ $value['good_color'] ]) echo $this->good_colors[ $value['good_color'] ] ?></td>
+                <td><?php echo $value['stock'] ?></td>
+                <td><?php echo $value['sell_in'] ?></td>
+                <td><?php echo $value['change_sales'] ?></td>
+                <td><?php echo $value['receive_change_sales'] ?></td>
+                <td><?php echo $value['return'] ?></td>
+                <td><?php echo $value['storage'] ?></td>
+                <td><?php echo My_Number::f( $value['price'] ) ?></td>
+                <td><?php echo My_Number::f( $value['value'] ) ?></td>
+            </tr>
+            <?php endforeach ?>
+        <?php endif ?>
+    </tbody>
+</table>

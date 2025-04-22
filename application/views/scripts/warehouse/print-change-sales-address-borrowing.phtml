@@ -1,0 +1,59 @@
+<?PHP $userStorage = Zend_Auth::getInstance()->getStorage()->read(); ?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
+<html>
+    <head>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8">
+    <title>Print</title>
+    <link href="<?php echo HOST ?>css/bootstrap.min.css" rel="stylesheet">
+    <link rel="stylesheet" type="text/css" href="<?php echo HOST ?>css/supermarket.css">
+    <script src="//ajax.googleapis.com/ajax/libs/jquery/1.10.2/jquery.min.js"></script>
+    <style type="text/css">
+     
+      body{width: 470px;font-size:20px;font-family:"supermarket"!important;color: #000;line-height:normal;}
+      p{font-size: 20px;font-family:"supermarket"!important;color: #000}
+      #logo img{width:350px;height: 100px;margin-top:35px;margin-left: 35px;}
+    
+        .imgbutton{width:40px !important;cursor:pointer;position:  absolute;}
+        .print{    position: absolute;width: 15px;margin-top: 10px;margin-left: 85%;}
+        @media print{.print,.no-print{display:none!important}}
+        .page_munber{    position: absolute;text-align: right;width: 83%;}
+        .head-number{
+            margin-top: 10px;
+        }
+        .address{
+            width: 470px;
+            margin-top: 30px;
+            font-size: 27px;
+            line-height: 35px;
+        }
+    </style>
+
+    <script type="text/javascript">
+        function Print()
+        {
+            //$( ".imgbutton" ).remove();
+            window.print();
+        }
+
+    </script>
+        
+</head>
+<body>
+    <div class="head-number"><?=$this->data['sn_ref'] . ' | ' . $this->data['rq'];?></div>
+    <div class="head-number"><?=$this->data['code'] . ' | ' . $this->data['fullname'] . ' | ' . $this->data['tel_number'];?></div>
+    <div class="address"><?=$this->address;?></div>
+</body>
+</html>
+
+
+<script src="<?php echo HOST ?>js/jquery-1.7.2.min.js"></script>
+<script>
+    try {
+        $(document).ready(function() {
+            parent.window.frames['picking_address'].focus();
+            parent.window.frames['picking_address'].print();
+        });
+    } catch (err) {
+
+    }
+</script>

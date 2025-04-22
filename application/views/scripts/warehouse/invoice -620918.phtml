@@ -1,0 +1,1227 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
+<html>
+
+   <head>
+      <meta http-equiv="Pragma" content="no-cache">
+      <meta http-equiv="Expires" content="-1">
+      <meta http-equiv="Content-Type" content="text/html; charset=utf-8">
+      <title>Print</title>
+      <script src="//ajax.googleapis.com/ajax/libs/jquery/1.10.2/jquery.min.js"></script>
+      <link rel="stylesheet" href="//code.jquery.com/ui/1.11.3/themes/smoothness/jquery-ui.css">
+      <link rel="stylesheet" type="text/css" href="<?php echo HOST ?>css/thaiSalaban.css">
+
+      <script src="//code.jquery.com/ui/1.11.3/jquery-ui.js"></script>
+      <style type="text/css">
+      body{margin:0 auto;font-family:"thaiSalaban"!important;font-size:25px;margin-top:-60px}
+
+     @media print{
+        .top_page{margin-top: 50px;}
+            .fee{  position: relative;right: -121px;}.tdright{text-align:right}.tdnum{position:relative;left:12px}#frmInvoice{display:inline;position:absolute;margin-top:130px}#frmInvoice input{float:left}input[type="text"]{height:23px}.print,.no-print{display:none!important}.fleft{float:left}.fright{float:right}
+               .top{text-align:center;float:left}.top p{height:24px;line-height:24px;margin:0}.textbox{width:600px;border:1px solid #000;height:70px}.blank10{height:10px;clear:both}.title{width:600px;text-align:center;height:30px;font-size:15px;line-height:30px;background-color:#fabf8f;font-weight:700}.tbl,.tbllist{width:600px;position:relative;top:33px;left:-60px;text-align:center}.tbl tr{margin:0}.tbl tr td,.tbllist tr td{background-color:#fff}.tbl .firsttd{width:145px}.tbl .secondtd{width:100px}.tbl .thirdtd{width:36px}.tbl .forthtd{width:65px}.assign{width:200px;font-weight:700;height:100px;margin-top:10px;text-align:center;margin-right:20px}.note{border-bottom:1px dotted #ccc;width:300px;float:left;margin:9px 0 0 25px}.green{text-align:center}.green td{background-color:#cfc!important}#logo{float:left;display:block;width:200px}#logo img{width:136px;margin-top:10px}.trcenter{text-align:center}.invoice{width:453px;display:block;clear:both;margin-left:119px}.invoice-number{float:left;padding-left:37px}.order-type{float:right;text-align:right}.right{text-align:right}.detail{width:587px}.detail .col1{width:109px;float:left}.detail .col2{width:224px;float:left}.detail .col2 span{font-weight:700}.detail .col3{width:100px;float:left}.detail .col3 span{font-weight:700}.clear{clear:both}.colleft{float:left;width:300px}.colright{float:right;width:165px}.vat{width:435px!important;float:right!important}#vatnumber{clear:both}#vatnumber .sn{width:54px;border:1px solid #000;height:14px;float:left}.marksn{float:left;border-left:1px solid #000;font-weight:700;padding-left:3px}.order{float:left;margin-left:10px}.order .sn{width:5px;height:10px;border:1px solid #000;float:left;margin-left:5px}.order .alert{margin-left:16px;margin-bottom:4px}.title small{float:right;font-weight:400;font-size:8px;padding-right:2em}.top1{text-align:left;float:left;height:54px;padding:5px;padding-left:42px}input[type="text"]{display:block;margin:0;font-weight:700;text-align:center;font-size:10px;border:none}.model{font-size:8px!important;text-transform:uppercase}.imgbutton{width:40px!important;cursor:pointer}.print{width:20px!important}.scroll{overflow:hidden}.number{width:10px}h1{text-transform:uppercase;font-size:17px;margin-bottom:4px}strong{text-transform:uppercase}.casl{border-top:0 solid #000}.titlecompany{font-size:15px}.right{text-align:right}.left{text-align:left}.an{visibility:hidden}.hoa{text-transform:uppercase}.date{position:relative;top:25px;left:-73px}.vat1{top:621px;position:absolute;left:19px}.vat1 tr{height:21px}.tmck{visibility:visible!important;right:16px;position:relative;top:-11px}.name{padding-left:25px}.price-tt{left:10px;position:relative}.hangkhuyenmai{position:relative;left:4px}input[type="text"]{display:block;margin:0;font-weight:700;text-align:left;font-weight:normal;font-size:12px!important;border:none}.total_debate{padding-left:20px;width:270px;text-align:left;font-weight:400;font-size:13px;display:block;margin:0}.tdright{text-align:right}.tdnum{position:relative;left:12px}
+            #frmInvoice{display:inline;position:fixed;margin-top:30px; margin-left: -100px;}
+            #frmInvoice input{float:left}input[type="text"]{height:23px}.fleft{float:left}.fright{float:right}body{margin:0 auto;width:595px;font-size:10px;margin-top:-60px}.top{text-align:center;float:left}.top p{height:24px;line-height:24px;margin:0}.textbox{width:600px;border:1px solid #000;height:70px}.blank10{height:10px;clear:both}.title{width:600px;text-align:center;height:30px;font-size:15px;line-height:30px;background-color:#fabf8f;font-weight:700}.tbl,.tbl tr{margin:0}.tbl tr td,
+            .tbllist tr td{background-color:#fff}
+            .tbl .firsttd{width:145px}
+            .tbl .secondtd{width:100px}
+            .tbl .thirdtd{width:36px}
+            .tbl .forthtd{width:65px}
+            .assign{width:200px;font-weight:700;height:100px;margin-top:10px;text-align:center;margin-right:20px}.note{border-bottom:1px dotted #ccc;width:300px;float:left;margin:9px 0 0 25px}.green{text-align:center}.green td{background-color:#cfc!important}#logo{float:left;display:block;width:200px}#logo img{width:136px;margin-top:10px}.trcenter{text-align:center}.invoice{width:453px;display:block;clear:both;margin-left:119px}.invoice-number{float:left;padding-left:37px}.order-type{float:right;text-align:right}.right{text-align:right}.detail{width:587px}.detail .col1{width:109px;float:left}.detail .col2{width:224px;float:left}.detail .col2 span{font-weight:700}.detail .col3{width:100px;float:left}.detail .col3 span{font-weight:700}.clear{clear:both}.colleft{float:left;width:300px}.colright{float:right;width:165px}.vat{width:435px!important;float:right!important}#vatnumber{clear:both}#vatnumber .sn{width:54px;border:1px solid #000;height:14px;float:left}.marksn{float:left;border-left:1px solid #000;font-weight:700;padding-left:3px}.order{float:left;margin-left:10px}.order .sn{width:5px;height:10px;border:1px solid #000;float:left;margin-left:5px}.order .alert{margin-left:16px;margin-bottom:4px}.title small{float:right;font-weight:400;font-size:8px;padding-right:2em}.top1{text-align:left;float:left;height:54px;padding:5px;padding-left:42px}input[type="text"]{display:block;margin:0;font-weight:700;text-align:center;font-size:10px;border:none}.model{font-size:8px!important;text-transform:uppercase}.imgbutton{width:40px!important;cursor:pointer}.print{width:20px!important}.scroll{overflow:hidden}.number{width:10px}h1{text-transform:uppercase;font-size:17px;margin-bottom:4px}strong{text-transform:uppercase}.casl{border-top:0 solid #000}.titlecompany{font-size:15px}.right{text-align:right}.left{text-align:left}.an{visibility:hidden}.hoa{text-transform:uppercase}.date{position:relative;top:25px;left:-96px}.vat1{top:621px;position:absolute;left:19px}.vat1 tr{height:21px}.tmck{visibility:visible!important;right:16px;position:relative;top:-11px}.name{padding-left:25px}.price-tt{left:10px;position:relative}.hangkhuyenmai{position:relative;left:4px}input[type="text"]{display:block;margin:0;font-weight:700;text-align:left;font-weight:normal;font-size:12px!important;border:none}.total_debate{padding-left:20px;width:270px;text-align:left;font-weight:400;font-size:13px;display:block;margin:0}#date{position: absolute;left: 250px;top: 0px;}
+             .tdnum{  width: 40px;
+                 text-align: left;}
+
+            /* Distributor Table */     
+            .col_head_left{margin-top: 40px;position: relative;float:left; margin-left: -140px;font-size:25px;}    
+            .col_head_right{margin-top: 40px;position: relative;float:right; margin-right: -160px;font-size:25px;}      
+            .col1_head_left{width:500px;height: 45px;}
+            .col1_head_right{width:300px;height: 50px;margin-left: -100px;}
+            .col2_head_right{margin-right: -10px;height: 35px;float:right;}
+            .col3_head_right{margin-right: 150px;height: 35px;margin-top: 5px;}
+            .col4_head_right{margin-left: 50px;height: 35px;float:right; margin-top: -360px;position: absolute;}
+            .col5_head_right{margin-right: 20px;height: 35px;margin-top: 100px;}
+         
+            /* Sales Man Table */
+            .tbl_head {background-color:#fff;margin-top: 25px;width: 1100px;margin-left: -90px;font-size:25px;}
+            .tbl_head1{width:205px;position: absolute;margin-left: -80px;}
+            .tbl_head2{width:160px;position: absolute;margin-left: 200px;}
+            .tbl_head3{width:200px;position: absolute;margin-left: 470px;}
+            .tbl_head4{width:250px;position: absolute;margin-left: 720px;}
+
+            /* Item Table */
+
+            <?php if($this->distributor['rank'] == '11'){ ?>
+
+               /*King Power*/
+               .tbl_list {background-color:#fff;margin-top: 75px;height: 340px; width: 1100px;margin-left: -260px; font-size:25px;line-height: 0px}
+               .tbl_row_list{height:20px;}
+               .tbl_col1_list{width:50px;margin-left: -40px;text-align: center;}
+               .tbl_col2_list{width:170px;margin-left: 20px;line-height: 15px;}
+               .tbl_col3_list{width:400px;margin-left: 220px;line-height: 15px;}
+               .tbl_col4_list{width:140px;margin-left: 580px;text-align: right;}
+               .tbl_col5_list{width:130px;margin-left: 770px;text-align: right;}
+               .tbl_col6_list{width:130px;margin-left: 915px;text-align: right;}
+
+            <?php }else{ ?>
+
+               .tbl_list {background-color:#fff;margin-top: 65px;height: 340px; width: 1100px;margin-left: -220px; font-size:25px;}
+               .tbl_row_list{height:20px;}
+               .tbl_col1_list{width:50px;position: absolute;margin-left: -30px;text-align: center;}
+               .tbl_col2_list{width:250px;position: absolute;margin-left: 35px;}
+               .tbl_col3_list{width:400px;position: absolute;margin-left: 220px;}
+               .tbl_col4_list{width:140px;position: absolute;margin-left: 580px;text-align: right;}
+               .tbl_col5_list{width:130px;position: absolute;margin-left: 770px;text-align: right;}
+               .tbl_col6_list{width:130px;position: absolute;margin-left: 915px;text-align: right;}
+
+            <?php } ?>
+            
+            /* TAX Table */
+            .col_VAT_left {margin-top: 20px;position: relative;float:left; margin-left: -200px;font-size:25px;}   
+            .col_VAT_right {margin-top: 20px;position: relative;float:right; margin-right: -220px;font-size:25px;}   
+            .col1_VAT_left{font-size: 16; width: 550px;height: 50px;}
+
+            .col1_VAT_right{font-size: 16;float:left;position: relative;margin-left: -130px; margin-top: 3px;} 
+            .col2_VAT_right{font-size: 16;text-align: right;}
+
+            /* Print New Page */
+            .single_record{page-break-after: always;}
+
+        }
+            
+        @media screen{
+        .top_page{margin-top: 50px;}
+            .fee{  position: relative;right: -121px;}.tdright{text-align:right}.tdnum{position:relative;left:12px}#frmInvoice{display:inline;position:absolute;margin-top:130px}#frmInvoice input{float:left}input[type="text"]{height:23px}.fleft{float:left}.fright{float:right}
+               .top{text-align:center;float:left}.top p{height:24px;line-height:24px;margin:0}.textbox{width:600px;border:1px solid #000;height:70px}.blank10{height:10px;clear:both}.title{width:600px;text-align:center;height:30px;font-size:15px;line-height:30px;background-color:#fabf8f;font-weight:700}.tbl,.tbllist{width:600px;position:relative;top:33px;left:-60px;text-align:center}.tbl tr{margin:0}.tbl tr td,.tbllist tr td{background-color:#fff}.tbl .firsttd{width:145px}.tbl .secondtd{width:100px}.tbl .thirdtd{width:36px}.tbl .forthtd{width:65px}.assign{width:200px;font-weight:700;height:100px;margin-top:10px;text-align:center;margin-right:20px}.note{border-bottom:1px dotted #ccc;width:300px;float:left;margin:9px 0 0 25px}.green{text-align:center}.green td{background-color:#cfc!important}#logo{float:left;display:block;width:200px}#logo img{width:136px;margin-top:10px}.trcenter{text-align:center}.invoice{width:453px;display:block;clear:both;margin-left:119px}.invoice-number{float:left;padding-left:37px}.order-type{float:right;text-align:right}.right{text-align:right}.detail{width:587px}.detail .col1{width:109px;float:left}.detail .col2{width:224px;float:left}.detail .col2 span{font-weight:700}.detail .col3{width:100px;float:left}.detail .col3 span{font-weight:700}.clear{clear:both}.colleft{float:left;width:300px}.colright{float:right;width:165px}.vat{width:435px!important;float:right!important}#vatnumber{clear:both}#vatnumber .sn{width:54px;border:1px solid #000;height:14px;float:left}.marksn{float:left;border-left:1px solid #000;font-weight:700;padding-left:3px}.order{float:left;margin-left:10px}.order .sn{width:5px;height:10px;border:1px solid #000;float:left;margin-left:5px}.order .alert{margin-left:16px;margin-bottom:4px}.title small{float:right;font-weight:400;font-size:8px;padding-right:2em}.top1{text-align:left;float:left;height:54px;padding:5px;padding-left:42px}input[type="text"]{display:block;margin:0;font-weight:700;text-align:center;font-size:10px;border:none}.model{font-size:8px!important;text-transform:uppercase}.imgbutton{width:40px!important;cursor:pointer}.print{width:20px!important}.scroll{overflow:hidden}.number{width:10px}h1{text-transform:uppercase;font-size:17px;margin-bottom:4px}strong{text-transform:uppercase}.casl{border-top:0 solid #000}.titlecompany{font-size:15px}.right{text-align:right}.left{text-align:left}.an{visibility:hidden}.hoa{text-transform:uppercase}.date{position:relative;top:25px;left:-73px}.vat1{top:621px;position:absolute;left:19px}.vat1 tr{height:21px}.tmck{visibility:visible!important;right:16px;position:relative;top:-11px}.name{padding-left:25px}.price-tt{left:10px;position:relative}.hangkhuyenmai{position:relative;left:4px}input[type="text"]{display:block;margin:0;font-weight:700;text-align:left;font-weight:normal;font-size:12px!important;border:none}.total_debate{padding-left:20px;width:270px;text-align:left;font-weight:400;font-size:13px;display:block;margin:0}.tdright{text-align:right}.tdnum{position:relative;left:12px}
+            #frmInvoice{display:inline;position:fixed;margin-top:30px; margin-left: -100px;}
+            #frmInvoice input{float:left}input[type="text"]{height:23px}.fleft{float:left}.fright{float:right}body{margin:0 auto;width:595px;font-size:10px;margin-top:-60px}.top{text-align:center;float:left}.top p{height:24px;line-height:24px;margin:0}.textbox{width:600px;border:1px solid #000;height:70px}.blank10{height:10px;clear:both}.title{width:600px;text-align:center;height:30px;font-size:15px;line-height:30px;background-color:#fabf8f;font-weight:700}.tbl,.tbl tr{margin:0}.tbl tr td,
+            .tbllist tr td{background-color:#fff}
+            .tbl .firsttd{width:145px}
+            .tbl .secondtd{width:100px}
+            .tbl .thirdtd{width:36px}
+            .tbl .forthtd{width:65px}
+            .assign{width:200px;font-weight:700;height:100px;margin-top:10px;text-align:center;margin-right:20px}.note{border-bottom:1px dotted #ccc;width:300px;float:left;margin:9px 0 0 25px}.green{text-align:center}.green td{background-color:#cfc!important}#logo{float:left;display:block;width:200px}#logo img{width:136px;margin-top:10px}.trcenter{text-align:center}.invoice{width:453px;display:block;clear:both;margin-left:119px}.invoice-number{float:left;padding-left:37px}.order-type{float:right;text-align:right}.right{text-align:right}.detail{width:587px}.detail .col1{width:109px;float:left}.detail .col2{width:224px;float:left}.detail .col2 span{font-weight:700}.detail .col3{width:100px;float:left}.detail .col3 span{font-weight:700}.clear{clear:both}.colleft{float:left;width:300px}.colright{float:right;width:165px}.vat{width:435px!important;float:right!important}#vatnumber{clear:both}#vatnumber .sn{width:54px;border:1px solid #000;height:14px;float:left}.marksn{float:left;border-left:1px solid #000;font-weight:700;padding-left:3px}.order{float:left;margin-left:10px}.order .sn{width:5px;height:10px;border:1px solid #000;float:left;margin-left:5px}.order .alert{margin-left:16px;margin-bottom:4px}.title small{float:right;font-weight:400;font-size:8px;padding-right:2em}.top1{text-align:left;float:left;height:54px;padding:5px;padding-left:42px}input[type="text"]{display:block;margin:0;font-weight:700;text-align:center;font-size:10px;border:none}.model{font-size:8px!important;text-transform:uppercase}.imgbutton{width:40px!important;cursor:pointer}.print{width:20px!important}.scroll{overflow:hidden}.number{width:10px}h1{text-transform:uppercase;font-size:17px;margin-bottom:4px}strong{text-transform:uppercase}.casl{border-top:0 solid #000}.titlecompany{font-size:15px}.right{text-align:right}.left{text-align:left}.an{visibility:hidden}.hoa{text-transform:uppercase}.date{position:relative;top:25px;left:-96px}.vat1{top:621px;position:absolute;left:19px}.vat1 tr{height:21px}.tmck{visibility:visible!important;right:16px;position:relative;top:-11px}.name{padding-left:25px}.price-tt{left:10px;position:relative}.hangkhuyenmai{position:relative;left:4px}input[type="text"]{display:block;margin:0;font-weight:700;text-align:left;font-weight:normal;font-size:12px!important;border:none}.total_debate{padding-left:20px;width:270px;text-align:left;font-weight:400;font-size:13px;display:block;margin:0}#date{position: absolute;left: 250px;top: 0px;}
+             .tdnum{  width: 40px;
+                 text-align: left;}
+
+            /* Distributor Table */     
+            .col_head_left{margin-top: 40px;position: relative;float:left; margin-left: -140px;font-size:25px;}    
+            .col_head_right{margin-top: 40px;position: relative;float:right; margin-right: -160px;font-size:25px;}     
+            .col1_head_left{width:500px;height: 45px;}
+            .col1_head_right{width:300px;height: 50px;margin-left: -100px;}
+            .col2_head_right{margin-right: -10px;height: 35px;float:right;}
+            .col3_head_right{margin-right: 150px;height: 35px;margin-top: 5px;}
+            .col4_head_right{margin-left: 50px;height: 35px;float:right; margin-top: -360px;position: absolute;}
+            .col5_head_right{margin-right: 20px;height: 35px;margin-top: 100px;}
+         
+            /* Sales Man Table */
+            .tbl_head {background-color:#fff;margin-top: 25px;margin-left: -90px;font-size:25px;}
+            .tbl_head1{width:205px;position: absolute;margin-left: -80px;}
+            .tbl_head2{width:160px;position: absolute;margin-left: 200px;}
+            .tbl_head3{width:200px;position: absolute;margin-left: 470px;}
+            .tbl_head4{width:250px;position: absolute;margin-left: 720px;}
+
+            /* Item Table */
+            
+
+            <?php if($this->distributor['rank'] == '11'){ ?>
+
+               /*King Power*/
+               .tbl_list {background-color:#fff;margin-top: 75px;height: 340px; width: 1100px;margin-left: -260px; font-size:25px;line-height: 0px}
+               .tbl_row_list{height:20px;}
+               .tbl_col1_list{width:50px;margin-left: -40px;text-align: center;}
+               .tbl_col2_list{width:170px;margin-left: 20px;line-height: 15px;}
+               .tbl_col3_list{width:400px;margin-left: 220px;line-height: 15px;}
+               .tbl_col4_list{width:140px;margin-left: 580px;text-align: right;}
+               .tbl_col5_list{width:130px;margin-left: 770px;text-align: right;}
+               .tbl_col6_list{width:130px;margin-left: 915px;text-align: right;}
+
+            <?php }else{ ?>
+
+               .tbl_list {background-color:#fff;margin-top: 65px;height: 340px; width: 1100px;margin-left: -220px; font-size:25px;}
+               .tbl_row_list{height:20px;}
+               .tbl_col1_list{width:50px;position: absolute;margin-left: -40px;text-align: center;}
+               .tbl_col2_list{width:250px;position: absolute;margin-left: 20px;}
+               .tbl_col3_list{width:400px;position: absolute;margin-left: 220px;}
+               .tbl_col4_list{width:140px;position: absolute;margin-left: 580px;text-align: right;}
+               .tbl_col5_list{width:130px;position: absolute;margin-left: 770px;text-align: right;}
+               .tbl_col6_list{width:130px;position: absolute;margin-left: 915px;text-align: right;}
+
+            <?php } ?>
+            
+            /* TAX Table */
+            .col_VAT_left {margin-top: 20px;position: relative;float:left; margin-left: -200px;font-size:25px;}   
+            .col_VAT_right {margin-top: 20px;position: relative;float:right; margin-right: -220px;font-size:25px;}   
+            .col1_VAT_left{font-size: 16; width: 550px;height: 50px;}
+
+            .col1_VAT_right{font-size: 16;float:left;position: relative;margin-left: -130px; margin-top: 3px;} 
+            .col2_VAT_right{font-size: 16;text-align: right;}
+
+            /* Print New Page */
+            .single_record{page-break-after: always;}
+
+        }
+
+      </style>
+   </head>
+   <body>
+      <?php
+         $spc_product_code = array("51011", "51074");
+         function VndText($amount)
+         {
+             if($amount <=0)
+             {
+                 return $textnumber="";
+             }
+             $Text=array("không", "một", "hai", "ba", "bốn", "năm", "sáu", "bảy", "tám", "chín");
+             $TextLuythua =array("","nghìn", "triệu", "tỷ", "ngàn tỷ", "triệu tỷ", "tỷ tỷ");
+             $textnumber = "";
+             $length = strlen($amount);
+         
+             for ($i = 0; $i < $length; $i++)
+                 $unread[$i] = 0;
+         
+             for ($i = 0; $i < $length; $i++)
+             {
+                 $so = substr($amount, $length - $i -1 , 1);
+         
+                 if ( ($so == 0) && ($i % 3 == 0) && ($unread[$i] == 0)){
+                     for ($j = $i+1 ; $j < $length ; $j ++)
+                     {
+                         $so1 = substr($amount,$length - $j -1, 1);
+                         if ($so1 != 0)
+                             break;
+                     }
+         
+                     if (intval(($j - $i )/3) > 0){
+                         for ($k = $i ; $k <intval(($j-$i)/3)*3 + $i; $k++)
+                             $unread[$k] =1;
+                     }
+                 }
+             }
+         
+             for ($i = 0; $i < $length; $i++)
+             {
+                 $so = substr($amount,$length - $i -1, 1);
+                 if ($unread[$i] ==1)
+                     continue;
+         
+                 if ( ($i% 3 == 0) && ($i > 0))
+                     $textnumber = $TextLuythua[$i/3] ." ". $textnumber;
+         
+                 if ($i % 3 == 2 )
+                     $textnumber = 'trăm ' . $textnumber;
+         
+                 if ($i % 3 == 1)
+                     $textnumber = 'mươi ' . $textnumber;
+         
+         
+                 $textnumber = $Text[$so] ." ". $textnumber;
+             }
+         
+             //Phai de cac ham replace theo dung thu tu nhu the nay
+             $textnumber = str_replace("không mươi", "lẻ", $textnumber);
+             $textnumber = str_replace("lẻ không", "", $textnumber);
+             $textnumber = str_replace("mươi không", "mươi", $textnumber);
+             $textnumber = str_replace("một mươi", "mười", $textnumber);
+             $textnumber = str_replace("mươi năm", "mươi lăm", $textnumber);
+             $textnumber = str_replace("mươi một", "mươi mốt", $textnumber);
+             $textnumber = str_replace("mười năm", "mười lăm", $textnumber);
+         
+             return ucfirst($textnumber);
+         }
+         
+         
+         
+         ?>
+      <form id="frmInvoice" action="" class="print">
+        <div style="margin-left: 50px;">
+           <select name="prefix" style="display: none;" id="prefix">
+                  <?php if (isset($this->invoice_prefix) and $this->invoice_prefix): ?>
+                  <?php foreach ($this->invoice_prefix as $k => $v): ?>
+                        <option <?php if (isset($v['warehouse_id']) and $v['warehouse_id'] ==
+                            $this->warehouse_id and $v['status'] == 1)
+                                        echo 'selected'; ?> value="<?php echo
+                            $v['id'] ?>"><?php echo
+                            $v['name']; ?></option>
+                      <?php endforeach;
+                endif; ?>
+         </select>
+         <input type="text" id="date" placeholder="click here to change date">
+         <input name="invoice_number" id="invoice_number" type="text" placeholder="Invoice number" class="no-print" value="<?php echo $this->market['invoice_number'];?>"/>
+         </br></br>
+         <input type="hidden" name="sales_sn" id="sales_sn" value="<?php echo $this->market['sn'];?>">
+         <input type="hidden" name="save_done" id="save_done" value="<?php echo ((isset($this->market['invoice_number']) ) and $this->market['invoice_number'] ? 1 : 0);?>">
+         <div style="display:none">
+           <input style="cursor: pointer;" type="button"  name="Save" id="Save" value="Save" class="no-print" />  
+         </div>
+         <div style="margin-left: 60px;"><input style="cursor: pointer;" type="button" name="Print" id="Print" value="Print" class="no-print" /></div>
+         </div>
+         <script type="text/javascript">
+            $(document).ready(function()
+            {
+                initUnload();
+                $( "#date" ).datepicker({ dateFormat: "dd/mm/yy" });
+
+                $("#date").change(function(){
+                    var new_date = $('#date').val();
+                    $('#invoice_date').text(new_date);
+
+                    var d = new Date();
+                    var time = d.getHours() + ":" + d.getMinutes() + ":" + d.getSeconds();
+
+                    $('#invoice_time').text(time);
+                });
+
+
+
+            });
+            
+            function initUnload(){
+                window.onbeforeunload = function(event) {
+            
+                    if ($('#save_done').val()==0){
+                        event = event || window.event;
+            
+                        var confirmClose = 'Please input invoice number!';
+            
+                        // For IE and Firefox prior to version 4
+                        if (event) {
+                            event.returnValue = confirmClose;
+                        }
+            
+                        // For Safari
+                        return confirmClose;
+                    }
+            
+                }
+            }
+            
+            $('#Print').click(function (){
+                var invoice_no = $('#invoice_number').val();
+                if(invoice_no !=''){
+                    window.print();
+                }else{
+                   alert('Please Input Invoice Number.'); 
+                }
+            });
+
+            $('#Save').click(function (){
+               // window.print();
+               // return;
+                $('#invoice_number').html('<span class="loading"></span>checking...');
+            
+                var all_values = [];
+            
+                $('input[name^="invoice_price"]').each(function() {
+                    all_values.push($(this).val());
+                });                
+                var date = $('#date').val();
+                
+                var dateTime = new Date($("#date").datepicker("getDate"));
+
+                var strDay =  dateTime.getDate();
+                
+                if(strDay <= 9) strDay = '0' + strDay;                
+                
+                var strMonth = dateTime.getMonth()+1;
+                
+                if(strMonth <= 9) strMonth = '0' + strMonth;
+                
+                var strYear = dateTime.getFullYear();                
+                if(strYear != '1970')
+                {
+                      $('#day').html(strDay) ; 
+                      $('#month').html(strMonth) ; 
+                      $('#year').html(strYear) ; 
+                }
+                else{date = ''}
+              
+                $.post('<?php echo HOST ?>get/invoice-save',
+                    {
+                        invoice_number: $('#invoice_number').val(),
+                        sales_sn: $('#sales_sn').val(),
+                        date : date,
+                        prefix: $('#prefix').val(),
+                        total_invoice_price: $('#total_invoice_price').val(),
+                        total_invoice_vat: $('#total_invoice_vat').val(),
+                        total_invoice_after_vat: $('#total_invoice_after_vat').val(),
+                        invoice_price: all_values
+                    }, function(data) {
+            
+                        var text = '';
+            
+                        switch (data) {
+                            case '-1':
+                                text = 'Please input Invoice number!';
+                                break;
+                            case '-2':
+                                text = 'Sales order number is invalid!';
+                                break;
+                            case '-3':
+                                text = 'This invoice number was used already!';
+                                break;
+                            case '-4':
+                                text = 'Cannot save invoice number, please try again!';
+                                break;
+                            case '0':
+                                location.reload();
+                                text = 'Saving successfully!';
+                                $('#save_done').val(1);
+                                break;
+                        }
+            
+                        alert(text);
+            
+                        initUnload();
+                    });
+            });
+         </script>
+      </form>
+      <div class="top_page" ></div>
+      <?php
+        $product_no="";
+        $product_name="";
+        $product_qty="";
+        $product_unit_price=0;
+        $product_amount=0;
+        $product_total_amount=0;
+        $delivery_fee=0;
+        $total_discount=0;
+        $total_discount_amount=0;
+        $vat=7;
+        $total_vat_amount=0;
+        $grand_total_amount=0;
+
+        $ext_vat_product_total_amount=0;
+
+        //print_r($this->imeis);
+
+        if($this->distributor['rank'] == '11'){
+         //King Power
+         $item_per_page=17;
+        }else{
+         $item_per_page=19;
+        }
+
+        $max_total_imei=1000;
+        $goods_total=count($this->mk_goods);
+        $imei_total=count($this->imeis);
+        $item_total=$goods_total+$imei_total;
+        //$item_total=3;
+        $pg_total= ceil(($item_total)/$item_per_page);
+
+        function format_number($num){
+           return number_format($num, 2);
+        }
+
+        function format_number_4($num){
+           return decimal_remove_comma(number_format($num, 2));
+        }
+
+        function format_number_2($num){
+           return decimal_remove_comma(number_format($num, 2));
+        }
+
+         function format_number_vat($num){
+           return number_format($num, 0);
+        }
+
+        function product_price($priceFloat,$decimal_p=0) {
+             $symbol = ' THB';
+             $symbol_thousand = '.';
+             $decimal_place = $decimal_p;
+             //$priceFloat=round($priceFloat, 0, PHP_ROUND_HALF_UP);
+             $price = number_format($priceFloat, $decimal_place, ',', $symbol_thousand);
+             return $price;
+         }
+
+         function decimal_remove_comma($priceFloat)
+         {
+            $price = str_replace(",","",$priceFloat);
+            return $price;
+         }
+
+         function cal_sale_off_percent_bk($percent_sale_off,$price,$num,$price_total){
+            //$sale_off =(100-$percent_sale_off)*0.01;
+            //$price_sale_off=($price*$sale_off);
+            if($percent_sale_off>0){
+                $price_sale_off=$price_total/$num;
+            }else{
+                $price_sale_off = $price;
+            }
+            return $price_sale_off;
+         }
+
+         function cal_sale_off_percent($sale_off_percent,$price,$num,$price_total){
+
+            //$sale_off =(100-$percent_sale_off)*0.01;
+            //$price_sale_off=($price*$sale_off);
+            if($sale_off_percent>0){
+                //$price_sale_off=$price_total/$num;
+                $price_sale_off = $price - (($price*$sale_off_percent/100)*100)/100;
+
+            }else{
+                $price_sale_off = $price;
+            }
+            return $price_sale_off;
+        }
+
+
+        function ext_vat($num){
+           return $num/1.07;
+        }
+
+        function get_time_string($seconds)
+        {
+            //return date('H:i:s', strtotime("2000-01-01 + $seconds SECONDS"));
+            return $mysqltime = date ("d/m/Y", $seconds);
+        }
+
+        if ($this->distributor['id']== '3691' || $this->distributor['id']== '3025') {
+            if ($this->market['cat_id']==11) {
+                 $total_discount = 0.01;
+            }
+           
+        }
+        //print_r($this->distributor);
+        $store_id=$this->distributor['id'];
+
+        $store_code=$this->distributor['store_code'];
+        
+        $distributor_name =$this->distributor['unames'];
+        if($distributor_name==''){
+            $distributor_name =$this->distributor['title'];
+        }
+        $distributor_address=$this->distributor['add'];
+        $distributor_tax=$this->distributor['mst_sn'];
+        $customer_brandshop_id =$this->customer_brandshop_id;
+        if($customer_brandshop_id !=''){
+            $distributor_name =$this->customerbrandshop[0]['customer_name'];
+            $distributor_tax =$this->customerbrandshop[0]['tax_number'];
+            $distributor_address =$this->customerbrandshop[0]['address_tax'];
+            $distributor_branch_no =$this->customerbrandshop[0]['branch_no'];
+        }      
+        
+
+        $invoice_number=$this->market['invoice_number'];
+        $invoice_datetime = explode(" ", $this->market['invoice_time']);
+        $invoice_date_new =$invoice_datetime[0];
+        $invoice_time =$invoice_datetime[1];
+        $date=date_create($invoice_date_new);
+
+        $invoice_date_ex= explode('/', date_format($date,"d/m/Y")) ;
+        $years = $invoice_date_ex[2]+543;
+        $invoice_date = $invoice_date_ex[0].'/'.$invoice_date_ex[1].'/'.$years;
+        $invoice_credit= date_format($date,"d.m.Y");//pungpond
+        $invoice_timestamp = strtotime($invoice_date_new);
+
+        $salesman =$this->staff['firstname'].' '.$this->staff['lastname'];
+       // print_r($this->Tag);
+        $invoice_date5= date_format($date,"Y-m-d");
+
+        $val1 = $invoice_date5;
+        $val2 = '2016-04-18 0:0:0';
+        
+        $datetime1 = new DateTime($val1);
+        $datetime2 = new DateTime($val2);
+        
+
+
+        $sales_order_no_PO = $this->Tag[0]['name'];
+        $sales_order_no=$this->market['sn_ref'];
+        if($sales_order_no==''){
+            $sales_order_no=$this->market['sn'];
+        }
+
+        $add_delivery_fee=0;
+        $payment_order = $this->market['payment_order'];
+        $payment_type = $this->market['payment_type'];
+
+        // Add Payment Type 20160614
+        if($payment_type !=""){
+            if($payment_type =="CR"){
+                $day_credit = $this->credit_type['day'];
+                $payment_type = "เครดิต ".$day_credit.' วัน';
+               //$get_life_time= date('d/m/Y', strtotime(' +'.$day_credit.' day'));
+               $get_life_= date("d/m/Y",strtotime($invoice_credit.' +'.$day_credit.' day'));//pungpond
+               $date_x = explode('/', $get_life_);
+               $years_x = $date_x[2]+543;
+               $get_life_time = $date_x[0].'/'.$date_x[1].'/'.$years_x;
+            }else{
+                $payment_type = "ขายสด";
+                $get_life_time= $invoice_date;
+            }
+        }else{
+            if($payment_order<=0){
+                $day_credit = $this->credit_type['day'];
+                $payment_type = "เครดิต ".$day_credit.' วัน';
+               //$get_life_time= date('d/m/Y', strtotime(' +'.$day_credit.' day'));
+               $get_life_= date("d/m/Y",strtotime($invoice_credit.' +'.$day_credit.' day'));//pungpond
+               $date_x = explode('/', $get_life_);
+               $years_x = $date_x[2]+543;
+               $get_life_time = $date_x[0].'/'.$date_x[1].'/'.$years_x;
+            }else{
+                $payment_type = "ขายสด";
+                $get_life_time= $invoice_date;
+            }
+        }
+
+        
+         //if($customer_brandshop_id !=''){
+         if($this->distributor['rank'] =='10'){
+               if($distributor_branch_no =='00000'){
+                  $branch="สำนักงานใหญ่";
+                  $invoice_branch =$distributor_branch_no;
+               }else if($distributor_branch_no == '002'){
+                  $branch="สาขาที่ 2";
+                  $invoice_branch =$distributor_branch_no;
+               }else if($distributor_branch_no){
+                  $branch="สาขา";
+                  $invoice_branch =$distributor_branch_no;
+               }else{
+                  $branch="สาขา";
+                  $invoice_branch =$this->distributor['branch_no'];
+               } 
+
+
+         }else if($this->distributor['rank'] =='11'){
+            if($this->distributor['branch_no'] =='00000'){
+                  $branch="สำนักงานใหญ่";
+                  $invoice_branch =$this->distributor['branch_no'];
+               }else{
+                  $branch=$this->distributor['branch_no'];
+                  $invoice_branch =$this->distributor['branch_no'];
+               }      
+         }else{
+            if($this->distributor['parent']==0){
+               $branch="สำนักงานใหญ่";
+               $invoice_branch =$this->distributor['branch_no']; 
+            }else{
+               if($this->distributor['branch_no'] =='00000'){
+                  $branch="สำนักงานใหญ่";
+                  $invoice_branch =$this->distributor['branch_no'];
+               }else if($distributor_branch_no){
+                  $branch="สาขา";
+                  $invoice_branch =$distributor_branch_no; 
+               }else{
+                  $branch="สาขา";
+                  $invoice_branch =$this->distributor['branch_no'];
+               }   
+            }
+         }
+
+
+        
+         if($this->distributor['rank'] =='11')
+         {
+               $invoice_branch_show= $branch." &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;";
+         }else{
+            if($invoice_branch !=""){
+               $invoice_branch_show= $branch." &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; ลำดับที่ : ".$invoice_branch;
+            }
+         }
+
+
+        
+        
+    $row_item=0;$running=0;$item_running=0;
+    for($pg=1;$pg<=$pg_total;$pg++){ 
+        //echo $show_data;
+        if($pg==1){
+            echo '<div style="margin-top: 80px;"></div>';
+        }else if($pg==2){
+            echo '<div style="margin-top: 20px;"></div>';
+        }else{
+            echo '<div style="margin-top: 35px;"></div>';
+        }  
+
+        $pg_number= $pg."/".$pg_total;
+        
+        ?>
+   
+      </br></br></br></br></br></br></br></br></br>
+      <div class="blank10"></div>
+
+    <div class="col_head_left">
+        <div class="col1_head_left" ><?=$store_code?>&nbsp;&nbsp;(<?=$sales_order_no?>)</div>
+        <div class="col1_head_left"><?=$distributor_name?></div>
+        <div class="col1_head_left"><?=$distributor_address?></div>
+    </div>
+
+    <div class="col_head_right">
+        <div class="col1_head_right"><span ><?=$invoice_number?></span></div>
+        <div id="invoice_time" name="invoice_time" class="col2_head_right"><?=$invoice_time?></div>
+        <div id="invoice_date" name="invoice_date" class="col1_head_right"><?=$invoice_date?></div>
+        <div class="col3_head_right"><span ></span></div>
+        <div class="col1_head_right" style="margin-top: 5px;"><span ><?=$invoice_branch_show?></span></div>
+        <div class="col4_head_right"><span ><?=$pg_number?></span></div>
+    </div>
+
+    <div class="col_head_right">
+        <div class="col5_head_right" style="ma"><span ><?=$distributor_tax?></span></div>
+    </div>
+
+    <div class="blank10"></div></br></br></br>
+
+    <table class="tbl_head" cellspacing="1" cellpadding="5">
+        <tr>
+            <td class="tbl_head1"><?=$salesman?></td>
+            <td class="tbl_head2"><?=$payment_type?></td>
+            <td class="tbl_head3" ><?=$get_life_time?></td>
+            <?php if($this->distributor['id'] != '34119'){ ?>
+            <td class="tbl_head4"><?=$sales_order_no_PO?></td>
+            <?php } ?>
+        </tr>
+    </table>
+      <div class="blank10"></div>
+      </br></br>
+    <table class="tbl_list" cellspacing="1" cellpadding="6">
+        <?php  
+        //print_r($this->mk_goods[0]);
+        $item_running=0;$delivery_show=0;$percent_sale_off=0;$margin=0;
+        for($i=1;$i<=$item_per_page;$i++){
+            $product_amount=0; //print_r($this->mk_goods);
+            $price_clas=$this->mk_goods[$row_item]['price_clas']; //Product Name
+
+            if($price_clas==11){
+               $product_no=$this->mk_goods[$row_item]['product_code']; //Product Code Invoice
+               if($product_no==''){
+                   $product_no=$this->mk_goods[$row_item]['product_code']; //Product Code Invoice
+               }
+               $product_name=$this->mk_goods[$row_item]['desc']; //Product Name
+            }else{
+               if($this->distributor['id'] =='34119'){
+                  //$product_no=$this->mk_goods[$row_item]['product_code']; //Product Code Invoice
+                  $product_no=$this->mk_goods[$row_item]['product_code']; //Product Code Invoice
+                  if($product_no==''){
+                      $product_no=$this->mk_goods[$row_item]['product_code']; //Product Code Invoice
+                  }
+                  //$product_name=$this->mk_goods[$row_item]['good_name']; //Product Name
+                  $product_name="BS ".$this->mk_goods[$row_item]['desc']; //Product Name
+               }else if(in_array($this->distributor['id'], $spc_product_code)){
+                  //$product_no=$this->mk_goods[$row_item]['product_code']; //Product Code Invoice
+                  $product_no=$this->mk_goods[$row_item]['good_code']; //Product Code Invoice
+                  if($product_no==''){
+                      $product_no=$this->mk_goods[$row_item]['product_code']; //Product Code Invoice
+                  }
+                  //$product_name=$this->mk_goods[$row_item]['good_name']; //Product Name
+                  $product_name=$this->mk_goods[$row_item]['good_name']; //Product Name   
+               }else{
+                  $product_no=$this->mk_goods[$row_item]['desc_name']; //Product Code Invoice
+                  if($product_no==''){
+                      $product_no=$this->mk_goods[$row_item]['name']; //Product Code Invoice
+                  }
+                  $product_name=$this->mk_goods[$row_item]['desc']; //Product Name
+               }
+               
+            }
+
+            
+            $product_type=$this->mk_goods[$row_item]['type']; //Product Name
+            
+            if($product_type==2 || $product_type==5){
+               $product_type_name="/Demo";
+            }else{
+               $product_type_name="";
+            }
+
+            $product_qty=$this->mk_goods[$row_item]['num'];  //QTY
+            $product_unit_name="";
+            $product_unit_price=$this->mk_goods[$row_item]['price']; //Unit Price
+            $percent_sale_off=$this->mk_goods[$row_item]['sale_off_percent']; //Unit Price
+            $price_total =$this->mk_goods[$row_item]['total']; //Total Price
+           // print_r($this->mk_goods[$row_item]);
+            $product_unit_price = cal_sale_off_percent($percent_sale_off,$product_unit_price,$product_qty,$price_total);
+
+            $total_spc_discount=$this->market['total_spc_discount']; //total_spc_discount
+
+            $product_amount +=$this->mk_goods[$row_item]['total']; //Total Price
+            $good_color = $this->mk_goods[$row_item]['good_color'];
+            $good_id =$this->mk_goods[$row_item]['id']; //Total Price
+            $product_colors=$this->good_colors[$good_color]; //Product Name
+            $delivery_fee = $this->mk_goods[0]['delivery_fee'];
+            //$delivery_fee=60;
+            $row_item+=1;
+    
+            $grand_total_amount+=$product_amount;
+            //convert_number
+            $grand_total_amount_text="";$shipping_text="";
+
+            if($pg==$pg_total  && $item_per_page==$i){
+               
+               //Grand Total
+                if ($this->market['rank'] == 10 || $this->market['warehouse_id'] == 71) {
+                      $shipping_text = $this->market['shipping_text'];
+                   }else{
+ 
+                $delivery_address=$this->market['delivery_address'];
+                if($delivery_address==''){
+                    $delivery_address=$this->market['add_tax'];
+                }
+    
+               if($this->market['shipping_text']!=''){
+
+                  $cus = '';
+                   if ($this->market['customer_name']) {
+                       $cus =  $this->market['customer_name'];
+                     }  
+                   if ($this->distributor['rank'] == 3 and $this->distributor['id'] != 30879 and $this->distributor['id'] != 24026 and $this->distributor['id'] != 23236 and $this->distributor['id'] != 34807 ) {
+                       $delivery_address = $delivery_address;
+                    }else if (isset($this->market['add_time']) and $this->market['add_time'] > '2017-03-15 00:00:00') {
+                       $delivery_address=  $cus.' '.My_Address::genAddessDelivery($this->market['shipping_address']);
+                        
+                    }else{
+                        $delivery_address = $delivery_address;
+                    }
+
+                 $shipping_text=$delivery_address.' หมายเหตุ : '.$this->market['shipping_text']; 
+               }else{
+                  $cus = '';
+                   if ($this->market['customer_name']) {
+                       $cus =  $this->market['customer_name'];
+                     }  
+                   if ($this->distributor['rank'] == 3 and $this->distributor['id'] != 30879 and $this->distributor['id'] != 24026 and $this->distributor['id'] != 23236 and $this->distributor['id'] != 34807 ) {
+                       $shipping_text = $delivery_address;
+                    }else if (isset($this->market['add_time']) and $this->market['add_time'] > '2017-03-15 00:00:00') {
+                       $shipping_text=  $cus.' '.My_Address::genAddessDelivery($this->market['shipping_address']);
+                        
+                    }else{
+                        $shipping_text = $delivery_address;
+                    }
+                // $shipping_text=$delivery_address; 
+               }
+            }
+            }
+            
+        ?>
+        <?php 
+        //echo $item_total;
+        if($item_total>=$i){ 
+            //echo $item_total;
+        ?>
+            <?php if($product_no !='' ){ 
+                $running+=1;
+                //echo $this->distributor['id'];
+                //echo "rank>".($this->distributor['rank']);
+                if($this->market['rank'] == '9'){
+                    $product_unit_price_4 = format_number_4(($product_unit_price));
+                    if ($this->distributor['id']=='3691' || ($datetime1 >= $datetime2) ){
+                        $product_amount_4 = format_number_2($product_unit_price_4) * $product_qty;
+                    }else{
+                        $product_amount_4 = format_number_2(($price_total));
+                    }
+                    if ($sales_order_no == 'SO590407-00082' || $sales_order_no == 'SO590408-00294') {
+                        $product_amount_4 = format_number_2($product_unit_price_4) * $product_qty;
+                    }
+                    if ($sales_order_no == 'SO590405-00222'){
+                        $product_amount_4 = format_number_2(($price_total));
+                    }
+
+                    //$product_unit_price_4 = 10000;
+                    $ext_vat_product_total_amount += $product_amount_4;
+                    $chk_name = strlen(trim($product_name.' '.$product_colors.$product_type_name));
+                }else{
+                    $product_unit_price_4 = format_number_4(ext_vat($product_unit_price));
+                    if ($this->distributor['id']=='3691' || ($datetime1 >= $datetime2) ){
+                        $product_amount_4 = format_number_2($product_unit_price_4) * $product_qty;
+                    }else{
+                        $product_amount_4 = format_number_2(ext_vat($price_total));
+                    }
+                    if ($sales_order_no == 'SO590407-00082' || $sales_order_no == 'SO590408-00294') {
+                        $product_amount_4 = format_number_2($product_unit_price_4) * $product_qty;
+                    }
+                    if ($sales_order_no == 'SO590405-00222') {
+                        $product_amount_4 = format_number_2(ext_vat($price_total));
+                    }
+
+                    $ext_vat_product_total_amount += $product_amount_4;
+                    $chk_name = strlen(trim($product_name.' '.$product_colors.$product_type_name));
+                }
+                
+            ?>
+
+            <tr class="tbl_row_list">
+                <td class="tbl_col1_list"><?=$running?></td>
+                
+                <?php
+                $temp_product_no = $product_no;
+                //1. CSC = 3169  2.Power buy = 3093  3.AIS = 11293  4.DTAC = 3005,44927 5.TRUE = 3028
+                //by sine '38451','649','3172','370','20755','606','34650','992','44152','49698','44145','44153','49301','48138'
+                if(in_array($this->distributor['id'], ['3169','3093','11293','3005','44927','3028','38451','649','3172','370','20755','606','34650','992','44152','49698','44145','44153','49301','48138'])){
+                  if($good_id == '338'){
+                     $temp_product_no = 'CPH1853(2G)';
+                  }
+                  if($good_id == '339')
+                     $temp_product_no = 'CPH1853(3G)';
+                  }
+                ?>
+
+                <td class="tbl_col2_list"><?=$temp_product_no;?></td>  
+                <?php
+
+                if($this->market['warehouse_id']=='123' && $this->market['cat_id']==11 && $product_no !='03BOPPO'){
+                  $open_market_text1="";
+                  $open_market_text2=" พร้อมซิม";
+                }
+
+                //print_r($this->market['cat_id']);
+                  if($price_clas==11)
+                  {
+                ?> 
+                  <td class="tbl_col3_list" style="margin-left: 260px;">
+                     <?=trim($product_name.' '.$product_colors.$product_type_name);?></br>
+                  </td>
+                <?php
+                  }else{
+                     $simlock="";
+                     if($this->market['warehouse_id']=='116' && $product_no !='03BOPPO'){
+                        $simlock=" (Locked SIM)";
+                     }
+
+                     if($this->distributor['id']=="34119"){
+                        $style="style='margin-left: 260px;'";  
+                     }else if(in_array($this->distributor['id'], $spc_product_code)){
+                        $style="style='margin-left: 260px;'"; 
+                     }else{
+                        $style="style='margin-left: 230px;'"; 
+                     }
+                ?>
+                  <?php   
+                     if(in_array($this->distributor['id'], $spc_product_code)){
+                        if($product_name !="")
+                        {
+                           $product_colors="";
+                        }
+                  ?>
+                      <td class="tbl_col3_list" <?php echo $style ?> ><?php echo $open_market_text1;?>
+                           <?=trim($product_name.' '.$product_colors.$product_type_name);?><?php echo $simlock; ?>
+                           <?php echo $open_market_text2;?>
+                        </br>
+                     </td>
+                  <?php }else{ ?>
+                     <td class="tbl_col3_list" <?php echo $style ?> ><?php echo $open_market_text1;?>
+                           <?=trim($product_name.' '.$product_colors.$product_type_name);?><?php echo $simlock; ?>
+                           <?php echo $open_market_text2;?>
+                        </br>
+                     </td>
+
+                <?php 
+                   }
+                  }
+                ?>
+                <td class="tbl_col4_list"><?php echo number_format($product_qty).' '.$product_unit_name; ?></td>
+                <td class="tbl_col5_list"><?php echo format_number($product_unit_price_4);?></td>
+                <td class="tbl_col6_list"><?php echo format_number($product_amount_4);?>
+
+                </td>  
+            </tr>
+            <?php 
+            $rank = $this->distributor['rank'];
+
+            if($chk_name>=41){
+                if ($sales_order_no == 'SO590805-00515')
+                {
+                    $margin += (12);
+                }else{
+                    if($rank==10){
+                        $margin += (1*-1);
+                    }else{
+                        $margin += (12*-1);
+                    }                   
+                }
+
+                // $col_VAT = "style='margin-top: ".$margin."px;'";
+                //$col_VAT = "style='margin-top: 45px;'";
+                $col_VAT = "style='margin-top: 35px;'";
+            ?>
+            <?php } ?>
+                <?php 
+                foreach ($this->imeis as $row){
+                    if($row['good_id']==$good_id && $row['good_color']==$good_color){
+                    $show_imei= $row['imei_sn'];
+                    $i+=1;
+                ?>
+                <tr class="tbl_row_list">
+                    <td class="tbl_col1_list">_</td>
+                    <td class="tbl_col2_list"></td>
+                    <td class="tbl_col3_list">&nbsp;&nbsp;&nbsp;&nbsp;<?=$show_imei?></td>
+                    <td class="tbl_col4_list"></td>
+                    <td class="tbl_col5_list"></td>
+                    <td class="tbl_col6_list"></td>
+                </tr>
+                <?php }}?>
+                
+            <?php }else{?>
+            <tr class="tbl_row_list">
+                <td class="tbl_col1_list"></td>
+                <td class="tbl_col2_list"></td>
+                <td class="tbl_col3_list"></td>
+                <td class="tbl_col4_list"></td>
+                <td class="tbl_col5_list"></td>
+                <td class="tbl_col6_list"></td>
+            </tr>
+
+            <?php }}else{?>
+            <?php if($delivery_fee>0 && $pg==$pg_total && $delivery_show ==0){ 
+                    $delivery_show=1;
+                ?>
+                    <tr class="tbl_row_list">
+                        <td class="tbl_col1_list"><?=$running+1?></td>
+                        <td class="tbl_col2_list">F40011</td>
+                        <td class="tbl_col3_list">ค่าบริการ</td>
+                        <td class="tbl_col4_list">1</td>
+                        <td class="tbl_col5_list"><?=number_format(ext_vat($delivery_fee),2)?></td>
+                        <td class="tbl_col6_list"><?=number_format(ext_vat($delivery_fee),2)?></td>
+                    </tr>
+                <?php }else{ ?>
+            <tr class="tbl_row_list">
+                <td class="tbl_col1_list"></td>
+                <td class="tbl_col2_list"></td>
+                <td class="tbl_col3_list"></td>
+                <td class="tbl_col4_list"></td>
+                <td class="tbl_col5_list"></td>
+                <td class="tbl_col6_list"></td>
+            </tr>
+            
+            <?php }}}?>
+            
+    </table>  
+
+      <div class="blank10"></div>
+      </br>
+
+    <div <?=$col_VAT?> class="col_VAT_left">
+        <div class="col1_VAT_left"><span ><?=$shipping_text?></span>
+         <?php if($this->distributor['id'] == '34119' && $sales_order_no_PO){ ?>
+        <div class="col1_head_left">หมายเหตุ : <?=$sales_order_no_PO?></div>
+        <?php } ?>
+        </div></br></br></br>
+        <div class="col1_VAT_left"><?=$grand_total_amount_text?></div>
+    </div>
+    <?php 
+
+               $delivery_fee_4 = format_number_2(ext_vat($delivery_fee));
+               $ext_vat_product_total_amount += $delivery_fee_4;
+               $ext_vat_total_discount_amount=$ext_vat_product_total_amount;
+
+               $special_discount = 0;
+               date_default_timezone_set('Asia/Bangkok');
+               $date = new DateTime('2017-01-04 00:00:00');
+               $date_start= date_format($date,"Y-m-d H:i:s");
+               $date_order = $this->market['invoice_time'];
+               
+               if($date_order < $date_start){
+                      if ($store_id =='3691' || $store_id =='3025' ){
+                        $total_discount_ext = (($ext_vat_product_total_amount) * 0.01);
+
+                        $total_vat_amount = decimal_remove_comma((($ext_vat_total_discount_amount-$total_discount_ext)*1.07))-($ext_vat_total_discount_amount-$total_discount_ext);
+
+                          $ext_vat_total_discount = $total_discount_ext;
+
+                          $ext_vat_total_discount_amount = ($ext_vat_total_discount_amount-$total_discount_ext);
+
+                          $in_vat_grand_total_amount = decimal_remove_comma(format_number($ext_vat_total_discount_amount))+decimal_remove_comma(format_number($total_vat_amount));
+
+                      }else if ($store_id =='25760' || $store_id =='21088' || $store_id =='25550' || $store_id =='28456' || $store_id =='47151' ) {
+                          $vat=0;
+                          $total_discount_ext = 0;
+
+                          $total_vat_amount = decimal_remove_comma((($ext_vat_total_discount_amount-$total_discount_ext)))-($ext_vat_total_discount_amount-$total_discount_ext);
+
+                          $ext_vat_total_discount = $total_discount_ext;
+
+                          $ext_vat_total_discount_amount = ($ext_vat_total_discount_amount-$total_discount_ext);
+
+                          $in_vat_grand_total_amount = decimal_remove_comma(format_number($ext_vat_total_discount_amount))+decimal_remove_comma(format_number($total_vat_amount));
+                      }else{
+                          $vat=7;
+                          $total_discount_ext = 0;
+
+                           $total_vat_amount = decimal_remove_comma((($ext_vat_total_discount_amount-$total_discount_ext)*1.07))-($ext_vat_total_discount_amount-$total_discount_ext);
+
+                          $ext_vat_total_discount = $total_discount_ext;
+
+                          $ext_vat_total_discount_amount = ($ext_vat_total_discount_amount-$total_discount_ext);
+
+                          $in_vat_grand_total_amount = decimal_remove_comma(format_number($ext_vat_total_discount_amount))+decimal_remove_comma(format_number($total_vat_amount));
+                     }
+
+               }else{
+
+                  if ($store_id =='25760' || $store_id =='21088' || $store_id =='25550' || $store_id =='28456' || $store_id =='47151' ) {
+                          $vat=0;
+                          $total_discount_ext = 0;
+
+                          $total_vat_amount = decimal_remove_comma((($ext_vat_total_discount_amount-$total_discount_ext)))-($ext_vat_total_discount_amount-$total_discount_ext);
+
+                          $ext_vat_total_discount = $total_discount_ext;
+
+                          $ext_vat_total_discount_amount = ($ext_vat_total_discount_amount-$total_discount_ext);
+
+                          $in_vat_grand_total_amount = decimal_remove_comma(format_number($ext_vat_total_discount_amount))+decimal_remove_comma(format_number($total_vat_amount));
+
+
+                   }else{
+                     $total_discount_ext = $total_spc_discount;
+                     if ($sales_order_no == 'SO600112-00358'){
+                        $total_vat_amount = decimal_remove_comma((($ext_vat_total_discount_amount-$total_discount_ext)*1.07))-($ext_vat_total_discount_amount-$total_discount_ext)+0.01;
+                     }else if ($sales_order_no == 'SO600308-00056'){
+                        $total_vat_amount = decimal_remove_comma((($ext_vat_total_discount_amount-$total_discount_ext)*1.07))-($ext_vat_total_discount_amount-$total_discount_ext)+0.01;
+                     }else if ($sales_order_no == 'SO600605-01146'){
+                        $total_vat_amount = decimal_remove_comma((($ext_vat_total_discount_amount-$total_discount_ext)*1.07))-($ext_vat_total_discount_amount-$total_discount_ext)+0.01;
+                     }else{
+                        $total_vat_amount = decimal_remove_comma((($ext_vat_total_discount_amount-$total_discount_ext)*1.07))-($ext_vat_total_discount_amount-$total_discount_ext);
+                     }
+                     
+                     $ext_vat_total_discount = $total_discount_ext;
+
+                     $ext_vat_total_discount_amount = ($ext_vat_total_discount_amount-$total_discount_ext);
+
+                     $in_vat_grand_total_amount = decimal_remove_comma(format_number($ext_vat_total_discount_amount))+decimal_remove_comma(format_number($total_vat_amount));
+                   }
+
+                
+               }  
+
+               
+
+
+
+    if($pg==$pg_total){ 
+
+        if ($sales_order_no == 'SO590912-00648') {
+            //$in_vat_grand_total_amount = 94189.12;
+        }
+    ?>
+    <div <?=$col_VAT?> class="col_VAT_right">
+        <div class="col2_VAT_right"><span ><?php echo format_number($ext_vat_product_total_amount);?></span></div>
+        <div class="col2_VAT_right" style="margin-top:-10px"><span ><?php echo format_number($ext_vat_total_discount);?></span></div>
+        <div class="col2_VAT_right" style="margin-top:-10px"><span ><?php echo format_number($ext_vat_total_discount_amount);?></span></div>
+        <div class="col1_VAT_right" style="margin-top:-10px"><span ><?php echo format_number_vat($vat);?></span></div>
+        <div class="col2_VAT_right" style="margin-top:-10px"><span ><?php echo format_number($total_vat_amount);?></span></div>
+        <div class="col2_VAT_right" style="margin-top: 15px;"><span ><?php echo format_number($in_vat_grand_total_amount);?></span></div>
+    </div>
+    
+    <?php } ?>
+    <?php echo '<p class="single_record"></p>';}?>
+
+    <script>
+        Number.prototype.formatMoney = function(decPlaces, thouSeparator, decSeparator) {
+        var n = this,
+            decPlaces = isNaN(decPlaces = Math.abs(decPlaces)) ? 2 : decPlaces,
+            decSeparator = decSeparator == undefined ? "." : decSeparator,
+            thouSeparator = thouSeparator == undefined ? "," : thouSeparator,
+            sign = n < 0 ? "-" : "",
+            i = parseInt(n = Math.abs(+n || 0).toFixed(decPlaces)) + "",
+            j = (j = i.length) > 3 ? j % 3 : 0;
+        return sign + (j ? i.substr(0, j) + thouSeparator : "") + i.substr(j).replace(/(\d{3})(?=\d)/g, "$1" + thouSeparator) + (decPlaces ? decSeparator + Math.abs(n - i).toFixed(decPlaces).slice(2) : "");
+        };
+    </script>
+
+      <script type="text/javascript">
+
+        
+         //window.print();
+        
+         $( ".total_edit" ).change(function() {
+             $total = $.trim($(this).val());
+             $parent = $(this).parent().parent();         
+             $total_price = $parent.find('.total');
+             $total_price.html($total);
+          });
+          
+          $(".total_debate").change(function() {
+             
+                 $total_debate = $(this).val();
+                 
+                 var all_values = [];
+            
+                 $('.total_edit').each(function() {
+                    all_values.push($(this).val());
+                 });
+                 
+                 $.post('<?php echo HOST ?>get/bvg',
+                    {
+                        total_debate : $total_debate,
+                        sales_sn: $('#sn').val(),
+                        invoice_price: all_values
+                    }, function(data) {
+            
+                        var text = '';
+            
+                        switch (data) {
+                            case '-1':
+                                text = 'Sales order number is invalid!';
+                                alert(text);
+                                break;
+                           
+                            case '0':
+                                text = 'Update!';
+                                $('#save_done').val(1);
+                                break;
+                            
+                            case '-4':
+                                text = 'Error not detected';
+                                alert(text);
+                                break;
+                        }
+            
+                        
+            
+                        initUnload();
+                    });
+          });
+         
+      </script>
+   </body>
+
+<?php
+    function convert_number($number){ 
+        $txtnum1 = array('ศูนย์','หนึ่ง','สอง','สาม','สี่','ห้า','หก','เจ็ด','แปด','เก้า','สิบ'); 
+        $txtnum2 = array('','สิบ','ร้อย','พัน','หมื่น','แสน','ล้าน','สิบ','ร้อย','พัน','หมื่น','แสน','ล้าน'); 
+        $number = str_replace(",","",$number); 
+        $number = str_replace(" ","",$number); 
+        $number = str_replace("บาท","",$number); 
+        $number = explode(".",$number); 
+        if(sizeof($number)>2){ 
+        return 'ทศนิยมหลายตัวนะจ๊ะ'; 
+        exit; 
+        } 
+        $strlen = strlen($number[0]); 
+        $convert = ''; 
+        for($i=0;$i<$strlen;$i++){ 
+            $n = substr($number[0], $i,1); 
+            if($n!=0){ 
+                if($i==($strlen-1) AND $n==1){ $convert .= 'เอ็ด'; } 
+                elseif($i==($strlen-2) AND $n==2){  $convert .= 'ยี่'; } 
+                elseif($i==($strlen-2) AND $n==1){ $convert .= ''; } 
+                else{ $convert .= $txtnum1[$n]; } 
+                $convert .= $txtnum2[$strlen-$i-1]; 
+            } 
+        } 
+
+        $convert .= 'บาท'; 
+        if($number[1]=='0' OR $number[1]=='00' OR 
+        $number[1]==''){ 
+        $convert .= 'ถ้วน'; 
+        }else{ 
+        $strlen = strlen($number[1]); 
+        for($i=0;$i<$strlen;$i++){ 
+        $n = substr($number[1], $i,1); 
+            if($n!=0){ 
+            if($i==($strlen-1) AND $n==1){$convert 
+            .= 'เอ็ด';} 
+            elseif($i==($strlen-2) AND 
+            $n==2){$convert .= 'ยี่';} 
+            elseif($i==($strlen-2) AND 
+            $n==1){$convert .= '';} 
+            else{ $convert .= $txtnum1[$n];} 
+            $convert .= $txtnum2[$strlen-$i-1]; 
+            } 
+        } 
+        $convert .= 'สตางค์'; 
+        } 
+        return $convert; 
+        } 
+
+      //  print_r($this->market);
+?>
+</html>

@@ -1,0 +1,215 @@
+<style>
+
+a{
+    margin-right: 2.5px;
+    margin-left: 2.5px;
+}
+.status_enable{
+    width: 70px;
+    background: #99ff66;
+    text-align: center;
+}
+.status_disable{
+    width: 70px;
+    background: #ff8c66;
+    text-align: center;
+}
+.hilight
+{
+    background: #E8ADAA;
+    /*color:white;*/
+}
+.hilight:hover
+{
+    /*color:black;*/
+}
+</style>
+<div class="table-responsive">
+    <span class="pull-left">
+        <button class="btn btn-success" type="button" onclick="window.location='<?php echo HOST ?>finance/create-cn-price-manual'">
+            Create CN Price Manual
+        </button>
+
+        <button class="btn btn-success" type="button" onclick="window.location='<?php echo HOST ?>finance/import-cn-price-manual'">
+            Import CN Price Manual
+        </button>
+    </span>
+
+
+    <span class="pull-right" style="display: none;">
+        <button class="btn btn-info btn-confirm-status" value="1" id="btn-confirm-enable" type="button">เปิดใช้งาน</button>&nbsp;
+
+        <button class="btn btn-danger btn-confirm-status" value="0" id="btn-confirm-disable" type="button">ปิดใช้งาน</button>
+    </span>
+</div>
+<div class="table-responsive">
+
+</div>
+<table class="table table-bordered">
+    <thead>
+        <tr>
+            <?php echo $this->sorting(array(
+                    '#',
+					'title'  => 'Distributor Name',
+                    'chanel'  => 'Chanel',
+                    'creditnote_sn'  => 'Creditnote No',
+                    'price_ext_vat'  => 'Price (Ext VAT)',
+                    'vat'  => 'VAT (%)',
+                    'total_price_vat'  => 'ภาษีมูลค่าเพิ่ม',
+                    'wht_vat' => 'ภาษีหัก ณ ที่จ่าย (%)',
+                    'wht_price'  => 'Price (ภาษีหัก ณ ที่จ่าย)',
+					'total_amount'  => 'Price (In VAT)',
+                   
+                    'manual_remark'  => 'Description',
+                    'create_date' => 'Request Date',
+                    'create_by' => 'Request By',
+                    'confirm_date' => 'Confirm Date',
+                    'confirm_by' => 'Confirm By',
+                    
+                    'status' => 'Status',
+                     'Action'
+                ),
+                $this->url, $this->sort, $this->desc); ?>
+        </tr>
+    </thead>
+    <tbody>
+        <?php
+        $statuses = unserialize(DISCOUNT_STATUS);
+        if (isset($this->get_resule) and $this->get_resule) :
+            foreach ($this->get_resule as $k=>$m):
+
+                $confirm_status = false;$WaitConfirm_status = false;
+                $textConfirm_status = 'ไม่เปิดใช้งาน';
+
+                if(isset($m['manual_active']) && $m['manual_active']&& $m['manual_active']==1){
+                    $confirm_status = true;
+                    $textConfirm_status = 'เปิดใช้งาน';
+                }
+
+                if($m['confirm_date'] !=""){
+                    $WaitConfirm_status = true;
+                }
+
+                switch($m['chanel']) {
+                    case 'reward':
+                        $chanel_show = "ส่งเสริมการขาย";
+                        break;
+                    case 'promotion':
+                        $chanel_show = "ส่งเสริมการขาย";
+                    break;    
+                    case 'incentive':
+                        $chanel_show = "ค่า Incentive";
+                        break;
+                    case 'decoration':
+                        $chanel_show = "ค่าตกแต่งหน้าร้าน";
+                        break;
+                    case 'price':
+                        $chanel_show = "แก้ไขราคา";
+                        break;    
+                    case 'oppo_all_green':
+                        $chanel_show = "OPPO All Green";
+                        break;    
+                    case 'top_green':
+                        $chanel_show = "OPPO Top Green";
+                        break; 
+                    case 'live_demo':
+                        $chanel_show = "Live Demo";
+                        break; 
+                    case 'rent':
+                        $chanel_show = "ค่าเช่า";
+                        break;                          
+                    default:
+                        $chanel_show = "";
+                }
+
+                $price_ext_vat= $m['price_ext_vat'];
+                $vat= $m['vat'];
+                switch($vat) {
+                    case '0':
+                        $vat_cal = 0;
+                        break;
+                    case '7':
+                        $vat_cal = 0.07;
+                        break;
+                    default:
+                        $vat_cal = 0;
+                }
+
+                $total_price_vat = ($price_ext_vat * $vat_cal);
+            ?>
+
+
+            <tr>
+                <td>#</td>
+                <td><?php echo $m['title'] ?></td>
+                <td><?php echo $chanel_show ?></td>
+                <td><?php echo $m['creditnote_sn'] ?></td>
+                <td><?php echo number_format($m['price_ext_vat'],2) ?></td>
+                <td><?php echo $m['vat'] ?>%</td>
+                <td><?php echo number_format($total_price_vat,2) ?></td>
+                <td><?php echo $m['wht_vat'] ?>%</td>
+                <td><?php echo number_format($m['wht_price']*-1,2) ?></td>
+                <td><?php echo number_format($m['total_amount'],2) ?></td>
+                <td><?php echo $m['manual_remark'] ?></td>
+                <td><?php echo $m['create_date'] ?></td>
+                <td><?php echo $m['staff_name'] ?></td>
+                
+                <td><?php if($WaitConfirm_status==false){echo "<input class='status_disable' type='text' value='รออนุมัติ'>";}else{echo $m['confirm_date'];} ?></td>
+                <td><?php echo $m['confirm_staff_name'] ?></td>
+                <td><input class="<?php if($confirm_status){echo 'status_enable';}else{echo 'status_disable';}?>" id="confirmStatus-<?=$i;?>" type="text" value="<?=$textConfirm_status;?>"  ></td>
+                
+                <td><a title="Creditnote Manual" target="_blank" href="/finance/creditnote-manual-print?sn=<?php echo $m['creditnote_sn'];?>&d_id=<?php echo $m['distributor_id'];?>&creditnote_type=creditnote_manual"> <i class="icon-print" style="color: red"></i></a></td>
+                
+            </tr>
+        <?php endforeach;?>
+		<?php endif; ?>
+    </tbody>
+</table>
+<div class="paging">
+    <?php echo $this->paging($this->total, $this->limit, $this->offset, $this->url);?>
+</div>
+
+<script type="text/javascript" src="/js/jets.js"></script>
+<script type="text/javascript" src="/js/jquery-ui-1.8.12.custom.min.js"></script>
+<script src="<?php echo HOST ?>js/tag-it.min.js" type="text/javascript" charset="utf-8"></script>
+
+<script>
+    
+
+    $(document).ready(function () {
+        
+        alert(1);
+        $('.btn-confirm-status').click(function(event)
+        {
+            
+            var creditnote_sn = [];
+            $('.checkbox-confirm:checked').each(function(index, el) {
+                creditnote_sn.push($(el).val());
+            });
+
+            if(creditnote_sn.length > 0){
+                if (confirm('Are you sure?')) {
+
+                    $.ajax({
+                        url: '<?php echo HOST.'finance/creditnote-status';?>',
+                        type: 'POST',
+                        data: {'d_id':<?=$this->distributor['id'];?>,'creditnote_sn':creditnote_sn},
+                    })
+                    .done(function(response) {
+
+                    });
+
+                }
+            }else{
+                alert('กรุณาเลือกรายการที่ต้องการ');
+            }
+
+        });    
+    });
+
+
+    
+
+
+
+</script>

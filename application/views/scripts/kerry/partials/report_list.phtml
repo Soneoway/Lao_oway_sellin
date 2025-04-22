@@ -1,0 +1,294 @@
+<style>
+    .red
+    {
+        background: #1B8324;
+        color:white;
+    }
+    .red:hover
+    {
+        color:black;
+    }
+
+    .modal-text-detail{
+      font-size: 11px;
+      line-height: 5px;
+    }
+
+    .modal-content-address{
+      line-height: 15px;
+    }
+
+    #modal-display-img{
+      margin-top: 15px;
+      text-align: center;
+    }
+
+    .icon-imge{
+      padding: 0 20px;
+      cursor: pointer;
+    }
+
+    #delivery_image{
+      cursor: -webkit-zoom-in;
+    }
+</style>
+
+<!-- Modal -->
+<div class="modal fade" id="modalAddress" role="dialog">
+    <div class="modal-dialog">
+
+      <!-- Modal content-->
+      <div class="modal-content">
+        <div class="modal-header">
+          <button type="button" class="close" data-dismiss="modal">&times;</button>
+          <h4 class="modal-title">Address | Tracking No : <span class="text-modal" id="modal-text-tracking_no"></span></h4>
+      </div>
+      <div class="modal-body modal-content-address">
+          <span class="modal-text-detail">Contact Name : <span class="text-modal" id="modal-text-contact_name"></span></span><br/>
+          <span class="modal-text-detail">Phone : <span class="text-modal" id="modal-text-phone"></span></span><br/>
+          <span class="modal-text-detail">Address : <span class="text-modal<br/>" id="modal-text-address"></span></span>
+          <span class="modal-text-detail">District Name : <span class="text-modal" id="modal-text-district_name"></span></span><br/>
+          <span class="modal-text-detail">Amphure Name : <span class="text-modal" id="modal-text-amphure_name"></span></span><br/>
+          <span class="modal-text-detail">Provice Name : <span class="text-modal" id="modal-text-provice_name"></span></span><br/>
+          <span class="modal-text-detail">Zip Code : <span class="text-modal" id="modal-text-zipcode"></span></span><br/>
+
+          <div class="modal-display-img show_hide" id="modal-display-img">
+            <img id="delivery_image" style="width: 100%">
+            <div align="center">
+              <span><i class="icon-imge icon-mail-reply icon-3x" id="icon-imge-l"></i></span>
+              <span><i class="icon-imge icon-mail-forward icon-3x" id="icon-imge-r"></i></span>
+            </div>
+          </div>
+      </div>
+      <div class="modal-footer">
+          <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+      </div>
+  </div>
+
+</div>
+</div>
+
+<!-- Modal -->
+<!-- <div class="modal fade" id="modalImage" role="dialog">
+    <div class="modal-dialog"> -->
+
+      <!-- Modal content-->
+      <!-- <div class="modal-content">
+        <div class="modal-header">
+          <button type="button" class="close" data-dismiss="modal">&times;</button>
+          <h4 class="modal-title">Image | Tracking No : <span class="text-modal" id="modal-text-tracking_no_img"></span></h4>
+      </div>
+      <div class="modal-body" style="text-align: center;">
+          <img id="delivery_image" style="width: 100%">
+      </div>
+      <div class="modal-footer">
+          <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+      </div>
+  </div>
+
+</div>
+</div> -->
+
+<table class="table table-bordered">
+    <thead>
+        <tr>
+            <?php echo $this->sorting(array(
+               '#',
+               'tracking_no'          => 'Tracking No',
+               'sn_ref'               => 'Sale Order Reference',
+               'number_of_package'    => 'Number of Package',
+               'weight'               => 'Weight',
+               'good_id'              => 'Product Name',
+               'good_color'           => 'Product Color',
+               'num'                  => 'Sales Quantity',
+               'title'                => 'Retailer Name',
+             // 'contact_name'  => 'Contact Name',
+             // 'phone' => 'Phone',
+             // 'address'   => 'Address',
+             // 'district_name' => 'District Name',
+             // 'amphure_name'  => 'Amphure Name',
+             // 'provice_name'  => 'Provice Name',
+             // 'zipcode'   => 'Zip Code',
+               'send_date'            => 'Send Time',
+               'status'               => 'Send Status',
+               'created_date'         => 'Receive Date',
+               'status_receive'       => 'Receive Status',
+               'add_time'             => 'Order Time',
+               'sales_confirm_date'   => 'Sales Confirm Date',
+               'finance_confirm_date' => 'Finance Confirm Date',
+               'outmysql_time'        => 'Out of Warehouse Time',
+               'company_logistics'    => 'Company Logistics',
+               'Action'
+               ),
+               $this->url, $this->sort, $this->desc); ?>
+           </tr>
+       </thead>
+       <tbody>
+        <?php
+        //print_r($this->no_show_brandshop);
+        //echo $this->no_show_brandshop = 1;
+        $statuses = unserialize(DISCOUNT_STATUS);
+        if (isset($this->markets_sn) and $this->markets_sn) :
+            foreach ($this->markets_sn as $k=>$m):
+               $dt = DateTime::CreateFromFormat("Y-m-d H:i:s", isset($m['last_updated_at']) ? $m['last_updated_at'] : $m['add_time']);
+           $h = $dt->format('H');
+           $i = $dt->format('i');
+           $d = $dt->format('d');
+           $date = date('d');
+
+             //print_r($m);
+           ?>
+           <tr class="<?php
+           if(isset($h) and isset($i) and ($h >= 16))
+           {
+            if($date == $d)
+            {
+                if($h==16 and $i>=30)
+                    echo 'red';
+                else if($h > 16)
+                    echo 'red';
+            }
+        }
+        ?>">
+        <td><a href="#id" rel="<?php echo $m['sn'] ?>" class="collapse_a btn btn-default btn-small" id="m_<?php echo $m['sn'] ?>"><span class="col-sign">+</span><img class="img-loading" src="<?php echo HOST?>img/ajax-loader.gif" style="display: none" /></a></td>
+        <td><?php echo $m['tracking_no'] ?: '-'; ?></td>
+        <td><?php echo $m['sn_ref'] ?: '-'; ?></td>
+        <td><?php echo $m['number_of_package'] ?: '-' ?></td>
+        <td><?php echo $m['weight'] ?: '-' ?></td>
+        <!-- <td><?php if (isset($this->distributors) && $this->distributors && isset($this->distributors[$m['d_id']])) echo $this->distributors[$m['d_id']]['title'] ?></td> -->
+        <td></td>
+        <td></td>
+        <td><?php echo $m['qnum'] ?: '-'; ?></td>
+        <td><?php echo $m['title'] ?: '-'; ?></td>
+        <!-- <td><?php //echo $m['contact_name'] ?></td> -->
+        <!-- <td><?php //echo $m['phone'] ?></td> -->
+        <!-- <td><?php //echo $m['address'] ?></td> -->
+        <!-- <td><?php //echo $m['district_name'] ?></td> -->
+        <!-- <td><?php //echo $m['amphure_name'] ?></td> -->
+        <!-- <td><?php //echo $m['provice_name'] ?></td> -->
+        <!-- <td><?php //echo $m['zipcode'] ?></td> -->
+
+        <?php if(in_array($m['company'], ['3','5','6'])){?>
+          <td><?php if(in_array($m['created_at'], ['','0000-00-00 00:00:00'])){echo '-';}else{echo $m['created_at'];} ?></td>
+          <?php if ($m['created_at'] > 1){?>
+          <td>Done</td>
+          <?php }else{ ?>
+          <td>-</td>
+          <?php } ?>
+        <?php }else{ ?>
+          <td><?php if(in_array($m['send_date'], ['','0000-00-00 00:00:00'])){echo '-';}else{echo $m['send_date'];} ?></td>
+          <td><?php echo $m['status'] ?: '-'; ?></td>
+        <?php } ?>
+
+        
+        <td><?php if(in_array($m['receive_created_date'], ['','0000-00-00 00:00:00'])){echo '-';}else{echo $m['receive_created_date'];} ?></td>
+        <td><?php echo $m['kerry_status_code'] ?: '-'; ?></td>
+        <td><?php if(in_array($m['add_time'], ['','0000-00-00 00:00:00'])){echo '-';}else{echo $m['add_time'];} ?></td>
+        <td><?php if(in_array($m['sales_confirm_date'], ['','0000-00-00 00:00:00'])){echo '-';}else{echo $m['sales_confirm_date'];} ?></td>
+        <td><?php if(in_array($m['finance_confirm_date'], ['','0000-00-00 00:00:00'])){echo '-';}else{echo $m['finance_confirm_date'];} ?></td>
+        <td><?php if(in_array($m['outmysql_time'], ['','0000-00-00 00:00:00'])){echo '-';}else{echo $m['outmysql_time'];} ?></td>
+        <td><?php echo $m['company_logistics']?: '-';?></td>
+        <td style="text-align: center;"><a href="#" onclick="showModalAddress('<?php echo trim(preg_replace('/\s\s+/', ' ',$m['tracking_no'] ?: '-')); ?>','<?php echo trim(preg_replace('/\s\s+/', ' ',$m['contact_name'] ?: '-')); ?>','<?php echo trim(preg_replace('/\s\s+/', ' ',$m['phone'] ?: '-')); ?>','<?php echo trim(preg_replace('/\s\s+/', ' ',$m['address'] ?: '-')); ?>','<?php echo trim(preg_replace('/\s\s+/', ' ',$m['district_name'] ?: '-')); ?>','<?php echo trim(preg_replace('/\s\s+/', ' ',$m['amphure_name'] ?: '-')); ?>','<?php echo trim(preg_replace('/\s\s+/', ' ',$m['provice_name'] ?: '-')); ?>','<?php echo trim(preg_replace('/\s\s+/', ' ',$m['zipcode'] ?: '-')); ?>'),showModelImage('<?php echo $m['tracking_no'] ?: '-'; ?>','<?php echo $m['image'] ?: 'none.jpg';?>','<?php if(in_array($m['company'], ['3','5','6']) && !in_array($m['kerry_status_code'], ['','-'])){echo 'SHOW';}else{echo 'HIDE';}?>')" data-toggle="modal" data-target="#modalAddress" title="Show Details Address" class="icon-show-detail"><i class="icon-zoom-in"></i></a>
+
+        <!-- <?php if(in_array($m['company'], ['3','5','6']) && !in_array($m['kerry_status_code'], ['','-'])){?>
+          <a href="#" onclick="showModelImage('<?php echo $m['tracking_no'] ?: '-'; ?>','<?php echo $m['image'] ?: 'none.jpg';?>')"  data-toggle="modal" data-target="#modalImage" title="Show Image"><i class="icon-picture"></i></a>
+        <?php } ?> -->
+
+        </td>
+    </tr>
+
+<?php endforeach;?>
+<?php endif; ?>
+</tbody>
+</table>
+<div class="paging">
+    <?php echo $this->paging($this->total, $this->limit, $this->offset, $this->url);?>
+</div>
+
+<script>
+  $(document).ready(function(){
+
+    var retate_current = 0;
+    var retate = 90;
+
+    var zoom_status = 'IN';
+    var zoom = 350;
+
+    var old_width = $('#delivery_image').width();
+    var old_modal_width = $('#modal').width();
+
+    $('.icon-show-detail').click(function(e) {
+
+      if(zoom_status == 'OUT'){
+        zoom_status = 'IN';
+        var width = $('#delivery_image').width()-zoom;
+        var modal_width = $('#modal').width()-zoom;
+        $('#modal').css({width: modal_width+"px"});
+        $('#delivery_image').css({'cursor':'-webkit-zoom-in'});
+        $('#delivery_image').css({width: width+"px"});
+      }
+
+      retate_current = 0;
+
+      $('#modal').css({width: old_modal_width+"px"});
+      $('#delivery_image').css({width: old_width+"px"});
+
+      $('#delivery_image').css({
+         '-moz-transform':'rotate('+retate_current+'deg)',
+         '-webkit-transform':'rotate('+retate_current+'deg)',
+         '-o-transform':'rotate('+retate_current+'deg)',
+         '-ms-transform':'rotate('+retate_current+'deg)',
+         'transform':'rotate('+retate_current+'deg)'
+    });
+
+    });
+  
+    $('#delivery_image').click(function(event) {
+      if(zoom_status == 'IN'){
+        zoom_status = 'OUT';
+        var width = $('#delivery_image').width()+zoom;
+        var modal_width = $('#modal').width()+zoom;
+        $('#modal').animate({width: modal_width+"px"}, 'slow');
+        $('#delivery_image').animate({width: width+"px"}, 'slow');
+        $('#delivery_image').css({'cursor':'-webkit-zoom-out'});
+        return false;
+      }
+
+      if(zoom_status == 'OUT'){
+        zoom_status = 'IN';
+        var width = $('#delivery_image').width()-zoom;
+        var modal_width = $('#modal').width()-zoom;
+        $('#modal').animate({width: modal_width+"px"}, 'slow');
+        $('#delivery_image').css({'cursor':'-webkit-zoom-in'});
+        $('#delivery_image').animate({width: width+"px"}, 'slow');
+        return false;
+      }
+
+    });
+
+    $('#icon-imge-l').click(function(event) {
+      retate_current = retate_current-retate;
+
+      $('#delivery_image').css({
+         '-moz-transform':'rotate('+retate_current+'deg)',
+         '-webkit-transform':'rotate('+retate_current+'deg)',
+         '-o-transform':'rotate('+retate_current+'deg)',
+         '-ms-transform':'rotate('+retate_current+'deg)',
+         'transform':'rotate('+retate_current+'deg)'
+    });
+    });
+
+    $('#icon-imge-r').click(function(event) {
+      retate_current = retate_current+retate;
+
+      $('#delivery_image').css({
+         '-moz-transform':'rotate('+retate_current+'deg)',
+         '-webkit-transform':'rotate('+retate_current+'deg)',
+         '-o-transform':'rotate('+retate_current+'deg)',
+         '-ms-transform':'rotate('+retate_current+'deg)',
+         'transform':'rotate('+retate_current+'deg)'
+    });
+    });
+
+  });
+</script>

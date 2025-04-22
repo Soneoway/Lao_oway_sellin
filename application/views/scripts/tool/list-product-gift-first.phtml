@@ -1,0 +1,169 @@
+
+       <div class="col-md-12" style="display: flex;">
+            <div class="dual-list list-left-product-gift col-md-5">
+                <div class="well-pg">
+                    <div class="row tabLeft">
+                        <div class="col-md-7">
+                            <div class="input-prepend">
+                                <span class="add-on"><i class="icon icon-search"></i></span>
+                                <input type="text" name="SearchDualList" class="form-control" placeholder="Search" />
+                            </div>
+                        </div>
+                        <div class="col-md-2">
+                            <div class="btn-group">
+                                <a class="btn btn-default selectorPG" title="select all"><i class="icon icon-circle-blank"></i></a>
+                            </div>
+                        </div>
+                    </div>
+                    <div>
+                         <span class="so-title">Product ID</span>
+                         <span class="price_ori">Product Name</span>
+                         
+                    </div>
+                    <ul class="list-group">
+                    </ul>
+                </div>
+            </div>
+
+            <div class="list-arrows-product-gift col-md-1 text-center">
+                <div class="but"><a class="btn btn-default btn-sm move-left">
+                    <span class="icon icon-chevron-left"></span>
+                </a>
+
+                <a class="btn btn-default btn-sm move-right">
+                    <span class="icon icon-chevron-right"></span>
+                </a>
+                </div>
+                
+            </div>
+
+            <div class="dual-list list-right-product-gift col-md-5">
+                <div class="well-pg">
+                    <div class="row tabLeft">
+                        
+                        <div class="col-md-7">
+                            <div class="input-prepend">
+                                <span class="add-on"><i class="icon icon-search"></i></span>
+                                <input type="text" name="SearchDualList" class="form-control" placeholder="Search" />
+                                
+                            </div>
+                        </div>
+                        <div class="col-md-2">
+                            <div class="btn-group">
+                                <a class="btn btn-default selectorPG" title="select all"><i class="icon icon-circle-blank"></i></a>
+                            </div>
+                        </div>
+                    </div>
+                    <div>
+                         <span class="so-title">Product ID</span>
+                         <span class="price_ori">Product Name</span>
+                         
+                    </div>
+                    <ul class="list-group">
+                     <?PHP 
+                        $i = 1;
+                        foreach ($this->forceSaleDetailSelect   as $list ) :
+                         
+                            ?>
+                        <li class="list-group-item item-product-gift">
+                            <span class="so"><?=$list['g_id']?></span>
+                            <span class="price_ori "><?=$list['good_name']?>
+
+                            <input type="hidden" class="sn" name="g_gift_id[]"  value="<?=$list['g_id']?>">
+                            </span>
+                           
+                            <span class="price_text"><span style="vertical-align: super;">จำนวน : </span> 
+
+                            <input type="number" min="1"    name="g_gift_id_num[]" value="<?=$list['g_id_num']?>" required>
+                            </span>
+                            
+                        </li>
+                            
+                            
+                      <?PHP $i+=1; 
+                       
+                      endforeach; ?>  
+                    </ul>
+                
+                </div>
+            </div>
+        </div>
+ <script type="text/javascript">
+    
+    $(document).ready(function () {
+           
+          
+            $("*").keypress(function(event){  
+                 if(event.keyCode==13){  
+                    return false;  
+                 }  
+            });
+
+            $('body').on('click', '.list-group .item-product-gift', function () {
+                $(this).toggleClass('activePG');
+            });
+          
+           
+
+          
+            $('.list-arrows-product-gift a').click(function () {
+                var $button = $(this), actives = '';
+                if ($button.hasClass('move-left')) {
+                    actives = $('.list-right-product-gift ul li.activePG');
+                    actives.removeClass('activePG');
+                   acc = actives.clone().appendTo('.list-left-product-gift ul').find('span').addClass('none_price').find('input,textarea,select,hidden,number').attr('disabled','disabled');
+                    acc.parent().parent().find('.pay_ment').removeClass('pay_money_total');
+                    actives.remove();
+                    
+                  
+                } else if ($button.hasClass('move-right')) {
+                    actives = $('.list-left-product-gift ul li.activePG');
+                    actives.removeClass('activePG');
+                    acc  =  actives.clone().appendTo('.list-right-product-gift ul').find('span').removeClass('none_price').find('input,textarea,select,hidden,number').removeAttr('disabled');
+                    acc.parent().find('.pay_ment').addClass('pay_money_total');
+                    actives.remove();
+                   
+                    
+                    
+                }
+            });
+
+            $('.dual-list .selectorPG').click(function () {
+                var $checkBox = $(this);
+                if (!$checkBox.hasClass('selected')) {
+                    $checkBox.addClass('selected').closest('.well-pg').find('ul li:not(.activePG)').addClass('activePG');
+                    $checkBox.children('i').removeClass('icon icon-circle-blank').addClass('icon icon-ok');
+                } else {
+                    $checkBox.removeClass('selected').closest('.well-pg').find('ul li.activePG').removeClass('activePG');
+                    $checkBox.children('i').removeClass('icon icon-ok').addClass('icon icon-circle-blank');
+                }
+            });
+            $('[name="SearchDualList"]').keyup(function (e) {
+                var code = e.keyCode || e.which;
+                if (code == '9') return;
+                if (code == '27') $(this).val(null);
+                var $rows = $(this).closest('.dual-list').find('.list-group li');
+                var val = $.trim($(this).val()).replace(/ +/g, ' ').toLowerCase();
+                $rows.show().filter(function () {
+                    var text = $(this).text().replace(/\s+/g, ' ').toLowerCase();
+                    return !~text.indexOf(val);
+                }).hide();
+            });
+
+            
+
+            $(document).on("submit", "form", function(e)
+            {
+                 $('#form').submit();
+            });
+            
+        });
+
+        
+        function roundNumber(num, dec) {
+            var result = Math.round(num*Math.pow(10,dec))/Math.pow(10,dec);
+            return Number(result).toLocaleString('en',{ minimumFractionDigits: 2 });
+        }
+    </script>
+
+     

@@ -1,0 +1,129 @@
+<div class="page-header">
+    <h1>Import Serial Number Code</h1>
+</div>
+<style>
+    tr td:first-child {
+        width: 40%;
+    }
+</style>
+<form role="form" id="form" action="<?php echo HOST.'warehouse/add-imei-in-act';?>" target="iframe" method="post" class="form-horizontal">
+<div class="row">
+    <div class="span6">
+
+	        <table class="table table-bordered">
+	            <tbody>
+                    <tr>
+                        <td>Purchase order ID</td>
+                        <td><strong><?php isset($this->PO) and $this->PO and printf($this->PO->id);?></strong></td>
+                    </tr>
+
+                    <tr>
+                        <td>Purchase order number</td>
+                        <td><strong><?php isset($this->PO) and $this->PO and printf($this->PO->sn_ref);?></strong></td>
+                    </tr>
+
+                    <tr>
+                        <td>Purchase order Type</td>
+                        <td><?php if (isset($this->PO['type'])) echo My_Po_Type::getLabel($this->PO['type']) ?></td>
+                    </tr>
+                    <tr>
+                        <td>Purchase order Maker</td>
+                        <td><?php printf($this->created_by_name);?></td>
+                    </tr>
+
+                    <tr>
+                        <td>Product Name</td>
+                        <td style="color:blue; font-size:16px; font-weight:bold;"><?php echo $brand[0]['brand_name']; ?> <?php echo $this->goods_cache[$this->PO->good_id];?></td>
+                    </tr>
+
+                    <tr>
+                        <td>Product Color</td>
+                        <td style="color:blue; font-size:16px; font-weight:bold;"><?php echo $this->good_colors_cache[$this->PO->good_color];?></td>
+                    </tr>
+
+                    <tr>
+                        <td>Purchase quantity</td>
+                        <td style="color:blue; font-size:16px; font-weight:bold;"><?php isset($this->PO) and $this->PO and printf($this->PO->num);?></td>
+                    </tr>
+
+                    <?php if ( in_array($this->PO->cat_id, array(PHONE_CAT_ID, DIGITAL_CAT_ID, ILIKE_CAT_ID))): ?>
+                        <tr>
+                            <td>Number already in storage</td>
+                            <td style="color:red; font-size:16px; font-weight:bold;"><?php if (isset($this->num_scanned) and $this->num_scanned) echo $this->num_scanned; else echo "0";?></td>
+                        </tr>
+                    <?php endif ?>
+
+
+					<?php if (isset($this->phone_id) && $this->phone_id == $this->PO->cat_id): ?>
+						<tr>
+	                        <td>Number already in storage22</td>
+	                        <td><?php if (isset($this->num_scanned) and $this->num_scanned) echo $this->num_scanned; else echo "0";?></td>
+	                    </tr>
+					<?php endif ?>
+
+
+                    <tr>
+                        <td>Whether to enter the warehouse</td>
+                        <td><?php if ($this->PO->mysql_user):?><i class="icon-ok"></i><?php else:?><i class="icon-remove"></i><?php endif;?></td>
+                    </tr>
+
+                    <tr>
+                        <td>Warehousing Man</td>
+                        <td><?php echo $this->warehousing_name;?></td>
+                    </tr>
+
+                    <tr>
+                        <td>Time input warehouse</td>
+                        <td><?php if ($this->PO->mysql_time):?><?php echo $this->PO->mysql_time;?><?php else:?>-<?php endif;?></td>
+                    </tr>
+
+                    <?php
+                        $QBrand = new Application_Model_Brand;
+                        $brand = $QBrand->getBrand($this->PO->good_id);
+                    ?>
+	            </tbody>
+	        </table>
+
+
+    </div>
+    <div class="span3">
+    	<label for="" class="">Serial Number Code: | <strong id="num_imei">0</strong> Code(s)</label>
+		<textarea name="imei" id="imei" cols="20" rows="15"></textarea>
+    </div>
+    <div class="span3">
+    	<iframe src="<?php echo HOST ?>warehouse/add-imei-in-act" name="iframe" frameborder="0" height="390px"></iframe>
+    </div>
+</div>
+<div class="row">
+    <div class="span4">
+        <input type="hidden" name="id" value="<?php isset($this->PO) and $this->PO and printf($this->PO->id);?>">
+        <input type="hidden" id="back_url" name="back_url" value="/warehouse/in">
+        <button type="submit" class="btn btn-primary">Submit</button>
+        <button type="button" class="btn btn-danger go-back">Go back</button>
+    </div>
+</div>
+</form>
+<script>
+    $(document).ready(function () {
+        $('.go-back').click(function(e){
+            window.location.href = $('#back_url').val();
+            return false;
+        });
+
+        initShowIMEINum();
+    });
+
+    function initShowIMEINum(){
+        $('#imei').keyup(function (e){
+
+            var inputnum = 0;
+
+            if ($(this).val() != '')
+                inputnum = ($(this).val().split("\n").length).toString();
+
+
+            $('#num_imei').html(inputnum);
+
+        });
+    }
+</script>

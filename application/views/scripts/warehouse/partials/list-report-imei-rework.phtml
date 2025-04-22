@@ -1,0 +1,61 @@
+<table class="table table-bordered">
+    <thead>
+        <tr>
+            <?php echo $this->sorting(array(
+                    'id' => 'Report ID',
+                    'co_ref' => 'CO Swap',
+					'po_ref' => 'PO',
+                    'co_end_ref' => 'CO END',
+                    'good_model' => 'Product Model',
+                    'good_name' => 'Product Name',
+                    'color_name' => 'Product Color',
+                    'good_type' => 'Product Type',
+                    'created_by' => 'Created By',
+					'created_date' => 'Created Date'
+                ),
+                $this->url, $this->sort, $this->desc); ?>
+        </tr>
+    </thead>
+    <tbody>
+        <?php if (isset($this->data) and $this->data) :
+            foreach ($this->data as $key => $value):?>
+
+            <tr>
+                <td><?=$value['id']?></td>
+                <td><?=$value['co_ref']?></td>
+                <td><?=$value['po_ref']?></td>
+                <td><?=$value['co_end_ref']?></td>
+                <td><?=$value['good_model']?></td>
+                <td><?=$value['good_name']?></td>
+                <td><?=$value['color_name']?></td>
+                <td><?php 
+
+                switch ($value['good_type']) {
+                    case '1':
+                        echo 'Normal';
+                        break;
+                    case '2':
+                        echo 'Demo';
+                        break;
+                    case '5':
+                        echo 'APK';
+                        break;
+                }
+
+                ?></td>
+                <td><?=$value['fullname']?></td>
+                <td><?=$value['created_date']?></td>
+            </tr>
+
+            <?php endforeach;?>
+        <?php endif; ?>
+    </tbody>
+</table>
+                
+<div class="paging">
+    <?php echo $this->paging($this->total, $this->limit, $this->offset, $this->url);?>
+</div>
+
+<script>
+
+</script>

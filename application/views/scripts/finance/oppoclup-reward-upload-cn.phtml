@@ -1,0 +1,142 @@
+<style>
+    iframe {
+        width: 100%;
+        height: 500px;
+    }
+
+    .bar {
+        line-height: 18px;
+    }
+    .modal-scrollable
+    {
+        position: absolute;
+        z-index: 9999;
+    }
+</style>
+<div class="page-header">
+    <h1>Upload OPPO Club Reward Confrom - Credit Note</h1>
+</div>
+
+<?php
+if (isset($this->messages_success) and $this->messages_success)
+    foreach ($this->messages_success as $message):
+        echo '<div class="alert alert-success">'.$message."</div>";
+    endforeach;
+
+if (isset($this->messages) and $this->messages)
+    foreach ($this->messages as $message):
+        echo '<div class="alert alert-error">'.$message."</div>";
+    endforeach;
+
+?>
+<div class="well">
+    <div class="row-fluid">
+
+        <div class="span4">
+            List of uploaded files <a class="btn btn-success btn-mini" href="<?php echo HOST ?>sales/mou-log">View Logs</a>
+
+
+        </div>
+
+    </div>
+</div>
+
+<form action="<?php echo HOST ?>finance/save-oppo-clup-reward-confirm" id="form" target="iframe" class="form-inline" method="post" enctype="multipart/form-data">
+
+    <div class="row">
+        <div class="span6">
+            <div class="form-group">
+                <label for="joint_circular_id">Quater Year</label>
+                <?php 
+                    $year_now = date('Y'); 
+                    $year_prev = date('Y')-6; 
+                ?>
+                <select id="quater_year" name="quater_year">
+                    <option value="">-- Select Year --</option>
+                    <?php for($y=$year_now;$y>=$year_prev;$y--){ 
+                        $selected="";
+                        if (isset($this->params['quater_year']) and $y==$this->params['quater_year'])
+                            {$selected="selected";}
+                    ?>
+                    <option value="<?=$y?>" <?=$selected?>><?=$y?></option>
+                    <?php } ?>
+                </select>
+            </div>
+            </p>
+            <div class="form-group">
+                <label for="joint_circular_id">Quater No. </label>
+                <select id="quater_no" name="quater_no">
+                    <option value="">-- Select Quater --</option>
+                    <?php for($i=1;$i<=4;$i++){ 
+                        $quater_no = "Quater_0".$i;
+                        $quater_no_name = "Quater 0".$i;
+
+                        $selected="";
+                        if (isset($this->params['quater_no']) and $quater_no==$this->params['quater_no'])
+                            {$selected="selected";}
+                    ?>
+                        <option value="<?=$quater_no?>"<?=$selected?> ><?=$quater_no_name?></option>
+                    <?php } ?>
+                </select>
+            </div>
+        </div>
+
+        <div class="span6">
+            <div class="form-group">
+                <label for="" class="span4">File <span style="color: red">*</span>
+                    <input type="file" class="span4" name="file" required />
+                </label>
+            </div>
+        </div>
+    </div>
+    </p>
+    <div class="clearfix"></div>
+
+    <div class="form-group">
+        <button type="submit" class="form-control btn btn-primary">Save</button>
+        <a href="/finance/oppoclup-reward-list-cn" class="btn btn-danger">Go back</a>
+    </div>
+</form>
+
+<div class="row">
+    <div class="span12">
+        <div class="progress progress-striped active">
+            <div class="bar" style="width: 0%;"></div>
+        </div>
+    </div>
+</div>
+
+<iframe src="" frameborder="0" name="iframe" id="iframe"></iframe>
+<script src="<?php echo HOST ?>js/jquery-ui.js"></script>
+<script src="<?php echo HOST ?>js/bootstrap-modal.js"></script>
+<script src="<?php echo HOST ?>js/bootstrap-modalmanager.js"></script>
+<script type="text/javascript" src="<?php echo HOST ?>js/sales.po.js"></script>
+
+<script>
+    function confirmExit() {
+        return "Orders are being processed.";
+    }
+
+    function set_progress(percent) {
+        $('.bar').css('width', percent+'%');
+        $('.bar').html(percent+'%');
+    }
+
+
+    $(document).ready(function () {
+
+        $('form').bind('submit',function(e){
+            $('.bar').css('width', '0%');
+            $('.bar').html('');
+            $('#iframe').get(0).contentWindow.clear_content();
+            $('form button, form input, form select').prop('readonly', true);
+            $('.loading').remove();
+            $(this).after('<span class="pre_loading">Processing <span><span class="loading"></span>');
+            window.onbeforeunload = confirmExit;
+        });
+       // $('#add_po_btn').click(show_add_joint_modal);
+    });
+
+
+   
+</script>

@@ -1,0 +1,401 @@
+<div class="page-header">
+    <?php if (isset($this->sales) and $this->sales):?>
+        <h1>Edit Returned Auto Check</h1>
+    <?php else:?>
+        <h1>Create Returned Auto Check</h1>
+    <?php endif;?>
+</div>
+
+<?php
+
+if (isset($this->messages) and $this->messages)
+    foreach ($this->messages as $message):
+        echo '<div class="alert alert-error">'.$message.'</div>';
+    endforeach;
+?>
+
+<div class="row">
+	<div class="span12">
+        <iframe name="ifrmSave" id="ifrmSave" width="100%" style="display:none;"></iframe>
+        <form role="form" id="form" action="<?php echo HOST.'sales/save-return-auto-check';?>" method="post" target="ifrmSave" class="form-inline">
+        	<?php 
+            $show_create_cn_menu = $this->show_create_cn_menu;
+            $create_cn = "checked"; 
+            //$active_cn = "checked";   
+            $hide = '';
+            if (isset($this->sales) and $this->sales):
+            
+            $return_sn = $this->sales[0]['sale']->sn_ref;
+            if($return_sn==''){
+                $return_sn = $this->sales[0]['sale']->sn;  
+            }
+
+            $create_cn = $this->sales[0]['sale']->create_cn;
+            if($create_cn==1){
+                $create_cn = "checked";
+            }else{
+                $hide = 'hide';
+                $create_cn ="";
+            }
+
+            //$active_cn = $this->sales[0]['sale']->active_cn;
+            if($active_cn==1){
+                $active_cn = "checked";
+            }else{
+                $active_cn ="";
+            }
+         
+            ?>
+        		<div class="row">
+        			<div class="span6">
+        				<label class="span2">Return order number</label>
+		                <span class="span3"><strong><?=$return_sn?></strong></span>
+        			</div>
+        		</div>
+            <?php endif;?>
+
+            <div class="row">
+
+                <div class="span3">
+                </br>
+                    <label for="" class="span2">IMEI Code:
+                    <?php if ($this->sales){
+                        $num_imei=0; 
+                       foreach ($this->imei_return as $imei){
+                             $imei_return_list .= $imei['imei_sn']."\n";
+                             $num_imei +=1;
+                       }
+
+                    ?>
+                        <textarea name="imei" id="imei" cols="20" rows="10"><?=$imei_return_list?></textarea>
+                    <?php }else{ ?>
+                        <textarea name="imei" id="imei" cols="20" rows="10"></textarea>
+                    <?php } ?>
+                    </label>
+                    <div class="span12">
+                        <button type="button" class="btn btn-check-imei btn-success">Check Imei</button>
+                    </div>
+                    <div class="row">
+
+                <div class="span3">
+
+                    <label class="span4"></p>
+                        <span><strong id="num_imei">
+                            <?php
+                                if ($this->sales){
+                                   echo $num_imei;     
+                                }else{
+                                   echo "0";     
+                                }
+                            ?>
+                        </strong> IMEI</span>
+                    </label>
+                </div>
+
+            </div>
+        </p>
+            <div class="row">
+                <div class="span4">
+                    <div class="control-group">
+                        <input type="hidden" name="data_phone_return" id="data_phone_return" />
+                        <input type="hidden" id="back_url" name="back_url" value="/sales/return-list">
+                        <input type="hidden" name="sn" value="<?php isset($this->sales) and $this->sales and printf($this->sales[0]['sale']->sn);?>">
+                        <div class="span4">
+                            <button type="submit" class="btn btn-primary">Submit</button>
+                            <button type="button" class="btn btn-warning btn-reset">Reset</button>
+                            
+                            <button type="button" class="btn btn-danger go-back">Go back</button>
+                        </div>
+                    </div>
+                    <div class="clearfix"></div>
+                </div>
+            </div>
+                </div>
+
+                <div class="span9">
+                <div class="SearchBoxImei">
+                    <p/>คืนสินค้า (พนักงานยืม) <span style="color: red">*</span><p/>
+                        <table class="table table-bordered">
+                            <thead>
+                                <tr>
+                                    <?php echo $this->sorting(array(
+                                            '#',
+                                            'title'  => 'Store Code',
+                                            'title'  => 'Distributor Name',
+                                            'total_imei'  => 'Total Imei',
+                                            'total_amount'  => 'Total Amount',
+                                            'return_to'  => 'Return To',
+                                        ),
+                                        $this->url, $this->sort, $this->desc); ?>
+                                </tr>
+                            </thead>
+                        </table>
+
+                        
+                    
+                </div>    
+                <div class="SearchBoxImei">
+                    <p/>คืนสินค้า (เครื่องขาย) <span style="color: red">*</span><p/>
+                        
+                        <table id="return_by_distributorTable" class="table table-bordered">
+                            <thead>
+                                <tr>
+                                    <?php echo $this->sorting(array(
+                                            '#',
+                                            'store_code'  => 'Store Code',
+                                            'title'  => 'Distributor Name',
+                                            'total_imei'  => 'Total Imei',
+                                            'total_amount'  => 'Total Amount',
+                                            'create_cn'  => 'สร้าง CN',
+                                            'active_cn'  => 'เปิดใช้งาน',
+                                            'shape'  => 'สภาพเครื่อง',
+                                            'return_to'  => 'Return To',
+                                            'remark'  => 'Remark',
+                                            'imei_list'  => 'Imei List',
+                                        ),
+                                        $this->url, $this->sort, $this->desc); ?>
+                                </tr>
+                            </thead>
+                        </table>
+                        
+                    
+                </div>
+                
+                </div>
+                
+
+                <div class="span6">
+                    <label class="span4">
+                        &nbsp;
+                    </label>
+                </div>
+            </div>
+
+        </br>
+            
+        </form>
+    </div>
+</div>
+
+
+<script src="/js/jquery.blockUI.js"></script>
+
+<style>
+    .blockOverlay{
+        z-index: 10000 !important;
+    }
+    .blockPage{
+        z-index: 10001 !important;
+    }
+    #SearchBox{
+		width: 360px!important;
+	}
+	#distributor_id{
+		z-index: 0!important;
+	}
+	.dropdown{
+		z-index: 2;
+	}.span122 {
+        margin-left: : 25px;
+    }
+    .SearchBoxImei{
+        width: 1000px!important;
+        margin-left: : 25px!important;
+    }
+
+</style>
+<script>
+    $(document).ready(function () {
+        //initSearchOptionDistributor('distributor_id', 'SearchBox');
+        initGoBack();
+        initReset();
+        initShowIMEINum();
+        initCheckReturnImei();
+
+        $(document).ajaxStart(function(){
+            $.blockUI({ css: { 
+                border: 'none', 
+                padding: '15px', 
+                backgroundColor: '#000', 
+                '-webkit-border-radius': '10px', 
+                '-moz-border-radius': '10px', 
+                opacity: .5, 
+                color: '#fff' 
+            } });
+        });
+
+        $(document).ajaxStop(function(){
+            $.unblockUI();
+        });
+
+        $(document).on("submit", "form", function(e){
+
+            $.blockUI({ css: { 
+                border: 'none', 
+                padding: '15px', 
+                backgroundColor: '#000', 
+                '-webkit-border-radius': '10px', 
+                '-moz-border-radius': '10px', 
+                opacity: .5, 
+                color: '#fff' 
+            } });
+
+            // $.unblockUI();
+
+        });
+
+        $('#ifrmSave').load(function() {
+            $.unblockUI();
+        });
+
+        $('.create_cn').mousedown(function()
+        {
+            alert(1);
+            if (!$(this).is(':checked')) {
+                this.checked = confirm("Are you sure?");
+                $(this).trigger("change");
+            }
+        });
+
+        $('#create_cn').change(function(e){
+            console.log(1);
+            if(this.checked) {
+                $('.div-return-type').removeClass('hide');
+            }else{
+                $('.div-return-type').addClass('hide');
+            }
+        });
+    });
+
+    <?php if(isset($this->sales[0]['sale']->return_type) && $this->sales[0]['sale']->return_type){?>
+            $('#return_type').val('<?=$this->sales[0]['sale']->return_type;?>');
+    <?php } ?>
+
+    function initShowIMEINum(){
+        $('#imei').keyup(function (e){
+
+            var inputnum = 0;
+
+            if ($(this).val() != '')
+                inputnum = ($(this).val().split("\n").length).toString();
+
+
+            $('#num_imei').html(inputnum);
+
+        });
+    }
+
+    function initGoBack(){
+        $('.go-back').click(function(e){
+            window.location.href = $('#back_url').val();
+            return false;
+        });
+    }
+
+    //Only number and one dot
+    function onlyDecimal(element, decimals)
+    {
+        $(element).keypress(function(event)
+        {
+            num = $(this).val() ;
+            num = isNaN(num) || num === '' || num === null ? 0.00 : num ;
+            if ((event.which != 46 || $(this).val().indexOf('.') != -1) && (event.which < 48 || event.which > 57))
+            {
+                event.preventDefault();
+
+            }
+            if($(this).val() == parseFloat(num).toFixed(decimals))
+            {
+                event.preventDefault();
+            }
+        });
+    }
+
+     function initCheckReturnImei()
+     {
+        $('.btn-check-imei').click(function(e){
+
+            var imei = $('#imei').val();
+            if (imei == ''){
+                alert('Please Input Imei SN !');
+                return;
+            }
+
+            var imei_v = $.trim(imei).split("\n");
+            var imei_list = '';
+            
+           /* $.each(imei_v , function(i, val) { 
+                imei_list += $.trim(imei_v[i])+',';
+            });*/
+
+             $.each(imei_v , function(i, val) { 
+                imei_list += "'"+$.trim(imei_v[i])+"',";
+            });
+
+            var warehouse_id = $('#warehouse_id').val();
+
+           // distributor_id=1266;warehouse_id=1;
+           
+            
+                $.post("/get/check-return-imei-auto-check",
+                {warehouse_id: warehouse_id, imei_list: imei_list.slice(0, -1)}
+                ,function(data,status){
+                    console.log(data);
+                    
+                    $('#data_phone_return').val(data);
+                    var data = $.parseJSON(data);
+
+                   // $('.data_phone_return').val('');
+                    if (data.check==1){
+                        var obj = data.result_return_by_distributor;
+                        var obj_imei = data.result_return_by_imei;
+                        var total_row = obj.length-1;var j=1;
+                        //$('#myTable').empty();
+                        $('#return_by_distributorTable tbody').remove();
+                        for (var i = 0; i < obj.length; i++)
+                        {
+                            var imei_list_show='';
+                            for (var j = 0; j < obj_imei.length; j++)
+                            {
+                                if(obj_imei[j]['distributor_id']==obj[i]['distributor_id']){
+                                    imei_list_show += $.trim(obj_imei[j]['imei_sn'])+",";
+                                }
+                            }
+                            //imei_list "+imei_list_show+"
+                            if(obj[i]['distributor_id'] != null){
+                                $('#return_by_distributorTable').append("<tr><td>"+j+"<input type='hidden' value='"+obj[i]['distributor_id']+"' name='d_id[]'/></td><td>"+obj[i]['store_code']+"</td><td>"+obj[i]['title']+"</td><td>"+obj[i]['count_imei']+"</td><td>"+obj[i]['sum_price']+"</td><td><input class='create_cn' checked='true' value='"+obj[i]['distributor_id']+"' name='create_cn[]' type='checkbox'</input></td><td><input class='active_cn' name='active_cn[]' value='"+obj[i]['distributor_id']+"' checked='true'  type='checkbox'</input></td><td><select style='width: 110px;' class='imei_shape' name='imei_shape[]'><option value='"+obj[i]['distributor_id']+"-1'>Goodset</option><option value='"+obj[i]['distributor_id']+"-2'>Broken-seal</option><option value='"+obj[i]['distributor_id']+"-3'>Box-damage</option><option value='"+obj[i]['distributor_id']+"-4'>Unit-damage</option></select></td><td><select id='warehouse_id' class='span4' name='warehouse_id[]' required='required'><option value=''>Please select</option><?php foreach ($this->warehouses as $warehouse):?> <option value='"+obj[i]['distributor_id']+"-<?php echo $warehouse->id;?>' <?php if($warehouse->id==26) :?> selected<?php endif;?>><?php echo $warehouse->name;?></option> <?php endforeach;?></select></td><td><textarea name='remark_text[]' class='span2 remark_text'></textarea></td><td><textarea name='imei_list_show[]' class='span2 imei_list_show'>"+imei_list_show.substring(0, imei_list_show.length - 1)+"</textarea></td></tr>");
+
+                                j +=1;
+                            }
+                            
+                        }
+ 
+                    }else if(data.check==2){
+                        alert('Imei Exist in Return Data!');
+                        $('select, input:text, input.num, input.price, input.total').val('');
+                    }else{
+                        alert('No Data !');
+                        $('select, input:text, input.num, input.price, input.total').val('');
+                    }
+                });
+            
+            return false;
+        });
+    }
+
+    function initReset(){
+        $('button.btn-reset').click(function(e){
+            e.preventDefault();
+            $('select, input:text, input.num, input.price').val('');
+            $('textarea').val('');
+
+            $('#num_imei').html(0);
+        })
+    }
+</script>
+<style>
+	label input,
+	label select {
+		margin-right: 25px;
+	}
+</style>

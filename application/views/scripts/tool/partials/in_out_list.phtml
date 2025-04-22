@@ -1,0 +1,181 @@
+<?php
+function product_price($priceFloat) {
+$symbol_thousand = '.';
+$decimal_place = 0;
+$price = number_format($priceFloat, $decimal_place, '', $symbol_thousand);
+return $price;
+}
+function conv_date($date){
+   
+        
+        
+        return    date('d/m/Y',strtotime($date));
+}
+?>
+<style type="text/css">
+ .show{
+        vertical-align: top;
+        text-align: center;
+    }
+</style>
+<?PHP if (isset($this->action) && $this->action = 1) : ?>
+    
+
+<table class="table table-bordered">
+    <thead>
+        <tr>
+            <th rowspan="2" style="text-align: center;vertical-align: inherit;">Warehouse</th>
+            <th rowspan="2" colspan="5" style="text-align: center;vertical-align: inherit;">
+                
+                <?php 
+                       foreach ( $this->warehouse_id as $key => $value) {
+                          echo '<p>' . $this->warehouses[ $value ] . '</p>';
+                        } 
+                 ?>
+            </th>       
+            <th style="text-align: center;">FROM</th> 
+            <th  style="text-align: center;">TO</th>
+          
+        </tr>
+        <tr>
+            <th style="text-align: center;vertical-align: inherit;font-size: 16px;"><?=$this->params['date_from']?></th>
+            <th  style="text-align: center;vertical-align: inherit;font-size: 16px;"><?=$this->params['date_to']?></th>
+        </tr>
+        <tr>
+            <th colspan="3" style="text-align: center;vertical-align: inherit;">Mobile Phone</th>
+            <th colspan="3" style="text-align: center;vertical-align: inherit;">Accessories</th>
+            <th colspan="2" style="text-align: center;vertical-align: inherit;">Gift box</th>
+        </tr>
+        <tr>
+            <th rowspan="2" width="16%" style="text-align: center;vertical-align: inherit;">Date</th>
+            <th width="16%" style="text-align: center;">IN</th>
+            <th width="16%" style="text-align: center;">OUT</th>
+            <th width="16%" rowspan="2" style="text-align: center;vertical-align: inherit;">Date</th>
+            <th width="16%" style="text-align: center;">IN </th>
+            <th width="16%" style="text-align: center;">OUT</th>
+            
+            <th width="16%" style="text-align: center;">IN </th>
+            <th width="16%" style="text-align: center;">OUT</th>
+          
+        </tr>
+        <tr> 
+            <th style="text-align: center;">QTY</th>
+            <th style="text-align: center;">QTY</th>
+            <th style="text-align: center;">QTY</th>
+            <th style="text-align: center;">QTY</th>
+            <th style="text-align: center;">QTY</th>
+            <th style="text-align: center;">QTY</th>
+          
+        </tr>
+    </thead>
+    <tbody>
+    <?php
+    // Set timezone
+    date_default_timezone_set('UTC');
+       if (isset($this->params['date_from']) and $this->params['date_from']){
+              list( $day, $month, $year ) = explode('/', $this->params['date_from']);
+
+              if (isset($day) and isset($month) and isset($year) )
+                 $date = $year.'-'.$month.'-'.$day;
+
+            }
+             
+        if (isset($this->params['date_to']) and $this->params['date_to']){
+              list( $day, $month, $year ) = explode('/', $this->params['date_to']);
+
+              if (isset($day) and isset($month) and isset($year) )
+                 $end_date = $year.'-'.$month.'-'.$day;
+
+            }
+          
+
+    $in_Phone = $out_Phone=$in_Accessories=$out_Accessories=$co_in_Phone= $co_out_Phone =$co_in_Accessories = $co_out_Accessories =0;
+    while (strtotime($date) <= strtotime($end_date)) {
+           $in_Phone            = ($this->listPhone[$date])?$this->listPhone[$date]:'0';
+           $out_Phone           = ($this->listOutPhone[$date])?$this->listOutPhone[$date]:'0';
+           $in_Accessories      = ($this->listAccessories[$date])?$this->listAccessories[$date]:'0';
+           $out_Accessories     = ($this->listOutAccessories[$date])?$this->listOutAccessories[$date]:'0';
+           $co_in_Phone         = ($this->listCoInPhone[$date])?$this->listCoInPhone[$date]:'0';
+           $co_out_Phone        = ($this->listCoOutPhone[$date])?$this->listCoOutPhone[$date]:'0';
+           $co_in_Accessories   = ($this->listCoInAccessories[$date])?$this->listCoInAccessories[$date]:'0';
+           $co_out_Accessories  = ($this->listCoOutAccessories[$date])?$this->listCoOutAccessories[$date]:'0';
+
+           $listInAccessories_gift  = ($this->listInAccessories_gift[$date])?$this->listInAccessories_gift[$date]:'0';
+           $listOutAccessories_gift  = ($this->listOutAccessories_gift[$date])?$this->listOutAccessories_gift[$date]:'0';
+           $listCoInAccessories_gift  = ($this->listCoInAccessories_gift[$date])?$this->listCoInAccessories_gift[$date]:'0';
+           $listCoOutAccessories_gift  = ($this->listCoOutAccessories_gift[$date])?$this->listCoOutAccessories_gift[$date]:'0';
+
+
+           $t_in_phone = $in_Phone+$co_in_Phone;
+           $t_out_phone = $out_Phone+$co_out_Phone;
+
+           $in_gift =$listInAccessories_gift +$listCoInAccessories_gift;
+           $out_gift =$listOutAccessories_gift +$listCoOutAccessories_gift;
+
+           $t_in_Accessories = $in_Accessories+$co_in_Accessories;
+           $t_out_Accessories = $out_Accessories+$co_out_Accessories;
+        ?>
+        <tr>
+            <td style="text-align:center;"><?=conv_date($date)?></td>
+            <td style="text-align:right;" ><?=number_format($t_in_phone)?></td>
+            <td style="text-align:right;" ><?=number_format($t_out_phone)?></td>
+            <td style="text-align:center;background-color: #e4e4e4;"><?=conv_date($date)?></td>
+            <td style="text-align:right;background-color: #e4e4e4;"><?=number_format($t_in_Accessories)?></td>
+            <td style="text-align:right;background-color: #e4e4e4;"><?=number_format($t_out_Accessories)?></td>
+  
+            <td style="text-align:right;"><?=number_format($in_gift)?></td>
+            <td style="text-align:right;"><?=number_format($out_gift)?></td>
+        </tr>     
+                
+ <?php  $date = date ("Y-m-d", strtotime("+1 day", strtotime($date))); 
+
+    $phone_in         += $t_in_phone;
+    $phone_out        += $t_out_phone;
+    $Accessories_in   += $t_in_Accessories;
+    $Accessories_out  += $t_out_Accessories;
+    $GiftBoxIn        += $in_gift;
+    $GiftBoxOut       += $out_gift;
+}
+
+?>
+       <tfoot>
+           <tr>
+               <td style="text-align:center;background-color: #bdbdbd;">Total</td>
+               <td style="text-align:right;background-color: #bdbdbd;"><?=number_format($phone_in)?></td>
+               <td style="text-align:right;background-color: #bdbdbd;"><?=number_format($phone_out)?></td>
+               <td style="text-align:center;background-color: #bdbdbd;">Total</td>
+               <td style="text-align:right;background-color: #bdbdbd;"><?=number_format($Accessories_in)?></td>
+               <td style="text-align:right;background-color: #bdbdbd;"><?=number_format($Accessories_out)?></td>
+
+               <td style="text-align:right;background-color: #bdbdbd;"><?=number_format($GiftBoxIn)?></td>
+               <td style="text-align:right;background-color: #bdbdbd;"><?=number_format($GiftBoxOut)?></td>
+             
+             
+           </tr>
+       </tfoot>
+       
+    </tbody>
+</table>
+<div class="paging">
+    <?php echo $this->paging($this->total, $this->limit, $this->offset, $this->url);?>
+</div>
+<?PHP endif; ?>
+<script type="text/javascript" src="/js/jquery-ui-1.8.12.custom.min.js"></script>
+<link rel="stylesheet" type="text/css" href="/css/jquery-ui-1.8.12.custom.css"/>
+<?php echo $this->load();?>
+<?php echo $this->confirm();?>
+<script>
+    $('.collapse_a').each(function(){
+    	var _this = $(this);
+    	var _this_id = _this.attr('id');
+    	var $coll = $('.'+_this_id);
+
+    	_this.click(function(){
+
+    		$coll.toggle();
+    		if ($coll.is(':visible'))
+	    		_this.html('-');
+	    	else _this.html('+');
+    	});
+    });
+</script>

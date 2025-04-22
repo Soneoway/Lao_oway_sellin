@@ -1,0 +1,78 @@
+<table class="table table-bordered">
+	<thead>
+		<tr>
+			<th>Accounting organization.</th>
+			<th>Corporation Type.</th>
+			<th>Taxpayer Identification No.</th>
+			<th>Mnemonic code.</th>
+			<th>Code.</th>
+			<th>Remarks.</th>
+			<th>Creation Time.</th>
+			<th>Modified Time.</th>
+			<th>Operation</th>
+		</tr>
+	</thead>
+	<tbody>
+
+		<?php if(isset($this->accountOrg) && $this->accountOrg) : ?>
+			<?php foreach ($this->accountOrg as $value) : ?>
+				<?php
+				if($value['corporation_type'] == 1) {
+					$status = "Corporation";
+				}else{
+					$status = "Profit Center";
+				}
+				?>
+
+				<tr>
+					<td><?php echo $value['name']; ?></td>
+					<td><?php echo $status; ?></td>
+					<td><?php echo $value['identification_no']; ?></td>
+					<td><?php echo $value['mnemonic_code']; ?></td>
+					<td><?php echo $value['code']; ?></td>
+					<td><?php echo $value['remark']; ?></td>
+					<td><?php echo $value['created_at']; ?></td>
+					<td><?php echo $value['updated_at']; ?></td>
+					<td>
+						<a href="<?php echo HOST ?>finance/add-accounting-organization?id=<?php echo $value['id']; ?>&proceed=1" > Edit </a>
+						| <a href="<?php echo HOST ?>finance/add-accounting-organization?id=<?php echo $value['id']; ?>&proceed=2" > Detail </a>
+						| <a style="color: red;" data-id="<?php echo $value['id']; ?>" class="Confirm_data"> Delete </a>
+					</td>
+				</tr>
+
+			<?php endforeach; ?>
+		<?php endif; ?>
+		
+	</tbody>
+</table>
+<div class="paging">
+	<?php echo $this->paging($this->total, $this->limit, $this->offset, $this->url);?>
+</div>
+
+<script type="text/javascript">
+	$(document).ready(function(){
+		$('.Confirm_data').on('click', function (event) {
+			event.preventDefault();
+			var id = $(this).data('id');
+
+			Swal.fire({
+				title: 'Confirm to delete?',
+				text: 'ຢືນຢັນການລຶບ ຂໍ້ມູນ ຫຼື ບໍ່? ຫຼັງຈາກໄປເເລ້ວຈະບໍ່ສາມາດກູ້ຄືນໄດ້',
+				icon: 'question',
+				showCancelButton: true,
+				confirmButtonColor: '#3085d6',
+				cancelButtonColor: '#d33',
+				confirmButtonText: '<b style="font-family:Phetsarath OT">ຢືນຢັນ</ b>',
+				cancelButtonText: '<b style="font-family:Phetsarath OT">ຍົກເລີກ</ b>',
+			}).then((result) => {
+
+				if (result.isConfirmed) {
+					window.location.href="/finance/delete-accounting-organization?id="+id;
+				}
+
+			});
+		});
+
+	});
+
+</script>

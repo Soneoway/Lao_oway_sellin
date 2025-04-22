@@ -1,0 +1,59 @@
+<div class="page-header">
+    <h1>List Range Invoice</h1>
+</div>
+<?php
+    if (isset($this->messages) and $this->messages)
+        foreach ($this->messages as $message):
+            echo '<div class="alert alert-success">'.$message.'</div>';
+        endforeach;
+?>
+<div class="table-responsive">
+    <table class="table table-bordered">
+        <thead>
+        <tr>
+            <th>#</th>
+            <th>Object Type</th>
+            <th>Object</th>
+            <th>Total valie</th>
+            <th>From</th>
+            <th>To</th>
+            <th>Action</th>
+        </tr>
+        </thead>
+        <tbody>
+            <?php
+            if (isset($this->ranges) and $this->ranges)
+                foreach ($this->ranges as $k=>$ranges): ?>
+            <tr>
+                <td>
+                    <?php
+                    $inc = $this->offset + $k + 1;
+                    echo $inc;
+                    $type_range = unserialize(INTERNAL_TYPE);
+                    if($ranges['object_type'] and $ranges['object_type'] == INTERNAL_NUMBER_FOR_SERVICE)
+                        $object_name = $this->service[$ranges['object_id']]['name'];
+                    if($ranges['object_type'] and $ranges['object_type'] == INTERNAL_NUMBER_FOR_WAREHOUSE)
+                        $object_name = $this->warehouse[$ranges['object_id']];
+
+                    ?>
+                </td>
+                <td><?php echo $type_range[$ranges['object_type']] ? $type_range[$ranges['object_type']] : '';?></td>
+                <td><?php echo $object_name ? $object_name : '';?></td>
+                <td><?php echo $ranges['total'] ? $ranges['total'] : ''; ?></td>
+                <td><?php echo $ranges['first_input'] ? $ranges['first_input'] : '';?></td>
+                <td><?php echo $ranges['last_input'] ? $ranges['last_input'] : '';?></td>
+                <td class="">
+                    <a title="Delete" class="confirmLink" href="/user/del?id=<?php echo $user['id'];?>"> <i class="icon-trash"></i></a>
+                </td>
+            </tr>
+            <?php endforeach;?>
+
+        </tbody>
+    </table>
+</div>
+<div class="paging">
+    <?php echo $this->paging($this->total, $this->limit, $this->offset, $this->url);?>
+</div>
+<script type="text/javascript" src="/js/jquery-ui-1.8.12.custom.min.js"></script>
+<link rel="stylesheet" type="text/css" href="/css/jquery-ui-1.8.12.custom.css"/>
+<?php echo $this->confirm();?>

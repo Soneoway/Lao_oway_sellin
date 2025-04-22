@@ -1,0 +1,172 @@
+<style>
+
+a{
+    margin-right: 2.5px;
+    margin-left: 2.5px;
+}
+.status_enable{
+    width: 70px;
+    background: #99ff66;
+    text-align: center;
+}
+.status_disable{
+    width: 70px;
+    background: #ff8c66;
+    text-align: center;
+}
+.hilight
+{
+    background: #E8ADAA;
+    /*color:white;*/
+}
+.hilight:hover
+{
+    /*color:black;*/
+}
+</style>
+<?php
+$total_imei=0;$total_staff_confirm_imei=0;$total_finance_confirm_imei=0;
+if (isset($this->get_resule_all) and $this->get_resule_all){
+    foreach ($this->get_resule_all as $k=>$m){
+        $total_imei +=$m['total_imei'];
+        $total_staff_confirm_imei +=$m['total_staff_confirm_imei'];
+        $total_finance_confirm_imei +=$m['total_finance_confirm_imei'];
+    }
+    
+}
+?>
+<div class="row" >
+    <div class="span3">
+        <h3 style="color: red;">จำนวน Imei ที่ยังไม่ทำ</h3>
+    </div>
+    <div class="span5" style="margin-left: -20px;" >
+        <table id="return_by_imeiTable" class="table table-bordered">
+                 <tbody>
+                    <td style="text-align: center; color: #0000FF">Total Imei</td><td style="text-align: center;"><?php echo $total_imei;?></td>
+                    <td style="text-align: center; color: #0000FF">Staff Confirm</td><td style="text-align: center;"><?php echo $total_staff_confirm_imei;?></td>
+                    <td style="text-align: center; color: #0000FF">Finance Confirm</td><td style="text-align: center;"><?php echo $total_finance_confirm_imei;?></td>
+            </tbody>
+        </table>
+    </div>
+</div>
+
+
+
+<table class="table table-bordered">
+    <thead>
+        <tr>
+            <?php echo $this->sorting(array(
+                '#',
+                'box_number'  => 'Box Number',
+                'total_imei'  => 'Total Imei',
+                'total_staff_confirm_imei'  => 'Staff Confirm Imei',
+                'total_finance_confirm_imei'  => 'Finance Confirm Imei',
+                'box_post_number'  => 'รหัสพัสดุ',
+                'sender_name'  => 'ผู้ส่งพัสดุ/ร้านค้า',
+                'box_status' => 'Status',
+                'create_date'  => 'วันที่รับเข้าระบบ',
+                'create_by' => 'ผู้รับ',  
+                'remark'  => 'หมายเหตุ',                 
+                'Action'
+            ),
+            $this->url, $this->sort, $this->desc); ?>
+        </tr>
+    </thead>
+    <tbody>
+        <?php
+        $statuses = unserialize(DISCOUNT_STATUS);
+        if (isset($this->get_resule) and $this->get_resule) :
+            $row=1;
+            foreach ($this->get_resule as $k=>$m):
+
+                $box_status = false;
+                $textBox_status = 'ดำเนินการ';
+
+                if(isset($m['box_status']) && $m['box_status']&& $m['box_status']==1){
+                    $box_status=false;
+                    $textBox_status = 'ดำเนินการ';
+                }else if(isset($m['box_status']) && $m['box_status']&& $m['box_status']==2){
+                    $box_status=true;
+                    $textBox_status = 'เรียบร้อย';
+                }else{
+                    $box_status=false;
+                    $textBox_status = 'ไม่พบสถานะ';
+                }
+
+                    
+                ?>
+
+                <tr>
+                    <td><?php echo $row; ?></td>
+                    <td><?php echo $m['box_number'] ?></td>
+                    <td style="text-align: center;"><?php echo $m['total_imei'] ?></td>
+                    <td style="text-align: center;"><?php echo $m['total_staff_confirm_imei'] ?></td>
+                    <td style="text-align: center;"><?php echo $m['total_finance_confirm_imei'] ?></td>
+                    <td><?php echo $m['box_post_number'] ?></td>
+                    <td><?php echo $m['sender_name'] ?></td>
+                    <td><input class="<?php if($box_status){echo 'status_enable';}else{echo 'status_disable';}?>" id="boxStatus-<?=$i;?>" type="text" value="<?=$textBox_status;?>"></td>
+                    <td><?php echo $m['create_date'] ?></td>
+                    <td><?php echo $m['staff_name'] ?></td>
+                    <td><?php echo $m['remark'] ?></td>
+                    
+                    <td>
+                        <?php if($box_status==false){?>
+                        <a title="Check Imei Return"  href="/finance/return-box-number-imei-check-confirm?frm_action=check_imei&box_sn=<?php echo $m['box_sn'];?>"> <i class="icon-qrcode" style="color: red;"></i></a>
+                        <?php } ?>
+                    </td>
+                </tr>
+                <?php 
+                $row +=1;
+            endforeach;
+            ?>
+        <?php endif; ?>
+    </tbody>
+</table>
+<div class="paging">
+    <?php echo $this->paging($this->total, $this->limit, $this->offset, $this->url);?>
+</div>
+
+<script type="text/javascript" src="/js/jets.js"></script>
+<script type="text/javascript" src="/js/jquery-ui-1.8.12.custom.min.js"></script>
+<script src="<?php echo HOST ?>js/tag-it.min.js" type="text/javascript" charset="utf-8"></script>
+
+<script>
+
+
+    $(document).ready(function () {
+
+        //alert(1);
+        $('.btn-confirm-status').click(function(event)
+        {
+
+            var creditnote_sn = [];
+            $('.checkbox-confirm:checked').each(function(index, el) {
+                creditnote_sn.push($(el).val());
+            });
+
+            if(creditnote_sn.length > 0){
+                if (confirm('Are you sure?')) {
+
+                    $.ajax({
+                        url: '<?php echo HOST.'finance/creditnote-status';?>',
+                        type: 'POST',
+                        data: {'d_id':<?=$this->distributor['id'];?>,'creditnote_sn':creditnote_sn},
+                    })
+                    .done(function(response) {
+
+                    });
+
+                }
+            }else{
+                alert('กรุณาเลือกรายการที่ต้องการ');
+            }
+
+        });    
+    });
+
+
+    
+
+
+
+</script>

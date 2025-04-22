@@ -1,0 +1,198 @@
+<link rel="stylesheet" type="text/css" href="/css/jquery-ui-1.8.12.custom.css"/>
+<link rel="stylesheet" type="text/css" href="<?php echo HOST ?>js/file-uploader/fileuploader.css"/>
+<link rel="stylesheet" type="text/css" href="/css/bootstrap-modal.css"/>
+<style type="text/css">
+    .btn-group a {
+        white-space: nowrap;
+    }
+</style>
+<?PHP  ?>
+<table class="table table-bordered">
+    <thead>
+        <tr>
+            <?php echo $this->sorting(array(
+                    'id'                 =>'ID',
+                    'sn'                 =>'PO number',
+                    // 'receive_sn'         =>'Receive number',
+                    'staff_username'     =>'PO By',
+                    'good_category_name' =>'Category',
+                    'good_name'          =>'Product name',
+                    'good_color_name'    =>'Color',
+                    'num'                =>'Quantity',
+                    // 'price'              =>'Price',
+                    'Payment',
+                    'Receive to warehouse',
+                    'warehouse_name'     =>'Purchaser',
+                    // 'Remark',
+                    'created_at'         =>'Order time',
+                    // 'mysql_time'         =>'Receive time',
+                    'Action',
+                ),
+                $this->url, $this->sort, $this->desc); ?>
+        </tr>
+    </thead>
+    <tbody>
+        <?php
+        if (isset($this->POs) and $this->POs)
+            foreach ($this->POs as $k=>$PO): 
+
+        $sn_ref = $PO['sn_ref'];
+        $receive_sn = $PO['receive_ref'];
+         if($sn_ref==''){
+            $sn_ref = $PO['sn'];
+         }
+         if($receive_sn==''){
+            $receive_sn = $PO['receive_ref'];
+         }
+        ?>
+        <tr>
+            <td style="width:3%"><?php echo $PO['id'];?></td>
+            <td style="width:7%"><?php echo $sn_ref;?></td>
+            <!-- <td><?php echo $receive_sn;?></td> -->
+            <td style="width:5%"><?php echo $PO['staff_username'];?></td>
+            <td style="width:4%"><?php echo $PO['good_category_name'];?></td>
+            <td style="width:11%"><?php echo $PO['brand_name']; ?> <?php echo $PO['good_name'];?></td>
+            <td style="width:10%"><?php echo $PO['good_color_name'];?></td>
+            <td style="text-align:center; color:darkblue; width:4%"><?php echo $PO['num'];?></td>
+            <?PHP 
+            $userStorage = Zend_Auth::getInstance()->getStorage()->read();
+
+            $show_price=false;
+            if (My_Staff_Group::inGroup($userStorage->group_id, PO_SHOW_PRICE) || $userStorage->group_id == ADMINISTRATOR_ID || HUMAN_RH_ID ) 
+            {
+                $show_price  = true;
+            }
+
+            if ($show_price==true):?>
+                <!-- <td><?php echo My_Number::f($PO['price']);?></td> -->
+            <?PHP else:?>
+                <!-- <td>xxxx</td> -->
+            <?PHP endif;?>
+            
+            <td style="text-align:center; width:5%"><?php if ($PO['flow']):?><i style="color:green" class="icon-ok"></i><?php else:?><i style="color:red" class="icon-remove"></i><?php endif;?></td>
+            <td style="text-align:center; width:5%"><?php if ($PO['mysql_user']):?><i style="color:green" class="icon-ok"></i><?php else:?><i style="color:red" class="icon-remove"></i><?php endif;?></td>
+            <td style="width:11%"><?php echo $PO['warehouse_name'];?></td>
+            <!-- <td><?php echo $PO['text'];?></td> -->
+            <td style="width:10%"><?php echo $PO['created_at'];?></td>
+            <!-- <td style="width:7%"><?php echo $PO['mysql_time'];?></td> -->
+            <td style="width:7%" class="">
+                <div class="btn-group">
+                    <a class="btn dropdown-toggle" data-toggle="dropdown" href="#">
+                        Action
+                        <span class="caret"></span>
+                    </a>
+                    <ul class="dropdown-menu">
+                        <li><a title="View" href="/po/view?id=<?php echo $PO['id'];?>"> <i class="icon-eye-open"></i> View</a></li>
+                        <?php if (!$PO['flow'] and !$PO['mysql_user']): ?>
+                            <li><a title="Edit" href="/po/create?id=<?php echo $PO['id'];?>"> <i class="icon-edit"></i> Edit</a></li>
+                            <li><a title="Delete" class="confirmLink" href="/po/del?id=<?php echo $PO['id'];?>"> <i class="icon-trash"></i> Delete</a></li>
+                            <?php else:?>
+                            <li><a class="lock" title="Lock" href="javascript:void(0);"> <i class="icon-lock"></i> Lock</a></li>
+                        <?php endif;?>
+
+                        <?php if (!(isset($PO['uploaded_imei_file']) && $PO['uploaded_imei_file']) && $this->access('po', 'upload-imei')): ?>
+                            <li><a href="#" class="upload_file" data-po-sn="<?php echo '_'. $PO['sn'];?>"><i class="icon-file"></i> Upload Excel file</a></li>
+                        <?php endif ?>
+                    </ul>
+                </div>
+
+                <?php if (isset($PO['uploaded_imei_file']) && $PO['uploaded_imei_file']): ?>
+                    <i class="icon-file"></i>
+                <?php endif ?>
+            </td>
+        </tr>
+        <?php endforeach;?>
+
+    </tbody>
+</table>
+<div class="paging">
+    <?php echo $this->paging($this->total, $this->limit, $this->offset, $this->url);?>
+</div>
+
+<?php echo $this->partial('po/partials/upload-file-modal.phtml', array()) ?>
+
+<script src="https://cdn.rawgit.com/zenorocha/clipboard.js/master/dist/clipboard.min.js"></script>
+<script type="text/javascript" src="/js/bootstrap-modal.js"></script>
+<script type="text/javascript" src="/js/bootstrap-modalmanager.js"></script>
+<script src="<?php echo HOST ?>js/file-uploader/fileuploader.js" type="text/javascript"></script>
+<script type="text/javascript" src="/js/jquery-ui-1.8.12.custom.min.js"></script>
+<script type="text/javascript" src="/js/bootstrap-modal.js"></script>
+<script type="text/javascript" src="/js/bootstrap-modalmanager.js"></script>
+
+<?php echo $this->load();?>
+<?php echo $this->confirm();?>
+
+<script>
+var sn = false;
+
+$('.lock').click(function(e){
+    e.preventDefault();
+    alert('Sorry,This information is blocked...You can not delete payment has been made or has been the storage of information!');
+});
+
+(function($) {
+    $('.upload_file').click(show_upload_modal);
+    new Clipboard('.copy_link');
+})(jQuery);
+
+function show_upload_modal(e) {
+    sn = $(e.target).data('po-sn');
+    $('.alert').removeClass('alert-danger').removeClass('alert-success').text('').hide();
+    $('#upload_modal').modal();
+
+    if (sn) {
+        $('.file-uploader').show().each(init_uploader(sn));
+        $('#upload_po_sn').text(sn.replace('_', ''));
+
+    } else {
+        $('.file-uploader').hide();
+    }
+}
+
+function init_uploader(sn) {
+    return function(index, element) {
+        _sn = sn;
+        var _self = $(this);
+        var uploader = new qq.FileUploader({
+            element: _self[0],
+            params: {
+                po_sn: _sn
+            },
+            action: '<?php echo HOST ?>po/upload-imei',
+            multiple: false,
+            // ex. ['jpg', 'jpeg', 'png', 'gif'] or []
+            allowedExtensions: ['xls', 'xlsx'],
+            sizeLimit: 5 * 1024 * 1024,
+            onProgress: function(id, fileName, loaded, total){
+                $('.fix-msg').addClass('show');
+
+                $("form").submit(function (e) {
+                    e.preventDefault();
+                });
+
+                $(window).on('beforeunload', function() {
+                    return 'Please wait your upload proccess complete!';
+                });
+            },
+            onComplete: function(id, fileName, responseJSON){
+                if ( responseJSON.success==true ){
+                    $('#link').val(responseJSON.link);
+                    $('#link').parent().show();
+                    $('.alert').removeClass('alert-danger').addClass('alert-success').text('Done').show();
+                    $('[data-po-sn='+_sn+']').parents('td').append('<i class="icon-file"></i>');
+                    $('[data-po-sn='+_sn+']').remove();
+                } else {
+                    $('#link').val('');
+                    $('#link').parent().hide();
+                    $('.alert').removeClass('alert-success').addClass('alert-danger').text(responseJSON.error).show();
+                }
+
+                $('.fix-msg').removeClass('show');
+            },
+            onCancel: function(id, fileName){},
+            onError: function(id, fileName, xhr){}
+        });
+    }
+}
+
+</script>

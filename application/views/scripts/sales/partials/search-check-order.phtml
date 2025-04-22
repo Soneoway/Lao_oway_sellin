@@ -1,0 +1,215 @@
+<link href="../css/select2.css" rel="stylesheet"/>
+<script src="../js/select2.js"></script>
+<form class="form-search form-horizontal" method="get" action="<?php echo HOST ?>sales/distributor-order">
+    <div class="row">
+        <div class="span5">
+            <div class="control-group">
+                <label for="order_from" class="span2">Order From</label>
+                <input type="text" class="form-control search-query date" id="order_from" name="order_from" value="<?php isset($this->params['order_from']) and printf($this->params['order_from']);?>">
+            </div>
+            <div class="control-group">
+                <label for="order_to" class="span2">Order To</label>
+                <input type="text" class="form-control search-query date" id="order_to" name="order_to" value="<?php isset($this->params['order_to']) and printf($this->params['order_to']);?>">
+            </div> 
+
+          <div class="control-group">
+                <label for="area" class="span2">Area</label>
+                <select id="area" name="area" class="span3">
+                    <option value="">---All Area---</option>
+                    <?php if (isset( $this->area ) && $this->area): ?>
+                    <?php foreach ($this->area as $key => $area): ?>
+                        <?php if($key != '1'){?>
+                            <option value="<?php echo $key ?>" <?php if( isset($this->params['area']) && isset($this->params['area']) && $this->params['area'] == $key ) echo "selected='selected'" ?>><?php echo $area ?></option>
+                        <?php } ?>
+                    <?php endforeach ?>
+                <?php endif ?>
+                </select>
+            </div>
+        </div>
+        <div class="span5">
+
+            <div class="control-group">
+               <label class="span2" for="rank" style="color: blue;">Retailer name ຮ້ານຄ້າ<span style="color: red">*</span></label>
+
+               <select id="rank" name="rank" class="rank span3">
+                <option value="">---</option>
+                <option value="9" <?php if( isset($this->distributor['rank']) and $this->distributor['rank']==9 ) { ?> selected<?php }?>>7. Laos(9)</option>
+                <option value="10" <?php if( isset($this->distributor['rank']) and $this->distributor['rank']==10 ) { ?> selected<?php }?>>8. Alei(10)</option>
+            </select>
+
+        </div>       
+
+        <div class="retailer_name_list"></div>
+    </div>
+</div>
+
+<div class="row">
+    <div class="span5">
+        <div class="control-group">
+            <label for="cat_id" class="span2">Product Category</label>
+            <select id="cat_id" class="span3" name="cat_id">
+                <option value="">Choose</option>
+                <?php if ($this->good_categories): foreach ($this->good_categories as $id=>$name):?>
+                    <option value="<?php echo $id;?>" <?php if (isset($this->params['cat_id']) and $id==$this->params['cat_id']):?> selected<?php endif;?>><?php echo $name;?></option>
+                <?php endforeach; endif;?>
+            </select>
+        </div>
+
+        <div class="control-group">
+            <label for="good_id" class="span2">Product</label>
+            <select id="good_id" class="span3" name="good_id">
+                <option value="">Choose</option>
+                <?php if ($this->goods): foreach ($this->goods as $key=> $item):?>
+                    <option value="<?php echo $key;?>" <?php if (isset($this->params['good_id']) and $key==$this->params['good_id']):?> selected<?php endif;?>><?php echo $item;?></option>
+                <?php endforeach; endif;?>
+            </select>
+        </div>
+
+        <div class="control-group">
+            <label for="good_color" class="span2">Color</label>
+            <select id="good_color" class="span3" name="good_color">
+                <option value="">Choose</option>
+                <?php if ($this->goodColors): foreach ($this->goodColors as $key=>$item):?>
+                    <option value="<?php echo $key;?>" <?php if (isset($this->params['good_color']) and $key==$this->params['good_color']):?> selected<?php endif;?>><?php echo $item;?></option>
+                <?php endforeach; endif;?>
+            </select>
+        </div>
+
+
+
+    </div>
+    <br>
+    <div class="span5">
+     <!--edit selector warehouse -->
+     <div class="control-group">
+        <label class="control-label" for="name" style="color: blue;">Warehouse <span style="color: red">*</span></label>
+        <div class="controls">
+            <select name="warehouse" id="warehouse">
+                <option value>---</option>
+                <?php if (isset( $this->warehouses_cached ) && $this->warehouses_cached): ?>
+                    <?php foreach ($this->warehouses_cached as $key => $warehouses): ?>
+                        <?php if($key != '1'){?>
+                            <option value="<?php echo $key ?>" <?php if( isset($this->params['warehouse']) && isset($this->params['warehouse']) && $this->params['warehouse'] == $key ) echo "selected='selected'" ?>><?php echo $warehouses ?></option>
+                        <?php } ?>
+                    <?php endforeach ?>
+                <?php endif ?>
+            </select>
+            <p class="help-block"></p >
+        </div>
+    </div><br>
+    <div class="control-group">
+        <label class="control-label" for="type" style="color: red; font-size: 20px;">Order type <span style="color: red">*</span></label>
+        <div class="controls">
+            <select name="type" id="type">
+                <option value="0">Choose</option>
+                <option value="1" <?php if( isset($this->params['type']) and $this->params['type']==1 ) { ?> selected<?php }?>>Retailler</option>
+                <option value="3" <?php if( isset($this->params['type']) and $this->params['type']==3 ) { ?> selected<?php }?>>Staff</option>
+                <option value="5" <?php if( isset($this->params['type']) and $this->params['type']==5 ) { ?> selected<?php }?>>APK</option>
+            </select>
+            <p class="help-block"></p >
+        </div>
+    </div>
+</div>
+</div>
+
+<button type="submit" class="btn btn-primary">Search</button>
+<button type="reset" class="btn btn-danger">Reset</button>
+<button type="submit" name="export" value="1" class="btn btn-success">Export Excel</button>
+<button type="submit" name="export" value="2" class="btn btn-warning">Export Model</button>
+<button type="submit" name="export" value="3" class="btn btn-success">Export IMEI</button>
+<!-- <button type="submit" name="export" value="2" class="btn btn-success">Export IMEI</button> -->
+
+</form>
+<script type="text/javascript" src="<?php echo HOST ?>js/jets.js"></script>
+<script>
+    $(document).ready(function () {
+
+        <?php if(isset($this->warehouse)) { ?>
+            $('#warehouse').val(<?= $this->warehouse ?>);
+            get_warehouse(<?= $this->warehouse ?>);
+        <?php } ?>
+
+        $('.warehouse').change(function(event){
+            get_warehouse($(this).val());
+        });
+
+        <?php if(isset($this->rank)) { ?>
+            $('#rank').val(<?= $this->rank ?>);
+            get_distributor_cached_for_search(<?= $this->rank ?>);
+        <?php }?>
+
+        $('.rank').change(function(event) {
+            get_distributor_cached_for_search($(this).val());
+        });
+
+        function get_distributor_cached_for_search(rank_id){
+
+            var rank_id = rank_id;
+            $.ajax({
+              url: '<?php echo HOST ?>get/distributor-cached-for-search',
+              type: 'POST',
+              dataType: 'html',
+              data: {rank_id: rank_id},
+          })
+            .done(function(data) {
+              $('.retailer_name_list').empty();
+              $('.retailer_name_list').append(data);
+              var jets = new Jets({
+                searchTag: '#SearchBox',
+                contentTag: '#d_id'
+            });
+              <?php if(isset($this->d_id)){ ?>
+                $('#d_id').val(<?= $this->d_id ?>);
+            <?php }?>
+            console.log("success");
+        })
+            .fail(function() {
+              console.log("error");
+          })
+            .always(function() {
+              console.log("complete");
+          });
+
+        }
+        
+        initSearchOptionDistributor('d_id', 'SearchBox');
+        $( '.date' ).datepicker({ dateFormat: "dd/mm/yy" });
+
+        $('#cat_id, #good_id').change(function(){
+            $(this).after('<span class="loading"></span>');
+            var _self = $(this);
+            var cat_id = $('#cat_id').val();
+
+            if (_self.attr('id')=='cat_id')
+                $('#good_id').find('option:not(:first)').remove();
+
+            var good_id = $('#good_id').val();
+
+            $('#good_color').find('option:not(:first)').remove();
+
+            $('#num, #price').val('');
+
+            $.get("/get/load",
+                {cat_id: cat_id, good_id: good_id}
+                ,function(data,status){
+                    var data = $.parseJSON( data );
+                    if (data.goods){
+                        var obj = data.goods;
+                        for (var i = 0; i < obj.length; i++) {
+                            $('#good_id').append('<option value="'+obj[i]['id']+'">'+obj[i]['name']+'</option>');
+                        }
+                    }
+                    if (data.colors){
+                        var obj = data.colors;
+                        for (var i = 0; i < obj.length; i++) {
+                            $('#good_color').append('<option value="'+obj[i]['id']+'">'+obj[i]['name']+'</option>');
+                        }
+                    }
+                    _self.nextAll('.loading').remove();
+                });
+        });
+    });
+</script>
+<script>
+       // $(document).ready(function() { $("#d_id").select2(); });
+   </script>

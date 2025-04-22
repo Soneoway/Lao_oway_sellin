@@ -1,0 +1,36 @@
+<div class="page-header">
+    <h1>List Targets <small>Sell In</small></h1>
+</div>
+
+<div class="accordion" id="accordion2">
+    <div class="accordion-group">
+        <div class="accordion-heading">
+            <a class="accordion-toggle collapsed" data-toggle="collapse" data-parent="#accordion2" href="#collapseTwo">
+                Search
+            </a>
+        </div>
+        <div id="collapseTwo" class="accordion-body collapse" style="height: 0px;">
+            <div class="accordion-inner">
+                <?php
+                    echo $this->render('sales/partials/target-search.phtml');
+                ?>
+            </div>
+        </div>
+    </div>
+</div>
+
+<div class="table-responsive">
+    <?php
+        echo $this->render('sales/partials/target-list.phtml');
+    ?>
+</div>
+
+<script>
+    $(document).ready(function () {
+        $('.form-search button:reset').click(function (e){
+            $('.form-search input, .form-search select').val('');
+            $('.form-search').submit();
+            return false;
+        });
+    });
+</script>

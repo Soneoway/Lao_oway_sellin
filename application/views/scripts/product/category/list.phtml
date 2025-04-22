@@ -1,0 +1,58 @@
+<div class="page-header">
+    <h1>Category List</h1>
+</div>
+<?php
+    if (isset($this->messages_success) and $this->messages_success)
+        foreach ($this->messages_success as $message):
+            echo '<div class="alert alert-success">'.$message.'</div>';
+        endforeach;
+
+    if (isset($this->messages) and $this->messages)
+        foreach ($this->messages as $message):
+            echo '<div class="alert alert-error">'.$message.'</div>';
+        endforeach;
+?>
+<div class="row">
+    <div class="span12">
+        <span class="pull-right">
+            <button class="btn-success" type="button" onclick="window.location='<?php echo HOST ?>product/category-create'">
+                <i class="icon-plus"></i>
+            </button>
+        </span>
+    </div>
+</div>
+<div class="table-responsive">
+    <table class="table table-bordered">
+	    <thead>
+	        <tr>
+	            <th>#</th>
+	            <th>Name</th>
+	            <th>Action</th>
+	        </tr>
+	    </thead>
+	    <tbody>
+	        <?php
+	        if (isset($this->goodCategories) and $this->goodCategories) :
+	        	$i = 1;
+	            foreach ($this->goodCategories as $k=>$goodCategory): ?>
+	        <tr>
+	            <td>
+	                <?php
+	                    echo $i++;
+	                ?>
+	            </td>
+	            <td><?php echo $goodCategory['name'] ?></td>
+	            <td class="">
+	                <a title="Edit" href="/product/category-create?id=<?php echo $goodCategory['id'];?>"> <i class="icon-edit"></i></a>
+	                <a title="Delete" class="confirmLink" href="/product/category-delete?id=<?php echo $goodCategory['id'];?>"> <i class="icon-trash"></i></a>
+	            </td>
+	        </tr>
+	        <?php endforeach;?>
+			<?php endif; ?>
+	    </tbody>
+	</table>
+	
+</div>
+<script type="text/javascript" src="/js/jquery-ui-1.8.12.custom.min.js"></script>
+<link rel="stylesheet" type="text/css" href="/css/jquery-ui-1.8.12.custom.css"/>
+<?php echo $this->confirm();?>

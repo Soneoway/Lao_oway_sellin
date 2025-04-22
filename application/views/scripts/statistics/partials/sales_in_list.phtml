@@ -1,0 +1,82 @@
+<?php
+function product_price($priceFloat) {
+$symbol_thousand = '.';
+$decimal_place = 0;
+$price = number_format($priceFloat, $decimal_place, '', $symbol_thousand);
+return $price;
+}
+?>
+<table class="table table-bordered">
+    <thead>
+        <tr>
+            <?php echo $this->sorting(array(
+					'#',
+					'sn'            => 'Sale Order Number',
+					'd_id'          => 'Retailer Name',
+					'good_id'       => 'Product Name',
+					'good_color'    => 'Product Color',
+					'num'           => 'Sales Quantity',
+					'price'         => 'Sales Price',
+					'total'         => 'Total',
+					'pay_time'      => 'Payment or Not',
+					'shipping_yes_time'      => 'Shipping',
+					'outmysql_time' => 'Out of Warehouse',
+					'add_time'      => 'Order Time',
+                ),
+                $this->url, $this->sort, $this->desc); ?>
+        </tr>
+    </thead>
+    <tbody>
+        <?php
+        if (isset($this->markets_sn) and $this->markets_sn) :
+            foreach ($this->markets_sn as $k=>$m):
+
+                ?>
+        <tr>
+        	<td><?php echo $this->offset+1+$k; ?></td>
+            <td><?php echo $m['sn'] ?></td>
+            <td><?php if (isset($this->distributors) && $this->distributors && isset($this->distributors[$m['d_id']])) echo $this->distributors[$m['d_id']] ?></td>
+            <td><?php if (isset($this->goods) && $this->goods && isset($this->goods[$m['good_id']])) echo $this->goods[$m['good_id']] ?></td>
+            <td><?php if (isset($this->goodColors) && $this->goodColors && isset($this->goodColors[$m['good_color']])) echo $this->goodColors[$m['good_color']] ?></td>
+            <td><?php echo $m['num'] ?></td>
+            <td><?php echo product_price($m['price']); ?></td>
+            <td><?php echo product_price($m['total']) ?></td>
+            <td><?php if ($m['pay_time']):?><i class="icon-ok"></i><?php else:?><i class="icon-remove"></i><?php endif;?></td>
+            <td><?php if ($m['shipping_yes_time']):?><i class="icon-ok"></i><?php else:?><i class="icon-remove"></i><?php endif;?></td>
+            <td><?php if ($m['outmysql_time']):?><i class="icon-ok"></i><?php else:?><i class="icon-remove"></i><?php endif;?></td>
+            <td><?php echo $m['add_time'] ?></td>
+
+        </tr>
+
+        <?php endforeach;?>
+		<?php endif; ?>
+    </tbody>
+</table>
+<div class="paging">
+    <?php echo $this->paging($this->total, $this->limit, $this->offset, $this->url);?>
+</div>
+
+<script type="text/javascript" src="/js/jquery-ui-1.8.12.custom.min.js"></script>
+<link rel="stylesheet" type="text/css" href="/css/jquery-ui-1.8.12.custom.css"/>
+<?php echo $this->load();?>
+<?php echo $this->confirm();?>
+<script>
+    $('.lock').click(function(e){
+        e.preventDefault();
+        alert('Sorry,This information is blocked...You can not delete payment has been made or has been the storage of information!');
+    });
+
+    $('.collapse_a').each(function(){
+    	var _this = $(this);
+    	var _this_id = _this.attr('id');
+    	var $coll = $('.'+_this_id);
+
+    	_this.click(function(){
+
+    		$coll.toggle();
+    		if ($coll.is(':visible'))
+	    		_this.html('-');
+	    	else _this.html('+');
+    	});
+    });
+</script>

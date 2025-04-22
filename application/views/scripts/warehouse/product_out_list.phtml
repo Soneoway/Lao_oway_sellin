@@ -1,0 +1,131 @@
+<table class="table table-bordered">
+    <thead>
+        <tr>
+            <?php echo $this->sorting(array(
+                    '#',
+                    'sn'            => 'Sales Order Number',
+                    'Product Category',
+                    'Product',
+                    'Color',
+                    'num'           => 'Quantity',
+                    'price'         => 'Price',
+                    'Invoice'       => 'Invoice',
+                    'd_id'          => 'Retailer',
+                    'area'          => 'Area',
+                    'region'        => 'Province',
+                    'district'      => 'District',
+                    'outmysql_time' => 'OUT Time',
+					'Action'
+                ),
+                $this->url, $this->sort, $this->desc); ?>
+        </tr>
+    </thead>
+    <tbody>
+        <?php
+        if (isset($this->markets) and $this->markets)
+            foreach ($this->markets as $k=>$PO): ?>
+            <tr>
+                <td><a href="#id" rel="<?php echo $PO['sn'] ?>" class="collapse_a btn btn-default btn-small" id="m_<?php echo $PO['sn'] ?>"><span class="col-sign">+</span><img class="img-loading" src="<?php echo HOST?>img/ajax-loader.gif" style="display: none" /></a></td>
+                <td><?php echo $PO['sn'];?></td>
+                <td></td>
+                <td></td>
+                <td></td>
+                <td><?php echo $PO['total_qty'];?></td>
+                <td><?php echo number_format($PO['total_price'], 0, ',', '.'); ?></td>
+                <td><?php if(isset($PO['invoice_number']))echo $PO['invoice_number'];?></td>
+                <td><?php if(isset($this->distributors) && isset($this->distributors[$PO['d_id']])) echo $this->distributors[$PO['d_id']]['title'];?></td>
+
+                <td><?php if (isset($PO['district'])) echo My_Region::getValue($PO['district'], My_Region::Area) ?></td>
+                <td><?php if (isset($PO['district'])) echo My_Region::getValue($PO['district'], My_Region::Province) ?></td>
+                <td><?php if (isset($PO['district'])) echo My_Region::getValue($PO['district'], My_Region::District) ?></td>
+                
+                <td><?php echo $PO['outmysql_time'];?></td>
+                <td class="">
+                    <a href="<?php echo HOST ?>warehouse/product-out-print?sn=<?php echo $PO['sn'];?>" class="btn <?php if(isset($PO['print_time']) && $PO['print_time']) echo 'btn-info'; else echo 'btn-default'; ?> btn-small" target="_blank"><?php if(isset($PO['print_time']) && $PO['print_time']) echo $PO['print_time']; else echo "Print" ?></a>
+                    <!-- print invoice -->
+                    <div class="btn-group">
+                        <a class="btn dropdown-toggle btn-warning" data-toggle="dropdown" href="#">
+                            Print Invoice
+                            <span class="caret"></span>
+                        </a>
+
+                        <ul class="dropdown-menu" role="menu" aria-labelledby="dropdownMenu3">
+                              <li role="presentation"><a role="menuitem" tabindex="-1" target="_blank" href="<?php echo HOST ?>warehouse/invoice?sn=<?php echo $PO['sn'];?>">Invoice</a></li>
+                              <li role="presentation"><a role="menuitem" tabindex="-1" target="_blank" href="<?php echo HOST ?>warehouse/invoice-no-accessories?sn=<?php echo $PO['sn'];?>">Invoice no Accessories</a></li>
+                              <li role="presentation"><a role="menuitem" tabindex="-1" target="_blank" href="<?php echo HOST ?>warehouse/invoice-vt?sn=<?php echo $PO['sn'];?>">Viettel</a></li>
+                              <li role="presentation"><a role="menuitem" tabindex="-1" target="_blank" href="<?php echo HOST ?>warehouse/invoice?sn=<?php echo $PO['sn'];?>&type=fpt">FPT</a></li>
+                              <li role="presentation"><a role="menuitem" tabindex="-1" target="_blank" href="<?php echo HOST ?>warehouse/invoice?sn=<?php echo $PO['sn'];?>&type=nk">Nguyễn  Kim</a></li>
+                              <li role="presentation"><a role="menuitem" tabindex="-1" target="_blank" href="<?php echo HOST ?>warehouse/invoice-dmcl?sn=<?php echo $PO['sn'];?>">Điện máy chợ lớn</a></li>
+                              <li role="presentation"><a role="menuitem" tabindex="-1" target="_blank" href="<?php echo HOST ?>warehouse/invoice?sn=<?php echo $PO['sn'];?>&type=campuchia">Campuchia</a></li>
+                              <li role="presentation"><a role="menuitem" tabindex="-1" target="_blank" href="<?php echo HOST ?>warehouse/invoice?sn=<?php echo $PO['sn'];?>&type=custom">Custom</a></li>
+                              <li role="presentation"><a role="menuitem" tabindex="-1" target="_blank" href="<?php echo HOST ?>warehouse/invoice?sn=<?php echo $PO['sn'];?>&type=digital">Digital</a></li>
+                               <li role="presentation"><a role="menuitem" tabindex="-1" target="_blank" href="<?php echo HOST ?>warehouse/invoice?sn=<?php echo $PO['sn'];?>&type=bkhh">BVG kèm bảng kê</a></li>
+                                <li role="presentation"><a role="menuitem" tabindex="-1" target="_blank" href="<?php echo HOST ?>warehouse/invoice?sn=<?php echo $PO['sn'];?>&type=ck">Chiết khấu kèm bảng kê</a></li>
+                               
+                               <li role="presentation"><a role="menuitem" tabindex="-1" target="_blank" href="<?php echo HOST ?>warehouse/invoice?sn=<?php echo $PO['sn'];?>&type=accessories-fpt">Phụ kiện cho FPT</a></li>
+                        </ul>
+                    </div>
+
+                    <!-- print invoice -->
+                </td>
+            </tr>
+
+        <?php endforeach;?>
+
+    </tbody>
+</table>
+<div class="paging">
+    <?php echo $this->paging($this->total, $this->limit, $this->offset, $this->url);?>
+</div>
+
+<script type="text/javascript" src="/js/jquery-ui-1.8.12.custom.min.js"></script>
+<link rel="stylesheet" type="text/css" href="/css/jquery-ui-1.8.12.custom.css"/>
+<?php echo $this->load();?>
+<?php echo $this->confirm();?>
+<script>
+    $('.collapse_a').click(function(){
+        var _this = $(this);
+        var _this_id = _this.attr('id');
+        var sn = _this.attr('rel');
+
+        if (_this.parent().parent().next().hasClass('accordion-body')){
+
+            $('.m_'+sn).toggle();
+
+            if ($('.m_'+sn).is(':visible'))
+                _this.find('.col-sign'). html('-');
+            else _this.find('.col-sign'). html('+');
+
+        } else {
+            _this.find('.col-sign'). html('');
+
+            getMarketDetail(sn);
+        }
+
+    });
+
+    function getMarketDetail(sn){
+        if (! $('#m_'+sn).parent().parent().next().hasClass('accordion-body')){
+            $('#m_'+sn+' .col-sign').html('');
+            $('#m_'+sn+' .img-loading').show();
+
+            $.ajax({
+                type: 'post',
+                url: '/get/market-detail',
+                data: {
+                    'sn': sn,
+                    'list': 'product-out',
+                    'params': '<?php echo (isset($this->params) ? serialize($this->params) : '')?>'
+                },
+                error: function(){
+                },
+                success: function(data){
+                    $('.m_'+sn).remove();
+                    $('#m_'+sn).parent().parent().after(data);
+                    $('#m_'+sn).find('.col-sign').html('-');
+                    $('#m_'+sn+' .img-loading').hide();
+                }
+            });
+        }
+    }
+</script>

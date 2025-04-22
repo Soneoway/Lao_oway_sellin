@@ -1,0 +1,330 @@
+<script type="text/javascript" src="<?php echo HOST ?>js/jquery-ui-1.8.12.custom.min.js"></script>
+<link rel="stylesheet" type="text/css" href="<?php echo HOST ?>css/jquery-ui-1.8.12.custom.css"/>
+<link rel="stylesheet" href="<?php echo HOST ?>css/bootstrap-multiselect.css" type="text/css"/>
+<script type="text/javascript" src="<?php echo HOST ?>js/bootstrap-multiselect.js"></script>
+<?php
+    //print_r($_GET);
+    //print_r($this->params['cancel']);
+?>
+<form class="form-search form-horizontal" method="get" action="<?php echo HOST ?>sales/index-accessories">
+    <div class="row">
+        <div class="span5">
+            <div class="control-group">
+                <label for="sn" class="span2">Sales Order Number</label>
+                <input id="sn" name="sn" type="text" class="input-medium search-query form-control" value="<?php isset($this->params['sn']) and printf($this->params['sn']);?>">
+            </div>
+
+            <div class="control-group">
+                <label for="warehouse_id" class="span2">Warehouse</label>
+                <select id="warehouse_id" name="warehouse_id[]" class="multiselect" multiple="multiple">
+                    <?php 
+                    if (isset($this->params['warehouse_id'])){
+                        if ($this->warehouses_cached): 
+                           $i=0;
+                           foreach ($this->warehouses_cached as $id=>$name):?>
+                                <?php 
+                                    $selected='';
+                                    try{
+                                        $key = array_search($id, $this->params['warehouse_id']);
+                                        $warehouse_id = $this->params['warehouse_id'][$key];
+                                        if($warehouse_id==$id){
+                                            $selected='selected';
+                                        }else{
+                                            $selected='';
+                                        }  
+                                    } catch (Exception $e) {
+                                        $selected='';
+                                    }
+      
+                                ?>
+                                <option value="<?php echo $id;?>" <?php echo $selected;?>   >
+                                    <?php echo $name;?>
+                                </option>
+
+                        <?php endforeach; endif;?>
+                    <?php }else{ ?>
+                        <?php if ($this->warehouses_cached): 
+                            foreach ($this->warehouses_cached as $id=>$name):?>
+                            <option value="<?php echo $id;?>">
+                                <?php echo $name;?>
+                            </option>
+                        <?php endforeach; endif;?>
+                    <?php } ?>
+                </select>
+            </div>
+
+            <div class="control-group">
+                <label for="cat_id" class="span2">Product Category</label>
+                <select id="cat_id" class="span3" name="cat_id">
+                    <option value="">Choose</option>
+                    <?php if ($this->good_categories): foreach ($this->good_categories as $id=>$name):?>
+                        <option value="<?php echo $id;?>" <?php if (isset($this->params['cat_id']) and $id==$this->params['cat_id']):?> selected<?php endif;?>><?php echo $name;?></option>
+                    <?php endforeach; endif;?>
+                </select>
+            </div>
+
+            <div class="control-group">
+                <label for="good_id" class="span2">Product</label>
+                <select id="good_id" class="span3" name="good_id">
+                    <option value="">Choose</option>
+                    <?php if ($this->goods): foreach ($this->goods as $key=> $item):?>
+                        <option value="<?php echo $key;?>" <?php if (isset($this->params['good_id']) and $key==$this->params['good_id']):?> selected<?php endif;?>><?php echo $item;?></option>
+                    <?php endforeach; endif;?>
+                </select>
+            </div>
+
+            <div class="control-group">
+                <label for="good_color" class="span2">Color</label>
+                <select id="good_color" class="span3" name="good_color">
+                    <option value="">Choose</option>
+                    <?php if ($this->goodColors): foreach ($this->goodColors as $key=>$item):?>
+                        <option value="<?php echo $key;?>" <?php if (isset($this->params['good_color']) and $key==$this->params['good_color']):?> selected<?php endif;?>><?php echo $item;?></option>
+                    <?php endforeach; endif;?>
+                </select>
+            </div>
+
+            <div class="control-group">
+                <label for="type" class="span2">Order Type</label>
+                <select id="type" class="span3" name="type">
+                    <option value="">Choose</option>
+                    <option value="1" <?php if (isset($this->params['type']) and $this->params['type']==1):?> selected <?php endif;?>>For Retailer</option>
+                    <option value="2" <?php if (isset($this->params['type']) and $this->params['type']==2):?> selected <?php endif;?>>For Demo</option>
+                    <option value="3" <?php if (isset($this->params['type']) and $this->params['type']==3):?> selected <?php endif;?>>For Staffs</option>
+                    <option value="4" <?php if (isset($this->params['type']) and $this->params['type']==4):?> selected <?php endif;?>>For Lending</option>
+                </select>
+            </div>
+
+            <div class="control-group">
+                <label for="invoice_number" class="span2">Invoice Number</label>
+                <input id="invoice_number" name="invoice_number" type="text" class="input-medium search-query form-control" value="<?php isset($this->params['invoice_number']) and printf($this->params['invoice_number']);?>">
+            </div>
+
+            <div class="control-group">
+                <label class="span2" for="distributor_po">KA</label>
+                <select name="distributor_ka" class="span3" id="distributor_ka">
+                    <option value>---</option>
+                    <?php if (isset($this->distributor_ka)): ?>
+                        <?php foreach ($this->distributor_ka as $_key => $ka): ?>
+                            <option value="<?php echo $_key ?>"
+                                <?php if(isset($this->params['distributor_ka']) && $this->params['distributor_ka'] == $_key) echo "selected" ?>><?php echo $ka['title'] ?></option>
+                        <?php endforeach ?>
+                    <?php endif ?>
+                </select>
+            </div>
+
+            <div class="control-group">
+                <label class="span2" for="distributor_po">PO Number</label>
+                <select name="distributor_po" class="span3" id="distributor_po">
+                    <option value>---</option>
+
+                    <?php if (isset($this->po_list)): ?>
+                        <?php foreach ($this->po_list as $_key => $_po): ?>
+                            <option value="<?php echo $_po['id'] ?>"
+                                <?php if(isset($this->params['distributor_po']) && $this->params['distributor_po'] == $_po['id']) echo "selected" ?>><?php echo $_po['po_name'] ?></option>
+                        <?php endforeach ?>
+                    <?php endif ?>
+                </select>
+            </div>
+
+            <div class="control-group">
+                <label for="myTags" class="span2">Tags</label>
+                <ul class="form-control span3" id="myTags"><?php
+                    if (isset($this->params['tags']) and $this->params['tags']):
+                        foreach ($this->params['tags'] as $ta)
+                            echo '<li>'.$ta.'</li>';
+                    endif;
+                    ?></ul>
+            </div>
+            
+            <div class="control-group">
+                <label for="distributor_name" class="span2">Retailer Name</label>
+                <input id="distributor_name" name="distributor_name" type="text" class="input-medium search-query form-control" value="<?php isset($this->params['distributor_name']) and printf($this->params['distributor_name']);?>">
+            </div>
+            
+            <div class="control-group">
+                <label for="d_id" class="span2">Retailer</label>
+                    <input type='text' class="span3" name='SearchBox' id="SearchBox" placeholder="Search" autocomplete="off" />
+                    <select name="d_id" id="d_id" class="span3" size="5">
+                        <option value="">Choose</option>
+                        <?php /*if (isset($this->distributors) && $this->distributors): foreach ($this->distributors as $id=>$name):*/?><!--
+                            <option value="<?php /*echo $id;*/?>" <?php /*if (isset($this->params['d_id']) and $id==$this->params['d_id']):*/?> selected="selected"<?php /*endif;*/?>><?php /*echo $name;*/?></option>
+                        --><?php /*endforeach; endif;*/?>
+                    </select>
+                
+            </div>
+
+        </div>
+        <div class="span5">
+            <div class="control-group">
+                <label for="area_id" class="span2">Area</label>
+                <select name="area_id" id="area" class="span3">
+                    <option value="">Choose</option>
+                    <?php if (isset($this->areas) && $this->areas): foreach ($this->areas as $id=>$name):?>
+                        <option value="<?php echo $id;?>" <?php if (isset($this->params['area_id']) and $id==$this->params['area_id']):?> selected="selected"<?php endif;?>><?php echo $name;?></option>
+                    <?php endforeach; endif;?>
+                </select>
+            </div>
+
+            <div class="control-group">
+                <label for="region" class="span2">Province</label>
+                <select name="region_id" id="region" class="span3">
+                    <option value="">Choose</option>
+                    <?php if (isset($this->regions) && $this->regions): foreach ($this->regions as $id=>$name):?>
+                        <option value="<?php echo $id;?>" <?php if (isset($this->params['region_id']) and $id==$this->params['region_id']):?> selected="selected"<?php endif;?>><?php echo $name;?></option>
+                    <?php endforeach; endif;?>
+                </select>
+            </div>
+
+            <div class="control-group">
+                <label for="district" class="span2">District</label>
+                <select name="district_id" id="district" class="span3">
+                    <option value="">Choose</option>
+                    <?php if (isset($this->districts) && $this->districts): foreach ($this->districts as $id=>$name):?>
+                        <option value="<?php echo $id;?>" <?php if (isset($this->params['district_id']) and $id==$this->params['district_id']):?> selected="selected"<?php endif;?>><?php echo $name;?></option>
+                    <?php endforeach; endif;?>
+                </select>
+            </div>
+
+            <div class="control-group">
+                <label for="campaign" class="span2">Campaign</label>
+                <select name="campaign_id" id="campaign" class="span3">
+                    <option value="">Choose</option>
+                    <?php if (isset($this->campaign) && $this->campaign): foreach ($this->campaign as $id=>$name):?>
+                        <option value="<?php echo $id;?>" <?php if (isset($this->params['campaign_id']) and $id==$this->params['campaign_id']):?> selected="selected"<?php endif;?>><?php echo $name;?></option>
+                    <?php endforeach; endif;?>
+                </select>
+            </div>
+
+
+            <div class="control-group">
+                <label for="payment" class="span2">PAYMENT</label>
+                <input id="payment" name="payment" type="checkbox" class="input-large search-query form-control" value="1" <?php if (isset($this->params['payment']) and $this->params['payment']):?>checked="checked" <?php endif;?>>
+            </div>
+            <div class="control-group">
+                <label for="outmysql_time" class="span2">OUT OF THE WAREHOUSE</label>
+                <input id="outmysql_time" name="outmysql_time" type="checkbox" class="input-large search-query form-control" value="1" <?php if (isset($this->params['outmysql_time']) and $this->params['outmysql_time']):?>checked="checked" <?php endif;?>>
+            </div>
+            <div class="control-group">
+                <label for="created_at_from" class="span2">Order Time From</label>
+                <input type="text" class="form-control search-query date" id="created_at_from" name="created_at_from" value="<?php isset($this->params['created_at_from']) and printf($this->params['created_at_from']);?>">
+            </div>
+            <div class="control-group">
+                <label for="created_at_to" class="span2">Order Time To</label>
+                <input type="text" class="form-control search-query date" id="created_at_to" name="created_at_to" value="<?php isset($this->params['created_at_to']) and printf($this->params['created_at_to']);?>">
+            </div>
+            <div class="control-group">
+                <label for="invoice_time_from" class="span2">Invoice Time From</label>
+                <input type="text" class="form-control search-query date" id="invoice_time_from" name="invoice_time_from" value="<?php isset($this->params['invoice_time_from']) and printf($this->params['invoice_time_from']);?>">
+            </div>
+            <div class="control-group">
+                <label for="invoice_time_to" class="span2">Invoice Time To</label>
+                <input type="text" class="form-control search-query date" id="invoice_time_to" name="invoice_time_to" value="<?php isset($this->params['invoice_time_to']) and printf($this->params['invoice_time_to']);?>">
+            </div>
+            <div class="control-group">
+                <label for="finance_confirm_time_from" class="span2">Finance Confirm Time From</label>
+                <input type="text" class="form-control search-query date" id="finance_confirm_time_from" name="finance_confirm_time_from" value="<?php isset($this->params['finance_confirm_time_from']) and printf($this->params['finance_confirm_time_from']);?>">
+            </div>
+            <div class="control-group">
+                <label for="finance_confirm_time_to" class="span2">Finance Confirm Time To</label>
+                <input type="text" class="form-control search-query date" id="finance_confirm_time_to" name="finance_confirm_time_to" value="<?php isset($this->params['finance_confirm_time_to']) and printf($this->params['finance_confirm_time_to']);?>">
+            </div>
+            <div class="control-group">
+                <label for="status" class="span2">Status</label>
+                <select id="status" class="span3" name="status">
+                    <option value="1" <?php if (isset($this->params['status']) and $this->params['status']==1):?> selected<?php endif;?>>Active</option>
+                    <option value="2" <?php if (isset($this->params['status']) and $this->params['status']==2):?> selected<?php endif;?>>Expired</option>
+                </select>
+            </div>
+            <div class="control-group">
+                <label for="text" class="span2">Remark</label>
+                <input id="text" name="text" type="text" class="input-medium search-query form-control" value="<?php isset($this->params['text']) and printf($this->params['text']);?>">
+            </div>
+            <div class="control-group">
+                <label for="user_id" class="span2">Order Maker</label>
+                <select id="user_id" class="span3" name="user_id">
+                    <option value="">Choose</option>
+                    <?php if ($this->staffs_cached): foreach ($this->staffs_cached as $id=>$name):?>
+                        <option value="<?php echo $id;?>" <?php if (isset($this->params['user_id']) and $id==$this->params['user_id']):?> selected<?php endif;?>><?php echo $name;?></option>
+                    <?php endforeach; endif;?>
+                </select>
+            </div>
+            <div class="control-group">
+                <label for="cancel" class="span2">Cancel or Not</label>
+                <select name="cancel" id="cancel" class="span3">
+                    <option value="">Choose</option>
+                    <option value="0" <?php if (isset($this->params['cancel']) and $this->params['cancel']==0):?> selected<?php endif;?>>Not Cancel</option>
+                    <option value="1" <?php if (isset($this->params['cancel']) and $this->params['cancel']==1):?> selected<?php endif;?>>Canceled</option>
+                </select>
+            </div>
+        </div>
+    </div>
+
+    <button type="submit" class="btn btn-primary">Search</button>
+    <button type="reset" class="btn btn-warning">Reset</button>
+    <button type="submit" name="export" value="1" style="display: none;" class="btn btn-success">Export</button>
+    <button type="submit" name="export" value="4" style="display: none;" class="btn btn-success">IMEI Export</button>
+    <button type="submit" name="export" value="7" style="display: none;" class="btn btn-success">Output VAT Report</button>
+    <button type="submit" name="export" value="8" style="display: none;" class="btn btn-success">Order Status</button>
+    <br/><br/>
+    <button type="submit" name="export" value="9" style="display: none;" class="btn btn-success">Export By Province</button>
+    <button type="submit" name="export" value="10" style="display: none;" class="btn btn-success">Export By Distributor</button>
+    <button type="submit" name="export" value="11" style="display: none;" class="btn btn-success">Sale Master Data</button>
+    <input type="hidden" name="view_accessories" class="view_accessories" id="view_accessories" value="<?=$this->view_accessories?>"/>
+<!--    
+    <button type="submit" name="export" value="2" class="btn btn-success">Export For Finance</button>
+    <button type="submit" name="export" value="3" class="btn btn-success">Export For Finance 2</button> 
+    <button type="submit" name="export" value="5" class="btn btn-success">Export For Campaign</button> 
+-->
+</form>
+<script async="async">
+    getDistributor(<?php echo ((isset($this->params['d_id']) and $this->params['d_id']) ? $this->params['d_id'] : '');?>);
+
+    options = {
+        selectAllText: 'Select All',
+        includeSelectAllOption: true,
+        includeSelectAllIfMoreThan: 3,
+        disableIfEmpty: true
+    };
+
+    function multi() {
+        $('.multiselect').multiselect(options);
+    }
+
+    function getDistributor(currentDistributorID) {
+
+        $.ajax({
+            url: '<?php echo HOST ?>get/distributor-cached',
+            type: 'post',
+            dataType: 'json'
+        })
+            .done(function(data) {
+                if (!data || data.no_data) return false;
+                $('#d_id option').not(':first').remove();
+                d_list = [];
+                $.each(data, function(key, value) {
+                    var selected = currentDistributorID == key ? 'selected' :'';
+                    var op = '<option value="'+key+'" ' + selected + '>'+value.store_code+' - '+value.title+'</option>';
+                    d_list.push(op);
+                });
+                document.getElementById('d_id').innerHTML = d_list.join();
+
+                var jets = new Jets({
+                    searchTag: '#SearchBox',
+                    contentTag: '#d_id'
+                });
+            })
+            .fail(function() {
+                console.log("error");
+            })
+            .always(function() {
+                /*console.log("complete");*/
+            });
+
+    }
+
+    $(document).ready(function () {
+        multi();
+
+    });
+
+</script>

@@ -1,0 +1,152 @@
+<div class="row">
+    <div class="span9">
+        <table class="table table-bordered">
+            <thead>
+                <tr>
+                    <?php echo $this->sorting(array(
+                            '#',
+                            'Cartoon Box Number',
+                            'PO SN',
+                            'Shipping Time',
+                            'Download Link',
+                            'IMEI List',
+                        ),
+                        $this->url, $this->sort, $this->desc
+                    ); ?>
+                </tr>
+            </thead>
+            <tbody>
+                <?php
+                if (isset($this->boxes) and $this->boxes)
+                    foreach ($this->boxes as $k=>$box): ?>
+                <tr>
+                    <td><?php $inc = $this->offset + $k + 1; echo $inc; ?></td>
+                    <td><a href="<?php echo HOST ?>po/cartoon-box?po_from=&amp;po_to=&amp;cartoon_box_number=<?php echo $box['cartoon_box_number'] ?>"><?php echo $box['cartoon_box_number'] ?></a></td>
+                    <td><a href="<?php echo HOST ?>po/cartoon-box?po_from=&amp;po_to=&amp;po_sn=<?php echo $box['po_sn'] ?>"><?php echo $box['po_sn'] ?></a></td>
+                    <td><?php if(isset($box['shipping_time']) && strtotime($box['shipping_time'])) echo date('d/m/Y H:i:s', strtotime($box['shipping_time'])) ?></td>
+                    <td>
+                        <div class="input-append">
+                            <input class="span2" type="text" value="<?php echo HOST ?>download?id=<?php echo $box['hash'] ?>" id="link<?php echo $inc ?>">
+                            <button class="btn bt-default copy_link" type="button" data-clipboard-target="#link<?php echo $inc ?>">
+                                <img src="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAA4AAAAQCAYAAAAmlE46AAAAwUlEQVQoU5XSz01CQRAG8B8e6YAW8IggiTV4sANvVCShBjgQmjAQbcQqNENYMu+9xSxz2p2Z789+2ZFhvWGDX6xwqOwYVZo/eMUD9pjcAp6wSMOvdI/zU5rF7jLuoRiWoub4rrFjlmZnlxl4AzNod4C1t9aIwt0AWCxnQJ+wCqwpjLHG+2X4r2JRecQW02Kvb+XKkgah8IFQrFZJNacb57uAfeawuGuxmlMt72wKp+UDdFI94rkFhU+8lC/XiOmu/QH1wCcPHwfbWAAAAABJRU5ErkJggg==">
+                            </button>
+                        </div>
+                    </td>
+                    <td>
+                        <button type="button"
+                            class="btn btn-default btn-mini view_imei_list"
+                            data-box="<?php echo $box['cartoon_box_number'] ?>">
+                            <i class="icon-eye-open"></i>
+                        </button>
+                    </td>
+                </tr>
+                <?php endforeach;?>
+
+            </tbody>
+        </table>
+        <div class="paging">
+            <?php echo $this->paging($this->total, $this->limit, $this->offset, $this->url);?>
+        </div>
+    </div>
+
+    <div class="span3">
+        <legend>IMEI List</legend>
+        <div class="imei_list">
+
+        </div>
+    </div>
+</div>
+<script src="https://cdn.rawgit.com/zenorocha/clipboard.js/master/dist/clipboard.min.js"></script>
+<script type="text/javascript">
+(function($) {
+    $('.view_imei_list').click(view_imei_list);
+    new Clipboard('.copy_link');
+})(jQuery);
+
+function view_imei_list(e) {
+    _self = $(e.target).hasClass('view_imei_list') ? $(e.target) : $(e.target).parent();
+    box = _self.data('box');
+    imei_list = $('.imei_list');
+    imei_list.fadeOut().html('');
+
+    $('.close_imei_list')
+        .removeClass('btn-info')
+        .removeClass('btn-warning')
+        .addClass('btn-default')
+        .removeClass('close_imei_list')
+        .addClass('view_imei_list')
+        .off('click')
+        .on('click', view_imei_list)
+        .html('<i class="icon-eye-open"></i>');
+
+    if (!box) return false;
+
+    _self.html('<span class="loading"></span>');
+
+    $.ajax({
+        url: '<?php echo HOST ?>po/cartoon-box-imei',
+        type: 'post',
+        dataType: 'html',
+        data: {cartoon_box_number: box},
+    })
+    .done(function(html) {
+        if (!html) return false;
+
+        try {
+            data = $.parseJSON(html);
+
+            if (data && !data.error && data.imeis) {
+                html_parts = [];
+                len = data.imeis.length;
+
+                for(var i = 0; i < len; i++)
+                    html_parts.push("<li>"+data.imeis[i]+"</li>");
+
+                imei_list.html("<ol>"+html_parts.join("")+"</ol>");
+
+                _self.removeClass('btn-default')
+                    .removeClass('view_imei_list')
+                    .addClass('close_imei_list')
+                    .addClass('btn-info')
+                    .off('click')
+                    .on('click', close_imei_list)
+                    .html('<i class="icon-eye-close"></i>');
+            } else if (data && data.error) {
+                imei_list.text(data.error);
+                _self.removeClass('btn-default')
+                    .addClass('btn-warning')
+                    .html('<i class="icon-exclamation-sign"></i>');
+            }
+        } catch(err) {
+            imei_list.text('Error');
+            _self.removeClass('btn-default')
+                .addClass('btn-warning')
+                .html('<i class="icon-exclamation-sign"></i>');
+        }
+
+        imei_list.fadeIn();
+
+        console.log("success");
+    })
+    .fail(function() {
+        console.log("error");
+    })
+    .always(function() {
+        console.log("complete");
+    });
+}
+
+function close_imei_list(e) {
+    _self = $(e.target).hasClass('close_imei_list') ? $(e.target) : $(e.target).parent();
+    $('.imei_list').fadeOut().html('');
+    _self
+        .removeClass('btn-info')
+        .removeClass('btn-warning')
+        .addClass('btn-default')
+        .removeClass('close_imei_list')
+        .addClass('view_imei_list')
+        .off('click')
+        .on('click', view_imei_list)
+        .html('<i class="icon-eye-open"></i>');
+}
+</script>

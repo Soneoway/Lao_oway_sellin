@@ -1,0 +1,71 @@
+<div class="page-header">
+    <h1>Nhân viên mua máy</h1>
+</div>
+<?php
+    if (isset($this->messages_success) and $this->messages_success)
+        foreach ($this->messages_success as $message):
+            echo '<div class="alert alert-success">'.$message.'</div>';
+        endforeach;
+
+    if (isset($this->messages) and $this->messages)
+        foreach ($this->messages as $message):
+            echo '<div class="alert alert-error">'.$message.'</div>';
+        endforeach;
+?>
+
+<div class="accordion" id="accordion2">
+    <div class="accordion-group">
+        <div class="accordion-heading">
+            <a class="accordion-toggle collapsed" data-toggle="collapse" data-parent="#accordion2" href="#collapseTwo">
+                Search
+            </a>
+        </div>
+        <div id="collapseTwo" class="accordion-body collapse" style="height: 0px;">
+            <div class="accordion-inner">
+                <?php
+                    echo $this->render('staff-order/partials/search.phtml');
+                ?>
+            </div>
+        </div>
+    </div>
+</div>
+
+<div class="table-responsive">
+    <?php
+        echo $this->render('staff-order/partials/list.phtml');
+    ?>
+</div>
+
+<link rel="stylesheet" href="<?php echo HOST?>css/jquery-ui-1.8.12.custom.css" />
+<script src="<?php echo HOST?>js/jquery-ui-1.8.12.custom.min.js"></script>
+<style>
+	table tr td ul{
+		list-style: none;        
+		margin: 0px;
+		padding: 0px;
+	}
+	table tr td{
+		vertical-align: top!important;
+	}
+	table tr.main-row
+	{
+		background: #e5e5e5!important;
+	}
+	.chosen-container-multi .chosen-choices{
+		border-radius: 3px;
+		border: 1px solid #ccc;
+		box-shadow: none;
+	}
+</style>
+<script>
+	 $(document).ready(function () {
+         $( ".datepicker" ).datepicker({ dateFormat: "yy-mm-dd" });
+         $('.form-search button:reset').click(function (e){
+            $('.form-search input, .form-search select').val('');
+            $('textarea').val('');
+            $('.form-search').submit();
+            return false;
+        });
+        initSearchOptionDistributor('d_id', 'SearchBox');
+    });
+</script>

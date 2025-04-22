@@ -1,0 +1,11 @@
+<?php if (isset($this->errors)): ?>
+    <p><?php echo $this->errors ?></p>
+<?php endif ?>
+
+<?php if (isset($this->failed_list) && count($this->failed_list)): ?>
+    <ul>
+    <?php foreach ($this->failed_list as $key => $value): ?>
+        <li><?php echo $value ?></li>
+    <?php endforeach ?>
+    </ul>
+<?php endif ?>

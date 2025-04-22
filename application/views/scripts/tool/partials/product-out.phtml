@@ -1,0 +1,51 @@
+<style type="text/css">
+.invoice
+{
+    position: relative;
+    top: 0px;
+    z-index: 9999;
+    top: -486px;
+      height: 400px;
+  margin-bottom: -400px;}
+  </style>
+<table class="tbllist invoice" cellspacing="1" cellpadding="5">
+    <?php
+    $count = 0;
+    $num_total = $price_before_vat = 0;
+
+    if (isset($this->product) && is_array($this->product)):
+        $i = 1;
+        foreach ($this->product as $k => $v):
+            $price_before_vat +=  isset($this->total[ $k ]) ? $this->total[ $k ] : 0;
+                 if(isset($this->ck[$k]) and $this->ck[$k])
+                 {
+                     $price_before_vat = $price_before_vat - $this->ck[$k];
+                     $this->total[$k] = $this->ck[$k];
+                 }
+            $after_vat = (isset($this->total[ $k ]) ? $this->total[ $k ] : 0) * 1.1;            //đơn giá
+?>
+            <tr class="sp none">
+                <td class="abc"><span><?php echo $i++ ?></span></td>
+                <td class="productname">
+                    <?php echo $v ?>
+                </td>
+                <td class="unit" ><?php if(isset($this->unit[ $k ]) && $this->unit[ $k ]) echo $this->unit[ $k ] ?></td>
+                <td class="quantity" ><?php if(isset($this->quantity[ $k ]) && $this->quantity[ $k ]) echo $this->quantity[ $k ] ?></td>
+                <td class="price"><?php if(isset($this->price[ $k ]) && !empty($this->price[ $k ])) echo My_Number::product_price($this->price[ $k ], 2);  ?></td>
+                <td class="total"><?php  if(isset($this->total[ $k ]) && !empty($this->total[ $k ])) echo My_Number::product_price($this->total[ $k ], 2);  ?></td>
+            </tr>
+            <input type="hidden" name="invoice_price[]" value="<?php echo '_' . $after_vat ; ?>" />
+
+        <?php endforeach;
+    endif; ?>
+    <tr></tr>
+
+</table>
+
+<?php
+
+$this->vat = $vat = round($price_before_vat * 0.1);
+$this->price_before_vat = $price_before_vat = round($price_before_vat);
+$this->price_after_vat = intval($vat) + intval($price_before_vat);
+
+?>

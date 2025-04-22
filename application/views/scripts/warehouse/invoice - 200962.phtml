@@ -1,0 +1,208 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="utf-8">
+<style>
+body{
+   font-family:'phetsarath ot';
+  font-size:14px;
+}
+table, th, td {
+  border: 1px solid black;
+  border-collapse: collapse;
+  font-family:'phetsarath ot';
+  text-align:center;
+  font-size:13px;
+
+}
+th, td {
+  padding: 5px;
+  text-align: center;
+  
+}
+#td{
+   text-align:left;
+}
+#td1{
+   text-align:left;
+   padding-left: 25px;
+}
+#tdleft{
+   text-align:left;
+   padding: 10px;
+}
+#tdright{
+   text-align:right;
+   padding: 8px;
+}
+div{
+   text-align: center;
+   font-size:18px;
+   font-weight: bold;
+}
+b{
+  font-size: 16px;
+}
+#b2{
+  font-size: 15px;
+}
+#spanright{
+  text-align:right;
+
+}
+
+.single_record{page-break-after: always;} 
+</style>
+</head>
+<body>
+
+
+<?php 
+    $total = 30;
+    $show_item=10;
+    $totalpage= $total/$show_item;
+
+    $distributor_details= $this->distributor_details;
+    $getInvoiceDetails= $this->getInvoiceDetails;
+    print_r($getInvoiceDetails);
+    //$this->showinvooice;
+    for ($i = 1; $i <= $totalpage; $i++)
+    {
+?>
+<!-- Table 1 -->
+
+
+<table style="width:830px; height:135px; border: 0px;">
+  <tr>
+    <td style="width:520px" id="td1">
+       <b>Linko Mobile Sole</b> <br> 
+       <span id="b2">ບ້ານສະພານທອງໃຕ້, ເມືອງສີສັດຕະນາກ, ນະຄອນຫຼວງວຽງຈັນ. SaphanThongTai Village,</span> <br>
+       <span id="b2">Sisattanak District, Vientiane ໂທ/Tel:021-224455, Mobile:020-22331144</span> <br>
+       <div>ບິນຂາຍສິນຄ້າ/Sell Invoice</div>
+    </td> 
+    <td rowspan="2" id="td">
+       ເລກທີ່ : <?php echo $distributor_details[0]['sn_ref']?>/<?php echo $distributor_details[0]['invoice_number']?><br>
+       ວັນທີ : <?php echo $distributor_details[0]['invoice_time'] ?> <br>
+       ເລກທີ່ PO : <?php echo $distributor_details[0]['null'] ?> <br>
+       Credit : <?php echo $distributor_details[0]['null'] ?> <br>
+       ຜູ້ຂາຍ : <?php echo $distributor_details[0]['Fullname'] ?> <br>
+       ໂທ/Tel : <?php echo $distributor_details[0]['null'] ?> <br>
+    </td>
+  </tr>
+   <tr style="height:40px">
+    <td id="td">
+       ລູກຄ້າ : <?php echo $distributor_details[0]['distributor_name'] ?><br>
+       ທິ່ຢູ່ : <?php echo $distributor_details[0]['shipping_address'] ?>
+    </td>
+  </tr>
+</table>
+
+<!-- Table 2 -->
+<table style="width:830px">
+  <tr>
+    <td style="width:35px">ລ.ດ</td>
+    <td> ລາຍການສິນຄ້າ/Description</td>
+    <td style="width:50px">ຈຳນວນ</td>
+    <td style="width:130px">ລາຄາ/ໜ່ວຍ</td>
+    <td>ລາຄາລວມ</td>
+  </tr>
+    <tr style="height:200px">
+    <td>
+      1 <br>
+      2 <br>
+      3 <br>
+      4 <br>
+      5 <br>
+      6 <br>
+      7 <br>
+      8 <br>
+      9 <br>
+      10 <br>
+      11 <br>
+      12 <br>
+    </td>
+    <td id="tdleft">
+      Oppo F11 Pro 64G &nbsp;&nbsp; Red/ແດງ <br>
+      Oppo F11 Pro 64G &nbsp;&nbsp; Red/ແດງ <br>
+      Oppo F11 Pro 64G &nbsp;&nbsp; Red/ແດງ <br>
+      Oppo F11 Pro 64G &nbsp;&nbsp; Red/ແດງ <br>
+      Oppo F11 Pro 64G &nbsp;&nbsp; Red/ແດງ <br>
+      Oppo F11 Pro 64G &nbsp;&nbsp; Red/ແດງ <br>
+      Oppo F11 Pro 64G &nbsp;&nbsp; Red/ແດງ <br>
+      Oppo F11 Pro 64G &nbsp;&nbsp; Red/ແດງ <br>
+      Oppo F11 Pro 64G &nbsp;&nbsp; Red/ແດງ <br>
+      Oppo F11 Pro 64G &nbsp;&nbsp; Red/ແດງ <br>
+      Oppo F11 Pro 64G &nbsp;&nbsp; Red/ແດງ <br>
+      Oppo F11 Pro 64G &nbsp;&nbsp; Red/ແດງ <br>
+    </td>
+    <td>
+      1 <br>
+      2 <br>
+      3 <br>
+      4 <br>
+      5 <br>
+      6 <br>
+      7 <br>
+      8 <br>
+      9 <br>
+      10 <br>
+      11 <br>
+      12 <br>
+    </td>
+    <td id="tdright">
+      2,500,000.00 <br>
+      2,500,000.00 <br>
+      2,500,000.00 <br>
+      2,500,000.00 <br>
+      2,500,000.00 <br>
+      2,500,000.00 <br>
+      2,500,000.00 <br>
+      2,500,000.00 <br>
+      2,500,000.00 <br>
+      2,500,000.00 <br>
+      2,500,000.00 <br>
+      225,500,000.00 <br>
+    </td>
+    <td id="tdright">
+      49,999,000.00 <br>
+      49,999,000.00 <br>
+      49,999,000.00 <br>
+      49,999,000.00 <br>
+      49,999,000.00 <br>
+      49,999,000.00 <br>
+      49,999,000.00 <br>
+      49,999,000.00 <br>
+      49,999,000.00 <br>
+      49,999,000.00 <br>
+      49,999,000.00 <br>
+      498,999,000.00 <br>
+    </td>
+  </tr>
+    <tr>
+    <td colspan="4">
+    <?php
+       $name="John";
+       $lastName="Travolta";
+       echo $name." . ".$lastName; 
+    
+    ?>
+    </td>
+    <td style="width:190px;" id="td1">ລວມທັງໝົດ: <span id="spanright">5,147,425,000.00</span></td>
+  </tr>
+</table>
+<br><br>
+ &nbsp;&nbsp;&nbsp; &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;_________________ &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;  _________________ &nbsp;&nbsp;&nbsp;&nbsp;&nbsp; _________________  <br>
+ &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<b>ຜູ້ອອກບິນ-ສົ່ງເຄື່ອງ</b> &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; <b>ຜູ້ກວດສອບ</b> &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; <b>ຜູ້ຮັບຊື້</b> &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+
+ <b> <?php echo $i."/".$totalpage;?></b>
+
+<?php           
+
+echo '<p class="single_record"></p>';
+
+}
+
+?>
+
+</body>
+</html>

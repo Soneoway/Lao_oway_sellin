@@ -1,0 +1,180 @@
+<div class="page-header">
+    <h1>View transaction</h1>
+</div>
+<?php
+    if (isset($this->messages_success) and $this->messages_success)
+        foreach ($this->messages_success as $message):
+            echo '<div class="alert alert-success">'.$message.'</div>';
+        endforeach;
+
+    if (isset($this->messages) and $this->messages)
+        foreach ($this->messages as $message):
+            echo '<div class="alert alert-error">'.$message.'</div>';
+        endforeach;
+?>
+<?php if(	isset($this->transaction) && $this->transaction	):?>
+<div class='row'>
+	<div class="span12">
+	        <table class="table table-bordered">
+	            <tbody>
+	         
+	            	<tr>
+	            		<td>Retailer:</td>
+	            		<td><?php echo $this->transaction['title']?></td>
+	            	</tr>
+<!--	            	<tr>-->
+<!--	            		<td>Dealer</td>-->
+<!--	            		<td>--><?php //echo $this->transaction['title']?><!--</td>	            		-->
+<!--	            	</tr>-->
+					<tr>
+	            		<td>Type</td>
+	            		<td>
+							<?php 
+								$arr = array(
+									'1'=>'In',
+									'2'=>'Out',
+									'3'=>'Bank transfer fee',
+									'4'=>'Assertment'
+								);	
+								
+								if($this->transaction['type'] == 1)
+									echo "In";
+								elseif($this->transaction['type'] == 2){
+									echo "Out";
+								}elseif($this->transaction['type'] == 3){
+									echo 'Bank transfer fee';
+								}
+								else{
+									echo 'Assertment';
+								}
+							?>
+						</td>	            		
+	            	</tr>
+					<?php 
+						if($this->transaction['type'] == 1 or $this->transaction['type'] == 3):
+					?>
+	            	<tr>
+	            		<td>Pay Time</td>
+	            		<td><?php echo $this->transaction['pay_time']?></td>	            		
+	            	</tr>
+	            	<tr>
+	            		<td>Pay money</td>
+	            		<td><?php echo number_format($this->transaction['pay_money'],2)?></td>	            		
+	            	</tr>
+	            	<tr>
+	            		<td>Fee Bank Tranfer</td>
+	            		<td><?php echo number_format($this->transaction['pay_banktranfer'],2)?></td>	            		
+	            	</tr>
+					
+	            	<tr>
+	            		<td>From bank</td>
+	            		<td><?php echo $this->transaction['bank_name']?></td>	            		
+	            	</tr>
+					<?php 
+						endif;
+					?>
+					<tr>
+	            		<td>Bank serial:</td>
+	            		<td><?php echo $this->transaction['bank_serial']?></td>
+	            	</tr>
+	            	<tr>
+	            		<td>Bank transaction code:</td>
+	            		<td><?php echo $this->transaction['bank_transaction_code']?></td>
+	            	</tr>
+					<tr>
+	            		<td>Content:</td>
+	            		<td><?php echo $this->transaction['content']?></td>
+	            	</tr>
+	            	<tr>
+	            		<td>Note:</td>
+	            		<td><?php echo $this->transaction['note']?></td>
+	            	</tr>
+	            	<tr>
+	            		<td>For Order number</td>
+	            		<td>
+	            			<?php 
+	            				if(	isset($this->markets) && $this->markets	):
+	            			?>
+                			<table class="table table-condensed market">
+                				<thead>
+                					<tr>
+                						<th>Order number</th>
+                						<th>Price ( THB )</th>
+                					</tr>
+                				</thead>
+                				<tbody>
+                				<?php 
+                			
+                						$sum = 0;
+                						foreach( $this->markets as $market):
+                							$sum += $market['total_all'];
+                						//print_r($market);
+                						$sn_ref = $market['sn_ref'];
+                						if($sn_ref==''){
+                							$sn_ref = $market['sn'];
+                						}
+                				?>
+                					<tr>
+                						<td><a href='/sales/view?sn=<?php echo $market["sn"] ?>' target="_blank" ><?php echo $sn_ref?><a/></td>
+                						<td class="text-right"><?php echo number_format($market['total_all'],2)?></td>
+                					</tr>
+                				<?php 
+                						endforeach;
+                					echo "<tr><td>Total</td><td class='text-right'>".number_format($sum,2)."</td></tr>";
+                					
+                				?>
+                				</tbody>
+                			</table>
+                			<?php
+                				 endif;
+                			?>
+                		</td>	            		
+	            	</tr>
+	            	<?php 
+						if($this->transaction['type'] == 2):
+					?>
+	            	<tr>
+	            		<td>Out put</td>
+	            		<td><?php echo number_format($this->transaction['output'],2);?></td>     		
+	            	</tr>
+	            	<tr>
+	            		<td>Payment confirm</td>
+	            		<td><?php echo $this->transaction['payment'];?></td>     		
+	            	</tr>
+					<?php 
+						endif;
+					?>
+	            	<tr>
+	            		<td>Remain balance up to this time:</td>
+	            		<td><?php echo number_format($this->remain_balance,2);?></td>        		
+	            	</tr>
+	            </tbody>
+	        </table>
+	        <input type="hidden" name="back_url" id="back_url" value="/checkmoney/<?php if($this->is_credit == 'CREDIT'){ echo 'credit-'; } else if($this->is_credit == 'MULTICASH') { echo 'multi-cash-'; }?>list">
+	        <button type="button" class="btn btn-danger go-back">Go back</button>
+	</div>
+	
+	
+</div>
+<?php 
+	endif
+?>
+	
+<link rel="stylesheet" href="<?php echo HOST?>css/checkmoney.css" />
+<script type="text/javascript">
+	$(document).ready(function(){
+		$('.go-back').click(function(e){
+            window.location.href = $('#back_url').val();
+            return false;
+        });
+	});
+</script>	
+	
+	
+	
+	
+	
+	
+	
+	
+	

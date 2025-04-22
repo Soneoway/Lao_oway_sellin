@@ -1,0 +1,37 @@
+<form class="form-search form-horizontal" method="get" action="<?php echo HOST ?>finance/report-stock-daily">
+    <div class="row">
+        <div class="span5">
+        <div class="control-group">
+            <label for="document_type" class="span2">Type</label>
+            <select style="width: 180px;" id="document_type" name="document_type">
+                <option value="">-- Select Report -- </option>
+                <option value="1" <?php if (isset($this->params['document_type']) and '1'==$this->params['document_type']){?> selected <?php } ?>>1. Storage Daily</option>
+                <option value="2" <?php if (isset($this->params['document_type']) and '2'==$this->params['document_type']){?> selected <?php } ?>>2. Cancelled Daily</option>
+                <option value="3" <?php if (isset($this->params['document_type']) and '3'==$this->params['document_type']){?> selected <?php } ?>>3. Storage Daily Digital</option>
+                <option value="4" <?php if (isset($this->params['document_type']) and '4'==$this->params['document_type']){?> selected <?php } ?>>4. Storage Daily Acc</option>
+                <option value="5" <?php if (isset($this->params['document_type']) and '5'==$this->params['document_type']){?> selected <?php } ?>>5. Daily Submitted</option>
+                <option value="6" <?php if (isset($this->params['document_type']) and '6'==$this->params['document_type']){?> selected <?php } ?>>6. Daily Distributor Surplus</option>
+            </select>
+        </div>
+
+        </div>
+        <div class="span5">
+            <div class="control-group">
+                <label for="doc_created_at_from" class="span2">Document Time From</label>
+                <input type="text" class="form-control search-query date" id="doc_created_at_from" name="doc_created_at_from" 
+                value="<?php if(isset($this->params['doc_created_at_from'])){ printf($this->params['doc_created_at_from']);}else{echo date("d/m/Y");} ?>">
+            </div>
+
+            <div class="control-group">
+                <label for="doc_created_at_to" class="span2">Document Time To</label>
+                <input type="text" class="form-control search-query date" id="doc_created_at_to" name="doc_created_at_to" 
+                value="<?php if(isset($this->params['doc_created_at_to'])){ printf($this->params['doc_created_at_to']);}else{echo date("d/m/Y");} ?>">
+            </div>
+
+        </div>
+    </div>
+    <input type="hidden" name="counter" value="<?=$this->counter;?>">
+    <button type="submit" class="btn btn-primary">Search</button>
+    <!-- <button type="reset" class="btn btn-warning">Reset</button> -->
+    <button type="submit" name="export" value="1" style="display: none;" class="btn btn-success">Export</button>
+</form>

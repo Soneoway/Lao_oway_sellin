@@ -1,0 +1,239 @@
+<div class="page-header">
+    <h1>Price Log <small>Create</small></h1>
+</div>
+
+<form class="form-horizontal" method="post" action="<?php echo HOST ?>product/price-log-save">
+    <div class="span6">
+		
+		<div class="control-group">
+            <label class="control-label" for="good_id">Categories</label>
+            <div class="controls">
+                <select name="cat_id" id="cat_id" required>
+                    <option value>---</option>
+                    <?php if (isset($this->cat) && $this->cat): ?>
+                        <?php foreach ($this->cat as $key => $cat): ?>
+                            <option value="<?php echo $key ?>"
+                                    <?php if (isset($this->good['cat_id']) && $key==$this->good['cat_id']) echo "selected" ?>
+                                ><?php echo $cat ?></option>
+                        <?php endforeach ?>
+                    <?php endif ?>
+                </select>
+            </div>
+        </div>
+	
+        <div class="control-group">
+            <label class="control-label" for="good_id">Product</label>
+            <div class="controls">
+                <select name="good_id" id="good_id" required>
+                    <option value>---</option>
+                    <?php if (isset($this->goods) && $this->goods): ?>
+                        <?php foreach ($this->goods as $key => $good): ?>
+                            <option value="<?php echo $good['id'] ?>"
+                                    <?php if (isset($this->log['id']) && $good['id']==$this->log['good_id']) echo "selected" ?>
+                                ><?php echo $good['name'] ?></option>
+                        <?php endforeach ?>
+                    <?php endif ?>
+                </select>
+            </div>
+        </div>
+
+        <div class="control-group">
+            <label class="control-label" for="color_id">Color - (for exception cases)</label>
+            <div class="controls">
+                <select name="color_id" id="color_id">
+                    <option value>---</option>
+                    <?php if (isset($this->good_colors) && $this->good_colors): ?>
+                        <?php foreach ($this->good_colors as $key => $good_color): ?>
+                            <option value="<?php echo $key ?>"
+                                    <?php if (isset($this->log['id']) && $key==$this->log['color_id']) echo "selected" ?>
+                                ><?php echo $good_color ?></option>
+                        <?php endforeach ?>
+                    <?php endif ?>
+                </select>
+            </div>
+        </div>
+
+        <div class="control-group">
+            <label class="control-label" for="price">Price</label>
+            <div class="controls">
+                <input type="text" name="price" id="price" required
+                    value="<?php if (isset($this->log['price'])) echo $this->log['price'] ?>">
+            </div>
+        </div>
+
+        <div class="control-group">
+            <label class="control-label" for="from_date">From</label>
+            <div class="controls">
+                <input type="text" name="from_date" id="from_date" required class="date"
+                    value="<?php if (isset($this->log['from_date']) && strtotime($this->log['from_date'])) echo date('d/m/Y', strtotime($this->log['from_date'])) ?>">
+            </div>
+        </div>
+
+        <div class="control-group">
+            <label class="control-label" for="to_date">To</label>
+            <div class="controls">
+                <input type="text" name="to_date" id="to_date"  class="date"
+                    value="<?php if (isset($this->log['to_date']) && strtotime($this->log['to_date'])) echo date('d/m/Y', strtotime($this->log['to_date'])) ?>">
+            </div>
+        </div>
+
+        <div class="controls">
+            <a href="<?php echo HOST ?>product/price-log" class="btn btn-default">Cancel</a>
+            <input type="hidden" name="id" value="<?php if(isset($this->log['id'])) echo $this->log['id'] ?>">
+            <button type="submit" class="btn btn-primary">Save</button>
+        </div>
+    </div>
+
+    <div class="span5">
+            <div class="control-group">
+                <label class="control-label" for="price_1">I Agent Price</label>
+                <div class="controls">
+                    <input type="number" id="price_1" name="price_1" placeholder="I Agent Price" value="<?php if(isset($this->price) and $this->price[LOG_PRICE_I_AGENT_PRICE]) echo $this->price[LOG_PRICE_I_AGENT_PRICE] ?>">
+                </div>
+            </div>
+            <div class="control-group">
+                <label class="control-label" for="price_2">II Agent Price</label>
+                <div class="controls">
+                    <input type="number" id="price_2" name="price_2" placeholder="II Agent Price" value="<?php if(isset($this->price) and $this->price[LOG_PRICE_II_AGENT_PRICE]) echo $this->price[LOG_PRICE_II_AGENT_PRICE] ?>">
+                </div>
+            </div>
+            <div class="control-group">
+                <label class="control-label" for="price_5">III Agent Price (For FPT)</label>
+                <div class="controls">
+                    <input type="number" id="price_5" name="price_5" placeholder="III Agent Price (For FPT)" value="<?php if(isset($this->price) and $this->price[LOG_PRICE_III_AGENT_PRICE_FOR_FPT]) echo $this->price[LOG_PRICE_III_AGENT_PRICE_FOR_FPT] ?>">
+                </div>
+            </div>
+            <div class="control-group">
+                <label class="control-label" for="price_6">IV Agent Price (Deal Smartphone - Viễn Hưng)</label>
+                <div class="controls">
+                    <input type="number" id="price_6" name="price_6" placeholder="IV Agent Price (Deal Smartphone - Viễn Hưng)" value="<?php if(isset($this->price) and $this->price[LOG_PRICE_IV_AGENT_PRICE_FOR_VIEN_HUNG]) echo $this->price[LOG_PRICE_IV_AGENT_PRICE_FOR_VIEN_HUNG] ?>">
+                </div>
+            </div>
+            <div class="control-group">
+                <label class="control-label" for="price_7">V Agent Price (TGDD - Accessories)</label>
+                <div class="controls">
+                    <input type="number" id="price_7" name="price_7" placeholder="V Agent Price (TGDD - Accessories)" value="<?php if(isset($this->price) and $this->price[LOG_PRICE_V_AGENT_PRICE_FOR_TGDD_ACCESSORIES]) echo $this->price[LOG_PRICE_V_AGENT_PRICE_FOR_TGDD_ACCESSORIES] ?>">
+                </div>
+            </div>
+            <div class="control-group">
+                <label class="control-label" for="price_8">VI Agent Price (Nguyen Kim)</label>
+                <div class="controls">
+                    <input type="number" id="price_8" name="price_8" placeholder="VI Agent Price (Nguyen Kim)" value="<?php if(isset($this->price) and $this->price[LOG_PRICE_VI_AGENT_PRICE_FOR_NGUYEN_KIM]) echo $this->price[LOG_PRICE_VI_AGENT_PRICE_FOR_NGUYEN_KIM] ?>">
+                </div>
+            </div>
+            <div class="control-group">
+                <label class="control-label" for="price_9">VII Agent Price (For Cambodia)</label>
+                <div class="controls">
+                    <input type="number" id="price_9" name="price_9" placeholder="VII Agent Price (For Cambodia)" value="<?php if(isset($this->price) and $this->price[LOG_PRICE_VII_AGENT_PRICE_FOR_CAMPODIA]) echo $this->price[LOG_PRICE_VII_AGENT_PRICE_FOR_CAMPODIA] ?>">
+                </div>
+            </div>
+            <div class="control-group">
+                <label class="control-label" for="price_10">VIII Agent Price (Accessories For Cambodia)</label>
+                <div class="controls">
+                    <input type="number" id="price_10" name="price_10" placeholder="VIII Agent Price (Accessories For Cambodia)" value="<?php if(isset($this->price) and $this->price[LOG_PRICE_VIII_AGENT_PRICE_FOR_CAMPODIA_ACCESSORIES]) echo $this->price[LOG_PRICE_VIII_AGENT_PRICE_FOR_CAMPODIA_ACCESSORIES] ?>">
+                </div>
+            </div>
+            <div class="control-group">
+                <label class="control-label" for="price_11">IX Agent Price (Điện máy Chợ Lớn)</label>
+                <div class="controls">
+                    <input type="number" id="price_11" name="price_11" placeholder="IX Agent Price (Điện máy Chợ Lớn)" value="<?php if(isset($this->price) and $this->price[LOG_PRICE_IX_AGENT_PRICE_FOR_DIEN_MAY_CHO_LON]) echo $this->price[LOG_PRICE_IX_AGENT_PRICE_FOR_DIEN_MAY_CHO_LON] ?>">
+                </div>
+            </div>
+            <div class="control-group">
+                <label class="control-label" for="price_13">TGDD Thường</label>
+                <div class="controls">
+                    <input type="number" id="price_13" name="price_13" placeholder="TGDD" value="<?php if(isset($this->price) and $this->price[LOG_PRICE_TGDD_THUONG]) echo $this->price[LOG_PRICE_TGDD_THUONG] ?>">
+                </div>
+            </div>
+            <div class="control-group">
+                <label class="control-label" for="price_1300">TGDD Nợ</label>
+                <div class="controls">
+                    <input type="number" id="price_1300" name="price_1300" placeholder="TGDD" value="<?php if(isset($this->price) and $this->price[LOG_PRICE_TGDD_NO]) echo $this->price[LOG_PRICE_TGDD_NO] ?>">
+                </div>
+            </div>
+            <div class="control-group">
+                <label class="control-label" for="price_14">VTA</label>
+                <div class="controls">
+                    <input type="number" id="price_14" name="price_14" placeholder="VTA" value="<?php if(isset($this->price) and $this->price[LOG_PRICE_VTA]) echo $this->price[LOG_PRICE_VTA] ?>">
+                </div>
+            </div>
+            <div class="control-group">
+                <label class="control-label" for="price_15">Vinpro</label>
+                <div class="controls">
+                    <input type="number" id="price_15" name="price_15" placeholder="Vinpro" value="<?php if(isset($this->price) and $this->price[LOG_PRICE_VINPRO]) echo $this->price[LOG_PRICE_VINPRO] ?>">
+                </div>
+            </div>
+            <div class="control-group">
+                <label class="control-label" for="price_12">Laos</label>
+                <div class="controls">
+                    <input type="number" id="price_12" name="price_12" placeholder="Laos" value="<?php if(isset($this->price) and $this->price[LOG_PRICE_LAOS]) echo $this->price[LOG_PRICE_LAOS] ?>">
+                </div>
+            </div>
+            <div class="control-group">
+                <label class="control-label" for="price_3">Retail Price</label>
+                <div class="controls">
+                    <input type="number" id="price_3" name="price_3" placeholder="Retail Price" value="<?php if(isset($this->price) and $this->price[LOG_PRICE_RETAILER_PRICE]) echo $this->price[LOG_PRICE_RETAILER_PRICE] ?>">
+                </div>
+            </div>
+            <div class="control-group">
+                <label class="control-label" for="price_4">Import Price</label>
+                <div class="controls">
+                    <input type="number" id="price_4" name="price_4" placeholder="Import Price" value="<?php if(isset($this->price) and $this->price[LOG_PRICE_IMPORT_PRICE]) echo $this->price[LOG_PRICE_IMPORT_PRICE] ?>">
+                </div>
+            </div>
+            
+            <div class="control-group">
+                <label class="control-label" for="price_4">Demo</label>
+                <div class="controls">
+                    <input type="number" id="price_17" name="price_17" placeholder="DEMO Price" value="<?php if(isset($this->price) and $this->price[LOG_PRICE_DEMO]) echo $this->price[LOG_PRICE_DEMO] ?>">
+                </div>
+            </div>
+
+
+    </div>
+   
+    <div class="control-group span12">
+
+    </div>
+</form>
+
+<script type="text/javascript" src="/js/jquery-ui-1.8.12.custom.min.js"></script>
+<link rel="stylesheet" type="text/css" href="/css/jquery-ui-1.8.12.custom.css"/>
+<script type="text/javascript">
+    $(document).ready(function () {
+        $( '.date' ).datepicker({ dateFormat: "dd/mm/yy" });
+    });
+</script>
+<script type="text/javascript">
+    $(document).ready(function () {
+        $( '.date' ).datepicker({ dateFormat: "dd/mm/yy" });
+        initSelectCategories();
+    });
+    
+    
+    function initSelectCategories(){
+        $(document).off('change', '.cat_id')
+        .on('change', '#cat_id', function(e) {
+            $('.loading').remove();
+            $(this).after('<span class="loading"></span>');
+            var cat_id = $(this).val();
+
+            $.get("/product/load-product",
+                {cat_id: cat_id}
+                ,function(data,status){
+                    var data = $.parseJSON( data );
+                    if (data.goods){
+                        var obj = data.goods;
+                        $('#good_id').html('<option value="0">Please select</option>');
+                        for (var i = 0; i < obj.length; i++) {
+                            $('#good_id').append('<option value="'+obj[i]['id']+'">'+obj[i]['name']+'</option>');
+                        }
+                    }
+    
+                    $('button[type=submit]').prop('disabled', false);
+                    $('form').unbind('submit');
+                    $('.loading').remove();
+                });
+        });
+    }
+</script>

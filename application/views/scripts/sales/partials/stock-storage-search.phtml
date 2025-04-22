@@ -1,0 +1,48 @@
+<form class="form-search form-horizontal" method="get" action="<?php echo HOST ?>sales/stock-storage">
+    <div class="row">
+        <div class="span5">
+            <div class="control-group">
+                <label for="area" class="control-label">Area</label>
+                <div class="controls">
+                    <select name="area_id" id="area" class="span3">
+                        <option value="">Choose</option>
+                        <?php if (isset($this->areas) && $this->areas): foreach ($this->areas as $id=>$name):?>
+                            <option value="<?php echo $id;?>" <?php if (isset($this->params['area_id']) and $id==$this->params['area_id']):?> selected="selected"<?php endif;?>><?php echo $name;?></option>
+                        <?php endforeach; endif;?>
+                    </select>
+                </div>
+            </div>
+
+            <div class="control-group">
+                <label for="good_id" class="control-label">Product</label>
+                <div class="controls">
+                    <select id="good_id" class="span3" name="good_id">
+                        <option value="">Choose</option>
+                        <?php if ($this->goods): foreach ($this->goods as $key=> $item):?>
+                            <option value="<?php echo $key;?>" <?php if (isset($this->params['good_id']) and $key==$this->params['good_id']):?> selected<?php endif;?>><?php echo $item;?></option>
+                        <?php endforeach; endif;?>
+                    </select>
+                </div>
+            </div>
+
+        </div>
+        <div class="span5">
+            <div class="control-group">
+                <label for="stock_from" class="control-label">Area Storage &ge;</label>
+                <div class="controls">
+                    <input name="stock_from" id="stock_from" value="<?php if(isset($this->params['stock_from'])) echo $this->params['stock_from'] ?>" />
+                </div>
+            </div>
+            <div class="control-group">
+                <label for="stock_to" class="control-label">Area Storage &le;</label>
+                <div class="controls">
+                    <input name="stock_to" id="stock_to" value="<?php if(isset($this->params['stock_to'])) echo $this->params['stock_to'] ?>" />
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <button type="submit" class="btn btn-primary">Search</button>
+    <button type="reset" class="btn btn-warning">Reset</button>
+    <button type="submit" name="export" value="1" class="btn btn-success">Export</button>
+</form>

@@ -1,0 +1,276 @@
+<?php
+function product_price($priceFloat) {
+    $symbol = ' THB';
+    $symbol_thousand = ',';
+    $decimal_place = 2;
+    $price = number_format($priceFloat, $decimal_place, '.', $symbol_thousand);
+    return $price;
+}
+?>
+<div class="page-header" xmlns="http://www.w3.org/1999/html">
+    <h1>Return Confirmation</h1>
+</div>
+
+<?php
+if (isset($this->messages) and $this->messages)
+    foreach ($this->messages as $message):
+        echo '<div class="alert alert-error">'.$message.'</div>';
+    endforeach;
+
+?>
+
+<div class="row">
+	<div class="span12">
+        <form role="form" id="form" action="<?php echo HOST.'finance/return-confirm';?>" method="post" class="form-inline">
+            <input type="hidden" name="distributer_id" id="distributer_id" value="<?=$this->sales[0]['distributer_id']?>">
+
+        	<?php if (isset($this->sales) and $this->sales):
+            $return_sn = $this->sales[0]['sale']->sn_ref;
+            $create_cn = $this->sales[0]['sale']->create_cn;
+            $active_cn = $this->sales[0]['sale']->active_cn;
+            if($create_cn==1){
+                $create_cn = "checked";
+            }else{
+                $create_cn ="";
+            }
+
+            if($active_cn==1){
+                $active_cn = "checked";
+            }else{
+                $active_cn ="";
+            }
+
+            if($return_sn==''){
+                $return_sn = $this->sales[0]['sale']->sn;  
+            }
+            ?>
+        		<div class="row">
+        			<div class="span6">
+        				<label class="span2">Sales order number</label>
+		                <span class="span3"><strong><?=$return_sn?></strong></span>
+        			</div>
+        		</div>
+            <?php endif;?>
+
+            <div class="row">
+                <div class="span6">
+                    <label class="span2">สร้างรหัส CN <span style="color: red">*</span></label>
+                    <span class="span3"><input id="create_cn" class="create_cn" name="create_cn" type="checkbox" 
+                    <?=$create_cn?> value="1" ></span>
+
+                    <label class="span2">เปิดใช้งาน CN <span style="color: red">*</span></label>
+                    <span class="span3"><input id="active_cn" class="active_cn" name="active_cn" type="checkbox" 
+                    <?=$active_cn?> value="1" ></span>
+                </div>
+ 
+            </div>
+            <span style="color: red; margin-left: 25px;">(กรณีเลือกเปิดใช้งาน CN จะมีผลทำให้ Admin สามารถใช้งาน CN ได้ทันที)</span>
+
+            <?php if($create_cn){?>
+
+                <div class="row">
+
+                    <div class="span6 div-return-type <?=$hide;?>">
+
+                        <label class="span2">Retrun Type <span style="color: red">*</span></label>
+                        <select class="span2" id="return_type" name="return_type" style="margin-left: 15px;">
+                                <option value="1">เครื่องเสีย</option>
+                                <option value="2">Adjustment</option>
+                                <option value="3">Demo</option>
+                                <option value="4">RTN</option>
+                                <option value="5">EOL</option>
+                        </select>
+                    </div>
+
+                    <!-- <div class="span6">
+                        <label class="span2">Return Type</label>
+                        <span class="span3"><strong>
+                        <?php 
+                            switch ($this->sales[0]['sale']->return_type) {
+                                case '1':
+                                    echo 'เครื่องเสีย';
+                                    break;
+                                case '2':
+                                    echo 'Adjustment';
+                                    break;
+                                case '3':
+                                    echo 'Demo';
+                                    break;
+                                case '4':
+                                    echo 'RTN';
+                                    break;
+                                case '5':
+                                    echo 'EOL';
+                                    break;        
+                        }?>
+                        </strong></span>
+                    </div> -->
+                </div>
+
+            <?php } ?>
+
+            <!-- <input type="hidden" name="return_type" value="<?=$this->sales[0]['sale']->return_type;?>"> -->
+
+			<div class="row">
+    			<div class="span6">
+                    <label class="span2">Retailer name</label>
+                    <span class="span3"><strong><?php echo $this->sales[0]['retailer_name'];?></strong></span>
+            	</div>
+    		</div>
+
+			<div class="row">
+    			<div class="span6">
+                    <label class="span2">Return to</label>
+                    <span class="span3"><strong><?php echo $this->sales[0]['warehouse_name'];?></strong></span>
+            	</div>
+    		</div>
+
+			<div class="row">
+    			<div class="span6">
+                    <label class="span2">Sale staffs</label>
+                    <span class="span3"><strong><?php echo $this->sales[0]['created_by_name'];?></strong></span>
+            	</div>
+    		</div>
+
+			<div class="row">
+    			<div class="span6">
+                    <label class="span2">Order time</label>
+                    <span class="span3"><strong><?php echo $this->sales[0]['sale']->add_time;?></strong></span>
+            	</div>
+    		</div>
+
+            <div class="row">
+                <div class="span12">
+                    <table class="table table-bordered span12">
+                        <thead>
+                            <tr>
+                                <th>Products category</th>
+                                <th>Product</th>
+                                <th>Color</th>
+                                <th>Quantity</th>
+                                <th>Price</th>
+                                <th>Total Price</th>
+                                <th>Remark</th>
+                            </tr>
+                        </thead>
+
+                        <tbody>
+
+                        <?php
+                        $total_num = $total_price = $total_total = 0;
+                        foreach ($this->sales as $item):
+                            $sale = $item['sale'];
+                            $total_num += $sale->num;
+                            $total_price += $sale->price;
+                            $total_total += $sale->total;
+                        ?>
+
+                            <tr>
+                                <td><?php echo $item['category'];?></td>
+                                <td><?php echo $item['good'];?></td>
+                                <td><?php echo $item['color'];?></td>
+                                <td><?php printf('-'.$sale->num);?></td>
+                                <td><?php printf('-'.product_price($sale->price));?></td>
+                                <td><?php printf('-'.product_price($sale->total));?></td>
+                                <td><?php if(isset($sale['text']) and $sale['text'])echo ($sale['text']);?></td>
+                            </tr>
+
+                        <?php endforeach;?>
+
+                        </tbody>
+
+                        <tfoot>
+                            <tr>
+                                <td colspan="3"><strong>SUMMARY</strong></td>
+                                <td><strong><?php echo '-'.$total_num;?></strong></td>
+                                <td><strong><?php echo '-'.product_price($total_price);?></strong></td>
+                                <td><strong><?php echo '-'.product_price($total_total);?></strong></td>
+                                <td>&nbsp;</td>
+                            </tr>
+                        </tfoot>
+                    </table>
+                </div>
+            </div>
+
+            <div class="row">
+                <div class="span6">
+                    <label class="span2">Settle accounts</label>
+                    <span class="span3"><input id="payment" name="payment" required="required" type="checkbox" value="1" <?php if (isset($this->sales[0]['sale']->pay_user) and $this->sales[0]['sale']->pay_user):?>checked="checked" <?php endif;?>></span>
+                </div>
+            </div>
+
+            <div class="row">
+                <div class="span12">
+                    <label class="span2">Notes</label>
+                    <span class="span4"><textarea name="pay_text" class="span2"><?php printf($this->sales[0]['sale']->pay_text);?></textarea></span>
+                </div>
+            </div>
+
+            <div class="row">
+                <div class="span12">
+                    <span class="span4" style="color: red">* Please confirm information,This action can not be reversed!!...</span>
+                </div>
+            </div>
+
+            <div class="row">
+                <div class="span6">
+                    <div class="control-group">
+                        <input type="hidden" name="back_url" id="back_url" value="/finance/return-list">
+                        <!-- <input type="hidden" class="create_cn" name="create_cn" id="create_cn" value="<?=$create_cn?>">
+                        <input type="hidden" class="active_cn" name="active_cn" id="active_cn" value="<?=$active_cn?>"> -->
+                        
+                        <input type="hidden" name="sn" value="<?php isset($this->sales) and $this->sales and printf($this->sales[0]['sale']->sn);?>">
+                        <div class="span4">
+                            <button type="submit" class="btn btn-primary">Submit</button>
+                            
+                            <button type="button" class="btn btn-danger go-back">Go back</button>
+                        </div>
+                    </div>
+                    <div class="clearfix"></div>
+                </div>
+            </div>
+        </form>
+    </div>
+</div>
+
+
+<script>
+    $(document).ready(function () {
+        $('#form').submit(function (e){
+            if (!$("#payment").is(':checked')) {
+                alert("Please select at least one operation...");
+                return false;
+            } else {
+                if (!confirm('This action can not be reversed, please exercise caution...'))
+                    return false;
+            }
+        });
+        initGoBack();
+
+        $('#create_cn').change(function(e) {
+            if(this.checked) {
+                $('.div-return-type').removeClass('hide');
+            }else{
+                $('.div-return-type').addClass('hide');
+            }
+        });
+
+        <?php if(isset($this->sales[0]['sale']->return_type) && $this->sales[0]['sale']->return_type){?>
+                $('#return_type').val('<?=$this->sales[0]['sale']->return_type;?>');
+        <?php } ?>
+
+    });
+
+    function initGoBack(){
+        $('.go-back').click(function(e){
+            window.location.href = $('#back_url').val();
+            return false;
+        });
+    }
+</script>
+<style>
+	label input,
+	label select {
+		margin-right: 25px;
+	}
+</style>

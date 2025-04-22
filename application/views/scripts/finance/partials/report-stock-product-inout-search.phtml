@@ -1,0 +1,59 @@
+<form class="form-search form-horizontal" method="get" action="<?php echo HOST ?>finance/report-stock-product-inout">
+    <div class="row">
+        <div class="span5">
+        <div class="control-group">
+                <label for="cat_id" class="span2">PRODUCT CATEGORY</label>
+                <select id="cat_id" class="span2" name="cat_id">
+                    <option value="">Choose</option>
+                    <?php if ($this->good_categories): foreach ($this->good_categories as $id=>$name):?>
+                        <?php if($id=="11"){ ?>
+                        <option value="<?php echo $id;?>" <?php if (isset($this->params['cat_id']) and $id==$this->params['cat_id']):?> selected<?php endif;?>><?php echo $name;?></option>
+                        <?php } ?>
+                        <?php if($id=="12"){ ?>
+                        <option value="<?php echo $id;?>" <?php if (isset($this->params['cat_id']) and $id==$this->params['cat_id']):?> selected<?php endif;?>><?php echo $name;?></option>
+                        <?php } ?>
+                    <?php endforeach; endif;?>
+                </select>
+            </div>
+
+            <div class="control-group">
+                <label for="good_id" class="span2">Product</label>
+                <select id="good_id" class="span3" name="good_id">
+                    <option value="all">-- All Product --</option>
+                    <?php if ($this->goods): foreach ($this->goods as $item):?>
+                        <option  value="<?php echo $item->id;?>" <?php if (isset($this->params['good_id']) and $item->id==$this->params['good_id']):?> selected<?php endif;?>><?php echo $item->name;?></option>
+                    <?php endforeach; endif;?>
+                </select>
+            </div>
+
+            <div class="control-group">
+                <label for="good_color" class="span2">Color</label>
+                <select id="good_color" class="span3" name="good_color">
+                    <option value="all">-- All Color --</option>
+                    <?php if ($this->colors): foreach ($this->colors as $item):?>
+                        <option value="<?php echo $item->id;?>" <?php if (isset($this->params['good_color']) and $item->id==$this->params['good_color']):?> selected<?php endif;?>><?php echo $item->name;?></option>
+                    <?php endforeach; endif;?>
+                </select>
+            </div>
+
+        </div>
+        <div class="span5">
+            <div class="control-group">
+                <label for="doc_created_at_from" class="span2">Stock Date From</label>
+                <input type="text" class="form-control search-query date" id="doc_created_at_from" name="doc_created_at_from" 
+                value="<?php if(isset($this->params['doc_created_at_from'])){ printf($this->params['doc_created_at_from']);}else{echo date("d/m/Y");} ?>">
+            </div>
+
+            <div class="control-group">
+                <label for="doc_created_at_to" class="span2">Stock Date To</label>
+                <input type="text" class="form-control search-query date" id="doc_created_at_to" name="doc_created_at_to" 
+                value="<?php if(isset($this->params['doc_created_at_to'])){ printf($this->params['doc_created_at_to']);}else{echo date("d/m/Y");} ?>">
+            </div>
+
+        </div>
+    </div>
+    <input type="hidden" name="counter" value="<?=$this->counter;?>">
+    <button type="submit" class="btn btn-primary">Search</button>
+    <!-- <button type="reset" class="btn btn-warning">Reset</button> -->
+    <button type="submit" name="export" value="1" class="btn btn-success">Export</button>
+</form>

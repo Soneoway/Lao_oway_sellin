@@ -1,0 +1,225 @@
+<table class="table table-bordered">
+    <thead>
+        <tr>
+            <?php echo $this->sorting(array(
+        			'#',
+                    'Creditnote SN',
+        			'Imei SN',
+            		'Dealer',
+                    
+            		'Product Name',
+                    'Price รวม VAT',
+                    'Campaign Name',
+                    'Action'
+                ),
+                $this->url, $this->sort, $this->desc); ?>
+        </tr>
+    </thead>
+    <tbody>
+        <?php
+        $arrStatus = array(
+            0 => 'Pending',
+            1 => 'Approved',
+        );
+        //print_r($this->list);
+        if (isset($this->list) and $this->list)
+            $run=0;
+            foreach ($this->list as $item): 
+            $run +=1;
+
+            //print_r($this->jointCircularCached);
+            ?>
+        <tr>
+            <td><?php echo $run?></td>
+            <td><?php echo $item['creditnote_sn']?></td>
+            <td><a href="/bvg?imei_sn=<?php echo $item['imei_sn']?>"><?php echo $item['imei_sn']?></a></td>
+            <td><a href="/bvg?d_id=<?php echo $item['d_id']?>"><?php echo isset($this->distributorsCached[$item['d_id']]) ? $this->distributorsCached[$item['d_id']] : '';?></a></td>
+            
+            <td><a href="/bvg?good_id=<?php echo $item['good_id']?>"><?php echo isset($this->goodsCached[$item['good_id']]) ? $this->goodsCached[$item['good_id']] : '';?></a></td>
+            <td><?php echo number_format($item['price'])?></td>
+            <td><a href="/bvg?joint_circular_id=<?php echo $item['joint_circular_id']?>"><?php echo isset($this->jointCircularCached[$item['joint_circular_id']]) ? $this->jointCircularCached[$item['joint_circular_id']] : '';?></a></td>
+            <td style="display:none"><?php echo isset($item['bvg_payment_confirmed_at']) ? date('d-m-Y' , strtotime($item['bvg_payment_confirmed_at']))  : 'x';?></td>
+            <td>
+                <a href="#"> <i data-imei-id="<?php if(isset($item['id']) && $item['id']) echo $item['id'] ?>" class="add icon-plus"></i></a>
+                <a  href="#"> <i data-imei-id="<?php if(isset($item['id']) && $item['id']) echo $item['id'] ?>" class="decrease icon-minus"></i></a>
+                <a target="_blank" href="finance/cn-view-print/?sn=<?=$item['creditnote_sn']?>&d_id=<?=$item['d_id']?>"> <i data-imei-id="<?php if(isset($item['id']) && $item['id']) echo $item['id'] ?>" class="icon-print"></i></a>
+            </td>
+
+
+        </tr>
+        <?php endforeach;?>
+    </tbody>
+</table>
+<div class="paging">
+    <?php echo $this->paging($this->total, $this->limit, $this->offset, $this->url);?>
+</div>
+
+
+<div id="modal1" class="modal hide fade" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+    <div class="modal-header">
+        <button type="button" class="close" data-dismiss="modal" aria-hidden="true">×</button>
+        <h3 id="myModalLabel">Rollback Imei</h3>
+    </div>
+    <div class="modal-body">
+
+        <div class="control-group">
+
+            <div class="control-group">
+                <label for="reason">Reason</label>
+                <input type="text" class="form-control reason"  name="month" required="required" value="" />
+            </div>
+
+            <div class="control-group">
+                <label for="sn">SN (*If return or rollback)</label>
+                <input type="hidden" name="imei_id" class="imei_id" value="" />
+                <input type="text" class="form-control sn"  name="sn" required="required" value="" />
+            </div>
+
+        </div>
+    </div>
+    <div class="modal-footer">
+        <button class="btn btn-success" id="btn_save_add" aria-hidden="true">Save</button><button class="btn" data-dismiss="modal" aria-hidden="true">Close</button>
+    </div>
+</div>
+
+<div id="modal2" class="modal hide fade" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+    <div class="modal-header">
+        <button type="button" class="close" data-dismiss="modal" aria-hidden="true">×</button>
+        <h3 id="myModalLabel">Confirm IMEI is payment</h3>
+    </div>
+    <div class="modal-body">
+
+        <div class="control-group">
+            <div class="control-group">
+                <label for="month">Month</label>
+                <input type="text" class="form-control date" id="date" name="date" required="required" value="<?php echo date('m/Y');?>" />
+            </div>
+
+            <div class="controls">
+                <input type="hidden" name="imei_id" class="imei_id" value="" />
+                <input type="text" name="reason" class="reason control-group" placeholder="Reason" required="required" />
+            </div>
+
+        </div>
+    </div>
+    <div class="modal-footer">
+        <button class="btn btn-success" id="btn_save_minus" aria-hidden="true">Save</button><button class="btn" data-dismiss="modal" aria-hidden="true">Close</button>
+    </div>
+</div>
+
+<script type="text/javascript" src="/js/bootstrap-modal.js"></script>
+<script type="text/javascript" src="/js/bootstrap-modalmanager.js"></script>
+<link rel="stylesheet" type="text/css" href="/css/bootstrap-modal.css"/>
+<script type="text/javascript" src="/js/jquery-ui-1.8.12.custom.min.js"></script>
+<link rel="stylesheet" type="text/css" href="/css/jquery-ui-1.8.12.custom.css"/>
+<script>
+     $('.add').click(function(){
+        var _self = $(this);
+	    $('#modal1').modal();
+        $('.imei_id').val(_self.data('imei-id'));
+    });
+     $( '.date' ).datepicker({ dateFormat: "dd/mm/yy" });
+   $('#btn_save_add').click(function(){
+
+            $modal = $('#modal1');
+            $modal.modal('loading');
+            var reason = $(this).parent().parent().find('.reason').val();
+            var sn = $(this).parent().parent().find('.sn').val();
+
+
+            if(!(reason))
+            {
+                alert('Please insert reason ');
+                return;
+            }
+
+            if(!(sn))
+            {
+                alert('Please insert sn');
+                return;
+            }
+
+			$.post('<?php echo HOST ?>bvg/rollback',
+	            {
+					id   : $('.imei_id').val(),
+                    reason : reason,
+                    sn : sn
+	            },
+	            function(data){
+                  //  var obj = jQuery.parseJSON(data);
+
+	            	if (data['code'] == 1) {
+						$modal
+							.modal('loading')
+							.find('.modal-body')
+					        .prepend('<div class="alert alert-info fade in">' +
+					          'Rollback successful!<button type="button" class="close" data-dismiss="alert">&times;</button>' +
+					        '</div>');
+
+	            	} else {
+            			$modal
+                            .modal('loading')
+							.find('.modal-body')
+					        .prepend('<div class="alert alert-error fade in">' +
+					          'Rollback failed! Try again. '+data.error+'<button type="button" class="close" data-dismiss="alert">&times;</button>' +
+					        '</div>');
+
+	            	}
+        		}
+        	);
+	});
+
+    $('#btn_save_minus').click(function(){
+            $modal = $('#modal2');
+			$modal.modal('loading');
+            var reason = $(this).parent().parent().find('.reason').val();
+            var date = $(this).parent().parent().find('#date').val();
+
+            if(!(reason))
+            {
+                alert('Please insert reason ');
+                return;
+            }
+
+            if(!(date))
+            {
+                alert('Please insert date');
+                return;
+            }
+
+
+			$.post('<?php echo HOST ?>bvg/confirm-payment',
+	            {
+                    id   : $('.imei_id').val(),
+                    reason : reason,
+                    date : date
+	            },
+	            function(data){
+                    if (data['code'] == 1) {
+                        $modal
+                            .modal('loading')
+                            .find('.modal-body')
+                            .prepend('<div class="alert alert-info fade in">' +
+                            'Confirm payment successful!<button type="button" class="close" data-dismiss="alert">&times;</button>' +
+                            '</div>');
+
+                    } else {
+                        $modal
+                            .modal('loading')
+                            .find('.modal-body')
+                            .prepend('<div class="alert alert-error fade in">' +
+                            'Confirm failed! Try again. '+data.error+'<button type="button" class="close" data-dismiss="alert">&times;</button>' +
+                            '</div>');
+
+                    }
+
+        		}
+        	);
+	});
+
+    $('.decrease').click(function(){
+        var _self = $(this);
+	    $('#modal2').modal();
+        $('.imei_id').val(_self.data('imei-id'));
+    });
+</script>

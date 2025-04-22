@@ -1,0 +1,86 @@
+<table class="table table-bordered">
+    <thead>
+        <tr>
+            <?php echo $this->sorting(array(
+					'#',
+					'IMEI',
+					'PO SN',
+					'Return SN',
+					'Warehouse',
+					'Product Name',
+					'Product Color',
+					'Shape',
+					'Status',
+					'Action'
+                ),
+                $this->url, $this->sort, $this->desc); ?>
+        </tr>
+    </thead>
+    <tbody>
+        <?php
+        if (isset($this->list) and $this->list) :
+            foreach ($this->list as $k=>$m): ?>
+        <tr>
+        	<td><?php $inc = $this->offset + $k + 1;
+                echo $inc; ?></td>
+            <td><?php echo $m['imei_sn'] ?></td>
+            <td><?php echo ($m['po_sn'] ? $m['po_sn'] : '') ?></td>
+            <td><?php echo ($m['return_sn'] ? $m['return_sn'] : '') ?></td>
+            <td><?php if( isset( $this->warehouses[$m['warehouse_id']] ) && $this->warehouses[$m['warehouse_id']] ) echo $this->warehouses[$m['warehouse_id']] ?></td>
+            <td><?php echo ( isset($this->goods_cached[$m['good_id']]) ? $this->goods_cached[$m['good_id']] : '' ) ?></td>
+            <td><?php echo ( isset($this->good_colors_cached[$m['good_color']]) ? $this->good_colors_cached[$m['good_color']] : '' ) ?></td>
+			<td>
+				<?php switch ($m['shape']) { //1:goodset;2:broken-seal;3:box-damage;4:unit-damage
+					case '1':
+						echo "goodset";
+						break;
+					case '2':
+						echo "broken-seal";
+						break;
+					case '3':
+						echo "box-damage";
+						break;
+					case '4':
+						echo "unit-damage";
+						break;
+					default:
+						echo "n/a";
+						break;
+				} ?>
+			</td>
+			<td>
+				<?php switch ($m['status']) { // 1:ok;2:processing;3:lost
+					case '1':
+						echo "OK";
+						break;
+					case '2':
+						echo "processing";
+						break;
+					case '3':
+						echo "lost";
+						break;
+					case '4':
+						echo "on-changing";
+						break;
+					default:
+						echo "n/a";
+						break;
+				} ?>
+			</td>
+            <td>
+                <a title="Confirm" href="/warehouse/bad-back-sales?imei_sn=<?php echo $m['imei_sn'];?>"> <i class="icon-ok"></i></a>
+            </td>
+        </tr>
+
+        <?php endforeach;?>
+		<?php endif; ?>
+    </tbody>
+</table>
+<div class="paging">
+    <?php echo $this->paging($this->total, $this->limit, $this->offset, $this->url);?>
+</div>
+
+<script type="text/javascript" src="/js/jquery-ui-1.8.12.custom.min.js"></script>
+<link rel="stylesheet" type="text/css" href="/css/jquery-ui-1.8.12.custom.css"/>
+<?php echo $this->load();?>
+<?php echo $this->confirm();?>

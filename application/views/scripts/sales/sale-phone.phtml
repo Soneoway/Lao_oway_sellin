@@ -1,0 +1,183 @@
+<style>
+.page-header{margin-top: 70px;}
+#submit_btn{margin-left: 10px;}
+</style>
+<div class="page-header">
+    <h1>Create Sale Model </h1>
+</div>
+
+<div class="content_sale_phone">
+    <form action="<?php echo HOST;?>/sales/sale-phone">
+    <table class="table table-bordered">
+        <thead>
+            <tr>
+                <th>Phone</th>
+                <?php if(isset($this->dataSale) && $this->dataSale) : ?> 
+                <?php foreach($this->dataSale as $key => $value) : ?> 
+                <th><?php echo $value['sale']."%";?></th>
+                <?php endforeach; ?>
+                <?php endif; ?>
+            </tr>
+        </thead>
+        
+        <tbody>
+            <?php if(isset($this->data) && $this->data) : ?> 
+            <?php foreach($this->data as $key => $value) : ?> 
+            <tr>
+                <td><?php echo $value['name'];?></td>
+                <?php if(isset($this->dataSale) && $this->dataSale) : ?> 
+                <?php foreach($this->dataSale as $_key => $_value) : ?> 
+                <td><input good='<?php echo $value['good_id'];?>' id="checkbox_sale" <?php if(strstr($value['good_sale_id'],$_value['id'])){echo "checked";}?> type="checkbox" value="<?php echo $_value['id'];?>" /></td>
+                <?php endforeach; ?>
+                <?php endif; ?>     
+            </tr>
+            <?php endforeach; ?>
+            <?php endif; ?>
+        </tbody>
+    </table>
+        <button type="button" class="btn btn-primary pull-right btn btn-warning" id="add_category_btn">Add</button>
+    </form>
+</div>
+
+<form action="<?php echo HOST."sales/change-sale-checkbox";?>" method="POST">
+<div id="modal_new_category" class="modal hide fade in" tabindex="-1" role="dialog" aria-labelledby="newCategoryLabel" aria-hidden="true" style="display: block;">
+    <div class="modal-header">
+        <button type="button" class="close" data-dismiss="modal" aria-hidden="true">×</button>
+        <h3 id="newCategoryLabel">Add New Sale Phone</h3>
+    </div>
+    <div class="modal-body">
+        <div class="row-fluid">
+            <div class="row">
+                <div class="span1">
+                    <div class="control-group">
+                        <label for="category_name">Category</label>
+                        <select class="cat_id" name="cat_id" style="width: 100%;">
+                            <option value="">Please select</option>
+                            <?php foreach ($this->good_categories as $good_category):?>
+                            <option value="<?php echo $good_category->id;?>"><?php echo $good_category->name;?></option>
+                            <?php endforeach;?>
+                        </select>
+                    </div>
+                </div>
+                <div class="span2">
+                    <div class="control-group">
+                        <label for="category_name">Product</label>
+                        <select class="good_id" name="good_id" style="width: 100%;">
+                            <option value="">Please select</option>
+                            <?php foreach ($goods as $good):?>
+                            <option value="<?php echo $good->id;?>"><?php echo $good->name;?></option>
+                            <?php endforeach;?>
+                        </select>
+                    </div>
+                </div>
+                <div class="span2">
+                    <div class="control-group">
+                        <label for="category_name">Sale</label>
+                        <select name="phone_sale_id" style="width: 100%;">
+                            <?php if(isset($this->dataSale) && $this->dataSale) : ?> 
+                            <?php foreach($this->dataSale as $key => $value) : ?> 
+                            <option value="<?php echo $value['id'];?>"><?php echo $value['sale'];?> %</option>
+                            <?php endforeach; ?>
+                            <?php endif; ?>
+                        </select>
+                    </div>
+                </div>
+            </div>            
+        </div>
+    </div>
+    <div class="modal-footer">
+        <input type="hidden" name="check" value="3" />
+        <button class="btn btn-primary" type="submit" id="save_category_btn">Save</button>
+        <button class="btn" data-dismiss="modal" aria-hidden="true">Cancel</button>
+    </div>
+</div>
+</form>
+
+<script>
+$(document).ready(function() {
+    /*Select category */
+    $(document).off('change', '.cat_id')
+    .on('change', '.cat_id', function(e) {
+        $('button[type=submit]').prop('disabled', true);
+        $('form').bind('submit',function(e){e.preventDefault();});
+
+        $('.loading').remove();
+        $(this).after('<span class="loading"></span>');
+        var div_parent = $(this).parent().parent().parent();
+        var _self = $(this);
+        var cat_id = $(this).val();
+
+        $.get("/get/load",
+            {cat_id: cat_id}
+            ,function(data,status){
+                var data = $.parseJSON( data );
+                if (data.goods){
+                    var obj = data.goods;
+                    div_parent.find('.good_id').html('<option value="0">Please select</option>');
+                    for (var i = 0; i < obj.length; i++) {
+                        div_parent.find('.good_id').append('<option value="'+obj[i]['id']+'">'+obj[i]['name']+'</option>');
+                    }
+                }
+                $('button[type=submit]').prop('disabled', false);
+                $('form').unbind('submit');
+                _self.nextAll('.loading').remove();
+            });
+    });
+    /* end */
+    
+    $new_category_modal = $("#modal_new_category");
+    $new_category_modal.hide();
+    $("#add_category_btn").click(show_new_category_modal);
+    function show_new_category_modal(e) {
+        $new_category_modal.modal({backdrop: 'static'})
+    }
+    
+    $(document).on('click', "#checkbox_sale", function() {  
+        good_id = $(this).attr("good");
+        phone_sale_id = $(this).val();
+        if ($(this).is(':checked')) {
+            check = 1;
+        }
+        else{
+            check = 0;
+        }
+        $.ajax({
+			  url: "<?php echo HOST."sales/change-sale-checkbox";?>",
+		      type: "POST",
+		      dataType: "text",
+		      context: this,
+		      data: "good_id="+good_id+"&phone_sale_id="+phone_sale_id+"&check="+check,
+		      beforeSend: function() {				
+				},
+		      success: function(result){
+					if(result)
+					{
+                        alert(result);
+					}
+					else
+					{	
+						alert("Có lỗi 1 !!");
+					}						
+		      },
+		      error:function(){
+		    	  alert("Có lỗi 2!!");
+		      }
+		});
+    });
+     
+});
+</script>
+
+
+
+
+
+
+
+
+
+
+
+
+
+

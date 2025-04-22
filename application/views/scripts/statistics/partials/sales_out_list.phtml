@@ -1,0 +1,63 @@
+<table class="table table-bordered">
+    <thead>
+        <tr>
+            <?php echo $this->sorting(array(
+					'#',
+					'Product Name',
+                    'Product Color',
+                    'Retailer Name',
+                    'Sales Quantity',
+					'add_time'      => 'Order Time',
+                ),
+                $this->url, $this->sort, $this->desc); ?>
+        </tr>
+    </thead>
+    <tbody>
+        <?php
+        if (isset($this->markets_sn) and $this->markets_sn) :
+            foreach ($this->markets_sn as $k=>$m):
+
+                ?>
+        <tr>
+        	<td><?php echo $this->offset+1+$k; ?></td>
+
+            <td><?php if (isset($this->goods) && $this->goods && isset($this->goods[$m['good_id']])) echo $this->goods[$m['good_id']] ?></td>
+            <td><?php if (isset($this->goodColors) && $this->goodColors && isset($this->goodColors[$m['good_color']])) echo $this->goodColors[$m['good_color']] ?></td>
+            <td><?php if (isset($this->distributors) && $this->distributors && isset($this->distributors[$m['distributor_id']])) echo $this->distributors[$m['distributor_id']] ?></td>
+            <td><?php echo $m['goods_num'] ?></td>
+            <td><?php echo $m['add_time'] ?></td>
+
+        </tr>
+
+        <?php endforeach;?>
+		<?php endif; ?>
+    </tbody>
+</table>
+<div class="paging">
+    <?php echo $this->paging($this->total, $this->limit, $this->offset, $this->url);?>
+</div>
+
+<script type="text/javascript" src="/js/jquery-ui-1.8.12.custom.min.js"></script>
+<link rel="stylesheet" type="text/css" href="/css/jquery-ui-1.8.12.custom.css"/>
+<?php echo $this->load();?>
+<?php echo $this->confirm();?>
+<script>
+    $('.lock').click(function(e){
+        e.preventDefault();
+        alert('Sorry,This information is blocked...You can not delete payment has been made or has been the storage of information!');
+    });
+
+    $('.collapse_a').each(function(){
+    	var _this = $(this);
+    	var _this_id = _this.attr('id');
+    	var $coll = $('.'+_this_id);
+
+    	_this.click(function(){
+
+    		$coll.toggle();
+    		if ($coll.is(':visible'))
+	    		_this.html('-');
+	    	else _this.html('+');
+    	});
+    });
+</script>

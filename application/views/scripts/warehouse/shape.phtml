@@ -1,0 +1,118 @@
+<div class="page-header">
+    <h1>Update Bad IMEI</h1>
+</div>
+
+<form role="form" id="form" action="<?php echo HOST.'warehouse/shape-act';?>" target="iframe" method="post" class="form-horizontal">
+<div class="row">
+      <div class="span3">
+    	<label for="" class="">IMEI Code: <span><strong id="num_imei">0</strong> IMEI(s)</span></label>
+		<textarea name="imei" id="imei" cols="20" rows="20"></textarea>
+		<div id="check_res"></div>
+    </div>
+   <div class="span3">
+    	<div class="control-group">
+                        <label for="cat_id" class="span2">Shape Type <span style="color: red">*</span></label>
+                        <select id="cat_id" class="span3" name="cat_id" required="required">
+                            <option value="">Please select</option>
+                                                            <!--<option value="1">Good Set</option>-->
+                                                            <option value="2">Broken-Seal</option>
+                                                            <option value="3">Box-Damage</option>
+                                                            <option value="4">Unit-Damage</option>
+                                                    </select>
+                    </div>
+    </div>
+    <div class="span3">
+    	<iframe src="<?php echo HOST ?>warehouse/shape-act" name="iframe" frameborder="0" height="390px"></iframe>
+    </div>
+</div>
+<div class="row">
+    <div class="span3">
+        <input type="hidden" name="sn" value="<?php isset($this->sn) and $this->sn and printf($this->sn);?>">
+        <input type="hidden" id="back_url" name="back_url" value="/warehouse/bad-imei-management">
+        <button type="submit" class="btn btn-primary">Submit</button>
+        <button type="button" class="btn btn-danger go-back">Go back</button>
+    </div>
+</div>
+
+</form>
+
+
+<script>
+    $(document).ready(function () {
+        $('.go-back').click(function(e){
+            window.location.href = $('#back_url').val();
+            return false;
+        });
+
+        initShowIMEINum();
+        checkIMEI();
+
+    });
+
+    function initShowIMEINum(){
+        $('#imei').keyup(function (e){
+
+            var inputnum = 0;
+
+            if ($(this).val() != '')
+                inputnum = ($(this).val().split("\n").length).toString();
+
+
+            $('#num_imei').html(inputnum);
+
+        });
+    }
+
+    function checkIMEI() {
+    	var pressed = false; 
+	    var chars = []; 
+	    $(window).keypress(function(e) {
+	        if (e.which >= 48 && e.which <= 57) {
+	            chars.push(String.fromCharCode(e.which));
+	        }
+
+	        if (pressed == false) {
+	            setTimeout(function(){
+	                if (chars.length >= 10) {
+	                	$('#check_res').html('<span class="loading"></span> checking...');
+
+	                    var barcode = chars.join("");
+
+	                    // AJAX checking
+	                    $.post('<?php echo HOST ?>tool/shape-act', {imei: barcode}, function(data) {
+	                    	text = '';
+
+	                    	switch (data) {
+	                    		case '1':
+	                    			text = '<div class="alert alert-success"><strong>OK</strong></div>';
+                    				break;
+                    			case '0':
+                    				text = '<div class="alert alert-error"><strong>IMEI ' + barcode + ' NOT in warehouse</strong></div>';
+                					break;
+                				case '-1':
+                    				text = '<div class="alert alert-error"><strong>No data sent to server</strong></div>';
+                					break;
+                				case '-2':
+                    				text = '<div class="alert alert-error"><strong>IMEI ' + barcode + ' in WRONG FORMAT</strong></div>';
+                					break;
+            					case '-3':
+                    				text = '<div class="alert alert-error"><strong>IMEI ' + barcode + ' is RETURNED and CANNOT back to sales</strong></div>';
+                					break;
+            					default:
+            						text = '<div class="alert alert-error"><strong>Unknown Error ' + data+ '</strong></div>';
+            						break;
+	                    	}
+
+	                    	$('#check_res').html(text);
+	                    });
+	                }
+	                chars = [];
+	                pressed = false;
+	            },500);
+	        }
+	        pressed = true;
+	    });
+
+		
+    }
+</script>

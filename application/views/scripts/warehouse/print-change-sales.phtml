@@ -1,0 +1,420 @@
+<?PHP $userStorage = Zend_Auth::getInstance()->getStorage()->read(); ?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
+<html>
+
+<head>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8">
+    <title>Print</title>
+    <link href="<?php echo HOST ?>css/bootstrap.min.css" rel="stylesheet">
+    <link rel="stylesheet" type="text/css" href="<?php echo HOST ?>css/supermarket.css">
+    <script src="//ajax.googleapis.com/ajax/libs/jquery/1.10.2/jquery.min.js"></script>
+    <style type="text/css">
+    body {
+        height: 100px;
+        font-size: 14px;
+        font-family: "phetsarath ot" !important;
+        color: #000
+    }
+
+    p {
+        font-size: 12px;
+        font-family: "phetsarath ot" !important;
+        color: #000
+    }
+
+    .top_page {
+        margin-top: 10px;
+    }
+
+    .top {
+        text-align: left;
+    }
+
+    .top p {
+        height: 24px;
+        line-height: 12px;
+        margin: 0;
+        font-weight: normal;
+        margin-top: 5px;
+        font-size: 15px;
+    }
+
+    .blank10 {
+        height: 15px;
+        clear: both
+    }
+
+    .title_page_logo {
+        font-weight: bold;
+        margin-top: -60px;
+        margin-left: 180px;
+        font-size: 14px;
+    }
+
+    .title {
+        width: 600px;
+        text-align: center;
+        height: 30px;
+        font-size: 14px;
+        line-height: 30px;
+        background-color: #fabf8f;
+        font-weight: bold
+    }
+
+    .title small {
+        float: right;
+        font-weight: normal;
+        font-size: 8px;
+        padding-right: 2em;
+    }
+
+    .tbl,
+    .tbllist {
+        border-top: 2px solid black;
+        border-bottom: 2px solid black;
+    }
+
+    .table td {
+        border-top: 0px solid #dddddd;
+        height: 20px;
+    }
+
+    #logo img {
+        width: 170px;
+        height: 45px;
+        ;
+        margin-top: 10px
+    }
+
+    .detail {
+        width: 100%;
+    }
+
+    .signature_page_col_right {
+        float: right;
+    }
+
+    .imgbutton {
+        width: 40px !important;
+        cursor: pointer;
+        position: absolute;
+    }
+
+    .print {
+        position: absolute;
+        width: 15px;
+        margin-top: 10px;
+        margin-left: 85%;
+    }
+
+    .scroll {
+        overflow: hidden;
+    }
+
+    .number {
+        width: 10px;
+    }
+
+    .signname {
+        width: 549px;
+        margin: auto;
+        padding-left: 70px;
+    }
+
+    @media print {
+
+        .print,
+        .no-print {
+            display: none !important
+        }
+    }
+
+    .page_munber {
+        position: absolute;
+        text-align: right;
+        width: 83%;
+    }
+
+    .single {}
+
+    .single_box2 {
+        border-top: 2px solid black;
+        width: 20px;
+        padding-top: 10px;
+        text-align: center;
+    }
+
+    .data_box {
+        height: 180px;
+        position: button
+    }
+
+    ._header {
+        width: 520px;
+        position: absolute;
+        margin-left: 50%;
+        margin-top: -70px;
+
+    }
+
+    ._header h1 {
+        font-size: 40px;
+    }
+
+    .rcorners1 {
+        border-radius: 25px;
+        border: 2px solid #000;
+        padding: 20px;
+        width: 100px;
+        height: 15px;
+        font-size: 20px;
+        font-weight: BOLD;
+    }
+
+    div {
+        font-family: phetsarath ot;
+    }
+    </style>
+
+    <script type="text/javascript">
+    function Print() {
+        //$( ".imgbutton" ).remove();
+        window.print();
+    }
+    </script>
+
+</head>
+
+<body>
+    <?php   
+                $total = $this->total;
+                $item_per_page = 10;
+                $page = ceil(($total )/ $item_per_page);
+                $page_no=0;$item_row= 0;$no=0;
+        for($page_no=1;$page_no<=$page;$page_no++){ 
+            $pg_number= $page_no."/".$page;
+            ?>
+
+
+    <div class="print"><img src="<?php echo HOST ?>img/print.png" class="imgbutton print" onclick="Print()"
+            id="print" /></div>
+    <div id="logo"><img src="<?php echo HOST ?>img/New_logo.png" /><br /></div><br>
+
+    <!--   <div class="_header">
+            <h1><?php echo My_Sale_Order_Type::getHeader($this->changeSalesOrder['type']) ?></h1>
+        </div> -->
+    <div class="top">
+
+
+
+        <div style="float:right;margin-top: -10px;" class=" rcorners1">ບິນຍ້າຍເຄື່ອງ</div>
+        <!-- <div class="page_munber"><?=$pg_number?></div> -->
+        <div class="title_page_logo"><a style="color: black ; font-size:16px">ບໍລິສັດ ໂອພີເເອວ ການຄ້າ
+                ຈຳກັດຜູ້ດຽວ</a><br />
+            <p style="margin-top: 8px; font-size: 12px">ອາຄານ ຕຶກຫ້ອງການ ວຽງຈັນເຊັນເຕີ ຊັ້ນ2 ບ້ານໜອງຈັນ
+                ເມືອງສີສັດຕະນາກ ນະຄອນຫຼວງວຽງຈັນ</p>
+        </div>
+    </div>
+
+    <div class="row" style="margin-top: 20px;">
+        <div class="span3" style="width: 300px;">
+            <!-- <p><strong>ຜູ້ຂໍເບີກ</strong></p> -->
+            <span><strong>ສາງທີ່ຍ້າຍອອກ</strong> : <?=$this->warehouses[$this->changeSalesOrder['old_id']];?>
+            </span><br>
+            <span><strong>ສາງທີ່ຮັບເຂົ້າ</strong> : <?=$this->warehouses[$this->changeSalesOrder['new_id']];?>
+            </span><br>
+            <span><strong>ຜູ້ສ້າງລາຍການ</strong> : <?=$this->staff[$this->changeSalesOrder['created_by']];?> </span>
+            <!--      <p><strong>ປະເພດການຂໍເບີກ</strong></p>
+                <p><strong>ປະເພດເອກະສານອ້າງອີງ</strong></p> -->
+        </div>
+        <!--  <div class="span2">
+                <p>: <?=$this->changeSalesList['salesman_id'];?></p>
+                <p>: <?=$this->warehouses[$this->changeSalesOrder['new_id']];?> </p>
+                <p>: <?=$this->warehouses[$this->changeSalesOrder['old_id']];?> </p>
+                <p>: <?=$this->staff[$this->changeSalesOrder['created_by']];?> </p>
+                <p>: <?=$this->changedoctype[$this->changeSalesList['doc_type']] ;?> </p>
+                <p>: </p>
+                </div>-->
+        <div class="span4" style="width: 300px; float:right;">
+            <span><strong>ເລກທີ່ເອກະສານ</strong> : <?=$this->changeSalesOrder['sn_ref'];?></span><br>
+            <span><strong>ວັນທີເອກະສານ</strong> : <?=$this->changeSalesOrder['created_at']?></span><br>
+            <!-- <span><strong style="font-weight:bold; font-size:20px;">ປະເພດເອກະສານ : <?php echo My_Sale_Order_Type::getHeader($this->changeSalesOrder['type']) ?></strong></span><br>
+                <p><strong>ເລກທີ່ອ້າງອີງ</strong></p>
+                <p><strong>ວັນທີ່ອ້າງອີກ</strong></p>
+                <p><strong>ວັນທີຕ້ອງການສິນຄ້າ</strong></p>
+                <p><strong>ເລກທີເອກະສານອ້າງອີງ</strong></p>
+                <p><strong>ວັນທີເອກະສານອ້າງອີກ</strong></p> -->
+        </div>
+        <div class="span3">
+            <!-- <p>: <?=$this->changeSalesOrder['sn_ref'];?></p>
+                <p>: <?=$this->changeSalesOrder['created_at']?></p> 
+                <p>:</p>
+                <p>:</p>
+                <p>: <?=$this->changeSalesList['product_demand'];?></p>
+                <p>:</p>
+                <p>:</p> -->
+        </div>
+    </div> <br>
+
+
+    <div class="data_box">
+
+        <table class="table " cellspacing="0" cellpadding="1">
+
+            <thead class="tbllist">
+                <tr>
+                    <th style="width:7%">ລຳດັບ</th>
+                    <!-- <th style="width:20%">ລະຫັດສິນຄ້າ</th> -->
+                    <th style="width:40%">ຊື່ສິນຄ້າ</th>
+                    <th style="width:10%">ປະເພດ</th>
+                    <th style="width:8%">ຈຳນວນ</th>
+                    <th style="width:15%">ລາຄາຕໍ່ໜ່ວຍ</th>
+                    <th style="width:15%">ລວມ</th>
+
+
+                </tr>
+            </thead>
+            <tbody>
+
+                <?PHP  
+                    $data = $this->changeSalesProduct;
+                       
+                    for($i=1;$i<=$item_per_page;$i++){
+                        $sum += $data[$item_row]['num'];
+                    if($total>=$i){ 
+                        $no+=1; 
+                            
+                        if ($data[$item_row]['cat_id'] == 11) {
+                            $unit = 'ເຄື່ອງ';
+                            // $name = 'Smart Phone ລຸ້ນ ';
+                        }elseif ($data[$item_row]['cat_id'] == 12) {
+                            $unit = 'ອັນ';
+                            $name = 'Accessories ';
+                        }
+                        elseif ($data[$item_row]['cat_id'] == 13) {
+                            $unit = 'ເຄື່ອງ';
+                            $name = 'Digital ';
+                        }
+                        elseif ($data[$item_row]['cat_id'] == 14) {
+                            $unit = 'ເຄື່ອງ';
+                            $name = 'iLIKE ';
+                        }
+                        elseif ($data[$item_row]['cat_id'] == 16) {
+                            $unit = 'ເຄື່ອງ';
+                            $name = 'Bundle Gift ';
+                        }else{
+                            $unit = '-';
+                            $name = '-';
+                        }
+                        if ($data[$item_row]['good_id'] == 127 && $data[$item_row]['cat_id'] == 12  ) {
+                            $unit = 'ອັນ';
+                            $name = 'Bundle Gift ';
+                        }
+                        if($data[$item_row]['good_id']!=''){
+                ?>
+                <tr>
+                    <td style="padding: 3px;"><?=$no?></td>
+                    <td style="padding: 3px;"><?= $data[$item_row]['brand_name'] ?>
+                        <?=$name.$this->goods_cached[$data[$item_row]['good_id']]." ".$this->good_colors_cached[$data[$item_row]['good_color']]; ?>
+                    </td>
+                    <td style="padding: 3px;">
+                        <?php echo My_Sale_Order_Type::getHeader($this->changeSalesOrder['type']) ?></td>
+                    <td style="padding: 3px; padding-left: 30px;"><?= $data[$item_row]['num'] ?></td>
+                    <td style="padding: 3px;">
+                        <? //=$unit;?>
+                        <?php if($data[$item_row['change_sales_pice']]){ echo number_format($data[$item_row]['change_sales_pice']); }else{ 
+                            echo number_format($data[$item_row]['price_9']); }?>
+                    </td>
+                    <td style="padding: 3px;">
+                        <?php 
+                if($data[$item_row['change_sales_pice']]){
+                    $price_row = $data[$item_row]['change_sales_pice'];
+                }else{
+                    $price_row = $data[$item_row]['price_9'];
+                }
+
+                $total_price_row = $data[$item_row]['num'] * $price_row;
+                echo number_format($total_price_row,0);
+
+                            ?>
+                    </td>
+
+
+                </tr>
+                <?php if($data[$item_row]['change_sales_pice']) { $pricetotal += $data[$item_row]['change_sales_pice'] * $data[$item_row]['num']; }else{ $pricetotal += $data[$item_row]['price_9'] * $data[$item_row]['num'];} ?>
+                <?php }else{?>
+                <tr>
+                    <td></td>
+                    <td></td>
+                    <td></td>
+                    <td></td>
+                    <td></td>
+                    <td></td>
+
+                </tr>
+                <?php } 
+                 
+                }  $item_row += 1;
+                    }   
+                      ?>
+            </tbody>
+
+        </table>
+    </div>
+
+    <div class="single">
+        <table class="table " cellspacing="0" cellpadding="6">
+
+            <thead class="tbllist">
+                <tr>
+                    <th style="width:10%"></th>
+                    <th style="width:10%"></th>
+                    <th style="width:10%"></th>
+                    <th style="width:32%;text-align: right;">ລວມທັງໝົດ:</th>
+                    <th style="width:10%"><?= $sum?></th>
+                    <th style="text-align:right;"><?php echo number_format($pricetotal)?></th>
+                    <th style="width:6%"></th>
+
+                </tr>
+            </thead>
+        </table>
+        <!--  <div class="detail">
+            <p>ລາຍລະດຽດ :<?=$this->changeSalesList['detail'];?></p>
+            <p>ໝາຍເຫດ :<?=$this->changeSalesList['note'];?></p>
+            <br/>
+           
+            <p>ຂໍ້ທີ່ 1. ຜູ້ຂໍເບີກສິນຄ້າ ຕ້ອງກວດເບິ່ງເຄື່ອງທີ່ເບີກເຂົ້າມາກົງກັບເຄື່ອງທີ່ເຮົາຂໍເບີກບໍ ເຊັ່ນວ່າ: ກວດລຸ້ນ,ສີ,ຈຳນວນ</p>
+            <p>ຂໍ້ທີ່ 2. ຫຼັງຈາກກວດແລ້ວກົງກັບສິນຄ້າທີ່ຂໍເບີກ ແມ່ນໃຫ້ທຳການສະແກນ ເຂົ້າລະບົບ</p>
+            <p>ຂໍ້ທີ່ 3. ແຕ່ຫາກກວດແລ້ວເຄື່ອງບໍ່ກົງກັບສິນຄ້າທີ່ຂໍເບີກ ແມ່ນໃຫ້ຮີບແຈ້ງມາທາງສາງຕົ້ນທາງຫຼືແອດມິນ ເພື່ອໃຫ້ກວດເບິ່ງຄືນອີກຄັ້ງ</p>
+            <p>ຂໍ້ທີ່ 4. ກໍລະນີ້ເຄື່ຶອງເສຍຫາຍ ຫຼັງໄດ້ຮັບເຄື່ອງໄປແລ້ວ ຜູ້ຂໍເບີກຕ້ອງເປັນຄົນຮັບຜິດຊອບທຸກຢ່າງ</p>
+        </div> -->
+        <div class="row" style="margin-top: 40px; text-align:center;">
+
+            <span>
+                <span><b style="padding: 35px;">(______________)</b></span>
+                <span><b style="padding: 35px;">(______________)</b></span>
+                <span><b style="padding: 35px;">(______________)</b></span><br><br>
+                <span><b style="padding: 70px;">ຜູ້ຍ້າຍເຄື່ອງ</b></span>
+                <span><b style="padding: 70px;">ຫົວໜ້າສາງ</b></span>
+                <span><b style="padding: 60px;">ຫົວໜ້າການເງິນ</b></span> <br><br>
+
+        </div>
+        <!-- <div class="span6" style="margin-top: 4%;"><p>ພິມເມືອ : <?=date("Y-m-d h:i:sa")?></p></div> -->
+        <!-- <div class="span6" style="margin-top: 4%;" ><p style="float:right;">ພິມໂດຍ : <?=$this->staff[$userStorage->id] ?> </p></div>
+ <?PHP  } ?> -->
+</body>
+
+</html>
+
+
+<script src="<?php echo HOST ?>js/jquery-1.7.2.min.js"></script>
+<script>
+try {
+    $(document).ready(function() {
+        parent.window.frames['picking_list'].focus();
+        parent.window.frames['picking_list'].print();
+    });
+} catch (err) {
+
+}
+</script>

@@ -1,0 +1,163 @@
+<link href="../css/select2.css" rel="stylesheet"/>
+<script src="../js/select2.js"></script>
+<form class="form-search form-horizontal" method="get" action="<?php echo HOST ?>sales/check-list-credit-note">
+    <div class="row">
+        <div class="span5">
+        <!-- <input type="hidden" name='SearchBox' id="SearchBox"> -->
+            <div class="control-group">
+                <label for="sn" class="span2">Credit Note No</label>
+                <input id="sn" name="sn" type="text" class="input-medium search-query form-control" value="<?php isset($this->params['sn']) and printf($this->params['sn']);?>">
+            </div>
+
+            <div class="control-group">
+                <label for="creditnote_type" class="span2">Credit Note Type</label>
+                <select id="creditnote_type" name="creditnote_type">
+                    <option value="">Show All</option>
+                    <option value="CN">CN</option>
+                    <option value="CP">CP</option>
+                </select>
+            </div>
+
+        </div>
+        <div class="span5">
+
+            <div class="control-group">
+             <label class="span2" for="rank">ประเภทร้านค้า<span style="color: red">*</span></label>
+                
+                    <select id="rank" name="rank" class="rank span3">
+                        <option value="">---</option>
+                        <option value="1" <?php if( isset($this->distributor['rank']) and $this->distributor['rank']==1 ) { ?> selected<?php }?>>1. ORG-WDS(1)</option>
+                        <option value="2" <?php if( isset($this->distributor['rank']) and $this->distributor['rank']==2 ) { ?> selected<?php }?>>2. ORG(2)</option>
+                        <option value="5" <?php if( isset($this->distributor['rank']) and $this->distributor['rank']==5 ) { ?> selected<?php }?>>3. ORG-Dtac/Advice(5)</option>
+                        <option value="6" <?php if( isset($this->distributor['rank']) and $this->distributor['rank']==6 ) { ?> selected<?php }?>>4. ORG-Lotus/Power by(6)</option>
+                        <option value="7" <?php if( isset($this->distributor['rank']) and $this->distributor['rank']==7 ) { ?> selected<?php }?>>5. Dealer(7)</option>
+                        <option value="8" <?php if( isset($this->distributor['rank']) and $this->distributor['rank']==8 ) { ?> selected<?php }?>>6. HUB(8)</option>
+                        <option value="9" <?php if( isset($this->distributor['rank']) and $this->distributor['rank']==9 ) { ?> selected<?php }?>>7. Laos(9)</option>
+                        <option value="3" <?php if( isset($this->distributor['rank']) and $this->distributor['rank']==3 ) { ?> selected<?php }?>>8. Online and Staff(3)</option>
+                        <option value="10" <?php if( isset($this->distributor['rank']) and $this->distributor['rank']==10 ) { ?> selected<?php }?>>9. Brand Shop/Service(10)</option>
+                        <option value="11" <?php if( isset($this->distributor['rank']) and $this->distributor['rank']==11 ) { ?> selected<?php }?>>10. King Power(11)</option>
+                        <option value="12" <?php if( isset($this->distributor['rank']) and $this->distributor['rank']==12 ) { ?> selected<?php }?>>11. Jaymart(12)</option>
+                        <option value="13" <?php if( isset($this->distributor['rank']) and $this->distributor['rank']==13 ) { ?> selected<?php }?>>12. Brand Shop By Dealer(13)</option>
+                        <option value="14" <?php if( isset($this->distributor['rank']) and $this->distributor['rank']==14 ) { ?> selected<?php }?>>13. KR Dealer(14)</option>
+                        <option value="15" <?php if( isset($this->distributor['rank']) and $this->distributor['rank']==15 ) { ?> selected<?php }?>>14. TRUE(15)</option>
+                    </select>
+                
+             </div>       
+                
+        <div class="retailer_name_list"></div>   
+        <div class="control-group">
+                <label for="chanel" class="span2">Chanel</label>
+                <select id="chanel" name="chanel">
+                    <option value="">Show All</option>
+                    <option value="accessories">Accessories</option>
+                    <option value="oppo_all_green">OPPO All Green</option>
+                    <option value="price">Protection Price</option>
+                    <option value="return">Return Product</option>
+                    <option value="top_green">OPPO Top Green</option>
+                </select>
+            </div>      
+        </div>
+    </div>
+    <div class="row">
+        
+        <div class="span5">
+            
+            <div class="control-group">
+                <label for="created_at_from" class="span2">Create Time From</label>
+                <input type="text" class="form-control search-query date" id="created_at_from" name="created_at_from" value="<?php isset($this->params['created_at_from']) and printf($this->params['created_at_from']);?>">
+            </div>
+            <div class="control-group">
+                <label for="created_at_to" class="span2">Create Time To</label>
+                <input type="text" class="form-control search-query date" id="created_at_to" name="created_at_to" value="<?php isset($this->params['created_at_to']) and printf($this->params['created_at_to']);?>">
+            </div>
+        </div>
+    </div>
+
+    <!-- <button type="submit" class="btn btn-primary">Search</button>
+    <button type="reset" class="btn btn-warning">Reset</button> -->
+    <button style="margin-left: 30px" type="submit"  name="export" value="1" class="btn btn-success">Export</button>
+</form>
+<script type="text/javascript" src="<?php echo HOST ?>js/jets.js"></script>
+<script>
+
+    $(document).ready(function () {
+
+        <?php if(isset($this->rank)) { ?>
+        $('#rank').val(<?= $this->rank ?>);
+        get_distributor_cached_for_search(<?= $this->rank ?>);
+        <?php }?>
+
+        $('.rank').change(function(event) {
+            get_distributor_cached_for_search($(this).val());
+          });
+
+        function get_distributor_cached_for_search(rank_id){
+
+            var rank_id = rank_id;
+                  $.ajax({
+                      url: '<?php echo HOST ?>get/distributor-cached-for-search',
+                      type: 'POST',
+                      dataType: 'html',
+                      data: {rank_id: rank_id},
+                  })
+                  .done(function(data) {
+                      $('.retailer_name_list').empty();
+                      $('.retailer_name_list').append(data);
+                        var jets = new Jets({
+                        searchTag: '#SearchBox',
+                        contentTag: '#d_id'
+                    });
+                        <?php if(isset($this->d_id)){ ?>
+                            $('#d_id').val(<?= $this->d_id ?>);
+                        <?php }?>
+                      console.log("success");
+                  })
+                  .fail(function() {
+                      console.log("error");
+                  })
+                  .always(function() {
+                      console.log("complete");
+                  });
+        }
+        
+        // initSearchOptionDistributor('d_id', 'SearchBox');
+        $( '.date' ).datepicker({ dateFormat: "dd/mm/yy" });
+
+        $('#cat_id, #good_id').change(function(){
+            $(this).after('<span class="loading"></span>');
+            var _self = $(this);
+            var cat_id = $('#cat_id').val();
+
+            if (_self.attr('id')=='cat_id')
+                $('#good_id').find('option:not(:first)').remove();
+
+            var good_id = $('#good_id').val();
+
+            $('#good_color').find('option:not(:first)').remove();
+
+            $('#num, #price').val('');
+
+            $.get("/get/load",
+                {cat_id: cat_id, good_id: good_id}
+                ,function(data,status){
+                    var data = $.parseJSON( data );
+                    if (data.goods){
+                        var obj = data.goods;
+                        for (var i = 0; i < obj.length; i++) {
+                            $('#good_id').append('<option value="'+obj[i]['id']+'">'+obj[i]['name']+'</option>');
+                        }
+                    }
+                    if (data.colors){
+                        var obj = data.colors;
+                        for (var i = 0; i < obj.length; i++) {
+                            $('#good_color').append('<option value="'+obj[i]['id']+'">'+obj[i]['name']+'</option>');
+                        }
+                    }
+                    _self.nextAll('.loading').remove();
+                });
+        });
+    });
+</script>
+<script>
+       // $(document).ready(function() { $("#d_id").select2(); });
+</script>

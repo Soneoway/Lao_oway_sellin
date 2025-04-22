@@ -1,0 +1,235 @@
+<div class="page-header">
+	<?php if(isset($this->accountMy) && $this->accountMy) : ?>
+		<h1 style="font-family: Times New Roman;">Edit Bank Account (My Side)</h1>
+	<?php else: ?>
+		<h1 style="font-family: Times New Roman;">Add Bank Account (My Side)</h1>
+	<?php endif; ?>
+</div>
+
+<form class="form-horizontal" action="<?php echo HOST ?>finance/save-bank-account-my-side" method="post">
+	<div class="row" style="border-style: solid; padding: 30px 10px 10px 10px; border-color: lavender;">
+
+		<div class="span6">
+
+			<div class="control-group">
+				<label for="dis_id" class="control-label" style="width: 180px; padding-right: 20px;"> <span style="color: red">*</span> Distributor(My Side) : </label>
+				<div class="controls">
+					<select class="span3" name="dis_id" id="dis_id" required <?php if(isset($this->accountMy) && $this->accountMy) : ?> disabled <?php endif; ?>>
+						<option value=""> Please Select </option>
+						<?php foreach ($this->distributor as $value) : ?>
+							<option value="<?php echo $value['id'] ?>" <?php if(isset($this->accountMy->d_id) &&$this->accountMy->d_id == $value['id']) { ?> selected <?php } ?>><?php echo $value['title'] ?></option>
+						<?php endforeach; ?>
+					</select>
+				</div>
+			</div>
+
+			<div class="control-group">
+				<label for="bank_account" class="control-label" style="width: 180px; padding-right: 20px;"> <span style="color: red">*</span>Bank Account : </label>
+				<div class="controls">
+					<input type="text" name="bank_account" id="bank_account" class="span3" required value="<?php if(isset($this->accountMy) && printf($this->accountMy->bank_account)) ?>">
+				</div>
+			</div>
+
+			<div class="control-group">
+				<label for="mnemonic_code" class="control-label" style="width: 180px; padding-right: 20px;"><span style="color: red">*</span> Mnemonic Code : </label>
+				<div class="controls">
+					<input type="text" name="mnemonic_code" id="mnemonic_code" class="span3" required value="<?php if(isset($this->accountMy) && printf($this->accountMy->mnemonic_code)) ?>">
+				</div>
+			</div>
+
+			<div class="control-group">
+				<label for="card_no" class="control-label" style="width: 180px; padding-right: 20px;"><span style="color: red">*</span> Card No./Account :</label>
+				<div class="controls">
+					<input type="text" name="card_no" id="card_no" class="span3" required value="<?php if(isset($this->accountMy) && printf($this->accountMy->card_no)) ?>">
+				</div>
+			</div>
+
+			<div class="control-group">
+				<label for="user_id" class="control-label" style="width: 180px; padding-right: 20px;">User : </label>
+				<div class="controls">
+					<select class="span3" name="user_id" id="user_id" disabled>
+						<option value=""> Please Selected </option>
+					</select>
+				</div>
+			</div>
+
+			<div class="control-group">
+				<label for="status" class="control-label" style="width: 180px; padding-right: 20px;"><span style="color: red">*</span> Off/On :</label>
+				<div class="controls">
+					<select class="span3" name="status" id="status" required>
+						<option value="1" <?php if(isset($this->accountMy->status) && $this->accountMy->status == 1) : ?> selected <?php endif; ?> > On </option>
+						<option value="2" <?php if(isset($this->accountMy->status) && $this->accountMy->status == 2) : ?> selected <?php endif; ?> > Off </option>
+					</select>
+				</div>
+			</div>
+
+			<div class="control-group">
+				<label for="card_type" class="control-label" style="width: 180px; padding-right: 20px;"> <span style="color: red">*</span> Card Type : </label>
+				<div class="controls">
+					<select name="card_type" id="card_type" class="span3">
+						<option value=""> Please selected </option>
+						<option value="1" <?php if(isset($this->accountMy->card_type) && $this->accountMy->card_type == 1) : ?> selected <?php endif; ?> >Major Card</option>
+						<option value="2" <?php if(isset($this->accountMy->card_type) && $this->accountMy->card_type == 2) : ?> selected <?php endif; ?> >Deputy Card</option>
+						<option value="3" <?php if(isset($this->accountMy->card_type) && $this->accountMy->card_type == 3) : ?> selected <?php endif; ?> >Virtual Card</option>
+					</select>
+				</div>
+			</div>
+
+			<div class="control-group master_account">
+				<label for="master_account" class="control-label" style="width: 180px; padding-right: 20px;">Associate Master Card Account : </label>
+				<div class="controls">
+					<select name="master_account" id="master_account" class="span3">
+						<option value=""> Please Selected </option>
+
+						<?php if(isset($this->bankaccount) && $this->bankaccount) : ?>
+							<?php foreach($this->bankaccount as $key => $value) : ?>
+								<option value="<?php echo $key ?>" <?php if(isset($this->accountMy->master_account_id) && $this->accountMy->master_account_id == $key) : ?> selected <?php endif; ?> ><?php echo $value ?></option>
+							<?php endforeach; ?>
+						<?php endif; ?>
+					</select>
+				</div>
+			</div>
+
+		</div>
+
+		<div class="span6">
+
+			<div class="control-group">
+				<label for="bank_id" class="control-label" style="width: 180px; padding-right: 20px;"><span style="color: red">*</span> Bank : </label>
+				<div class="controls">
+					<select class="span3" name="bank_id" id="bank_id" required>
+						<option value=""> Please Selected </option>
+
+						<?php if(isset($this->bank) && $this->bank) : ?>
+							<?php foreach($this->bank as $key => $value) : ?>
+								<option value="<?php echo $key ?>" <?php if(isset($this->accountMy->bank) && $this->accountMy->bank == $key) : ?> selected <?php endif; ?> ><?php echo $value ?></option>
+							<?php endforeach; ?>
+						<?php endif; ?>
+					</select>
+				</div>
+			</div>
+
+			<div class="control-group">
+				<label for="account_org" class="control-label" style="width: 180px; padding-right: 20px;">Accounting organization : </label>
+				<div class="controls">
+					<select name="account_org" class="span3" id="account_org">
+						<option value=""> Please Selected </option>
+
+						<?php if(isset($this->accountOrg) && $this->accountOrg) : ?>
+							<?php foreach($this->accountOrg as $value) : ?>
+								<option value="<?php echo $value['id'] ?>" <?php if(isset($this->accountMy->account_org_id) && $this->accountMy->account_org_id == $value['id']) : ?> selected <?php endif; ?> ><?php echo $value['name'] ?></option>
+							<?php endforeach; ?>
+						<?php endif; ?>
+					</select>
+				</div>
+			</div>
+
+			<div class="control-group">
+				<label for="hots" class="control-label" style="width: 180px; padding-right: 20px;"><span style="color: red">*</span> Host-to-Host : </label>
+				<div class="controls">
+					<select name="hots" class="span3" id="hots" required>
+						<option value="2" <?php if(isset($this->accountMy->host) && $this->accountMy->host == 2 ) : ?> selected <?php endif; ?> > No </option>
+						<option value="1" <?php if(isset($this->accountMy->host) && $this->accountMy->host == 1 ) : ?> selected <?php endif; ?> > Yes </option>
+					</select>
+				</div>
+			</div>
+
+			<div class="control-group">
+				<label for="account_pp" class="control-label" style="width: 180px; padding-right: 20px;"><span style="color: red">*</span> Account Property : </label>
+				<div class="controls">
+					<select class="span3" name="account_pp" id="account_pp" required>
+						<option value=""> Please Selected </option>
+						<option value="1" <?php if(isset($this->accountMy->account_pp) && $this->accountMy->account_pp == 1) : ?> selected <?php endif; ?> > Personal Account </option>
+						<option value="2" <?php if(isset($this->accountMy->account_pp) && $this->accountMy->account_pp == 2) : ?> selected <?php endif; ?> > Company Account </option>
+					</select>
+				</div>
+			</div>
+
+			<div class="control-group">
+				<label for="account_type" class="control-label" style="width: 180px; padding-right: 20px;"><span style="color: red">*</span> Account Type :</label>
+				<div class="controls">
+					<select class="span3" name="account_type" id="account_type" required>
+						<option value=""> Please Selected </option>
+
+						<?php if(isset($this->accountType) && $this->accountType) : ?>
+							<?php foreach($this->accountType as $key => $value) : ?>
+								<option value="<?php echo $key ?>" <?php if(isset($this->accountMy->account_type) && $this->accountMy->account_type == $key) : ?> selected <?php endif; ?> ><?php echo $value ?></option>
+							<?php endforeach; ?>
+						<?php endif; ?>
+					</select>
+				</div>
+			</div>
+
+			<div class="control-group">
+				<label for="remark" class="control-label" style="width: 180px; padding-right: 20px;"> Remark :</label>
+				<div class="controls">
+					<textarea class="span3" name="remark" id="remark" cols="2" rows="2"><?php if(isset($this->accountMy) && printf($this->accountMy->remark)) ?></textarea>
+				</div>
+			</div>
+
+		</div>
+
+		<div class="span12" style="padding-bottom: 400px; padding-left: 50px; padding-top: 20px;">
+			<div class="control-group">
+				<input type="hidden" id="back_url" name="back_url" value="/finance/bank-account-my-side">
+				<input type="hidden" name="id" value="<?php echo $this->accountMy->id ?>" />
+
+				<button type="submit" class="btn btn-success"> Save </button>
+
+				<button type="button" class="btn btn-danger go-back"> Back </button>
+			</div>
+		</div>
+
+	</div>
+</form>
+
+
+<script type="text/javascript">
+
+	$(document).ready(function () {
+
+		initGoBack();
+
+		$( "#dis_id" ).change(function() {
+
+			var distributor_id    = $('#dis_id').val();
+
+			$.get("/finance/load-warehouse",
+				{distributor_id : distributor_id}
+				,function(data,status){
+					var data = $.parseJSON( data );
+
+
+					if (data.account){
+						var obj = data.account;
+						$('#account_org').html('<option value="0"> Please Selected </option>');
+						for (var i = 0; i < obj.length; i++) {
+							$('#account_org').append('<option value="'+obj[i]['id']+'">'+obj[i]['name']+'</option>');
+						}
+					}
+				})
+		})
+
+	});
+
+	$(function() {
+		$('.master_account').hide(); 
+		$('#card_type').change(function(){
+			if($('#card_type').val() == '2' || $('#card_type').val() == '3') {
+				$('.master_account').show();
+				$('#master_account').prop('required', true);
+			} else {
+				$('.master_account').hide();
+				$('#master_account').removeAttr('required'); 
+			} 
+		});
+	});
+	
+	function initGoBack(){
+		$('.go-back').click(function(e){
+			window.location.href = $('#back_url').val();
+			return false;
+		});
+	}
+
+</script>

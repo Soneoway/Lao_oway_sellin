@@ -1,0 +1,205 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
+<html>
+   <head>
+      <meta http-equiv="Pragma" content="no-cache">
+      <meta http-equiv="Expires" content="-1">
+      <meta http-equiv="Content-Type" content="text/html; charset=utf-8">
+      <meta name="description" content="Invoice Laser">
+      <meta name="keywords" content="Invoice Laser">
+      <meta name="author" content="Cuong seven">
+      <title>Print Mobilizition Order</title>
+      <script src="<?php echo HOST ?>js/jquery-1.7.2.min.js"></script>
+      <link rel="stylesheet" href="<?php echo HOST ?>css/jquery-ui.css">
+      <link rel="stylesheet" href="<?php echo HOST ?>css/invoice.css">
+      <script src="<?php echo HOST ?>js/jquery-ui.js"></script>
+   </head>
+   <style>h2 {
+           font-size: 23px;
+           font-weight: bold;
+           text-transform: uppercase;
+           margin-top: 6px;
+           margin-bottom: 10px;
+       }
+
+       .name-order
+       {
+           text-transform: uppercase;
+           padding-left: 6px;
+           width: 400px;
+           padding: 0px 30px;
+       }
+       .signleft {
+           text-align: left;
+           padding-left: 30px;
+       }
+       .signname {
+           width: 325px;
+           float: left;
+           text-align: center;
+           margin-top: 16px;
+       }
+       .center
+       {
+           text-align: center;
+       }
+   </style>
+   <body>
+   <!--begin invoice print template -->
+   <div class="block">
+
+       <div class="header">
+           <div id="logo">
+               <img src="<?php echo HOST ?>img/logoprint.png" alt="logo" title="logo"/>
+           </div>
+           <div class="print">
+               <img src="<?php echo HOST ?>img/print.png" alt="print" title="print">
+           </div>
+
+           <div class="no-print">
+               <!-- <a target="_blank" href="<?php echo HOST ?>warehouse/list-good?sn=<?php echo $this->sn ?>">In bang ke</a> -->
+           </div>
+           <div class="inform">
+
+               <h2>LỆNH ĐIỀU ĐỘNG XUẤT HÀNG</h2>
+               <p>Số: <?php if(isset($this->order_name) and $this->order_name) echo $this->order_name ?>
+               </p>
+               <div class="date">
+                   <div class="day">Ngày: <span><?php echo date("d"); ?></span></div>
+                   <div class="month">Tháng: <span><?php echo date("m"); ?></span></div>
+                   <div class="year">Năm: <span><?php echo date("Y"); ?></span></div>
+               </div>
+           </div>
+
+
+
+
+           <div class="clear"></div>
+       </div>
+
+       <div class="information">
+
+           <div class="row-1">
+               <div class="col"><span>Đơn vị bán hàng</span>:<strong class="name"><?php if(isset($this->to_warehouse_oppo['warehouse_name']) and $this->to_warehouse_oppo['warehouse_name']) echo $this->to_warehouse_oppo['warehouse_name']; ?></strong></div>
+               <div class="col"><span>Mã số thuế </span>:<strong class="mst"><?php if(isset($this->to_warehouse_oppo['mst']) and $this->to_warehouse_oppo['mst']) echo $this->to_warehouse_oppo['mst']; ?></strong></div>
+               <div class="col"><span>Địa chỉ </span>:<strong class="not"><?php if(isset($this->to_warehouse_oppo['address']) and $this->to_warehouse_oppo['address']) echo $this->to_warehouse_oppo['address']; ?></strong></div>
+               <div class="col"><span>Điện thoại </span>:<strong class="not"><?php if(isset($this->to_warehouse_oppo['phone']) and $this->to_warehouse_oppo['phone']) echo $this->to_warehouse_oppo['phone']; ?> </strong></div>
+               <div class="col"><span>Kho nhập </span>:<strong><?php if(isset($this->to_warehouse['name']) and $this->to_warehouse['name']) echo $this->to_warehouse['name']; ?></strong> - Số điện thoại: <?php if(isset($this->to_warehouse['tel']) and $this->to_warehouse['tel']) echo $this->to_warehouse['tel']; ?></strong></div>
+               <div class="col"><span>Số PXKKVCNB </span>:<strong class="not"><?php if(isset($this->invoice_number) and $this->invoice_number) echo $this->invoice_number;  ?></strong></div>
+            </div>
+
+       </div>
+
+       <div class="devider"></div>
+
+       <div class="tblist">
+
+            <table class="table-border" cellspacing="0">
+                <tr class="thead">
+                    <td >STT</td>
+                    <td>Mã hàng</td>
+                    <td class="productname" >Tên nhãn hiệu quy cách, phẩm chất vật tư(sản phẩm hàng hóa)</td>
+
+                    <td>Mã số</td>
+                    <td class="unit" >Đơn vị tính</td>
+                    <td class="price">Số Imei</td>
+                    <td class="quantity" >Số lượng</td>
+
+                </tr>
+
+
+                <?php
+                $count = 0;
+                $num_total = $price_before_vat = 0;
+                $total = 0;
+                if (isset($this->product) && is_array($this->product)):
+                    $i = 1;
+					if (count($this->product) <= 15) {
+						foreach ($this->product as $k => $v):
+							$total += intval($this->total[ $k ]);
+							//đơn giá
+							?>
+							<tr class="sp">
+								<td class="abc"><span><?php echo $i++ ?></span></td>
+								<td class="mst" style="width: 83px;    text-align: center;" ><?php if(isset($this->mst[ $k ]) && $this->mst[ $k ]) echo $this->mst[ $k ] ?></td>
+
+								<td class="productname" style="width: 368px;">
+									<?php echo $v ?>
+								</td>
+								<td class="mst" style="width: 83px;    text-align: center;" ><?php if(isset($this->mst[ $k ]) && $this->mst[ $k ]) echo $this->mst[ $k ] ?></td>
+
+								<td class="unit" style="width: 79px;" ><?php if(isset($this->unit[ $k ]) && $this->unit[ $k ]) echo $this->unit[ $k ] ?></td>
+								<td></td>
+								<td class="in" style="    width: 136px;    text-align: center;"><?php if(isset($this->in[ $k ]) && !empty($this->in[ $k ])) echo intval($this->in[ $k ]) ?></td>
+							   </tr>
+							<input type="hidden" name="invoice_price[]" value="<?php echo '_' . $after_vat ; ?>" />
+
+						<?php endforeach;
+					} else {?>
+						<tr class="sp">
+								<td class="abc"><span><?php echo $i++ ?></span></td>
+								<td class="mst" style="width: 83px;    text-align: center;" ><?php if(isset($this->mst[ $k ]) && $this->mst[ $k ]) echo $this->mst[ $k ] ?></td>
+
+								<td class="productname" style="width: 368px;">
+									Linh kiện ĐTDĐ
+								</td>
+								<td class="mst" style="width: 83px;    text-align: center;" ></td>
+
+								<td class="unit" style="width: 79px;" >Thùng</td>
+								<td></td>
+								<td class="in" style="    width: 136px;    text-align: center;">1</td>
+							   </tr>
+							<input type="hidden" name="invoice_price[]" value="<?php echo '_' . $after_vat ; ?>" />
+					<?php }
+                endif; ?>
+
+                <tr class="sp">
+                    <td  colspan="5" style="    text-align: right;    padding-right: 30px;">Tổng cộng:</td>
+                    <td class="center"><?php if(isset($this->total_price) and $this->total_price) echo My_Number::product_price($this->total_price) ?></td>
+                </tr>
+            </table>
+
+
+
+       </div>
+
+       <div class="devider"></div>
+
+       <div class="signname signleft">
+           <div>Người lập</div>
+           <p>(Ký, ghi rõ họ tên)</p>
+       </div>
+
+       <div class="signname signleft">
+           <div>Thủ kho</div>
+           <p>(Ký, ghi rõ họ tên)</p>
+       </div>
+
+
+
+       <div class="signname signright">
+            <div>Người nhận hàng</div>
+           <p>(Ký, đóng dấu, ghi rõ họ tên)</p>
+       </div>
+
+       <div class="clear"></div>
+
+       <div class="foot">
+           <p>(Cần kiểm tra, đối chiếu khi lập, giao, nhận lệnh điều động)</p>
+       </div>
+
+      <div class="page-break"></div>
+   </div>
+   
+   <input type="hidden" id="total_invoice_price" name="total_invoice_price" value="<?php echo $this->price_before_vat ; ?>" />
+   <input type="hidden" id="service_id" name="service_id" value="<?php echo $this->service_id ; ?>" />
+   <input type="hidden" id="total_invoice_vat" name="total_invoice_vat" value="<?php echo $this->vat ; ?>" />
+   <input type="hidden" id="total_invoice_after_vat" name="total_invoice_after_vat" value="<?php echo $this->price_after_vat; ?>" />
+   <input type="hidden" id="invoice_number" value="<?php if(isset($this->invoice_number) and $this->invoice_number) echo $this->invoice_number; ?>">
+   <input type="hidden" id="invoice_prefix" value="<?php if(isset($this->invoice_prefix['id']) and $this->invoice_prefix['id']) echo $this->invoice_prefix['id']; ?>">
+   <input type="hidden" id="sn" value="<?php if(isset($this->sn)) echo $this->sn; ?>">
+  <script>
+		window.print();
+        setTimeout(function(){var ww = window.open(window.location, '_self'); ww.close(); }, 1000);
+   </script>
+   </body>
+</html>

@@ -1,0 +1,27 @@
+<?php
+
+if ($this->details){
+
+    foreach ($this->details as $m){
+?>
+            <tr class="m_<?php echo $this->sn;?> accordion-body collapse">
+                <td></td>
+                <td></td>
+                <td></td>
+                <td></td>
+                <td><?php if (isset($this->goods) && $this->goods && isset($this->goods[$m['good_id']])) echo $this->goods[$m['good_id']]; ?></td>
+                <td><?php if (isset($this->goodColors) && $this->goodColors && isset($this->goodColors[$m['good_color_id']])) echo $this->goodColors[$m['good_color_id']]; ?></td>
+                <td><?php echo $m['qty']; ?></td>
+                <td></td>
+                <td></td>
+                <td></td>
+                <td></td>
+                <td></td>
+                <td></td>
+                <td></td>
+                <td></td>
+                <td></td>
+            </tr>
+
+    <?php } ?>
+<?php } ?>

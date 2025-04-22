@@ -1,0 +1,273 @@
+
+<script type="text/javascript" src="<?php echo HOST ?>js/jquery-1.7.2.min.js"></script> 
+<script type="text/javascript" src="<?php echo HOST ?>js/jquery-ui-1.8.12.custom.min.js"></script>
+<link rel="stylesheet" type="text/css" href="<?php echo HOST ?>css/jquery-ui-1.8.12.custom.css"/>  
+<link rel="stylesheet" href="<?php echo HOST ?>css/bootstrap-multiselect.css" type="text/css"/>
+<script type="text/javascript" src="<?php echo HOST ?>js/bootstrap-multiselect.js"></script>
+
+<style type="text/css">
+ol, ul { list-style: none }
+
+
+
+/* Create a custom checkbox */
+.checkmark {
+    position: absolute;
+    top: 0;
+    left: 0;
+    height: 25px;
+    width: 25px;
+    background-color: #eee;
+}
+
+/* On mouse-over, add a grey background color */
+.container:hover input ~ .checkmark {
+    background-color: #ccc;
+}
+
+/* When the checkbox is checked, add a blue background */
+.container input:checked ~ .checkmark {
+    background-color: #2196F3;
+}
+
+/* Create the checkmark/indicator (hidden when not checked) */
+.checkmark:after {
+    content: "";
+    position: absolute;
+    display: none;
+}
+
+/* Show the checkmark when checked */
+.container input:checked ~ .checkmark:after {
+    display: block;
+}
+
+/* Style the checkmark/indicator */
+.container .checkmark:after {
+    left: 9px;
+    top: 5px;
+    width: 5px;
+    height: 10px;
+    border: solid white;
+    border-width: 0 3px 3px 0;
+    -webkit-transform: rotate(45deg);
+    -ms-transform: rotate(45deg);
+    transform: rotate(45deg);
+}
+.box_file
+{
+      border: 1px solid #ccc;
+    padding: 8px 10px;
+    margin-right: 15px;
+}
+label {
+  display: inline-block;
+    max-width: 100%;
+    margin-bottom: 5px;
+    font-weight: 700;
+}
+</style>
+
+
+    <div class="page-header">
+        <h2>Setup Privileges Position Discount</h2>
+    </div>
+    <div class="container">
+    <form role="form" id="form" enctype="multipart/form-data" action="<?php echo HOST.'tool/ep-privileges-position-save';?>" method="post"  >
+      <div class="well"> 
+        <div class="row">
+            <div class="span5">
+              <?php // echo "<pre>";print_r($this->discount_setup[0]['discount_id']);  
+                /*$setup_department = array("0", "1", "2", "3");
+                $setup_position = array("3042", "3047", "7016", "8023");*/
+                //$discount_id="";
+                $setup_department = $this->setup_department;
+                $setup_position = $this->setup_position;
+                if(isset($this->discount_setup[0]['discount_id'])){
+                  $discount_id = $this->discount_setup[0]['discount_id'];
+                }
+              ?>
+                <?php // echo "<pre>";print_r($setup_department);  ?>
+                <?php // echo "<pre>";print_r($this->setup_department);  ?>
+                <div class="control-group">
+                  <label>Company</label>
+                  <select id="company_id" class="span3" name="company_id" required>
+                        <option value="">Choose</option>
+                        <?php if (isset($this->company) && $this->company): foreach ($this->company as $id=>$item):?>
+                            <option value="<?php echo $item['company_id']?>" <?php if (isset($this->params['company_id']) and $item['company_id']==$this->params['company_id']):?> selected="selected"<?php endif;?>><?php echo $item['company_name'];?></option>
+                        <?php endforeach; endif;?>
+                    </select>
+                </div>
+                <div class="control-group">
+                    <label>Discount Type </label>
+                    <select id="discount_id" class="span3" name="discount_id" required>
+                        <option value="">Choose</option>
+                        <?php if (isset($this->discount) && $this->discount): foreach ($this->discount as $id=>$item):?>
+                            <option value="<?php echo $item['discount_id'].";".$item['warehouse_id'].";".$item['bank_id'].";".$item['distributor_id'];?>" <?php if (isset($this->params['discount_id']) and $item['discount_id']==$this->params['discount_id']):?> selected="selected"<?php endif;?>><?php echo $item['discount_type'];?></option>
+                        <?php endforeach; endif;?>
+                    </select>
+                </div>
+            </div>
+        </div> 
+
+        <?php //print_r($this->position[1]);  ?>
+        <div class="col-md-5">
+          
+          <h3>Positions</h3>
+          <ul class="treeview">
+            <?php $i=0;?>
+            <li>
+              <input type="checkbox" name="all_staff" id="app_menu"  <?php echo ($types['type_all_staff'][0]  == 1)?'checked':'' ?> value="1" >
+              <label for="personalinfo" class="custom-unchecked"> All Staff</label>
+              <ul>
+
+                <?php foreach($this->position as $subapp): ?>
+                    <li>
+                      <input type="checkbox" name="position[<?php echo $app['department_id']?>][]" id="sub_menu" value="<?php echo $subapp['position_id'] ?>;<?php echo $subapp['position_code'] ?>" <?php echo(@in_array($subapp['position_id'], $setup_position))?'checked':''?> <?php echo(@in_array($app['position_id'], $setup_position))?'checked':''?>>
+                      
+                      <label for="personalinfo-1" class="<?php echo (@in_array($app['position_id'], $setup_position))?'custom-checked':'custom-unchecked'?>" style="font-weight:400"> <?php echo $subapp['position_name'] ?>
+                      </label>
+                    </li>
+                <?php endforeach?>
+              </ul>
+            </li>
+          </ul>
+          
+        </div>
+
+
+        
+        <div class="row">
+                <div class="span6">
+                    <div class="control-group">
+                        
+                        <div class="span4">
+                            <input type="hidden" name="action" id="action" value="save">
+                            <button type="submit" class="btn btn-primary" id="submit_btn">Confirm</button>
+                            <a href="/ep-privileges-position-list" class="btn btn-danger go-back">Go back</a>
+                        </div>
+                    </div>
+                    <div class="clearfix"></div>
+                </div>
+        </div>
+    </form>
+</div>
+
+<script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.11.0/umd/popper.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-fileinput/4.4.9/js/fileinput.min.js"></script>
+<script type="text/javascript">
+
+$(function() {
+
+  $('input[type="checkbox"]').change(checkboxChanged);
+
+  function checkboxChanged() {
+    var $this = $(this),
+        checked = $this.prop("checked"),
+        container = $this.parent(),
+        siblings = container.siblings();
+
+    container.find('input[type="checkbox"]')
+    .prop({
+        indeterminate: false,
+        checked: checked
+    })
+    .siblings('label')
+    .removeClass('custom-checked custom-unchecked custom-indeterminate')
+    .addClass(checked ? 'custom-checked' : 'custom-unchecked');
+
+    checkSiblings(container, checked);
+  }
+
+  function checkSiblings($el, checked) {
+    var parent = $el.parent().parent(),
+        all = true,
+        indeterminate = false;
+
+    $el.siblings().each(function() {
+      return all = ($(this).children('input[type="checkbox"]').prop("checked") === checked);
+    });
+
+    if (all && checked) {
+      parent.children('input[type="checkbox"]')
+      .prop({
+          indeterminate: false,
+          checked: checked
+      })
+      .siblings('label')
+      .removeClass('custom-checked custom-unchecked custom-indeterminate')
+      .addClass(checked ? 'custom-checked' : 'custom-unchecked');
+
+      checkSiblings(parent, checked);
+    } 
+    else if (all && !checked) {
+      indeterminate = parent.find('input[type="checkbox"]:checked').length > 0;
+
+      parent.children('input[type="checkbox"]')
+      .prop("checked", checked)
+      .prop("indeterminate", false)
+      .siblings('label')
+      .removeClass('custom-checked custom-unchecked custom-indeterminate')
+      .addClass(indeterminate ? 'custom-indeterminate' : (checked ? 'custom-checked' : 'custom-unchecked'));
+
+      checkSiblings(parent, checked);
+    } 
+    else {
+
+    }
+  }
+
+  $(document).on("submit", "form", function(e){
+        if (confirm('ต้องการบันทึกข้อมูลใช่หรือไม่ ?')) {
+            // return  true;
+        }else{
+            e.preventDefault();
+            // $('#submit_btn').removeAttr('disabled');
+            $.unblockUI();
+            return  false;
+        }
+  });
+
+  $('#discount_id').change(function(event) {
+      var company_id = $('#company_id').val();
+      var discount_id = $(this).val();
+      var arr = discount_id.split(';');
+      //$('#action').val("view").change();
+      window.location.href = "ep-privileges-position-create?action=view&company_id="+company_id+"&discount_id="+arr[0];
+      //$( "#form" ).submit();
+  });
+
+  $('#company_id').change(function()
+    {
+
+        $('.alert').addClass('hide');
+
+        $(this).after('<span class="loading"></span>');
+        var _self = $(this);
+        var company_id = $('#company_id').val();
+
+        if (_self.attr('id')=='company_id')
+        {
+            $('#discount_id').find('option:not(:first)').remove();
+        }
+
+        $.get("/get/load-staff-discount",
+        {company_id: company_id}
+        ,function(data,status){
+            var data = $.parseJSON( data );
+            if (data.discount){
+                var obj = data.discount;
+                for (var i = 0; i < obj.length; i++) {
+                    $('#discount_id').append('<option value="'+obj[i]['discount_id']+'">'+obj[i]['discount_type']+'</option>');
+                }
+            }
+            
+            _self.nextAll('.loading').remove();
+        });
+
+
+    });
+
+});
+
+</script>

@@ -1,0 +1,44 @@
+<form class="form-horizontal form-search" method="get" action="<?php echo HOST ?>warehouse/delivery-fee">
+    <div class="row">
+        <div class="span5">
+            <div class="control-group">
+                <label class="control-label" for="name">Name</label>
+                <div class="controls">
+                    <input type="text" id="name" name="name" value="<?php if(isset($this->params['name'])) echo $this->params['name'] ?>"
+                        placeholder="Province or District Name" >
+                </div>
+            </div>
+        </div>
+
+        <div class="span5">
+            <div class="control-group">
+                <label class="control-label" for="no_delivery">No Delivery</label>
+                <div class="controls">
+                    <input type="checkbox" id="no_delivery" name="no_delivery" value="1" <?php if(isset($this->params['no_delivery']) && $this->params['no_delivery']) echo "checked" ?>>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="row">
+        <div class="span10">
+            <div class="control-group">
+                <div class="controls">
+                    <button type="submit" class="btn btn-primary">Search</button>
+                    <button type="reset" class="btn btn-warning">Reset</button>
+                </div>
+            </div>
+        </div>
+    </div>
+</form>
+
+<script type="text/javascript">
+    $(document).ready(function () {
+        $('.form-search button:reset').click(function (e){
+            $('.form-search input, .form-search select').val('');
+            $('.form-search').submit();
+            return false;
+        });
+
+    });
+</script>

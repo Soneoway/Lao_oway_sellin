@@ -1,0 +1,61 @@
+<div class="account-container">
+
+    <div class="content clearfix">
+
+        <form action="/user/auth" method="post">
+            <?php if (isset($this->coc_coc) && $this->coc_coc): ?>
+                <!-- ---------------------------------------------- -->
+                <div class="alert alert-error">
+                    <?php echo $this->coc_coc;?>
+                </div>
+                <!-- ---------------------------------------------- -->
+            <?php else: ?>
+
+                <center><h2 style="font-family: Times New Roman">WMS System</h1></center>
+
+                <div class="login-fields">
+
+                    <?php
+                    if (isset($this->messages) and $this->messages) :
+                        foreach ($this->messages as $message): ?>
+                        <div class="alert alert-error">
+                            <?php echo $message;?>
+                        </div>
+                        <?php endforeach;
+                    else:
+                    ?>
+                    <p></p>
+                    <?php endif;?>
+
+                    <div class="field">
+                        <label for="email">Username</label>
+                        <input type="text" id="email" name="email" placeholder="Username" autocomplete="off" required="required" class="login username-field" autofocus />
+                    </div> <!-- /field -->
+
+                    <div class="field">
+                        <label for="password">Password:</label>
+                        <input type="password" id="password" name="password" placeholder="Password" required="required" autocomplete="off" class="login password-field"/>
+                    </div> <!-- /password -->
+
+                </div> <!-- /login-fields -->
+
+                <div class="login-actions">
+                    <!--
+                                    <span class="login-checkbox">
+                                        <input id="Field" name="Field" type="checkbox" class="field login-checkbox" value="First Choice" tabindex="4" />
+                                        <label class="choice" for="Field">Keep me signed in</label>
+                                    </span>
+                    -->
+                    <button type="submit" class="button btn btn-success btn-large">Login</button>
+
+                </div> <!-- .actions -->
+            <?php endif; ?>
+        </form>
+
+    </div> <!-- /content -->
+
+</div> <!-- /account-container -->
+
+<div class="login-extra">
+    <!-- <a href="/user/reset">Reset Password</a> -->
+</div> <!-- /login-extra -->

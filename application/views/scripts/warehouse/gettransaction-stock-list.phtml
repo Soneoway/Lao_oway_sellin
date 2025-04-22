@@ -1,0 +1,96 @@
+<?php  
+	$money_type = unserialize(MONEY_TYPE);
+?>
+<?php 
+	if(isset($this->result) AND $this->result):
+		foreach ($this->result as $key => $item):
+
+		if( $item['type'] == 2){
+			$pay_money=$item['pay_money']*-1;
+			$total_price=$pay_money+$item['pay_service'];	
+		}else{
+			$pay_money=$item['pay_money'];
+			$total_price=$pay_money+$item['pay_banktransfer']+$item['pay_servicecharge']+$item['pay_service'];	
+		}
+
+?>
+<?php 
+		$balance_amount=0;$in_amount=0;$out_amount=0;
+
+		$cnt = $i + 1;
+        $key_id = $stocks[$i]['good_id'].'_'.$stocks[$i]['good_color'].'_'.$stocks[$i]['warehouse_id'];
+?>
+<tr class="<?php echo $this->class;?>">
+	<?php
+					echo "  <td>".$cnt."</td>";
+                    echo "  <td>".$stocks[$i]['created_date']."</td>";
+                    echo "  <td>".$stocks[$i]['category']."</td>";
+                    echo "  <td>".$stocks[$i]['product_name']."</td>";
+                    echo "  <td>".$stocks[$i]['product_color']."</td>";
+                    echo "  <td>".$document_number."</td>";
+                    //echo "  <td>".$stocks[$i]['document_number']."</td>";
+                    echo "  <td>".$stocks[$i]['document_type']."</td>";
+                    echo "  <td>".$stocks[$i]['wh_from']."</td>";
+                    echo "  <td>".$stocks[$i]['wh_to']."</td>";
+                    
+                    if (!isset($stocks[$i]['in_amount'])) { echo "<td>-</td>"; } 
+                    else { echo "<td>".number_format($stocks[$i]['in_amount'])."</td>"; }
+                    if (!isset($stocks[$i]['in_cost'])) { echo "<td>-</td>"; } 
+                    else { echo "<td>".number_format($stocks[$i]['in_cost'],2)."</td>"; }
+                    if (!isset($stocks[$i]['in_total_cost'])) { echo "<td>-</td>"; } 
+                    else { echo "<td>".number_format($stocks[$i]['in_amount']*$stocks[$i]['in_cost'],2)."</td>"; }
+
+                    if (!isset($stocks[$i]['out_amount'])) { echo "<td>-</td>"; } 
+                    else { echo "<td>".number_format($stocks[$i]['out_amount'])."</td>"; }
+                    if (!isset($stocks[$i]['out_cost'])) { echo "<td>-</td>"; } 
+                    else { echo "<td>".number_format($stocks[$i]['out_cost'],2)."</td>"; }
+                    if (!isset($stocks[$i]['out_total_cost'])) { echo "<td>-</td>"; } 
+                    else { echo "<td>".number_format($stocks[$i]['out_amount']*$stocks[$i]['out_cost'],2)."</td>"; }
+
+                    /*---In Stock----*/
+                    if ($stocks[$i]['document_type']=='PO') {
+                        if (isset($stocks[$i]['in_amount'])) { $in_amount +=$stocks[$i]['in_amount'];} 
+                    }
+
+                    /*---Out Stock----*/
+                    if ($stocks[$i]['document_type']=='SO') {
+                        if (isset($stocks[$i]['out_amount'])) { $out_amount +=$stocks[$i]['out_amount'];}  
+                    }
+
+                    /*---Out Stock----*/
+                    if ($stocks[$i]['document_type']=='Transfer') {
+
+                       if($stocks[$i]['warehouse_id']==$stocks[$i]['wh_to_id']){
+                         
+                       }else{
+                         if (isset($stocks[$i]['in_amount'])) { $in_amount +=$stocks[$i]['in_amount'];} 
+                       }                     
+                    }
+
+                    /*---Show Balance Stock----*/
+                    $balance_amount = $in_amount-$out_amount;
+
+                    $good_id=$stocks[$i]['good_id'];
+                    $good_color=$stocks[$i]['good_color'];
+
+                    echo "<td>".number_format($balance_amount)."</td>"; 
+
+                    if ($stocks[$i]['document_type']=='SO') 
+                    {
+                        echo "<td>";
+                            echo "<span title='View Imei List' class='badge badge-default' 
+                            data-sales-sn='".$sales_sn."' data-good-id='".$good_id."' data-good-color='".$good_color."' ?>Imei</span>";
+                        echo "</td>"; 
+                    }else{
+                        echo "<td></td>";
+                    }
+	?>
+</tr>
+
+<?php 
+		endforeach;
+	endif;
+?>
+
+
+

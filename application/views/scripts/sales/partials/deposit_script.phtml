@@ -1,0 +1,170 @@
+<script type="text/javascript" src="/js/jquery-ui-1.8.12.custom.min.js"></script>
+<link rel="stylesheet" type="text/css" href="/css/jquery-ui-1.8.12.custom.css"/>
+<script src="<?php echo HOST?>js/jets.js"></script>
+<script type="text/javascript">
+    $(document).ready(function () {
+
+        $(".price").keydown(function (e) {
+            // Allow: backspace, delete, tab, escape, enter and .
+            if ($.inArray(e.keyCode, [46, 8, 9, 27, 13, 110, 190]) !== -1 ||
+                 // Allow: Ctrl+A, Command+A
+                (e.keyCode === 65 && (e.ctrlKey === true || e.metaKey === true)) || 
+                 // Allow: home, end, left, right, down, up
+                (e.keyCode >= 35 && e.keyCode <= 40)) {
+                     // let it happen, don't do anything
+                     return;
+            }
+            // Ensure that it is a number and stop the keypress
+            if ((e.shiftKey || (e.keyCode < 48 || e.keyCode > 57)) && (e.keyCode < 96 || e.keyCode > 105)) {
+                e.preventDefault();
+            }
+        });
+
+
+        $('.rank').change(function(event) {
+            get_distributor_cached_for_search($(this).val());
+          });
+
+        
+
+        function get_distributor_cached_for_search(rank_id){
+
+            var rank_id = rank_id;
+                  $.ajax({
+                      url: '<?php echo HOST ?>get/distributor-cached-for-search',
+                      type: 'POST',
+                      dataType: 'html',
+                      data: {rank_id: rank_id},
+                  })
+                  .done(function(data) {
+                      $('.distributor_list').empty();
+                      $('.distributor_list').append(data);
+                        var jets = new Jets({
+                        searchTag: '#SearchBox',
+                        contentTag: '#d_id'
+                    });
+                        <?php if(isset($this->d_id)){ ?>
+                            $('#d_id').val(<?= $this->d_id ?>);
+                        <?php }?>
+                      console.log("success");
+                  })
+                  .fail(function() {
+                      console.log("error");
+                  })
+                  .always(function() {
+                      console.log("complete");
+                  });
+
+        }
+
+    function getDistributor(currentDistributorID) {
+
+        $.ajax({
+            url: '<?php echo HOST ?>get/distributor-cached',
+            type: 'post',
+            dataType: 'json'
+        })
+            .done(function(data) {
+                if (!data || data.no_data) return false;
+                $('#d_id option').not(':first').remove();
+
+                $.each(data, function(key, value) {
+                    var selected = currentDistributorID == key ? 'selected' :'';
+                    var op = '<option value="'+key+'" ' + selected + '>'+value.store_code+' - '+value.title+'</option>';
+                    $('#d_id').append(op);
+                });
+
+                var jets = new Jets({
+                    searchTag: '#SearchBox',
+                    contentTag: '#d_id'
+                });
+            })
+            .fail(function() {
+                console.log("error");
+            })
+            .always(function() {
+                /*console.log("complete");*/
+            });
+
+    }
+
+        $('.go-back').click(function(e){
+            window.location.href = $('#back_url').val();
+            return false;
+        });
+
+        $('.go-view').click(function(e){
+            window.location.href = $('#view_url').val();
+            return false;
+        });
+
+        $( '.date' ).datepicker({ dateFormat: "dd/mm/yy" });
+
+        initSearchOptionDistributor('distributor_list', 'SearchBox');
+        initChangeRetailer();
+    });
+
+    var joint_total = 0;
+
+    function initChangeRetailer(){//change retailer
+
+        $('.distributor-info').hide();
+        $('.customer-info').hide();
+        $(document).off('change', '#d_id')
+        .on('change', '#d_id', function(e) {
+
+            getRetailerInfo($(this));
+        });
+        
+    }
+
+    function getRetailerInfo(_this){
+
+        var id = _this.val();
+        if(id == ''){
+            $('.distributor-info').slideUp();
+            $('.customer-info').slideUp();
+        }else{
+
+            $.ajax({
+                type: 'get',
+                url : '/checkmoney/getbalance',
+                data: {'id':id},
+                success: function(data){
+                    if(data.status != 0){
+                       // alert(JSON.stringify(data));
+                        $('.distributor-info .retailer_name span').html(data.result.retailer_name);
+                        $('.distributor-info .add textarea').html(data.result.add);
+                       //-------------------------------
+                    } else {
+                        $('.distributor-info .retailer_name span').html('');
+                        $('.distributor-info .add textarea').html('');
+                    }
+                }
+            });
+
+
+            $('.distributor-info').slideDown();
+        }
+
+    }
+
+
+    function initSearchOptionDistributor(elm, searchEl){
+        var timeout;
+
+        $('#'+searchEl).on("keyup", function (e) {
+            if(e.keyCode == 40){
+                $('#'+elm).focus();
+                $('#'+elm + ' option:visible').first().attr('selected','selected');
+
+            }else{
+                var userInput = $('#'+searchEl).val();
+                window.clearTimeout(timeout);
+                timeout = window.setTimeout(function() {
+                    showOnlyOptionsSimilarToText($('#'+elm), userInput, true);
+                }, 500);
+            }
+        });
+    }
+</script>

@@ -1,0 +1,71 @@
+<form class="form-search form-horizontal" method="post" action="<?php echo HOST ?>sales/staff-sales-order-list">
+    <div class="row">
+        <div class="span6">
+
+            
+            <div class="control-group">
+            <label for="privileges_no" class="span2">รหัสการจองสินค้า</label>
+            <input id="privileges_no" name="privileges_no" type="text" class="input-medium search-query form-control" value="<?php isset($this->params['privileges_no']) and printf($this->params['privileges_no']);?>">
+            </div>
+
+            <div class="control-group">
+            <label for="staff_code" class="span2">รหัสพนักงาน</label>
+            <input id="staff_code" name="staff_code" type="text" class="input-medium search-query form-control" value="<?php isset($this->params['staff_code']) and printf($this->params['staff_code']);?>">
+            </div>
+
+            <div class="control-group">
+            <label for="staff_name" class="span2">ชื่อพนักงาน</label>
+            <input id="staff_name" name="staff_name" type="text" class="input-medium search-query form-control" value="<?php isset($this->params['staff_name']) and printf($this->params['staff_name']);?>">
+            </div>
+
+            <div class="control-group">
+            <label for="start_date" class="span2">วันที่ซื้อสินค้า</label>
+                <input type="text" class="span1 start_date" name="start_date" id="start_date" value="<?php isset($this->params['start_date']) and printf($this->params['start_date']);?>" /> - <input type="text" class="span1 end_date" name="end_date" id="end_date" value="<?php isset($this->params['end_date']) and printf($this->params['end_date']);?>" />
+            </div>
+
+            <div class="control-group" ">
+            <label for="discount_id" class="span2">ประเภทส่วนลด</label>
+                <select id="discount_id" name="discount_id" >
+                    <option value="0" >-ทั้งหมด-</option>
+                    <?php foreach ($this->get_discount_type as $k=>$m){  ?>
+                    <option value="<?php echo $m['discount_id']?>"  <?php if (isset($this->params['discount_id']) and $this->params['discount_id']==$m['discount_id']):?> selected<?php endif;?> ><?php echo $m['discount_type_name']?></option>
+                    
+                    <?php } ?>
+                </select>
+            </div>
+
+            <div class="control-group" ">
+            <label for="status" class="span2">สถานะ</label>
+                <select id="status" name="status" >
+                    <option value="2" <?php if (isset($this->params['status']) and $this->params['status']=='2'):?> selected<?php endif;?>>รอดำเนินการ</option>
+                    <option value="3" <?php if (isset($this->params['status']) and $this->params['status']=='3'):?> selected<?php endif;?>>สร้าง SO แล้ว</option>
+                    <option value="4" <?php if (isset($this->params['status']) and $this->params['status']=='4'):?> selected<?php endif;?>>สินค้ารอการจัดส่ง</option>
+                    <option value="5" <?php if (isset($this->params['status']) and $this->params['status']=='5'):?> selected<?php endif;?>>ได้รับสินค้าแล้ว</option>
+                    <option value="6" <?php if (isset($this->params['status']) and $this->params['status']=='6'):?> selected<?php endif;?>>ยกเลิก</option>
+                    <option value="0" <?php if (isset($this->params['status']) and $this->params['status']=='0'):?> selected<?php endif;?>>-ทั้งหมด-</option>
+                </select>
+            </div>
+        </div>
+        <div class="span5">
+
+        </div>
+    </div>
+
+    
+    <input type="hidden" name="counter" value="<?=$this->counter;?>">
+    <button type="submit" class="btn btn-primary">Search</button>
+    <button type="submit" name="export" value="1" class="btn btn-success">Export</button>
+</form>
+
+<script async="async">
+
+        $(document).on('focus',".start_date", function(){ 
+         $(this).datepicker({ dateFormat: "yy-mm-dd" });
+        });
+
+        $(document).on('focus',".end_date", function(){ 
+         $(this).datepicker({ dateFormat: "yy-mm-dd" });
+        });
+
+
+</script>

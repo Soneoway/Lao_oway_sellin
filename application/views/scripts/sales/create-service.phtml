@@ -1,0 +1,1531 @@
+<link rel="stylesheet" href="<?php echo HOST ?>css/jquery-ui.css">
+<link href="<?php echo HOST ?>css/jquery.tagit.css" rel="stylesheet" type="text/css">
+<link href="<?php echo HOST ?>css/tagit.ui-zendesk.css" rel="stylesheet" type="text/css">
+<link href="<?php echo HOST ?>css/bootstrap-modal.css" rel="stylesheet" type="text/css">
+<style>
+
+    #btn-calculate{margin-top:20px;}
+
+    .distributor-info{
+        padding: 10px;
+        border: 1px solid #ccc;
+        margin-left: 30px;
+    }
+    .distributor-info label{
+        font-weight: bold;
+
+    }
+    .customer-info{
+        padding: 10px;
+        border: 1px solid #ccc;
+        margin-left: 30px;
+    }
+    .customer-info label{
+        font-weight: bold;
+
+    }
+    .no_show{
+        display: none;
+    }
+    .total_price{
+        margin-left: 850px;
+        margin-top: -100px;
+        position: absolute;
+    }
+    .address_textarea{
+        width: 350px;
+        height: 50px;
+    }
+    label input,
+    label select {
+        margin-right: 25px;
+    }
+
+    #myTags{
+        display: block;
+        margin: 0px;
+        min-width: 400px;
+    }
+
+    #qs_retailer{
+        width: 100px!important;
+    }
+    .loading-mask{display: none;}
+    .info_nvmm,.info_ingame{
+        margin-bottom: 20px;
+        padding-bottom: 20px;
+        padding-left: 30px;
+        /*border-bottom: 1px solid #E39A2D;*/
+    }
+
+    #object_id{
+        position: relative;
+        border-top: none;
+        top: -20px;
+        left: -20px;
+        -webkit-appearance: button;
+        -webkit-border-radius: 2px;
+        -webkit-box-shadow: 0px 1px 3px rgba(0, 0, 0, 0.1);
+        -webkit-padding-end: 20px;
+        -webkit-padding-start: 2px;
+        -webkit-user-select: none;
+        background-image: -webkit-linear-gradient(#fafafa, #f4f4f4 40%, #e5e5e5);
+        /* background-position: 97% center; */
+        background-repeat: no-repeat;
+        border: 1px solid #AAA;
+        color: #555;
+        font-size: inherit;
+        margin: 20px;
+        overflow: hidden;
+        padding: 5px 10px;
+        text-overflow: ellipsis;
+        white-space: nowrap;
+        overflow-y: scroll;
+    }
+    .payment_date{
+        width: 100px!important;
+    }
+    .nvmm_money{
+        width: 100px!important;
+    }
+
+    .add_row_nvmm{
+        margin-left: 30px;
+    }
+    .delivery_fee{
+        text-align: right; max-width: 100px;
+    }
+    .not_show{display: none;}
+
+    .blockOverlay{
+        z-index: 10000 !important;
+    }
+    .blockPage{
+        z-index: 10001 !important;
+    }
+</style>
+
+
+
+<div class="page-header">
+    <?php if (isset($this->sales) and $this->sales):?>
+        <h1>Edit Sales order</h1>
+    <?php else:?>
+        <h1>Create Sales Order Service</h1>
+    <?php endif;?>
+</div>
+
+
+<?php
+
+$total_amount_all= $this->total_amount_all;
+$delivery_fee_all= $this->delivery_fee_all;
+$sales_order=$this->sales_order;
+//echo $total_amount_all;
+$delivery_fee = 0;
+$delivery_fee = $this->sales[0]['sale']->delivery_fee;
+if($delivery_fee<=0){
+    //$delivery_fee=60;
+}
+
+if (isset($this->messages) and $this->messages)
+    foreach ($this->messages as $message):
+        echo '<div class="alert alert-error">'.$message.'</div>';
+    endforeach;
+
+$customer_id = $this->sales[0]['sale']->customer_id;
+$area_id = $this->sales[0]['sale']->area_id;
+
+?>
+
+
+<form role="form" id="form" action="<?php echo HOST.'sales/save';?>" method="post" class="form-inline">
+
+<?php if (isset($this->sales) and $this->sales):?>
+    <input type="hidden" name="edit" value="1">
+    <div class="row">
+        <div class="span6">
+            <label class="span2">Sales order number</label>
+            <span class="span3"><strong><?php isset($this->sales) and $this->sales and isset($this->sales[0]['sale']->sn_ref) and printf($this->sales[0]['sale']->sn_ref);?></strong></span>
+        </div>
+    </div>
+    <div class="row">
+        <div class="span6">
+            <label class="span2">Order Maker</label>
+            <span class="span3"><strong><?php isset($this->sales) and $this->sales and isset($this->staffs_cached[ $this->sales[0]['sale']->user_id]) and printf($this->staffs_cached[ $this->sales[0]['sale']->user_id]);?></strong></span>
+        </div>
+    </div>
+    <div class="row">
+        <div class="span6">
+            <label class="span2">Order Time</label>
+            <span class="span3"><strong><?php isset($this->sales) and $this->sales and isset( $this->sales[0]['sale']->add_time) and printf( $this->sales[0]['sale']->add_time );?></strong></span>
+        </div>
+    </div>
+<?php endif;?>
+
+<div class="row">
+    <div class="span6">
+        <div id="tooltip_type" style="display: none">
+            <p>For Retailer: Export Orders for agents</p>
+            <p>For Demo: Orders experience</p>
+            <p>For Staffs: Orders for employees</p>
+            <p>For Lending: Orders loan</p>
+        </div>
+
+        <label class="span4 tooltip-r" for="type" data-toggle="tooltip">Order Type <span style="color: red">*</span>
+            <select id="type" class="span4 type" name="type" required="required">
+                <option value="">Please select</option>
+                <?php
+                    if(isset($this->arr_order_type) AND $this->arr_order_type):
+
+                        if($this->auto_select_brandshop_service){
+                            ?>
+                            <option value="1" <?php if ( isset($this->sales[0]['sale']) and $this->sales[0]['sale']->type == 1):?> selected <?php endif;?>>FOR RETAILER</option>
+                            <option value="5" <?php if ( isset($this->sales[0]['sale']) and $this->sales[0]['sale']->type == 5):?> selected <?php endif;?>>FOR APK</option>
+                        <?php }else{
+                        foreach($this->arr_order_type as $key => $value):
+                            ?>
+                            <option value="<?php echo $key;?>" <?php if ( isset($this->sales[0]['sale']) and $this->sales[0]['sale']->type == $key):?> selected <?php endif;?>>
+                                <?php echo $value;?>
+                            </option>
+                        <?php
+                        endforeach;
+                        }
+                        ?>
+                   <?php endif;
+                ?>
+            </select>
+        </label>
+
+<!--         <label style="display: none;" class="span4 tooltip-r" for="job_type1" data-toggle="tooltip">ประเภทงาน <span style="color: red;">*</span>
+            <select style="display: none;" id="job_type1" class="span4 job_type1" name="job_type1" required="required">
+                <option value="" >Please select</option>
+                    <option value="1"  >นอกประกัน</option>
+                    <option value="2" >ในประกัน/อัพซอฟแวร์</option>
+            </select>
+        </label> -->
+        
+        <?php
+            if($this->sales[0]['sale']->salesman ==''){
+                $sales_admin = $this->staff_id;
+                $sales_catty_id="";
+            }else{
+                $sales_admin = $this->sales[0]['sale']->salesman;
+                $sales_catty_id = $this->sales[0]['sale']->sales_catty_id;
+            }
+        ?>
+
+    <input type="hidden" class="span4" id="salesman" name="salesman" placeholder="Sales Admin" required="required" 
+        value="<?php echo $sales_admin;?>" />
+
+        <?php //echo $this->render('sales/partials/po-list.phtml') ?>
+        <?php if (isset($this->sales[0]['sale']->d_id) and $this->sales[0]['sale']->d_id) { ?>
+            <label class="span4" >Retailer name<span style="color: red">*</span><br/>
+                <span style="font-size: 18px;">    <?PHP echo $this->dis_name[$this->sales[0]['sale']->d_id] ?></span>
+                <input type="hidden" name="price_clas" class="price_clas" value="<?=$this->sales[0]['sale']->price_clas?>">
+                <input type="hidden" name="distributor_id" id="distributor_id" value="<?=$this->sales[0]['sale']->d_id?>">
+            </label>
+        <?PHP }else{ ?>      
+                <label class="span4" for="rank">ประเภทร้านค้า<span style="color: red">*</span>
+                
+                    <select id="rank" name="rank" class="rank span4">
+                        <option value="">---</option>
+
+                        <?php if($this->auto_select_brandshop_service){?>
+
+                        <option value="10" <?php if( isset($this->distributor['rank']) and $this->distributor['rank']==10 ) { ?> selected<?php }?>>9. Brand Shop/Service(10)</option>
+
+                        <?php }else{ ?>
+
+                        <option value="1" <?php if( isset($this->distributor['rank']) and $this->distributor['rank']==1 ) { ?> selected<?php }?>>1. ORG-WDS(1)</option>
+                        <option value="2" <?php if( isset($this->distributor['rank']) and $this->distributor['rank']==2 ) { ?> selected<?php }?>>2. ORG(2)</option>
+                        <option value="5" <?php if( isset($this->distributor['rank']) and $this->distributor['rank']==5 ) { ?> selected<?php }?>>3. ORG-Dtac/Advice(5)</option>
+                        <option value="6" <?php if( isset($this->distributor['rank']) and $this->distributor['rank']==6 ) { ?> selected<?php }?>>4. ORG-Lotus/Power by(6)</option>
+                        <option value="7" <?php if( isset($this->distributor['rank']) and $this->distributor['rank']==7 ) { ?> selected<?php }?>>5. Dealer(7)</option>
+                        <option value="8" <?php if( isset($this->distributor['rank']) and $this->distributor['rank']==8 ) { ?> selected<?php }?>>6. HUB(8)</option>
+                        <option value="9" <?php if( isset($this->distributor['rank']) and $this->distributor['rank']==9 ) { ?> selected<?php }?>>7. Laos(9)</option>
+                        <option value="3" <?php if( isset($this->distributor['rank']) and $this->distributor['rank']==3 ) { ?> selected<?php }?>>8. Online and Staff(3)</option>
+                        <option value="10" <?php if( isset($this->distributor['rank']) and $this->distributor['rank']==10 ) { ?> selected<?php }?>>9. Brand Shop/Service(10)</option>
+                        <option value="11" <?php if( isset($this->distributor['rank']) and $this->distributor['rank']==11 ) { ?> selected<?php }?>>10. King Power(11)</option>
+                        <option value="12" <?php if( isset($this->distributor['rank']) and $this->distributor['rank']==12 ) { ?> selected<?php }?>>11. Jaymart(12)</option>
+                        <option value="13" <?php if( isset($this->distributor['rank']) and $this->distributor['rank']==13 ) { ?> selected<?php }?>>12. Brand Shop By Dealer(13)</option>
+                        <option value="14" <?php if( isset($this->distributor['rank']) and $this->distributor['rank']==14 ) { ?> selected<?php }?>>13. KR Dealer(14)</option>
+                        <option value="15" <?php if( isset($this->distributor['rank']) and $this->distributor['rank']==15 ) { ?> selected<?php }?>>14. TRUE(15)</option>
+                      
+                        <?php } ?>
+
+                    </select>
+                </label>
+                    
+                
+        <div class="retailer_name_list"></div>    
+    <?PHP     } ?>
+
+    <input type="hidden" name="group_type_id" id="group_type_id" value="<?=$this->sales['sale']->group_type_id?>">
+
+        <label class="span4" for="salesman" style="display: none;">Sales Catty
+            <select id="salesman_catty" class="span4 salesman_catty" name="salesman_catty">
+                <option value="">Please select</option>
+            </select>
+            <input type="hidden" class="span4" id="sales_catty_id" name="sales_catty_id" value="<?php echo $sales_catty_id;?>" />
+        </label>
+        <label class="span4" for="salesman" id="customerName" style="display: none;">Name Customer
+            <input type="text" class="span4" id="custom_name" disabled name="custom_name" value="<?php if(isset($this->sales[0]['sale']->customer_name) and $this->sales[0]['sale']->customer_name){echo $this->sales[0]['sale']->customer_name;}?>" />
+        </label>
+        <div class="clearfix"></div>
+
+        <div class='customer-info'>
+                <?php $customer_tax_number = '';
+                    $member_brandshop_code = '';
+                    $customer_branch_number = '';
+                    $customer_phone_number = '';
+                    $customer_name = '';
+                    $address_tax = '';
+                    $customer_zip_code = '';
+                    if($customer_id !=''){
+                    foreach($this->customerbrandshop as $val):    
+                        if($val['customer_id']==$customer_id){
+                            $customer_phone_number=$val['phone_number'];
+                            $customer_tax_number=$val['tax_number'];
+                            $member_brandshop_code=$val['member_brandshop_code'];
+                            $customer_branch_number=$val['branch_no'];
+                            $customer_name=$val['customer_name'];
+                            $address_tax=$val['address_tax'];
+                            $customer_zip_code=$val['zip_code'];
+                        } 
+                    endforeach;
+                 } ?>
+            <p>
+                <button class="btn-success pull-right view-more" type="button">
+                    -
+                </button>
+            </p>
+
+            <p class="hide">
+                <label>Code<span style="color: red">*</span> : </label>
+                <input type="text" name="member_brandshop_code" class="member_brandshop_code" id="member_brandshop_code" value="<?=$member_brandshop_code?>" maxlength="10">
+                <button type="button" style="margin-left: 20px;" class="btn enter-member-brandshop">Enter Member</button>
+
+            </p>
+
+            <p>
+                <label>ชื่อ นามสกุล ลูกค้า<span style="color: red">*</span> : </label>
+                <input type="text" name="customer_name" minlength="3" class="customer_name extra_customer" id="customer_name" value="<?=$customer_name?>" placeholder="Customer Name">
+            </p>
+            <p >
+                <label>หมายเลขโทรศัพท์ติดต่อ 10 หลัก<br>(ถ้าเบอร์บ้าน 9 หลักให้ใส่ H นำหน้า)<span style="color: red">*</span> : </label>
+                <input type="text" class="customer_phone_number extra_customer" id="customer_phone_number" value="<?=$customer_phone_number?>" placeholder="Enter Phone Number" name="customer_phone_number" minlength="9" maxlength="10">
+            </p>
+            <p >
+                <label>หมายเลขบัตรประชาชน 13 หลัก<span style="color: red">*</span> : </label>
+                <input type="text" class="customer_tax_number extra_customer" id="customer_tax_number" value="<?=$customer_tax_number?>" placeholder="Enter Tax Number" name="customer_tax_number" minlength="13" maxlength="13">
+            </p>
+
+            <p >
+                <label>รหัสสาขา<br>(ถ้ามีรหัสสาขาให้ใส่รหัสสาขาให้ถูกต้อง)<span style="color: red">*</span> : </label>
+                <input type="text" class="customer_branch_number extra_customer" id="customer_branch_number" value="<?php if($customer_branch_number){echo $customer_branch_number;}else{echo '00000';}?>" placeholder="Enter Branch Number" name="customer_branch_number" maxlength="5">
+            </p>
+
+            <p <?php if($this->sales[0]['sale']->customer_tax_address==''){?> class='customer_tax_address' <?php } ?>>
+                <label>ที่อยู่<span style="color: red">*</span> : </label>
+                <textarea name="customer_tax_address" class="customer_tax_address address_textarea extra_customer" id="customer_tax_address"><?=$address_tax?></textarea>
+            </p>
+
+            <p >
+                <label>รหัสไปรษณีย์ของที่อยู่ 5 หลัก<span style="color: red">*</span> : </label>
+                <input type="text" class="customer_zip_code extra_customer" id="customer_zip_code" value="<?=$customer_zip_code?>" placeholder="Enter Zip Code" name="customer_zip_code" minlength="5" maxlength="5">
+            </p>
+            <!-- <div class="loader"></div> -->
+        </div>
+    </div>
+
+
+    <div class="span6">
+
+        <div class="control-group">
+            <label for="myTags" class="span2">Tags
+                <ul class="form-control span3" id="myTags"><?php
+                if (isset($this->a_tags) and $this->a_tags):
+                    foreach ($this->a_tags as $ta)
+                        echo '<li>'.$ta.'</li>';
+                endif;
+                ?></ul>
+            </label>
+        </div>
+
+        <label class="span4" for="warehouse_id">Warehouse <span style="color: red">*</span>
+            <select id="warehouse_id" class="span4" name="warehouse_id" required="required">
+                <option value="">Please select</option>
+                <?php foreach ($this->warehouses as $id=>$name):?>
+                    <option value="<?php echo $id;?>" <?php if ((isset($this->sales) and $id == $this->sales[0]['sale']->warehouse_id) || count($this->warehouses) == 1):?> selected<?php endif;?>><?php echo $name;?></option>
+                <?php endforeach;?>
+            </select>
+        </label>
+        <div class="clearfix"></div>
+        <div class='distributor-info clearfix'>
+            <p>
+                <button class="btn-success pull-right view-more" type="button">
+                    -
+                </button>
+            </p>
+            <p class='retailer_name'>
+                <label>Retailer name: </label>
+                <span></span>
+            </p>
+            <div class="delivery_add">
+            <p <?php if($this->sales[0]['sale']->delivery_address==''){?> class='add' <?php } ?>
+            >
+                <label>Address Delivery : </label>
+                <!-- <textarea name="add_delivery_new" class="address_textarea"><?php if(isset($this->sales[0]['sale']->delivery_address)) echo $this->sales[0]['sale']->delivery_address;?></textarea> -->
+                <textarea  name="add_delivery_old" style="display:none;" class="address_textarea "><?php if(isset($this->sales[0]['sale']->delivery_address)) echo $this->sales[0]['sale']->delivery_address;?></textarea>
+                 <select name="sipping_add" id="sipping_add" class="_search" style="width:100%" required>
+                        <?php if (isset( $this->districts ) && $this->districts): ?>
+                            <?php foreach ($this->districts as $key => $region): ?>
+                                <option value="<?php echo $key ?>" <?php if( isset($this->shipping_address['districts_id']) && $this->shipping_address['districts_id'] == $key ) echo "selected='selected'" ?>><?php echo $region['name'] ?></option>
+                            <?php endforeach ?>
+                        <?php endif ?>
+                    </select>  
+            </p>
+            </div>
+            <p class='credit_status'>
+                <label>ใช้วงเงินเครดิต : </label>
+                <span></span>
+            </p>
+            <p class='credit_amount'>
+                <label>Maximum Credit : </label>
+                <input type="hidden" calss="main_distributor_id" name="main_distributor_id" id="main_distributor_id" value="">
+                <strong><font color="red"><span></span></p></font></strong>
+            </p>
+            <p style="display: none;" class='balance'>
+                <label>Balance for this retailer : </label>
+                <span></span>
+            </p>
+            <p class='total_balance'>
+                <label>Total Remain balance (main and sub retailer) : </label>
+                <span></span>
+            </p>
+            <p class='credit_type'>
+                <label>Credit Type : </label>
+                <span></span>
+            </p>
+
+            <p class='spc_discount_show'>
+                <label>Special Discount (%) : </label>
+                <span></span>
+            </p>
+
+        </div>
+        
+    </div>
+</div>
+
+<br />
+
+<div class="row">
+    <div class="span12">
+        <label class="span2" for="life_time">Order Life time <span style="color: red">*</span>
+        </label>
+
+        <div class="span4">
+            <input class="span1" type="number" name="life_time" maxlength="3" max="5" min="1" id="life_time" required="required" <?php if (! $this->life_time_editable) {?> disabled<?php }?> value="<?php if ( isset($this->sales[0]['sale']) and $this->sales[0]['sale']->life_time ) echo $this->sales[0]['sale']->life_time / ( 24*60*60 ); else echo 1;?>"><span class="1"> day(s)</span>
+        </div>
+    </div>
+</div>
+
+
+<?php echo $this->render('sales/partials/fee.phtml') ?>
+
+
+<br />
+
+<div class="row">
+    <div class="span12">
+        <label class="span2" for="job_sn">Job Number.</label>
+        <input type="text" style="text-align: right;" id="job_sn" class="span2 job_sn" name="job_sn"  >
+    </div>
+
+</div>
+<br>
+<div class="row show_hide_service">
+    <div class="span12">
+        <label class="span2" for="life_time">ค่าสินค้าและบริการ <span style="color: red">*</span>
+
+        </label>
+        <input type="text" style="text-align: right;" required="required" class="span2 total c_show_hide_service c_value_0" value="0" name="total[]"  >
+        <div class="span4">
+            
+            <input type="hidden"  value="12" class="span4 cat_id" name="cat_id[]"  >
+            <input type="hidden"  value="156" class="span4 good_id" name="good_id[]"  >
+            <input type="hidden"  value="31" class="span4 good_color" name="good_color[]"  >
+            <input type="hidden"  value="1" class="span4 num" name="num[]"  >
+            <input type="hidden"  value="0" class="span4 price" name="price[]" >
+            <input type="hidden"  value="" class="span4 text" name="text[]" >
+            <input type="hidden"  value="0" class="span4 sale_off_percent" name="sale_off_percent[]" >
+            <input type="hidden"  name="ids[]" class="ids" />
+        </div>
+    </div>
+</div>
+<br>
+<div class="row">
+    <div class="span12">
+        <label class="span2" for="swap_imei">Swap IMEI
+        </label>
+        <div class="span4">
+            <input class="span1" type="checkbox" name="swap_imei" id="swap_imei">
+        </div>
+    </div>
+</div>
+<br>
+<div class="row">
+    <div class="span12">
+        <label class="span2" for="swap_acc">Swap Accessories
+        </label>
+        <div class="span4">
+            <input class="span1" type="checkbox" name="swap_acc" id="swap_acc">
+        </div>
+    </div>
+</div>
+<br>
+
+<div class="row old_imei swap_imei hide">
+    <div class="span12">
+        <label class="span2" for="old_imei">Old IMEI <span style="color: red">*</span></label>
+        <input type="text" id="old_imei" class="span2" name="old_imei" minlength="15" maxlength="15">
+        <br>
+        <br>
+    </div>
+</div>
+
+<div class="row new_imei swap_imei hide">
+    <div class="span12">
+        <label class="span2" for="new_imei">New IMEI <span style="color: red">*</span></label>
+        <input type="text" id="new_imei" class="span2" name="new_imei" minlength="15" maxlength="15">
+        <br>
+        <br>
+    </div>
+</div>
+
+<div class="div_swap_acc hide">
+    <div class="row">
+        <div class="span12">
+            <h3 style="margin-left: 20px;">Old Accessories</h3>
+            <label class="span1">Category 
+                <select class="span1 swap_acc_cat_id request_swap_acc" id="swap_acc_cat_id" name="swap_acc_cat_id" >
+                    <option value="12" selected>Accessories</option>
+                </select>
+            </label>
+
+            <label class="span2">Product
+                <select class="span2 swap_acc_good_id request_swap_acc" id="swap_acc_good_id" name="swap_acc_good_id" >
+                    <option value="">Please select</option>
+                    <?php foreach ($this->goods_acc as $good_acc):?>
+                        <option value="<?php echo $good_acc->id;?>"><?php echo $good_acc->name;?></option>
+                    <?php endforeach;?>
+                </select>
+            </label>
+
+            <label class="span1">Color 
+                <select class="span1 swap_acc_good_color request_swap_acc" id="swap_acc_good_color" name="swap_acc_good_color" >
+                    <option value="">Please select</option>
+                    <?php foreach ($this->colors_acc as $color_acc):?>
+                        <option value="<?php echo $color_acc->id;?>"><?php echo $color_acc->name;?></option>
+                    <?php endforeach;?>
+                </select>
+            </label>
+
+        </div>
+    </div>
+    <hr>
+</div>
+
+<?php if ($this->sales):?>
+
+    <?php foreach ($this->sales as $item):
+        $sale = $item['sale'];
+        $goods = $item['goods'];
+        $colors = $item['colors'];
+    ?>
+
+        <div class="row detail_good">
+            <div class="span12 addItem">
+                
+                <label class="span1">Category 
+                    <select class="span1 cat_id" name="cat_id[]" >
+                        <option value="">Please select</option>
+                        <?php foreach ($this->good_categories as $good_category):?>
+                            <option value="<?php echo $good_category->id;?>" <?php if ($good_category->id == $sale->cat_id):?> selected<?php endif;?>><?php echo $good_category->name;?></option>
+                        <?php  endforeach;?>
+                    </select>
+                </label>
+
+                <label class="span2">Product
+                    <select class="span2 good_id" name="good_id[]" >
+                        <option value="">Please select</option>
+                        <?php foreach ($goods as $good):?>
+                            <option value="<?php echo $good->id;?>" <?php if ($good->id == $sale->good_id):?> selected<?php endif;?>><?php echo $good->name;?></option>
+                        <?php endforeach;?>
+                    </select>
+                </label>
+
+                <label class="span1">Color 
+                    <select class="span1 good_color" name="good_color[]" >
+                        <option value="">Please select</option>
+                        <?php foreach ($colors as $color):?>
+                            <option value="<?php echo $color->id;?>" <?php if ($color->id == $sale->good_color):?> selected<?php endif;?>><?php echo $color->name;?></option>
+                        <?php endforeach;?>
+                    </select>
+                </label>
+
+                <label class="span1 quantity">Quantity 
+                    <input type="number" min="1" class="span1 num" name="num[]" maxlength="5" style="width: 50px" value="<?php printf($sale->num);?>" />
+                </label>
+
+                <label class="span1">Price 
+                <?PHP if ($this->rank == 10 && $sale->cat_id == 12) {
+                    $readonly = 'readonly';
+                }else{
+                    $readonly = '';
+                    } ?>
+                    <input type="text" min="1"   class="span1 price" <?=$readonly?> name="price[]" value="<?php echo My_Number::f($sale->price);?>" />
+                </label>
+
+                <label class="span1">Sale off <span style="color: red">*</span>
+                    <select disabled class="span1 sale_off_percent" name="sale_off_percent[]" >
+                    <option value="0" <?php if ($sale->sale_off_percent == 0){?> selected<?php }?>>0%</option>
+                    <option value="1" <?php if ($sale->sale_off_percent == 1){?> selected<?php }?>>1%</option>
+                    <option value="10" <?php if ($sale->sale_off_percent == 10){?> selected<?php }?>>10%</option>
+                    <option value="15" <?php if ($sale->sale_off_percent == 15){?> selected<?php }?>>15%</option>
+                    <option value="16" <?php if ($sale->sale_off_percent == 16){?> selected<?php }?>>16%</option>
+                    <option value="18" <?php if ($sale->sale_off_percent == 18){?> selected<?php }?>>18%</option>
+                    <option value="20" <?php if ($sale->sale_off_percent == 20){?> selected<?php }?>>20%</option>
+                    <option value="22" <?php if ($sale->sale_off_percent == 22){?> selected<?php }?>>22%</option>
+                    <option value="23" <?php if ($sale->sale_off_percent == 23){?> selected<?php }?>>23%</option>
+                    <option value="24" <?php if ($sale->sale_off_percent == 24){?> selected<?php }?>>24%</option>
+                    <option value="25" <?php if ($sale->sale_off_percent == 25){?> selected<?php }?>>25%</option>
+                    <option value="27" <?php if ($sale->sale_off_percent == 27){?> selected<?php }?>>27%</option>
+                    <option value="29" <?php if ($sale->sale_off_percent == 29){?> selected<?php }?>>29%</option>
+                    <option value="30" <?php if ($sale->sale_off_percent == 30){?> selected<?php }?>>30%</option>
+                    <option value="31" <?php if ($sale->sale_off_percent == 31){?> selected<?php }?>>31%</option>
+                    <option value="40" <?php if ($sale->sale_off_percent == 40){?> selected<?php }?>>40%</option>
+                    <option value="50" <?php if ($sale->sale_off_percent == 50){?> selected<?php }?>>50%</option>
+                    <option value="100" <?php if ($sale->sale_off_percent == 100){?> selected<?php }?>>ของแถม</option>
+                        
+                    </select>
+                </label>
+
+                <label class="span1">Total
+                <input readonly type="text" min="0"  class="span1 total" name="total[]" value="<?php echo My_Number::f($sale->total);?>" />
+                </label>
+
+                <label class="span2">Remark
+                    <textarea name="text[]" class="span2 text"><?php if(isset($sale->text)) echo $sale->text;?></textarea>
+                </label>
+                <div class="no_show">
+                <label class="span1 campaign">Campaign<span style="color: red">*</span>
+                    <input type="checkbox" class="span1 campaign_ck" name="campaign_ck[]"  <?php if(isset($sale->campaign) and $sale->campaign) echo 'checked="checked"'; ?> />
+                    <input type="hidden" class="campaign_val" name="campaign[]" value="<?php if(isset($sale->campaign) and $sale->campaign) echo $sale->campaign; ?>" />
+                </label>
+                </div>
+                <label class="span1">&nbsp;<button type="button" class="btn-danger remove-sales"><i class="icon-minus"></i></button></label>
+
+                <input type="hidden" name="ids[]" class="ids" value="<?php if(isset($sale->id)) echo $sale->id;?>">
+            </div>
+
+            <!-- Button add nhan vien mua may -->
+            <div class="span12 btn_add_row_nvmm" style="display: none">
+                <label for="" class="span12">
+                    <button class="add_row_nvmm btn btn-small btn-success" type="button">+</button>
+                </label>
+            </div>
+
+            <?php
+                if(isset($this->staff_nvmm)){
+                    foreach($this->staff_nvmm as $k => $value){
+                        if($value['market_id'] == $item['sale']['id']){
+            ?>
+
+            <?php if($item['sale']['d_id'] == OPPO_STAFF){ ?>
+                <div class="span12 info_nvmm" >
+                    <input type="hidden" name="product_color_key[]" class="product_color_key" value/>
+                    <label class="span3">For staff <span style="color: red">*</span>
+                        <input type="text" class="span3 name_staff" required value="<?php echo $value['staff_name'];?>"/>
+                        <input type="hidden" class="span3 id_staff" data-name="<?php echo $value['staff_name_2'];?>" name="id_staff[]" value="<?php echo $value['staff_id'];?>" />
+                    </label>
+
+                    <label class="span1">Add staff<span style="color: red"></span>
+                        <button type="button" class="btn-warning id_for_staff"><i class="icon-plus"></i></button>
+                    </label>
+
+                    <label class="span1 wrap_shipment_type">Loại <span style="color: red"></span>
+                        <select class="span1 shipment_type" name="shipment_type[]">
+                            <option value="0">----</option>
+                            <?php
+                                if(isset($this->arr_shipment_type) AND $this->arr_shipment_type){
+                                    foreach($this->arr_shipment_type as $_k => $_v){
+                                        ?>
+                                        <option value="<?php echo $_k;?>" <?php if(isset($value['shipment_type']) AND $_k == $value['shipment_type']) echo 'selected';?>><?php echo $_v;?></option>
+                                    <?php
+                                    }
+                                }
+                            ?>
+                        </select>
+                    </label>
+
+                    <label class="span1">num 
+                        <input type="number" min="1" class="span1 staff_num" name="staff_num[]"  maxlength="5" style="width: 50px"
+                               value="<?php if( isset($value['num']) ) echo $value['num']; ?>"/>
+                    </label>
+
+                    <label class="span2">จำนวนของคะแนนที่ได้รับ 
+                        <input type="text" class="span2 sophieuthu nvmm_money" name="sophieuthu[]" value="<?php if( isset($value['number_sales_order']) ) echo $value['number_sales_order']; ?>"/>
+                    </label>
+
+                    <label class="span2">จำนวนเงินที่ชำระ<span style="color: red"></span>
+                        <input type="text" class="span2 sotienthucte nvmm_money" name="sotienthucte[]" value="<?php if( isset($value['actual_amount_paid']) ) echo $value['actual_amount_paid']; ?>"/>
+                    </label>
+
+                    <label class="span1">ยอดคงเหลือ <span style="color: red"></span>
+                        <input type="text" class="span2 sodu nvmm_money" name="sodu[]" readonly/>
+                    </label>
+
+                    <label class="span2"> วันที่ชำระเงิน:<span style="color: red"></span><br />
+                        <input type="text" name="payment_date[]" class="payment_date" value="<?php if( isset($value['payment_date']) ) echo date('d/m/Y',strtotime($value['payment_date'])); ?>" />
+                    </label>
+
+                    <label class="span1">
+                        <button type="button" class="remove_nvmm btn btn-small btn-danger">-</button>
+                    </label>
+                </div>
+            <?php }elseif($item['sale']['d_id'] == OPPO_INGAME){?>
+
+            <div class="span12 info_ingame">
+
+                <label class="span2">Name<span style="color: red">*</span>
+                    <input type="hidden" name="product_color_key[]" class="product_color_key" value/>
+                    <input type="text" class="span2 name_staff_ingame" name="name_staff_ingame[]" value="<?php echo $value['name']?>"/>
+
+                </label>
+
+                <label class="span2">IDNumber<span style="color: red"></span>
+                    <input type="text" class="span2 cmnd_staff_ingame" name="cmnd_staff_ingame[]" value="<?php echo $value['id_number']?>" />
+                </label>
+
+                <label class="span1 ">Loại <span style="color: red"></span>
+                    <select class="span1 shipment_type" name="shipment_type[]">
+                        <option value="0">----</option>
+                        <?php
+                        if(isset($this->arr_shipment_type) AND $this->arr_shipment_type){
+                            foreach($this->arr_shipment_type as $_k => $_v){
+                                ?>
+                                <option value="<?php echo $_k;?>" <?php if(isset($value['shipment_type']) AND $_k == $value['shipment_type']) echo 'selected';?>><?php echo $_v;?></option>
+                            <?php
+                            }
+                        }
+                        ?>
+                    </select>
+                </label>
+
+                <label class="span1">num 
+                    <input type="number" min="1" class="span1 staff_num" name="staff_num[]"  maxlength="5" style="width: 50px"
+                           value="<?php if( isset($value['num']) ) echo $value['num']; ?>"/>
+                </label>
+
+                <label class="span2">จำนวนของคะแนนที่ได้รับ <span style="color: red"></span>
+                    <input type="text" class="span2 sophieuthu nvmm_money" name="sophieuthu[]" value="<?php if( isset($value['number_sales_order']) ) echo $value['number_sales_order']; ?>"/>
+                </label>
+
+                <label class="span2">จำนวนเงินที่ชำระ<span style="color: red"></span>
+                    <input type="text" class="span2 sotienthucte nvmm_money" name="sotienthucte[]" value="<?php if( isset($value['actual_amount_paid']) ) echo $value['actual_amount_paid']; ?>"/>
+                </label>
+
+                <label class="span1">ยอดคงเหลือ <span style="color: red"></span>
+                    <input type="text" class="span2 sodu nvmm_money" name="sodu[]" readonly/>
+                </label>
+
+                <label class="span2"> วันที่ชำระเงิน:<span style="color: red"></span><br />
+                    <input type="text" name="payment_date[]" class="payment_date" value="<?php if( isset($value['payment_date']) ) echo date('d/m/Y',strtotime($value['payment_date'])); ?>"/>
+                </label>
+
+                <label class="span1">
+                    <button type="button" class="remove_nvmm btn btn-small btn-danger">-</button>
+                </label>
+            </div>
+            <?php }?>
+
+            <?php
+                        }// End if
+                    }// End foreach
+                }// End if
+            ?>
+        </div>
+<?php endforeach;?>
+
+
+<?php else:?>
+    <div class="row detail_good">
+        <div class="span12">
+
+            <label class="span1">Category 
+                <select class="span1 cat_id select_cat request_swap_imei request_swap_acc" name="cat_id[]" >
+                    <option value="">Please select</option>
+                    <option class="hide" id="cat_phone" value="11">Phone</option>
+                    <?php foreach ($this->good_categories as $good_category):?>
+                        <option class="all_cat" value="<?php echo $good_category->id;?>"><?php echo $good_category->name;?></option>
+                    <?php endforeach;?>
+                </select>
+            </label>
+
+            <label class="span2">Product 
+                <select class="span2 good_id request_swap_imei request_swap_acc" name="good_id[]" >
+                    <option value="">Please select</option>
+                </select>
+            </label>
+
+            <label class="span1">Color 
+                <select class="span1 good_color request_swap_imei request_swap_acc" name="good_color[]" >
+                    <option value="">Please select</option>
+                </select>
+            </label>
+
+            <label class="span1">Quantity 
+                <input type="number" min="1" class="span1 num request_swap_imei request_swap_acc" name="num[]"  maxlength="5" style="width: 50px" />
+            </label>
+
+            <label class="span1">Price 
+                <input type="text" min="1" step="any"   class="span1 price request_swap_imei request_swap_acc" name="price[]" />
+            </label>
+
+            <label class="span1">Sale off 
+                <select class="span1 sale_off_percent" name="sale_off_percent[]" >
+                    <option value="0">0%</option>
+                    <option value="1">1%</option>
+                    <option value="10">10%</option>
+                    <option value="15">15%</option>
+                    <option value="16">16%</option>
+                    <option value="18">18%</option>
+                    <option value="20">20%</option>
+                    <option value="22">22%</option>
+                    <option value="23">23%</option>
+                    <option value="24">24%</option>
+                    <option value="25">25%</option>
+                    <option value="27">27%</option>
+                    <option value="29">29%</option>
+                    <option value="30">30%</option>
+                    <option value="31">31%</option>
+                    <option value="40">40%</option>
+                    <option value="50">50%</option>
+                    <option value="100">ของแถม</option>
+                </select>
+            </label>
+
+            <label class="span1">Total
+                <input type="text" min="0" step="any"  readonly value="0" class="span1 total request_swap_imei request_swap_acc" name="total[]" />
+            </label>
+
+            <label class="span2">Remark
+                <textarea name="text[]" class="span2 text"></textarea>
+            </label>
+            <div class="no_show">
+            <label class="span1 campaign">Campaign
+                <input type="checkbox" class="span1 campaign_ck not_show" name="campaign_ck[]"  />
+                <input type="hidden" class="campaign_val" name="campaign[]" value="" />
+            </label>
+            </div>
+            <!-- <label class="span1">&nbsp;<button type="button" class="btn-danger remove-sales"><i class="icon-minus"></i></button></label> -->
+
+            <input type="hidden" name="ids[]" class="ids" />
+        </div>
+
+        <!-- Button add nhan vien mua may -->
+        <div class="span12 btn_add_row_nvmm" style="display: none">
+            <label for="" class="span12">
+                <button class="add_row_nvmm btn btn-small btn-success" type="button">+</button>
+            </label>
+        </div>
+    </div>
+
+    <div class="add-gift"></div>
+<?php endif;?>
+
+<div class="row">
+    <div class="span12">
+        <label class="span3"><button type="button" class="btn-success add-sales"><i class="icon-plus"></i></button></label>
+    </div>
+</div>
+<br>
+
+<div class="row not_show">
+    <div class="span6">
+        <div class="span6">
+            <p><button type="button" id="btn-calculate" class="btn btn-warning add-bvg">Create Protect Price</button></p>
+        </div>
+    </div>
+</div>
+<br>
+
+
+<?php if ($this->sales_discount):?>
+
+    <?php foreach ($this->sales_discount as $sale):    ?>
+
+<div class="row" >
+    <div class="span12">
+        <label class="span2">Joint Circular Discount<span style="color: red">*</span>
+           <select class="span2 joint_discount" name="joint_discount[]" required="required" >
+                <option value="">Please select</option>
+                <?php foreach ($this->joint_discount as $k => $v):?>
+                    <option value="<?php echo $k;?>" <?php if ($k == $sale->joint_circular_id):?>selected<?php endif;?>><?php echo $v;?></option>
+                <?php endforeach;?>
+            </select>
+        </label>
+
+
+
+    <label class="span2">Price Discount <span style="color: red">*</span>
+            <input type="text" min="1" required="required" class="span2 price_discount" name="price_discount[]" value="<?php printf(My_Number::f($sale->price));?>" />
+    </label>
+
+
+           <label class="span1">&nbsp;<button type="button" class="btn-danger remove-sales"><i class="icon-minus"></i></button></label>
+           <input type="hidden" name="ids_discount[]" class="ids"  value="<?php if(isset($sale->id)) echo $sale->id;?>" />
+   </div>
+</div>
+
+    <?php endforeach;endif;?>
+<!--end discount-->
+
+<div class="row not_show">
+    <div class="span6">
+        <div class="span6">
+            <p><button type="button" id="btn-discount" class="btn btn-primary btn-sale">Create Discount</button></p>
+        </div>
+    </div>
+</div>
+
+<!---   Credit Note -->
+<?php if ($this->credits_note_sales_order):?>
+<?php 
+foreach ($this->credits_note_sales_order as $sale):   
+    $creditnote_sn = $sale['creditnote_sn'];
+    $balance_total = $sale['balance_total'];
+    $use_total = $sale['use_discount'];
+ ?>
+
+<div class="row" >
+<div class="span12">
+<label class="span2">Discount Credit Note<span style="color: red">*</span>
+   <select class="span2 discount_creditnote" name="discount_creditnote[]" >
+        <option value="">Please select</option>
+        <?php 
+
+        $row_total=count($this->credits_note);
+
+        foreach ($this->credits_note as $k):
+            for($row=0;$row<=$row_total;$row++){
+            if($k[$row]['creditnote_sn']!=''){
+        ?>
+            <option value="<?php echo $k[$row]['balance_total'];?>" 
+              <?php if ($k[$row]['creditnote_sn'] == $creditnote_sn):?>selected<?php endif;?>>
+              <?php echo $k[$row]['creditnote_sn'];?>
+            </option>
+        <?php 
+            }
+        } 
+        endforeach;?>
+    </select><?=$creditnote_sn?>
+</label>
+
+    <label class="span2">Discount Balance Total <span style="color: red">*</span>
+            <input type="text" readonly min="1"  class="span2 price_balance_discount_creditnote" name="price_balance_discount_creditnote[]" value="<?php printf(My_Number::f($balance_total));?>" />
+    </label>
+
+    <label class="span2">Use Discount Price <span style="color: red">*</span>
+            <input type="text" min="1" required="required" class="span2 price_use_discount_creditnote" name="price_use_discount_creditnote[]" value="<?php printf(My_Number::f($use_total));?>" />
+    </label>
+
+
+           <label class="span1">&nbsp;<button type="button" class="btn-danger remove-credit-note"><i class="icon-minus"></i></button></label>
+           <input type="hidden" name="ids_discount_creditnote[]" class="span2 ids_discount_creditnote"  value="<?=$creditnote_sn?>" />
+   </div>
+</div>
+
+    <?php endforeach;endif;?>
+
+<div class="row">
+    <div class="span6">
+        <div class="span6">
+            <p><button type="button" id="btn-discount-creditnote" class="btn btn-primary btn-sale">Create Discount Credit Note</button></p>
+        </div>
+    </div>
+</div>
+
+<!--- End  Credit Note -->
+
+ <!--- Summary Total Price --> 
+ <div class="row">
+ <input type="hidden" name="txt_sum_total" id="txt_sum_total" value="0">
+ <input type="hidden" name="txt_sum_discount_creditnote" id="txt_sum_discount_creditnote" value="0">
+ <input type="hidden" name="txt_sum_discount" id="txt_sum_discount" value="0">
+ <input type="hidden" name="txt_sum_discount_protection_price" id="txt_sum_discount_protection_price" value="0">
+ <input type="hidden" name="total_amount_all" class="total_amount_all" id="total_amount_all" value="<?=$total_amount_all?>">
+ <input type="hidden" name="delivery_fee_all" class="delivery_fee_all" id="delivery_fee_all" value="<?=$delivery_fee_all?>">
+ <input type="hidden" name="distributor_no_check_limit" class="distributor_no_check_limit" id="distributor_no_check_limit">
+ <input type="hidden" name="product_total_qty" class="product_total_qty" id="product_total_qty">
+
+ <input type="hidden" name="sales_order" class="sales_order" id="sales_order" value="<?=$sales_order?>">
+<div class="total_price">
+        <div align="right"  style="font-weight:bold;" >
+            <input type="text" class="delivery_fee" style="display:none;" name="delivery_fee" id="delivery_fee" value="<?=$delivery_fee?>">
+            <input type="hidden" name="delivery_fee_status" class="delivery_fee_status" id="delivery_fee_status" value="0">
+        <div  style="margin-top: 3%;">
+            มูลค่าการสั่งซื้อก่อน VAT : <label id="total_total" name="total_total">0</label></div>
+        <div class="not_show no_show"> ค่าจัดส่ง(มูลค่าก่อน VAT) : <label id="ext_vat_delivery" name="ext_vat_delivery">0</label></div>
+        <div class="not_show"> ส่วนลดใบลดหนี้(มูลค่าก่อน VAT) : <label id="ext_sum_discount_price" name="ext_sum_discount_price">0</label></div>
+        <div> ภาษี 7% : <label id="vat_amount" name="vat_amount">0</label></div>
+        <div> มูลค่าการสั่งซื้อรวม VAT : <label id="total_amount" name="total_amount">0</label></div>
+        <div> ..........................................................</div>        
+        <div> หัก ส่วนลดใบลดหนี้ : <label id="sum_discount_price" name="sum_discount_price">0</label></div>
+        <div class="no_show"> บวก ค่าจัดส่ง : <label id="in_vat_delivery" name="in_vat_delivery">0</label></div>
+        <div> ยอดเงินที่ต้องชำระ : <label id="priceall" name="priceall">0</label></div>
+</div>
+</div>
+</div>
+ <!--- End  Summary Total Price -->  
+
+<div class="row">
+    <div class="span6">
+        <div class="control-group">
+            <input type="hidden" name="sn" id="sn" value="<?php isset($this->sales) and $this->sales and printf($this->sales[0]['sale']->sn);?>">
+            <input type="hidden" name="sn_ref" value="<?php echo $this->sn_ref?>">
+            <input type="hidden" name="market_general_id" value="<?php echo (isset($this->sales[0]['sale']->market_general_id) ? $this->sales[0]['sale']->market_general_id : 0);?>">
+            <div class="span4">
+                <button type="button" class="btn btn-primary" id="submit_btn">Submit</button>
+                <button type="submit" style="display:none;"></button>
+                <button type="reset" id='reset' class="btn btn-warning">Reset</button>
+                <input type="hidden" name="back_url" id="back_url" value="/sales">
+                
+                <button type="button" class="btn btn-danger go-back">Go back</button>
+                <button type="button" id="btn_auto_remark" class="btn btn-success">Auto create remark</button>
+
+                
+                <input type="hidden" name="job_type" class="job_type" id="job_type" value="1">
+                <input type="hidden" name="sel_customer_id" class="sel_customer_id" id="sel_customer_id" value="<?=$customer_id?>">
+                <input type="hidden" name="group_id" class="group_id" id="group_id" value="<?=$this->group_id?>">
+                <input type="hidden" name="area_id" class="area_id" id="area_id" value="<?=$area_id?>">
+
+                <input type="hidden" name="rank" class="rank" id="rank" value="">
+                <input type="hidden" name="total_spc_discount" class="total_spc_discount" id="total_spc_discount" value="0">
+                <input type="hidden" name="spc_discount" class="spc_discount" id="spc_discount" value="0">
+                <input type="hidden" name="spc_discount_phone" class="spc_discount_phone" id="spc_discount_phone" value="0">
+                <input type="hidden" name="spc_discount_acc" class="spc_discount_acc" id="spc_discount_acc" value="0">
+                <input type="hidden" name="spc_discount_digital" class="spc_discount_digital" id="spc_discount_digital" value="0">
+
+                <input type="hidden" name="save_service" class="save_service" id="save_service" value="service">
+                <input type="hidden" name="order_date" id="order_date" value="<?php isset($this->sales) and $this->sales and isset( $this->sales[0]['sale']->add_time) and printf( $this->sales[0]['sale']->add_time );?>">
+
+             </div>
+        </div>
+        <div class="clearfix"></div>
+    </div>
+</div>
+</br>
+</br>
+
+</form>
+
+<?php echo $this->render('sales/partials/common-clone.phtml'); ?>
+
+<div id="dialog" title="Confirmation"></div>
+<div id="dialog1" title="Confirmation"></div>
+
+<script type="text/javascript" src="/js/jquery-ui-1.8.12.custom.min.js"></script>
+<script type="text/javascript" src="/js/jquery-ui.js"></script>
+<link rel="stylesheet" type="text/css" href="/css/jquery-ui-1.8.12.custom.css"/>
+<!-- <link rel="stylesheet" href="/css/style_ui.css"> -->
+<!-- <link rel="stylesheet" href="/css/themes/smoothness/jquery-ui.css"> -->
+<script type="text/javascript" src="/js/select2.full.js"></script>
+<link href="/css/select2.min.css" type="text/css" rel="stylesheet" />
+
+<script src="/js/jquery.blockUI.js"></script>
+
+
+<script>
+
+ $(document).ready(function(){
+
+    $(document).change(function(event) {
+        if($("#swap_imei").is(':checked')){
+            $('.add-sales').addClass('hide');
+        }
+
+        if($('#swap_acc').is(':checked')){
+            $('.add-sales').addClass('hide');
+        }
+    });
+
+    $('#swap_acc_good_id').change(function(){
+        $(this).after('<span class="loading"></span>');
+        var _self = $(this);
+        var cat_id = $('#swap_acc_cat_id').val();
+        var good_id = $('#swap_acc_good_id').val();
+
+        $('#swap_acc_good_color').find('option:not(:first)').remove();
+
+        $.get("/get/load",
+            {cat_id: cat_id, good_id: good_id}
+            ,function(data,status){
+                var data = $.parseJSON( data );
+                if (data.colors){
+                    var obj = data.colors;
+                    for (var i = 0; i < obj.length; i++) {
+                        $('#swap_acc_good_color').append('<option value="'+obj[i]['id']+'">'+obj[i]['name']+'</option>');
+                    }
+                }
+                _self.nextAll('.loading').remove();
+            });
+    });
+
+    $('#swap_imei').change(function(event) {
+        if(this.checked) {
+
+            $('#swap_acc').attr('checked',false);
+            $('#swap_acc').change();
+
+            $('#cat_phone').removeClass('hide');
+            $('.all_cat').addClass('hide');
+            $(".select_cat option[value=11]").attr('selected', 'selected').change();
+            $('.old_imei').removeClass('hide');
+            $('.new_imei').removeClass('hide');
+
+            $('.num').attr('readonly', true);
+
+            $('.swap_imei').attr('required', true);
+
+            $('.show_hide_service').addClass('hide');
+            $('.c_show_hide_service').attr('disabled', true);
+            $('.c_show_hide_service').removeAttr('required');
+
+            $('.c_value_0').val(0);
+
+            $('.request_swap_imei').attr('required',true);
+
+        }else{
+            $('#cat_phone').addClass('hide');
+            $('.all_cat').removeClass('hide');
+            $(".select_cat option[value=]").attr('selected', 'selected').change();
+            $('.old_imei').addClass('hide');
+            $('.new_imei').addClass('hide');
+
+            $('.num').attr('readonly', false);
+
+            $('.swap_imei').removeAttr('required');
+
+            $('.show_hide_service').removeClass('hide');
+            $('.c_show_hide_service').removeAttr('disabled');
+            $('.c_show_hide_service').attr('required',true);
+
+            $('.c_value_0').val(0);
+
+            $('.request_swap_imei').removeAttr('required');
+
+        }
+    });
+
+    $('#swap_acc').change(function(event) {
+        if(this.checked) {
+            
+            $('#swap_imei').attr('checked',false);
+            $('#swap_imei').change();
+
+            $(".select_cat option[value=12]").attr('selected', 'selected').change();
+            $('.div_swap_acc').removeClass('hide');
+
+            $('.num').attr('readonly', true);
+
+            $('.show_hide_service').addClass('hide');
+            $('.c_show_hide_service').attr('disabled', true);
+            $('.c_show_hide_service').removeAttr('required');
+
+            $('.c_value_0').val(0);
+
+            $('.request_swap_acc').attr('required',true);
+
+        }else{
+            $(".select_cat option[value=]").attr('selected', 'selected').change();
+            $('.div_swap_acc').addClass('hide');
+
+            $('.num').attr('readonly', false);
+
+            $('.show_hide_service').removeClass('hide');
+            $('.c_show_hide_service').removeAttr('disabled');
+            $('.c_show_hide_service').attr('required',true);
+
+            $('.c_value_0').val(0);
+
+            $('.request_swap_acc').removeAttr('required');
+
+        }
+    });
+
+    $('.cat_id').live('change', function(event) {
+
+        if($('#swap_imei').checked){
+            $('.add-sales').removeClass('hide');
+        }
+
+        if($(this).val() == 11){
+            $('.add-sales').addClass('hide');
+        }
+
+    });
+
+    $('.add-sales').click(function(event) {
+        console.log($('.cat_id').length);
+        console.log('in');
+        if($('.cat_id').length > 2){
+            console.log('lock');
+            $('#cat_phone').addClass('hide');
+            $('#swap_imei').attr('disabled', true);
+        }else{
+            console.log('unlock');
+            $('#cat_phone').removeClass('hide');
+            $('#swap_imei').removeAttr('disabled');
+
+        }
+
+        if(!$('#distributor_id').val()){
+            $(".select_cat option[value=]").attr('selected', 'selected').change();
+        }
+    });
+
+    <?php
+    if($this->auto_select_brandshop_service && !$this->sales){
+    ?>
+    $('#type').val('1');
+    $('#rank').val('10');
+
+    var rank_id = 10;
+
+      if (rank_id == 1 || rank_id == 2 || rank_id ==5 || rank_id ==6 || rank_id ==7 || rank_id ==8 ) {
+        $('.price').prop('disabled', true);
+      }else if(rank_id == 3 || rank_id ==9 || rank_id == 10){
+        $('.price').prop('disabled', false);
+
+      }
+      if (rank_id == 10 || rank_id == 3) {
+            $('.delivery_add').hide();
+            $('#sipping_add').prop('disabled', true);
+        }else{
+            $('.delivery_add').show();
+            $('#sipping_add').prop('disabled', false);
+
+        }
+      $.ajax({
+          url: '/sales/list-distributor-for-create',
+          type: 'POST',
+          dataType: 'html',
+          data: {rank_id: rank_id},
+      })
+      .done(function(data) {
+          $('.retailer_name_list').empty();
+          $('.retailer_name_list').append(data);
+            initSearchOption();
+
+            var temp_d_id = $('#temp_d_id').val();
+
+            if(temp_d_id != ''){
+                $('#distributor_id').val(temp_d_id).change();
+            }
+            
+          console.log("success");
+      })
+      .fail(function() {
+          console.log("error");
+      })
+      .always(function() {
+          console.log("complete");
+      });
+
+    <?php } ?>
+
+    $('.enter-member-brandshop').click(function(event) {
+        var member_brandshop_code = $('#member_brandshop_code').val();
+
+        if(!member_brandshop_code){
+            alert('Please enter code!');
+            return false;
+        }
+
+        member_status = false;
+
+        $.ajax({
+            url: '<?php echo HOST.'sales/get-member-brandshop';?>',
+            type: 'POST',
+            data: {'code':member_brandshop_code}
+        })
+        .done(function(response) {
+            var obj_response = jQuery.parseJSON(response);
+            console.log("success");
+
+             switch(obj_response.status) {
+                case 200:
+                    console.log('done');
+
+                    member_status = true;
+
+                    $('#customer_name').val(obj_response.data['customer_name']);
+                    $('#customer_phone_number').val(obj_response.data['phone_number']);
+                    $('#customer_tax_number').val(obj_response.data['tax_number']);
+                    $('#customer_tax_address').val(obj_response.data['tax_address']);
+                    break;
+                case 400:
+                    alert(obj_response.message);
+                    break;
+            }
+            
+        });
+           
+    });
+
+    var member_status = null;
+
+    $('.detail_good').live('change', function(event) {
+
+        var div_parent = $(this);
+
+        var cat_id = div_parent.find('.cat_id').val();
+
+        var is_brandshop = $('#group_type_id').val();
+
+        if(member_status && cat_id == 12 && is_brandshop == 10){
+            div_parent.find('.sale_off_percent').val('20');
+        }
+    });
+
+     $(".total").keydown(function (e) {
+            // Allow: backspace, delete, tab, escape, enter and .
+            if ($.inArray(e.keyCode, [46, 8, 9, 27, 13, 110, 190]) !== -1 ||
+                 // Allow: Ctrl+A, Command+A
+                (e.keyCode === 65 && (e.ctrlKey === true || e.metaKey === true)) || 
+                 // Allow: home, end, left, right, down, up
+                (e.keyCode >= 35 && e.keyCode <= 40)) {
+                     // let it happen, don't do anything
+                     return;
+            }
+            // Ensure that it is a number and stop the keypress
+            if ((e.shiftKey || (e.keyCode < 48 || e.keyCode > 57)) && (e.keyCode < 96 || e.keyCode > 105)) {
+                e.preventDefault();
+            }
+        });
+
+     /*$('.job_type').change(function(event) {
+      var job_type_id = $(this).val();
+      if(job_type_id=='2'){
+          $('.total').attr('readonly', true);
+          $('.total').removeAttr('required="required"');
+          $(".total").val(0);
+      }else{
+          $('.total').attr('readonly', false);   
+          $('.total').attr('required="required"');
+      }
+      //alert(job_type_id);
+      
+    });*/
+
+
+    $('#job_sn').change(function(event) {
+      var job_sn_data = $(this).val();
+      $.ajax({
+                url: "/get/load-job-number-ajax",
+                type: 'POST',
+                dataType: "html",
+                data: {
+                    job_sn: job_sn_data
+                },
+                success: function( data ) {
+                    var data = $.parseJSON( data );
+                    if(data[0]['job_sn'] != null){
+                        alert('หมายเลข Job Number นี้มีการใช้งานแล้ว กรุณาป้อนใหม่ !');
+                        $("#job_sn").val('');
+                        return;
+                    }
+                   // console.log(data);
+                }
+            });
+      
+    });
+
+    /*$( "#job_sn" ).autocomplete({
+        source: function( request, response ) {
+            $.ajax({
+                url: "/get/load-job-number-ajax",
+                type: 'POST',
+                dataType: "html",
+                data: {
+                    job_sn: request.term
+                },
+                success: function( data ) {
+                    var data = $.parseJSON( data );
+                    if(data[0]['job_sn'] != null){
+                        alert('หมายเลข Job Number นี้มีการใช้งานแล้ว กรุณาป้อนใหม่ !');
+                        $("#job_sn").val('');
+                        return;
+                    }
+                   // console.log(data);
+                }
+            });
+
+        },
+    });*/
+
+
+    <?php if (isset($this->sales) and $this->sales):?>
+
+        var d_id = $('#distributor_id').val();
+        if (d_id == '24026' || d_id == '34807') {
+            $('.delivery_add').show();
+            $('#sipping_add').prop('disabled', false);
+            $('#customerName').show();
+            
+            $('#custom_name').prop('disabled', false);
+        }else{
+           
+            $('#customerName').hide();
+            $('#custom_name').prop('disabled', true);
+        }
+
+        <?php
+        $userStorage = Zend_Auth::getInstance()->getStorage()->read();
+        if(My_Staff_Group::inGroup($userStorage->group_id, array(ADMINISTRATOR_ID,FINANCE,CHECK_MONEY))) 
+        {
+        ?>
+            $('.sale_off_percent').removeAttr("disabled");
+        <?php } ?>
+
+    <?php endif;?>
+
+    chexk_disabled();
+    $("._search").select2({
+        placeholder: "Select...",
+        allowClear: true
+    });
+    $(".salesman").select2();
+    $(".salesman_catty").select2();
+    $( ".customer_id" ).select2();
+    $('body').on('change', '.price', function () {
+    var price = parseFloat($(this).val().split(',').join(''));
+    var div_parent = $(this).parent().parent().parent();
+     // alert(div_parent.find('.price').val());
+    var numX = div_parent.find('.num').val();
+    var total_sum = Math.round(price*parseFloat(numX.split(',').join('')),2);
+    div_parent.find('.total').val(total_sum);
+  });
+
+  $('.rank').change(function(event) {
+      var rank_id = $(this).val();
+      if (rank_id == 1 || rank_id == 2 || rank_id ==5 || rank_id ==6 || rank_id ==7 || rank_id ==8 ) {
+        $('.price').prop('disabled', true);
+      }else if(rank_id == 3 || rank_id ==9 || rank_id == 10){
+        $('.price').prop('disabled', false);
+
+      }
+      if (rank_id == 10 || rank_id == 3) {
+            $('.delivery_add').hide();
+            $('#sipping_add').prop('disabled', true);
+        }else{
+            $('.delivery_add').show();
+            $('#sipping_add').prop('disabled', false);
+
+        }
+      $.ajax({
+          url: '/sales/list-distributor-for-create',
+          type: 'POST',
+          dataType: 'html',
+          data: {rank_id: rank_id},
+      })
+      .done(function(data) {
+          $('.retailer_name_list').empty();
+          $('.retailer_name_list').append(data);
+            initSearchOption();
+
+            var temp_d_id = $('#temp_d_id').val();
+
+            if(temp_d_id != ''){
+                $('#distributor_id').val(temp_d_id).change();
+            }
+
+          console.log("success");
+      })
+      .fail(function() {
+          console.log("error");
+      })
+      .always(function() {
+          console.log("complete");
+      });
+      
+  });
+});
+
+
+function chexk_disabled(){
+    var rank_id = $('.price_clas').val();
+    // alert(rank_id);
+        if (rank_id == 1 || rank_id == 2 || rank_id ==5 || rank_id ==6 || rank_id ==7 || rank_id ==8 ) {
+        $('.price').prop('disabled', true);
+      }else if(rank_id == 3 || rank_id ==9 || rank_id == 10){
+        $('.price').prop('disabled', false);
+
+      }
+}
+
+  function check_campain_auto_add(){
+  var form = $('#form');
+      $.ajax({
+        url: '/get/check-campain-auto-add',
+        type: 'post',
+        data: form.serialize(),
+      })
+      .done(function(data) {
+        // alert(data);
+        if (data ==0) {
+          alert('จำนวนของแถมไม่เท่ากับจำนวนสินค้า');
+        $('button, input, select').prop('disabled', false);
+
+          window.stop();
+          // location.reload();
+          return false;
+          
+        }else{
+          return true;
+        }
+        console.log("success");
+      })
+      .fail(function() {
+        console.log("error");
+      })
+      .always(function() {
+        console.log("complete");
+      });
+  
+}
+
+
+
+ $('#submit_btn').on('click',function(event){
+         event.preventDefault();
+         check_campain_auto_add();
+         Auto_Summary_TotalPrice();
+
+         $.blockUI({ css: { 
+            border: 'none', 
+            padding: '15px', 
+            backgroundColor: '#000', 
+            '-webkit-border-radius': '10px', 
+            '-moz-border-radius': '10px', 
+            opacity: .5, 
+            color: '#fff' 
+        } });
+    });
+</script>
+
+<?php echo $this->render('sales/partials/common-script-service.phtml'); ?>

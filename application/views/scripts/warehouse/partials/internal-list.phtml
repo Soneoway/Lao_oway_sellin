@@ -1,0 +1,48 @@
+<table class="table table-bordered">
+    <thead>
+        <tr>
+            <?php echo $this->sorting(array(
+                    '#',
+                    'sn' => 'SN',
+                    'Order Name',
+                    'From Warehouse',
+                    'To Warehouse',
+                    'Transport Date',
+                    'Invoice Number',
+                    'Invoice Prefix',
+                    'Action'
+                ),
+                $this->url, $this->sort, $this->desc); ?>
+        </tr>
+    </thead>
+    <tbody>
+        <?php
+        if (isset($this->orders) and $this->orders)
+            foreach ($this->orders as $k=>$order): ?>
+        <tr>
+              <td>
+                <?php
+                    $inc = $this->offset + $k + 1;
+                    echo $inc;
+                ?>
+            </td>
+            <td><?php echo $order['sn'] ?></td>
+            <td><?php echo $order['order_name'] ?></td>
+            <td><?php echo $order['from_warehouse'] ?></td>
+            <td><?php echo $order['to_warehouse'] ?></td>
+            <td><?php echo date('d-m-Y' , strtotime($order['transport_date'])); ?></td>
+            <td><?php echo $order['invoice_number'] ?></td>
+            <td><?php echo isset($this->invoice_prefixs[$order['invoice_prefix'] ? $order['invoice_prefix'] : 0]) ?  $this->invoice_prefixs[$order['invoice_prefix']]['name'] : '' ; ?></td>
+            <td class="">
+                <a title="Delete" class="confirmLink" href="/warehouse/internal-reset?sn=<?php echo $order['sn'];?>"> <i class="icon-refresh"></i></a>
+            </td>
+        </tr>
+        <?php endforeach;?>
+
+    </tbody>
+</table>
+<div class="paging">
+    <?php echo $this->paging($this->total, $this->limit, $this->offset, $this->url);?>
+</div>
+<?php echo $this->load();?>
+<?php echo $this->confirm();?>

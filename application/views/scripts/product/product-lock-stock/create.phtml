@@ -1,0 +1,206 @@
+<link href="../css/select2.css" rel="stylesheet"/>
+<script src="../js/select2.js"></script>
+
+<div class="page-header">
+
+    <?php if(isset($this->lock) && $this->lock) : ?>
+        <h1 style="font-family: time new romans;">Edit Product Lock Stock</h1>
+    <?php else: ?>
+        <h1 style="font-family: time new romans;">Add Product Lock Stock</h1>
+    <?php endif; ?>
+
+</div>
+
+<?php
+    if (isset($this->messages_success) and $this->messages_success)
+        foreach ($this->messages_success as $message):
+            echo '<div class="alert alert-success">'.$message.'</div>';
+        endforeach;
+
+    if (isset($this->messages) and $this->messages)
+        foreach ($this->messages as $message):
+            echo '<div class="alert alert-error">'.$message.'</div>';
+        endforeach;
+?>
+
+<div style="padding: 10px;">
+    <form class="form-horizontal" action="<?php echo HOST ?>product/save-product-lock-stock" name="form" id="form" method="post">
+        <div class="row-fluid">
+
+            <div class="span4">
+                <div class="control-group">
+                    <label class="control-label" for="warehouse_id">Warehouse Name : <span style="color: red">*</span></label>
+                    <div class="controls">
+                        <select name="warehouse_id" id="warehouse_id" class="span3" required>
+                            <option value="">Please Selected</option>
+                            <?php if(isset($this->warehouse) && $this->warehouse) : ?>
+                                <?php foreach ($this->warehouse as $value) : ?>
+                                    <option value="<?php echo $value['id'] ?>" <?php if(isset($this->lock->warehouse_id) && $this->lock->warehouse_id == $value['id'] ) : ?> selected <?php endif; ?> ><?php echo $value['name'] ?></option>
+                                <?php endforeach; ?>
+                            <?php endif; ?>
+                        </select>
+                    </div>
+                </div>
+
+                <div class="control-group">
+                    <label class="control-label" for="lock_type">Lock Type : <span style="color: red">*</span></label>
+                    <div class="controls">
+                        <select name="lock_type" id="lock_type" class="span3" required>
+                            <option value="">Please Selected</option>
+                            <option value="1" <?php if(isset($this->lock->lock_type) && $this->lock->lock_type == 1) : ?> selected <?php endif; ?> > By Model ( All Color ) </option>
+                            <option value="2" <?php if(isset($this->lock->lock_type) && $this->lock->lock_type == 2) : ?> selected <?php endif; ?> > By Model Color ( Select Color ) </option>
+                        </select>
+                    </div>
+                </div>
+
+                <div class="control-group hidden" id="product_model_div">
+                    <label class="control-label" for="product_model">Product Model :<span style="color: red">*</span></label>
+                    <div class="controls">
+                        <select name="product_model" class="span3" id="product_model" required>
+                            <option value="">Please Selected</option>
+                            <?php if(isset($this->goods) && $this->goods) : ?>
+                                <?php foreach($this->goods as $value) : ?>
+                                    <option value="<?php echo $value['good_id'] ?>" <?php if(isset($this->lock->good_id) && $this->lock->good_id == $value['good_id']) : ?> selected <?php endif; ?> ><?php echo $value['brand_name'] ?> <?php echo $value['good_name'] ?></option>
+                                <?php endforeach; ?>
+                            <?php endif; ?>
+                        </select>
+                    </div>
+                </div>
+
+                <div class="control-group hidden" id="product_color_div">
+                    <label class="control-label" for="product_color">Product Color :<span style="color: red">*</span></label>
+                    <div class="controls">
+                        <select name="product_color" class="span3" id="product_color" required>
+                            <option value="">Please Selected</option>
+
+                            <?php if(isset($this->color) && $this->color) : ?>
+                                <?php foreach($this->color as $value) : ?>
+                                    <option value="<?php echo $value['color_id'] ?>" <?php if(isset($this->lock->color_id) && $this->lock->color_id == $value['color_id']) : ?> selected <?php endif; ?> ><?php echo $value['color_name'] ?></option>
+                                <?php  endforeach; ?>
+                            <?php endif; ?>
+                        </select>
+                    </div>
+                </div>
+
+                <div class="control-group hidden" id="qulity_div">
+                    <label class="control-label" for="qulity"> Qulity Lock : <span style="color: red">*</span></label>
+                    <div class="controls">
+                        <input type="number" name="qulity" id="qulity" class="span3" value="<?php if(isset($this->lock->qulity) && printf($this->lock->qulity)) ?>">
+                    </div>
+                </div>
+
+            </div>
+
+            <div class="span4">
+
+                <div class="control-group">
+                    <label class="control-label" for="remark"> Remark </label>
+                    <div class="controls">
+                        <textarea cols="2" rows="2" class="span3" name="remark" id="remark"></textarea>
+                    </div>
+                </div>
+
+            </div>
+        </div>
+
+        <hr />
+
+        <div class="row-fluid">
+            <div class="span12">
+                <div class="pull-left">
+                    <input type="hidden" name="id" value="<?php echo $this->lock->id ?>">
+                    <button type="submit" id="submit_btn" class="btn btn-success">Submit</button>
+                    <button type="button" id="cancel_btn" class="btn btn-warning">Cancel</button>
+                </div>
+            </div>
+        </div>
+
+    </form>
+</div>
+
+<script type="text/javascript" src="/js/jquery-ui-1.8.12.custom.min.js"></script>
+
+<script type="text/javascript">
+    $(document).ready(function () {
+
+        $("#warehouse_id, #lock_type, #product_model, #product_color").select2();
+
+        if($('#lock_type').val() == 1) {
+
+            $('#product_model_div').removeClass('hidden');
+            $('#product_color_div').addClass('hidden');
+            $('#qulity_div').addClass('hidden');
+
+            $('#product_color').removeAttr('required');
+            $('#qulity').removeAttr('required');
+
+        }else if($('#lock_type').val() == 2) {
+
+            $('#product_model_div').removeClass('hidden');
+            $('#product_color_div').removeClass('hidden');
+            $('#qulity_div').removeClass('hidden');
+
+            $('#product_color').attr('required', true);
+            $('#qulity').attr('required', true);
+
+        }
+
+        $('#lock_type').change(function() {
+
+            var selectedValue = $(this).val();
+
+            $("#product_model").select2("val", "");
+            $("#product_color").select2("val", "");
+
+            if(selectedValue == 1) {
+
+                $('#product_model_div').removeClass('hidden');
+                $('#product_color_div').addClass('hidden');
+                $('#qulity_div').addClass('hidden');
+
+                $('#product_color').removeAttr('required');
+                $('#qulity').removeAttr('required');
+
+            }else if(selectedValue == 2) {
+
+                $('#product_model_div').removeClass('hidden');
+                $('#product_color_div').removeClass('hidden');
+                $('#qulity_div').removeClass('hidden');
+
+                $('#product_color').attr('required', true);
+                $('#qulity').attr('required', true);
+
+            }else{
+
+                $('#product_model_div').addClass('hidden');
+                $('#product_color_div').addClass('hidden');
+                $('#qulity_div').addClass('hidden');
+            }
+
+        });
+
+        $('#product_model').change(function() {
+
+            var good_id = $(this).val();
+
+            $('#product_color').find('option:not(:first)').remove();
+            $("#product_color").select2("val", "");
+
+            $.get("/get/load-good-color", {
+                good_id: good_id
+            }, function(data, status) {
+
+                var data = $.parseJSON(data);
+
+                if (data.colors) {
+                    var obj = data.colors;
+                    for (var i = 0; i < obj.length; i++) {
+                        $('#product_color').append('<option value="' + obj[i]['id'] + '">' + obj[i]['name'] + '</option>');
+                    }
+                }
+            })
+        })
+
+    })
+
+</script>

@@ -1,0 +1,58 @@
+<div class="page-header">
+    <h1>New Price Protection</h1>
+</div>
+
+<?php
+if (isset($this->messages_success) and $this->messages_success)
+    foreach ($this->messages_success as $message):
+        echo '<div class="alert alert-success">'.$message."</div>";
+    endforeach;
+
+if (isset($this->messages) and $this->messages)
+    foreach ($this->messages as $message):
+        echo '<div class="alert alert-error">'.$message."</div>";
+    endforeach;
+?>
+<form method="post">
+
+    <div class="row">
+        <div class="span6">
+            <div class="form-group">
+                <label for="imei_sn">IMEI</label>
+                <input type="text" id="imei_sn" name="imei_sn" required="required" value="<?php if (isset($this->info['imei_sn']) and $this->info['imei_sn']) echo $this->info['imei_sn'];?>" <?php if (isset($this->info['imei_sn']) and $this->info['imei_sn']) {?> readonly<?php }?> />
+            </div>
+            <div class="form-group">
+                <label for="d_id">Dealer</label>
+                <select name="d_id" required="required">
+                    <option value="">Select</option>
+                    <?php foreach ( $this->distributorsCached as $id => $name ) {?>
+                    <option value="<?php echo $id;?>" <?php if (isset($this->info['d_id']) and $this->info['d_id'] == $id) {?> selected="selected" <?php }?>><?php echo $name;?></option>
+                    <?php } ?>
+                </select>
+            </div>
+
+        </div>
+        <div class="span6">
+            <div class="form-group">
+                <label for="joint_circular_id">Joint Circular</label>
+                <select name="joint_circular_id" id="joint_circular_id" required="required">
+                    <option value="">Select</option>
+                    <?php foreach ( $this->jointCircular as $item ) {?>
+                        <option value="<?php echo $item['id'];?>" <?php if (isset($this->info['joint_circular_id']) and $this->info['joint_circular_id'] == $item['id']) {?> selected="selected" <?php }?>><?php echo $item['name'];?></option>
+                    <?php } ?>
+                </select>
+
+            </div>
+        </div>
+    </div>
+
+    <div class="clearfix"></div>
+
+    <div class="form-group">
+        <input type="submit" class="form-control btn btn-primary" value="Save" />
+        <input type="hidden" name="back_url" id="back_url" value="/bvg" />
+        <input type="hidden" name="id" id="id" value="<?php if (isset($this->info['id']) and $this->info['id']) echo $this->info['id'];?>" />
+
+        <a href="/bvg" class="btn btn-danger">Go back</a>
+    </div>
+</form>

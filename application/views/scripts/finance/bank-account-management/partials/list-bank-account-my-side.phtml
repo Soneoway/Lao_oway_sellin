@@ -1,0 +1,84 @@
+<table class="table table-bordered">
+	<thead>
+		<tr>
+			<th>mnemonic code</th>
+			<th>Bank Account</th>
+			<th>Bank</th>
+			<th>Our Bank Card Number</th>
+			<th>Code</th>
+			<th>Accounting organization</th>
+			<th>Account Property</th>
+			<th>Account Type</th>
+			<th>Host-to-Host</th>
+			<th>Primary and secondary cards</th>
+			<th>Modifier</th>
+			<th>Remarks</th>
+			<th>Off/On</th>
+			<th>Action</th>
+	</thead>
+	<tbody>
+		<?php if(isset($this->bankAccountMy) && $this->bankAccountMy) : ?>
+			<?php foreach ($this->bankAccountMy as $value) : ?>
+
+				<?php if($value['account_pp'] == 1) { $account_pp = "Personal Account"; }elseif($value['account_pp'] == 2) { $account_pp = "Company Account"; }else{ $account_pp = "-"; }  ?>
+				<?php if($value['host'] == 1) { $host = "Yes"; }else { $host = "No"; } ?>
+				<?php if($value['card_type'] == 1) { $card_type = "Major Card"; }elseif($value['card_type'] == 2) { $card_type = "Deputy Card"; }else{ $card_type = "Virtual Card"; } ?>
+				<?php if($value['status'] == 1) { $status = "<span style='color: green'> On </span>"; }else{ $status = "<span style='color: red'> Off </span>"; } ?>
+
+				<tr>
+					<td><?php echo $value['mnemonic_code'] ?></td>
+					<td><?php echo $value['bank_account'] ?></td>
+					<td><?php echo $this->bank[$value['bank']] ?></td>
+					<td><?php echo $value['card_no'] ?></td>
+					<td><?php echo $value['code'] ?></td>
+					<td><?php echo $this->accountOrg[$value['account_org_id']] ?></td>
+					<td><?php echo $account_pp ?></td>
+					<td><?php echo $this->accountType[$value['account_type']] ?></td>
+					<td><?php echo $host ?></td>
+					<td><?php echo $card_type ?></td>
+					<td><?php echo $this->staff_cache[$value['updated_by']] ?> </td>
+					<td><?php echo $value['remark'] ?></td>
+					<td><?php echo $status ?></td>
+					<td>
+						<a href="<?php echo HOST ?>finance/add-bank-account-my-side?id=<?php echo $value['id'] ?>"> Edit </a>
+						| <a href="#" style="color: red;" data-id="<?php echo $value['id'] ?>" class="Confirm_data"> Delete </a>
+					</td>
+				</tr>
+
+			<?php endforeach; ?>
+		<?php endif; ?>
+
+	</tbody>
+</table>
+
+<div class="paging">
+	<?php echo $this->paging($this->total, $this->limit, $this->offset, $this->url);?>
+</div>
+
+<script type="text/javascript">
+	$(document).ready(function(){
+		$('.Confirm_data').on('click', function (event) {
+			event.preventDefault();
+			var id = $(this).data('id');
+
+			Swal.fire({
+				title: 'Confirm to delete?',
+				text: 'ຢືນຢັນການລຶບ ຂໍ້ມູນ ຫຼື ບໍ່? ຫຼັງຈາກລົບໄປເເລ້ວຈະບໍ່ສາມາດກູ້ຄືນໄດ້',
+				icon: 'question',
+				showCancelButton: true,
+				confirmButtonColor: '#3085d6',
+				cancelButtonColor: '#d33',
+				confirmButtonText: '<b style="font-family:Phetsarath OT">ຢືນຢັນ</ b>',
+				cancelButtonText: '<b style="font-family:Phetsarath OT">ຍົກເລີກ</ b>',
+			}).then((result) => {
+
+				if (result.isConfirmed) {
+					window.location.href="/finance/delete-bank-account-my-side?id="+id;
+				}
+
+			});
+		});
+
+	});
+
+</script>

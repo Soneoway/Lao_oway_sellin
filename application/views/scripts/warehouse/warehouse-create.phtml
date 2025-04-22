@@ -1,0 +1,201 @@
+<link href="../css/select2.css" rel="stylesheet"/>
+<script src="../js/select2.js"></script>
+
+<style>
+	body{
+		font-family: phetsarath ot;
+	}
+
+</style>
+<div class="page-header">
+	<?php if (isset($this->warehouse) && $this->warehouse): ?>
+		<h1>Edit Warehouse</h1>
+	<?php else: ?>
+		<h1>Create Warehouse ສ້າງສາງໃໝ່</h1>
+	<?php endif ?>
+
+</div>
+<?php
+
+$warehouse_type = $this->warehouse['warehouse_type'];
+$company_id = $this->warehouse['company_id'];
+$area_id = $this->warehouse['area_id'];
+$provience = $this->warehouse['province_id'];
+
+if (isset($this->messages) and $this->messages)
+	foreach ($this->messages as $message):
+		echo '<div class="alert alert-error">'.$message.'</div>';
+	endforeach;
+	?>
+<div style="padding: 10px;">
+	<form class="form-horizontal" action="<?php echo HOST ?>warehouse/warehouse-save" name="form" id="form" method="post">
+		<div class="row-fluid">
+
+			<div class="span4">
+				<div class="control-group">
+					<label class="control-label" for="name">Warehouse Name <span style="color: red">*</span></label>
+					<div class="controls">
+						<input type="text" id="name" class="span3" name="name" placeholder="Warehouse Name" required="required" value="<?php if( isset($this->warehouse) && isset($this->warehouse['name']) ) echo $this->warehouse['name'] ?>" />
+						<p class="help-block"></p>
+					</div>
+				</div>
+
+				<div class="control-group">
+					<label class="control-label">Warehouse Level<span style="color: red">*</span></label>
+					<div class="controls">
+						<select name="warehouse_level" id="warehouse_level" class="span3" required>
+							<option value="">Please Selected</option>
+							<option value="1" <?php if(isset($this->warehouse['level']) && $this->warehouse['level'] == 1) : ?> selected <?php endif; ?>>First-tier</option>
+							<option value="2" <?php if(isset($this->warehouse['level']) && $this->warehouse['level'] == 2) : ?> selected <?php endif; ?>>Second-tier</option>
+						</select>
+					</div>
+				</div>
+
+				<div class="control-group">
+					<label class="control-label">Warehouse Address<span style="color: red">*</span></label>
+					<div class="controls">
+						<input type="text" name="address" class="span3" placeholder="Enetr" required value="<?php if(isset($this->warehouse) && isset($this->warehouse['address'])) echo $this->warehouse['address'] ?>">
+					</div>
+				</div>
+
+				<div class="control-group">
+					<label class="control-label">Store Affiliation<span style="color: red">*</span></label>
+					<div class="controls">
+						<select name="store_affili" class="span3" id="store_affili" required>
+							<option value="">Please Selected</option>
+							<option value="1" <?php if(isset($this->warehouse['affiliation']) && $this->warehouse['affiliation'] == 1) : ?> selected <?php endif; ?>>Private Warehouse</option>
+							<option value="2" <?php if(isset($this->warehouse['affiliation']) && $this->warehouse['affiliation'] == 2) : ?> selected <?php endif; ?>>Third-party Warehouse</option>
+						</select>
+					</div>
+				</div>
+
+
+				<div class="control-group">
+					<label class="control-label" for="name">Commpany <span style="color: red">*</span></label>
+					<div class="controls">
+						<select id="company_id" class="span3" name="company_id" required="required">
+							<option>----</option>
+							<option value="1" <?php if ($company_id==1):?>selected<?php endif;?>>OPPO</option>
+						</select>
+					</div>
+				</div>
+
+<!-- 				<div class="control-group">
+					<label class="control-label" for="area">Warehouse Area :</label>
+					<div class="controls">
+						<select class="form-control span3" name="area" id="area">
+							<option value=""> Please Select </option>
+							<?php if ($this->area): foreach ($this->area as $id=>$name):?>
+								<option value="<?php echo $id;?>" <?php if ($area_id==$id):?>selected<?php endif;?>><?php echo $name?></option>
+							<?php endforeach; endif;?>
+						</select>
+					</div>
+				</div> -->
+
+
+				<div class="control-group">
+					<label for="show_kerry" class="control-label">ສະແດງໃຫ້ Kerry ເຫັນ</label>
+					<div class="controls">
+						<input id="show_kerry" name="show_kerry" type="checkbox" class="" value="1" <?php if (isset($this->warehouse['show_kerry']) and $this->warehouse['show_kerry']=='1'):?>checked="checked" <?php endif;?>>
+					</div>
+				</div>
+
+
+			</div>
+
+			<div class="span4">
+				<div class="control-group">
+					<label class="control-label">Affiliated Agency <span style="color: red;">*</span></label>
+					<div class="controls">
+						<select class="span3" name="provience" id="provience" required>
+							<option value="">Please Select</option>
+							<?php if($this->provience) : foreach($this->provience as $item) : ?>
+								<option value="<?php echo $item['id'] ?>" <?php if($provience == $item['id']) :?> selected <?php endif ?> ><?php echo $item['name'] ?></option>
+							<?php endforeach; endif; ?>
+						</select>
+					</div>
+				</div>
+
+				<div class="control-group">
+					<label class="control-label">Marketable <span style="color: red">*</span></label>
+					<div class="controls">
+						<select name="markettable" class="span3" required>
+							<option value="1" <?php if(isset($this->warehouse['market_table']) && $this->warehouse['market_table'] == 1) : ?> selected <?php endif; ?>>Yes</option>
+							<option value="2" <?php if(isset($this->warehouse['market_table']) && $this->warehouse['market_table'] == 2) : ?> selected <?php endif; ?>>No</option>
+						</select>
+					</div>
+				</div>
+
+				<div class="control-group">
+					<label class="control-label">External Serial Number<span style="color: red">*</span></label>
+					<div class="controls">
+						<input type="text" name="exter_serial" placeholder="Enter" class="span3" value="<?php if(isset($this->warehouse) && isset($this->warehouse['external_serial'])) echo $this->warehouse['external_serial'] ?>">
+					</div>
+				</div>
+			</div>
+
+			<div class="span4">
+				<div class="control-group">
+					<label class="control-label">Warehouse Type <span style="color: red">*</label>
+						<div class="controls">
+							<select id="warehouse_type" class="span3" name="warehouse_type" required="required">
+							<option>Please Selected</option>
+							<?PHP foreach ($this->warehouse_type as $key => $value):?>
+							<option value="<?=$key?>" <?php if ($warehouse_type==$key):?>selected<?php endif;?>><?=$value?></option>
+							<?PHP endforeach; ?>
+						</select>
+						</div>
+					</div>
+
+					<div class="control-group">
+						<label class="control-label">Leader<span style="color: red">*</span></label>
+						<div class="controls">
+							<input type="text" name="leader" class="span3" placeholder="Enter" required value="<?php if(isset($this->warehouse) && isset($this->warehouse['external_serial'])) echo $this->warehouse['leader'] ?>">
+						</div>
+					</div>
+
+					<div class="control-group">
+						<label class="control-label">Leader Tel.<span style="color: red;">*</span></label>
+						<div class="controls">
+							<input type="text" name="tel" class="span3" placeholder="020 OR 030 XXXXXXXX" required value="<?php if(isset($this->warehouse) && isset($this->warehouse['phone'])) echo $this->warehouse['phone'] ?>">
+						</div>
+					</div>
+
+					<div class="control-group">
+						<label class="control-label">Remark</label>
+						<div class="controls">
+							<textarea class="span3" cols="2" rows="2" name="remark"><?php if(isset($this->warehouse) && isset($this->warehouse['remark'])) echo $this->warehouse['remark'] ?></textarea>
+						</div>
+					</div>
+				</div>
+
+
+
+			</div>
+			<input type="hidden" name="good_color" id="good_color" />
+			<input type="hidden" name="id" value="<?php if( isset($this->warehouse) && isset($this->warehouse['id']) ) echo $this->warehouse['id'] ?>" />
+			<div class="row-fluid">
+				<div class="span12">
+					<div class="pull-right">
+						<button type="submit" id="submit_btn" class="btn btn-primary">Submit</button>
+						<button type="button" id="cancel_btn" class="btn btn-warning go-back">Cancel</button>
+						<input type="hidden" name="back_url" id="back_url" value="/warehouse/list">
+					</div>
+				</div>
+			</div>
+		</form>
+	</div>
+
+		<script type="text/javascript" src="/js/jquery-ui-1.8.12.custom.min.js"></script>
+
+		<script type="text/javascript">
+			$(document).ready(function () {
+				$("#warehouse_type, #company_id, #area, #provience, #warehouse_level").select2();
+
+				$('.go-back').click(function(e){
+					window.location.href = $('#back_url').val();
+
+					return false;
+				});
+			});
+		</script>

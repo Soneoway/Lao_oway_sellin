@@ -1,0 +1,44 @@
+<table class="table table-bordered">
+    <thead>
+        <tr>
+            <?php echo $this->sorting(array(
+                    '#',
+                    'Name',
+                    'Contact',
+                    'Phone Number',
+                    'Address',
+                    'Action',
+                ),
+                $this->url, $this->sort, $this->desc); ?>
+        </tr>
+    </thead>
+    <tbody>
+        <?php
+        if (isset($this->hubs) and $this->hubs)
+            foreach ($this->hubs as $k=>$_hub): ?>
+        <tr>
+            <td>
+                <?php echo ($this->offset + $k + 1) ?>
+            </td>
+            <td><?php echo $_hub['name'];?></td>
+            <td><?php echo $_hub['contact'];?></td>
+            <td><?php echo $_hub['mobile_phone'];?></td>
+            <td><?php echo $_hub['address'];?></td>
+            <td>
+                <a href="<?php echo HOST ?>hub/edit?id=<?php echo $_hub['id'] ?>" class="btn btn-default btn-mini" title="Edit"><i class="icon-edit"></i></a>
+                <a href="<?php echo HOST ?>hub/delete?id=<?php echo $_hub['id'] ?>" class="btn btn-danger btn-mini confirmLink" title="Delete"><i class="icon-trash"></i></a>
+            </td>
+        </tr>
+        <?php endforeach;?>
+
+    </tbody>
+</table>
+
+<div class="paging">
+    <?php echo $this->paging($this->total, $this->limit, $this->offset, $this->url);?>
+</div>
+
+<script type="text/javascript" src="/js/jquery-ui-1.8.12.custom.min.js"></script>
+<link rel="stylesheet" type="text/css" href="/css/jquery-ui-1.8.12.custom.css"/>
+<?php // echo $this->load();?>
+<?php echo $this->confirm();?>

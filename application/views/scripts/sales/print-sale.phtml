@@ -1,0 +1,1081 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
+<html>
+
+<head>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8">
+    <title>Print</title>
+    <script src="//ajax.googleapis.com/ajax/libs/jquery/1.10.2/jquery.min.js"></script>
+    <style type="text/css">
+    @media print {
+        #print {
+            display: none;
+        }
+
+        .alert {
+            display: none;
+        }
+    }
+
+    body {
+        margin: 0 auto;
+        width: 595px;
+        font-size: 10px;
+        font-family: Times New Roman;
+        padding-bottom:
+    }
+
+    .top {
+        width: 595px;
+        text-align: right
+    }
+
+    .top p {
+        height: 24px;
+        line-height: 24px;
+        margin: 0
+    }
+
+    .textbox {
+        width: 600px;
+        border: 1px solid black;
+        height: 70px
+    }
+
+    .blank10 {
+        height: 2px;
+        clear: both
+    }
+
+    .title {
+        padding-top: 5px;
+        width: 600px;
+        text-align: center;
+        height: 30px;
+        font-size: 15px;
+        line-height: 30px;
+        font-weight: bold
+    }
+
+    .tbl,
+    .tbllist {
+        width: 600px;
+        background-color: #ccc;
+        text-align: center;
+        font-weight: bold
+    }
+
+    .tbl tr {
+        margin: 0
+    }
+
+    .tbl tr td,
+    .tbllist tr td {
+        background-color: #fff
+    }
+
+    .tbl .firsttd {
+        width: 145px
+    }
+
+    .tbl .secondtd {
+        width: 100px
+    }
+
+    .tbl .thirdtd {
+        width: 36px
+    }
+
+    .tbl .forthtd {
+        width: 65px
+    }
+
+    .assign {
+        width: 100px;
+        font-weight: bold;
+        float: left;
+        height: 100px;
+        margin-top: 10px;
+        border-bottom: 1px solid black;
+        margin-right: 20px
+    }
+
+    .note {
+        border-bottom: 1px dotted #ccc;
+        width: 300px;
+        float: left;
+        margin: 9px 0 0 25px
+    }
+
+    .green {
+        text-align: center
+    }
+
+    .green td {
+        background-color: #1caf47 !important
+    }
+
+    #logo {
+        float: left;
+        display: block
+    }
+
+    #logo img {
+        width: 136px;
+        margin-top: 10px
+    }
+
+    .trcenter {
+        text-align: center
+    }
+
+    .invoice {
+        width: 453px;
+        display: block;
+        clear: both;
+        margin-left: 119px
+    }
+
+    .invoice-number {
+        float: left;
+        padding-left: 37px;
+    }
+
+    .order-type {
+        float: right;
+        text-align: right
+    }
+
+    .right {
+        text-align: right
+    }
+
+    .detail {
+        width: 587px
+    }
+
+    .detail .col1 {
+        width: 140px;
+        float: left;
+    }
+
+    .detail .col1-1 {
+        width: 70px;
+        float: left;
+    }
+
+    .detail .col2 {
+        width: 374px;
+        float: left
+    }
+
+    .detail .col2 span {
+        font-weight: bold
+    }
+
+    .detail .col2-1 {
+        width: 140px;
+        float: left
+    }
+
+    .detail .col2-1 span {
+        font-weight: bold
+    }
+
+    .detail .col2-2 {
+        width: 230px;
+        float: left
+    }
+
+    .detail .col2-2 span {
+        font-weight: bold
+    }
+
+    .detail .col3 {
+        width: 150px;
+        float: left
+    }
+
+    .detail .col3 span {
+        font-weight: bold;
+    }
+
+    .clear {
+        clear: both
+    }
+
+    .colleft {
+        float: left;
+        width: 300px;
+    }
+
+    .colright {
+        float: right;
+        width: 165px
+    }
+
+    .vat {
+        width: 435px !important;
+        float: right !important
+    }
+
+    #vatnumber {
+        clear: both
+    }
+
+    #vatnumber .sn {
+        width: 54px;
+        border: 1px solid black;
+        height: 14px;
+        float: left
+    }
+
+    .marksn {
+        float: left;
+        border-left: 1px solid black;
+        font-weight: bold;
+        padding-left: 3px
+    }
+
+    .order {
+        float: left;
+        margin-left: 10px
+    }
+
+    .order .sn {
+        width: 5px;
+        height: 10px;
+        border: 1px solid black;
+        float: left;
+        margin-left: 5px
+    }
+
+    .order .alert {
+        margin-left: 16px;
+        margin-bottom: 4px
+    }
+
+    .title small {
+        float: right;
+        font-weight: normal;
+        font-size: 8px;
+        padding-right: 2em;
+    }
+
+    .title_bank {
+        width: 600px;
+        text-align: center;
+        height: 30px;
+        font-size: 10px;
+        line-height: 30px;
+        background-color: #1caf47;
+    }
+
+    .tablehead{
+        width: 600px;
+        border-color: none;
+    }
+
+    .not_show {}
+
+    .not_show_sumary {
+        display: none;
+    }
+
+    input[type="text"] {
+        display: block;
+        margin: 0px;
+        font-family: time new roman;
+        font-weight: bold;
+        text-align: center;
+        font-size: 10px;
+        border: none;
+    }
+
+    .model {
+        font-size: 8px !important;
+        text-transform: uppercase;
+    }
+
+    .imgbutton1 {
+        max-width: 20%;
+        height: 10%;
+        cursor: pointer;
+        float: right;
+    }
+
+    .imgbutton2 {
+        max-width: 20%;
+        height: 10%;
+        cursor: pointer;
+        float: left;
+    }
+
+    .print {
+        max-width: 35px !important;
+    }
+
+    .scroll {
+        overflow: hidden;
+    }
+
+    .number {
+        width: 10px;
+    }
+
+    .total_price {
+        width: 265px;
+        margin-left: 330px;
+    }
+
+    .alert {
+        color: red;
+        font-size: 18px
+    }
+
+    .blockOverlay {
+        z-index: 10000 !important;
+    }
+
+    .blockPage {
+        z-index: 10001 !important;
+    }
+
+    body {
+        font-family: phetsarath ot;
+        font-
+    }
+    </style>
+
+    <script type="text/javascript">
+    var i = 0;
+    var soluong = 0;
+    var tSoluong = 0;
+    var tTotal = 0;
+    var dongia = 0;
+
+    function expand(id) {
+        var len = document.getElementById(id).value.length;
+        document.getElementById(id).size = len + 1;
+    }
+
+    function number(value) {
+        soluong = value;
+        tSoluong = parseInt(tSoluong) + parseInt(soluong);
+    }
+
+    function price(value) {
+        dongia = value;
+
+        var total = dongia * soluong;
+        tTotal = parseInt(tTotal) + parseInt(total);
+        document.getElementById('price' + i).value = total;
+        document.getElementById('subNumber').value = tSoluong;
+        document.getElementById('subTotal').value = tTotal;
+    }
+
+    function displayResult() {
+        var table = document.getElementById("myTable");
+        var row = table.insertRow(i + 1);
+        var cell1 = row.insertCell(0);
+        var cell2 = row.insertCell(1);
+        var cell3 = row.insertCell(2);
+        var cell4 = row.insertCell(3);
+        var cell5 = row.insertCell(4);
+        var cell6 = row.insertCell(5);
+        var cell7 = row.insertCell(6);
+        var cell8 = row.insertCell(7);
+
+        cell1.innerHTML = i + 1;
+        i++;
+        cell2.innerHTML =
+            '<input type="text" name="goods_name" value="" style="width:95px;overflow:hidden;font-size:8px;" onkeyup = "expand(this.id)" >';
+        cell3.innerHTML = '<input class="model" type="text" name="goods_name" value="" style="width:113px;">';
+        cell4.innerHTML = '<input type="text" name="goods_name" value="" style="width:36px;" >';
+        cell5.innerHTML =
+            '<input type="text" name="goods_name" class="number"  value="" style="width:18px;margin: auto;" onblur="number(this.value);" >';
+        cell6.innerHTML = '<input type="text" name="goods_name" id="dongia' + i +
+            '" value="" onblur="price(this.value);" style="width:45px;" >';
+        cell7.innerHTML = '<input type="text" name="goods_name" id="price' + i +
+        '"   style="width:50px;margin:auto;" >';
+        cell8.innerHTML = '<input type="text" name="goods_name" value="" style="width:86px;" >';
+    }
+
+    function Print() {
+        $(".imgbutton").remove();
+        window.print();
+    }
+    </script>
+</head>
+
+<body>
+    <?php
+$total_num = $total_price = $total_total = $total_spc_discount = 0;
+foreach ($this->sales as $item):
+    $sale = $item['sale'];
+    $total_num += $sale['num'];
+    $total_price += decimal_remove_comma($sale['price']);
+    $total_total += decimal_remove_comma($sale['total']);
+    $total_discount_ext = decimal_remove_comma($sale['total_spc_discount']*-1);
+
+
+endforeach;
+?>
+    <?php
+
+function decimal_remove_comma($priceFloat)
+{
+    $price = str_replace(",","",$priceFloat);;
+    return $price;
+}
+
+function product_price($priceFloat) {
+    $symbol = ' THB';
+    $symbol_thousand = ',';
+    $decimal_place = 2;
+    $price = number_format($priceFloat, $decimal_place, '.', $symbol_thousand);
+    return $price;
+}
+
+function cal_sale_off_percent($sale_off_percent,$price,$num,$price_total){
+
+    //$sale_off =(100-$percent_sale_off)*0.01;
+    //$price_sale_off=($price*$sale_off);
+    if($sale_off_percent>0){
+        //$price_sale_off=$price_total/$num;
+        $price_sale_off = $price - (($price*$sale_off_percent/100)*100)/100;
+
+    }else{
+        $price_sale_off = $price;
+    }
+    return $price_sale_off;
+}
+
+function product_price_full($priceFloat) {
+    $symbol = ' THB';
+    $symbol_thousand = ',';
+    $decimal_place = 2;
+    $price = number_format($priceFloat, $decimal_place, '.', $symbol_thousand);
+    return $price;
+}
+
+function format_number_4($num){
+    //$a = 5678.56789;
+    //$res = substr($num,0,strpos($num,'.')+3); 
+    //return decimal_remove_comma($res);
+   return decimal_remove_comma(number_format($num, 2));
+}
+
+function format_number_2($num){
+   return decimal_remove_comma(number_format($num, 2));
+}
+
+function ext_vat($num){
+   return $num/1.07;
+}
+
+
+?>
+
+    <?php
+    
+
+    $delivery_fee=$this->sales[0]['sale']['delivery_fee'];
+   // $total_discount = decimal_remove_comma($this->total_discount);
+
+    $sn_ref = '';
+    if(isset($this->sales[0]['sale']['sn_ref'])){
+        $sn_ref=$this->sales[0]['sale']['sn_ref'];
+    }
+    if($sn_ref==''){
+        $sn_ref=$this->sn;
+    }
+
+    $payment_type='';
+
+    if(isset($this->sales[0]['sale']['payment_type']) && $this->sales[0]['sale']['payment_type']){
+
+        switch ($this->sales[0]['sale']['payment_type']) {
+            case 'CA':
+                $payment_type=' (เงินสด)';
+                break;
+            case 'CR':
+                $payment_type=' (เงินเชื่อ)';
+                break;
+        }
+        // $payment_type=' ('.$this->sales[0]['sale']['payment_type'].')';
+    }
+
+    $invoice_number=$this->sales[0]['sale']['invoice_number'];
+    if($invoice_number==''){
+        $invoice_number=$this->inv_sn;
+    }
+    //  show trackin_no
+    $tracking_no = $this->sales[0]['sale']['tracking_no'];
+    if($tracking_no == ''){
+        $tracking_no = '-';
+    }
+
+    $staff_code = $this->sales[0]['sale']['staff_code'];
+    if($staff_code == '' || $staff_code == '0'){
+        $staff_code = '-';
+    }
+
+    $sales_order_no_po=$this->sales[0]['Tag'];
+
+    $delivery_address=$this->sales[0]['sale']['delivery_address'];
+    if($delivery_address==''){
+        $delivery_address=$this->distributor['add_tax'];
+    }
+     
+    $list_cn='';$list_deposit='';$total_discount=0;$total_deposit=0;
+    //print_r($this->sales[0]['credit_note_list']);
+     foreach ($this->sales[0]['credit_note_list'] as $k => $datas) 
+     {
+        $creditnote_sn = $datas['creditnote_sn'];
+        $discount = $datas['total_discount'];
+        $total_discount += $datas['total_discount'];
+
+        if($creditnote_sn!=''){
+            $list_cn .='</br>'.$creditnote_sn.'='.$discount.' B';
+           // $total_discount = $item['total_discount'];
+        }
+     }
+
+     foreach ($this->sales[0]['deposit_list'] as $k => $datas) 
+     {
+        $deposit_sn = $datas['deposit_sn'];
+        $discount = $datas['total_deposit'];
+        $total_deposit += $datas['total_deposit'];
+
+        if($deposit_sn!=''){
+            $list_deposit .='</br>'.$deposit_sn.'='.$discount.' B';
+           // $total_discount = $item['total_discount'];
+        }
+     }
+
+     $job_sn = $this->job_sn;
+    //print_r($this->sales[0]['sale']);
+    $data1 =explode(' ', date('d/m/Y h:i:s' , strtotime($this->add_time))) ;
+    $data_day =  explode('/', $data1[0]);
+    $year =  $data_day[2]+543;
+    $create_date = $data_day[0].'/'.$data_day[1].'/'.$year.' '.$data1[1];
+?>
+
+    <div id="print"> <br>
+        <img src="<?php echo HOST ?>img/print.png" title="Print" class="imgbutton1 print" onclick="Print()" id="" />
+        <img src="<?php echo HOST ?>img/return_box.png" title="Return To List" class="imgbutton2 print" onclick="close_back()" id="close" />
+    </div>
+
+    <div class="blank10"></div>
+    <div class="title">
+        <b style="font-size:25px;">ບິນຈອງສິນຄ້າ</b> <small><?php echo $this->gop ?></small></div>
+    <div class="title_bank">ບ້ານສະພານທອງໃຕ້, ເມືອງສີສັດຕະນາກ, ນະຄອນຫຼວງວຽງຈັນ. SaphanThongTai Village,
+        Sisattanak District, Vientiane ໂທ/Tel:021-228789</div><br>
+    <div class="blank10"></div>
+    <div class="warp">
+        <div class="colleft">
+            <div class="detail">
+                <div class="col12">
+
+                <table class="tablehead">
+                    <tr>
+                        <td style="width: 330px;"><b>&nbsp;&nbsp;&nbsp; ເລກບິນສັ່ງເຄື່ອງ : </b><?php echo $sn_ref . $payment_type ?></td>
+
+                        <?php if($invoice_number !=''){ ?>
+                        <td><b>ເລກບິນອອກເຄື່ອງ :</b> <?php echo $invoice_number ?></td>
+                        <?php } ?>
+                    </tr>
+                    <tr>
+                        <td style="width: 330px;"><b>&nbsp;&nbsp;&nbsp; ວັນທີ່ສັ່ງເຄື່ອງ : </b><?php echo $create_date; ?></span></td>
+                        <td><b>ປະເພດການສັ່ງເຄື່ອງ :</b> <span style="color:#1caf47; font-size:13px;"><?php echo $this->sales[0]['order_type'] ?></span></td>
+                    </tr>
+                    <tr>
+                        <td style="width: 330px;"><b>&nbsp;&nbsp;&nbsp; ຜູ້ສັ່ງເຄື່ອງ : </b><span>&nbsp;<?php echo $this->sales[0]['salesman_confirm'] ?></span></td>
+                        <td><b>ຜູ້ຢືນຢັນ :</b>  <span><?php echo $this->sales[0]['finance_confirm'] ?></span></td>
+                    </tr>
+                    <tr>
+                        <td style="width: 330px;"><b>&nbsp;&nbsp;&nbsp; ຊື່ຮ້ານຄ້າ : </b><span style="color:#1caf47; font-size:12px;"><?php echo $this->sales[0]['store_name'] ?></span></td>
+                        <td><b>ລະຫັດຮ້ານ : </b><span style="color:#1caf47; font-size:12px;"> <?php echo $this->sales[0]['store_code'] ?></span></td>
+                    </tr>
+                    <tr>
+                        <td style="width: 330px;"><b>&nbsp;&nbsp;&nbsp; ທີ່ຢູ່ : </b> <span><?php echo $this->sales[0]['store_address']; ?></span></td>
+                        <td><b>ຊື່ລູກຄ້າ : </b> <span><?php echo $this->sales[0]['store_owner']; ?>&nbsp;&nbsp;&nbsp;</span> <b>ເບີໂທ :</b> <span><?php echo $this->sales[0]['store_tel']; ?></span></td>
+                    </tr>
+
+                    <tr>
+                        <td style="width: 330px;"><b>&nbsp;&nbsp;&nbsp; ຊື່ Finance :</b>  <span><?php echo $this->distributor['distributor_code']." - ". $this->distributor['title'] ?></td>
+                        <td><b>ຊື່ສາງອອກເຄື່ອງ : <span style="color:#1caf47; font-size:14px;">&nbsp;<?php echo $this->sales[0]['warehouse_name'] ?></span></b></td>
+                    </tr>
+                </table> <br>
+
+                </div>
+            </div>
+
+            </div>
+
+            <!--row2-->
+            <!-- <div class="detail clear">
+            <div class="col1">ບໍລິສັດ :</div>  
+            <div class="col2"><span><?php echo $this->distributor['unames'] ?></span></div>   <div class="col3">
+
+                <p class="barcode"><img style="width: 180px; display:none;" src="<?php echo HOST.'photo/barcode2/'.$this->sn.'.jpg' ?>" alt="<?php echo $this->sn ?>"></p>
+
+            </div>
+        </div> -->
+
+            <!--row6 //Tanong -->
+            <?PHP 
+            $name = '';
+            if ($this->sales[0]['customer_name']) {
+                $name = $this->sales[0]['customer_name'];
+            }
+        ?>
+
+        </div>
+
+
+        <?php 
+    $phone_show=0;$accessories_show=0;$digital_show=0;
+    foreach ($this->sales as $item){
+        if ($item['category'] == 'Phone'){
+            $phone_show=1;
+        }else if ($item['category'] == 'Accessories'){
+            $accessories_show=1;
+        }else if ($item['category'] == 'Digital'){
+            $digital_show=1;
+        }elseif ($item['category'] == 'IoT') {
+            $iot_show = 1;
+        }
+    }
+
+?>
+
+
+        <?php if($phone_show==1){ ?>
+        <div class="blank10"></div>
+        <div class="blank10"></div>
+        <table class="tbllist" cellspacing="1" cellpadding="5">
+            <caption style="text-align: left; font-size: 13px;">&nbsp;&nbsp;&nbsp; ລາຍການສັ່ງເຄື່ອງ Order List</caption>
+            <tr class="trcenter green ">
+                <td>#</td>
+                <td>ລຸ້ນ</td>
+                <!-- <td>Model</td> -->
+                <td>ສີ</td>
+                <td>ຈຳນວນ</td>
+                <td>ລາຄາ/ໜ່ວຍ</td>
+                <td>ລວມ</td>
+                <td width="94">ໝາຍເຫດ</td>
+            </tr>
+            <?php $num_total = 0; ?>
+            <?php $price_total = 0; ?>
+            <?php
+    $sum_total_total =0;
+    $total_num = $total_price = $total_total = 0;$i=1;$product_unit_price=0;$product_total_price=0;
+    $g_product_total_price =0;$d_id ="";
+
+    // print_r($this->sales);
+
+    foreach ($this->sales as $item):
+        $sale = $item['sale'];
+        $d_id = $sale['d_id'];
+        // print_r($sale['sale_off_percent']);
+
+        if ($item['category'] == 'Phone'){
+            if($this->distributor['rank'] == 9)
+            {
+                $product_unit_price = product_price(format_number_4((cal_sale_off_percent($sale['good_discount'],$sale['price'],$sale['num'],$sale['total']))));
+            }else{
+                $product_unit_price = product_price(format_number_4(ext_vat(cal_sale_off_percent($sale['good_discount'],$sale['price'],$sale['num'],$sale['total']))));
+            }
+
+
+            $product_total_price = product_price($sale['num'] * decimal_remove_comma($product_unit_price));
+
+            $total_num += $sale['num'];
+            if($this->distributor['rank'] == 9)
+            {
+                $total_price += decimal_remove_comma(format_number_4((cal_sale_off_percent($sale['good_discount'],$sale['price'],$sale['num'],$sale['total']))));
+            }else{
+                $total_price += decimal_remove_comma(format_number_4(ext_vat(cal_sale_off_percent($sale['good_discount'],$sale['price'],$sale['num'],$sale['total']))));
+            }
+
+            $total_total += decimal_remove_comma($product_total_price);
+        }
+            
+        ?>
+            <?php if ($item['category'] == 'Phone'): ?>
+            <tr>
+                <td><span><?php echo $i++ ?></span></td>
+                <td style="text-align:left"><?php echo $item['brand_name'] ?> <?php echo $item['good'];?></td>
+                <!-- <td><?php echo $item['brand_name'] ?> <?php echo $item['desc'];?></td> -->
+                <td><?php echo $item['color'];?></td>
+                <td><?php echo $sale['num'];?></td>
+                <td><?php echo $product_unit_price;?></td>
+                <td><?php echo $product_total_price;?></td>
+                <td><?php echo $sale['text'];?></td>
+            </tr>
+            <?php endif ?>
+            <?php endforeach;
+    $g_product_total_price +=$total_total;
+    ?>
+
+
+
+            <tr class="green" style="font-size:12px;">
+                <td colspan="2">ລວມທັງໝົດ</td>
+                <td></td>
+                <!-- <td></td> -->
+                <td><?php echo $total_num;?></td>
+                <td></td>
+                <td><?php echo product_price($total_total);?></td>
+                <td></td>
+            </tr>
+        </table>
+        <?php } 
+
+ if($iot_show == 1){ ?>
+        <div class="blank10"></div>
+        <div class="blank10"></div>
+        <table class="tbllist" cellspacing="1" cellpadding="5">
+            <caption style="text-align: left;">IOT List</caption>
+            <tr class="trcenter green ">
+                <td>#</td>
+                <td>ລະຫັດສິນຄ້າ</td>
+                <td>Model</td>
+                <td>ສີ</td>
+                <td>ຈຳນວນ</td>
+                <td>ລາຄາ/ໜ່ວຍ</td>
+                <td>ລວມ</td>
+                <td width="94">ໝາຍເຫດ</td>
+            </tr>
+            <?php $num_total = 0; ?>
+            <?php $price_total = 0; ?>
+            <?php
+    $sum_total_total =0;
+    $total_num = $total_price = $total_total = 0;$i=1;$product_unit_price=0;$product_total_price=0;
+    $g_product_total_price =0;$d_id ="";
+    foreach ($this->sales as $item):
+        $sale = $item['sale'];
+        $d_id = $sale['d_id'];
+        //print_r($sale['sale_off_percent']);
+
+        if ($item['category'] == 'IoT'){
+            if($this->distributor['rank'] == 9)
+            {
+                $product_unit_price = product_price(format_number_4((cal_sale_off_percent($sale['sale_off_percent'],$sale['price'],$sale['num'],$sale['total']))));
+            }else{
+                $product_unit_price = product_price(format_number_4(ext_vat(cal_sale_off_percent($sale['sale_off_percent'],$sale['price'],$sale['num'],$sale['total']))));
+            }
+
+
+            $product_total_price = product_price($sale['num'] * decimal_remove_comma($product_unit_price));
+
+            $total_num += $sale['num'];
+            if($this->distributor['rank'] == 9)
+            {
+                $total_price += decimal_remove_comma(format_number_4((cal_sale_off_percent($sale['sale_off_percent'],$sale['price'],$sale['num'],$sale['total']))));
+            }else{
+                $total_price += decimal_remove_comma(format_number_4(ext_vat(cal_sale_off_percent($sale['sale_off_percent'],$sale['price'],$sale['num'],$sale['total']))));
+            }
+
+            $total_total += decimal_remove_comma($product_total_price);
+        }
+            
+        ?>
+            <?php if ($item['category'] == 'IoT'): ?>
+            <tr>
+                <td><span><?php echo $i++ ?></span></td>
+                <td><?php echo $item['good'];?></td>
+                <td><?php echo $item['desc'];?></td>
+                <td><?php echo $item['color'];?></td>
+                <td><?php echo $sale['num'];?></td>
+                <td><?php echo $product_unit_price;?></td>
+                <td><?php echo $product_total_price;?></td>
+                <td><?php echo $sale['text'];?></td>
+            </tr>
+            <?php endif ?>
+            <?php endforeach;
+    $g_product_total_price +=$total_total;
+    ?>
+
+
+
+            <tr class="green">
+                <td colspan="2">ລວມທັງໝົດ</td>
+                <td></td>
+                <td></td>
+                <td><?php echo $total_num;?></td>
+                <td></td>
+                <td><?php echo product_price($total_total);?></td>
+                <td></td>
+            </tr>
+        </table>
+        <?php } 
+
+if($accessories_show==1){
+?>
+        <div class="blank10"></div>
+        <div class="blank10"></div>
+        <table class="tbllist not_show_sumary" cellspacing="1" cellpadding="5">
+            <caption style="text-align: left;">รายละเอียดส่วนลด</caption>
+            <tr class="trcenter green not_show">
+                <td>#</td>
+                <td>Campaign Name</td>
+                <td>ລະຫັດສິນຄ້າ</td>
+                <td>Model</td>
+                <td>ສີ</td>
+                <td>ຈຳນວນ</td>
+                <td>ສ່ວນລົດ/ໜ່ວຍ</td>
+                <td>ລວມ</td>
+            </tr>
+            <?php //$num_total = 0; ?>
+            <?php //$price_total = 0; ?>
+            <?php
+    //$total_num = $total_price = $total_total = 0;$i=1;
+    
+    foreach ($this->BVG as $item):
+        $row=1;
+       /* $sale = $item['sale'];
+        if ($item['category'] == 'Phone'){$total_num += $sale['num'];
+            $total_price += $sale['price'];
+            $total_total += $sale['total'];}
+
+        */  
+            $sum_discount_price=0; $sum_discount_qty=0; 
+            $sum_discount_qty=$item['qty'];
+            $sum_discount_price=decimal_remove_comma($item['sum_discount_price']);
+            //$sum_discount_price +=$sum_discount_price;
+        ?>
+            <tr>
+                <td><span><?php echo $row++ ?></span></td>
+                <td><?php echo $item['joint_circular_name'];?></td>
+                <td><?php echo $item['good_name'];?></td>
+                <td><?php echo $item['description'];?></td>
+                <td><?php echo $item['color_name'];?></td>
+                <td><?php echo $item['qty'];?></td>
+                <td><?php echo $item['discount_price'];?></td>
+                <td><?php echo $item['sum_discount_price'];?></td>
+
+            </tr>
+            <?php endforeach;?>
+
+
+
+            <tr class="green not_show">
+                <td colspan="2">ລວມทั้งหมด</td>
+                <td></td>
+                <td></td>
+                <td></td>
+                <td><?php echo $sum_discount_qty;?></td>
+                <td></td>
+                <td><?php echo $sum_discount_price;?></td>
+            </tr>
+        </table>
+        <?php } ?>
+
+        <div class="blank10"></div>
+        <!-- <div class="row">
+    <div class="span6">
+        <label class="span2">Credit Note Discount List</label>
+        <span class="span3">
+            <?php
+                echo $list_cn;
+            ?>
+        </span>
+    </div>
+</div>
+<div class="blank10"></div>
+<div class="blank10"></div>
+<div class="row">
+    <div class="span6">
+        <label class="span2">Deposit List</label>
+        <span class="span3">
+            <?php
+                echo $list_deposit;
+            ?>
+        </span>
+    </div>
+</div>  -->
+
+        <div class="blank10"></div>
+        <?php
+//echo "".$d_id;
+$d_id = $this->distributor['id'];
+
+$special_discount = 0;
+date_default_timezone_set('Asia/Bangkok');
+$date = new DateTime('2017-01-04 00:00:00');
+$date_start= date_format($date,"Y-m-d H:i:s");
+$date_order = $this->add_time;
+
+if($date_order < $date_start){
+    if ($d_id=='3691' || $d_id=='3025')
+    {
+        $ext_vat_delivery=format_number_4(ext_vat($delivery_fee));
+        $total_discount_ext = (($g_product_total_price+$ext_vat_delivery) *0.01)*-1;
+        $ext_vat_total_amount= decimal_remove_comma(product_price($ext_vat_delivery+$g_product_total_price+$total_discount_ext));
+        $vat_amount = ($ext_vat_total_amount*1.07)-$ext_vat_total_amount;
+        $in_vat_price_discount=$total_discount*-1;
+        $in_vat_price_deposit=$total_deposit*-1;
+
+        $in_vat_total_amount = decimal_remove_comma(product_price($vat_amount))+decimal_remove_comma(product_price($ext_vat_total_amount));
+        $in_vat_total_amount_total= $in_vat_total_amount - $total_discount - $total_deposit;
+    }else if ($this->distributor['rank'] == 9){
+        $ext_vat_delivery=format_number_4(($delivery_fee));
+        $total_discount_ext = 0;
+        $ext_vat_total_amount= decimal_remove_comma(product_price($ext_vat_delivery+$g_product_total_price));
+        $vat_amount = ($ext_vat_total_amount)-$ext_vat_total_amount;
+        $in_vat_price_discount=$total_discount*-1;
+        $in_vat_price_deposit=$total_deposit*-1;
+
+        $in_vat_total_amount = decimal_remove_comma(product_price($vat_amount))+decimal_remove_comma(product_price($ext_vat_total_amount));
+        $in_vat_total_amount_total= ($ext_vat_total_amount+$vat_amount) - $total_discount - $total_deposit;
+    }else{
+        $ext_vat_delivery=format_number_4(ext_vat($delivery_fee));
+        $total_discount_ext = 0;
+        $ext_vat_total_amount= decimal_remove_comma(product_price($ext_vat_delivery))+decimal_remove_comma(product_price($g_product_total_price));
+        $vat_amount = $ext_vat_total_amount*1.07-$ext_vat_total_amount;
+        $in_vat_price_discount=$total_discount*-1;
+        $in_vat_price_deposit=$total_deposit*-1;
+        $in_vat_total_amount = decimal_remove_comma(product_price($vat_amount))+decimal_remove_comma(product_price($ext_vat_total_amount));
+
+        $in_vat_total_amount_total= $in_vat_total_amount - $total_discount - $total_deposit;
+
+        if($in_vat_total_amount_total<=0){
+            $in_vat_total_amount_total=0;
+        }
+    }
+}else{
+
+        if ($this->distributor['rank'] == 9){
+            $ext_vat_delivery=format_number_4(($delivery_fee));
+            $total_discount_ext = 0;
+            $ext_vat_total_amount= decimal_remove_comma(product_price($ext_vat_delivery+$g_product_total_price));
+            $vat_amount = ($ext_vat_total_amount)-$ext_vat_total_amount;
+            $in_vat_price_discount=$total_discount*-1;
+            $in_vat_price_deposit=$total_deposit*-1;
+
+            $in_vat_total_amount = decimal_remove_comma(product_price($vat_amount))+decimal_remove_comma(product_price($ext_vat_total_amount));
+            $in_vat_total_amount_total= ($ext_vat_total_amount+$vat_amount) - $total_discount - $total_deposit;
+        }else{
+            $ext_vat_delivery=format_number_4(ext_vat($delivery_fee));
+            $ext_vat_total_amount= decimal_remove_comma(product_price($ext_vat_delivery+$g_product_total_price+$total_discount_ext));
+            $vat_amount = ($ext_vat_total_amount*1.07)-$ext_vat_total_amount;
+
+            $in_vat_price_discount=$total_discount*-1;
+            $in_vat_price_deposit=$total_deposit*-1;
+
+            $in_vat_total_amount = decimal_remove_comma(product_price($vat_amount))+decimal_remove_comma(product_price($ext_vat_total_amount));
+
+            $in_vat_total_amount_total= $in_vat_total_amount - $total_discount - $total_deposit;
+        }
+}
+
+    if($in_vat_total_amount_total<=0)
+    {
+        $in_vat_total_amount_total=0;
+    }
+
+
+?>
+
+        <!--
+<div class="total_price">
+     <div align="right"  style="font-weight:bold">
+        <div class="clear" style="margin-top: 3%;"> </div>
+        
+        <div class="clear">
+            ມູນຄ່າສິນຄ້າກ່ອນ VAT : <label id="total_total" name="total_total"><?=product_price($g_product_total_price)?></label></div> 
+        <div > ບວກຄ່າຈັດສົ່ງກ່ອນ VAT : <label id="ext_vat_delivery" name="ext_vat_delivery"><?=product_price($ext_vat_delivery)?></label></div>
+        <div class="not_show_sumary"> ສ່ວນຫຼູດບິນ(ມູນຄ່າກ່ອນ VAT) : <label id="ext_sum_discount_price" name="ext_sum_discount_price"><?=product_price($ext_vat_price_discount)?></label></div>
+        
+        <div class="clear" >
+            ສ່ວນຫຼູດພິເສດ : <label id="total_total" name="total_total"><?=product_price($total_discount_ext)?></label></div> 
+        <div> ມູນຄ່າສິນຄ້າທັງໝົດ : <label id="sum_discount_price" name="sum_discount_price"><?=product_price($ext_vat_total_amount)?></label></div>
+        <div> ພາສີ 0% : <label id="vat_amount" name="vat_amount"><?=product_price($vat_amount)?></label></div>
+        <div> ມູນຄ່າລວມ VAT : <label id="total_amount" name="total_amount"><?=product_price($in_vat_total_amount)?></label></div>
+        <div> ..........................................................</div>        
+        <div> ຫັກ ສ່ວນຫຼູດບິນ : <label id="sum_discount_price" name="sum_discount_price"><?=product_price($in_vat_price_discount)?></label></div>
+        <div> ຫັກ ເງິນມັດຈຳ : <label id="sum_deposit_price" name="sum_deposit_price"><?=product_price($in_vat_price_deposit)?></label></div>
+        <div class="not_show_sumary"> ບວກຄ່າຈັດສົ່ງ : <label id="in_vat_delivery" name="in_vat_delivery"><?=product_price($delivery_fee)?></label></div>
+        <div> ຍອດເງິນທີ່ຕ້ອງຊຳລະ : <label id="priceall" name="priceall"><?=product_price($in_vat_total_amount_total)?></label></div>
+   </div>
+</div>
+-->
+
+        <!-- <div class="barcode" >
+           <?PHP 
+           $barbode_data = $this->barcode;
+           $total01 = product_price($in_vat_total_amount_total);  
+           $total02 = explode(',', $total01);
+           if (count($total02)==1) {
+               $total03 = $total02[0];
+           }elseif (count($total02)==2) {
+               $total03 = $total02[0].$total02[1];
+           }elseif (count($total02)==3) {
+               $total03 = $total02[0].$total02[1].$total02[2];
+           }elseif (count($total02)==4) {
+               $total03 = $total02[0].$total02[1].$total02[2].$total02[3];
+              
+           }
+           $total04 = explode('.', $total03);
+           // $total05 = $total04[0].$total04[1];
+           $total05 = 0;
+
+           $code = $barbode_data.'%0D'.$total05;
+           $code_show = $this->barcode_show.' '.$total05;
+           ?> 
+            <div class="barcode" style="width: 390px;margin: 0 auto;">
+                <p><img  src="<?=HOST?>public/barcodegen/BCGcode128.php?code=<?=$code?>" style="margin-top:5px; color:#000"/></p>
+                <p style="width: 225px;margin: 0 auto;font-size: 12px;margin-top: -8px;"><?=$code_show?></p>
+            </div>
+</div> -->
+    </div>
+
+    <div class="blank10"></div>
+    <script src="/js/jquery.blockUI.js"></script>
+    <script type="text/javascript">
+    $(document).ready(function() {
+
+        <?php if(strlen($sn_ref) == 18){ ?>
+
+        $.blockUI({
+            css: {
+                border: 'none',
+                padding: '15px',
+                backgroundColor: '#000',
+                '-webkit-border-radius': '10px',
+                '-moz-border-radius': '10px',
+                opacity: .5,
+                color: '#fff'
+            }
+        });
+
+        $('.blockUI h1').append('<br/><progress value="0" max="3" id="progressBar"></progress>');
+
+        $.get('<?=HOST?>cron/gen-sn-ref', function(data) {
+            var timeleft = 3;
+            var downloadTimer = setInterval(function() {
+                document.getElementById("progressBar").value = 3 - --timeleft;
+                if (timeleft <= 0) {
+                    clearInterval(downloadTimer);
+                    location.reload();
+                }
+            }, 1000);
+        });
+
+        <?php } ?>
+
+    });
+
+    function Print() {
+        window.print();
+    }
+
+    function close_back() {
+        window.location = "/sales";
+    }
+    </script>
+</body>
+
+</html>

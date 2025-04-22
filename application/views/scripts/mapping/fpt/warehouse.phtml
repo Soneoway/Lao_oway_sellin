@@ -1,0 +1,68 @@
+<div class="page-header">
+    <h1>Warehouse Mapping <small>For FPT</small></h1>
+</div>
+<?php
+    if (isset($this->messages_success) and $this->messages_success)
+        foreach ($this->messages_success as $message):
+            echo '<div class="alert alert-success">'.$message.'</div>';
+        endforeach;
+
+    if (isset($this->messages) and $this->messages)
+        foreach ($this->messages as $message):
+            echo '<div class="alert alert-error">'.$message.'</div>';
+        endforeach;
+?>
+<div class="row">
+    <div class="span12">
+        <span class="pull-right">
+            <button class="btn-success" type="button" onclick="window.location='<?php echo HOST ?>mapping/fpt-warehouse-edit'">
+                <i class="icon-plus"></i>
+            </button>
+        </span>
+    </div>
+</div>
+<div class="row">
+    <div class="span12">
+        <table class="table table-bordered">
+            <thead>
+                <tr>
+                    <?php echo $this->sorting(array(
+                        '#',
+                        'area_name'      => 'FPT Area',
+                        'warehouse_name' => 'OPPO Warehouse',
+                        'Action'
+                    ),
+                    $this->url, $this->sort, $this->desc); ?>
+                </tr>
+            </thead>
+            <tbody>
+                <?php if (isset($this->mapping) && $this->mapping): ?>
+                    <?php foreach ($this->mapping as $key => $value): ?>
+                        <tr>
+                            <td><?php
+                                    $inc = $this->offset + $key + 1;
+                                    echo $inc;
+                                ?>
+                            </td>
+                            <td><?php echo $value['name'] ?></td>
+                            <td>
+                                <?php echo $value['warehouse_name'] ?>
+                            </td>
+                            <td>
+                                <a title="Edit" href="<?php echo HOST ?>mapping/fpt-warehouse-edit?id=<?php echo $value['id'];?>"> <i class="icon-edit"></i></a>
+                                <a title="Delete" class="confirmLink" href="<?php echo HOST ?>mapping/fpt-warehouse-delete?id=<?php echo $value['id'];?>"> <i class="icon-trash"></i></a>
+                            </td>
+                        </tr>
+                    <?php endforeach ?>
+                <?php endif ?>
+            </tbody>
+        </table>
+        <div class="paging">
+            <?php echo $this->paging($this->total, $this->limit, $this->offset, $this->url);?>
+        </div>
+    </div>
+</div>
+
+<script type="text/javascript" src="<?php echo HOST ?>js/jquery-ui-1.8.12.custom.min.js"></script>
+<link rel="stylesheet" type="text/css" href="<?php echo HOST ?>css/jquery-ui-1.8.12.custom.css"/>
+<?php echo $this->confirm();?>

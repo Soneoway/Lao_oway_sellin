@@ -1,0 +1,286 @@
+<?php  if(isset($this->res) && $this->res): ?>
+	<table class="table table-striped">
+		<thead>
+			<tr>
+				<th style="text-align:center;">#</th>
+				<th style="text-align:center;">SN</th>
+				<th style="text-align:center;">Model</th>
+				<th style="text-align:center;">Color</th>
+				<th style="text-align:center;">IN Date</th>
+				<th style="text-align:center;">OUT Date</th>
+				<th style="text-align:center;">Activated Date</th>
+				<th style="text-align:center;">PO sn</th>
+				<th style="text-align:center;">SO sn</th>
+				<th style="text-align:center;">RO sn</th>
+				<th style="text-align:center;">DO sn</th>
+				<th style="text-align:center;">CO sn</th>
+				<!-- <th>CN For Price Protection</th> -->
+
+			<!-- <th>Round Protection Price</th>
+				<th>Protection Price</th> -->
+
+				<th style="text-align:center;"> Imei Lock </th>
+				<th style="text-align:center;"> Timing </th>
+
+				<!-- <th style="text-align:center;">Area</th> -->
+				<th style="text-align:center;">Provience</th>
+				<th style="text-align:center;"><font color="red"><span style="font-size:11px;">Warehouse(ສາງ)</font><font color="green">Store(ຮ້ານຄ້າ)</span></font></th>
+
+
+
+<!-- 				<th>Distributor</th>
+				<th>Warehouse</th> -->
+
+				<!-- <th style="text-align:center;">Order Type</th> -->
+				<!-- <th>OUT Pirce</th> -->
+				<th style="text-align:center;">IMEI Status</th>
+				<th style="text-align:center;">Product Type</th>
+			</tr>
+		</thead>
+		<tbody>
+			<?php $i = $this->offset + 1; ?>
+			<?php foreach ($this->res as $k => $v): 
+				
+			$QRegionalmarket = new Application_Model_RegionalMarket();
+			$QArea = new Application_Model_Area();
+			$QDistributor = new Application_Model_Distributor();
+
+			$where = $QDistributor->getAdapter()->quoteInto('id = ?',$v['imei']['distributor_id']);
+			$distributor_data = $QDistributor->fetchRow($where);
+
+			$where2 = $QRegionalmarket->getAdapter()->quoteInto('id = ?',$distributor_data['region']);
+			$regional_market_data = $QRegionalmarket->fetchRow($where2);
+
+			$where3 = $QArea->getAdapter()->quoteInto('id = ?',$regional_market_data['area_id']);
+			$area_data = $QArea->fetchRow($where3);
+
+				?>
+				<tr>
+					<td><?php echo $i++; ?></td>
+					<td><?php echo $k ?></td>
+					<?php if (gettype($v) == 'string'): ?>
+					<td colspan="11"><?php echo $v ?></td>
+					<?php else: ?>
+						<td>
+							<?php       $QBrand = new Application_Model_Brand();
+                						$brands = $QBrand->getBrand($v['imei']['good_id']);
+                 			?>
+					
+							
+							<?php echo $brands[0]['brand_name']; ?> <?php echo ( !empty($this->goods[$v['imei']['good_id']] ) ? $this->goods[$v['imei']['good_id']] : '-' ) ?>
+								
+						</td>
+						<td><?php echo ( !empty( $this->good_colors[$v['imei']['good_color']] ) ? $this->good_colors[$v['imei']['good_color']] : '-' ) ?></td>
+						<td><?php echo $v['imei']['into_date'] ?></td>
+						<td><?php echo (!empty($v['imei']['out_date']) ? $v['imei']['out_date'] : '-') ?></td>
+						<td><?php echo (!empty($v['imei']['activated_date']) ? $v['imei']['activated_date'] : '-') ?></td>
+						<?php
+						$po_sn=$v['po']['sn_ref'];
+						$so_sn=$v['so']['sn_ref'];
+						$return_sn=$v['return_ref']['sn_ref'];
+						$ret_creditnote_sn=$v['return_ref']['creditnote_sn'];
+						$change_distributor=$v['change_distributor']['do_number'];
+						$prt_creditnote_sn=$v['price_protection']['creditnote_sn'];
+						
+						/*if($prt_creditnote_sn !=''){
+							$creditnote_sn=$prt_creditnote_sn;
+						}
+						if($ret_creditnote_sn !=''){
+							if($prt_creditnote_sn !='' && $ret_creditnote_sn !=''){
+								$creditnote_sn=$ret_creditnote_sn.'/'.$prt_creditnote_sn;
+							}else{
+								$creditnote_sn=$ret_creditnote_sn;
+							}
+						}
+						*/
+
+						if($ret_creditnote_sn==''){
+							$ret_creditnote_sn = '-';
+						}
+
+						if($change_distributor==''){
+							$change_distributor = '-';
+						}
+
+						if($prt_creditnote_sn==''){
+							$prt_creditnote_sn = '-';
+						}
+						?>
+						<td><?php echo $po_sn; ?></td>
+						<td><?php echo (!empty($v['imei']['sales_sn']) ? $so_sn : '-') ?></td>
+						<td><?php echo (!empty($v['imei']['return_sn']) ? $return_sn : '-') ?></td>
+						
+						<td><?php echo $change_distributor; ?></td>
+						<!-- <td><?php echo $prt_creditnote_sn; ?></td> -->
+						<td><?php echo (!empty($v['co']['sn_ref']) ? $v['co']['sn_ref'] : '-') ?></td>
+
+						<!-- <td><?=$v['round_bvg'];?></td>
+							<td><?=$v['sum_bvg_price'];?></td> -->
+
+							<td>
+								<?php if($v['lock'] !='') { ?>
+									<div style="background-color: green; border-radius: 50px; text-align: center; width: 50px;">
+										<span style="font-style: normal; color: white;">Yes</span>
+									</div>
+								<?php }else{ ?>
+									<div style="background-color: red; border-radius: 50px; text-align: center; width: 50px;">
+										<span style="font-style: normal; color: white;">No</span>
+									</div>
+								<?php };?>
+							</td>
+							<td><?php if($v['timing'] !='') { ?>
+								<div style="background-color: green; border-radius: 50px; text-align: center; width: 50px;">
+									<span style="font-style: normal; color: white;">Yes</span>
+								</div>
+							<?php }else{ ?>
+								<div style="background-color: red; border-radius: 50px; text-align: center; width: 50px;">
+									<span style="font-style: normal; color: white;">No</span>
+								</div>
+							<?php };?>
+							</td>
+
+						<!-- <td><?php echo (!empty($area_data['name']) ? $area_data['name'] : '-'); ?></td> -->
+						<td><?php echo (!empty($regional_market_data['name']) ? $regional_market_data['name'] : '-'); ?></td>
+
+						<td>
+						<font color="red">
+							<?php if(isset($v['imei']['warehouse_id'])): ?>
+								<p>
+									<?php if( isset($this->warehouses[ $v['imei']['warehouse_id'] ]) ) echo $this->warehouses[ $v['imei']['warehouse_id'] ];  ?>
+								</p>
+							<?php endif ?>
+						</font>
+						<font color="green">
+							<p>
+								<!-- <?php echo ( !empty( $this->distributors[$v['imei']['distributor_id']]['title'] ) ? $this->distributors[$v['imei']['distributor_id']]['title'] : '' ) ?> -->
+
+								<?php echo ( !empty( $v['store']['name'] ) ? $v['store']['name'] : '' ) ?>
+								<?php echo !empty($v['store']['name']) ? "(".$v['store']['store_code']." )" : ''; ?>
+
+
+								<!-- <?php echo ( !empty( $this->distributors[$v['imei']['distributor_id']]['title'] ) ? $this->distributors[$v['imei']['distributor_id']]['title'] : '' ) ?> --> 
+								<!-- <?php echo !empty($v['imei']['distributor_id']) ? "(ID = ".$v['imei']['distributor_id'].")" : ''; ?> -->
+							</p>
+						</font>
+					</td>
+					<!-- <td>
+						<?php if (!empty($v['so'])): ?>
+							
+							<?PHP
+							switch($v['so']['type']){
+								case 1:
+								echo 'Normal';
+								break;
+
+								case 2:
+								echo 'APK';
+								break;
+								case 5:
+								echo 'DEMO';
+								break;
+								default:
+								echo 'Staff';
+								break;
+								
+							}
+							?>				
+
+						<?php endif ?>               
+					</td> -->
+					<td>
+						<?php if ( isset( $v['imei']['status'] ) ): ?>
+							<?php switch ( $v['imei']['status'] ) {
+								case '1':
+								echo 'OK';
+								break;
+								case '2':
+								echo 'Processing';
+								break;
+								case '3':
+								echo 'Lost';
+								break;
+								case '4':
+								echo 'On Changing';
+								break;
+								default:
+								echo 'n/a';
+								break;
+							} ?>
+						<?php endif ?>
+					</td>
+					<td>
+						<?php
+						if (!empty($v['imei']['type'])){
+							switch($v['imei']['type']){
+								case 1:
+								echo 'Normal';
+								break;
+								case 2:
+								echo 'APK';
+								break;
+								case 5:
+								echo 'DEMO';
+								break;
+								case 3:
+								echo 'Staff';
+								break;
+							}
+						}
+						?>
+					</td>
+				<?php endif; ?>
+			</tr>
+		<?php endforeach ?>
+	</tbody>
+</table>
+<div class="paging">
+	<?php echo $this->paging($this->total, $this->limit, $this->offset, $this->url);?>
+</div>
+<script>
+	$(document).ready(function(){
+		page();
+	});
+
+	function page() {
+		$('a.paging-link').click(function(e){
+			e.preventDefault();
+
+			_self = $(this);
+			_self.parents('ul').after('<span class="loading"></span>');
+			imei = $('#imei').val();
+			url = _self.attr('href');
+			params = url.split('?');
+			if (params.length == 1) {
+				page = 1;
+			} else {
+				params = params[1].split('&');
+				for (i = 0; i < params.length; i++) {
+					pair = params[i].split('=');
+					if (pair[0] == 'page') {
+						page = pair[1];
+						break;
+					}
+				}
+
+				if (page === undefined) {
+					page = 1;
+				}
+			}
+
+			$.post(
+				"<?php echo HOST . 'tool/check-imei'?>",
+				{
+					value : imei,
+					page : page,
+					is_check : 1
+				},
+				function(data){
+					$('.ajax-load').html(data);
+					_self.nextAll('ul .loading').remove();
+				});
+
+			return false;
+		});
+	}
+</script>
+<?php endif; ?>

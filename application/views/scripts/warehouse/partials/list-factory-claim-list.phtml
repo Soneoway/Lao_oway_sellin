@@ -1,0 +1,144 @@
+
+<!-- Modal -->
+  <div class="modal fade" id="myModal" role="dialog">
+    <div class="modal-dialog">
+    
+      <!-- Modal content-->
+      <div class="modal-content">
+        <div class="modal-header">
+          <button type="button" class="close" data-dismiss="modal">&times;</button>
+          <h4 class="modal-title">Delete</h4>
+        </div>
+        <div class="modal-body">
+          Remark : <input type="text" id="modal-remark">
+          <input type="hidden" id="modal-id" value="">
+        </div>
+        <div class="modal-footer">
+          <button type="button" class="btn btn-info btn-del" data-dismiss="modal">Save</button>
+          <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+        </div>
+      </div>
+      
+    </div>
+  </div>
+
+<table class="table table-bordered">
+    <thead>
+        <tr>
+            <?php echo $this->sorting(array(
+					'#',
+                    'job_number' => 'Job Number',
+                    'old_imei' => 'Old IMEI',
+                    'old_good_model' => 'Old Product Model',
+                    'old_good' => 'Old Product Name',
+                    'old_good_color' => 'Old Product Color',
+                    'new_imei' => 'New IMEI',
+                    'new_good_model' => 'New Product Model',
+                    'new_good' => 'New Product Name',
+                    'new_good_color' => 'New Product Color',
+                    'warehouse' => 'Warehouse',
+                    'remark' => 'Remark',
+                    'created_date' => 'Request Date',
+                    'fullname' => 'Request By',
+                    'status' => 'Status',
+                    'Action
+'                ),
+                $this->url, $this->sort, $this->desc); ?>
+        </tr>
+    </thead>
+    <tbody>
+        <?php if (isset($this->data) and $this->data) :
+            foreach ($this->data as $key => $value):
+                
+        ?>
+            <tr>
+                <td><?=($key+1)?></td>
+                <td><?=$value['job_number']?></td>
+                <td><?=$value['old_imei']?></td>
+                <td><?=$value['old_good_model']?></td>
+                <td><?=$value['old_good']?></td>
+                <td><?=$value['old_good_color']?></td>
+                <td><?=$value['new_imei']?></td>
+                <td><?=$value['new_good_model']?></td>
+                <td><?=$value['new_good']?></td>
+                <td><?=$value['new_good_color']?></td>
+                <td><?php if(isset($this->warehouse_cache[$value['warehouse']])){echo $this->warehouse_cache[$value['warehouse']]; }?></td>
+                <td><?=$value['remark']?></td>
+                <td><?=$value['created_date']?></td>
+                <td><?=$value['fullname']?></td>
+                <td><?php switch ($value['status']) {
+                    case '0':
+                        echo 'Delected';
+                        break;
+                    case '1':
+                        echo 'Wait Approve';
+                        break;
+                    case '2':
+                        echo '<span style="color:green;">Approved</span>';
+                        break;
+                    case '3':
+                        echo '<span style="color:red;cursor:help;" title="' . $value['fullname_cancel'] . ' : ' . $value['del_remark'] . '">Cancel</span>';
+                        break;
+                    case '4':
+                        echo 'Input Money';
+                        break;
+                    case '5':
+                        echo 'Get Money';
+                        break;
+                } ?></td>
+                <td style="text-align: center;">
+                    <?php if($value['status'] == 1){ ?>
+                    <a href="#" title="Cancel" class="del"  data-id="<?=$value['factory_claim_id']?>"> <i class="icon-eraser"></i></a>
+                    <?php } ?>
+                </td>
+            </tr>
+
+            <?php endforeach;?>
+        <?php endif; ?>
+    </tbody>
+</table>
+                
+<div class="paging">
+    <?php echo $this->paging($this->total, $this->limit, $this->offset, $this->url);?>
+</div>
+
+<script>
+
+    $( document ).ready(function() {
+
+        $(".del").click(function(){
+
+            $("#myModal").modal();
+            $('#modal-id').val($(this).data('id'));
+        });
+
+        $('.btn-del').click(function(event) {
+            
+            $.ajax({
+                url: '<?php echo HOST.'warehouse/del-factory-claim';?>',
+                type: 'POST',
+                data: {'id':$('#modal-id').val(),'remark':$('#modal-remark').val()},
+            })
+            .done(function(response) {
+                var obj_response = jQuery.parseJSON(response);
+                console.log("success");
+
+                 switch(obj_response.status) {
+                    case 200:
+                        console.log('done');
+                        location.reload();
+                        break;
+                    case 400:
+                        alert(obj_response.message);
+                        break;
+                    default:
+                        location.reload();
+                }
+                
+            });
+            
+        });
+
+    });
+    
+</script>

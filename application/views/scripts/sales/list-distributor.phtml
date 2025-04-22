@@ -1,0 +1,213 @@
+<table class="table table-bordered">
+    <thead>
+        <tr>
+            <?php echo $this->sorting(array(
+                'ລ.ດ', 
+                'id'    => 'Distributor ID',
+                // 'finance_code'     => 'Finance Code',
+                // 'store_code'     => 'Store Code',
+                'title'    => 'Distributor Name<br>(ຊື່ບ່ອນຈັດສົ່ງ)',
+                'branch_number'     => 'Branch Of Number',
+                
+                // 'unames'   => 'Company Name<br>(ຊື່ຕາມກົມພາສີ)',
+                // 'spc_discount'   => 'Special Discount (%)',
+                // 'credit_status'   => 'Credit Status',
+                // 'credit_amount'   => 'Maximum Credit',
+                // 'Used Credit',
+                // 'Balance',
+
+                'add_tax'  => 'Default Delivery Address',
+                'owner_name' => 'Owner name',
+                'tel' => 'Phone',
+                // 'Grand Area',
+                'area'     => 'Area',
+                'region'   => 'Province',
+                'district' => 'District',
+                'warehouse' => 'Warehouse',
+                // 'org_name' => 'KA Type',
+                // 'group_id' => 'Distributor Type Group',
+                'd_status' => 'Status',
+                'activate' => 'Verify',
+                'Action'
+            ),
+            $this->url, $this->current_col, $this->desc); ?>
+        </tr>
+    </thead>
+    <tbody>
+        <?php
+        $userStorage = Zend_Auth::getInstance()->getStorage()->read();
+
+        $grand_e1 = array(81,82,83,110,111,112);
+        $grand_e2 = array(85,86,87,115,88,89,116,117);
+        $grand_e3 = array(90,91,92,93,113);
+        $grand_e4 = array(94,95,96);
+        $grand_e5 = array(97,109);
+        $grand_w1 = array(98,99,100,101,102,114);
+        $grand_w2 = array(103,104,105);
+        $grand_w3 = array(106,107,108);
+
+
+        if (isset($this->distributors) and $this->distributors) :
+            foreach ($this->distributors as $k => $distributor):
+
+                $grand_area = '';
+
+                if(isset($distributor['district'])){
+
+                    $excel_area_name = My_Region::getValue($distributor['district'], My_Region::Area);
+
+                    $excel_area_id = My_Region::getValue($distributor['district'], My_Region::Area, My_Region::ID);
+
+                    if ( in_array($excel_area_id, $grand_e1) ) { $grand_area = 'BKK East-1'; } 
+                    else if ( in_array($excel_area_id, $grand_e2) ) { $grand_area = 'BKK East-2'; }
+                    else if ( in_array($excel_area_id, $grand_e3) ) { $grand_area = 'BKK East-3'; }
+                    else if ( in_array($excel_area_id, $grand_e4) ) { $grand_area = 'BKK East-4'; }
+                    else if ( in_array($excel_area_id, $grand_e5) ) { $grand_area = 'BKK East-5'; }
+                    else if ( in_array($excel_area_id, $grand_w1) ) { $grand_area = 'BKK West-1'; }
+                    else if ( in_array($excel_area_id, $grand_w2) ) { $grand_area = 'BKK West-2'; }
+                    else if ( in_array($excel_area_id, $grand_w3) ) { $grand_area = 'BKK West-3'; }
+                    else { $grand_area = $excel_area_name; }
+
+                }
+
+
+                ?>
+                <tr>
+                    <td>
+                        <?php
+                        $inc = $this->offset + $k + 1;
+                        echo $inc;
+                        ?>
+                    </td>
+                    <td><?php echo $distributor['id'] ?></td>
+            <!-- <td style="white-space: nowrap;"><?php echo $distributor['finance_code'] ?></td>
+                <td style="white-space: nowrap;"><?php echo $distributor['store_code'] ?></td> -->
+                <td>
+                    <?php if (isset($distributor['is_ka']) && $distributor['is_ka']): ?>
+                        <span class="label label-success">KA</span>                    
+                    <?php endif ?>
+                    <?php if (isset($distributor['is_internal']) && $distributor['is_internal']): ?>
+                        <span class="label label-inverse">Internal</span>                    
+                    <?php endif ?>
+                    <?php if (isset($distributor['del']) && $distributor['del'] == 1): ?>
+                        <strike><?php echo $distributor['title'] ?></strike>
+                    <?php else: ?>
+                        <a title="Edit" href="<?php echo HOST ?>sales/create-distributor?id=<?php echo $distributor['id'];?>">
+                            <?php echo $distributor['title'] ?>
+                        </a>
+                    <?php endif ?>
+                </td>
+
+
+                <td style="text-align: center; color: red;"><?php echo $distributor['total_store'] ?></td>
+
+                <!-- <td><?php echo $distributor['unames'] ?></td> -->
+                <?php 
+                $credit_status=$distributor['credit_status']; 
+                if($credit_status==1){
+                    $credit_status="ใช้ได้";
+                }else{
+                    $credit_status="-";
+                }
+
+                $QStoreAccount  = new Application_Model_Storeaccount();
+                $q_total_credit_all  = $QStoreAccount->getMainDistributorBalance($distributor['id']); 
+                $total_credit_all = $q_total_credit_all['credit_amount'];
+                $total_use_credit_all = $q_total_credit_all['use_credit'];
+                $total_balance_all = $q_total_credit_all['balance'];
+               // $credit_amount=$distributor['credit_amount'];
+                $credit_amount=$total_credit_all;
+                $credit_use=($distributor['balance']); 
+                /*
+                if($credit_use > 0){
+                    $balance = $credit_amount-$credit_use;
+                }else{
+                    $balance = 0;
+                }
+                */
+                ?>
+                <!-- <td style="text-align: center;"><?php echo $distributor['spc_discount'];?></td> -->
+                <!-- <td style="text-align: center;"><?php echo $credit_status;?></td> -->
+                <!-- <td><?php echo number_format($credit_amount,2) ?></td> -->
+            <!-- <td><?php echo number_format($credit_use,2) ?></td>
+                <td><?php echo number_format(($total_balance_all),2) ?></td> -->
+
+                <td><?php echo $distributor['add_tax']; ?></td>
+                <td><?php echo $distributor['name']; ?></td>
+                <td><?php echo $distributor['tel']; ?></td>
+                <!-- <td><?php echo $grand_area; ?></td> -->
+                <td style="white-space: nowrap;"><?php if (isset($distributor['district'])) echo My_Region::getValue($distributor['district'], My_Region::Area) ?></td>
+                <td style="white-space: nowrap;"><?php if (isset($distributor['district'])) echo My_Region::getValue($distributor['district'], My_Region::Province) ?></td>
+                <td style="white-space: nowrap;"><?php if (isset($distributor['district'])) echo My_Region::getValue($distributor['district'], My_Region::District) ?></td>
+                <td>
+                 <?php if($distributor['warehouse_status'] == '') {
+                    echo $distributor['warehouse_name'];
+                }else{ ?>
+                    <p style="text-align: center;"> - </p >
+                <?php } ?>
+                
+            </td>
+            <!-- <td style="white-space: nowrap;"><?php if(isset($distributor['org_id']) && $distributor['org_id'] == 1){ echo 'ອື່ນໆ'; }else{ if($distributor['org_name']){echo $distributor['org_name'];}else{echo '-';} } ?></td> -->
+            <!-- <td style="white-space: nowrap;"><?php switch ($distributor['quota_channel']) {
+                    case '10':
+                    echo 'Brand Shop By Dealer';
+                    break;
+                    case '1':
+                    echo 'ORG By Dealer';
+                    break;
+                    default:
+                    echo '-';
+                    break;
+                } ?></td> -->
+                <td style="white-space: nowrap;"><?php switch ($distributor['del']) {
+                    case '':
+                    echo 'Enable';
+                    break;
+                    case '1':
+                    echo 'Disable';
+                    break;
+                    case '2':
+                    echo 'Suspended';
+                    break;
+                } ?></td>
+                <td>
+                    <?php if(isset($distributor['activate']) && $distributor['activate'] == 1){ echo 'Verified'; }else{ echo 'Non Verify'; } ?>
+                </td>
+                <td class="">
+                    <?php if ($this->access('sales', 'delete-distributor') && ( !isset($distributor['del']) || !$distributor['del'] )): ?>
+                    <a title="Delete" class="confirmLink" href="/sales/delete-distributor?id=<?php echo $distributor['id'];?>"> <i class="icon-trash"></i></a>
+                <?php endif ?>
+
+            <!--     <?php if($userStorage->group_id == ADMINISTRATOR_ID){ ?>
+                    <a title="Delete" class="confirmLink" href="/sales/second-delete-distributor?id=<?php echo $distributor['id'];?>"> <i class="icon-trash"></i></a>
+                    <?php } ?> -->
+
+                    <?php if ($this->access('sales', 'undelete-distributor') && ( isset($distributor['del']) && $distributor['del'] == 1)): ?>
+                    <a title="Undelete" class="confirmLink" href="/sales/undelete-distributor?id=<?php echo $distributor['id'];?>"> <i class="icon-refresh"></i></a>
+                <?php endif ?>
+
+                <?php if ($this->access('sales', 'suspend-cooperation') && (!isset($distributor['del']) || !$distributor['del'] )): ?>
+                <a title="Suspend Cooperation" class="" href="/sales/suspend-cooperation?id=<?php echo $distributor['id']; ?>"><i class="icon-unlock-alt"></i></a>
+            <?php endif ?>
+
+            <?php if($this->access('sales', 're-cooperation') && (isset($distributor['del']) || $distributor['del'] == 2)) : ?>
+                <a title="Re-Cooperation" class="" href="/sales/re-cooperation?id=<?php echo $distributor['id']; ?>"><i class="icon-unlock"></i></a>
+        <?php endif ?>
+
+        <a title="Shipping Address" class="" href="/sales/shipping-address?id=<?php echo $distributor['id'];?>"> <i class="icon-truck"></i></a>
+        <a title="Distributor Document" class="" href="/sales/distributor-document?id=<?php echo $distributor['id'];?>"> <i class="icon-upload"></i></a>
+
+        <?php if($distributor['activate'] != 1) : ?>
+            <a href="/sales/verified-distributor?id=<?php echo $distributor['id'] ;?>" title="Verified"><i class="icon-foursquare"></i></a>
+        <?php endif; ?>
+    </td>
+</tr>
+<?php endforeach;?>
+<?php endif; ?>
+</tbody>
+</table>
+<div class="paging">
+    <?php echo $this->paging($this->total, $this->limit, $this->offset, $this->url);?>
+</div>
+<?php echo $this->load();?>
+<?php echo $this->confirm();?>

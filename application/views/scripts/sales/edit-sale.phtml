@@ -1,0 +1,51 @@
+<style>
+.page-header{margin-top: 70px;}
+#submit_btn{margin-left: 10px;}
+</style>
+<div class="page-header">
+    <h1>Sale Off</h1>
+</div>
+
+<div class="content_sale_phone">
+    <form action="<?php echo HOST;?>sales/save-sale"  method="POST">
+        <div class="shipment_wrap">
+            <div class="row-fluid">
+                <div class="row">
+                    <div class="span12">
+                        <div class="control-group">
+                            <label for="category_name">Content</label>
+                            <input type="text" name="type" value="<?php if(isset($this->data) && $this->data) : echo $this->data->type;endif;?>" />
+                        </div>
+                    </div>
+                    <div class="span12">
+                        <div class="control-group">
+                            <label for="category_name">Sale</label>
+                            <input type="text" name="sale" value="<?php if(isset($this->data) && $this->data) : echo $this->data->sale;endif;?>" />
+                        </div>
+                    </div>
+                </div>            
+            </div>
+        </div>
+		<input type='hidden' name='id' value="<?php if(isset($this->data) && $this->data) : echo $this->data->id;endif;?>" />
+        <input type='submit' class="btn btn-primary btn btn-primary" id="add_category_btn" value='Save' />
+        <a href="<?php echo HOST."sales/sale";?>" class="btn btn-primary btn btn-danger" id="add_category_btn">Go Back</a>
+    </form>
+</div>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+

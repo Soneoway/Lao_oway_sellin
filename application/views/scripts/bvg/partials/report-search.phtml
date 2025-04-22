@@ -1,0 +1,132 @@
+<form class="form-search form-horizontal" method="get">
+    <div class="row">
+        <div class="span5">
+            <div class="control-group">
+                <label for="sales_sn" class="span2">Sales SN</label>
+                <input id="sales_sn" name="sales_sn" type="text" class="input-medium search-query form-control" value="<?php isset($this->params['sales_sn']) and printf($this->params['sales_sn']);?>">
+            </div>
+
+            <div class="control-group">
+                <label for="invoice_from" class="span2">Invoice From</label>
+                <input id="invoice_from" name="invoice_from" type="text" class="input-medium search-query form-control date" value="<?php isset($this->params['invoice_from']) and printf($this->params['invoice_from']);?>">
+            </div>
+
+            <div class="control-group">
+                <label for="invoice_to" class="span2">Invoice To</label>
+                <input id="invoice_to" name="invoice_to" type="text" class="input-medium search-query form-control date" value="<?php isset($this->params['invoice_to']) and printf($this->params['invoice_to']);?>">
+            </div>
+
+
+            <div class="control-group">
+                <label for="warehouse_id" class="span2">Warehouse</label>
+                <select name="warehouse_id" id="warehouse_id">
+                    <option value="">Select</option>
+                    <?php foreach ( $this->warehouse_cache as $id => $name ) {?>
+                        <option value="<?php echo $id;?>" <?php if (isset($this->params['warehouse_id']) and $this->params['warehouse_id'] == $id) {?> selected="selected" <?php }?>><?php echo $name;?></option>
+                    <?php } ?>
+                </select>
+            </div>
+        </div>
+
+        <div class="span5">
+
+            <div class="control-group">
+                <label for="joint" class="span2">Joint Type</label>
+                <select name="joint_type" class="joint">
+                    <option value="">Select</option>
+                    <?php foreach ( $this->joint_type as $id=>$name ) {?>
+                        <option value="<?php echo $id;?>" <?php if (isset($this->params['joint_type']) and $this->params['joint_type'] == $id) {?> selected="selected" <?php }?>><?php echo $name;?></option>
+                    <?php } ?>
+                </select>
+            </div>
+
+            <div class="control-group">
+                <label for="joint_circular_id" class="span2">Joint Circular</label>
+                <select name="joint_circular_id" id="joint_circular_id">
+                    <option value="0">Please select joint</option>
+                    <?php foreach ( $this->jointCircularCached as $id=>$name ) {?>
+                        <option value="<?php echo $id;?>" <?php if (isset($this->params['joint_circular_id']) and $this->params['joint_circular_id'] == $id) {?> selected="selected" <?php }?>><?php echo $name;?></option>
+                    <?php } ?>
+                </select>
+            </div>
+
+
+
+            <div class="control-group">
+                <label for="good_id" class="span2">Product</label>
+                <select name="good_id" id="good_id">
+                    <option value="">Select</option>
+                    <?php foreach ( $this->products as $item ) {?>
+                        <option value="<?php echo $item['id'];?>" <?php if (isset($this->params['good_id']) and $this->params['good_id'] == $item['good_id']) {?> selected="selected" <?php }?>><?php echo $item['good_name'];?></option>
+                    <?php } ?>
+                </select>
+            </div>
+
+            <div class="control-group">
+                <label class="span4" >Retailer name <span style="color: red">*</span>
+                    <input type='text' class="span4" name='SearchBox' id="SearchBox" placeholder="Search" autocomplete="off" />
+                    <select name="d_id" class="span4" id="distributor_id" size="5">
+                        <option value="">Please select</option>
+                        <?php if (isset($this->distributorsCached)): ?>
+                            
+                        <?php foreach ( $this->distributorsCached as $id=>$name ): ?>
+                            <option value="<?php echo $id;?>" <?php if (isset($this->params['d_id']) and $this->params['d_id'] == $id) {?> selected="selected" <?php }?>><?php echo $name;?></option>
+                        <?php endforeach; ?>
+                        
+                        <?php endif; ?>
+                    </select>
+                </label>
+            </div>
+        </div>
+    </div>
+   
+    <div class="row">
+        <div class="span12">
+            <button type="submit" class="btn btn-primary">Search</button>
+            <button type="reset" class="btn btn-warning">Reset</button>
+            <button type="submit" name="export" value="1" class="btn btn-success">Export by Model</button>
+            <button type="submit" name="export_all" value="1" class="btn btn-success">Export by All Model</button>
+            <button type="submit" name="export_follow" value="1" class="btn btn-success">Export Follow</button>
+            <button type="submit" name="export_total" value="1" class="btn btn-success">Export Total Report</button>
+            <button type="submit" name="export_discount" value="1" class="btn btn-success">Export Discount Incentive</button>
+            <button type="submit" name="export_discount" value="2" class="btn btn-success">Export Discount</button>
+        </div>
+    </div>
+   
+</form>
+
+<script type="text/javascript">
+
+    $(document).ready(function () {
+
+        $(document).off('change', '.joint')
+            .on('change', '.joint', function() {
+                $('button[type=submit]').prop('disabled', true);
+                $('form').bind('submit',function(e){e.preventDefault();});
+                $('.loading').remove();
+                $(this).after('<span class="loading"></span>');
+                var joint_type = $('.joint').val();
+                $('#joint_circular_id').find('option:not(:first)').remove();
+                $.get("/get/load-jointtype",
+                    {joint_type: joint_type}
+                    ,function(data,status){
+                        var data = $.parseJSON( data );
+                        if (data){
+                            var obj = data.joint;
+
+                            $('#joint_circular_id').html('<option value="0">Please select joint</option>');
+                            for (var i = 0; i < obj.length; i++) {
+                                $('#joint_circular_id').append('<option value="'+obj[i]['id']+'">'+obj[i]['name']+'</option>');
+                            }
+                        }
+
+                        $('button[type=submit]').prop('disabled', false);
+                        $('form').unbind('submit');
+                        $('.loading').remove();
+                    });
+            });
+
+    });
+
+
+</script>

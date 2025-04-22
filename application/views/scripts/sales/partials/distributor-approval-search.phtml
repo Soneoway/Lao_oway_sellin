@@ -1,0 +1,44 @@
+<script type="text/javascript" src="<?php echo HOST ?>js/jquery-ui-1.8.12.custom.min.js"></script>
+<link rel="stylesheet" type="text/css" href="<?php echo HOST ?>css/jquery-ui-1.8.12.custom.css"/>
+
+<link href="<?php echo HOST ?>css/jquery.tagit.css" rel="stylesheet" type="text/css">
+<link href="<?php echo HOST ?>css/tagit.ui-zendesk.css" rel="stylesheet" type="text/css">
+
+<link rel="stylesheet" href="<?php echo HOST ?>css/bootstrap-multiselect.css" type="text/css"/>
+<script type="text/javascript" src="<?php echo HOST ?>js/bootstrap-multiselect.js"></script>
+<?php
+    //print_r($_GET);
+    //print_r($this->params['cancel']);
+?>
+<form class="form-search form-horizontal" method="get" action="<?php echo HOST ?>sales/distributor-approval">
+    <div class="row">
+        <div class="span5">
+
+            <div class="control-group">
+                <label for="dis_id" class="span2">Distributor ID</label>
+                <input id="dis_id" name="dis_id" type="text" class="input-medium search-query form-control" value="<?php isset($this->params['dis_id']) and printf($this->params['dis_id']);?>">
+            </div>
+
+            <div class="control-group">
+                <label for="dis_name" class="span2">Distributor Name</label>
+                <input id="dis_name" name="dis_name" type="text" class="input-medium search-query form-control" value="<?php isset($this->params['dis_name']) and printf($this->params['dis_name']);?>">
+            </div>
+
+        </div>     
+        <div class="span5">
+            
+
+        </div>
+    </div>
+
+    <button type="submit" class="btn btn-primary">Search</button>
+    <!-- <button type="submit" name="export" value="1" class="btn btn-success">Export</button> -->
+    
+</form>
+<script async="async">
+
+    $(document).ready(function () {
+
+    });
+
+</script>

@@ -1,0 +1,286 @@
+<!-- <link href="https://cdnjs.cloudflare.com/ajax/libs/select2/4.0.4/css/select2.min.css" rel="stylesheet" /> -->
+<link rel="stylesheet" href="<?php echo HOST?>css/select2.css" />
+
+ <style type="text/css">
+    .blockOverlay{
+        z-index: 10000 !important;
+    }
+    .blockPage{
+        z-index: 10001 !important;
+    }
+</style> 
+
+<div class="page-header">
+    <h1>Black List Distributor</h1>
+</div>
+<div class="container">
+<br />
+
+<form role="form" id="form" enctype="multipart/form-data" action="<?php echo HOST.'tool/add-black-list-distributor';?>" method="post" >
+    <div class="col-md-12"> 
+      <div class="control-group" style="margin-left: 20px;">
+            <label class="control-label" for="d_id">Distributor<span style="color: red">*</span></label>
+            <div class="controls">
+                <select id="d_id" name="d_id" class="d_id" required="required" style="width: 300px">
+                    <option value="">---</option>
+                </select>
+                <p class="help-block"></p>
+            </div>
+        </div>  
+       
+    </div>
+
+    <div class="col-md-12"> 
+      <div class="control-group" style="margin-left: 20px;">
+            <label class="control-label" for="type">Type<span style="color: red">*</span></label>
+            <div class="controls">
+                <select id="type" name="type" class="type" required="required" style="width: 300px">
+                    <option value="">---</option>
+                    <option value="10">ALL</option>
+                    <option value="1">FOR RETAILER</option>
+                    <option value="2">FOR DEMO</option>
+                    <option value="3">FOR STAFF</option>
+                    <option value="4">FOR LENDING</option>
+                    <option value="5">FOR APK</option>
+                </select>
+                <p class="help-block"></p>
+            </div>
+        </div>  
+       
+    </div>
+
+    <div class="col-md-12"> 
+      <div class="control-group" style="margin-left: 20px;">
+            <label class="control-label" for="remark">เหตุผล<span style="color: red">*</span></label>
+            <div class="controls">
+                <select id="remark" name="remark" class="remark" required="required" style="width: 300px">
+                    <option value="">---</option>
+                    <?php foreach ($this->reason as $key => $value) { ?>
+                    <option value="<?=$key;?>"><?=$value;?></option>
+                    <?php } ?>
+                </select>
+                <p class="help-block"></p>
+            </div>
+        </div>  
+       
+    </div>
+
+    <div class="col-md-12"> 
+      <div class="control-group" style="margin-left: 20px;">
+            <label class="control-label" for="text_remark">คำอธิบาย</label>
+            <div class="controls">
+                <textarea style="width: 290px;" name="text_remark" id="text_remark" cols="30" rows="5"></textarea>
+                <p class="help-block"></p>
+            </div>
+        </div>  
+       
+    </div>
+
+   </div>
+    
+    <div class="row" style="margin-top: 15px;margin-bottom: 50px;">
+            <div class="span6">
+                <div class="control-group">
+                    
+                    <div class="span4">
+
+                        <button type="submit" class="btn btn-primary" id="submit_btn">Confirm</button>
+                        <input type="hidden" name="back_url" id="back_url" value="black-list-distributor">
+                        <a href="black-list-distributor" class="btn btn-danger go-back">Go back</a>
+                    </div>
+                </div>
+                <div class="clearfix"></div>
+            </div>
+    </div>
+</form>
+</div>
+
+<!-- <script src="https://cdnjs.cloudflare.com/ajax/libs/select2/4.0.4/js/select2.min.js"></script> -->
+<script src="<?php echo HOST?>js/select2.js"></script>
+
+<script src="/js/jquery.blockUI.js"></script>
+
+
+<script type="text/javascript">
+
+$(document).ajaxStart(function(){
+    $.blockUI({ css: { 
+        border: 'none', 
+        padding: '15px', 
+        backgroundColor: '#000', 
+        '-webkit-border-radius': '10px', 
+        '-moz-border-radius': '10px', 
+        opacity: .5, 
+        color: '#fff' 
+    } });
+});
+
+$(document).ajaxStop(function(){
+    $.unblockUI();
+});
+
+$(document).ready(function () {
+
+        $("#d_id").select2();
+      
+        $("*").keypress(function(event){  
+             if(event.keyCode==13){  
+                return false;  
+             }  
+        });
+
+        // $('body').on('click', '.list-group .list-group-item', function () {
+        //     $(this).toggleClass('active');
+        // });
+
+        var timeOut;
+
+        $('.select2-input').live('keyup', function(event) {
+            var text = $(this).val();
+
+            if(event.keyCode==13){  
+                getDataTimeout(text,'bypass');
+             }else{
+                getDataTimeout(text);
+             }
+
+        });
+
+
+        function getDataTimeout(text,bypass){
+            clearTimeOut();
+
+            if(bypass == 'bypass'){
+
+                $('#d_id').empty();
+                $('#d_id').append('<option value="">---</option>');
+
+                $.ajax({
+                    url: '/tool/list-distributor-new',
+                    type: 'POST',
+                    data: {text: text},
+                })
+               .done(function(response) {
+
+                var obj_response = jQuery.parseJSON(response);
+
+                    $.each( obj_response, function( key, value ) {
+                        $('#d_id').append('<option value="'+value.id+'">['+value.store_code+'] '+value.title+' ('+value.id+')</option>');
+                    });
+                    $('#d_id').trigger('change');
+                   console.log("success");
+               });
+
+            }else{
+
+                timeOut = setTimeout(function() {
+
+                    $('#d_id').empty();
+                    $('#d_id').append('<option value="">---</option>');
+
+                    $.ajax({
+                        url: '/tool/list-distributor-new',
+                        type: 'POST',
+                        data: {text: text},
+                    })
+                   .done(function(response) {
+
+                        var obj_response = jQuery.parseJSON(response);
+
+                        $.each( obj_response, function( key, value ) {
+                            $('#d_id').append('<option value="'+value.id+'">['+value.store_code+'] '+value.title+' ('+value.id+')</option>');
+                        });
+                        $('#d_id').trigger('change');
+                       console.log("success");
+                    });
+
+                }, 3000);
+
+            }
+            
+        }
+
+        function clearTimeOut(){
+            clearTimeout(timeOut);
+        }
+      
+        $('body').on('change', '.rank', function () {
+           var list =  $(this).val();
+           
+           $.ajax({
+               url: '/tool/list-distributor',
+               type: 'POST',
+               data: {rank: list},
+           })
+           .done(function(data) {
+                $('.list_distributor').empty();
+                $('.list_distributor').append(data);
+               console.log("success");
+           })
+           .fail(function() {
+               console.log("error");
+           })
+           .always(function() {
+               console.log("complete");
+           });
+           
+        });
+
+      
+        // $('.list-arrows a').click(function () {
+        //     var $button = $(this), actives = '';
+        //     if ($button.hasClass('move-left')) {
+        //         actives = $('.list-right ul li.active');
+        //        acc = actives.clone().appendTo('.list-left ul').find('span.price_text').addClass('none_price').find('input,textarea,select,hidden,number').attr('disabled','disabled').val('');
+        //         acc.parent().parent().find('.pay_ment').removeClass('pay_money_total');
+        //         actives.remove();
+                
+              
+        //     } else if ($button.hasClass('move-right')) {
+        //         actives = $('.list-left ul li.active');
+        //         acc  =  actives.clone().appendTo('.list-right ul').find('span').removeClass('none_price').find('input,textarea,select,hidden,number').removeAttr('disabled');
+        //         acc.parent().find('.pay_ment').addClass('pay_money_total');
+        //         actives.remove();
+               
+                
+                
+        //     }
+        // });
+
+        // $('.dual-list .selector').click(function () {
+        //     var $checkBox = $(this);
+        //     if (!$checkBox.hasClass('selected')) {
+        //         $checkBox.addClass('selected').closest('.well').find('ul li:not(.active)').addClass('active');
+        //         $checkBox.children('i').removeClass('icon icon-circle-blank').addClass('icon icon-ok');
+        //     } else {
+        //         $checkBox.removeClass('selected').closest('.well').find('ul li.active').removeClass('active');
+        //         $checkBox.children('i').removeClass('icon icon-ok').addClass('icon icon-circle-blank');
+        //     }
+        // });
+        // $('[name="SearchDualList"]').keyup(function (e) {
+        //     var code = e.keyCode || e.which;
+        //     if (code == '9') return;
+        //     if (code == '27') $(this).val(null);
+        //     var $rows = $(this).closest('.dual-list').find('.list-group li');
+        //     var val = $.trim($(this).val()).replace(/ +/g, ' ').toLowerCase();
+        //     $rows.show().filter(function () {
+        //         var text = $(this).text().replace(/\s+/g, ' ').toLowerCase();
+        //         return !~text.indexOf(val);
+        //     }).hide();
+        // });
+
+        
+
+        // $(document).on("submit", "form", function(e)
+        // {
+        //      $('#form').submit();
+        // });
+        
+    });
+
+    
+    function roundNumber(num, dec) {
+        var result = Math.round(num*Math.pow(10,dec))/Math.pow(10,dec);
+        return Number(result).toLocaleString('en',{ minimumFractionDigits: 2 });
+    }
+</script>

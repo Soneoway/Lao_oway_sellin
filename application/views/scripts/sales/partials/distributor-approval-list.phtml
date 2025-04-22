@@ -1,0 +1,146 @@
+<style>
+.red
+{
+    background: #1B8324;color:red;
+}
+.show_item{
+      background-color:#32CD32;
+}
+.show_item_select{
+      background-color:#FFA500;
+}
+
+</style>
+
+<!-- START : Modal -->
+  <div class="modal fade" id="myModal" data-backdrop="static" role="dialog">
+    <div class="modal-dialog">
+    
+      <!-- Modal content-->
+      <div class="modal-content">
+        <div class="modal-header">
+          <button type="button" class="close" data-dismiss="modal">&times;</button>
+          <h4 class="modal-title">Remark | Distributor : <span id="modal_d_name"></span></h4>
+        </div>
+        <div class="modal-body">
+          <input type="text" name="remark" id="modal_remark">
+          <input type="hidden" name="d_id" id="modal_d_id">
+        </div>
+        <div class="modal-footer">
+          <button type="button" class="btn btn-success" id="save-remark">Save</button>
+          <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+        </div>
+      </div>
+      
+    </div>
+  </div>
+<!-- END : Modal -->
+
+<div class="row">
+    <div class="span12" style="margin-bottom: 15px;">
+        <!-- <button class="btn btn-success btn-mini pull-right" id="attach-payment">Attach Payment</button> -->
+        <button class="btn btn-success btn-mini pull-right" id="btn-approval">Approval</button>
+    </div>
+</div>
+
+<table class="table table-bordered">
+    <thead>
+        <tr>
+            <?php echo $this->sorting(array(
+          'id' => 'Distributor ID',
+          'title' => 'Distributor Name',
+          'remark' => 'Remark',
+          'mst_sn' => 'MST Number',
+          'Action',
+          '<input type="checkbox" class="check_all" name="check_all" />'
+                ),
+                $this->url, $this->sort, $this->desc); ?>
+        </tr>
+    </thead>
+    <tbody>
+
+      <?php
+      foreach ($this->list as $key => $value) {
+      ?>
+      <tr>
+
+          <td style="width: 100px;"><?php echo $value['d_id']; ?></td>
+          <td><?php echo $value['title']; ?></td>
+          <td><?php echo $value['remark']; ?></td>
+          <td><?php echo $value['mst_sn']; 
+
+          if($value['display_mst']){
+            echo ' <span style="color:red">(ร้านนี้มีเลขผู้เสียภาษีซ้ำ)</span><br>';
+            foreach ($value['display_mst'] as $key_mst => $value_mst) {
+              if($key_mst > 0){
+                echo ' | ';
+              }
+              ?>
+              <a href="/sales/distributor?id=<?php echo $value_mst['id']; ?>" target="_blank"><?php echo $value_mst['title']; ?></a>
+              <?php 
+            }
+          }
+
+
+          ?></td>
+          <td style="width: 100px;">
+              <a title="View" target="_blank" href="/sales/distributor-document?id=<?php echo $value['d_id'];?>"> <i class="icon-eye-open"></i></a>
+              <a style="margin-left: 10px;" title="Confirming" href="/sales/distributor-approval?save=1&id=<?php echo $value['d_id'];?>" onclick="return confirm('You confirm to approval')"><i class="icon-ok"></i></a>
+              <?php if ($this->access('sales', 'delete-distributor') && ( !isset($value['del']) || !$value['del'] )): ?>
+                  <a style="margin-left: 10px;" title="Delete" class="confirmLink" href="/sales/delete-distributor?id=<?php echo $value['d_id'];?>" onclick="return confirm('Are you sure for delete?');"> <i class="icon-trash"></i></a>
+              <?php endif ?>
+              <a style="margin-left: 10px;" id="btn-add-remark" onclick="openModal('<?php echo $value['d_id']; ?>','<?php echo $value['title']; ?>','<?php echo $value['remark']; ?>')" title="Remark" data-toggle="modal" data-target="#myModal" href="#""><i class="icon-pencil"></i></a>
+          </td>
+          <td style="width: 15px;"><input type="checkbox" name="d_id" class="checkbox-approval" value="<?php echo $value['d_id'] ?>" data-sn="<?php echo $value['d_id'] ?>"></td>
+          </tr>
+
+      <?php } ?>
+    </tbody>
+</table>
+<div class="paging">
+    <?php echo $this->paging($this->total, $this->limit, $this->offset, $this->url);?>
+</div>
+
+<script>
+$(document).ready(function () {
+
+  $('#save-remark').click(function(event) {
+    var d_id = $('#modal_d_id').val();
+    var remark = $('#modal_remark').val();
+    $.ajax({
+        url: '<?php echo HOST.'sales/ajax-save-distributor-remark';?>',
+        type: 'POST',
+        data: {d_id:d_id,remark:remark},
+    })
+    .done(function(response) {
+      var obj_response = jQuery.parseJSON(response);
+      console.log("success");
+
+       switch(obj_response.status) {
+          case 200:
+              console.log('done');
+              alert(obj_response.message);
+              location.reload();
+              break;
+          case 400:
+              alert(obj_response.message);
+              break;
+          default:
+              location.reload();
+        }
+        
+    });
+    
+  });
+
+});
+
+function openModal(d_id,d_name,remark){
+  $('#modal_d_id').val(d_id);
+  $('#modal_remark').val(remark);
+  $('#modal_d_name').html(d_name);
+  $('#modal_remark').focus();
+}
+
+</script>
+

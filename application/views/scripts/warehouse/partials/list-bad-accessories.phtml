@@ -1,0 +1,81 @@
+<table class="table table-bordered">
+    <thead>
+    <tr>
+        <?php echo $this->sorting(array(
+                '#',
+                'Name',
+                'Color',
+                'Category',
+                'Brand',
+                'Product Details',
+                'Current Order',
+                'Storage ( Available for sale )',
+                'Storage ( Unavailable for sale )',
+                'Total Storage',
+                'Available Stock',
+                'Action',
+            ),
+            $this->url, $this->sort, $this->desc); ?>
+    </tr>
+    </thead>
+    <tbody>
+    <?php
+    if (isset($this->goods) and $this->goods)
+        foreach ($this->goods as $k=>$good): ?>
+            <tr>
+                <td>
+                    <?php
+                    $inc = $this->offset + $k + 1;
+                    echo $inc;
+                    ?>
+                </td>
+                <td><?php echo $good['name'] ?></td>
+                <td>
+
+                    <span class="label"><?php if ( isset($this->goodColors[$good['good_color_id']]) ) echo $this->goodColors[$good['good_color_id']] ?></span>
+
+                </td>
+                <td><?php if ( isset( $this->goodCategories ) && isset( $this->goodCategories[$good['cat_id']] ) ) echo $this->goodCategories[$good['cat_id']] ?></td>
+                <td><?php if (  isset( $this->brands[$good['brand_id']] ) ) echo $this->brands[$good['brand_id']] ?></td>
+
+                <td><?php echo $good['desc'] ?></td>
+
+                <td><?php $current_order =  ($good['current_order'] ? $good['current_order'] : 0); echo $current_order; ?></td>
+
+                <td><?php
+                    $bad = $count = 0;
+                    if ($good['cat_id'] == PHONE_CAT_ID){
+                        $bad = ($good['imei_bad_count'] ? $good['imei_bad_count'] : 0);
+                        $count = ($good['imei_count'] ? $good['imei_count'] : 0);
+                    } else {
+                        $bad = ($good['damage_product_count'] ? $good['damage_product_count'] : 0);
+                        $count = ($good['product_count'] ? $good['product_count'] : 0);
+
+                    }
+                    echo $count;
+                    ?></td>
+
+
+                <td><?php echo $bad;?></td>
+                <td><?php
+                    $total_storage = $count + $bad;
+                    echo ($total_storage ? $total_storage : 0);
+                    ?></td>
+                <td><?php
+                    $available = intval($count) - intval($current_order);
+                    echo ($available > 0 ? $available : 0);
+                    ?></td>
+                <td class="">
+                    <a title="Edit" href="/warehouse/add-bad-accessories?good_id=<?php echo $good['id'];?>&good_color=<?php echo $good['good_color_id'];?>&warehouse_id=<?php echo (isset($this->params['warehouse_id']) and $this->params['warehouse_id'] ? $this->params['warehouse_id'] : '');?>"> <i class="icon-edit"></i></a>
+                </td>
+
+            </tr>
+        <?php endforeach;?>
+
+    </tbody>
+</table>
+<div class="paging">
+    <?php echo $this->paging($this->total, $this->limit, $this->offset, $this->url);?>
+</div>
+<?php echo $this->load();?>
+<?php echo $this->confirm();?>

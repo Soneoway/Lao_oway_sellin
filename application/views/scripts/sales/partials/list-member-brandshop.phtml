@@ -1,0 +1,57 @@
+<table class="table table-bordered">
+    <thead>
+        <tr>
+            <?php echo $this->sorting(array(
+				'#',
+                'code'     => 'Code',
+                'customer_name' => 'Customer Name',
+                'phone_number' => 'Phone Number',
+                'tax_number' => 'Tax Number',
+                'tax_address' => 'Tax Address',
+                'status' => 'Status',
+                'created_date' => 'Created Date',
+                'modified_date' => 'Modified Date',
+				'Action'
+                ),
+            $this->url, $this->current_col, $this->desc); ?>
+        </tr>
+    </thead>
+    <tbody>
+        <?php
+        if (isset($this->memberBrandshops) and $this->memberBrandshops) :
+            foreach ($this->memberBrandshops as $k => $memberBrandshop): ?>
+        <tr>
+                
+            <td><?php echo $k+1 ?></td>
+            <td><?php echo $memberBrandshop['code'] ?></td>
+            <td><?php echo $memberBrandshop['customer_name'] ?></td>
+            <td><?php echo $memberBrandshop['phone_number'] ?></td>
+            <td><?php echo $memberBrandshop['tax_number'] ?></td>
+            <td><?php echo $memberBrandshop['tax_address'] ?></td>
+            <td><?php switch ($memberBrandshop['status']) {
+                case '1':
+                    echo 'Active';
+                    break;
+                case '0':
+                    echo 'Inactive';
+                    break;
+            } ?></td>
+            <td><?php echo $memberBrandshop['created_date'] ?></td>
+            <td><?php echo $memberBrandshop['modified_date'] ?></td>
+            
+            <td>
+                <a title="Edit" class="" href="/sales/create-member-brandshop?id=<?php echo $memberBrandshop['id'];?>"> <i class="icon-edit"></i></a>
+                <?php if ($this->access('sales', 'delete-member-brandshop')): ?>
+                    <a title="Delete" class="confirmLink" href="/sales/delete-member-brandshop?id=<?php echo $memberBrandshop['id'];?>"> <i class="icon-trash"></i></a>
+                <?php endif ?>
+            </td>
+        </tr>
+        <?php endforeach;?>
+		<?php endif; ?>
+    </tbody>
+</table>
+<div class="paging">
+    <?php echo $this->paging($this->total, $this->limit, $this->offset, $this->url);?>
+</div>
+<?php echo $this->load();?>
+<?php echo $this->confirm();?>

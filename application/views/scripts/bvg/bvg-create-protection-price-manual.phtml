@@ -1,0 +1,251 @@
+<div class="page-header">
+    <h1>Create Protection Price</h1>
+</div>
+<style>
+    tr td:first-child {
+        width: 20%;
+    }
+    .address_textarea{
+        width: 350px;
+        height: 50px;
+    }
+</style>
+<?php
+    if (isset($this->messages_success) and $this->messages_success)
+        foreach ($this->messages_success as $message):
+            echo '<div class="alert alert-success">'.$message.'</div>';
+        endforeach;
+
+    if (isset($this->messages) and $this->messages)
+        foreach ($this->messages as $message):
+            echo '<div class="alert alert-error">'.$message.'</div>';
+        endforeach;
+?>
+<?php if (isset($this->error) && $this->error): ?>
+        <div class="alert alert-error">
+            <button type="button" class="close" data-dismiss="alert">&times;</button>
+            <strong>ERROR!</strong> <?php echo $this->error ?>
+        </div>
+ <?php endif ?>       
+<?php
+    if (isset($this->warning) and $this->warning)
+        foreach ($this->warning as $message):
+            echo '<div class="alert alert-block">'.$message.'</div>';
+        endforeach;
+
+    if (isset($this->error) and $this->error)
+        foreach ($this->error as $message):
+            echo '<div class="alert alert-error">'.$message.'</div>';
+        endforeach;
+?>
+<div class="row">
+    <div class="span12">
+        <form role="form" id="form" action="<?php echo HOST.'bvg/bvg-protection-price-save';?>" method="post" class="form-horizontal">
+
+            <div class="row">
+                <div class="span6">
+                    <label class="span4" >Retailer name <span style="color: red">*</span>
+                        <input type='text' class="span4" name='SearchBox' id="SearchBox" placeholder="Search" autocomplete="off" />
+                        <!-- <select name="distributor_id" class="span4" id="distributor_id" required="required" size="5">
+                            <option value="">Please select</option>
+                            <?php
+                            //foreach($this->distributors as $distributor):
+                                $selected = '';
+                                if(isset($this->market['d_id']) and $distributor['id'] == $this->market['d_id']){
+                                    $selected = 'selected';
+                                }
+                                echo '<option '.$selected.' value="'.$distributor['id'].'">'.$distributor['store_code'].' '.$distributor['title'].'</option>';
+                            //endforeach;
+                            ?>
+                        </select> -->
+
+                        <select name="distributor_id" class="span4" id="distributor_id" required="required" size="5">
+                            <option value="">Please select</option>
+                        </select>
+
+                    </label>
+                </div>
+
+                <div class="span6">
+                    <div class='distributor-info clearfix'>
+                        <p>
+                            <button class="btn-success pull-right view-more" type="button">
+                                -
+                            </button>
+                        </p>
+                        <p class='retailer_name'>
+                            <label>Retailer name: </label>
+                            <span></span>
+                        </p>
+                        <p <?php if($this->sales[0]['sale']->delivery_address==''){?> class='add' <?php } ?>>
+                            <label>Address Delivery: </label>
+                            <textarea name="add_delivery_new" rows="5" cols="190" class="address_textarea"></textarea>
+                       
+
+                        </p>
+                        
+
+                    </div>
+                </div>
+            </div>
+             <div class="row">
+                <div class="span6">
+                    <label class="span1">Type <span style="color: red">*</span>
+                        <select id="creditnote_type" name="creditnote_type" required="required">
+                        <option value="">กรุณาเลือกประเภท CN</option>
+                        <option value="CN">CN</option>
+                        <option value="CP">CP</option>
+                    </select>
+                    </label>
+                </div>
+            </div>
+            </p>
+            <div class="row">
+                <div class="span6">
+                    <label class="span1">Chanel <span style="color: red">*</span>
+                        <select id="chanel" name="chanel" required="required">
+                        <option value="">กรุณาเลือกช่องทาง</option>
+                        <option value="reward">ส่งเสริมการขาย OPPO Club</option>
+                        <option value="oppo_sis">ส่งเสริมการขาย OPPO SIS</option>
+                        <option value="return">คืนสินค้า</option>
+                        <option value="price">ปรับราคาสินค้า</option>
+                        <option value="service">ค่าบริการ</option>
+                        <option value="top_green">ส่งเสริมการขาย OPPO Top Green</option>
+                        <option value="oppo_all_green">ส่งเสริมการขาย OPPO All Green</option>
+                        <option value="cn_service">CN Service</option>
+                    </select>
+                    </label>
+                </div>
+            </div>
+            </p>
+           
+            <div class="row">
+                <div class="span6">
+                    <label class="span1">Sales Order
+                        <input type="text" class="sales_order" name="sales_order" />
+                    </label>
+                </div>
+            </div>
+            </br>
+
+            <div class="row">
+                <div class="span6">
+                    <label class="span1">Price <span style="color: red">*</span>
+                        <input type="text" required="required" class="price" name="price" />
+                    </label>
+                </div>
+            </div>
+            </br>
+            
+            <div class="row">
+                <div class="span6">
+                    <label class="span1">เปิดใช้งาน <span style="color: red">*</span>
+                        <input type="checkbox" id="credit_status" name="credit_status" value="1" />
+                    </label>
+                </div>
+            </div>
+            </br>
+	        <div class="row">
+		        <div class="span6">
+                    <input type="hidden" name="sn" value="<?php isset($this->market) and $this->market and printf($this->market['sn']);?>">
+		            <input type="hidden" id="back_url" name="back_url" value="/bvg/list-payment">
+                    <input type="hidden" id="view_url" name="view_url" value="/finance/return-list-credit-note">
+                    <input  type="hidden" id="type" name="type" value="" />
+		            <button type="submit" class="btn btn-primary">Save</button>
+		            <button type="button" class="btn btn-danger go-back">Go back</button>
+
+                    <button type="button"  class="btn btn-primary go-view">View Protection Price List</button>
+		        </div>
+	        </div>
+        </form>
+    </div>
+
+</div>
+</div>
+<script>
+
+    $(document).ready(function () {
+
+        $("*").keypress(function(event){  
+             if(event.keyCode==13){  
+                return false;  
+             }  
+        });
+
+        var timeOut;
+
+        $('#SearchBox').live('keyup', function(event) {
+            var text = $(this).val();
+
+            if(text.length <= 3){
+                return false;
+            }
+
+            if(event.keyCode==13){  
+                getDataTimeout(text,'bypass');
+             }else{
+                getDataTimeout(text);
+             }
+
+        });
+
+
+        function getDataTimeout(text,bypass){
+            clearTimeOut();
+
+            if(bypass == 'bypass'){
+
+                $('#distributor_id').empty();
+                $('#distributor_id').append('<option value="">Please select</option>');
+
+                $.ajax({
+                    url: '/tool/list-distributor-new',
+                    type: 'POST',
+                    data: {text: text},
+                })
+               .done(function(response) {
+
+                var obj_response = jQuery.parseJSON(response);
+
+                    $.each( obj_response, function( key, value ) {
+                        $('#distributor_id').append('<option value="'+value.id+'">['+value.store_code+'] '+value.title+' ('+value.id+')</option>');
+                    });
+                    $('#distributor_id').trigger('change');
+                   console.log("success");
+               });
+
+            }else{
+
+                timeOut = setTimeout(function() {
+
+                    $('#distributor_id').empty();
+                    $('#distributor_id').append('<option value="">Please select</option>');
+
+                    $.ajax({
+                        url: '/tool/list-distributor-new',
+                        type: 'POST',
+                        data: {text: text},
+                    })
+                   .done(function(response) {
+
+                        var obj_response = jQuery.parseJSON(response);
+
+                        $.each( obj_response, function( key, value ) {
+                            $('#distributor_id').append('<option value="'+value.id+'">['+value.store_code+'] '+value.title+' ('+value.id+')</option>');
+                        });
+                        // $('#distributor_id').trigger('change');
+                       console.log("success");
+                    });
+
+                }, 3000);
+
+            }
+            
+        }
+
+        function clearTimeOut(){
+            clearTimeout(timeOut);
+        }
+    });
+</script>
+<?php  echo $this->render('bvg/partials/script.phtml'); ?>

@@ -1,0 +1,336 @@
+<div class="page-header">
+    <h1>Create CN Price Manual</h1>
+</div>
+<style>
+    tr td:first-child {
+        width: 20%;
+    }
+    .address_textarea{
+        width: 350px;
+        height: 50px;
+
+    }
+</style>
+<?php
+    if (isset($this->messages_success) and $this->messages_success)
+        foreach ($this->messages_success as $message):
+            echo '<div class="alert alert-success">'.$message.'</div>';
+        endforeach;
+
+    if (isset($this->messages) and $this->messages)
+        foreach ($this->messages as $message):
+            echo '<div class="alert alert-error">'.$message.'</div>';
+        endforeach;
+?>
+<?php if (isset($this->error) && $this->error): ?>
+        <div class="alert alert-error">
+            <button type="button" class="close" data-dismiss="alert">&times;</button>
+            <strong>ERROR!</strong> <?php echo $this->error ?>
+        </div>
+ <?php endif ?>       
+<?php
+    if (isset($this->warning) and $this->warning)
+        foreach ($this->warning as $message):
+            echo '<div class="alert alert-block">'.$message.'</div>';
+        endforeach;
+
+    if (isset($this->error) and $this->error)
+        foreach ($this->error as $message):
+            echo '<div class="alert alert-error">'.$message.'</div>';
+        endforeach;
+?>
+<div class="row">
+    <div class="span12">
+        <form role="form" id="form" action="<?php echo HOST.'finance/create-cn-price-manual-save';?>" method="post" class="form-horizontal" enctype="multipart/form-data">
+
+            <div class="row">
+                <div class="span6">
+
+                    <div class="control-group">
+                     <label class="span2" for="rank">ประเภทร้านค้า <span style="color: red">*</span></label>
+                        
+                            <select id="rank" name="rank" class="rank span3" required="required" >
+                                <option value="">---</option>
+                                <option value="1" <?php if( isset($this->distributor['rank']) and $this->distributor['rank']==1 ) { ?> selected<?php }?>>1. ORG-WDS(1)</option>
+                                <option value="2" <?php if( isset($this->distributor['rank']) and $this->distributor['rank']==2 ) { ?> selected<?php }?>>2. ORG(2)</option>
+                                <option value="5" <?php if( isset($this->distributor['rank']) and $this->distributor['rank']==5 ) { ?> selected<?php }?>>3. ORG-Dtac/Advice(5)</option>
+                                <option value="6" <?php if( isset($this->distributor['rank']) and $this->distributor['rank']==6 ) { ?> selected<?php }?>>4. ORG-Lotus/Power by(6)</option>
+                                <option value="7" <?php if( isset($this->distributor['rank']) and $this->distributor['rank']==7 ) { ?> selected<?php }?>>5. Dealer(7)</option>
+                                <option value="8" <?php if( isset($this->distributor['rank']) and $this->distributor['rank']==8 ) { ?> selected<?php }?>>6. HUB(8)</option>
+                                <option value="9" <?php if( isset($this->distributor['rank']) and $this->distributor['rank']==9 ) { ?> selected<?php }?>>7. Laos(9)</option>
+                                <option value="3" <?php if( isset($this->distributor['rank']) and $this->distributor['rank']==3 ) { ?> selected<?php }?>>8. Online and Staff(3)</option>
+                                <option value="10" <?php if( isset($this->distributor['rank']) and $this->distributor['rank']==10 ) { ?> selected<?php }?>>9. Brand Shop/Service(10)</option>
+                                <option value="11" <?php if( isset($this->distributor['rank']) and $this->distributor['rank']==11 ) { ?> selected<?php }?>>10. King Power(11)</option>
+                                <option value="12" <?php if( isset($this->distributor['rank']) and $this->distributor['rank']==12 ) { ?> selected<?php }?>>11. Jaymart(12)</option>
+                                <option value="13" <?php if( isset($this->distributor['rank']) and $this->distributor['rank']==13 ) { ?> selected<?php }?>>12. Brand Shop By Dealer(13)</option>
+                                <option value="14" <?php if( isset($this->distributor['rank']) and $this->distributor['rank']==14 ) { ?> selected<?php }?>>13. KR Dealer(14)</option>
+                                <option value="15" <?php if( isset($this->distributor['rank']) and $this->distributor['rank']==15 ) { ?> selected<?php }?>>14. TRUE(15)</option>
+                            </select>
+                        
+                     </div>
+
+                     <div class="distributor_list" id="distributor_list"></div> 
+
+                    
+                </div>
+
+                <div class="span6">
+                    <div class='distributor-info clearfix'>
+                        <p class='retailer_name'>
+                            <label>Distributor Name: </label>
+                            <span></span>
+                        </p>
+                        <p <?php if($this->sales[0]['sale']->delivery_address==''){?> class='add' <?php } ?>>
+                            <label>Address Delivery: </label>
+                            <textarea name="add_delivery_new" rows="5" cols="190" readonly="true" class="address_textarea"></textarea>
+                       
+
+                        </p>
+                        
+
+                    </div>
+                </div>
+            </div>
+
+            <div class="row">
+                <div class="span6">
+
+                    <label class="span2" for="chanel">Chanel <span style="color: red">*</span></label>    
+                        <select id="chanel" name="chanel" required="required">
+                            <option value="">กรุณาเลือกช่องทาง</option>
+                            <option value="promotion">ส่งเสริมการขาย</option>
+                            <option value="incentive">ค่า Incentive</option>
+                            <option value="decoration">ค่าตกแต่งหน้าร้าน</option>
+                            <option value="price">แก้ไขราคา</option>
+                            <option value="oppo_all_green">OPPO All Green</option>
+                            <option value="top_green">OPPO Top Green</option>
+                            <option value="live_demo">Live Demo</option>
+                            <option value="rent">ค่าเช่า</option>
+                            <option value="reward">ส่งเสริมการขาย OPPO Club</option>
+                        </select> 
+                </div>
+            </div>
+            </br>
+
+            <div class="row">
+                <div class="span6">
+
+                    <label class="span2" for="chanel">วันที่สร้าง CN <span style="color: red">*</span></label>    
+                    <input type="text" class="create_date" id="create_date" name="create_date" value="<?php echo date('Y-m-d'); ?>"> 
+                </div>
+            </div>
+            </br>
+
+            <div class="row">
+                <div class="span6">
+                        <label class="span2" for="price_ext_vat">Price (ราคาก่อน VAT) <span style="color: red">*</span></label>   
+                        <input type="text" required="required"  class="price_ext_vat" name="price_ext_vat" />
+                </div>
+            </div>
+            </br>
+
+            <div class="row">
+                <div class="span6">
+
+                    <label class="span2" for="vat">VAT <span style="color: red">*</span></label>    
+                        <select id="vat" name="vat" required="required">
+                            <option value="">กรุณาเลือก VAT</option>
+                            <option value="0">0%</option>
+                            <option value="7">7%</option>
+                        </select>
+                    </label>
+                </div>
+            </div>
+            </br>
+
+            <div class="row">
+                <div class="span6">
+
+                    <label class="span2" for="wht_vat">ภาษีหัก ณ ที่จ่าย <span style="color: red">*</span></label>    
+                        <select id="wht_vat" name="wht_vat" required="required">
+                            <option value="">กรุณาเลือก</option>
+                            <option value="0">0%</option>
+                            <option value="1">1%</option>
+                            <option value="2">2%</option>
+                            <option value="3">3%</option>
+                            <option value="5">5%</option>
+                        </select>
+                    </label>
+                </div>
+            </div>
+            </br>
+          
+            <div class="row">
+                <div class="span6">
+                        <label class="span2" for="wht_price">Price (ภาษีหัก ณ ที่จ่าย) <span style="color: red">*</span></label>   
+                        <input type="text" required="required"  class="wht_price" name="wht_price" />
+                </div>
+            </div>
+            </br>
+
+            <div class="row">
+                <div class="span6">
+                        <label class="span2" for="price">Price (ราคารวม VAT) <span style="color: red">*</span></label>   
+                        <input type="text" required="required"  class="price" name="price" />
+                </div>
+            </div>
+            </br>
+
+            <div class="row">
+                <div class="span6">
+                        <label class="span2" for="manual_remark">Description<span style="color: red">*</span></label>   
+                        <textarea name="manual_remark" class="span2" required="required"></textarea>
+                        <label class="span3" for="manual_remark"><span style="color: red;font-size: 6px;">"ตัวอย่าง :    ส่งเสริมการขาย OPPO Club ช่วงวันที่ 1 มกราคม 2561 ถึง 1 มกราคม 2561"</span></label>
+                </div>
+            </div>
+            </br>
+
+            <div class="row">
+                <div class="span6">
+                        <label class="span2" for="creditnote_status">เปิดใช้งาน <span style="color: red">*</span></label>   
+                        <input type="checkbox" id="creditnote_status" name="creditnote_status" value="1"  checked />
+                </div>
+            </div>
+            </br>
+            <div class="row">
+                <div class="span6">
+                    <input type="hidden" id="back_url" name="back_url" value="/finance/creditnote-manual-list">
+                    <input  type="hidden" id="type" name="type" value="" />
+                    <input  type="hidden" id="creditnote_type" name="creditnote_type" value="CN" />
+                    <button type="submit" class="btn btn-primary">Save</button>
+                    <button type="button" class="btn btn-danger go-back">Go back</button>
+                </div>
+            </div>
+        </form>
+    </div>
+
+</div>
+</div>
+<script async="async">
+    <?php if(isset($this->rank)) { ?>
+            $('#rank').val(<?= $this->rank ?>);
+            get_distributor_cached_for_search(<?= $this->rank ?>);
+    <?php }?>
+
+    $(document).ready(function () {
+        initChangeVAT();
+        //console.log(111);
+    });    
+
+    $('.price_ext_vat').live('change', function(e) {
+        cal_cn_price();   
+    });
+
+
+    function initChangeVAT()
+    {
+        $(document).off('change', 'form #vat,form #wht_vat')
+        .on('change', 'form #vat,form #wht_vat', function(e) {
+            cal_cn_price();
+        });
+    }
+
+    function cal_cn_price()
+    {
+        var total_price=0;var total_price_vat=0;var total_price_wht_vat=0;
+        var vat_cal=0;var wht_vat_cal=0;
+        var price_ext_vat = $('.price_ext_vat').val();
+        var vat = $('#vat :selected').val();
+        var wht_vat = $('#wht_vat :selected').val();
+
+        switch(vat) {
+            case '0':
+                vat_cal = 0;
+                break;
+            case '7':
+                vat_cal = 0.07;
+                break;
+            default:
+                vat_cal = 0;
+        }
+
+        switch(wht_vat) {
+            case '1':
+                wht_vat_cal = 0.01;
+                break;
+            case '2':
+                wht_vat_cal = 0.02;
+                break;
+            case '3':
+                wht_vat_cal = 0.03;
+                break;
+            case '5':
+                wht_vat_cal = 0.05;
+                break;        
+            default:
+                wht_vat_cal = 0;
+        }
+
+        total_price_vat = price_ext_vat * vat_cal;
+
+        total_price_wht_vat = price_ext_vat * wht_vat_cal;
+
+        total_price = Math.round(price_ext_vat) + Math.round(total_price_vat) - Math.round(total_price_wht_vat);
+
+        $('.wht_price').val(roundNumber(total_price_wht_vat,2).replace(",", ""));
+        $('.price').val(roundNumber(total_price,2).replace(",", ""));
+
+        /*console.log(price_ext_vat);
+        console.log(vat);
+        console.log(wht_vat);
+        console.log(vat_cal);
+        console.log(wht_vat_cal);
+        console.log(total_price);*/
+    }
+
+
+    $(".price_ext_vat").keydown(function (e) {
+        // Allow: backspace, delete, tab, escape, enter and .
+        if ($.inArray(e.keyCode, [46, 8, 9, 27, 13, 110, 190]) !== -1 ||
+             // Allow: Ctrl+A, Command+A
+            (e.keyCode === 65 && (e.ctrlKey === true || e.metaKey === true)) || 
+             // Allow: home, end, left, right, down, up
+            (e.keyCode >= 35 && e.keyCode <= 40)) {
+                 // let it happen, don't do anything
+                 return;
+        }
+        // Ensure that it is a number and stop the keypress
+        if ((e.shiftKey || (e.keyCode < 48 || e.keyCode > 57)) && (e.keyCode < 96 || e.keyCode > 105)) {
+            e.preventDefault();
+        }
+    });
+
+    $(".wht_price").keydown(function (e) {
+        // Allow: backspace, delete, tab, escape, enter and .
+        if ($.inArray(e.keyCode, [46, 8, 9, 27, 13, 110, 190]) !== -1 ||
+             // Allow: Ctrl+A, Command+A
+            (e.keyCode === 65 && (e.ctrlKey === true || e.metaKey === true)) || 
+             // Allow: home, end, left, right, down, up
+            (e.keyCode >= 35 && e.keyCode <= 40)) {
+                 // let it happen, don't do anything
+                 return;
+        }
+        // Ensure that it is a number and stop the keypress
+        if ((e.shiftKey || (e.keyCode < 48 || e.keyCode > 57)) && (e.keyCode < 96 || e.keyCode > 105)) {
+            e.preventDefault();
+        }
+    });
+
+    $(".price").keydown(function (e) {
+        // Allow: backspace, delete, tab, escape, enter and .
+        if ($.inArray(e.keyCode, [46, 8, 9, 27, 13, 110, 190]) !== -1 ||
+             // Allow: Ctrl+A, Command+A
+            (e.keyCode === 65 && (e.ctrlKey === true || e.metaKey === true)) || 
+             // Allow: home, end, left, right, down, up
+            (e.keyCode >= 35 && e.keyCode <= 40)) {
+                 // let it happen, don't do anything
+                 return;
+        }
+        // Ensure that it is a number and stop the keypress
+        if ((e.shiftKey || (e.keyCode < 48 || e.keyCode > 57)) && (e.keyCode < 96 || e.keyCode > 105)) {
+            e.preventDefault();
+        }
+    });
+
+</script>    
+<?php echo $this->render('finance/partials/create_cn_price_manual_script.phtml'); ?>

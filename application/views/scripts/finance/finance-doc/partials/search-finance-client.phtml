@@ -1,0 +1,159 @@
+<link rel="stylesheet" href="<?php echo HOST?>css/select2.css" />
+<script src="<?php echo HOST?>js/select2.js"></script>
+
+<form class="form-search form-horizontal" method="get">
+	<div class="row">
+
+		<div class="span5">
+			<div class="control-group">
+				<label for="dis_id_m" class="control-label"> Distributor(My Side) : </label>
+				<div class="controls">
+					<select class="span3" name="dis_id_m" id="dis_id_m" >
+						<option value=""> Please Selected </option>
+
+						<?php if(isset($this->distributor_m) && $this->distributor_m) : ?>
+							<?php foreach ($this->distributor_m as $value) :  ?>
+								<option value="<?php echo $value['id'] ?>" <?php if(isset($this->params['dis_id_m']) && $this->params['dis_id_m'] == $value['id']) : ?> selected <?php endif; ?> ><?php echo $value['title'] ?></option>
+							<?php endforeach; ?>
+						<?php endif; ?>
+
+					</select>
+				</div>
+			</div>
+
+			<div class="control-group">
+				<label for="dis_id_y" class="control-label"> Distributor(Your Side) : </label>
+				<div class="controls">
+					<select class="span3" name="dis_id_y" id="dis_id_y" >
+						<option value=""> Please Selected </option>
+
+						<?php if(isset($this->distributor_y) && $this->distributor_y) : ?>
+							<?php foreach($this->distributor_y as $value) : ?>
+								<option value="<?php echo $value['id'] ?>" <?php if(isset($this->params['dis_id_y']) && $this->params['dis_id_y'] == $value['id']) : ?> selected <?php endif; ?> ><?php echo $value['title'] ?></option>
+							<?php endforeach; ?>
+						<?php endif; ?>
+						
+					</select>
+				</div>
+			</div>
+
+			<div class="control-group">
+				<label for="finance_client" class="control-label"> Finance Client : </label>
+				<div class="controls">
+					<input type="text" name="finance_client" class="span3" id="finance_client" value="<?php isset($this->params['finance_client']) and printf($this->params['finance_client']);?>">
+				</div>
+			</div>
+
+			<div class="control-group">
+				<label for="network" class="control-label"> Network : </label>
+				<div class="controls">
+					<select class="span3" name="network" id="network">
+						<option value=""> Please Selected </option>
+						<option value="1" <?php if(isset($this->params['network']) && $this->params['network'] == 1) : ?> selected <?php endif; ?> > All Network </option>
+					</select>
+				</div>
+			</div>
+
+			<div class="control-group">
+				<label for="mnemonic_code" class="control-label"> Mnemonic code : </label>
+				<div class="controls">
+					<input type="text" name="mnemonic_code" id="mnemonic_code" class="span3" value="<?php isset($this->params['mnemonic_code']) and printf($this->params['mnemonic_code']);?>" />
+				</div>
+			</div>
+
+			<div class="control-group">
+				<label for="" class="control-label"> Finance Warehouse Name : </label>
+				<div class="controls">
+					<select class="span3" name="finance_warehouse" id="finance_warehouse">
+						<option value=""> Please Selected </option>
+
+						<?php if(isset($this->finance_warehouse_arr) && $this->finance_warehouse_arr) : ?>
+							<?php foreach($this->finance_warehouse_arr as $value) : ?>
+								<option value="<?php echo $value['id'] ?>" <?php if(isset($this->params['finance_warehouse']) && $this->params['finance_warehouse'] == $value['id']) : ?> selected <?php endif; ?> ><?php echo $value['name'] ?></option>
+							<?php endforeach; ?>
+						<?php endif; ?>
+					</select>
+				</div>
+			</div>
+
+		</div>
+
+		<div class="span5">
+			<div class="control-group">
+				<label for="account_org_m" class="control-label"> Accounting organization(My Side) : </label>
+				<div class="controls">
+					<input type="text" name="account_org_m" id="account_org_m" class="span3" value="<?php isset($this->params['account_org_m']) and printf($this->params['account_org_m']);?>">
+				</div>
+			</div>
+
+			<div class="control-group">
+				<label for="account_org_y" class="control-label"> Accounting organization(Your Side) : </label>
+				<div class="controls">
+					<input type="text" name="account_org_y" id="account_org_y" class="span3" value="<?php isset($this->params['account_org_y']) and printf($this->params['account_org_y']);?>">
+				</div>
+			</div>
+
+			<div class="control-group">
+				<label for="cross_account" class="control-label"> Cross - accounting organizations are allowed : </label>
+				<div class="controls">
+					<select class="span3" name="cross_account" id="cross_account">
+						<option value=""> Please Selected </option>
+						<option value="1" <?php if(isset($this->params['cross_account']) && $this->params['cross_account'] == 1) : ?> selected <?php endif; ?> > Yes </option>
+						<option class="2" <?php if(isset($this->params['cross_account']) && $this->params['cross_account'] == 2) : ?> selected <?php endif; ?> > No </option>
+					</select>
+				</div>
+			</div>
+
+			<div class="control-group">
+				<label class="control-label" for="status"> Off/On : </label>
+				<div class="controls">
+					<select class="span3" name="status" id="status">
+						<option value=""> Please Selected </option>
+						<option value="1" <?php if(isset($this->params['status']) && $this->params['status'] == 1) : ?> selected <?php endif; ?> > On </option>
+						<option value="2" <?php if(isset($this->params['status']) && $this->params['status'] == 2) : ?> selected <?php endif; ?> > Off </option>
+					</select>
+				</div>
+			</div>
+
+		</div>
+
+		<button type="submit" class="btn btn-primary">Search</button>
+		<button type="reset" class="btn btn-warning">Reset</button>
+		<button type="submit" class="btn btn-success" name="export" value="1"> Export </button>
+
+	</div>
+</form>
+
+<script type="text/javascript">
+	$('#dis_id_m, #dis_id_y').select2();
+
+	$(document).ready(function () {
+
+		$( "#dis_id_m" ).change(function() {
+			var distributor_id    = $('#dis_id_m').val();
+			$.get("/finance/load-distributor",
+				{distributor_id : distributor_id}
+				,function(data,status){
+					var data = $.parseJSON( data );
+
+					if (data.distributor){
+						var obj = data.distributor;
+						$('#dis_id_y').html('<option value="0"> Please Selected </option>');
+						for (var i = 0; i < obj.length; i++) {
+							$('#dis_id_y').append('<option value="'+obj[i]['id']+'">'+obj[i]['title']+'</option>');
+						}
+					}
+
+					if (data.financewarehouse){
+						var obj = data.financewarehouse;
+						$('#finance_warehouse').html('<option value="0"> Please Selected </option>');
+						for (var i = 0; i < obj.length; i++) {
+							$('#finance_warehouse').append('<option value="'+obj[i]['id']+'">'+obj[i]['name']+'</option>');
+						}
+					}
+
+				})
+		})
+
+	});
+</script>

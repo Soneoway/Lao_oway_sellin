@@ -1,0 +1,127 @@
+<div class="page-header">
+    <h1>IMEI return management</h1>
+</div>
+<?php
+    if (isset($this->messages_success) and $this->messages_success)
+        foreach ($this->messages_success as $message):
+            echo '<div class="alert alert-success">'.$message.'</div>';
+        endforeach;
+
+    if (isset($this->messages) and $this->messages)
+        foreach ($this->messages as $message):
+            echo '<div class="alert alert-error">'.$message.'</div>';
+        endforeach;
+?>
+<div class="accordion" id="accordion2">
+    <div class="accordion-group">
+        <div class="accordion-heading">
+            <a class="accordion-toggle collapsed" data-toggle="collapse" data-parent="#accordion2" href="#collapseTwo">
+                Search
+            </a>
+        </div>
+        <div id="collapseTwo" class="accordion-body collapse" style="height: 0px;">
+            <div class="accordion-inner">
+                <form id="form" name="form" class="form-search form-horizontal" action="<?php echo HOST ?>warehouse/return-management">
+                    <div class="row">
+                        <div class="span6">
+                            <div class="control-group">
+                                <label class="control-label" for="imei_sn">IMEI</label>
+                                <div class="controls">
+                                    <input type="text" id="imei_sn" name="imei_sn" placeholder="IMEI" <?php if( isset($this->params['imei_sn']) && $this->params['imei_sn'] ) echo 'value="'.$this->params['imei_sn'].'"' ?> />
+                                </div>
+                            </div>
+
+                        </div>
+                        <div class="span6">
+                            <div class="control-group">
+                                <label class="control-label" for="return_sn">Return SN</label>
+                                <div class="controls">
+                                    <input type="text" id="return_sn" name="return_sn" placeholder="Return SN" <?php if( isset($this->params['return_sn']) && $this->params['return_sn'] ) echo 'value="'.$this->params['return_sn'].'"' ?> />
+                                </div>
+                            </div>
+
+                        </div>
+                    </div>
+
+                    <div class="row">
+                        <div class="span10">
+                            <div class="controls">
+                                <button type="submit" class="btn btn-primary">Search</button>
+                                <button type="reset" class="btn btn-warning">Reset</button>
+                            </div>
+                        </div>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+</div>
+
+<div class="table-responsive load-ajax">
+    <table class="table table-bordered">
+        <thead>
+        <tr>
+            <?php echo $this->sorting(array(
+                    '#',
+                    'IMEI',
+                    'Return SN',
+                    'Warehouse',
+                    'Status',
+                    'Back warehouse at',
+                    'Back warehouse by',
+                    'Action'
+                ),
+                $this->url, $this->sort, $this->desc); ?>
+        </tr>
+        </thead>
+        <tbody>
+        <?php
+        $status = array(
+            1 => 'Goodset',
+            2 => 'Broken-seal',
+            3 => 'Box-damage',
+            4 => 'Unit-damage',
+        );
+        if (isset($this->list) and $this->list)
+            foreach ($this->list as $k=>$item): ?>
+                <tr>
+
+                    <td>
+                        <?php
+                        $inc = $this->offset + $k + 1;
+                        echo $inc;
+                        ?>
+                    </td>
+                    <td><?php echo $item['imei_sn'] ?></td>
+                    <td><?php echo $item['return_sn'] ?></td>
+                    <td><?php echo ( isset($this->warehouses_cached[$item['warehouse_id']]) ? $this->warehouses_cached[$item['warehouse_id']] : '' ) ?></td>
+                    <td><?php echo ( isset($status[$item['status']]) ? $status[$item['status']] : '' ) ?></td>
+                    <td><?php echo $item['back_warehouse_at'] ?></td>
+                    <td><?php echo ( isset($this->staffs_cached[$item['back_warehouse_by']]) ? $this->staffs_cached[$item['back_warehouse_by']] : '' ) ?></td>
+                    <td class="">
+                        <a title="Back to sales" class="confirmLink" href="/warehouse/return-back-sales?id=<?php echo $item['id'];?>&return=1"> <i class="icon-ok"></i></a>
+                    </td>
+                </tr>
+            <?php endforeach;?>
+
+        </tbody>
+    </table>
+    <div class="paging">
+        <?php echo $this->paging($this->total, $this->limit, $this->offset, $this->url);?>
+    </div>
+
+
+</div>
+<?php echo $this->load();?>
+<?php echo $this->confirm();?>
+<script type="text/javascript" src="/js/jquery-ui-1.8.12.custom.min.js"></script>
+<link rel="stylesheet" type="text/css" href="/css/jquery-ui-1.8.12.custom.css"/>
+<script>
+    $(document).ready(function () {
+        $('.form-search button:reset').click(function (e){
+            $('.form-search input, .form-search select').val('');
+            $('.form-search').submit();
+            return false;
+        });
+    });
+</script>

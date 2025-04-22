@@ -1,0 +1,107 @@
+<?php
+function product_price($priceFloat) {
+$symbol_thousand = '.';
+$decimal_place = 0;
+$price = number_format($priceFloat, $decimal_place, '', $symbol_thousand);
+return $price;
+}
+?>
+<table class="table table-bordered">
+    <thead>
+        <tr>
+            <?php echo $this->sorting(array(
+                    //'<label class="select_all">Select All <input type="checkbox" style="display:none;" /></label>',
+                    'campaign_id'    => 'Campaign Id',
+                    'name'           => 'Campaign Name',
+                    'status'         => 'Status',
+                    'distributor_all'=> 'Distributor',
+                    'start_date'     => 'Start Date',
+                    'end_date'       => 'End Date',
+                    'Action',
+                ),
+                $this->url, $this->sort, $this->desc); ?>
+        </tr>
+    </thead>
+    <tbody>
+    <?php 
+        foreach ($this->forceSale as $campaign): 
+    ?>
+        <tr>
+            <td><?php echo $campaign['campaign_id'];?></td>
+            <td><?php echo $campaign['name'];?></td>
+            <td><?php echo $campaign['status'];?></td>
+            <td><?php echo ($campaign['distributor_all'] == 1 ? 'All' :'By Select') ;?></td>
+            <td><?php echo $campaign['start_date'];?></td>
+            <td><?php echo $campaign['end_date'];?></td>
+            <td>
+                <a title="Edit" href="/force-sale/create?id=<?php echo $campaign['campaign_id'];?>&type=<?php echo $campaign['order_type'];?>"> <i class="icon-edit"></i></a>
+                <a title="Edit" href="/force-sale/detele?id=<?php echo $campaign['campaign_id'];?>"> <i class="icon-trash"></i></a>
+
+            </td>
+        </tr>
+    <?php endforeach;?> 
+
+    </tbody>
+</table>
+
+<div class="paging">
+    <?php
+    // print_r($this->total.'- -'. $this->limit.'- -'.$this->offset.'- -'. $this->url) ;
+    echo $this->paging($this->total, $this->limit, $this->offset, $this->url);?>
+</div>
+
+<script type="text/javascript" src="/js/jquery-ui-1.8.12.custom.min.js"></script>
+<link rel="stylesheet" type="text/css" href="/css/jquery-ui-1.8.12.custom.css"/>
+<?php echo $this->load();?>
+<?php echo $this->confirm();?>
+<script>
+
+var tmp_warehouse_id = 0;
+var locaton_pair = {
+    1: 8,
+    2: 11,
+    3: 10,
+    8: 1,
+    10: 3,
+    11: 2
+};
+
+;(function($){
+    $('.select_all input').on('change', function(e) {
+        check = $('.select_all input').prop('checked');
+        $('.row_select').prop('checked', check);
+
+        if (check)
+            $('.row_select').parents('tr').addClass("checked");
+        else
+            $('.row_select').parents('tr').removeClass("checked");
+    });
+
+    $(".row_select").on('change', function(e) {
+
+        if ($(this).prop('checked') == true) {
+            $('.row_select').prop('checked', false);
+            $(this).prop('checked', true);
+        } 
+
+        /*
+        if($(this).is(":checked")){
+            current_warehouse_id = $(this).data('warehouse');
+            if (tmp_warehouse_id && tmp_warehouse_id != current_warehouse_id && locaton_pair[tmp_warehouse_id] != current_warehouse_id) {
+                console.log(locaton_pair[tmp_warehouse_id]);
+                e.preventDefault();
+                $(this).removeAttr('checked');
+                alert("Orders in 02 warehouses");
+
+                return false;
+            }
+
+            tmp_warehouse_id = current_warehouse_id;
+
+            $(this).closest('tr').addClass("checked");
+        } else{
+            $(this).closest('tr').removeClass("checked");
+        }*/
+    });
+})(jQuery);
+</script>

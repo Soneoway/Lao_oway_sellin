@@ -1,0 +1,312 @@
+<script type="text/javascript" src="<?php echo HOST ?>js/jquery-ui-1.8.12.custom.min.js"></script>
+<link rel="stylesheet" type="text/css" href="<?php echo HOST ?>css/jquery-ui-1.8.12.custom.css"/>
+
+<!-- <link href="../css/select2.css" rel="stylesheet"/> -->
+<!-- <script src="../js/select2.js"></script> -->
+
+<div class="page-header">
+    <h1>Quota Management</h1>
+</div>
+<style type="text/css">
+.label {
+    padding: 3px 6px 4px;
+    font-size: 12px;
+    }
+	.label-default  {
+  background-color: #aaa  !important;
+}
+
+.badge-primary,
+.label-primary {
+  background-color: #428bca !important;
+}
+
+.label-success, 
+.badge-success {
+  background-color: #3cc051;
+  background-image: none !important;
+}
+
+.label-warning, 
+.badge-warning {
+  background-color: #fcb322;
+  background-image: none !important;
+}
+
+.label-danger, 
+.badge-danger {
+  background-color: #fb0000;
+  background-image: none !important;
+}
+
+.label-info, 
+.badge-info {
+  background-color: #57b5e3;
+  background-image: none !important;
+}
+</style>
+
+<?php
+    if (isset($this->messages_success) and $this->messages_success)
+        foreach ($this->messages_success as $message):
+            echo '<div class="alert alert-success">'.$message.'</div>';
+        endforeach;
+
+    if (isset($this->messages) and $this->messages)
+        foreach ($this->messages as $message):
+            echo '<div class="alert alert-error">'.$message.'</div>';
+        endforeach;
+?>
+
+<!-- Modal -->
+  <div class="modal fade" id="modal-clone-quota" role="dialog">
+    <div class="modal-dialog">
+    
+      <!-- Modal content-->
+      <div class="modal-content">
+        <div class="modal-header">
+          <button type="button" class="close" data-dismiss="modal">&times;</button>
+          <h4 class="modal-title">Clone Quota</h4>
+        </div>
+        <div class="modal-body">
+
+        <form method="post" action="<?php echo HOST ?>tool/clone-quota">
+          <p>Clone Date : 
+            <input type="text" class="form-control date" name="clone_date" value="<?php echo date('d/m/Y', strtotime('1 day'));?>" required="required">
+        </p>
+
+        <input type="hidden" id="modal-q_id" name="q_id" required="required">
+
+        </div>
+
+        <div class="modal-footer">
+          <button type="submit" class="btn btn-success" id="btn-modal-submit">Submit</button>
+
+          <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+        </div>
+
+        </form>
+
+      </div>
+      
+    </div>
+  </div>
+
+
+<!-- <div class="accordion" id="accordion2">
+    <div class="accordion-group">
+        <div class="accordion-heading">
+            <a class="accordion-toggle collapsed" data-toggle="collapse" data-parent="#accordion2" href="#collapseTwo">
+                Search
+            </a>
+        </div>
+        <div id="collapseTwo" class="accordion-body collapse" style="height: 0px;">
+            <div class="accordion-inner">
+                <?php
+                    // echo $this->render('tool/partials/distributor-black-list-search.phtml');
+                ?>
+            </div>
+        </div>
+    </div>
+</div> -->
+<div style="margin-bottom: 15px;"><a href="add-quota" class="btn btn-success">Add Quota</a>
+<button class="pull-right btn" id="btn-clone-quota" data-toggle="modal" data-target="#modal-clone-quota">Clone Quota</button>
+</div>
+<div class="table-responsive">
+    <table class="table table-bordered">
+        <thead>
+            <tr>
+                <?php echo $this->sorting(array(
+                        '#',
+                        'Quota Data',
+                        'Warehouse Name',
+                        'Distributor Type',
+                        'Product',
+                        'Color',
+                        'Type',
+                        'Quota Total',
+                        // 'Quota',
+                        'Status',
+                        'Action',
+                        '<center><input type="checkbox" class="check_all" name="check_all" /></center>'
+                    ),
+                    $this->url, $this->sort, $this->desc); ?>
+            </tr>
+        </thead>
+        <tbody>
+            <?php 
+                if( $this->quota ):
+                    $intSTT = 1;
+                foreach($this->quota as $item):
+
+                    if($item['created_at'] < '2017-10-19 05:00:00'){
+                    	switch ($item['dis_type']) {
+                    		case '1':
+                    			$type = 'ORG';
+                    			break;
+                    		case '7':
+                    			$type = 'Dealer / Hub';
+                    			break;
+                    		case '10':
+                    			$type = 'Brand Shop';
+                    			break;
+                    		
+                    		default:
+                    			$type = '-';
+                    			break;
+                    	}
+                    }else{
+                        switch ($item['dis_type']) {
+                            case '3':
+                                $type = "KA";
+                                break;
+                            case '2':
+                                $type = "KR";
+                                break;
+                            case '1':
+                                $type = "Dealer / Hub";
+                               break;
+                            case '10':
+                                $type = "Brand Shop";
+                               break;
+                            case '4':
+                                $type = "Operator";
+                               break;
+                            
+                            default:
+                                $type = '-';
+                                break;
+                        }
+                    }
+
+                if ($item['status'] == 1) {
+                	$toDay = date('Y-m-d');
+                	$quota_d = $item['quota_date'];
+
+                	if ($quota_d < $toDay) {
+                		$status = '<span class="label label-default">Expired</span>';
+                	}elseif ($quota_d > $toDay) {
+                		$status = '<span class="label label-primary">Quota Next</span>';
+                	}elseif ($quota_d = $toDay) {
+                		$status = '<span class="label label-success">Now</span>';
+                	}
+                }else{
+                	$status = '<span class="label label-danger">Disabled</span>';
+                }
+            ?>
+                    <tr>
+                        <td><?php echo $intSTT++;?></td>
+                        <td><?php echo date('d/m/Y',strtotime($item['quota_date']));?></td>
+                        <td><center><?php echo $item['warehouse_name']?></center></td>
+                        <td><?php echo $type?></td>
+                        <td><?php echo '[ '.$item['good'].' ]  '.$item['desc']?></td>
+                        <td><center><?php echo $item['color']?></center></td>
+                        <td><center><?php switch ($item['good_type']) {
+                            case '1':
+                                echo 'Normal';
+                                break;
+                            case '2':
+                                echo 'Demo';
+                                break;
+                            case '5':
+                                echo 'APK';
+                                break;
+                            
+                        } ?></center></td>
+
+                        <?php if(isset($item['channel']) and $item['channel'] == 99){
+                            $quantity_all = $item['quantity_all'];
+                            // $current_quota = 0;
+                            // if(isset($item['current_quota']) && $item['current_quota'] > 0){
+                            //     $current_quota = $item['current_quota'];
+                            // }
+                            // $quota = $quantity_all-$current_quota;
+                            ?>
+                    
+                        <td><center><?=$quantity_all?></center></td>
+                        <!-- <td><center><?=$quota?></center></td> -->
+
+                        <?php }else{
+
+                            $quantity_all = $item['quantity'];
+                            // $current_quota = 0;
+                            // if(isset($item['current_quota']) && $item['current_quota'] > 0){
+                            //     $current_quota = $item['current_quota'];
+                            // }
+                            // $quota = $quantity_all-$current_quota;
+
+                            ?>
+
+                        <td><center><?=$quantity_all?></center></td>
+                        <!-- <td><center><?=$quota?></center></td> -->
+
+                        <?php } ?>
+
+                        <td><center><?php echo $status?></center></td>
+                        
+                        <td>
+                        <center>
+                            <a class="btn btn-warning" title="view" href="view-quota?sn=<?=$item['sn']?>" >
+                                <i class="icon-eye-open "></i>
+                            </a>
+                        </center>
+                        </td>
+                        <td>
+                            <center><input type="checkbox" class="attach-quota" value="<?=$item['id']?>"></center>
+                        </td>
+                    </tr>
+            <?php 
+                endforeach;
+                endif;
+            ?>
+        </tbody>
+    </table>
+    <div class="paging">
+        <?php echo $this->paging($this->total, $this->limit, $this->offset, $this->url);?>
+    </div>
+</div>
+<script>
+
+    function unblock(id,title){
+
+        if (confirm("Press Confirm Unblock : "+title) == true) {
+                window.location.assign("/tool/un-black-list?d_id="+id);
+            }
+       
+    }
+
+    $(document).ready(function () {
+
+        $('.date').datepicker({ dateFormat: "dd/mm/yy",minDate:0 });
+
+        $('.form-search button:reset').click(function (e){
+            $('.form-search input, .form-search select').val('');
+            $('.form-search').submit();
+            return false;
+        });
+
+        $('.check_all').change(check_all);
+        function check_all(e) {
+            _self = $(e.target);
+            $('.attach-quota').prop('checked', _self.is(":checked"));
+        }
+
+        $('#btn-clone-quota').click(function(event) {
+            q_id = [];
+
+            $('.attach-quota:checked').each(function(index, el) {
+                q_id.push($(el).val());
+            });
+
+            if(q_id.length > 0){
+                $('#modal-q_id').val(q_id.join(','));
+            }else{
+                $('#modal-q_id').val('');
+            }
+        });
+
+        $('#btn-modal-submit').click(function(event) {
+            console.log($('#modal-q_id').val());
+        });
+    });
+</script>

@@ -1,0 +1,185 @@
+     <div class="col-md-12" style="display: flex;">
+            <div class="dual-list list-left-warehouses col-md-5">
+                <div class="well-W">
+                    <div class="row tabLeft">
+                        <div class="col-md-7">
+                            <div class="input-prepend">
+                                <span class="add-on"><i class="icon icon-search"></i></span>
+                                <input type="text" name="SearchDualList" class="form-control" placeholder="Search" />
+                            </div>
+                        </div>
+                        <div class="col-md-2">
+                            <div class="btn-group">
+                                <a class="btn btn-default selectorW" title="select all"><i class="icon icon-circle-blank"></i></a>
+                            </div>
+                        </div>
+                    </div>
+                    <div>
+                         <span class="so-title">WareHouses ID</span>
+                         <span class="price_ori">WareHouses Name</span>
+                         
+                    </div>
+                    <ul class="list-group">
+                    <?PHP 
+                        $i = 1;
+                        foreach ($this->warehouses as $id => $list ) :
+                         
+                            ?>
+                            <li class="list-group-item item-warehouses">
+                                <span class="so"><?=$id?></span>
+                                <span class="price_ori "><?=$list?>
+
+                                <input type="hidden" class="sn" name="w_id[]" disabled value="<?=$id?>">
+                                </span>
+                               
+                            </li>
+                            
+                            
+                      <?PHP $i+=1; 
+                       
+                      endforeach; ?>  
+                        
+                    </ul>
+                </div>
+            </div>
+
+            <div class="list-arrows-warehouses col-md-1 text-center">
+                <div class="but" style="margin-top: 80px;"><a class="btn btn-default btn-sm move-left">
+                    <span class="icon icon-chevron-left"></span>
+                </a>
+
+                <a class="btn btn-default btn-sm move-right">
+                    <span class="icon icon-chevron-right"></span>
+                </a>
+                </div>
+                
+            </div>
+
+            <div class="dual-list list-right-warehouses col-md-5">
+                <div class="well-W">
+                    <div class="row tabLeft">
+                        
+                        <div class="col-md-7">
+                            <div class="input-prepend">
+                                <span class="add-on"><i class="icon icon-search"></i></span>
+                                <input type="text" name="SearchDualList" class="form-control" placeholder="Search" />
+                                
+                            </div>
+                        </div>
+                        <div class="col-md-2">
+                            <div class="btn-group">
+                                <a class="btn btn-default selectorW" title="select all"><i class="icon icon-circle-blank"></i></a>
+                            </div>
+                        </div>
+                    </div>
+                    <div>
+                         <span class="so-title">WareHouses ID</span>
+                         <span class="price_ori">WareHouses Name</span>
+                         
+                    </div>
+                    <ul class="list-group">
+                        <?PHP 
+                        $i = 1;
+                        foreach ($this->warehousesSelect as $list ) :
+                         
+                            ?>
+                            <li class="list-group-item item-warehouses">
+                                <span class="so"><?=$list['w_id']?></span>
+                                <span class="price_ori "><?=$list['name']?>
+
+                                <input type="hidden" class="sn" name="w_id[]" value="<?=$list['w_id']?>">
+                                </span>
+                               
+                            </li>
+                            
+                            
+                      <?PHP $i+=1; 
+                       
+                      endforeach; ?>  
+                    </ul>
+                
+                </div>
+            </div>
+        </div>
+        
+       
+     
+
+    <script type="text/javascript">
+     
+  
+    
+    $(document).ready(function () {
+           
+          
+            // $("*").keypress(function(event){  
+            //      if(event.keyCode==13){  
+            //         return false;  
+            //      }  
+            // });
+
+            $('body').on('click', '.list-group .item-warehouses', function () {
+                $(this).toggleClass('activeW');
+            });
+           
+
+          
+            $('.list-arrows-warehouses a').click(function () {
+                var $button = $(this), actives = '';
+                if ($button.hasClass('move-left')) {
+                    actives = $('.list-right-warehouses ul li.activeW');
+                    actives.removeClass('activeW');
+                   acc = actives.clone().appendTo('.list-left-warehouses ul').find('span').addClass('none_price').find('input,textarea,select,hidden,number').attr('disabled','disabled');
+                    acc.parent().parent().find('.pay_ment').removeClass('pay_money_total');
+                    actives.remove();
+                    
+                  
+                } else if ($button.hasClass('move-right')) {
+                    actives = $('.list-left-warehouses ul li.activeW');
+                    actives.removeClass('activeW');
+                    acc  =  actives.clone().appendTo('.list-right-warehouses ul').find('span').removeClass('none_price').find('input,textarea,select,hidden,number').removeAttr('disabled');
+                    acc.parent().find('.pay_ment').addClass('pay_money_total');
+                    actives.remove();
+                   
+                    
+                    
+                }
+            });
+
+            $('.dual-list .selectorW').click(function () {
+                var $checkBox = $(this);
+                if (!$checkBox.hasClass('selected')) {
+                    $checkBox.addClass('selected').closest('.well-W').find('ul li:not(.activeW)').addClass('activeW');
+                    $checkBox.children('i').removeClass('icon icon-circle-blank').addClass('icon icon-ok');
+                } else {
+                    $checkBox.removeClass('selected').closest('.well-W').find('ul li.activeW').removeClass('activeW');
+                    $checkBox.children('i').removeClass('icon icon-ok').addClass('icon icon-circle-blank');
+                }
+            });
+            $('[name="SearchDualList"]').keyup(function (e) {
+                var code = e.keyCode || e.which;
+                if (code == '9') return;
+                if (code == '27') $(this).val(null);
+                var $rows = $(this).closest('.dual-list').find('.list-group li.item-warehouses');
+                var val = $.trim($(this).val()).replace(/ +/g, ' ').toLowerCase();
+                $rows.show().filter(function () {
+                    var text = $(this).text().replace(/\s+/g, ' ').toLowerCase();
+                    return !~text.indexOf(val);
+                }).hide();
+            });
+
+            
+
+            $(document).on("submit", "form", function(e)
+            {
+                 $('#form').submit();
+            });
+            
+        });
+
+        
+        function roundNumber(num, dec) {
+            var result = Math.round(num*Math.pow(10,dec))/Math.pow(10,dec);
+            return Number(result).toLocaleString('en',{ minimumFractionDigits: 2 });
+        }
+    </script>

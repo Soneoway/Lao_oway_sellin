@@ -1,0 +1,473 @@
+<script type="text/javascript" src="/js/jquery-ui-1.8.12.custom.min.js"></script>
+<link rel="stylesheet" type="text/css" href="/css/jquery-ui-1.8.12.custom.css"/>
+<script type="text/javascript">
+    $(document).ready(function () {
+
+        $('.go-back').click(function(e){
+            window.location.href = $('#back_url').val();
+            return false;
+        });
+
+        $('.go-view').click(function(e){
+            window.location.href = $('#view_url').val();
+            return false;
+        });
+
+        $( '.date' ).datepicker({ dateFormat: "dd/mm/yy" });
+        initSelectJoint();
+        initSelectJointAccessories();
+        initSelectQuantityBVG();
+        initSelectProductBVG();
+        initAddBVG();
+        initRemoveSales();
+        initRemoveAccessories();
+        // initSearchOptionDistributor('distributor_id', 'SearchBox');
+        initAddBvgAccessories();
+        initSelectProductBVGAccessories();
+        initChangeRetailer();
+    });
+
+    var joint_total = 0;
+
+    function initChangeRetailer(){//change retailer
+
+        $('.distributor-info').hide();
+        $('.customer-info').hide();
+        $(document).off('change', '#distributor_id')
+        .on('change', '#distributor_id', function(e) {
+            getRetailerInfo($(this));
+           // DiscountCreditNote();
+        });
+        
+        //initViewMore();
+    }
+
+    function getRetailerInfo(_this){
+
+        var id = _this.val();
+        if(id == ''){
+        $('.distributor-info').slideUp();
+        $('.customer-info').slideUp();
+    }else{
+
+        $.ajax({
+            type: 'get',
+            url : '/checkmoney/getbalance',
+            data: {'id':id},
+            success: function(data){
+                if(data.status != 0){
+                   // alert(JSON.stringify(data));
+                    $('.distributor-info .retailer_name span').html(data.result.retailer_name);
+                    $('.distributor-info .add textarea').html(data.result.add);
+                   //-------------------------------
+                } else {
+                    $('.distributor-info .retailer_name span').html('');
+                    $('.distributor-info .add textarea').html('');
+                }
+            }
+        });
+
+
+        $('.distributor-info').slideDown();
+    }
+
+    }
+
+
+    function initAddBVG(){
+        $('.add-bvg').click(function(e){
+            var old_div = $('.div-bvg');
+            var new_div = old_div.clone();
+            var distributor_id = $('#distributor_id').val();
+            new_div.removeClass('div-bvg').find('select, input, textarea').removeAttr('disabled');
+            $('from .joint').each(function(i, obj) {
+                if($('.joint').val())
+                {
+                    joint_total++;
+                }
+            });
+            $.get("/get/load-joint",
+                {distributor_id : distributor_id , init_params : 1}
+                ,function(data,status){
+                    var data = $.parseJSON( data );
+
+                    if (data){
+                        var obj = data;
+
+
+                        new_div.find('.joint').html('<option value="0">Please select</option>');
+                        for (var i = 0; i < obj.length; i++) {
+
+                            if(i <= joint_total)
+                            {
+                                new_div.find('.joint').append('<option value="'+obj[i]['id']+'">'+obj[i]['name']+'</option>');
+                            }
+                            else
+                                new_div.find('.joint').append('<option disabled value="'+obj[i]['id']+'">'+obj[i]['name']+'</option>');
+                        }
+                    }
+
+                    else
+                    {
+                        alert(data.error);
+                    }
+
+
+                    $('button[type=submit]').prop('disabled', false);
+                    $('form').unbind('submit');
+                });
+
+            new_div.insertBefore($(this).parent().parent().parent()).show();
+
+
+
+            initSelectJoint();
+            initSelectQuantityBVG();
+            initRemoveSales();
+            initSelectProductBVG();
+            return false;
+        });
+    }
+
+    //fucntion add bvg accessories
+    function initAddBvgAccessories()
+    {
+        $('.add-accessories').click(function(e){
+            var old_div = $('.div-accessories');
+            var new_div = old_div.clone();
+            new_div.removeClass('div-accessories').find('select, input, textarea').removeAttr('disabled');
+            new_div.insertBefore($(this).parent().parent().parent()).show();
+            initSelectJoint();
+            initSelectQuantityBVG();
+            initRemoveAccessories()
+            initSelectProductBVG();
+            initSelectProductBVGAccessories();
+            return false;
+        });
+    }
+
+    function initSelectProductBVGAccessories()
+    {
+        $(document).off('change', '.good_id_bvg_accessories')
+            .on('change', '.good_id_bvg_accessories', function(e) {
+
+
+                $('.loading').remove();
+                $(this).after('<span class="loading"></span>');
+
+
+                var div_parent = $(this).parent().parent().parent();
+
+                var _self = $(this);
+
+                var good_id = div_parent.find('.good_id_bvg_accessories').val();
+                var joint = div_parent.find('.joint_accessories').val();
+
+                div_parent.find('.num_bvg, .price_bvg, .total_bvg').val('');
+                var distributor_id    = $('#distributor_id').val();
+
+
+                $.get("/get/load-joint",
+                    {joint: joint, good_id: good_id , init_params : 3 , distributor_id : distributor_id }
+                    ,function(data,status){
+                        var data = $.parseJSON( data );
+                        if (data){
+                            var price = data.price;
+                            var num = data.total_num;
+                            var total_price = data.total_price;
+                            div_parent.find('.price_bvg').val(float_f(price));
+                            div_parent.find('.num_bvg').val(num);
+                            div_parent.find('.total_new').val(total_price);
+                        }
+
+                        //   $('button[type=submit]').prop('disabled', false);
+                        //  $('form').unbind('submit');
+                        _self.nextAll('.loading').remove();
+                    });
+            });
+    }
+
+
+    function initSelectProductBVG()
+    {
+        $(document).off('change', '.good_id_bvg')
+            .on('change', '.good_id_bvg', function(e) {
+                $('button[type=submit]').prop('disabled', true);
+                $('form').bind('submit',function(e){e.preventDefault();});
+                var distributor_id    = $('#distributor_id').val();
+                var _self = $(this);
+                if(!distributor_id)
+                {
+                    _self.val('');
+                    alert('Please select Warehouse/Retailer!');
+                }
+
+
+                $('.loading').remove();
+                $(this).after('<span class="loading"></span>');
+
+                var div_parent = $(this).parent().parent().parent();
+
+
+
+                var good_id = div_parent.find('.good_id_bvg').val();
+                var joint = div_parent.find('.joint').val();
+
+                div_parent.find('.num_bvg, .price_bvg, .total_bvg').val('');
+
+
+                $.get("/get/load-joint",
+                    {joint: joint, good_id: good_id , distributor_id : distributor_id}
+                    ,function(data,status){
+
+                        var data = $.parseJSON( data );
+
+                        var price = data.price;
+                        var num = data.total;
+                        var total = data.total_price;
+
+                        if (num > 0){
+                            div_parent.find('.price_bvg').val(float_f(price));
+                            div_parent.find('.num_bvg').val(float_f(num));
+                            div_parent.find('.total_bvg').val(float_f(total));
+                            selectBVGIMEI(div_parent);
+                            joint_total++;
+                        }
+                        else
+                        {
+                            alert('This distributor is don\'t have imei for this joint circular or discounts have been paid!');
+                        }
+
+                        $('button[type=submit]').prop('disabled', false);
+                        $('form').unbind('submit');
+                        _self.nextAll('.loading').remove();
+                    });
+            });
+    }
+
+    function initSelectQuantityBVG()
+    {
+        $(document).off('change', '.num_bvg')
+            .on('change', '.num_bvg', function(e) {
+             //   $('button[type=submit]').prop('disabled', true);
+            //    $('form').bind('submit',function(e){e.preventDefault();});
+                $('.loading').remove();
+                var distributor_id    = $('#distributor_id').val();
+                var div_parent = $(this).parent().parent().parent();
+                var _self = $(this);
+                var num = _self.val();
+                var price = floatval(div_parent.find('.price_bvg').val());
+
+                if (distributor_id) {
+                    console.log(distributor_id);
+                    var total_price = 0;
+                    if (price && num)
+                        total_price = price * num;
+                    div_parent.find('.total_bvg').val(float_f(total_price)).change();
+                    selectBVGIMEI(div_parent);
+
+                }
+                else
+                {
+                    _self.val('');
+                    alert('Please select Warehouse/Retailer!');
+                }
+            });
+    }
+
+    function selectBVGIMEI(div_parent)
+    {
+      //  $('button, input, select').prop('disabled', true);
+        distributor_id    = $('#distributor_id').val();
+        joint  = div_parent.find('.joint').val();
+        good_id_bvg = div_parent.find('.good_id_bvg').val();
+        num =  div_parent.find('.num_bvg').val();
+        var value = '';
+
+        if(!joint && !good_id_bvg)
+        {
+            alert('Please Choose BVG');
+            $('button, input, select').prop('disabled', false);
+            return false;
+        }
+
+        $('.loading').remove();
+        var targetUrl = '<?php echo HOST."bvg/get-imei" ?>';
+
+        //get ajax content
+
+        if (distributor_id && joint && good_id_bvg){
+            div_parent.parents('.control-group').append("<span class=\'loading\'></span>");
+
+            $.post(targetUrl, {
+                d_id : distributor_id,
+                joint_circular_id : joint,
+                good_id : good_id_bvg,
+                num : num
+            }, function(data){
+                $('button, input, select').prop('disabled', false);
+
+                if (data){
+                    if(data.result == 3)
+                    {
+                        alert('Number imei you insert is too large, Please contact Technolog Team');
+                        $('.loading').remove();
+                        div_parent.find('.num_bvg').val(0);
+                        div_parent.find('.total_bvg').val(0).change();
+                        div_parent.find('.bvg_imei').find('option').remove();
+                    }
+                    if(data.result == 4)
+                    {
+                        alert('This distributor don\'t have imei for discount');
+                        $('.loading').remove();
+                        div_parent.find('.num_bvg').val(0);
+                        div_parent.find('.total_bvg').val(0).change();
+                        div_parent.find('.bvg_imei').find('option').remove();
+                    }
+
+                    if(data.result == 1)
+                    {
+
+                        div_parent.find('.bvg_imei option').remove();
+                        var obj = data.data;
+                        for (var i = 0; i < obj.length; i++) {
+                            div_parent.find('.bvg_imei').append('<option value="'+obj[i]['id']+'">'+obj[i]['imei_sn']+'</option>');
+                            value += obj[i]['id'] + ',';
+                        }
+                    }
+
+                }
+                $('.loading').remove();
+                div_parent.find('.ids_imei').val(value.slice(0,-1));
+                div_parent.find('.bvg_imei option').prop('selected', true);
+            });
+        }
+    }
+
+    function initRemoveSales(){
+        $(document).off('click', '.remove-sales')
+            .on('click', '.remove-sales', function(e) {
+                $(this).parent().parent().parent().remove();
+                return false;
+            });
+    }
+
+    function initRemoveAccessories()
+    {
+        $(document).off('click', '.remove-accessories')
+            .on('click', '.remove-accessories', function(e) {
+                $(this).parent().parent().parent().remove();
+                return false;
+            });
+    }
+
+    function initSelectJointAccessories()
+    {
+        $(document).off('change', '.joint_accessories')
+            .on('change', '.joint_accessories', function() {
+
+                $('.loading').remove();
+                $(this).after('<span class="loading"></span>');
+                var div_parent = $(this).parent().parent().parent();
+                var _self = $(this);
+                var joint = div_parent.find('.joint_accessories').val();
+
+                if (_self.hasClass('joint_accessories'))
+                    div_parent.find('.good_id').find('option:not(:first)').remove();
+
+                var good_id = div_parent.find('.good_id').val();
+
+                var distributor_id = $('#distributor_id').val();
+
+                div_parent.find('.good_color').find('option:not(:first)').remove();
+
+                div_parent.find('.num, .price, .total').val('');
+
+
+                $.get("/get/load-joint",
+                    {joint: joint, distributor_id : distributor_id , init_params : 3}
+                    ,function(data,status){
+                        var data = $.parseJSON( data );
+
+                        if (data){
+                            var obj = data;
+                            div_parent.find('.good_id_bvg_accessories').html('<option value="0">Please select</option>');
+                            for (var i = 0; i < obj.length; i++) {
+
+                                div_parent.find('.good_id_bvg_accessories').append('<option value="'+obj[i]['good_id']+'">'+obj[i]['name']+'</option>');
+                            }
+                        }
+                        _self.nextAll('.loading').remove();
+                    });
+            });
+    }
+
+
+
+
+    function initSelectJoint()
+    {
+        $(document).off('change', '.joint')
+            .on('change', '.joint', function() {
+            //    $('button[type=submit]').prop('disabled', true);
+              //  $('form').bind('submit',function(e){e.preventDefault();});
+                $('.loading').remove();
+                $(this).after('<span class="loading"></span>');
+                var div_parent = $(this).parent().parent().parent();
+                var _self = $(this);
+                var joint = div_parent.find('.joint').val();
+
+                if (_self.hasClass('joint'))
+                    div_parent.find('.good_id').find('option:not(:first)').remove();
+
+                var good_id = div_parent.find('.good_id').val();
+
+                var distributor_id = $('#distributor_id').val();
+
+                div_parent.find('.good_color').find('option:not(:first)').remove();
+
+                div_parent.find('.num, .price, .total').val('');
+
+
+                $.get("/get/load-joint",
+                    {joint: joint, good_id: good_id , distributor_id : distributor_id}
+                    ,function(data,status){
+                        var data = $.parseJSON( data );
+                        if (data.goods){
+                            var obj = data.goods;
+                            div_parent.find('.good_id_bvg').html('<option value="0">Please select</option>');
+                            for (var i = 0; i < obj.length; i++) {
+                                div_parent.find('.good_id_bvg').append('<option value="'+obj[i]['id']+'">'+obj[i]['name']+'</option>');
+                            }
+                        }
+
+                      //  $('button[type=submit]').prop('disabled', false);
+                      //  $('form').unbind('submit');
+                        _self.nextAll('.loading').remove();
+                    });
+            });
+    }
+
+
+
+
+
+
+    function initSearchOptionDistributor(elm, searchEl){
+        var timeout;
+
+        $('#'+searchEl).on("keyup", function (e) {
+            if(e.keyCode == 40){
+                $('#'+elm).focus();
+                $('#'+elm + ' option:visible').first().attr('selected','selected');
+
+            }else{
+                var userInput = $('#'+searchEl).val();
+                window.clearTimeout(timeout);
+                timeout = window.setTimeout(function() {
+                    showOnlyOptionsSimilarToText($('#'+elm), userInput, true);
+                }, 500);
+            }
+        });
+    }
+</script>

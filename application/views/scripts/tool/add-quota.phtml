@@ -1,0 +1,429 @@
+    <!-- <link href="//netdna.bootstrapcdn.com/bootstrap/3.2.0/css/bootstrap.min.css" rel="stylesheet" id="bootstrap-css"> -->
+
+    <link href="<?=HOST?>public/css/bootstrap.modi.min.css" rel="stylesheet">
+     <style type="text/css">
+        .list-group{
+            height: 200px;
+            overflow: hidden;
+            overflow-y: scroll;
+        }
+
+        .so {
+            width: 80px;
+            padding-left: 15px;
+            display: -webkit-inline-box;
+            display: inline-block;
+        }
+        .price_ori {
+            width: 320px;
+            display: -webkit-inline-box;
+            display: inline-block;
+            text-align: left;
+        }
+        .so-title {
+            padding-left: 20px;
+            width: 100px;
+            display: -webkit-inline-box;
+            display: inline-block;
+        }
+        .price_text{
+            margin-top: 10px;
+        }
+        #d_id {
+            left: 110px !important;
+                top: -29px
+        }
+        .span2{
+            width: 100px
+        }
+        input{
+            width: 70px
+        }
+    </style> 
+
+    <div class="page-header">
+        <h1>Add Quota</h1>
+    </div>
+    <div class="container">
+    <br />
+    <form role="form" id="form" enctype="multipart/form-data" action="<?php echo HOST.'tool/save-quota';?>" method="post" >
+        <div class="col-md-6"> 
+          
+             
+            <div class="control-group">  
+                <label class="span3" for="rank">Rank<span style="color: red">*</span></label>
+                <div class="controls">
+                    <select id="rank" name="rank" class="rank span3" required="required">
+                        <option value="">---</option>
+
+                        <!-- <option value="1" <?php if( isset($this->distributor['rank']) and $this->distributor['rank']==1 ) { ?> selected<?php }?>> ORG</option>
+                        <option value="7" <?php if( isset($this->distributor['rank']) and $this->distributor['rank']==7 ) { ?> selected<?php }?>> Dealer/HUB</option>
+                        <option value="10" <?php if( isset($this->distributor['rank']) and $this->distributor['rank']==10 ) { ?> selected<?php }?>> Brand Shop</option> -->
+                        
+                        <option value="3" <?php if( isset($this->distributor['rank']) and $this->distributor['rank']==3 ) { ?> selected<?php }?>> KA</option>
+                        <option value="2" <?php if( isset($this->distributor['rank']) and $this->distributor['rank']==2 ) { ?> selected<?php }?>> KR</option>
+                        <option value="1" <?php if( isset($this->distributor['rank']) and $this->distributor['rank']==1 ) { ?> selected<?php }?>> Dealer/HUB</option>
+                        <option value="10" <?php if( isset($this->distributor['rank']) and $this->distributor['rank']==10 ) { ?> selected<?php }?>> Brand Shop</option>
+                        <option value="4" <?php if( isset($this->distributor['rank']) and $this->distributor['rank']==4 ) { ?> selected<?php }?>> Operator</option>
+                    </select>
+                    <p class="help-block"></p>
+                </div>
+            </div>  
+           
+           <div class="control-group">
+            <label class="span3" for="rank">Product Category<span style="color: red">*</span></label>
+                <div class="controls">
+                    <select class="cat_id span3"  name="cat_id" required="required">
+                    <option value="">Choose</option>
+                    <?php if ($this->good_categories): foreach ($this->good_categories as $id=>$name):?>
+                        <option value="<?php echo $id;?>" <?php echo (isset($list['cat_id']) and $id==$list['cat_id'])? 'selected':''?> ><?php echo $name;?></option>
+                    <?php endforeach; endif;?>
+                </select>
+                </div>
+           
+            </div>
+            <div class="control-group">
+                <label class="span3" for="rank">Product<span style="color: red">*</span></label>
+                    <div class="controls">
+                       <select class="good_id span3" class="" name="good_id" required="required">
+                        <option value="">Choose</option>
+                     
+                            <?php foreach ($goods as $good):?>
+                                <option value="<?php echo $good->id;?>" <?php echo ($good->id == $list->good_id)?'selected':''?>><?php echo $good->name;?></option>
+                            <?php endforeach;?>
+                       
+                    </select>
+                    </div>
+               
+            </div>
+            <div class="control-group">
+                <label class="span3" for="rank">Color<span style="color: red">*</span></label>
+                    <div class="controls">
+                        <select class="good_color span3" class="" name="good_color" required="required">
+                        <option value="">Choose</option>
+                        <?php foreach ($colors as $color):?>
+                                <option value="<?php echo $color->id;?>" <?php echo ($color->id == $list->good_color)? 'selected':''?>><?php echo $color->name;?></option>
+                            <?php endforeach;?>
+                    </select>
+                    </div>
+                
+            </div>
+
+            <div class="control-group">
+                <label class="span3" for="rank">Type<span style="color: red">*</span></label>
+                    <div class="controls">
+                        <select class="good_type span3" class="" name="good_type" required="required">
+                        <option value="">Choose</option>
+                        <option value="1">Normal</option>
+                        <option value="2">Demo</option>
+                        <option value="5">APK</option>
+                    </select>
+                    </div>
+                
+            </div>
+
+            <div class="control-group">
+                <label class="span3" for="warehouse_id">Warehouse<span style="color: red">*</span></label>
+                <div class="controls">
+                    <select id='warehouse_id' class='span3 warehouse_id' name='warehouse_id' required='required'>
+                        <option value=''>Please select</option>
+                        <?php foreach ($this->warehouses as $warehouse):?> 
+                            <option value='<?php echo $warehouse->id;?>'><?php echo $warehouse->name;?></option> 
+                        <?php endforeach;?>
+                    </select>
+                    </div>
+            </div>
+
+            <div class="control-group">
+                <label class="span3" for="rank">Quota Date<span style="color: red">*</span></label>
+                    <div class="controls">
+                        <input type="text" class="date" name="quota_date" style="width: 260px;">
+                    </div>
+                
+            </div>
+            <div class="control-group">
+                <label class="span3" for="rank">Quota All<span style="color: red">*</span></label>
+                    <div class="controls">
+                        <input type="text" class="number all_qty" name="all_qty" required>
+                    </div>
+                
+            </div>
+            
+                    
+          
+        </div>
+      
+        <div style="clear: both"></div>
+      
+       <div class="type_dealer" style="display: none">
+        <table class="table table-bordered">
+            <thead>
+                <tr>
+                    <td width="10%">Area</td>
+                    <td width="30%">Quota Quantity</td>
+                </tr>
+            </thead>
+            <tbody>
+            <tr>
+                <td>Dealer All <span style="color: red">*</span><input type="hidden" name="dealer" value="99" disabled></td>
+                <td><input type="text" class="number all_qty_2" readonly name="all_qty_2" value="0" disabled></td>
+            </tr>
+            <?PHP foreach ($this->area as $key => $value) {?>
+            <tr>
+                <td>
+                    <input class="cb-not-allow-area" type="checkbox" name="not_allow_area[]" value="<?=$value['id']?>">
+                    <?=$value['name']?><input type="hidden" name="area_id[]" value="<?=$value['id']?>" disabled></td>
+                <td><input type="text" class="number quota_qty" required name="quota_qty[]" value="0" disabled></td>
+            </tr>
+        
+            <?PHP } ?>
+            </tbody>
+        </table>
+       </div>
+      
+        
+        <div class="row">
+                <div class="span6">
+                    <div class="control-group">
+                        
+                        <div class="span4">
+
+                            <button type="submit" class="btn btn-primary" >Confirm</button>
+                            <input type="hidden" name="back_url" id="back_url" value="black-list-distributor">
+                            <a href="quota-manage" class="btn btn-danger go-back">Go back</a>
+                        </div>
+                    </div>
+                    <div class="clearfix"></div>
+                </div>
+        </div>
+    </form>
+</div>
+
+    <!--  -->
+     
+<script type="text/javascript" src="/js/jquery-ui-1.8.12.custom.min.js"></script>
+<link rel="stylesheet" type="text/css" href="/css/jquery-ui-1.8.12.custom.css"/>
+    <script type="text/javascript">
+     
+
+
+    function initDatepicker(){
+        
+        $( '.date' ).datepicker({ dateFormat: "dd/mm/yy" });
+    }
+    
+    $(document).ready(function () {
+            initDatepicker();
+            initRemoveQuota();
+            initAddQuota();
+            initSelectProduct();
+            initInsertArea();
+            initAllQuota();
+
+            $('.cb-not-allow-area').click(function(event) {
+                var div_parent = $(this).parent().parent();
+                var quota_qty = div_parent.find('.quota_qty').val();
+
+                if ($(this).is(':checked')) {
+                    div_parent.find('.quota_qty').val('0');
+                    $('.quota_qty').change();
+                }
+                
+            });
+            
+            $("*").keypress(function(event){  
+                 if(event.keyCode==13){  
+                    return false;  
+                 }  
+            });
+
+            // $('body').on('click', '.list-group .list-group-item', function () {
+            //     $(this).toggleClass('active');
+            // });
+          
+            $('body').on('change', '.rank', function () {
+                // $('.loading').remove();
+                // $(this).after('<span class="loading"></span>');
+               var list =  $(this).val();
+               if (list == 1) {
+                $('.type_dealer').show();
+                $('.type_dealer').find('select, input').removeAttr('disabled');
+               }else{
+                $('.type_dealer').hide();
+                $('.type_dealer').find('select, input').attr('disabled','disabled');
+               }
+               
+            });
+
+        $('.number').keypress(function(event) {
+            if (event.which != 46 && (event.which < 47 || event.which > 59))
+            {
+                event.preventDefault();
+                if ((event.which == 46) && ($(this).indexOf('.') != -1)) {
+                    event.preventDefault();
+                }
+            }
+        });
+           
+        });
+
+    
+        function initAddQuota(){
+            $(document).off('click', '.add-quota')
+            .on('click', '.add-quota', function(e) {
+                var old_div = $('.div-add');
+                var new_div = old_div.clone();
+                new_div.removeClass('div-add').find('select, input, textarea').removeAttr('disabled');
+                new_div.insertBefore($(this).parents('.row')).show();
+                initRemoveQuota();
+                initSelectProduct();
+                return false;
+            });
+        }
+        function initRemoveQuota(){
+            $(document).off('click', '.remove-sales')
+            .on('click', '.remove-sales', function(e) {
+                var item = $(this).val();
+                var div = $(this).parent().parent();
+                alert(item)
+                if (item == '') {
+                    $(this).parent().parent().remove();
+                }else{
+                    if (confirm("Press Confirm Delete item ") == true) {
+                       
+                        $.ajax({
+                            url: 'delete-quota',
+                            type: 'POST',
+                            data: {item: item},
+                        })
+                        .done(function(data) {
+                            alert(data)
+                            div.remove();
+                            console.log("success");
+                        })
+                        .fail(function() {
+                            console.log("error");
+                        })
+                        .always(function() {
+                            console.log("complete");
+                        });
+                    }
+                }
+                
+                return false;
+            });
+        }
+        function initSelectProduct(){
+            $(document).off('change', '.cat_id, .good_id')
+            .on('change', '.cat_id, .good_id', function(e) {
+                $('button[type=submit]').prop('disabled', true);
+                $('form').bind('submit',function(e){e.preventDefault();});
+
+                $('.loading').remove();
+                $(this).after('<span class="loading"></span>');
+                var div_parent = $(this).parent().parent().parent();
+                var _self = $(this);
+                var cat_id = div_parent.find('.cat_id').val();
+                var distributor_id    = $('#d_id').val();
+                var rank    = $('.rank').val();
+
+                // if (distributor_id == "" || distributor_id == null) {
+                //   alert('Please select Retailer name..');
+                //   $('#d_id').focus();
+                // $('.good_id').find('option:not(:first)').remove();
+                // $('.good_color').find('option:not(:first)').remove();
+                // $('.quantity').val('');
+                // }
+                if (_self.hasClass('cat_id'))
+                    div_parent.find('.good_id').find('option:not(:first)').remove();
+
+                var good_id = div_parent.find('.good_id').val();
+
+                div_parent.find('.good_color').find('option:not(:first)').remove();
+
+                div_parent.find('.quantity').val('');
+
+                //alert(cat_id);alert(good_id);
+                $.get("/get/load",
+                    {cat_id: cat_id, good_id: good_id}
+                    ,function(data,status){
+                        var data = $.parseJSON( data );
+                        if (data.goods){
+                            var obj = data.goods;
+                            for (var i = 0; i < obj.length; i++) {
+                                 div_parent.find('.good_id').append('<option value="'+obj[i]['id']+'">'+obj[i]['name']+'</option>');
+                            }
+                        }
+                        if (data.colors){
+                            var obj = data.colors;
+                            for (var i = 0; i < obj.length; i++) {
+                                 div_parent.find('.good_color').append('<option value="'+obj[i]['id']+'">'+obj[i]['name']+'</option>');
+                            }
+                        }
+                        $('button[type=submit]').prop('disabled', false);
+                        $('form').unbind('submit');
+                        _self.nextAll('.loading').remove();
+                    });
+
+            });
+        }
+        
+        function initAllQuota(){
+            $(document).off('change', '.all_qty')
+            .on('change', '.all_qty', function(e) {
+               
+                $('.all_qty_2').val($(this).val());
+               
+                
+
+            });
+        }
+        function initInsertArea(){
+            $(document).off('change', '.quota_qty')
+            .on('change', '.quota_qty', function(e) {
+                $('button[type=submit]').prop('disabled', true);
+                $('form').bind('submit',function(e){e.preventDefault();});
+
+                // $('.loading').remove();
+                // $(this).after('<span class="loading"></span>');
+                // var div_parent = $(this).parent().parent().parent();
+                var q_qty       = 0;
+                var total_q_qty = 0;
+                var total       = 0;
+                var all_qty     = $('.all_qty').val();
+                if (!all_qty || all_qty == 0) {
+                    alert("กรุณากรอก Quota Dealer All");
+                    $(this).val(0);
+                    $('.all_qty').focus();
+                    exit();
+                }
+                $( ".quota_qty" ).each(function() {
+                        q_qty  = parseFloat($(this).val(),10);
+
+                          if(!isNaN(q_qty)){
+                                total_q_qty += q_qty;
+                            }
+                    
+                   
+                   
+                    
+                });
+                 total = all_qty-total_q_qty
+                 if (total < 0 ) {
+                    alert('Over Quota!');
+                    $(this).val(0).focus();
+                    // $(this);
+                    exit();
+                 }
+                $('.all_qty_2').val(total);
+               $('button[type=submit]').prop('disabled', false);
+               $('form').unbind('submit');
+                
+
+            });
+        }
+        function roundNumber(num, dec) {
+            var result = Math.round(num*Math.pow(10,dec))/Math.pow(10,dec);
+            return Number(result).toLocaleString('en',{ minimumFractionDigits: 2 });
+        }
+    </script>

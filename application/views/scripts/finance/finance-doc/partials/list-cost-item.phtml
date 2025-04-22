@@ -1,0 +1,85 @@
+<table class="table table-bordered">
+	<thead>
+		<tr>
+			<th>Name of Cost Item</th>
+			<th>Remind Code</th>
+			<th>Auxiliary Subject Code</th>
+			<th>Off/On</th>
+			<th>Remarks</th>
+			<th>Creation Date</th>
+			<th>Creator</th>
+			<th>Modification Date</th>
+			<th>Last Modified By</th>
+			<th>Category of expenses</th>
+			<th>Operation</th>
+		</tr>
+	</thead>
+	<tbody>
+
+		<?php if(isset($this->cost_item) && $this->cost_item) : ?>
+			<?php foreach ($this->cost_item as $value) : ?>
+				<?php if($value['status'] == 1) { $status ='<span style="color: green"> On </span>'; }else{ $status ='<span style="color: red"> Off</span>'; } ?>
+
+				<?php if($value['category_id'] == 1) { 
+					$category = 'ADJUSIT'; } 
+					elseif ($value['category_id'] == 2) { 
+						$category = 'DEPOSIT'; } 
+						elseif ($value['category_id'] == 3) { 
+							$category = 'DOWN_PAYMENT'; }
+							else {
+								$category = 'OTHERS';
+							}
+							?>
+				<tr>
+					<td><?php echo $value['cost_name'] ?></td>
+					<td><?php echo $value['remind_code'] ?></td>
+					<td><?php echo $value['subject_code'] ?></td>
+					<td><?php echo $status ?></td>
+					<td><?php echo $value['remark'] ?></td>
+					<td><?php echo $value['created_at'] ?></td>
+					<td><?php echo $this->staffs[$value['created_by']] ?></td>
+					<td><?php echo $value['updated_at'] ?></td>
+					<td><?php echo $this->staffs[$value['updated_by']] ?></td>
+					<td><?php echo $category ?></td>
+					<td>
+						<a href="<?php echo HOST ?>finance/add-cost-item?id=<?php echo $value['id'] ?>"> Edit </a>
+						| <a href="#" style="color: red;" data-id="<?php echo $value['id']; ?>" class="Confirm_data"> Delete </a>
+					</td>
+				</tr>
+			<?php endforeach; ?>
+		<?php endif; ?>
+
+	</tbody>
+</table>
+
+<div class="paging">
+	<?php echo $this->paging($this->total, $this->limit, $this->offset, $this->url);?>
+</div>
+
+<script type="text/javascript">
+	$(document).ready(function(){
+		$('.Confirm_data').on('click', function (event) {
+			event.preventDefault();
+			var id = $(this).data('id');
+
+			Swal.fire({
+				title: 'Confirm to delete?',
+				text: 'ຢືນຢັນການລຶບ ຂໍ້ມູນ ຫຼື ບໍ່? ຫຼັງຈາກລົບໄປເເລ້ວຈະບໍ່ສາມາດກູ້ຄືນໄດ້',
+				icon: 'question',
+				showCancelButton: true,
+				confirmButtonColor: '#3085d6',
+				cancelButtonColor: '#d33',
+				confirmButtonText: '<b style="font-family:Phetsarath OT">ຢືນຢັນ</ b>',
+				cancelButtonText: '<b style="font-family:Phetsarath OT">ຍົກເລີກ</ b>',
+			}).then((result) => {
+
+				if (result.isConfirmed) {
+					window.location.href="/finance/delete-cost-item?id="+id;
+				}
+
+			});
+		});
+
+	});
+
+</script>

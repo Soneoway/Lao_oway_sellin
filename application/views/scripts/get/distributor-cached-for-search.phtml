@@ -1,0 +1,14 @@
+ 
+
+ <div class="control-group">
+                <label for="d_id" class="span2">Retailer</label>
+                    <input type='text' class="span3" name='SearchBox' id="SearchBox" placeholder="Search" autocomplete="off" />
+                    <select name="d_id" id="d_id" class="span3" size="5">
+                        <option value="">Choose</option>
+                        <?php if (isset($this->response) && $this->response): 
+                        	foreach ($this->response as $key => $title):?>
+                            <option value="<?php echo $key;?>" <?php if (isset($this->params['d_id']) and $id==$this->params['d_id']):?> selected="selected"<?php endif;?>><?php echo $title;?></option>
+                        <?php endforeach; endif;?>
+                    </select>
+                
+            </div> 

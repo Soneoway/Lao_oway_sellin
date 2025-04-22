@@ -1,0 +1,112 @@
+<?php  if(isset($this->res) && $this->res): ?>
+<table class="table table-striped">
+	<thead>
+		<tr>
+			<th>#</th>
+			<th>IMEI</th>
+			<th>Model</th>
+			<th>Color</th>
+			<th>SO</th>
+			<th>Ivoice</th>
+			<th>Distributor Name</th>
+			<th>Round Protection Price</th>
+			<th>Time</th>
+			<th>CP</th>
+			<th>Old Price</th>
+			<th>Protection Price</th>
+			<th>New Price</th>
+			<th>Remark</th>
+		</tr>
+	</thead>
+	<tbody>
+		<?php $i = $this->offset + 1; 
+
+		?>
+		<?php foreach ($this->res as $k => $v): 
+				$count_num = count($v['get_bvg_from_tools']);
+				foreach ($v['get_bvg_from_tools'] as $bvg): 
+		?>
+			<tr>
+				<td><?php echo $i++; ?></td>
+				<td><?php echo $k ?></td>
+				<?php if (gettype($v) == 'string'): ?>
+					<td colspan="11"><?php echo $v ?></td>
+				<?php else: ?>
+				<td><?php echo ( !empty( $this->goods[$v['imei']['good_id']] ) ? $this->goods[$v['imei']['good_id']] : 'n/a' ) ?></td>
+				<td><?php echo ( !empty( $this->good_colors[$v['imei']['good_color']] ) ? $this->good_colors[$v['imei']['good_color']] : 'n/a' ) ?></td>
+				<td><?=$bvg['sn_ref'];?></td>
+				<td><?=$bvg['invoice_number'];?></td>
+				<td>
+					<?php if(isset($v['imei']['warehouse_id'])): ?>
+						<p>
+							<?php if( isset($this->warehouses[ $v['imei']['warehouse_id'] ]) ) echo $this->warehouses[ $v['imei']['warehouse_id'] ];  ?>
+						</p>
+					<?php endif ?>
+					<p>
+						<?php echo ( !empty( $this->distributors[$v['imei']['distributor_id']]['title'] ) ? $this->distributors[$v['imei']['distributor_id']]['title'] : 'n/a' ) ?> <?php echo !empty($v['imei']['distributor_id']) ? "(ID = ".$v['imei']['distributor_id'].")" : ''; ?>
+					</p>
+				</td>
+				<td><?=$count_num--;?></td>
+				<td><?=$bvg['create_date'];?></td>
+				<td><?=$bvg['creditnote_sn'];?></td>
+				<td><?=$bvg['invoice_price'];?></td>
+				<td><?=$bvg['price'];?></td>
+				<td><?=number_format($bvg['invoice_price']-$bvg['price'],2,'.','');?></td>
+				<td><?=$bvg['remark'];?></td>
+				<?php endif; ?>
+			</tr>
+		<?php endforeach;
+			endforeach; ?>
+	</tbody>
+</table>
+<div class="paging">
+    <?php echo $this->paging($this->total, $this->limit, $this->offset, $this->url);?>
+</div>
+<script>
+	$(document).ready(function(){
+		page();
+	});
+
+	function page() {
+    	$('a.paging-link').click(function(e){
+    		e.preventDefault();
+
+    		_self = $(this);
+			_self.parents('ul').after('<span class="loading"></span>');
+			imei = $('#imei').val();
+			url = _self.attr('href');
+			params = url.split('?');
+			if (params.length == 1) {
+				page = 1;
+			} else {
+				params = params[1].split('&');
+				for (i = 0; i < params.length; i++) {
+					pair = params[i].split('=');
+					if (pair[0] == 'page') {
+						page = pair[1];
+						break;
+					}
+				}
+
+				if (page === undefined) {
+					page = 1;
+				}
+			}
+
+			$.post(
+				"<?php echo HOST . 'tool/check-imei'?>",
+				{
+					value : imei,
+					page : page,
+					is_check : 1
+				},
+				function(data){
+					$('.ajax-load').html(data);
+					_self.nextAll('ul .loading').remove();
+			});
+
+			return false;
+    	});
+    }
+</script>
+<?php endif; ?>

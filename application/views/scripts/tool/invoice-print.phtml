@@ -1,0 +1,284 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
+<html>
+   <head>
+      <meta http-equiv="Pragma" content="no-cache">
+      <meta http-equiv="Expires" content="-1">
+      <meta http-equiv="Content-Type" content="text/html; charset=utf-8">
+      <meta name="description" content="Invoice Laser">
+      <meta name="keywords" content="Invoice Laser">
+      <meta name="author" content="Cuong seven">
+      <title>Print Invoice Laser</title>
+      <script src="<?php echo HOST ?>js/jquery-1.7.2.min.js"></script>
+      <link rel="stylesheet" href="<?php echo HOST ?>css/jquery-ui.css">
+      <link rel="stylesheet" href="<?php echo HOST ?>css/invoice.css">
+      <script src="<?php echo HOST ?>js/jquery-ui.js"></script>
+   </head>
+   <body>
+   <!--begin invoice print template -->
+   <div class="block">
+
+       <div class="header">
+           <div id="logo">
+               <img src="<?php echo HOST ?>img/logoprint.png" alt="logo" title="logo"/>
+           </div>
+           <div class="print">
+               <img src="<?php echo HOST ?>img/print.png" alt="print" title="print">
+           </div>
+
+           <div class="no-print">
+               <!-- <a target="_blank" href="<?php echo HOST ?>warehouse/list-good?sn=<?php echo $this->sn ?>">In bang ke</a> -->
+           </div>
+           <div class="inform">
+
+               <h2>Hóa đơn giá trị gia tăng</h2>
+               <p>Liên 1: Lưu</p>
+               <div class="date">
+                   <div class="day">Ngày: <span><?php echo date("d"); ?></span></div>
+                   <div class="month">Tháng: <span><?php echo date("m"); ?></span></div>
+                   <div class="year">Năm: <span><?php echo date("Y"); ?></span></div>
+               </div>
+           </div>
+
+           <div class="sign">
+               <p>Mẫu số: <span>01GTKT2/002</span></p>
+               <p>Ký hiệu: <span>QQ/15T</span></p>
+               <p>Số: <span class="invoice_number_change"><?php if(isset($this->invoice_number) and $this->invoice_number) echo $this->invoice_number ?></span></p>
+               <p class="barcode"><img src="<?php echo HOST.'photo/barcode2/'.$this->sn.'.jpg' ?>" alt="<?php echo $this->sn ?>"></p>
+           </div>
+
+
+           <div class="clear"></div>
+       </div>
+
+       <div class="information">
+
+           <div class="row-1">
+
+               <div class="col"><span>Đơn vị bán hàng</span>:<strong class="name">Công ty TNHH Một thành viên kỹ thuật & khoa học OPPO</strong></div>
+               <div class="col"><span>Mã số thuế </span>:<strong class="mst">0312059023</strong></div>
+               <div class="col"><span>Địa chỉ </span>:<strong class="not">Tòa nhà SCB, 242 Cống Quỳnh, Phường Phạm Ngũ Lão, Quận 1, Thành phố Hồ Chí Minh, Việt Nam</strong></div>
+               <div class="col"><span>Điện thoại </span>:<strong class="not">(08) 39202555 - Email:oppo@oppomobile.vn</strong></div>
+
+
+           </div>
+
+           <div class="devider"></div>
+
+           <div class="row-2">
+
+               <div class="col"><span>Đơn vị mua hàng: </span><strong class="name"><?php if(isset($this->name) and $this->name) echo $this->name; ?></strong></div>
+               <div class="col"><span>Mã số thuế: </span><strong class="mst"><?php echo $this->tax ?></strong></div>
+               <div class="col"><span>Địa chỉ: </span><strong class="not"><?php  echo $this->address ?></strong></div>
+               <div class="col"><span>Địa chỉ giao hàng: </span><strong class="not"><?php  echo $this->delivery_address ?></strong></div>
+                <div class="col"><span>Hình thức thanh toán: </span><strong >TM/CK</strong>
+                 <span class="limited">Hạn thanh toán: </span>  <?php if(isset($this->payment_method) and $this->payment_method): ?>  <strong><?php echo $this->payment_method; ?></strong> <?php endif; ?>
+                 <span class="limited">PO: </span>   <?php if(isset($this->market['invoice_note']) and $this->market['invoice_note']): ?>   <strong><?php echo  $this->market['invoice_note'] ; ?></strong> <?php endif; ?>
+               </div>
+           </div>
+
+       </div>
+
+       <div class="devider"></div>
+
+       <div class="tblist">
+
+            <table class="table-border" cellspacing="0">
+                <tr class="thead">
+                    <td>STT</td>
+                    <td class="productname">Tên hàng hóa dịch vụ</td>
+                    <td class="unit">Đơn vị tính</td>
+                    <td class="quantity">Số lượng</td>
+                    <td class="price">Đơn giá</td>
+                    <td class="total">Thành tiền</td>
+                </tr>
+                <tr class="thead">
+                    <td>1</td>
+                    <td>2</td>
+                    <td>3</td>
+                    <td>4</td>
+                    <td>5</td>
+                    <td>6 = 4x5</td>
+                </tr>
+
+                <?php for ($i = 1; $i <= 13; $i++) {?>
+                    <tr class="sp">
+                        <td></td>
+                        <td class="productname"></td>
+                        <td class="unit"></td>
+                        <td class="quantity"></td>
+                        <td class="price"></td>
+                        <td class="total"></td>
+                    </tr>
+                <?php }  ?>
+            </table>
+
+       </div>
+
+       <?php echo $this->render('tool/partials/product-out.phtml'); ?>
+
+       
+
+       <div class="footer">
+
+           <table class="table-border" cellspacing="1" cellpadding="5" style="border-top: none;">
+               <tr class="sp1">
+                   <td colspan="5">Cộng tiền hàng:</td>
+                   <td><?php if(isset($this->price_before_vat)) echo My_Number::product_price($this->price_before_vat); ?></td>
+               </tr>
+               <tr class="sp1">
+                   <td colspan="5"><span class="vat">Thuế suất GTGT: 10%</span> Tiền thuế GTGT:</td>
+                   <td><?php if(isset($this->vat)) echo My_Number::product_price($this->vat); ?></td>
+               </tr>
+
+               <tr class="sp1">
+                   <td colspan="5">Tổng cộng tiền thanh toán:</td>
+                   <td><?php if(isset($this->price_after_vat)) echo My_Number::product_price($this->price_after_vat); ?></td>
+               </tr>
+               <tr class="sp1">
+                   <td colspan="6" class="price-name" >Số tiền viết bằng chữ:<span><?php if(isset($this->price_before_vat)) echo ucfirst(My_Number::priceText($this->price_after_vat).' đồng'); ?></span></td>
+               </tr>
+           </table>
+
+       </div>
+
+       <div class="signname signleft">
+           <div>Người mua hàng</div>
+           <p>(Ký, ghi rõ họ tên)</p>
+       </div>
+
+       <div class="signname signright">
+            <div>Người bán hàng</div>
+           <p>(Ký, đóng dấu, ghi rõ họ tên)</p>
+       </div>
+
+       <div class="clear"></div>
+
+       <div class="foot">
+           <p>(Cần kiểm tra, đối chiếu khi lập, giao, nhận hóa đơn)</p>
+           <p>In tại công ty TNHH một thành viên kỹ thuật & khoa học OPPO - MST: 0312059023</p>
+           <p>In từ phần mềm FasTCN công ty CPQLDN tại TP.HCM - MST: 0100727825-001</p>
+       </div>
+
+      <div class="page-break"></div>
+   </div>
+   
+   <input type="hidden" id="total_invoice_price" name="total_invoice_price" value="<?php echo $this->price_before_vat ; ?>" />
+   <input type="hidden" id="total_invoice_vat" name="total_invoice_vat" value="<?php echo $this->vat ; ?>" />
+   <input type="hidden" id="total_invoice_after_vat" name="total_invoice_after_vat" value="<?php echo $this->price_after_vat; ?>" />
+   <input type="hidden" id="invoice_number" value="<?php if(isset($this->invoice_number) and $this->invoice_number) echo $this->invoice_number; ?>">
+   <input type="hidden" id="invoice_prefix" value="<?php if(isset($this->invoice_prefix) and $this->invoice_prefix) echo $this->invoice_prefix; ?>">
+   <input type="hidden" id="sn" value="<?php if(isset($this->sn)) echo $this->sn; ?>">
+
+   <!--end invoice print template -->
+<script type="text/javascript">
+    //clone to 2 page
+    function dublicate()
+    {
+        var block = $('.block').clone();
+        block.find('.inform p').html('Liên 2: Giao cho người mua');
+        block.find('#logo').addClass('print2');
+        block.find('.invoice').addClass('print3');
+        $('.block').after(block);
+    }
+
+
+
+    $(document).ready(function()
+    {
+        initUnload();
+    });
+
+    function initUnload(){
+        window.onbeforeunload = function(event) {
+
+            if ($('#save_done').val()==0){
+                event = event || window.event;
+
+                var confirmClose = 'Please input invoice number!';
+
+                // For IE and Firefox prior to version 4
+                if (event) {
+                    event.returnValue = confirmClose;
+                }
+
+                // For Safari
+                return confirmClose;
+            }
+
+        }
+    }
+
+    dublicate();
+
+    $('.print').click(function (){
+
+        var all_values = [];
+        var url = '<?php echo HOST ?>get/custom-laser-save';
+
+        $('input[name^="invoice_price"]').each(function() {
+            all_values.push($(this).val());
+        });
+
+        $.post(url,
+            {
+                invoice_number: $('#invoice_number').val(),
+                sales_sn: $('#sn').val(),
+                prefix: $('#invoice_prefix').val(),
+                total_invoice_price: $('#total_invoice_price').val(),
+                total_invoice_vat: $('#total_invoice_vat').val(),
+                total_invoice_after_vat: $('#total_invoice_after_vat').val(),
+                type : 1,
+                invoice_price: all_values
+            }, function(data) {
+
+                var text = '';
+
+                switch (data) {
+                    case '-1':
+                        text = 'Please input Invoice number!';
+                        break;
+                    case '-2':
+                        text = 'Sales order number is invalid!';
+                        break;
+                    case '-3':
+                        text = 'This invoice number was used already!';
+                        break;
+                    case '-4':
+                        text = 'Cannot save invoice number, please try again!';
+                        break;
+
+                    case '-6':
+                        location.reload(true);
+                        break;
+                    case '0':
+                        text = 'Saving successfully!';
+                        $('.invoice_lase').text($('#invoice_number').val());
+
+                        window.print();
+                        break;
+
+
+
+                }
+
+                alert(text);
+
+
+                initUnload();
+            });
+    });
+
+ /*   $(document).on('keydown', function(e) {
+        if(e.ctrlKey && (e.key == "p" || e.charCode == 16 || e.charCode == 112 || e.keyCode == 80) ){
+            alert("Please don\' use this commnand!");
+            e.cancelBubble = true;
+            e.preventDefault();
+
+            e.stopImmediatePropagation();
+        }
+    });*/
+
+
+</script>
+   </body>
+</html>

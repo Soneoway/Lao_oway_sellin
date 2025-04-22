@@ -1,0 +1,177 @@
+<form class="form-search form-horizontal" method="get" action="/checkmoney/lastinput">
+    <div class="row">
+        <div class="span5">
+
+            <div class="control-group">
+                <label  class="span2">Retailer Name:
+					<input type="text" class="span3" name="SearchBox" id="SearchBox" placeholder="Search" autocomplete="off" />
+					<select name="d_id" id="d_id" class="span3" size="5">
+						<option value="">Choose</option>
+						<?php
+						foreach($this->distributors as $item):
+							$selected = '';
+							if($item['id'] == $this->params['d_id']){
+								$selected = 'selected="selected"';
+							}
+							echo "<option value='".$item['id']."' $selected>".$item['title']."</option>";
+						endforeach;
+						?>
+					</select>
+				</label>
+            </div>
+
+            <div class="control-group">
+                <label   class="span2">Bank:
+				<select name='bank[]' multiple id='bank_id' >
+					<?php 
+						if( isset( $this->banks ) AND $this->banks    ):
+							foreach(  $this->banks as $item   ):
+								$selected = '';
+								if( in_array($item['id'],$this->params['bank']) ){
+									$selected = 'selected="selected"';
+								}
+								echo "<option value='".$item['id']."' $selected>".$item['name']."</option>";
+							endforeach;
+						endif;
+					?>
+				</select>
+				</label>
+            </div><!-- End bank -->
+			
+     
+            
+            <div class="control-group">
+                <label for="" class="span2">Bank serial:
+					<input type='text' name='bank_serial' value='<?php if(isset($this->params['bank_serial']) && $this->params['bank_serial'] ) echo $this->params['bank_serial']; ?>'> 
+				</label>
+            </div>
+            
+            <div class="control-group">
+                <label for="" class="span2">Bank transaction code:
+					<input type='text' name='bank_transaction_code' value='<?php if(isset($this->params['bank_transaction_code']) && $this->params['bank_transaction_code'] ) echo $this->params['bank_transaction_code']; ?>'> 
+				</label>
+            </div> 
+             
+        </div><!--  End span -->
+        <div class="span5">
+
+			<div class="control-group">
+				<label class="span2">Type: </label>
+				<?php 
+					$arr_type_time = array(
+						'' => 'All',
+						'1'=> 'In',
+						'2'=> 'Out',
+						'3'=> 'Transaction creation time'
+					);
+				?>
+				<select name='type_time'>
+					<?php 
+						foreach($arr_type_time as $key => $value){
+							$selected = '';
+							if( isset($this->params['type_time']) AND $this->params['type_time'] ){
+								if($this->params['type_time'] == $key){
+									$selected = 'selected="selected"';
+								}
+							}
+							echo '<option value="'.$key.'"' .$selected.'>'.$value.'</option>';
+						}
+					?>
+				</select>
+			</div>
+			
+			<div class="control-group">
+				<label   class="span2">From time: </label>
+				<input type='text' name='from_time' value="<?php (	isset($this->params['from_time']) AND $this->params['from_time']	) ? printf($this->params['from_time']) : '';?> " class='datepicker'/>
+			</div>
+			
+			<div class="control-group">
+				<label   class="span2">To time: </label>
+				<input type='text' name='to_time' value="<?php ( isset($this->params['to_time']) AND $this->params['to_time']	) ? printf($this->params['to_time']) : '';?> " class='datepicker'/>
+			</div>
+			
+			<div class="control-group">
+				<label  class="span2">From money: </label>
+				<?php 
+					$arr_type_money = array(
+						'' => 'All',
+						'1'=> 'In',
+						'2'=> 'Out',
+						'3'=> 'Bank transaction Fee',
+						'4'=> 'Assessment'
+					);
+				?>
+				<select name='type_money'>
+					<?php 
+						foreach($arr_type_money as $key => $value){
+							$selected = '';
+							if( isset($this->params['type_money']) AND $this->params['type_money'] ){
+								$selected = 'selected="selected"';
+							}
+							echo '<option value="'.$key.'"' .$selected.'>'.$value.'</option>';
+						}
+					?>
+				</select>
+				
+			</div>
+			
+			<div class="control-group">
+				<label  class="span2">From money: </label>
+				<input type='text' name='from_money' value="<?php (	isset($this->params['from_money']) AND $this->params['from_money']	) ? printf($this->params['from_money']) : '';?> " />
+			</div>
+			
+			<div class="control-group">
+				<label for="created_by" class="span2">To money: </label>
+				<input type='text' name='to_money' value="<?php (	isset($this->params['to_money']) AND $this->params['to_money']	) ? printf($this->params['to_money']) : '';?> " />
+			</div>
+			
+       
+		<div class="control-group">
+			<label   class="span2">Note: </label>
+			<textarea name='note'><?php (   isset($this->params['note']) AND $this->params['note']  ) ? printf($this->params['note']) : '';?></textarea>
+		</div>
+
+		<div class="control-group">
+			<label   class="span2">Content: </label>
+			<textarea name='content'><?php (   isset($this->params['content']) AND $this->params['content']  ) ? printf($this->params['content']) : '';?></textarea>
+		</div>
+		
+       </div><!-- End span5 -->
+    </div>
+   
+	<div class="row">
+        <div class="span5">
+   			 <button type="submit" class="btn btn-primary">Search</button>
+		     <button type="reset" class="btn btn-warning">Reset</button>
+		     <!-- <button type="submit" name="export" value="1" class="btn btn-success">Export</button> -->
+       	</div>
+    </div>
+   
+</form>
+<style>
+	#SearchBox{
+		width: 370px;
+	}
+	#d_id{
+		left: 0px!important;
+		margin-left: 0px;
+		margin-top: 20px;
+		width: 370px;
+	}
+	.group{
+		padding: 10px;
+		border: 1px solid #ccc;
+		margin-bottom: 15px;
+	}
+	.group p{
+		font-weight: bold;
+	}
+</style>
+<script>
+	$(document).ready(function(){
+		initSelectChosen();
+		function initSelectChosen(){
+			$("#bank_id").chosen();
+		}
+	});
+</script>

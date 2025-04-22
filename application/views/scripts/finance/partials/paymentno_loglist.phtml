@@ -1,0 +1,62 @@
+<style>
+
+a{
+    margin-right: 2.5px;
+    margin-left: 2.5px;
+}
+
+.hilight
+{
+    background: #E8ADAA;
+    /*color:white;*/
+}
+.hilight:hover
+{
+    /*color:black;*/
+}
+</style>
+<table class="table table-bordered">
+    <thead>
+        <tr>
+            <?php echo $this->sorting(array(
+					'from_payment_no'  => 'Payment No',
+					'to_payment_no'  => 'To Payment No',
+                    'use_total'  => 'Total Used',
+                    'create_date' => 'Create Date',
+                    'pay_type' => 'Log Type',
+                    'remark' => 'Remark'
+                ),
+                $this->url, $this->sort, $this->desc); ?>
+        </tr>
+    </thead>
+    <tbody>
+        <?php
+        $statuses = unserialize(DISCOUNT_STATUS);
+        if (isset($this->get_paymentno_log) and $this->get_paymentno_log) :
+            foreach ($this->get_paymentno_log as $k=>$m):
+            ?>
+            <tr>
+                <td><?php if(isset($m['from_payment_no']) && $m['from_payment_no']){ echo $m['from_payment_no']; }else{ echo '-';} ?></td>
+                <td><?php if(isset($m['to_payment_no']) && $m['to_payment_no']){ echo $m['to_payment_no']; }else{ echo '-';} ?></td>
+                <td><?php if(isset($m['use_total']) && $m['use_total']){ echo $m['use_total']; }else{ echo '-';} ?></td>
+                <td><?php if(isset($m['create_date']) && $m['create_date']){ echo $m['create_date']; }else{ echo '-';} ?></td>
+                <td><?php switch ($m['pay_type']) {
+                    case '0':
+                        echo 'System';
+                        break;
+                    case '1':
+                        echo 'Manual';
+                        break;
+                    default:
+                        echo '-';
+                        break;
+                }  ?></td>
+                <td><?php if(isset($m['remark']) && $m['remark']){ echo $m['remark']; }else{ echo '-';} ?>
+            </tr>
+        <?php endforeach;?>
+		<?php endif; ?>
+    </tbody>
+</table>
+<div class="paging">
+    <?php echo $this->paging($this->total, $this->limit, $this->offset, $this->url);?>
+</div>

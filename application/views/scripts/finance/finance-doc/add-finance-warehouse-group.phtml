@@ -1,0 +1,69 @@
+<div class="page-header">
+	<?php if(isset($this->fwarehouseGroup) && $this->fwarehouseGroup) : ?>
+		<h1 style="font-family: Times New Roman;">Edit Financial Warehouse Group</h1>
+	<?php else: ?>
+		<h1 style="font-family: Times New Roman;">Add Financial Warehouse Group</h1>
+	<?php endif; ?>
+</div>
+
+<form class="form-horizontal" action="<?php echo HOST ?>finance/save-finance-warehouse-group" method="post">
+	<div class="row" style="border-style: solid; padding: 30px 10px 10px 10px; border-color: lavender;">
+
+		<div class="span6">
+			<div class="control-group">
+				<label for="dis_id" class="control-label"><span style="color: red">*</span> Distributor (My Side) : </label>
+				<div class="controls">
+					<select class="span3" name="dis_id" id="dis_id" required <?php if(isset($this->fwarehouseGroup) && $this->fwarehouseGroup): ?> disabled <?php endif; ?> >
+						<option value=""> Please Select </option>
+						<?php foreach ($this->distributor as $value) : ?>
+							<option value="<?php echo $value['id'] ?>" <?php if(isset($this->fwarehouseGroup) && $this->fwarehouseGroup['d_id'] == $value['id'] ) : ?> selected <?php endif; ?>><?php echo $value['title'] ?></option>
+						<?php endforeach; ?>
+					</select>
+				</div>
+			</div>
+		</div>
+
+		<div class="span6">
+			<div class="control-group">
+				<label for="finance_warehouse_group" class="control-label"><span style="color: red">*</span> Finance Warehouse Group : </label>
+				<div class="controls">
+					<input type="text" class="span3" name="finance_warehouse_group" id="finance_warehouse_group" required value="<?php echo $this->fwarehouseGroup['group_name'] ?>">
+				</div>
+			</div>
+
+			<div class="control-group">
+				<label for="remark" class="control-label"> Remark : </label>
+				<div class="controls">
+					<textarea rows="2" cols="2" name="remark" class="span3"><?php echo $this->fwarehouseGroup['remark'] ?></textarea>
+				</div>
+			</div>
+		</div>
+
+
+		<div class="span12" style="padding-bottom: 400px; padding-left: 50px; padding-top: 20px;">
+			<div class="control-group">
+				<input type="hidden" name="id" value="<?php echo $this->fwarehouseGroup['id'] ?>">
+				<input type="hidden" id="back_url" name="back_url" value="/finance/finance-warehouse-group">
+				<button type="submit" class="btn btn-success"> Save </button>
+				<button type="button" class="btn btn-danger go-back"> Back </button>
+			</div>
+		</div>
+
+	</div>
+</form>
+
+<script type="text/javascript">
+
+	$(document).ready(function () {
+
+		initGoBack();
+	});
+	
+	function initGoBack(){
+		$('.go-back').click(function(e){
+			window.location.href = $('#back_url').val();
+			return false;
+		});
+	}
+
+</script>

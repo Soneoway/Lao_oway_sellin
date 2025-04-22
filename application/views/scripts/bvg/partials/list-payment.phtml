@@ -1,0 +1,69 @@
+<table class="table table-bordered">
+    <thead>
+        <tr>
+            <?php echo $this->sorting(array(
+        			'#',        			
+            		'Dealer',
+                    'Joint Circular',
+                    'Sales SN',
+
+                    'Total',
+                    'Number',
+                    'Status',
+                    'Warehouse',
+                    'Action'
+                ),
+                $this->url, $this->sort, $this->desc); ?>
+        </tr>
+    </thead>
+    <tbody>
+        <?php
+        $arrStatus = array(
+            0 => 'Pending',
+            1 => 'Approved',
+        );
+        if (isset($this->list) and $this->list)
+            foreach ($this->list as $item): ?>
+        <tr>
+            <td><?php echo $item['id']?></td>
+            <td><?php if(isset($item['d_id']) and $this->distributorsCached[$item['d_id']]) echo $this->distributorsCached[$item['d_id']]; ?></td>
+            <td><a href="/bvg?joint_circular_id=<?php echo $item['joint']?>"><?php echo isset($this->jointCircularCached[$item['joint']]) ? $this->jointCircularCached[$item['joint']] : '';?></a></td>
+            <td><?php if(isset($item['sn']) and $item['sn']) echo $item['sn'] ?></td>
+
+            <td><?php echo isset($item['total_price']) ? My_Number::product_price($item['total_price']) : 0; ?></td>
+            <td><?php echo isset($item['total_qty']) ? $item['total_qty'] : 0; ?></td>
+            <td><?php echo isset($item['approved_at']) ? $arrStatus[1] : $arrStatus[0]  ?></td>
+            <td><?php echo $this->warehouse[$item['warehouse_id']]; ?></td>
+            <td>
+                <?php if(empty($item['approved_at'])): ?>
+
+                    <a href="/bvg/bvg-create?sn=<?php echo $item['sn'];?>" title="edit"><i class="icon-edit"></i></a>
+
+                <?php endif; ?>
+
+                <?php if ($this->access('bvg', 'approve')) {
+                    if (empty($item['approved_at'])) {
+                        ?>
+                        <a href="/bvg/confirm-bvg?sn=<?php echo $item['sn'];?>" title="approve"><i class="icon-ok"></i></a>
+                    <?php
+                    }
+                }
+                ?>
+
+                <?php if(isset($item['approved_at'])) : ?>
+
+                    <a role="menuitem" tabindex="-1" target="_blank" href="<?php echo HOST ?>bvg/invoice?sn=<?php echo $item['sn'] ?>&type=bkhh"><i class="icon-print"></i></a>
+                    <a role="menuitem" tabindex="-1" target="_blank" href="<?php echo HOST ?>warehouse/list-good?sn=<?php echo $item['sn'] ?>"><i class="icon-list-alt"></i></a>
+
+                <?php endif ?>
+
+            </td>
+
+
+        </tr>
+        <?php endforeach;?>
+    </tbody>
+</table>
+<div class="paging">
+    <?php echo $this->paging($this->total, $this->limit, $this->offset, $this->url);?>
+</div>

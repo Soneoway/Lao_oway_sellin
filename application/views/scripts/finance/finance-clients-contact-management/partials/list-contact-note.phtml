@@ -1,0 +1,84 @@
+<table class="table table-bordered">
+	<thead>
+		<tr>
+			<th>Document No.</th>
+			<th>Finance Client</th>
+			<th>Finance Client Code</th>
+			<th>Distributor(Your Side)</th>
+			<th>Reconciliation Amount</th>
+			<th>Reconciliation Details</th>
+			<th>Business Date</th>
+			<th>Status</th>
+			<th>Adjustment Type</th>
+			<th>Contain Product Is Required</th>
+			<th>Creation Time</th>
+			<th>Finance Date</th>
+			<th>Review Date</th>
+			<th>Creator</th>
+			<th>Action</th>
+		</tr>
+	</thead>
+	<tbody>
+
+		<?php if(isset($this->contactNote) && $this->contactNote) : ?>
+			<?php foreach($this->contactNote as $value) : ?>
+
+				<?php 
+
+				if($value['status'] == 1) {
+					$concate_note_status = "<span style='color: blue'> Pending Review </span>";
+				}elseif($value['status'] == 2) {
+					$concate_note_status = "<span style='color: green'> Approved </span>";
+				}elseif($value['status'] == 3) {
+					$concate_note_status = "<span style='color: orange'> Re-review </span>";
+				}else{
+					$concate_note_status = "<span> Upapproved </span>";
+				}
+
+				if($value['conatin_product'] == 1) {
+					$conatin_product = 'Yes';
+				}else{
+					$conatin_product = 'No';
+				}
+
+				?>
+				<tr>
+					<td><?php echo $value['code'] ?></td>
+					<td><?php echo $value['finance_client_name'] ?></td>
+					<td><?php echo $value['finance_client_code'] ?></td>
+					<td><?php echo $value['distributor_you'] ?></td>
+					<td><?php echo number_format($value['amount'],0) ?></td>
+					<td><?php echo $value['reconcil_details'] ?></td>
+					<td><?php echo $value['business_date'] ?></td> 
+					<td><?php echo $concate_note_status ?></td>
+					<td><?php echo $value['adjustment_type'] ?></td>
+					<td><?php echo $conatin_product; ?></td>
+					<td><?php echo $value['created_at'] ?></td>
+					<td><?php echo $value['finance_date'] ?></td>
+					<td><?php echo $value['re-review_date'] ?></td>
+					<td><?php echo $this->staff[$value['created_by']] ?></td>
+					<td>
+						<a href="<?php echo HOST ?>finance/add-contact-note?id=<?php echo $value['id'] ?>&action_type=1">Detail</a>
+
+						<?php if(in_array($value['status'], array(1,3))) : ?>
+						| <a href="<?php echo HOST ?>finance/add-contact-note?id=<?php echo $value['id'] ?>&action_type=2">Edit</a>
+						<?php endif; ?>
+
+						<?php if(in_array($value['status'], array(1,3))) : ?>
+						| <a href="<?php echo HOST ?>finance/add-contact-note?id=<?php echo $value['id'] ?>&action_type=3">Approved</a>
+						<?php endif; ?>
+
+						<?php if(in_array($value['status'], array(2))) : ?>
+						| <a href="<?php echo HOST ?>finance/approved-contact-note=?id=<?php echo $value['id'] ?>&action_type=4" style="color: orange;">Re-review</a>
+						<?php endif; ?>
+
+						<?php if(in_array($value['status'], array(1,3))) : ?>
+						| <a href="<?php echo HOST ?>finance/approved-contact-note=?id=<?php echo $value['id'] ?>&action_type=5" style="color: red">Delete</a>
+						<?php endif; ?>
+					</td>
+				</tr>
+			<?php endforeach; ?>
+		<?php endif; ?>
+
+	</tbody>
+</table>

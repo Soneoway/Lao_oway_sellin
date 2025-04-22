@@ -1,0 +1,74 @@
+<link href="../css/select2.css" rel="stylesheet"/>
+<script src="../js/select2.js"></script>
+<form class="form-search form-horizontal" method="get" action="/staff">
+    <div class="row">
+        <div class="span5">
+            <div class="control-group">
+                <label for="username" class="span2">Username</label>
+                <input id="username" name="username" type="text" class="input-medium search-query form-control" value="<?php isset($this->params['username']) and printf($this->params['username']);?>">
+            </div>
+            <div class="control-group">
+                <label for="staff_code" class="span2">Staff Code</label>
+                <input id="staff_code" name="staff_code" type="text" class="input-medium search-query form-control" value="<?php isset($this->params['staff_code']) and printf($this->params['staff_code']);?>">
+            </div>
+        </div>
+        <div class="span5">
+            <div class="control-group">
+                <label class="control-label">Group</label>
+                <div class="controls">
+                    <div id="group_list">
+                        <div class="list_item">
+                            <select class="span3" name="group_id" id="group_id">
+                                <option value="0"> Select Group </option>
+                                <?php foreach ($this->groups as $item):?>
+                                    <option value="<?php echo $item->id;?>"
+                                        <?php if( isset($this->params['group_id']) && $this->params['group_id'] == $item->id ) echo "selected='selected'" ?>
+                                        ><?php echo $item->name;?></option>
+                                    <?php endforeach;?>
+                                </select>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="control-group">
+                    <label class="control-label"> Commpany </label>
+                    <div class="controls">
+                        <select class="span3" name="company" id="company">
+                            <option class=""> selected </option>
+                            <option value="1" <?php if(isset($this->params['company']) && $this->params['company'] == 1) echo "selected='selected'" ?>> OPPO </option>
+                            <option value="2" <?php if(isset($this->params['company']) && $this->params['company'] == 2) echo "selected='selected'" ?>> Realme </option>
+                        </select>
+                    </div>
+                </div>
+
+                <div class="control-group">
+                    <label class="control-label">Account Status</label>
+                    <div class="controls">
+                        <div id="group_list">
+                            <div class="list_item">
+                                <select class="span3" name="status" id="status">
+                                    <option value=""> All Status </option>
+                                    <option value="1" <?php if(isset($this->params['status']) && $this->params['status'] == 1) echo "selected='selected'" ?>> Enable </option>
+                                    <option value="2" <?php if(isset($this->params['status']) && $this->params['status'] == 2) echo "selected='selected'" ?>> Disable </option>
+                                    </select>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="clearfix"></div>
+
+
+            </div>
+
+            <button type="submit" class="btn btn-primary">Search</button>
+            <button type="reset" class="btn btn-warning">Reset</button>
+        </form>
+
+        <script type="text/javascript">
+            $(document).ready(function () {
+                $("#group_id, #status, #company").select2();
+            });
+
+        </script>

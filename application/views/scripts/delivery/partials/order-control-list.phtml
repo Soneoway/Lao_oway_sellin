@@ -1,0 +1,165 @@
+<style type="text/css">
+    tr.deleted td {
+        text-decoration: line-through;
+    }
+
+    tr td:last-child {
+        width: 70px;
+    }
+</style>
+<table class="table table-bordered">
+    <thead>
+        <tr>
+            <?php echo $this->sorting(array(
+                    '#',
+                    'sn'           => 'Delivery Order SN',
+                    'sales_ref'    => 'Sales Order SN',
+                    'tracking_no'  => 'Tracking No',
+                    'carrier'      => 'Carrier/Staff',
+                    'distributor'  => 'Distributor',
+                    'receiver'     => 'Receiver',
+                    'province'     => 'Province',
+                    'district'     => 'District',
+                    'created_at'   => 'Created At',
+                    'warehouse_id' => 'Warehouse',
+                    'carrier_id'   => 'Carrier',
+                    'status'       => 'Status',
+                    'Action'
+                ),
+                $this->url, $this->sort, $this->desc); ?>
+        </tr>
+    </thead>
+    <tbody>
+        <?php
+        //print_r($this->order_list);
+        if (isset($this->order_list) and $this->order_list)
+            foreach ($this->order_list as $k => $_order): ?>
+        <tr class="item">
+              <td>
+                <?php
+                    $inc = $this->offset + $k + 1;
+
+                ?>
+                <button class="btn btn-mini btn-default get_detail_btn" type="button" data-id="<?php echo $_order['id'] ?>">+</button>
+            </td>
+            <td><?php echo $_order['sn'] ?></td>
+            <td><?php echo $_order['sales_ref'] ?></td>
+            <td><?php echo $_order['tracking_no'] ?></td>
+            <td><?php if (isset(My_Carrier::$name[$_order['carrier_id']])): ?>
+                    <span class="label label-success"><?php echo My_Carrier::$name[$_order['carrier_id']] ?></span>
+                <?php elseif(isset($this->staffs[ $_order['staff_id'] ])): ?>
+                    <strong><?php echo $this->staffs[ $_order['staff_id'] ] ?></strong>
+                <?php elseif(isset($_order['type']) && My_Delivery_Type::Customer_Pickup == $_order['type']): ?>
+                    <span class="label label-default">Customer Pickup</span>
+                <?php elseif(isset($_order['type']) && My_Delivery_Type::Hub_Pickup == $_order['type']): ?>
+                    <span class="label label-default">Hub Pickup</span>
+                <?php endif ?>
+            </td>
+
+            <td><?php if (isset($this->distributor_cache[$_order['distributor_id']])) echo $this->distributor_cache[$_order['distributor_id']] ?></td>
+            <td><?php echo $_order['receiver'] ?></td>
+            <td><?php if(isset($_order['district'])) echo My_Region::getValue($_order['district'], My_Region::Province) ?></td>
+            <td><?php if(isset($_order['district'])) echo My_Region::getValue($_order['district'], My_Region::District) ?></td>
+            <td><?php if(isset($_order['created_at'])) echo date('d/m/Y H:i:s', strtotime($_order['created_at'])) ?></td>
+            <td><?php if(isset($this->warehouses[ $_order['warehouse_id'] ])) echo str_replace('Warehouse_', ' ', $this->warehouses[ $_order['warehouse_id'] ]) ?></td>
+
+            <td>
+            <?php if(isset(My_Carrier::$name[$_order['carrier_id']])) echo My_Carrier::$name[$_order['carrier_id']] ?>
+            </td>
+
+
+            <td>
+                <?php if ($_order['status'] == My_Delivery_Order_Status::Delivered && isset($_order['delivered_at'])): ?>
+                    <strong><?php echo date('d/m/Y H:i:s', strtotime($_order['delivered_at'])) ?></strong>
+
+                <?php else: ?>
+                    <i><?php if( isset(My_Delivery_Order_Status::$name[ $_order['status'] ]) ) echo My_Delivery_Order_Status::$name[ $_order['status'] ] ?></i>
+                <?php endif ?>
+            </td>
+            <td class="">
+                <div class="btn-group">
+                    <a class="btn dropdown-toggle" data-toggle="dropdown" href="#">Action<span class="caret"></span></a>
+                    <ul class="dropdown-menu">
+                        <?php if (false)://if ($this->access('delivery', 'order-control-view')
+                            //&& $_order['status'] == My_Delivery_Order_Status::Waiting): ?>
+                            <li>
+                                <a class="" href="<?php echo HOST ?>delivery/order-control-view?id=<?php echo $_order['id'];?>"><i class="icon-tags"></i> View and Update</a>
+                            </li>
+                        <?php endif; ?>
+
+                        <?php if ($this->access('delivery', 'order-control-delivered')
+                            && in_array($_order['status'], array(My_Delivery_Order_Status::Warehouse_To_Distributor)) ): ?>
+                            <li>
+                                <a class="confirmLink" href="<?php echo HOST ?>delivery/order-control-delivered?id=<?php echo $_order['id'];?>"><i class="icon-ok"></i> Mark as delivered</a>
+                            </li>
+                        <?php endif; ?>
+
+                        <?php 
+                            //9=J&T
+                            if ($this->access('delivery', 'order-control-detail-update') && $_order['carrier_id'] == '9' ): ?>
+                            <li>
+                                <a href="<?php echo HOST ?>delivery/order-control-detail-update?id=<?php echo $_order['id'];?>"><i class="icon-edit"></i> Update J&T</a>
+                            </li>
+                        <?php endif; ?>
+
+                        <?php if ($this->access('delivery', 'order-control-delete')
+                            && in_array($_order['status'], array(My_Delivery_Order_Status::Waiting, My_Delivery_Order_Status::Warehouse_To_Hub, My_Delivery_Order_Status::Warehouse_To_Distributor))): ?>
+                            <li>
+                                <?php
+
+                                $is_kerry = '';
+
+                                if($_order['is_co'] == 1){
+                                    
+                                    switch ($_order['carrier_id']) {
+                                        case '1':
+                                            //kerry
+                                            $is_kerry = 1;
+                                            break;
+                                        case '9':
+                                            //j&t
+                                            $is_kerry = 2;
+                                            break;
+                                    }
+
+                                }else{
+                                    $is_kerry = $_order['is_kerry'];
+                                }
+
+                                ?>
+                                <a class="confirmLink" href="<?php echo HOST ?>delivery/order-control-delete?id=<?php echo $_order['id'];?>&is_kerry=<?=$is_kerry;?>"><i class="icon-trash"></i> Cancel</a>
+                            </li>
+                        <?php endif ?>
+
+                        <?php if ($this->access('delivery', 'order-control-detail')): ?>
+                            <li>
+                                <a class="" href="<?php echo HOST ?>delivery/order-control-detail?id=<?php echo $_order['id'];?>"><i class="icon-eye-open"></i> View Detail</a>
+                            </li>
+                        <?php endif ?>
+
+                        <?php
+                            if ($this->access('delivery', 'order-control-print')
+                            && isset($_order['type'])
+                            && My_Delivery_Type::Outside == $_order['type']
+                            && isset($_order['status'])
+                            && isset($_order['carrier_id'])
+                           // && in_array($_order['carrier_id'], array(My_Carrier::Kerry_DN, My_Carrier::Kerry_HCM, My_Carrier::Kerry_HN))
+                            && in_array($_order['status'], array(My_Delivery_Order_Status::Warehouse_To_Hub, My_Delivery_Order_Status::Warehouse_To_Distributor))) : ?>
+                            <li>
+                                <a class="" href="<?php echo HOST ?>delivery/order-control-print?id=<?php echo $_order['id'];?>" target="_blank"><i class="icon-print"></i> Print Order</a>
+                            </li>
+                        <?php endif ?>
+                    </ul>
+                </div>
+            </td>
+        </tr>
+        <?php endforeach;?>
+
+    </tbody>
+</table>
+<div class="paging">
+    <?php echo $this->paging($this->total, $this->limit, $this->offset, $this->url);?>
+</div>
+<script type="text/javascript" src="/js/jquery-ui-1.8.12.custom.min.js"></script>
+<link rel="stylesheet" type="text/css" href="/css/jquery-ui-1.8.12.custom.css"/>
+<?php echo $this->confirm();?>

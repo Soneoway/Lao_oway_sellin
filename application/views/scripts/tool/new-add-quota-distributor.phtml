@@ -1,0 +1,401 @@
+<!-- <link href="//netdna.bootstrapcdn.com/bootstrap/3.2.0/css/bootstrap.min.css" rel="stylesheet" id="bootstrap-css"> -->
+
+<script type="text/javascript" src="<?php echo HOST ?>js/jquery-1.7.2.min.js"></script> 
+<script type="text/javascript" src="<?php echo HOST ?>js/jquery-ui-1.8.12.custom.min.js"></script>
+<link rel="stylesheet" type="text/css" href="<?php echo HOST ?>css/jquery-ui-1.8.12.custom.css"/>  
+<link rel="stylesheet" href="<?php echo HOST ?>css/bootstrap-multiselect.css" type="text/css"/>
+<script type="text/javascript" src="<?php echo HOST ?>js/bootstrap-multiselect.js"></script>
+<link href="<?=HOST?>public/css/bootstrap.modi.min.css" rel="stylesheet">
+
+<style type="text/css">
+
+</style> 
+
+<?php
+    if (isset($this->messages_success) and $this->messages_success)
+        foreach ($this->messages_success as $message):
+            echo '<div class="alert alert-success">'.$message.'</div>';
+        endforeach;
+
+    if (isset($this->messages) and $this->messages)
+        foreach ($this->messages as $message):
+            echo '<div class="alert alert-error">'.$message.'</div>';
+        endforeach;
+?>
+
+<div class="page-header">
+  <h1>New Add Quota Distributor</h1>
+</div>
+<div class="container">
+  <form role="form" id="form" action="<?php echo HOST.'tool/new-add-quota-distributor';?>" method="post"  > <!-- savequotadistributor -->
+
+   <div class="well">
+    <div class="control-group">
+      <label class="span3">Type<span style="color: red">*</span></label>
+      <div class="controls">
+        <select id="type" class="span3" name="type" required>
+          <option value="">Choose</option>
+          <option value="1" <?php if (isset($this->params['type']) and $this->params['type']==1):?> selected <?php endif;?>>Normal</option>
+          <option value="2" <?php if (isset($this->params['type']) and $this->params['type']==2):?> selected <?php endif;?>>Demo</option>
+          <option value="5" <?php if (isset($this->params['type']) and $this->params['type']==5):?> selected <?php endif;?>>APK</option>
+        </select>
+      </div>
+
+    </div>
+    <div class="control-group">
+      <label class="span3">Warehouse<span style="color: red">*</span></label>
+      <div class="controls">
+        <select class="warehouses span3"  name="warehouses" required>
+          <option value="">Choose</option>
+          <?php if ($this->warehouses): foreach ($this->warehouses as $id=>$name):?>
+            <option value="<?php echo $id;?>" <?php echo (isset($list['warehouses']) and $id==$list['warehouses'])? 'selected':''?> ><?php echo $name;?></option>
+          <?php endforeach; endif;?>
+        </select>
+      </div>
+
+    </div>
+    <div class="control-group">
+      <label class="span3">Product Category<span style="color: red">*</span></label>
+      <div class="controls">
+        <select class="cat_id span3"  name="cat_id" required>
+          <option value="">Choose</option>
+          <?php if ($this->good_categories): foreach ($this->good_categories as $id=>$name):?>
+            <option value="<?php echo $id;?>" <?php echo (isset($list['cat_id']) and $id==$list['cat_id'])? 'selected':''?> ><?php echo $name;?></option>
+          <?php endforeach; endif;?>
+        </select>
+      </div>
+
+    </div>
+    <div class="control-group">
+      <label class="span3">Product<span style="color: red">*</span></label>
+      <div class="controls">
+       <select class="good_id span3" class="" name="good_id" required>
+        <option value="">Choose</option>
+
+        <?php foreach ($goods as $good):?>
+          <option value="<?php echo $good->id;?>" <?php echo ($good->id == $list->good_id)?'selected':''?>><?php echo $good->name;?></option>
+        <?php endforeach;?>
+
+      </select>
+    </div>
+
+  </div>
+
+  <!-- <div class="control-group">
+  <label class="span3">Color<span style="color: red">*</span></label>
+    <div class="controls">
+        <select class="good_color span3" class="" name="good_color" required>
+        <option value="">Choose</option>
+        <?php foreach ($colors as $color):?>
+                <option value="<?php echo $color->id;?>" <?php echo ($color->id == $list->good_color)? 'selected':''?>><?php echo $color->name;?></option>
+            <?php endforeach;?>
+    </select>
+    </div>
+  </div> -->
+  <div class="control-group">
+    <label class="span3">Quota Date<span style="color: red">*</span></label>
+    <div class="controls">
+      <input type="text" class="date" name="quota_date" style="width: 260px;" required>
+    </div>
+
+  </div>
+
+</div>
+
+<div class="well"> 
+  <div class="col-md-12"> 
+
+   <h2>Distributor</h2>
+   <div class="control-group">
+    <div class="controls">ประเภทร้านค้า
+      <select id="rank" name="rank" class="rank">
+        <option value="">---</option>
+        <option value="1" <?php if( isset($this->distributor['rank']) and $this->distributor['rank']==1 ) { ?> selected<?php }?>>1. ORG-WDS(1)</option>
+        <option value="2" <?php if( isset($this->distributor['rank']) and $this->distributor['rank']==2 ) { ?> selected<?php }?>>2. ORG(2)</option>
+        <option value="5" <?php if( isset($this->distributor['rank']) and $this->distributor['rank']==5 ) { ?> selected<?php }?>>3. ORG-Dtac/Advice(5)</option>
+        <option value="6" <?php if( isset($this->distributor['rank']) and $this->distributor['rank']==6 ) { ?> selected<?php }?>>4. ORG-Lotus/Power by(6)</option>
+        <option value="7" <?php if( isset($this->distributor['rank']) and $this->distributor['rank']==7 ) { ?> selected<?php }?>>5. Dealer(7)</option>
+        <option value="8" <?php if( isset($this->distributor['rank']) and $this->distributor['rank']==8 ) { ?> selected<?php }?>>6. HUB(8)</option>
+        <option value="9" <?php if( isset($this->distributor['rank']) and $this->distributor['rank']==9 ) { ?> selected<?php }?>>7. Laos(9)</option>
+        <option value="3" <?php if( isset($this->distributor['rank']) and $this->distributor['rank']==3 ) { ?> selected<?php }?>>8. Online and Staff(3)</option>
+        <option value="10" <?php if( isset($this->distributor['rank']) and $this->distributor['rank']==10 ) { ?> selected<?php }?>>9. Brand Shop/Service(10)</option>
+        <option value="11" <?php if( isset($this->distributor['rank']) and $this->distributor['rank']==11 ) { ?> selected<?php }?>>10. King Power(11)</option>
+        <option value="12" <?php if( isset($this->distributor['rank']) and $this->distributor['rank']==12 ) { ?> selected<?php }?>>11. Jaymart(12)</option>
+        <option value="13" <?php if( isset($this->distributor['rank']) and $this->distributor['rank']==13 ) { ?> selected<?php }?>>12. Brand Shop By Dealer(13)</option>
+        <option value="14" <?php if( isset($this->distributor['rank']) and $this->distributor['rank']==14 ) { ?> selected<?php }?>>13. KR Dealer(14)</option>
+        <option value="15" <?php if( isset($this->distributor['rank']) and $this->distributor['rank']==15 ) { ?> selected<?php }?>>14. TRUE(15)</option>
+      </select>
+    </div>
+  </div>
+
+  <div class="retailer_name_list" style="width: 500px;"></div>
+
+</div>
+<br>
+<button class="btn btn-success" type="button" id="btn_add_dis">Add Distributor</button>
+<br>
+<br>
+<br>
+
+<div class="list_quota_distributor"></div>
+
+</div>
+
+<div class="row">
+  <div class="span6">
+    <div class="control-group">
+
+      <div class="span4">
+
+        <button type="submit" class="btn btn-primary" id="submit_btn">Confirm</button>
+        <a href="new-quota-manage-distributor" class="btn btn-danger go-back">Go back</a>
+      </div>
+    </div>
+    <div class="clearfix"></div>
+  </div>
+</div>
+</form>
+</div>
+
+<script type="text/javascript" src="<?php echo HOST ?>js/jets.js"></script>
+
+<script type="text/javascript">
+
+  $(document).ready(function () {
+
+    var num_row = 0;
+    var temp_d_id = [];
+
+    $('#btn_add_dis').click(function(event) {
+
+      if(!$('.good_id').val()){
+        alert('Please select product');
+        return false;
+      }
+
+      var d_id = $('#d_id').val();
+      var text_d_id = $( "#d_id option:selected" ).text();
+
+      console.log(d_id);
+
+      if(d_id == '' || d_id == null){
+        console.log('please select distributor');
+        return false;
+      }
+
+      if(jQuery.inArray(d_id,temp_d_id) !== -1){
+        console.log('duplicate distributor');
+        return false;
+      }
+
+      temp_d_id.push(d_id);
+      num_row++;
+
+      var all_color = '';
+      var all_color_input = '';
+
+      $(array_color).each(function(index, el) {
+        all_color = all_color + '<td>'+el.name+'</td>'
+        all_color_input = all_color_input + '<td><input style="width:100px;" type="text" name="list_color_quota[]" value="0" required></td>';
+      });
+
+      var action = '<td>Action</td>'
+
+      if(num_row == 1){
+        $('.list_quota_distributor').append('<table class="table table_quota"><tr><td>Distributor Name</td>'+all_color+action+'</tr></table>');
+      }
+
+      var action_del = '<td><button type="button" class="btn btn-default remove_quota_list" value="'+d_id+'"><i style="color:red" class="icon-remove"></i></button></td>';
+
+      $('.table_quota').append('<tr id="quota_detail_'+d_id+'"><td><input class="list_dis_quota" type="hidden" name="list_dis_quota[]" value="'+d_id+'"><span>'+text_d_id+'</span></td>'+all_color_input+action_del+'</tr>');
+
+    });
+
+    $('.remove_quota_list').live('click', function(event) {
+
+      var d_id = $(this).val();
+
+      $('#quota_detail_'+d_id).remove();
+      num_row--;
+
+      temp_d_id = jQuery.grep(temp_d_id, function(value) {
+        return value != d_id;
+      });
+
+      if(num_row < 1){
+        $('.table_quota').remove();
+      }
+
+    });
+
+    $('.cat_id').change(function(event) {
+      num_row = 0;
+      temp_d_id = [];
+      $('.table_quota').remove();
+    });
+
+    $('.good_id').change(function(event) {
+      num_row = 0;
+      temp_d_id = [];
+      $('.table_quota').remove();
+    });
+
+    $('#form').live('submit', function(event) {
+      if(num_row < 1){
+        alert('Please select distributor for set quota');
+        return false;
+      }
+    });
+
+    initSelectProduct();
+    $( '.date' ).datepicker({ dateFormat: "dd/mm/yy" });
+
+    initSearchOptionDistributor('d_id', 'SearchBox');
+    $( '.date' ).datepicker({ dateFormat: "dd/mm/yy" });
+        // initDatepicker();
+
+        $("*").keypress(function(event){  
+         if(event.keyCode==13){  
+          return false;  
+        }  
+      });
+
+        $('.rank').change(function(event) {
+          get_distributor_cached_for_search($(this).val());
+        });
+
+        function get_distributor_cached_for_search(rank_id){
+
+          var rank_id = rank_id;
+          $.ajax({
+            url: '<?php echo HOST ?>get/distributor-cached-for-search',
+            type: 'POST',
+            dataType: 'html',
+            data: {rank_id: rank_id},
+          })
+          .done(function(data) {
+            $('.retailer_name_list').empty();
+            $('.retailer_name_list').append(data);
+            var jets = new Jets({
+              searchTag: '#SearchBox',
+              contentTag: '#d_id'
+            });
+            <?php if(isset($this->d_id)){ ?>
+              $('#d_id').val(<?= $this->d_id ?>);
+              <?php }?>
+              console.log("success");
+            })
+          .fail(function() {
+            console.log("error");
+          })
+          .always(function() {
+            console.log("complete");
+          });
+
+        }
+
+        $('body').on('change', '.category', function () {
+         var list =  $(this).val();
+
+         $.ajax({
+           url: '/tool/list-product',
+           type: 'GET',
+           data: {cat_id: list},
+         })
+         .done(function(data) {
+          $('.list-left-product').empty();
+          $('.list-left-product').append(data);
+          console.log("success");
+        })
+         .fail(function() {
+           console.log("error");
+         })
+         .always(function() {
+           console.log("complete");
+         });
+
+       });
+
+        $('body').on('change', '.category-gift', function () {
+         var list =  $(this).val();
+
+         $.ajax({
+           url: '/tool/list-product-gift',
+           type: 'GET',
+           data: {cat_id: list},
+         })
+         .done(function(data) {
+          $('.list-left-product-gift').empty();
+          $('.list-left-product-gift').append(data);
+          console.log("success");
+        })
+         .fail(function() {
+           console.log("error");
+         })
+         .always(function() {
+           console.log("complete");
+         });
+
+       });
+        
+      });
+
+var array_color = [];
+
+function initSelectProduct(){
+  $(document).off('change', '.cat_id, .good_id')
+  .on('change', '.cat_id, .good_id', function(e) {
+    $('button[type=submit]').prop('disabled', true);
+    $('form').bind('submit',function(e){e.preventDefault();});
+
+    $('.all_color').remove();
+
+    $('.loading').remove();
+    $(this).after('<span class="loading"></span>');
+    var div_parent = $(this).parent().parent().parent();
+    var _self = $(this);
+    var cat_id = div_parent.find('.cat_id').val();
+    var distributor_id    = $('#d_id').val();
+    var rank    = $('.rank').val();
+
+    if (_self.hasClass('cat_id'))
+      div_parent.find('.good_id').find('option:not(:first)').remove();
+
+    var good_id = div_parent.find('.good_id').val();
+
+    div_parent.find('.good_color').find('option:not(:first)').remove();
+
+    div_parent.find('.quantity').val('');
+
+            //alert(cat_id);alert(good_id);
+            $.get("/get/load",
+              {cat_id: cat_id, good_id: good_id}
+              ,function(data,status){
+                var data = $.parseJSON( data );
+                if (data.goods){
+                  var obj = data.goods;
+                  for (var i = 0; i < obj.length; i++) {
+                   div_parent.find('.good_id').append('<option value="'+obj[i]['id']+'">'+obj[i]['name']+'</option>');
+                 }
+               }
+               if (data.colors){
+                var obj = data.colors;
+                array_color = obj;
+                for (var i = 0; i < obj.length; i++) {
+                 div_parent.find('.good_color').append('<option value="'+obj[i]['id']+'">'+obj[i]['name']+'</option>');
+
+                 $('form').append('<input type="hidden" class="all_color" name="all_color[]" value="'+obj[i]['id']+'">');
+               }
+             }
+             $('button[type=submit]').prop('disabled', false);
+             $('form').unbind('submit');
+             _self.nextAll('.loading').remove();
+           });
+
+          });
+}
+function roundNumber(num, dec) {
+  var result = Math.round(num*Math.pow(10,dec))/Math.pow(10,dec);
+  return Number(result).toLocaleString('en',{ minimumFractionDigits: 2 });
+}
+</script>

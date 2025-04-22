@@ -1,0 +1,305 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="utf-8">
+<title>Print : Weekly Inventory by Branch</title>
+</head>
+<style type="text/css">
+body {
+  font-family: "Times New Roman", Times, serif;
+  background: white; 
+  font-size:12px;
+  margin: 0px;
+}
+page {
+  background: white;
+  display: block;
+  margin: 0 auto;
+  /*margin-bottom: 0.5cm;*/
+  /*box-shadow: 0 0 0.5cm rgba(0,0,0,0.5);*/
+  padding-left:0.5cm;
+  padding-right:0.5cm;
+}
+page[size="A4"] {  
+  width: 21cm;
+  height: 29.7cm;
+}
+#sales-info{
+  text-align: center;
+  height:2cm;
+}
+table {
+    border-collapse: collapse;
+    width:100%;
+}
+
+table, th, td {
+    border: 1px solid black;
+}
+table.nb, table.nb th, table.nb td{
+  border: none;
+}
+.txthead{
+    text-align: center;
+    background-color: #b1a7a7;
+    height: 20px;
+    font-weight: bold;
+}
+.txtleft{
+    text-align: left;
+    background-color: #ddd;
+    height: 30px
+}
+.bgrey{
+    background-color: #ddd;
+    height: 60px;
+    text-align: left;
+    vertical-align: top;
+}
+.zc-ref {
+  display: none;
+}
+</style>
+
+<body>
+<page size="A4">
+    <div class="details-head-page-none" style="display: none;">
+      <div align="right" style="margin-right: 30px;padding-top: 160px;"><?php echo "$current_page/$total_page";?></div>
+    </div>
+
+    <div class="details-head-page">
+      <img style="width: 100%" src='<?php echo HOST.'img/oppo_header.png'?>'>
+    </div>
+      <table id="sales-info" style="margin-top:0.2cm;">
+        <?php
+            $currentTime = date('Y-m-d H:i:s');
+         ?>
+         <tr>
+          <th width="100%" colspan="12" style="padding: 5px;" class='txtleft'>Print : Weekly Inventory by Branch</th>
+         </tr>
+         <tr>
+          <th width="100%" colspan="12" style="padding: 5px;" class='txtleft'>Data Date : <?=$currentTime?></th>
+         </tr>
+        
+      </table>
+      <table id="sales-info" style="margin-top:-0.2cm;">
+         <tr>
+          <td width="100%" class="txthead">
+            <div id="myChart"></div>
+          </td>
+         </tr>
+      </table>
+      <br>
+      <table id="sales-info" style="margin-top:-0.2cm;">
+         <tr>
+          <td width="100%" class="txthead">
+            <div id="myChart2"></div>
+          </td>
+         </tr>
+      </table>
+      <br>
+      <table id="sales-info" style="margin-top:-0.2cm;">
+         <tr>
+          <td width="100%" class="txthead">
+            <div id="myChart3"></div>
+          </td>
+         </tr>
+      </table>
+      <br>
+</page>
+</body>
+</html>
+
+<?php
+
+
+
+$scale_x_values1 = [];$scale_x_values2 = [];$scale_x_values3 = [];
+$series1 = [];$series2 = [];$series3 = [];
+
+foreach ($this->get_resule1 as $id=>$item)
+{
+    $text = str_replace('Warehouse', '', $item['warehouse_name']);
+    array_push($scale_x_values1, $text);
+    array_push($series1, $item['total_cost_price']);
+}
+
+$scale_x_values1 = json_encode($scale_x_values1,JSON_NUMERIC_CHECK);
+$series1 = json_encode($series1,JSON_NUMERIC_CHECK);
+
+foreach ($this->get_resule2 as $id=>$item)
+{
+    $text = str_replace('Warehouse', '', $item['warehouse_name']);
+    array_push($scale_x_values2, $text);
+    array_push($series2, $item['total_cost_price']);
+}
+$scale_x_values2 = json_encode($scale_x_values2,JSON_NUMERIC_CHECK);
+$series2 = json_encode($series2,JSON_NUMERIC_CHECK);
+
+foreach ($this->get_resule3 as $id=>$item)
+{
+    $text = str_replace('Warehouse', '', $item['warehouse_name']);
+    array_push($scale_x_values3, $text);
+    array_push($series3, $item['total_cost_price']);
+}
+$scale_x_values3 = json_encode($scale_x_values3,JSON_NUMERIC_CHECK);
+$series3 = json_encode($series3,JSON_NUMERIC_CHECK);
+
+?>
+
+
+<script src= "https://cdn.zingchart.com/zingchart.min.js"></script>
+<script> zingchart.MODULESDIR = "https://cdn.zingchart.com/modules/";
+    ZC.LICENSE = ["569d52cefae586f634c54f86dc99e6a9","ee6b7db5b51705a13dc2339db3edaf6d"];</script>  
+<script src='//code.jquery.com/jquery-2.1.4.min.js'></script>
+
+<script>
+ 
+var scale_x_values1 = '<?php echo $scale_x_values1; ?>';
+var series1 = '<?php echo $series1; ?>';
+var scale_x_values2 = '<?php echo $scale_x_values2; ?>';
+var series2 = '<?php echo $series2; ?>';
+var scale_x_values3 = '<?php echo $scale_x_values3; ?>';
+var series3 = '<?php echo $series3; ?>';
+
+var myConfig = {
+    "type": "bar",
+    "background-color": "white",
+    "title": {
+        "color": "#606060",
+        "background-color": "white",
+        "text": "Weekly Inventory by Branch"
+    },
+    
+    "plotarea":{
+        "margin-bottom":"28%",
+        "margin-left":"10%"
+    },
+    "plot":{
+      "value-box":{
+        "thousands-separator":"," , 
+        "text":"%v",
+        "placement":"top",
+        "font-color":"black",
+        "angle":-60,
+        "offset-y":-20
+      }
+    },
+    "scale-x":{
+      "thousands-separator":"," , 
+      "values": JSON.parse(scale_x_values1),
+        "item": {
+            "color": "#606060",
+            "angle":-80,
+            "font-size":10
+        }
+    },
+    
+    "series": [
+      {
+        "values": JSON.parse(series1)
+      }
+    ]
+};
+
+var myConfig2 = {
+    "type": "bar",
+    "background-color": "white",
+    "title": {
+        "color": "#606060",
+        "background-color": "white",
+        "text": "Weekly Inventory by Branch"
+    },
+    
+    "plotarea":{
+        "margin-bottom":"30%",
+        "margin-left":"10%"
+    },
+    "plot":{
+      "value-box":{
+        "thousands-separator":"," , 
+        "text":"%v",
+        "placement":"top",
+        "font-color":"black",
+        "angle":-60,
+        "offset-y":-20
+      }
+    },
+    "scale-x":{
+      "values": JSON.parse(scale_x_values2),
+        "item": {
+            "color": "#606060",
+            "angle":-80,
+            "font-size":10
+        }
+    },
+    
+    "series": [
+      {
+        "values": JSON.parse(series2)
+      }
+    ]
+};
+
+var myConfig3 = {
+    "type": "bar",
+    "background-color": "white",
+    "title": {
+        "color": "#606060",
+        "background-color": "white",
+        "text": "Weekly Inventory by Branch"
+    },
+    
+    "plotarea":{
+        "margin-bottom":"28%",
+        "margin-left":"10%"
+    },
+    "plot":{
+      "value-box":{
+        "thousands-separator":"," , 
+        "text":"%v",
+        "placement":"top",
+        "font-color":"black",
+        "angle":-60,
+        "offset-y":-20
+      }
+    },
+    "scale-x":{
+      "values": JSON.parse(scale_x_values3),
+        "item": {
+            "color": "#606060",
+            "angle":-80,
+            "font-size":10
+        }
+    },
+    
+    "series": [
+      {
+        "values": JSON.parse(series3)
+      }
+    ]
+};
+
+zingchart.render({ 
+    id : 'myChart', 
+    data : myConfig, 
+    height: 600, 
+    width: "100%" 
+});
+
+zingchart.render({ 
+    id : 'myChart2', 
+    data : myConfig2, 
+    height: 600, 
+    width: "100%" 
+});
+
+zingchart.render({ 
+    id : 'myChart3', 
+    data : myConfig3, 
+    height: 600, 
+    width: "100%" 
+});
+
+
+</script>

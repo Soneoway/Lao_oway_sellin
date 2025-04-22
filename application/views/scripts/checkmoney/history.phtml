@@ -1,0 +1,119 @@
+<link rel="stylesheet" type="text/css" href="/css/jquery-ui-1.8.12.custom.css"/>
+<link rel="stylesheet" href="<?php echo HOST?>css/checkmoney.css" />
+<div class="page-header">
+    <h1>History transaction</h1>
+    
+</div>
+<?php
+    if (isset($this->messages_success) and $this->messages_success)
+        foreach ($this->messages_success as $message):
+            echo '<div class="alert alert-success">'.$message.'</div>';
+        endforeach;
+
+    if (isset($this->messages) and $this->messages)
+        foreach ($this->messages as $message):
+            echo '<div class="alert alert-error">'.$message.'</div>';
+        endforeach;
+?>
+<div class="accordion" id="accordion2">
+    <div class="accordion-group">
+        <div class="accordion-heading">
+            <a class="accordion-toggle collapsed" data-toggle="collapse" data-parent="#accordion2" href="#collapseTwo">
+                Search
+            </a>
+        </div>
+        <div id="collapseTwo" class="accordion-body collapse" style="height: 0px;">
+            <div class="accordion-inner">
+                <?php
+                    echo $this->render('checkmoney/partials/search_history.phtml');
+                ?>
+            </div>
+        </div>
+    </div>
+</div>
+<div class='alert alert-info'> 
+    <ul>
+        <li>
+            <span style="padding: 3">Retailer: <b><?php echo $this->dealer;?></b> 
+                <?php 
+                    if($this->current_distributor['del'] == 1){
+                ?>
+                    <span class="label">deleted</span>
+                <?php 
+                    }
+                ?>
+            </span>
+            <span> - Balance OPPO: <?php echo number_format($this->storeaccount['balance'],2);?> THB </span>
+            <span> - Balance TM: <?php echo number_format($this->storeaccount['balance_smartmobile'],2);?> THB </span>
+        </li>
+        <li>
+            <span>Main Retailer: <b><?php  echo $this->main_retailer['title'];?></b>
+                <?php 
+                    if($this->main_retailer['del'] == 1){
+                ?>
+                    <span class="label">deleted</span>
+                <?php 
+                    }
+                ?>
+            </span>
+        </li>
+        <li>
+            <span>Total balance OPPO: <?php echo number_format($this->total_balance['balance'],2); ?> THB</span>
+            <span> - Total balance TM: <?php echo number_format($this->total_balance['balance_smartmobile'],2); ?> THB</span>
+        </li>
+    </ul>
+</div>
+<div class="table-responsive">
+    <?php
+        echo $this->render('checkmoney/partials/list_his.phtml');
+    ?>
+</div>
+<input type="hidden" name="back_url" id="back_url" value="/checkmoney/list">
+<button type="button" class="btn btn-danger go-back">Go back</button>
+
+<script type="text/javascript" src="/js/jquery-ui-1.8.12.custom.min.js"></script>
+
+<?php echo $this->confirm();?>
+<script>
+$(document).ready(function(){
+        initCollapse(1);
+        function initCollapse(status){
+            if(status == 1){
+                $(".btn-collapse").parent().parent().find('table tbody tr:not(:first-child)').toggle('fast','linear');
+                $(".btn-collapse").html('+');
+            }
+            $(".btn-collapse").click(function(){
+                var _this = $(this);
+                var char = _this.html();
+                if(char == '+'){
+                    _this.html('-');
+                }else{
+                    _this.html('+');
+                }               
+                var node = _this.parent().parent().find('table tbody tr:not(:first-child)').toggle('fast','linear');
+                
+            });
+        }
+        
+        $('.confirmLink').bind("contextmenu",function(e){
+            return false;
+        });
+        
+        $('.lock').click(function(e){
+            e.preventDefault();
+            alert('Sorry,This information is blocked...You can not delete payment has been made or has been the storage of information!');
+        });
+
+        $('#hide').click(function(){
+            $("table tr td:not(.visibility)").toggle();
+
+        });
+
+        $('.go-back').click(function(e){
+            window.location.href = $('#back_url').val();
+            return false;
+        });
+    });     
+    
+
+</script>

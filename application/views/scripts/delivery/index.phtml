@@ -1,0 +1,231 @@
+<style type="text/css">
+    .numbering {
+        counter-reset: rowNumber;
+    }
+
+    .numbering tbody tr {
+        counter-increment: rowNumber;
+    }
+
+    .numbering tbody tr td:first-child::before {
+        content: counter(rowNumber);
+        min-width: 1em;
+        margin-right: 0.5em;
+    }
+
+    .table tbody tr.checked td {
+        background-color: #F1E2F9;
+    }
+
+    textarea {
+        resize: none;
+    }
+
+    .select_all {
+        color: white;
+        font-size: 10px;
+        text-align: center;
+        background-color: darkgray;
+        padding: 2px;
+        border-radius: 2px;
+        cursor: pointer;
+    }
+
+    .select_all input {
+        margin: 0;
+        float: left;
+        line-height: 18px;
+        height: 18px;
+    }
+
+    .select_all input:focus {
+        outline: none;
+    }
+</style>
+
+<div class="page-header">
+    <h1>Delivery <small>Group orders for a delivery</small></h1>
+</div>
+<?php
+    if (isset($this->messages_success) and $this->messages_success)
+        foreach ($this->messages_success as $message):
+            echo '<div class="alert alert-success">'.$message.'</div>';
+        endforeach;
+
+    if (isset($this->messages) and $this->messages)
+        foreach ($this->messages as $message):
+            echo '<div class="alert alert-error">'.$message.'</div>';
+        endforeach;
+?>
+<div class="accordion" id="accordion2">
+    <div class="accordion-group">
+        <div class="accordion-heading">
+            <a class="accordion-toggle collapsed" data-toggle="collapse" data-parent="#accordion2" href="#collapseTwo">
+                Search
+            </a>
+        </div>
+        <div id="collapseTwo" class="accordion-body collapse" style="height: 0px;">
+            <div class="accordion-inner">
+                <?php
+                    echo $this->render('delivery/partials/search.phtml');
+                ?>
+            </div>
+        </div>
+    </div>
+</div>
+
+<div class="table-responsive load-ajax" id="table">
+    <?php
+        echo $this->render('delivery/partials/list.phtml');
+    ?>
+</div>
+
+<div class="row">
+    <div class="span12">
+        <p><button class="btn btn-info" id="add_to_delivery">Add to Delivery Order</button></p>
+    </div>
+</div>
+
+<div class="row">
+    <div class="span12">
+        <legend>Delivery Order Detail</legend>
+        <table class="table table-bordered numbering" id="delivery_list" style="display:none;">
+            <thead>
+                <tr>
+                    <?php echo $this->sorting(array(
+                            '#',
+                            'sn'             => 'Sales Order Number',
+                            'num'            => 'Quantity',
+                            'd_id'           => 'Retailer',
+                            'region'         => 'Province',
+                            'district'       => 'District',
+                            'invoice_number' => 'Invoice Number',
+                            'outmysql_time'  => 'OUT Time',
+                            'warehouse_id'   => 'Warehouse',
+                            'Additional Info',
+                        ),
+                        $this->url, $this->sort, $this->desc); ?>
+                </tr>
+            </thead>
+            <tbody>
+            </tbody>
+        </table>
+    </div>
+</div>
+
+<div class="row">
+    <div class="span12">
+        <p><button title="สร้างรายการจัดส่ง"
+                class="btn btn-success" id="btn_create_delivery_order"
+                style="display:none;">Create Delivery Order</button></p>
+    </div>
+</div>
+
+<div class="row">
+    <div class="span12">
+        <div class="alert alert-success" style="display:none;"></div>
+        <div class="alert alert-danger" style="display:none;"></div>
+    </div>
+</div>
+
+<div class="row">
+    <div class="span12">
+        <div id="delivery_order">
+
+        </div>
+    </div>
+</div>
+
+
+<script>
+    $(document).ready(function () {
+        $('.form-search button:reset').click(function (e){
+            $('.form-search input, .form-search select').val('');
+            $('.form-search').submit();
+            return false;
+        });
+
+        $('#add_to_delivery').click(add_to_delivery);
+        $('#btn_create_delivery_order').click(create_delivery_order);
+    });
+
+    function add_to_delivery(e) {
+        //alert($('#delivery_list tbody tr').length);
+        
+        if($('#delivery_list tbody tr').length != 0){
+            alert('คุณสามารถสร้าง Delivery Order ได้เพียง 1 รายการเท่านั้นค่ะ!');
+        } else {
+            orders = $('.row_select:checked').parents('tr').clone();
+
+            orders.find('[type="checkbox"]').each(function(index, el) {
+                _self = $(el);
+                new_btn_elm = '<button class="btn btn-default btn-mini remove_order btn_new order_sn_list" value="'+_self.val()+'" title="Remove">&times;</button>';
+                _self.parent('td').html(new_btn_elm);
+            });
+
+            $('#delivery_list tbody').append(orders);
+
+            $('.row_select:checked').click();
+            $('.select_all input').prop('checked', false);
+            $('.checked').removeClass('checked');
+
+            $('.remove_order.btn_new').click(remove_order_from_delivery);
+            $('.btn_new').removeClass('btn_new');
+
+            $('#btn_create_delivery_order, #delivery_list').show();
+        }
+        
+    }
+
+    function remove_order_from_delivery(e) {
+        _self = $(e.target);
+        _self.parents('tr').remove();
+    }
+
+    function create_delivery_order(e) {
+        $('.alert').html('').hide();
+        $('.loading').remove();
+        var sn = [];
+
+        $('.order_sn_list').each(function(index, el) {
+            order_sn = $(el).val().trim();
+            if (order_sn)
+                sn.push( order_sn );
+        });
+
+        if (!sn.length) {
+            $('.alert-danger').text('ไม่สามารถสร้างรายการจัดส่งได้.').show();
+            return false;
+        }
+
+        $('#btn_create_delivery_order').after('<span class="loading"></span>');
+        $('button, input, select, textarea, form').prop('disabled', true);
+
+        $.ajax({
+            url: '<?php echo HOST ?>delivery/group-order',
+            type: 'post',
+            dataType: 'html',
+            data: {
+                sn: sn
+            },
+        })
+        .done(function(html) {
+            console.log("success");
+
+            if (html) {
+                $("#delivery_order").html(html);
+                $('#add_to_delivery, #btn_create_delivery_order, #accordion2, #table').remove();
+                $('.remove_order').unbind('click').hide();
+                $('button, input, select, textarea, form').prop('disabled', false);
+            }
+        })
+        .fail(function() {
+            console.log("error");
+        })
+        .always(function() {
+            $('.loading').remove();
+            console.log("complete");
+        });
+
+    }
+</script>

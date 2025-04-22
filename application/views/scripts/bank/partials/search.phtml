@@ -1,0 +1,28 @@
+<form class="form-search form-horizontal" method="get" action="/bank">
+    <div class="row">
+        <div class="span5">
+  
+             <div class="control-group">
+                <label for="created_by" class="span2">name</label>
+                <input type='text' name='name' value="<?php (	isset($this->params['name']) AND $this->params['name']	) ? printf($this->params['name']) : '';?> "/>
+            </div>
+            
+        </div>
+        <div class="span5">
+            
+        </div>
+    </div>
+   
+	<div class="row">
+        <div class="span5">
+   			 <button type="submit" class="btn btn-primary">Search</button>
+<!-- 		    <button type="reset" class="btn btn-warning">Reset</button> -->
+<!-- 		     <button type="submit" name="export" value="1" class="btn btn-success">Export</button>  -->
+       	</div>
+    </div>
+   
+</form>
+
+<script>
+	
+</script>

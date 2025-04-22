@@ -1,0 +1,107 @@
+<form id="form" name="form" class="form-search form-horizontal" action="<?php echo HOST ?>warehouse/internal-number">
+	<div class="row">
+
+        <div class="span5">
+            <div class="control-group">
+                <label class="control-label" for="sn">SN</label>
+                <div class="controls">
+                    <input type="text" id="sn" name="sn" placeholder="SN" <?php if( isset($this->params['sn']) && $this->params['sn'] ) echo 'value="'.$this->params['sn'].'"' ?> />
+                </div>
+            </div>
+        </div>
+
+		<div class="span5">
+			<div class="control-group">
+				<label class="control-label" for="name">Order Name</label>
+				<div class="controls">
+					<input type="text" id="name" name="order_name" placeholder="Order Name" <?php if( isset($this->params['order_name']) && $this->params['order_name'] ) echo 'value="'.$this->params['order_name'].'"' ?> />
+				</div>
+			</div>
+		</div>
+	</div>
+
+    <div class="row">
+
+        <div class="span5">
+            <div class="control-group">
+                <label class="control-label" for="from">Transport From</label>
+                <div class="controls">
+                    <input type="text" id="from" class="date" name="transport_from" placeholder="Transport From" <?php if( isset($this->params['transport_date_from']) && $this->params['transport_date_from'] ) echo 'value="'.$this->params['transport_date_from'].'"' ?> />
+                </div>
+            </div>
+        </div>
+
+        <div class="span5">
+            <div class="control-group">
+                <label class="control-label" for="to">Transport To</label>
+                <div class="controls">
+                    <input type="text" id="to" class="date" name="transport_to" placeholder="Transport To" <?php if( isset($this->params['transport_date_to']) && $this->params['transport_date_to'] ) echo 'value="'.$this->params['transport_date_to'].'"' ?> />
+                </div>
+            </div>
+        </div>
+
+        <div class="span5">
+            <div class="control-group">
+                <label class="control-label" for="service_from">Service From</label>
+                <div class="controls">
+                    <select id="service_from" name="service_from">
+                        <option value="">Choose Showroom</option>
+                        <?php if ($this->services): foreach ($this->services as $id=> $service):
+                            ?>
+                            <option value="<?php echo $service['name'];?>" <?php if (isset($this->params['service_from']) and $service['name']==$this->params['service_from']):?> selected<?php endif;?>><?php echo $service['name'];?></option>
+                        <?php endforeach; endif;?>
+                    </select>
+                </div>
+            </div>
+        </div>
+
+        <div class="span5">
+            <div class="control-group">
+                <label class="control-label" for="service_to">Service To</label>
+                <div class="controls">
+                    <select id="service_to" name="service_to">
+                        <option value="">Choose Showroom</option>
+                        <?php if ($this->services): foreach ($this->services as $id=> $service):
+                            ?>
+                            <option value="<?php echo $service['name'];?>" <?php if (isset($this->params['service_to']) and $service['name']==$this->params['service_to']):?> selected<?php endif;?>><?php echo $service['name'];?></option>
+                        <?php endforeach; endif;?>
+                    </select>
+                </div>
+            </div>
+        </div>
+
+        <div class="span5">
+            <div class="control-group">
+                <label class="control-label" for="invoice_number">Invoice Number</label>
+                <div class="controls">
+                    <input type="text" id="invoice_number" name="invoice_number" placeholder="Invoice Number" <?php if( isset($this->params['invoice_number']) && $this->params['invoice_number'] ) echo 'value="'.$this->params['invoice_number'].'"' ?> />
+                </div>
+            </div>
+        </div>
+
+        <div class="span5">
+            <div class="control-group">
+                <label class="control-label" for="to">Invoice Prefixs</label>
+                <div class="controls">
+                    <select id="invoice_prefix" name="invoice_prefix">
+                        <option value="">Choose</option>
+                        <?php if ($this->invoice_prefixs): foreach ($this->invoice_prefixs as $id=> $prefix):
+                            ?>
+                            <option value="<?php echo $id;?>" <?php if (isset($this->params['invoice_prefix']) and $id==$this->params['invoice_prefix']):?> selected<?php endif;?>><?php echo $prefix['name'];?></option>
+                        <?php endforeach; endif;?>
+                    </select>
+                </div>
+            </div>
+        </div>
+    </div>
+
+	<div class="row">
+        <div class="span10">
+            <div class="controls">
+				<button type="submit" class="btn btn-primary">Search</button>
+			    <button type="reset" class="btn btn-warning">Reset</button>
+			    <button type="submit" name="export" value="1" class="btn btn-success">Export</button>
+			</div>
+		</div>
+	</div>
+</form>

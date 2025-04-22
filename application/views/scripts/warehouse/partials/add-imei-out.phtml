@@ -1,0 +1,860 @@
+<?php
+function product_price($priceFloat) {
+    $symbol = ' THB';
+    $symbol_thousand = ',';
+    $decimal_place = 2;
+    $price = number_format($priceFloat, $decimal_place, '.', $symbol_thousand);
+    return $price;
+}
+
+?>
+
+<?php
+    $total_price=0;
+
+    if( isset($this->sales_out['total_price']) && $this->sales_out['total_price'])
+    {
+        $total = product_price($this->sales_out['total_price']);
+        $total_discount = $this->view->total_discount;
+        if($total_discount>0)
+        {
+           $total_price = $total - $total_discount;
+        }else{
+           $total_price = $total;
+        }
+    }
+
+    //echo $total_discount = $this->total_discount;
+    //$total_price = $total_discount;
+?>
+
+<!-- Modal -->
+<div id="modal-check-imei" class="modal fade" role="dialog" data-backdrop="static">
+  <div class="modal-dialog">
+
+    <!-- Modal content-->
+    <div class="modal-content">
+      <div class="modal-header">
+        <h4 class="modal-title">Check IMEI</h4>
+      </div>
+      <div class="modal-body">
+      <table style="width: 100%">
+          <tr >
+              <td style="width: 50%;vertical-align:top">
+              <div>
+                IMEI : <input type="text" class="clear-data" id="modal-input-imei" maxlength="15" style="width: 170px;">
+                <br/>
+                Status : 
+                <b>
+                <span class="modal-text-status" id="modal-text-status-none">NONE</span>
+                <span class="modal-text-status hide" id="modal-text-status-correct" style="color: green">CORRECT</span>
+                <span class="modal-text-status hide" id="modal-text-status-incorrect" style="color: red">INCORRECT</span>
+                </b>
+                <br/>
+                Count : <span class="modal-count" id="modal-count-correct">0</span>
+                <br/>
+                <textarea id="modal-textarea-correct" class="clear-data" disabled rows="15" style="resize: none;"></textarea>
+              </div>
+                  
+              </td>
+              <td style="width: 50%;vertical-align:top">
+                <span style="color: red"><b>INCORRECT LOG</b></span>
+                <br/>
+                Count : <span class="modal-count" id="modal-count-incorrect">0</span>
+                <br/>
+                <textarea style="resize: none;color: red" id="modal-textarea-incorrect" class="clear-data" disabled rows="17"></textarea>
+              </td>
+          </tr>
+      </table>
+        
+      </div>
+      <div class="modal-footer">
+      <button type="button" id="modal-btn-clear" class="btn btn-default pull-left">Clear</button>
+      <button type="button" class="btn btn-info" id="modal-btn-submit" data-dismiss="modal">Submit</button>
+      <!-- <button type="button" class="btn btn-success">Export</button> -->
+        <button type="button" class="btn btn-danger" data-dismiss="modal">Close</button>
+      </div>
+    </div>
+
+  </div>
+</div>
+
+<!-- Modal -->
+<div id="modal-check-imei-list" class="modal fade" role="dialog" data-backdrop="static">
+  <div class="modal-dialog">
+
+    <!-- Modal content-->
+    <div class="modal-content">
+      <div class="modal-header">
+        <h4 class="modal-title">Check IMEI List</h4>
+      </div>
+      <div class="modal-body">
+        <div id=display-check-imei-list></div>
+      </div>
+      <div class="modal-footer">
+        <button type="button" class="btn btn-danger" data-dismiss="modal">Close</button>
+      </div>
+    </div>
+
+  </div>
+</div>
+
+<!-- Modal -->
+<div id="modal-check-imei-qr" class="modal fade" role="dialog" data-backdrop="static">
+  <div class="modal-dialog">
+
+    <!-- Modal content-->
+    <div class="modal-content">
+      <div class="modal-header">
+        <h4 class="modal-title">Check IMEI QR</h4>
+      </div>
+      <div class="modal-body">
+      <table style="width: 100%">
+          <tr >
+              <td style="width: 50%;vertical-align:top">
+              <div>
+                IMEI : <!-- <input type="text" class="clear-data" id="modal-input-imei" maxlength="15" style="width: 170px;"> -->
+                <textarea id="modal-textarea-imei-qr" class="clear-data-qr" rows="1" style="resize: none;width: 170px;"></textarea>
+                <br/>
+                Status : 
+                <b>
+                <span class="modal-text-status-qr" id="modal-text-status-none-qr">NONE</span>
+                <span class="modal-text-status-qr hide" id="modal-text-status-correct-qr" style="color: green">CORRECT</span>
+                <span class="modal-text-status-qr hide" id="modal-text-status-incorrect-qr" style="color: red">INCORRECT</span>
+                </b>
+                <br/>
+                Package Count : <span class="modal-count-qr" id="modal-packcount-correct-qr">0</span><br/>
+                IMEI Count : <span class="modal-count-qr" id="modal-count-correct-qr">0</span>
+                <br/>
+                <textarea id="modal-textarea-correct-qr" class="clear-data-qr" disabled rows="15" style="resize: none;"></textarea>
+                <textarea id="modal-textarea-correct-qr-val" class="clear-data-qr hide" disabled rows="15" style="resize: none;"></textarea>
+              </div>
+                  
+              </td>
+              <td style="width: 50%;vertical-align:top">
+                <span style="color: red"><b>INCORRECT LOG</b></span>
+                <br/>
+                Package Count : <span class="modal-count-qr" id="modal-packcount-incorrect-qr">0</span><br/>
+                IMEI Count : <span class="modal-count-qr" id="modal-count-incorrect-qr">0</span>
+                <br/>
+                <textarea style="resize: none;color: red" id="modal-textarea-incorrect-qr" class="clear-data-qr" disabled rows="17"></textarea>
+              </td>
+          </tr>
+      </table>
+        
+      </div>
+      <div class="modal-footer">
+      <button type="button" id="modal-btn-clear-qr" class="btn btn-default pull-left">Clear</button>
+      <button type="button" class="btn btn-info" id="modal-btn-submit-qr" data-dismiss="modal">Submit</button>
+      <!-- <button type="button" class="btn btn-success">Export</button> -->
+        <button type="button" class="btn btn-danger" data-dismiss="modal">Close</button>
+      </div>
+    </div>
+
+  </div>
+</div>
+
+<div class="page-header">
+    <h1>IMEI Code OUT Warehouse </h1>
+</div>
+<form role="form" id="form" action="<?php echo HOST.'warehouse/add-imei-out-act';?>" target="iframe" method="post" class="form-horizontal">
+    <div class="row">
+        <div class="span6">
+            <table class="table table-bordered">
+                <thead>
+                <tr>
+                    <th>Order Number</th>
+                    <th>Total Quantity</th>
+                    <th>Order Type</th>
+                    <th>Total Price</th>
+                    <th>Retailer</th>
+                    <th>Sales Time</th>
+                </tr>
+                </thead>
+                <tbody>
+                <?php if (isset($this->sales_out) && $this->sales_out ): ?>
+
+                <?php endif ?>
+
+
+                <tr>
+                    <td><?php if( isset($this->sales_out['sn_ref']) && $this->sales_out['sn_ref']) echo $this->sales_out['sn_ref']; ?></td>
+                    <td><?php if( isset($this->sales_out['total_qty']) && $this->sales_out['total_qty']) echo $this->sales_out['total_qty']; else echo "0"; ?></td>
+                    <td><?php echo My_Sale_Order_Type::getLabel($this->sales_out['type']) ?></td>
+                    <td>XXXXX<?php //echo $total_price; ?></td>
+                    <td><?php if( isset($this->distributors) && isset($this->distributors[$this->sales_out['d_id']]) && $this->distributors[$this->sales_out['d_id']]) echo $this->distributors[$this->sales_out['d_id']]; ?></td>
+                    <td><?php if( isset($this->sales_out['add_time']) && $this->sales_out['add_time']) echo $this->sales_out['add_time']; ?></td>
+                </tr>
+                </tbody>
+            </table>
+            <?php if (isset($this->sales_list) && $this->sales_list): ?>
+                <table class="table table-bordered">
+                    <legend>List</legend>
+                    <thead>
+                    <tr>
+                        <th>ID</th>
+                        <th>Category</th>
+                        <th>Product Name</th>
+                        <th>Color</th>
+                        <th>Quantity</th>
+                        <th>Scanned OUT</th>
+                        <th>Price</th>
+                    </tr>
+                    </thead>
+                    <tbody>
+                    <?php foreach ($this->sales_list as $k => $v): ?>
+                        <tr>
+                            <td><?php echo $v['id'] ?></td>
+                            <td><?php echo $this->good_categories[$v['cat_id']] ?></td>
+                            <td><?php echo $this->goods[$v['good_id']] ?></td>
+                            <td><?php echo $this->goodColors[$v['good_color']] ?></td>
+                            <td><?php echo $v['num'] ?></td>
+                            <td><?php if(isset($this->sales_list_out) && isset($this->sales_list_out[$k]) && $this->sales_list_out[$k]) echo $this->sales_list_out[$k]; else echo "0"; ?></td>
+                            <td>XXXXX<?php //echo product_price($v['total']) ?></td>
+                        </tr>
+                    <?php endforeach ?>
+                    </tbody>
+                </table>
+            <?php endif ?>
+
+        <?php if($this->gift_list[0]['add_gift_by'] != '') { ?>
+             <table class="table table-bordered">
+                    <legend style="color: green">Gift List</legend>
+                    <thead>
+                    <tr>
+                        <th>ID</th>
+                        <th>Category</th>
+                        <th>Product Name</th>
+                        <th>Color</th>
+                        <th>Price</th>
+                    </tr>
+                    </thead>
+                    <tbody>
+                        <?php foreach ($this->gift_list as $k => $v): ?>
+                         <tr>
+                            <td></td>
+                            <td><?php echo $this->good_categories[$v['gift_cat_id']] ?></td>
+                            <td><?php echo $this->goods[$v['gift_good_id']] ?></td>
+                            <td><?php echo $this->goodColors[$v['gift_good_color']] ?></td>
+                            <td>XXXXX<?php //echo product_price($v['total']) ?></td>
+                        </tr>
+                        <?php endforeach ?>
+                    </tbody>
+                </table>
+        <?php } ?>
+
+
+            <?php if(in_array($this->is_kerry, ['KERRY','J&T'])){ 
+
+                $title_delivery = '';
+
+                switch ($this->is_kerry) {
+                    case 'KERRY':
+                        $title_delivery = 'Kerry';
+                        break;
+                    case 'J&T':
+                        $title_delivery = 'J&T';
+                        break;
+                }
+
+            ?>
+
+                <legend><?=$title_delivery?></legend>
+
+                <!-- <div class="control-group">
+                    <label class="control-label" for="tracking">Tracking <span style="color: red">*</span></label>
+                    <div class="controls">
+                        <input type="text" name="tracking" id="tracking" required="required"/>
+                    </div>
+                </div> -->
+
+                <div class="control-group">
+                    <label class="control-label" for="number_of_package">Number of Packages <span style="color: red">*</span></label>
+                    <div class="controls">
+                        <input type="number" name="number_of_package" id="number_of_package" value="1" required="required"/>
+                    </div>
+                </div>
+
+                <div class="control-group">
+                    <label class="control-label" for="weight">Weight <span style="color: red">*</span></label>
+                    <div class="controls">
+                        <input type="text" name="weight" id="weight" required="required"/>
+                    </div>
+                </div>
+                <input type="hidden" name="is_kerry" value="<?= $this->is_kerry ?>">
+                <br/><br/>
+
+            <?php } ?>
+
+        </div>
+        <div class="span3">
+            <div class="row">
+                <?php if (isset($this->sales_list) && $this->sales_list){
+                    $has_input_imei = $has_input_digital_sn = $has_input_ilike_sn  = $has_input_imei_iot= false;
+                    foreach ($this->sales_list as $k => $v){
+                        ?>
+                        <?php if ($v['cat_id'] == PHONE_CAT_ID and !$has_input_imei){
+                            ?>
+                            <div class="span3">
+                                <label for="" class="">
+                                    IMEI Code:
+                                    <span><strong id="num_imei">0</strong> IMEI(s)</span>
+                                </label>
+                                <textarea class="imei" name="imei" id="imei" cols="20" rows="15" required="required"></textarea>
+                                <div class="check_res"></div>
+                                <br/>
+                                <!-- <button type="button" id="btn-check-imei" class="btn btn-warning" data-toggle="modal" data-target="#modal-check-imei">Check IMEI</button> -->
+                                <!-- <button type="button" id="btn-check-imei-list" class="btn btn-warning" data-toggle="modal" data-target="#modal-check-imei-list">Check IMEI List</button> -->
+                                <!-- <button type="button" id="btn-check-imei-qr" class="btn btn-warning" data-toggle="modal" data-target="#modal-check-imei-qr">Check IMEI QR</button> -->
+                            </div>
+                            <?php
+                            $has_input_imei = true;
+                        } elseif ($v['cat_id'] == DIGITAL_CAT_ID and !$has_input_digital_sn) {?>
+                            <div class="span3">
+                                <label for="" class="">
+                                    Digital Serial Number:
+                                    <span><strong id="num_digital_sn">0</strong> SN(s)</span>
+                                </label>
+                                <textarea class="digital_sn" name="digital_sn" id="digital_sn" cols="20" rows="15" required="required"></textarea>
+                                <div class="check_res"></div>
+                                <!-- <br/>
+                                <button type="button" id="btn-check-imei" class="btn btn-warning" data-toggle="modal" data-target="#modal-check-imei">Check IMEI</button> -->
+                            </div>
+                            <?php
+                            $has_input_digital_sn = true;
+                        } elseif ($v['cat_id'] == ILIKE_CAT_ID and !$has_input_ilike_sn) {?>
+                            <div class="span3">
+                                <label for="" class="">
+                                    GOOD Serial Number:
+                                    <span><strong id="num_ilike_sn">0</strong> SN(s)</span>
+                                </label>
+                                <textarea class="ilike_sn" name="ilike_sn" id="ilike_sn" cols="20" rows="15" required="required"></textarea>
+                                <div class="check_res"></div>
+                                <!-- <br/>
+                                <button type="button" id="btn-check-imei" class="btn btn-warning" data-toggle="modal" data-target="#modal-check-imei">Check IMEI</button> -->
+                            </div>
+                            <?php
+                            $has_input_ilike_sn = true;
+
+                        //khuan add iot imei
+
+                        } elseif($v['cat_id'] == IOT_CAT_ID) {?>
+                            <div class="span3">
+                                <label for="" class="">
+                                    IMEI Code:
+                                    <span><strong id="num_imei">0</strong> IMEI(s)</span>
+                                </label>
+                                <textarea class="imei_iot" name="imei_iot" id="imei_iot" cols="20" rows="15" required="required"></textarea>
+                                <div class="check_res"></div>
+                                <br/>
+                            </div>
+                            <?php
+                        }
+                    }
+                }
+                ?>
+            </div>
+        </div>
+
+        <div class="span3">
+            <iframe src="<?php echo HOST ?>warehouse/add-imei-out-act" name="iframe" frameborder="0" height="390px"></iframe>
+        </div>
+    </div>
+    <div class="row">
+        <div class="span4">
+            <input type="hidden" name="sn" value="<?php isset($this->sn) and $this->sn and printf($this->sn);?>">
+            <input type="hidden" id="back_url" name="back_url" value="<?php if (isset($this->back_url) and $this->back_url) print($this->back_url); else echo '/warehouse/out';?>">
+            <button type="submit" class="btn btn-primary" id="btn-submit">Submit</button>
+            <button type="button" class="btn btn-danger go-back">Go back</button>
+        </div>
+    </div>
+</form>
+<script>
+    $(document).ready(function () {
+
+        var count_correct = 0;
+        var count_incorrect = 0;
+
+        var count_correct_qr = 0;
+        var count_incorrect_qr = 0;
+
+        var package = 0;
+
+        var packcount_corrent = 0;
+        var packcount_incorrent = 0;
+
+        var condition = 0;
+
+        $('.go-back').click(function(e){
+            window.location.href = $('#back_url').val();
+            return false;
+        });
+
+        initShowNum();
+
+        $('#modal-btn-submit').click(function(e) {
+            var old_log = $('#modal-textarea-incorrect').val();
+            $('#imei').val($('#modal-textarea-correct').val());
+            $('#btn-submit').click();
+            $('#modal-btn-clear').click();
+            $('#modal-textarea-incorrect').val(old_log);
+
+            count_correct = 0;
+            $('#modal-count-correct').html(0);
+
+            var inputnum = 0;
+
+            if ($('#imei').val() != '')
+                inputnum = ($('#imei').val().split("\n").length).toString();
+
+            $('#num_imei').html(inputnum);
+        });
+
+        $('#modal-btn-submit-qr').click(function(e) {
+            var old_log_qr = $('#modal-textarea-incorrect-qr').val();
+            $('#imei').val($('#modal-textarea-correct-qr-val').val());
+            // $('#btn-submit').click();
+            $('#modal-btn-clear-qr').click();
+            $('#modal-textarea-incorrect-qr').val(old_log_qr);
+
+            count_correct = 0;
+            $('#modal-count-correct').html(0);
+
+            var inputnum = 0;
+
+            if ($('#imei').val() != '')
+                inputnum = ($('#imei').val().split("\n").length).toString();
+
+            $('#num_imei').html(inputnum);
+        });
+
+        $('#modal-btn-clear').click(function(e){
+            $('.clear-data').val('');
+            $('.modal-text-status').addClass('hide');
+            $('#modal-text-status-none').removeClass('hide');
+
+            count_correct = 0;
+            count_incorrect = 0;
+            $('.modal-count').html(0);
+        });
+
+        $('#modal-btn-clear-qr').click(function(e){
+
+            $('.clear-data-qr').val('');
+            $('.modal-text-status-qr').addClass('hide');
+            $('#modal-text-status-none-qr').removeClass('hide');
+
+            package = 0;
+
+            count_correct_qr = 0;
+            count_incorrect_qr = 0;
+
+            packcount_corrent = 0;
+            packcount_incorrent = 0;
+
+            $('.modal-count-qr').html(0);
+        });
+
+        $('#modal-input-imei').keyup(function(e) {
+
+            if(e.which != 13){
+                return false;
+            }
+
+            var get_input = $('#modal-input-imei');
+            var get_textarea_correct = $('#modal-textarea-correct');
+            var get_textarea_incorrect = $('#modal-textarea-incorrect');
+
+            var size = 15;
+            var input_length = get_input.val().length;
+
+            if(input_length == size){
+
+                if(get_textarea_correct.val().indexOf(get_input.val()) != -1){
+                    
+                    if(get_textarea_incorrect.val().length < 1){
+                        get_textarea_incorrect.val(get_input.val() + ' | Duplicate Checking');
+
+                        count_incorrect++;
+                        $('#modal-count-incorrect').html(count_incorrect);
+                    }else{
+                        get_textarea_incorrect.val(get_input.val()  + ' | Duplicate Checking' + '\n' +get_textarea_incorrect.val());
+
+                        count_incorrect++;
+                        $('#modal-count-incorrect').html(count_incorrect);
+                    }
+
+                    $('.modal-text-status').addClass('hide');
+                    $('#modal-text-status-incorrect').removeClass('hide');
+
+                    get_input.val('');
+                    return false;
+                }
+
+                // $.ajax({
+                //     url: '<?php echo HOST.'warehouse/btn-check-imei';?>',
+                //     type: 'POST',
+                //     data: {'sn': '<?php echo $this->sn;?>','<?php
+                //             if($has_input_imei){echo 'imei';}elseif($has_input_digital_sn){echo 'digital_sn';}elseif($has_input_ilike_sn){echo 'ilike_sn';}else{echo 'imei';}
+                //             ?>': get_input.val()},
+                // })
+
+                $.ajax({
+                    url: '<?php echo HOST.'warehouse/btn-check-imei';?>',
+                    type: 'POST',
+                    data: {'sn': '<?php echo $this->sn;?>','imei': get_input.val()},
+                })
+                .done(function(response) {
+                    var obj_response = jQuery.parseJSON(response);
+                    console.log("success");
+
+                    switch(obj_response.status) {
+                        case 200:
+                            if(get_textarea_correct.val().length < 1){
+                                get_textarea_correct.val(get_input.val());
+
+                                count_correct++;
+                                $('#modal-count-correct').html(count_correct);
+                            }else{
+                                get_textarea_correct.val(get_input.val() + '\n' + get_textarea_correct.val());
+
+                                count_correct++;
+                                $('#modal-count-correct').html(count_correct);
+                            }
+
+                            $('.modal-text-status').addClass('hide');
+                            $('#modal-text-status-correct').removeClass('hide');
+
+                            break;
+                        case 400:
+                            if(get_textarea_incorrect.val().length < 1){
+                                get_textarea_incorrect.val(get_input.val() + obj_response.message);
+
+                                count_incorrect++;
+                                $('#modal-count-incorrect').html(count_incorrect);
+                            }else{
+                                get_textarea_incorrect.val(get_input.val() + obj_response.message + '\n' + get_textarea_incorrect.val());
+
+                                count_incorrect++;
+                                $('#modal-count-incorrect').html(count_incorrect);
+                            }
+
+                            $('.modal-text-status').addClass('hide');
+                            $('#modal-text-status-incorrect').removeClass('hide');
+
+                            break;
+                        default:
+                            console.log('status : ' + obj_response.status + ' | ' + obj_response.message);
+
+                            $('.modal-text-status').addClass('hide');
+                            $('#modal-text-status-none').removeClass('hide');
+                    }
+
+                    get_input.val('');
+                });
+
+            }else if(input_length > size){
+                get_input.val('');
+            }
+        });
+
+        var enter = 0;
+        var space = 0;
+
+        $('#modal-textarea-imei-qr').keyup(function(e) {
+
+            if(e.which == 13 || e.which == 32){
+
+                if(e.which == 13){
+                    enter++;
+                    condition++;
+                }
+
+                if(enter == 1 && e.which == 32){
+                    space++;
+                    condition++;
+                }
+
+
+                if(enter > 2 || space > 1){
+                    enter = 0;
+                    space = 0;
+                    condition = 0;
+
+                    return false;
+                }
+
+            }else{
+                enter = 0;
+                space = 0;
+                condition = 0;
+
+                return false;
+            }
+
+            if(condition < 3){
+                return false;
+            }
+
+            condition = 0;
+            package++;
+
+            var get_input = $('#modal-textarea-imei-qr');
+            var get_textarea_correct = $('#modal-textarea-correct-qr');
+            var get_textarea_correct_val = $('#modal-textarea-correct-qr-val');
+            var get_textarea_incorrect = $('#modal-textarea-incorrect-qr');
+
+            var get_input_temp = get_input.val();
+
+            var line = get_input.val().split(/\n/);
+
+            var correct_text = '';
+            var incorrect_text = '';
+
+            var temp_count_corrent = 0;
+            var temp_count_incorrent = 0;
+
+            var package_text = 'Package : ' + package + '\n';
+
+            $.each(line, function(index, el) {
+
+                if(el == ' '){
+                    get_input_temp = get_input_temp.replace(el+'', '');
+                    return false;
+                }
+
+                if(get_textarea_correct.val().indexOf(el) != -1){
+
+                    temp_count_incorrent++;
+                    incorrect_text = incorrect_text + el + ' | Duplicate Checking' + '\n';
+
+                    get_input_temp = get_input_temp.replace(el+'\n', '');
+                }
+
+
+            });
+
+            if(get_input_temp.length <= 1){
+                packcount_incorrent++;
+                if(get_textarea_incorrect.val().length < 1){
+                    get_textarea_incorrect.val(package_text+correct_text+incorrect_text);
+
+                    count_incorrect_qr = count_incorrect_qr+temp_count_corrent+temp_count_incorrent;
+                    $('#modal-count-incorrect-qr').html(count_incorrect_qr);
+                }else{
+                    get_textarea_incorrect.val(package_text+correct_text+incorrect_text + '\n' + get_textarea_incorrect.val());
+
+                    count_incorrect_qr = count_incorrect_qr+temp_count_corrent+temp_count_incorrent;
+                    $('#modal-count-incorrect-qr').html(count_incorrect_qr);
+                }
+
+                $('.modal-text-status-qr').addClass('hide');
+                $('#modal-text-status-incorrect-qr').removeClass('hide');
+                $('#modal-packcount-incorrect-qr').html(packcount_incorrent);
+
+
+                get_input.val('');
+
+                return false;
+            }
+            
+
+            $.ajax({
+                url: '<?php echo HOST.'warehouse/btn-check-imei-qr';?>',
+                type: 'POST',
+                data: {'sn': '<?php echo $this->sn;?>','imei': get_input_temp},
+            })
+            .done(function(response) {
+                var obj_response = jQuery.parseJSON(response);
+                console.log("success");
+
+                switch(obj_response.status) {
+                    case 200:
+
+                    $.each(obj_response.data.success, function(index, el) {
+                        temp_count_corrent++;
+                        correct_text = correct_text + el + '\n';
+                    });
+
+                    $.each(obj_response.data.error, function(index, el) {
+                        temp_count_incorrent++;
+                        incorrect_text = incorrect_text + el + '\n';
+                    });
+
+                    if(correct_text.length > 0 && incorrect_text.length < 1){
+                        packcount_corrent++;
+                        if(get_textarea_correct.val().length < 1){
+                            get_textarea_correct.val(package_text+correct_text);
+                            get_textarea_correct_val.val(correct_text);
+
+                            count_correct_qr = count_correct_qr+temp_count_corrent;
+                            $('#modal-count-correct-qr').html(count_correct_qr);
+                            $('#modal-packcount-correct-qr').html(packcount_incorrent);
+                        }else{
+                            get_textarea_correct.val(package_text+correct_text + '\n' + get_textarea_correct.val());
+                            get_textarea_correct_val.val(correct_text + '\n' + get_textarea_correct_val.val());
+
+                            count_correct_qr = count_correct_qr+temp_count_corrent;
+                            $('#modal-count-correct-qr').html(count_correct_qr);
+                        }
+
+                        $('.modal-text-status-qr').addClass('hide');
+                        $('#modal-text-status-correct-qr').removeClass('hide');
+
+                        $('#modal-packcount-correct-qr').html(packcount_corrent);
+
+                    }else{
+                        packcount_incorrent++;
+
+                        if(get_textarea_incorrect.val().length < 1){
+                            get_textarea_incorrect.val(package_text+correct_text+incorrect_text);
+
+                            count_incorrect_qr = count_incorrect_qr+temp_count_corrent+temp_count_incorrent;
+                            $('#modal-count-incorrect-qr').html(count_incorrect_qr);
+                        }else{
+                            get_textarea_incorrect.val(package_text+correct_text+incorrect_text + '\n' + get_textarea_incorrect.val());
+
+                            count_incorrect_qr = count_incorrect_qr+temp_count_corrent+temp_count_incorrent;
+                            $('#modal-count-incorrect-qr').html(count_incorrect_qr);
+                        }
+
+                        $('.modal-text-status-qr').addClass('hide');
+                        $('#modal-text-status-incorrect-qr').removeClass('hide');
+
+                        $('#modal-packcount-incorrect-qr').html(packcount_incorrent);
+
+                    }
+
+                        break;
+                    case 400:
+
+                        packcount_incorrent++;
+                        if(get_textarea_incorrect.val().length < 1){
+                            get_textarea_incorrect.val(package_text + obj_response.message);
+
+                            count_incorrect_qr++;
+                            $('#modal-count-incorrect-qr').html(count_incorrect_qr);
+                        }else{
+                            get_textarea_incorrect.val(package_text + obj_response.message + '\n\n' + get_textarea_incorrect.val());
+
+                            count_incorrect_qr++;
+                            $('#modal-count-incorrect-qr').html(count_incorrect_qr);
+                        }
+
+                        $('.modal-text-status-qr').addClass('hide');
+                        $('#modal-text-status-incorrect-qr').removeClass('hide');
+
+                        $('#modal-packcount-incorrect-qr').html(packcount_incorrent);
+
+                        break;
+                    default:
+                        console.log('status : ' + obj_response.status + ' | ' + obj_response.message);
+
+                        $('.modal-text-status-qr').addClass('hide');
+                        $('#modal-text-status-none-qr').removeClass('hide');
+                }
+
+                get_input.val('');
+            });
+
+        });
+
+
+    });
+
+    $('#btn-check-imei-list').click(function(e) {
+
+        $('#display-check-imei-list').html('');
+
+        var get_input = $('#imei');
+        
+        $.ajax({
+            url: '<?php echo HOST.'warehouse/btn-check-imei-list';?>',
+            type: 'POST',
+            data: {'sn': '<?php echo $this->sn;?>','imei': get_input.val()},
+        })
+        .done(function(response) {
+
+            $('#display-check-imei-list').html(response);
+        });
+
+    });
+
+    function printed(url)
+    {
+        window.open(url, true, '_blank');
+    }
+
+    function initShowNum(){
+        $('.imei,.digital_sn,.ilike_sn').keyup(function (e){
+
+            var inputnum = 0;
+
+            if ($(this).val() != '')
+                inputnum = ($(this).val().split("\n").length).toString();
+
+
+            $(this).prev().find('strong').html(inputnum);
+
+        });
+    }
+
+    // function checkIMEI() {
+    //     var pressed = false;
+    //     var chars = [];
+    //     $(window).keypress(function(e) {
+    //         if (e.which >= 48 && e.which <= 57) {
+    //             chars.push(String.fromCharCode(e.which));
+    //         }
+
+    //         if (pressed == false) {
+    //             setTimeout(function(){
+    //                 if (chars.length >= 10) {
+    //                     $('button[type=submit]').prop('disabled', true);
+    //                     $('form').bind('submit',function(e){e.preventDefault();});
+
+    //                     $('#check_res').html('<span class="loading"></span> checking...');
+
+    //                     var barcode = chars.join("");
+
+    //                     // AJAX checking
+    //                     $.post('<?php echo HOST ?>tool/check-imei-out', {imei: barcode}, function(data) {
+    //                         text = '';
+
+    //                         switch (data) {
+    //                             case '1':
+    //                                 text = '<div class="alert alert-success"><strong>OK</strong></div>';
+    //                                 break;
+    //                             case '0':
+    //                                 text = '<div class="alert alert-error"><strong>IMEI ' + barcode + ' NOT in warehouse</strong></div>';
+    //                                 break;
+    //                             case '-1':
+    //                                 text = '<div class="alert alert-error"><strong>No data sent to server</strong></div>';
+    //                                 break;
+    //                             case '-2':
+    //                                 text = '<div class="alert alert-error"><strong>IMEI ' + barcode + ' in WRONG FORMAT</strong></div>';
+    //                                 break;
+    //                             case '-3':
+    //                                 text = '<div class="alert alert-error"><strong>IMEI ' + barcode + ' is RETURNED and CANNOT back to sales</strong></div>';
+    //                                 break;
+    //                             default:
+    //                                 text = '<div class="alert alert-error"><strong>Unknown Error ' + data+ '</strong></div>';
+    //                                 break;
+    //                         }
+
+    //                         $('#check_res').html(text);
+
+    //                         $('button[type=submit]').prop('disabled', false);
+    //                         $('form').unbind('submit');
+    //                     });
+    //                 }
+    //                 chars = [];
+    //                 pressed = false;
+    //             },300);
+    //         }
+    //         pressed = true;
+    //     });
+
+
+    // }
+</script>

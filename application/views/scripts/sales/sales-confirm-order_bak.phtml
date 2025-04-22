@@ -1,0 +1,749 @@
+<style type="text/css">
+    .show{display: none;}
+
+</style>
+
+
+<div class="page-header" xmlns="http://www.w3.org/1999/html">
+    <h1>Sales Confirm Order</h1>
+</div>
+
+<?php
+
+function product_price($priceFloat) {
+    $symbol = ' THB';
+    $symbol_thousand = ',';
+    $decimal_place = 2;
+    $price = number_format($priceFloat, $decimal_place, '.', $symbol_thousand);
+    return $price;
+}
+
+function cal_sale_off_percent($sale_off_percent,$price,$num,$price_total){
+    if($sale_off_percent>0){
+        $price_sale_off = $price - (($price*$sale_off_percent/100)*100)/100;
+    }else{
+        $price_sale_off = $price;
+    }
+    return $price_sale_off;
+}
+
+function format_number_4($num){
+   return decimal_remove_comma(number_format($num, 4));
+}
+
+function decimal_remove_comma($priceFloat)
+{
+    $price = str_replace(",","",$priceFloat);;
+    return $price;
+}
+
+function ext_vat($num){
+   return $num/1.07;
+}
+
+//print_r($this->sales[0]['retailer_rank']);
+
+$show_cash_menu = $this->sales[0]['show_cash_menu'];
+$retailer_rank = $this->sales[0]['retailer_rank'];
+
+$pay_time=date('Y-m-d H:i:s');
+
+if (isset($this->messages) and $this->messages)
+    foreach ($this->messages as $message):
+        echo '<div class="alert alert-error">'.$message.'</div>';
+    endforeach;
+?>
+
+<div class="row">
+	<div class="span12">
+        <form role="form" id="form" enctype="multipart/form-data" action="<?php echo HOST.'sales/sales-confirm-order';?>" method="post" class="form-inline">
+        	<?php if (isset($this->sales) and $this->sales):?>
+        		<div class="row">
+        			<div class="span8">
+        				<label class="span3">Sales order number</label>
+		                <span class="span3"><strong><?php if(isset($this->sales) and isset($this->sales[0]['sale']->sn)) echo $this->sales[0]['sale']->sn_ref;?></strong></span>
+        			</div>
+        		</div>
+            <?php endif;?>
+
+			<div class="row">
+    			<div class="span8">
+                    <label class="span3">Warehouse</label>
+                    <span class="span3"><strong><?php echo $this->sales[0]['warehouse_name'];?></strong></span>
+            	</div>
+    		</div>
+
+			<div class="row">
+    			<div class="span8">
+                    <label class="span3">Retailer name</label>
+                    <span class="span3"><strong><?php echo $this->sales[0]['retailer_name'];?></strong></span>
+            	</div>
+    		</div>
+
+            <div class="row">
+                <div class="span8">
+                    <label class="span3">Maximun Credit</label>
+                    <span class="span3" ><font id="f_amount" ><strong id="s_amount"><?php echo number_format($this->sales[0]['credit_amount'],2); ?></strong></font></span>
+                </div>
+            </div>
+            <div style="display: none;" class="row">
+                <div class="span8">
+                    <label class="span3">Use Credit for this retailer:</label>
+                    <span class="span3"><strong><?php echo number_format($this->distributor_balance,2);?></strong></span>
+                </div>
+            </div>
+
+            <div  class="row">
+                <div class="span8">
+                    <label class="span3">Total Credit Use All (main and sub retailer):</label>
+                    <span class="span3"><strong><?php echo number_format($this->remain_balance,2);?></strong></span>
+                </div>
+            </div>
+            <div class="row">
+                <div class="span8">
+                    <label class="span3">Balance for this retailer:</label>
+                    <span class="span3"><strong><?php echo number_format($this->distributor_balance,2);?></strong></span>
+                </div>
+            </div>
+
+            
+            <div class="row">
+                <div class="span8">
+                    <label class="span3">Credit type</label>
+                    <span class="span3"><strong><?php echo $this->sales[0]['credit_type'];?></strong></span>
+                </div>
+            </div>
+
+            <div class="row">
+                <div class="span8">
+                    <label class="span3">Main Retailer</label>
+                    <span class="span3"><strong><?php echo $this->main_retailer['title'];?></strong></span>
+                </div>
+            </div>
+
+			<div class="row">
+    			<div class="span8">
+                    <label class="span3">Sales Admin</label>
+                    <span class="span3"><strong><?php echo $this->sales[0]['salesman_name'];?></strong></span>
+            	</div>
+    		</div>
+
+            <div class="row">
+                <div class="span8">
+                    <label class="span3">Sales Catty</label>
+                    <span class="span3"><strong><?php echo $this->sales[0]['salescatty_name'];?></strong></span>
+                </div>
+            </div>
+
+			<div class="row">
+    			<div class="span8">
+                    <label class="span3">Order maker</label>
+                    <span class="span3"><strong><?php echo $this->sales[0]['created_by_name'];?></strong></span>
+            	</div>
+    		</div>
+
+            <div class="row">
+                <div class="span8">
+                    <label class="span3">Order time</label>
+                    <span class="span3"><strong><?php echo $this->sales[0]['sale']->add_time;?></strong></span>
+                </div>
+            </div>
+
+			<div class="row">
+    			<div class="span8">
+                    <label class="span3">Order Type</label>
+                    <span class="span3"><?php echo My_Sale_Order_Type::getLabel($this->sales[0]['sale']['type']) ?></span>
+            	</div>
+    		</div>
+
+            
+
+
+            <div class="row">
+                <div class="span8 show">
+                    <label class="span3">Discount (CK):</label>
+                    <span class="span3"><strong><?php echo number_format($this->discount);?></strong></span>
+                </div>
+            </div>
+
+            <div class="row">
+                <div class="span8 show">
+                    <label class="span3">Discount (DIAMOND):</label>
+                    <span class="span3"><strong><?php echo number_format($this->diamond_discount);?></strong></span>
+                </div>
+            </div>
+
+             <div class="row">
+                <div class="span8 show">
+                    <label class="span3">Discount (BVG):</label>
+                    <span class="span3"><strong><?php echo number_format($this->discount_bvg);?></strong></span>
+                </div>
+            </div>
+
+            <div class="row">
+                <div class="span8">
+                    <label class="span3">Office:</label>
+                    <span class="span3"><strong><?php if(isset($this->office_area) AND $this->office_area) echo $this->office_area['title'];?></strong></span>
+                </div>
+            </div>
+
+            <div class="row">
+                <div class="span12">
+                    <table class="table table-bordered span12">
+                        <thead>
+                            <tr>
+                                <th>Products category</th>
+                                <th>Product</th>
+                                <th>Color</th>
+                                <th>Unit Price</th>
+                                <th>Quantity</th>
+                                <th>Total Price Ext VAT</th>
+                                <th>Delivery Fee</th>
+                                <th>ส่วนลดพิเศษ</th>
+                                <th>Total</th>
+                                <th>Total VAT</th>
+                                <th>Total Price Inc VAT</th>
+                                <th>Discount</th>
+                                <th>Total Amount</th>
+                                <th>Remark</th>
+
+                            </tr>
+                        </thead>
+
+                        <tbody>
+
+                        <?php
+                        $total_num = $total_price = $total_total = 0;$total_discount=0;
+
+                        $list_cn='';
+                        //print_r($this->sales[0]['credit_note_list']);
+                         foreach ($this->sales[0]['credit_note_list'] as $k => $datas) 
+                         {
+                            $creditnote_sn = $datas['creditnote_sn'];
+                            $total_discount = $datas['total_discount'];
+                            $g_total_discount += $datas['total_discount'];
+                            if($creditnote_sn!=''){
+                                $list_cn .=$creditnote_sn.'='.$total_discount.' B </br> ';
+                            }
+                         }
+
+                        foreach ($this->sales as $item):
+                            /*
+                            $sale = $item['sale'];
+                            $total_num += $sale->num;
+                            $total_price += $sale->price;
+                            //$total_discount = $item['total_discount'];
+                            $delivery_fee = $sale->delivery_fee;
+                            $total_total += $sale->total;
+                            $total_amount = $total_total-$total_discount+$delivery_fee;
+                            */
+                            $sale = $item['sale'];
+
+                            $product_unit_price = product_price(format_number_4(ext_vat(cal_sale_off_percent($sale->sale_off_percent,$sale->price,$sale->num,$sale->total))));
+                            $total_num = $sale->num;
+                            $product_total_price = $sale->num * decimal_remove_comma($product_unit_price);  
+                            $delivery_fee = decimal_remove_comma(product_price(ext_vat($sale->delivery_fee)));
+                            $total_discount_ext = ext_vat($g_total_discount);
+                            $total_total += $product_total_price;
+                            $total_amount = $total_total-$total_discount_ext+$delivery_fee;
+                            if ($this->sales[0]['sale']->d_id=='3691') {
+                                $total_discount_ext = (($total_amount) *0.01)*-1;
+                            }else{
+                                $total_discount_ext=0;
+                            }
+
+                        ?>
+
+                            <tr>
+
+                                <td><?php echo $item['category'];?></td>
+                                <td><?php echo $item['good'];?></td>
+                                <td><?php echo $item['color'];?></td>
+                                <td><?php echo $product_unit_price;?></td>
+                                <td><?php echo $sale->num;?></td>
+                                <td><?php echo product_price($product_total_price*1);?></td>
+                                <td></td>
+                                <td></td>
+                                <td></td>
+                                <td></td>
+                                <td></td>
+                                <td></td>
+                                <td></td>
+                                <td></td>
+                                <td><?php echo $sale->text;?></td>
+
+
+                            </tr>
+
+                        <?php endforeach;?>
+
+                        </tbody>
+                        <?php
+                    $pay_banktransfer=($this->sales[0]['all_payment_order'][0]['pay_banktransfer']);
+                    $pay_servicecharge=($this->sales[0]['all_payment_order'][0]['pay_servicecharge']);
+                    $pay_service=($this->sales[0]['all_payment_order'][0]['pay_service']);
+
+
+                    $g_total = (($total_total+$delivery_fee)-($total_discount_ext*-1));
+                    $g_total_vat = ($g_total*1.07)-$g_total;
+                    $g_total_inc_vat = $g_total+$g_total_vat;
+                    $g_total_inc_vat_amount = $g_total_inc_vat+$pay_banktransfer+$pay_servicecharge+$pay_service-$g_total_discount;
+
+                        ?>
+                        <tfoot>
+                            <tr>
+                                <td colspan="3"><strong>SUMMARY</strong></td>
+                                <td><strong></strong></td>
+                                <td><strong><?php echo $total_num;?></strong></td>
+                                <td><strong><?php echo product_price($total_total);?></strong></td>
+                                <td><strong><?php echo product_price($delivery_fee);?></strong></td>
+                                <td><strong><?php echo product_price($total_discount_ext);?></strong></td>
+                                <td><strong><?php echo product_price($g_total);?></strong></td>
+                                <td><strong><?php echo product_price($g_total_vat);?></strong></td>
+                                <td><strong><?php echo product_price($g_total_inc_vat);?></strong></td>
+                                <td><strong><?php echo product_price($g_total_discount*-1);?></strong></td>
+                                <td><strong><?php echo product_price($g_total_inc_vat_amount);?></strong></td>
+                                <td>&nbsp;</td>
+
+                            </tr>
+                        </tfoot>
+                    </table>
+                    <!-- include view table discount -->
+                    <?php echo $this->render('finance/partials/table-discount.phtml');?>
+                    <!-- include view table bvg -->
+                    <?php echo $this->render('finance/partials/table-bvg.phtml'); ?>
+                    <!-- include view table fee -->
+                    <?php //echo $this->render('finance/partials/table-fee.phtml'); ?>
+                </div>
+            </div>
+
+            <div class="row">
+                <div class="span6">
+                    <label class="span2">Credit Note Discount List</label>
+                    <span class="span3">
+                        <?php
+                            echo $list_cn;
+                        ?>
+                    </span>
+                </div>
+            </div>
+
+            <div class="row">
+                <div class="span6">
+                    <label class="span2">Payment or not <span style="color: red"> * </span></label>
+                    <span class="span3">
+                        <input id="payment" name="payment" type="checkbox" value="1" <?php if (isset($this->sales[0]['sale']->pay_user) and $this->sales[0]['sale']->pay_user):?>checked="checked" <?php endif;?>>
+                            <?php if($total_amount > 0){  ?>
+                            <div id="div-company" name="div-company" class="div-company span3" style="display: none;">
+
+                            <p>Company <span style="color: red"> * </span></p>
+                            <p>
+                                <select name="show_company_id" id="show_company_id" class="show_company_id" readonly="readonly" disabled="true">
+                                    <option value="">choose</option>
+                                    <option selected value="1">OPPO</option>
+                                    <option value="2">SMARTMOBILE</option>
+                                </select>
+                            </p>
+                            </div>
+                            <div id="div-payment_cash" name="div-payment_cash" class="div-payment_cash" style="display: none;">
+                            <span class="span3">
+                            <?php if($retailer_rank !=10 || $show_cash_menu==1){  ?>
+                            <p>Please choose the Bank<span style="color: red"> * </span></p>
+                            <p>
+                                <select id="select_bank_id" name="select_bank_id[]" calss="select_bank_id" disabled>
+                                    <option value="">Choose</option>
+                                    <?php foreach ($this->banks as $item):?>
+                                        <option value="<?php echo $item['id'];?>"><?php echo $item['name'];?></option>
+                                    <?php endforeach;?>
+                                </select>
+                            </p>
+                            <?php }?>
+                            
+                            <p>Money ( THB )<span style="color: red"> * </span></p>
+                            <p><input type="number" step="0.01" id="payment_order" name="payment_order[]" style="display: none" placeholder="Payment Order" />
+                            </p>
+                            <?php if($retailer_rank !=10 || $show_cash_menu==1){  ?>
+                            <p>Fee Bank Transfer ( THB )</p>
+                            <p><input type="number" value="0" step="0.01" id="payment_bank_transfer" disabled name="payment_bank_transfer[]" placeholder="Payment Fee Bank transfer" /></p>
+
+                            <p>Service Charge ( THB )</p>
+                            <p><input type="number" value="0" step="0.01" id="payment_servicecharge" disabled name="payment_servicecharge[]" placeholder="Payment Service Charge" /></p>
+
+                            <?php }?>
+
+                            <?php if($retailer_rank !=10 || $show_cash_menu==1){  ?>
+
+                            <p>File Pay Slip <span style="color: red"> * </span>(ขนาดไฟล์ ไม่เกิน 2MB) (*.jpg,jpeg,gif,png)</p>
+                            <p>
+                                <input type="file" class="span4" id="file" name="file[]"  multiple />
+                            </p>
+
+                            <?php }?>
+
+                            <?php if($retailer_rank ==10 && $show_cash_menu==1){  ?>
+                            <p>ค่าอะไหล่และค่าบริการ ( THB )</p>
+                            <p><input type="number" value="0" step="0.01" id="payment_service" disabled name="payment_service[]" placeholder="Payment Service" /></p>
+
+                            <?php } ?>
+                            <p>
+                                <button type="button" class="btn-success add-bank">
+                                <i class="icon-plus"></i></button>
+                                <button type="button" class="btn-danger remove-bank"><i class="icon-minus"></i></button>
+                            </p>
+                            
+
+                            <p>Time<span style="color: red"> * </span></p>
+                            <p><input type="text"  name="pay_time[]" class='datetimepicker pay_time' value="" required  /></p>
+
+                            </div>
+                            <?php } ?>
+                        </span>
+                    </span>
+                </div>
+
+                <div class="span6">
+                    <div class="control-group">
+                        <label for="myTags" class="span2">Tags
+                            <ul class="form-control span3" id="myTags"><?php
+                            if (isset($this->a_tags) and $this->a_tags):
+                                foreach ($this->a_tags as $ta)
+                                    echo '<li>'.$ta.'</li>';
+                            endif;
+                            ?></ul>
+                        </label>
+                    </div>
+                </div>
+            </div>
+
+            <div class="row">
+                <?php 
+
+                    if (isset($this->sales[0]['sale']->shipping_yes_id) and $this->sales[0]['sale']->shipping_yes_id)
+                    {
+                        $shipping_chk = "checked";
+                    }
+
+                    if($shipping_chk != "checked"){
+                        $shipping_chk = "checked";
+                    }
+                
+                ?>
+
+                <div class="span6">
+                    <label class="span2">Shipping <span style="color: red">* </span></label>
+                    <span class="span3"><input id="shipping" <?=$shipping_chk?> name="shipping" type="checkbox" value="1"></span>
+                </div>
+            </div>
+
+            <div class="row">
+                <div class="span12">
+                    <label class="span2">Payment Notes</label>
+
+                    <span class="span4"><textarea name="pay_text" class="span2"><?php if(isset($this->sales[0]['sale']->pay_text)) echo $this->sales[0]['sale']->pay_text;?></textarea></span>
+                </div>
+            </div>
+
+            <div class="row">
+                <div class="span12">
+                    <label class="span2">Delivery Notes</label>
+                    <span class="span4"><textarea name="shipping_text" class="span2"><?php if(isset($this->sales[0]['sale']->shipping_text)) echo $this->sales[0]['sale']->shipping_text;?></textarea></span>
+                </div>
+            </div>
+
+            <div class="row">
+                <div class="span12">
+                    <span class="span4" style="color: red">* Please confirm information,This action can not be reversed!!...</span>
+                </div>
+            </div>
+
+            <div class="row">
+                <div class="span6">
+                    <div class="control-group">
+                        <input type="hidden" name="sn" value="<?php isset($this->sales) and $this->sales and printf($this->sales[0]['sale']->sn);?>">
+                        <div class="span4">
+                            <button type="submit" class="btn btn-primary">Confirm</button>
+                            <input type="hidden" name="back_url" id="back_url" value="/sales">
+                            <input type="hidden" name="company_id" id="company_id" value="1">
+                            <input type="hidden" name="payment_type" class ="payment_type" id="payment_type" value="">
+                            <input type="hidden" name="total_out_amount" class ="total_out_amount" id="total_out_amount" value="<?=$g_total_inc_vat_amount?>">
+                            <input type="hidden" name="total_amount" class ="total_amount" id="total_amount" value="<?=$g_total_inc_vat_amount?>">
+                            <input type="hidden" name="retailer_rank" class ="retailer_rank" id="retailer_rank" value="<?=$retailer_rank?>">
+
+                            <button type="button" class="btn btn-danger go-back">Go back</button>
+                        </div>
+                    </div>
+                    <div class="clearfix"></div>
+                </div>
+            </div>
+        </form>
+    </div>
+</div>
+<div id='dialog' title='message'></div>
+
+<script src="<?php echo HOST?>js/jquery.datetimepicker.js"></script>
+
+<link rel="stylesheet" href="<?php echo HOST?>css/jquery-ui.css">
+<script src="<?php echo HOST?>js/jquery-ui.js"></script>
+<script src="<?php echo HOST?>js/numeral.min.js"></script>
+
+<script src="../js/tag-it.min.js" type="text/javascript" charset="utf-8"></script>
+<link href="../css/jquery.tagit.css" rel="stylesheet" type="text/css">
+<link href="../css/tagit.ui-zendesk.css" rel="stylesheet" type="text/css">
+<link rel="stylesheet" href="<?php echo HOST?>css/jquery.datetimepicker.css" />
+
+
+<script>
+
+ 
+
+if ($('#s_total').html() > $('#s_amount').html()) {
+    $('#f_amount').attr('color','red');
+}
+
+
+    function initTag(){
+
+        $('#myTags').tagit({
+            allowSpaces: true,
+            fieldName: 'tags[]',
+            autocomplete: {
+                delay: 0,
+                minLength: 2,
+                source: "<?php echo HOST;?>get/get-tags"
+            }
+        });
+
+    }
+
+    function initDatepicker(){
+        $( ".datetimepicker" ).datetimepicker({
+            format:'Y-m-d H:i'
+        });
+    }
+
+    function initRemoveBank(){
+        $('.remove-bank').click(function(e){
+            $(this).parent().parent().parent().remove();
+            $('#div-company').hide();
+            return false;
+        });
+    }
+
+    function initAddBank(){
+        $('.add-bank').click(function(e){
+            var old_div = $('.div-payment_cash');
+            var new_div = old_div.clone();
+
+            new_div.insertAfter($(this).parent().parent().parent()).show();
+
+            initRemoveBank();
+
+            return false;
+        });
+    }
+
+    $(document).ready(function () {
+        initTag();
+        initDatepicker();
+        initAddBank();
+        initRemoveBank();
+
+		$("#payment").click(function(){
+
+			var status_payment 		= $("#payment").is(":checked");
+			var checkPaymentStatus 	= '<?php echo $this->checkPaymentStatus;?>';
+            var credit_amount      = '<?php echo $this->credit_amount;?>';
+			var remain_balance 		= '<?php echo $this->remain_balance;?>';
+            var distributor_balance = '<?php echo $this->distributor_balance;?>';
+			var check_balance  		= '<?php echo $this->checkBalance;?>';
+			var need 				= '<?php echo $this->need;?>';
+			var _this = $(this);
+            checkPaymentStatus =0;
+            //alert(check_balance);
+            //alert(checkPaymentStatus);
+			if(status_payment == true){
+				if(checkPaymentStatus == 0 ){
+                    //alert(need);
+					var html = "Balance is not enough to payment";
+                    html += '<p>Total Credit Amount : '+numeral(credit_amount).format('0,0.00')+'</p>';
+                    html += '<p>Use Credit Total : '+numeral(remain_balance).format('0,0.00')+'</p>';
+                    html += '<p>Total Balance : '+numeral(distributor_balance).format('0,0.00')+'</p>';
+					
+                    //html += '<p>Need: '+numeral(need).format('0,0.00')+'</p>';
+					html += '<p>Do you want to continue? Please input money to accept</p>';
+					$("#dialog").html(html);
+					$('#dialog').dialog({
+						modal: true,
+						title: 'Payment Order',
+						buttons:{
+                            "Cash" : function() {
+                                $(this).dialog('close');
+                                
+                                $('#payment_type').val('CA');
+                                $('#payment_order').attr('required', 'required').show();
+                                $('#payment_order').prop('disabled', false);
+
+                                $('#div-company').show();
+
+                                $('#select_bank_id').attr('required', 'required').show();
+                                $('#select_bank_id').prop('disabled', false);
+                                $('#company_id').attr('required', 'required').show();
+                                //$('#company_id').prop('disabled', false);
+                                $('#payment_bank_transfer').attr('required', 'required').show();
+                                $('#payment_bank_transfer').prop('disabled', false);
+
+                                $('#payment_servicecharge').attr('required', 'required').show();
+                                $('#payment_servicecharge').prop('disabled', false);
+                                
+                                //$('#pay_time').text('');
+                               // $('#pay_time').val(0);
+                               // var aa = $('#pay_time').val();
+
+                               // alert(aa);
+
+                                // $('#pay_time').hide();
+                                //$('.pay_time').val('');
+
+                                $('#pay_time').attr('required', 'required').show();
+                                $('#pay_time').prop('disabled', false);
+                                $('.pay_time').prop('disabled', false);
+
+                                $('#select_bank_id').attr('required', 'required').show();
+                                $('#div-payment_cash').show();
+                                $('#pay_time').attr('required', 'required').show();
+
+                                $('#payment_service').attr('required', 'required').show();
+                                $('#payment_service').prop('disabled', false);
+                                
+                            },
+                            "Credit" : function() {
+                                $(this).dialog('close');
+                                $('#payment_type').val('CR');
+                                $('#payment_order').removeAttr('required').hide();
+                                $('#payment_order').prop('disabled', true);
+
+                                $('#select_bank_id').attr('required', 'required').hide();
+                                $('#select_bank_id').prop('disabled', true);
+                                $('#company_id').attr('required', 'required').hide();
+                                $('#company_id').prop('disabled', true);
+                                $('#payment_bank_transfer').attr('required', 'required').hide();
+                                $('#payment_bank_transfer').prop('disabled', true);
+
+                                $('#payment_servicecharge').attr('required', 'required').hide();
+                                $('#payment_servicecharge').prop('disabled', true);
+
+                                $('#pay_time').attr('required', 'required').hide();
+                                $('#pay_time').prop('disabled', true);
+                                $('.pay_time').prop('disabled', true);
+                               // alert($('.pay_time').val())
+
+                                $('#payment_service').attr('required', 'required').hide();
+                                $('#payment_service').prop('disabled', true);
+
+                                $('#div-company').hide();
+                                //alert(check_balance);
+                                check_balance = 10000;
+                                if(check_balance < 0)
+                                {
+                                    alert('วงเงินเครดิตของท่านไม่เพียงพอที่จะสั่งซื้อได้ กรุณาติดต่อเจ้าหน้าที่ ! ('+numeral(check_balance).format('0,0.00')+' บาท)');
+                                    $("#payment").prop( "checked", false );
+                                    return false;
+
+                                }
+                            },
+							'Cancel': function(){
+								$(this).dialog('close');
+								_this.prop( "checked", false );
+                                $('#payment_type').val('');
+                                $('#payment_order').removeAttr('required').hide();
+                                $('#payment_order').prop('disabled', true);
+                                $('#payment_order').removeAttr('required').hide();
+                                $('#payment_bank_transfer').removeAttr('required').hide();
+                                $('#payment_servicecharge').removeAttr('required').hide();
+                                $('#select_bank_id').removeAttr('required').hide();
+                                $('#div-payment_cash').hide();
+
+                                $('#select_bank_id').attr('required', 'required').hide();
+                                $('#select_bank_id').prop('disabled', true);
+                                $('#company_id').attr('required', 'required').hide();
+                                $('#company_id').prop('disabled', true);
+                                $('#payment_bank_transfer').attr('required', 'required').hide();
+                                $('#payment_bank_transfer').prop('disabled', true);
+                                $('#payment_servicecharge').attr('required', 'required').hide();
+                                $('#payment_servicecharge').prop('disabled', true);
+                                $('#pay_time').attr('required', 'required').hide();
+                                $('#pay_time').prop('disabled', true);
+                                $('.pay_time').prop('disabled', true);
+
+                                $('#payment_service').attr('required', 'required').hide();
+                                $('#payment_service').prop('disabled', true);
+
+                                $('#div-company').hide();
+							}
+						}
+					});
+
+					$("#dialog").dialog("open");
+				}else{
+                    $('#payment_order').hide();
+                    $('#div-company').hide();
+                    $('#div-payment_cash').hide();
+
+                    $('#select_bank_id').attr('required', 'required').hide();
+                    $('#select_bank_id').prop('disabled', true);
+                    $('#company_id').attr('required', 'required').hide();
+                    $('#company_id').prop('disabled', true);
+                    $('#payment_bank_transfer').attr('required', 'required').hide();
+                    $('#payment_bank_transfer').prop('disabled', true);
+                    $('#payment_servicecharge').attr('required', 'required').hide();
+                    $('#payment_servicecharge').prop('disabled', true);
+                    $('#pay_time').attr('required', 'required').hide();
+                    $('#pay_time').prop('disabled', true);
+
+                }
+
+			}else {
+                $('#payment_order').hide();
+                $('#div-company').hide();
+                $('#div-payment_cash').hide();
+
+                $('#select_bank_id').attr('required', 'required').hide();
+                $('#select_bank_id').prop('disabled', true);
+                $('#company_id').attr('required', 'required').hide();
+                $('#company_id').prop('disabled', true);
+                $('#payment_bank_transfer').attr('required', 'required').hide();
+                $('#payment_bank_transfer').prop('disabled', true);
+                $('#payment_servicecharge').attr('required', 'required').hide();
+                $('#payment_servicecharge').prop('disabled', true);
+                $('#pay_time').attr('required', 'required').hide();
+                $('#pay_time').prop('disabled', true);
+
+            }
+		});
+
+        $('#form').submit(function (e){
+            var status_payment  = $("#payment").is(":checked");
+            if (status_payment==true) 
+            {             
+                return true;
+            } else {
+                alert("Please Select Payment !");
+                return false;
+            }
+        });
+        initGoBack();
+    });
+
+    function initGoBack(){
+        $('.go-back').click(function(e){
+            window.location.href = $('#back_url').val();
+            return false;
+        });
+    }
+</script>
+<style>
+	label input,
+	label select {
+		margin-right: 25px;
+	}
+</style>

@@ -1,0 +1,65 @@
+<div class="page-header">
+    <h1>Service Factory Claim Input Money List</h1>
+</div>
+<?php
+    if (isset($this->messages_success) and $this->messages_success)
+        foreach ($this->messages_success as $message):
+            echo '<div class="alert alert-success">'.$message.'</div>';
+        endforeach;
+
+    if (isset($this->messages) and $this->messages)
+        foreach ($this->messages as $message):
+            echo '<div class="alert alert-error">'.$message.'</div>';
+        endforeach;
+?>
+
+<div class="accordion" id="accordion2">
+    <div class="accordion-group">
+        <div class="accordion-heading">
+            <a class="accordion-toggle collapsed" data-toggle="collapse" data-parent="#accordion2" href="#collapseTwo">
+                Search
+            </a>
+        </div>
+        <div id="collapseTwo" class="accordion-body collapse" style="height: 0px;">
+            <div class="accordion-inner">
+                <?php
+                    echo $this->render('warehouse/partials/search-factory-claim-input-money-list.phtml');
+                ?>
+            </div>
+        </div>
+    </div>
+</div>
+
+<button style="margin-bottom: 15px;" class="pull-right btn btn-info" id="attach-input-money">Input Money</button>
+
+<div class="table-responsive">
+    <?php
+        echo $this->render('warehouse/partials/list-factory-claim-input-money-list.phtml');
+    ?>
+</div>
+<script>
+    $(document).ready(function () {
+        $('.form-search button:reset').click(function (e){
+            $('.form-search input, .form-search select').val('');
+            $('.form-search').submit();
+            return false;
+        });
+
+        $('.check_all').change(check_all);
+
+        function check_all(e) {
+            _self = $(e.target);
+            $('.attach-id').prop('checked', _self.is(":checked"));
+        }
+
+        $('#attach-input-money').click(function(event) {
+            id = [];
+            $('.attach-id:checked').each(function(index, el) {
+                id.push($(el).val());
+            });
+            var url = "/warehouse/factory-claim-input-money?id="+id;
+            window.location.replace(url);
+        });
+    
+    });
+</script>

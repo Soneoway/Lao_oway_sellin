@@ -1,0 +1,76 @@
+<form class="form-search form-horizontal" method="get" action="/staff-order">
+    <div class="row">
+        <div class="span5">
+            <div class="control-group">
+              <label for="type" class="span2">Name</label>
+              <input type="text" name="staff_name" value="<?php if(isset($this->params['staff_name']) AND $this->params['staff_name']) echo $this->params['staff_name'];?>">
+            </div>
+
+            <div class="control-group">
+              <label for="type" class="span2">Code</label>
+              <input type="text" name="staff_code" value="<?php if(isset($this->params['staff_code']) AND $this->params['staff_code']) echo $this->params['staff_code'];?>">
+            </div>
+
+            <div class="control-group">
+              <label for="type" class="span2">ID number</label>
+              <input type="text" name="id_number" value="<?php if(isset($this->params['id_number']) AND $this->params['id_number']) echo $this->params['id_number'];?>">
+            </div>
+
+
+
+            <div class="control-group">
+              <label for="type" class="span2">Type</label>
+              <select name="type" id="">
+                  <option value="">---</option>
+                  <?php 
+                    foreach($this->staff_order_types as $key => $value):
+                  ?>
+                    <option value="<?php echo $key;?>" <?php if(isset($this->params['type']) AND $this->params['type'] == $key) echo 'selected'; ?> >
+                      <?php echo $value ?></option>
+                  <?php       
+                    endforeach;
+                  ?>
+              </select>
+          </div>
+        </div>
+        <div class="span5">
+            <div class="control-group">
+                <label for="type" class="span2">SN</label>
+                <input type="text"  name="sn" value="<?php if(isset($this->params['sn']) AND $this->params['sn']) echo $this->params['sn'];?>">
+            </div>
+
+            <div class="control-group">
+                <label for="type" class="span2">From date</label>
+                <input type="text" class="date" name="from_date" value="<?php if(isset($this->params['from_date']) AND $this->params['from_date']) echo $this->params['from_date'];?>">
+            </div>
+
+            <div class="control-group">
+                <label for="type" class="span2">To date</label>
+                <input type="text" class="date" name="to_date" value="<?php if(isset($this->params['to_date']) AND $this->params['to_date']) echo $this->params['to_date'];?>">
+            </div>
+
+            <div class="control-group">
+                <label for="type" class="span2">Company</label>
+                <select name="company_id" id="">
+                    <option value>---</option>
+                    <?php
+                        foreach($this->companies as $k => $v){
+                    ?>
+                            <option value="<?php echo $k; ?>" <?php if(isset($this->params['company_id']) AND $this->params['company_id'] == $k) echo 'selected'; ?>><?php echo $v;?></option>
+                    <?php 
+                        }
+                    ?>
+                </select>
+            </div>
+        </div>
+    </div>
+   
+	<div class="row">
+        <div class="span5">
+   			 <button type="submit" class="btn btn-primary">Search</button>
+		    <button type="reset" class="btn btn-warning">Reset</button>
+		     <button type="submit" name="export" value="1" class="btn btn-success">Export</button> 
+       	</div>
+    </div>
+   
+</form>

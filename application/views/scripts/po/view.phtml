@@ -1,0 +1,127 @@
+<?php
+function product_price($priceFloat) {
+    $symbol = ' THB';
+    $symbol_thousand = ',';
+    $decimal_place = 2;
+    $price = number_format($priceFloat, $decimal_place, '.', $symbol_thousand);
+    return $price;
+}
+?>
+
+
+<div class="page-header">
+    <h1>View PO</h1>
+</div>
+<style>
+    tr td:first-child {
+        width: 20%;
+    }
+</style>
+<?php
+    $sn_ref=$this->PO->sn_ref;
+    $receive_sn = $this->PO->receive_ref;
+    if($sn_ref==''){
+        $sn_ref=$this->PO->sn;
+    }
+    if($receive_sn==''){
+        $receive_sn = $PO['receive_ref'];
+    }
+?>
+<div class="row">
+    <div class="span12">
+        <table class="table table-bordered">
+            <tbody>
+
+                <tr>
+                    <td>Purchase order ID</td>
+                    <td><strong><?php isset($this->PO) and $this->PO and printf($this->PO->id);?></strong></td>
+                </tr>
+
+                <tr>
+                    <td>Purchase order number</td>
+                    <td><strong><?php isset($this->PO) and $this->PO and printf($sn_ref);?></strong></td>
+                </tr>
+                <tr>
+                    <td>Receive order number</td>
+                    <td><strong><?php isset($this->PO) and $this->PO and printf($receive_sn);?></strong></td>
+                </tr>
+                <tr>
+                    <td>Purchase order Type</td>
+                    <td><?php if (isset($this->PO['type'])) echo My_Po_Type::getLabel($this->PO['type']) ?></td>
+                </tr>
+
+                <tr>
+                    <td>Purchase order name</td>
+                    <td><?php printf($this->created_by_name);?></td>
+                </tr>
+
+                <tr>
+                    <td>Purchase quantity</td>
+                    <td><?php isset($this->PO) and $this->PO and printf($this->PO->num);?></td>
+                </tr>
+
+                <tr>
+                    <td>Purchase price</td>
+                    <td><?php isset($this->PO) and $this->PO and printf(product_price($this->PO->price));?></td>
+                </tr>
+
+                <tr>
+                    <td>Purchase time</td>
+                    <td><?php isset($this->PO) and $this->PO and printf($this->PO->created_at);?></td>
+                </tr>
+
+                <tr>
+                    <td>Purchaser</td>
+                    <td><?php isset($this->warehouse) and $this->warehouse and printf($this->warehouse);?></td>
+                </tr>
+
+                <tr>
+                    <td>Purchase payment</td>
+                    <td><?php if ($this->PO->flow):?><i class="icon-ok"></i><?php else:?><i class="icon-remove"></i><?php endif;?></td>
+                </tr>
+
+                <tr>
+                    <td>Payer</td>
+                    <td><?php echo $this->payer_name;?></td>
+                </tr>
+
+                <tr>
+                    <td>Time of payment</td>
+                    <td><?php if ($this->PO->flow):?><?php echo $this->PO->flow_time;?><?php else:?>-<?php endif;?></td>
+                </tr>
+
+                <tr>
+                    <td>Whether to enter the warehouse</td>
+                    <td><?php if ($this->PO->mysql_user):?><i class="icon-ok"></i><?php else:?><i class="icon-remove"></i><?php endif;?></td>
+                </tr>
+
+                <tr>
+                    <td>Warehousing people</td>
+                    <td><?php echo $this->warehousing_name;?></td>
+                </tr>
+
+                <tr>
+                    <td>Time input warehousing</td>
+                    <td><?php if ($this->PO->mysql_time):?><?php echo $this->PO->mysql_time;?><?php else:?>-<?php endif;?></td>
+                </tr>
+
+                <tr>
+                    <td>Purchase remark</td>
+                    <td><strong><?php isset($this->PO) and $this->PO and printf($this->PO->text);?></strong></td>
+                </tr>
+
+            </tbody>
+        </table>
+        <button type="button" class="btn btn-danger go-back">Go back</button>
+    </div>
+
+</div>
+<script>
+    $(document).ready(function () {
+        $('.go-back').click(function(e){
+            e.preventDefault();
+            parent.history.back();
+            return false;
+        });
+    });
+</script>

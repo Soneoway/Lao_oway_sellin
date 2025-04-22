@@ -1,0 +1,31 @@
+<div id="upload_modal" class="modal hide fade" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+    <div class="modal-header">
+        <button type="button" class="close" data-dismiss="modal" aria-hidden="true">×</button>
+        <h3 id="myModalLabel">Upload IMEI file</h3>
+    </div>
+    <div class="modal-body">
+        <div class="control-group">
+            <p>PO SN: <strong id="upload_po_sn"></strong></p>
+        </div>
+        <div class="control-group">
+            <label class="control-label" for="">Attach Files</label>
+            <div class="controls">
+                <p><strong>Kích thước file phải nhỏ hơn 5MB</strong></p>
+                <div class="file-uploader"></div>
+                <input type="hidden" name="photo" />
+                <input type="hidden" class="onprogress" />
+                <p class="help-block"></p>
+                <div class="alert" style="display:none;"></div>
+                <div class="input-prepend input-append" style="display:none;">
+                    <span class="add-on">Download Link</span><input class="span2" type="text" value="" id="link">
+                    <button class="btn bt-default copy_link" type="button" data-clipboard-target="#link">
+                        <img src="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAA4AAAAQCAYAAAAmlE46AAAAwUlEQVQoU5XSz01CQRAG8B8e6YAW8IggiTV4sANvVCShBjgQmjAQbcQqNENYMu+9xSxz2p2Z789+2ZFhvWGDX6xwqOwYVZo/eMUD9pjcAp6wSMOvdI/zU5rF7jLuoRiWoub4rrFjlmZnlxl4AzNod4C1t9aIwt0AWCxnQJ+wCqwpjLHG+2X4r2JRecQW02Kvb+XKkgah8IFQrFZJNacb57uAfeawuGuxmlMt72wKp+UDdFI94rkFhU+8lC/XiOmu/QH1wCcPHwfbWAAAAABJRU5ErkJggg==">
+                    </button>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="modal-footer">
+        <button class="btn btn-default" data-dismiss="modal" aria-hidden="true">Close</button>
+    </div>
+</div>

@@ -1,0 +1,55 @@
+<br><h1>Table List KeyProduct Lazada</h1><br>
+<form role="form" id="form" action="" class="form-horizontal">
+	<table class="table table-bordered">
+	            <thead>
+	                <tr>
+	                    <?php echo $this->sorting(array(
+	                            '#',
+	                            'key_product'   =>'Key Product',
+	                            'good_id'       =>'Good Product',
+	                            'good_color'    =>'Color Product',
+	                            'create_date'	=>'Create Date',
+	                            'Action'
+	                            
+	                        ),
+	                        $this->url, $this->sort, $this->desc); ?>
+	                </tr>
+	            </thead>
+	            <tbody>
+	                <?php
+	                
+	                    if(isset($this->list_key) and $this->list_key)
+	                    foreach($this->list_key as $k => $m):
+	                ?> 
+	                        <tr>
+	                            <td>
+	                                <?php 
+	                                $inc = $this->offset + $k + 1;
+	                                echo $inc;
+	                                ?>
+	                            </td>
+	                            <td><?php echo $m['key_product'];?></td>
+	                            <td><?php echo $m['good_name'];?></td>
+	                            <td><?php echo $m['color_name'];?></td>
+	                            <td><?php echo $m['create_date'];?></td>
+	                            <td><center>
+	                            	<a title="Delete" class="confirmLink" href="/sales/delkey?id=<?php echo $m['id'];?>"> <i class="icon-trash"></i></a>
+	                            </td></center>
+	                        </tr>
+	                <?php endforeach; ?>
+	            </tbody>
+	        </table>
+
+	            <div class="paging">
+	                <?php echo $this->paging($this->total, $this->limit, $this->offset, $this->url);?>
+	            </div>
+	            <script type="text/javascript" src="/js/jquery-ui-1.8.12.custom.min.js"></script>
+	            <link rel="stylesheet" type="text/css" href="/css/jquery-ui-1.8.12.custom.css"/>
+	            <?php echo $this->load();?>
+	            <?php echo $this->confirm();?>
+             <div class="control-group">
+              <div class="span4">
+	          <a type="button" href="create-import-map-key" class="btn btn-danger">Go back</a><a type="button" href="create-auto-so" class="btn btn-primary">Go to create</a>
+	          </div>
+	        </div>
+</form>

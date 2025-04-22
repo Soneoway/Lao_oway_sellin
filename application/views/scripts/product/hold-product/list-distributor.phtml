@@ -1,0 +1,170 @@
+
+       <div class="col-md-12" style="display: flex;">
+            <div class="dual-list list-left col-md-5">
+                <div class="well">
+                    <div class="row tabLeft">
+                        <div class="col-md-7">
+                            <div class="input-prepend">
+                                <span class="add-on"><i class="icon icon-search"></i></span>
+                                <input type="text" name="SearchDualList" class="form-control" placeholder="Search" />
+                            </div>
+                        </div>
+                        <div class="col-md-2">
+                            <div class="btn-group">
+                                <a class="btn btn-default selector" title="select all"><i class="icon icon-circle-blank"></i></a>
+                            </div>
+                        </div>
+                    </div>
+                    <div>
+                         <span class="so-title">Distributor ID</span>
+                         <span class="price_ori">Distributor Name</span>
+                         
+                    </div>
+                    <ul class="list-group">
+                    <?PHP 
+                        $i = 1;
+                        foreach ($this->blacklist as $list) :
+                         
+                            ?>
+                        <li class="list-group-item">
+                            <span class="so"><?=$list['id']?></span>
+                            <span class="price_ori "><?=$list['title']?>
+
+                            <input type="hidden" class="sn" name="d_id[]" disabled value="<?=$list['id']?>">
+                            </span>
+                           
+                           
+                            
+                        </li>
+                            
+                            
+                      <?PHP $i+=1; 
+                       
+                      endforeach; ?>  
+                        
+                    </ul>
+                </div>
+            </div>
+
+            <div class="list-arrows col-md-1 text-center">
+                <div class="but"><a class="btn btn-default btn-sm move-left">
+                    <span class="icon icon-chevron-left"></span>
+                </a>
+
+                <a class="btn btn-default btn-sm move-right">
+                    <span class="icon icon-chevron-right"></span>
+                </a>
+                </div>
+                
+            </div>
+
+            <div class="dual-list list-right col-md-5">
+                <div class="well">
+                    <div class="row tabLeft">
+                        
+                        <div class="col-md-7">
+                            <div class="input-prepend">
+                                <span class="add-on"><i class="icon icon-search"></i></span>
+                                <input type="text" name="SearchDualList" class="form-control" placeholder="Search" />
+                                
+                            </div>
+                        </div>
+                        <div class="col-md-2">
+                            <div class="btn-group">
+                                <a class="btn btn-default selector" title="select all"><i class="icon icon-circle-blank"></i></a>
+                            </div>
+                        </div>
+                    </div>
+                    <div>
+                         <span class="so-title">Distributor ID</span>
+                         <span class="price_ori">Distributor Name</span>
+                         
+                    </div>
+                    <ul class="list-group">
+                        
+                    </ul>
+                
+                </div>
+            </div>
+        </div>
+        
+       
+     
+
+    <script type="text/javascript">
+     
+  
+    
+    $(document).ready(function () {
+           
+          
+            $("*").keypress(function(event){  
+                 if(event.keyCode==13){  
+                    return false;  
+                 }  
+            });
+
+            $('body').on('click', '.list-group .list-group-item', function () {
+                $(this).toggleClass('active');
+            });
+          
+           
+
+          
+            $('.list-arrows a').click(function () {
+                var $button = $(this), actives = '';
+                if ($button.hasClass('move-left')) {
+                    actives = $('.list-right ul li.active');
+                   acc = actives.clone().appendTo('.list-left ul').find('span.price_text').addClass('none_price').find('input,textarea,select,hidden,number').attr('disabled','disabled').val('');
+                    acc.parent().parent().find('.pay_ment').removeClass('pay_money_total');
+                    actives.remove();
+                    
+                  
+                } else if ($button.hasClass('move-right')) {
+                    actives = $('.list-left ul li.active');
+                    acc  =  actives.clone().appendTo('.list-right ul').find('span').removeClass('none_price').find('input,textarea,select,hidden,number').removeAttr('disabled');
+                    acc.parent().find('.pay_ment').addClass('pay_money_total');
+                    actives.remove();
+                   
+                    
+                    
+                }
+            });
+
+            $('.dual-list .selector').click(function () {
+                var $checkBox = $(this);
+                if (!$checkBox.hasClass('selected')) {
+                    $checkBox.addClass('selected').closest('.well').find('ul li:not(.active)').addClass('active');
+                    $checkBox.children('i').removeClass('icon icon-circle-blank').addClass('icon icon-ok');
+                } else {
+                    $checkBox.removeClass('selected').closest('.well').find('ul li.active').removeClass('active');
+                    $checkBox.children('i').removeClass('icon icon-ok').addClass('icon icon-circle-blank');
+                }
+            });
+            $('[name="SearchDualList"]').keyup(function (e) {
+                var code = e.keyCode || e.which;
+                if (code == '9') return;
+                if (code == '27') $(this).val(null);
+                var $rows = $(this).closest('.dual-list').find('.list-group li');
+                var val = $.trim($(this).val()).replace(/ +/g, ' ').toLowerCase();
+                $rows.show().filter(function () {
+                    var text = $(this).text().replace(/\s+/g, ' ').toLowerCase();
+                    return !~text.indexOf(val);
+                }).hide();
+            });
+
+            
+
+            $(document).on("submit", "form", function(e)
+            {
+                 $('#form').submit();
+            });
+            
+        });
+
+        
+        function roundNumber(num, dec) {
+            var result = Math.round(num*Math.pow(10,dec))/Math.pow(10,dec);
+            return Number(result).toLocaleString('en',{ minimumFractionDigits: 2 });
+        }
+    </script>

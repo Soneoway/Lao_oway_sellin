@@ -1,0 +1,7 @@
+<option value>Chọn PO</option>
+<?php if (isset($this->po_list) && count($this->po_list)): ?>
+    <?php foreach ($this->po_list as $key => $po): ?>
+        <option value="<?php echo $po['id'] ?>"
+            data-note="<?php echo $po['note'] ?>"><?php echo $po['po_name'] ?></option>
+    <?php endforeach ?>
+<?php endif ?>

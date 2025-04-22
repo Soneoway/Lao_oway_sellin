@@ -1,0 +1,689 @@
+<style>
+    .blockOverlay{
+        z-index: 10000 !important;
+    }
+    .blockPage{
+        z-index: 10001 !important;
+    }
+    .color-red{
+        color: red;
+    }
+    .icon-imge{
+        padding: 0 20px;
+        cursor: pointer;
+    }
+    .img-borrowing{
+        cursor: -webkit-zoom-in;
+    }
+</style>
+
+<div class="page-header">
+    <h1>Borrow Request</h1>
+</div>
+<?php
+    if (isset($this->messages) and $this->messages)
+        foreach ($this->messages as $message):
+            echo '<div class="alert alert-error">'.$message.'</div>';
+        endforeach;
+?>
+
+<div class="modal fade" id="modal-show-borrowing" role="dialog">
+      <div class="modal-header" align="center">
+      <button type="button" class="close" data-dismiss="modal" aria-hidden="true">×</button>
+      <h3 id="myModalLabel">Image</h3>
+    </div>
+    <div id="show-img" class="modal-body">
+    
+    </div>
+    <div class="modal-footer">
+      <button class="btn" data-dismiss="modal" aria-hidden="true">Close</button>
+    </div>
+</div>
+
+<div class="row">
+    <div class="span12">
+
+        <div class="span5">
+
+            <!-- <div class="row">
+                <div class="span6">
+                    <label class="span2">Requert SN : </label>
+                    <span class="span3"><strong><?php echo $this->getDetailsRequest[0]['sn'];?></strong></span>
+                </div>
+            </div> -->
+
+            <div class="row">
+                <div class="span6">
+                    <label class="span2">Request Number : </label>
+                    <span class="span3"><strong><?php echo $this->getDetailsRequest[0]['rq'];?></strong></span>
+                </div>
+            </div>
+
+            <div class="row">
+                <div class="span6">
+                    <label class="span2">Product Grade : </label>
+                    <span class="span3"><strong><?php
+                    switch ($this->getDetailsRequest[0]['product_grade']) {
+                        case '1':
+                            echo 'A';
+                            break;
+                        case '2':
+                            echo 'B';
+                            break;
+                        case '3':
+                            echo 'Demo';
+                            break;
+                        case '4':
+                            echo 'APK';
+                            break;
+                        case '5':
+                            echo 'Prototype';
+                            break;
+                    }
+                    ?></strong></span>
+                </div>
+            </div>
+
+            <!-- <div class="row">
+                <div class="span6">
+                    <label class="span2">Borrow Type : </label>
+                    <span class="span3"><strong><?php
+                    // switch ($this->getDetailsRequest[0]['borrowing_type']) {
+                    //     case '1':
+                    //         // echo 'Demo for Event';
+                    //         echo 'เบิกยืมพนักงาน';
+                    //         break;
+                    //     case '2':
+                    //         // echo 'Complimentary';
+                    //         echo 'อภินันทนาการ';
+                    //         break;
+                    //     case '3':
+                    //         // echo 'Replace Customer Service';
+                    //         echo 'เบิกเปลี่ยนเครื่องลูกค้า';
+                    //         break;
+                    //     case '4':
+                    //         echo 'Prototype';
+                    //         break;
+                    // }
+                    ?></strong></span>
+                </div>
+            </div> -->
+
+            <div class="row">
+                <div class="span6">
+                    <label class="span2">Type : </label>
+                    <span class="span3"><strong><?php echo $this->getDetailsRequest[0]['hrs_department_name'];?></strong></span>
+                </div>
+            </div>
+
+            <div class="row <?php if(!$this->getDetailsRequest[0]['org_full_name']){echo 'hide';}?>">
+                <div class="span6">
+                    <label class="span2">ORG Full Name : </label>
+                    <span class="span3"><strong><?php echo $this->getDetailsRequest[0]['org_full_name'];?></strong></span>
+                </div>
+            </div>
+
+            <div class="row">
+                <div class="span6">
+                    <label class="span2">Event Program Name : </label>
+                    <span class="span3"><strong><?php echo $this->getDetailsRequest[0]['event_program_name'];?></strong></span>
+                </div>
+            </div>
+
+            <div class="row">
+                <div class="span6">
+                    <label class="span2">Event Program Start Period Date : </label>
+                    <span class="span3"><strong><?php echo $this->getDetailsRequest[0]['event_program_start_period_date'];?></strong></span>
+                </div>
+            </div>
+
+            <div class="row">
+                <div class="span6">
+                    <label class="span2">Event Program End Period Date : </label>
+                    <span class="span3"><strong><?php 
+                    // if($this->getDetailsRequest[0]['borrowing_type'] == 2){
+                    //     echo 'No Return';
+                    // }else{
+                    //     echo $this->getDetailsRequest[0]['return_date'];
+                    // }
+                    if(!$this->getDetailsRequest[0]['return_date']){
+                        echo 'No Return';
+                    }else{
+                        echo $this->getDetailsRequest[0]['return_date'];
+                    }
+                    ?></strong></span>
+                </div>
+            </div>
+
+            <div class="row">
+                <div class="span6">
+                    <label class="span2">Remark : </label>
+                    <span class="span3"><strong><?php echo $this->getDetailsRequest[0]['remark'];?></strong></span>
+                </div>
+            </div>
+
+            <div class="row">
+                <div class="span6">
+                    <label class="span2">Address : </label>
+                    <span class="span3"><strong><?php 
+                    switch ($this->getDetailsRequest[0]['delivery']) {
+                        case '1': ?>
+                        คลังสินค้าเคอรี่ บางนา โลจิสติกส์ เซ็นเตอร์ <br/>เลขที่ 33/2 หมู่ 7 บางปลา บางพลี สมุทรปราการ 10540 ติดต่อคุณศริญญา เกตุเขียว 0657174931
+                        <?php break;
+                        case '2': ?>
+                            บจก.ไทย ออปโป้ เลขที่230 ถ.บางขุนเทียน <br/>-ชายทะเล แขวงแสมดำ เขตบางขุนเทียน กรุงเทพฯ 10150 ติดต่อคุณหนึ่ง  0835527645 หรือ คุณเอ๋ 0958250441
+                            <?php break;
+                        case '3':
+                            echo $this->getDetailsRequest[0]['address'];
+                            break;
+                        case '4': ?>
+                            บริษัท ไทย ออปโป้ จำกัด <br/>อาคาร AIA Capital Center รัชดา เลขที่ 89 ชั้น 31 ห้อง 5-7 ถนน รัชดาภิเษก เขตดินแดง กทม. 10400 <br/>โทรศัพท์ : 02- 013-1810 แฟ็กซ์: 02-013–1820
+                            <?php break;
+                    }
+                    ?></strong></span>
+                </div>
+            </div>
+
+        </div>
+
+        <div class="span5">
+
+            <div class="row">
+                <div class="span7">
+                    <label class="span3">Area : </label>
+                    <span class="span3"><strong><?php echo $this->getDetailsRequest[0]['name'];?></strong></span>
+                </div>
+            </div>
+
+            <div class="row">
+                <div class="span7">
+                    <label class="span3">Request By : </label>
+                    <span class="span3"><strong><?php echo $this->getDetailsRequest[0]['fullname'];?></strong></span>
+                </div>
+            </div>
+
+            <div class="row">
+                <div class="span7">
+                    <label class="span3">Position : </label>
+                    <span class="span3"><strong><?php echo $this->getDetailsRequest[0]['position_name'];?></strong></span>
+                </div>
+            </div>
+
+            <div class="row">
+                <div class="span7">
+                    <label class="span3">Request Date : </label>
+                    <span class="span3"><strong><?php echo $this->getDetailsRequest[0]['created_date'];?></strong></span>
+                </div>
+            </div>
+
+            <div class="row <?php if(!$this->getDetailsRequest[0]['mg_fullname']){echo 'hide';}?>">
+                <div class="span7">
+                    <label class="span3">Manager Approved By : </label>
+                    <span class="span3"><strong><?php echo $this->getDetailsRequest[0]['mg_fullname'];?></strong></span>
+                </div>
+            </div>
+
+            <div class="row <?php if(!$this->getDetailsRequest[0]['manager_approved_date']){echo 'hide';}?>">
+                <div class="span7">
+                    <label class="span3">Manager Approved Date : </label>
+                    <span class="span3"><strong><?php echo $this->getDetailsRequest[0]['manager_approved_date'];?></strong></span>
+                </div>
+            </div>
+
+            <div class="row">
+                <div class="span7">
+                    <label class="span3">Admin Approved By : </label>
+                    <span class="span3"><strong><?php echo $this->getDetailsRequest[0]['admin_fullname'];?></strong></span>
+                </div>
+            </div>
+
+            <div class="row">
+                <div class="span7">
+                    <label class="span3">Admin Approved Date : </label>
+                    <span class="span3"><strong><?php echo $this->getDetailsRequest[0]['admin_approved_date'];?></strong></span>
+                </div>
+            </div>
+
+            <!-- <div class="row">
+                <div class="span7">
+                    <label class="span3">ASM Approved By : </label>
+                    <span class="span3"><strong><?php echo $this->getDetailsRequest[0]['asm_fullname'];?></strong></span>
+                </div>
+            </div>
+
+            <div class="row">
+                <div class="span7">
+                    <label class="span3">ASM Approved Date : </label>
+                    <span class="span3"><strong><?php echo $this->getDetailsRequest[0]['asm_approved_date'];?></strong></span>
+                </div>
+            </div> -->
+
+            <div class="row <?php if(!$this->getDetailsRequest[0]['rm_fullname']){echo 'hide';}?>">
+                <div class="span7">
+                    <label class="span3">RD Approved By : </label>
+                    <span class="span3"><strong><?php echo $this->getDetailsRequest[0]['rm_fullname'];?></strong></span>
+                </div>
+            </div>
+
+            <div class="row <?php if(!$this->getDetailsRequest[0]['rm_approved_date']){echo 'hide';}?>">
+                <div class="span7">
+                    <label class="span3">RD Approved Date : </label>
+                    <span class="span3"><strong><?php echo $this->getDetailsRequest[0]['rm_approved_date'];?></strong></span>
+                </div>
+            </div>
+
+            <!-- <div class="row">
+                <div class="span7">
+                    <label class="span3">Area Director Approved By : </label>
+                    <span class="span3"><strong><?php echo $this->getDetailsRequest[0]['area_fullname'];?></strong></span>
+                </div>
+            </div>
+
+            <div class="row">
+                <div class="span7">
+                    <label class="span3">Area Director Approved Date : </label>
+                    <span class="span3"><strong><?php echo $this->getDetailsRequest[0]['area_director_approved_date'];?></strong></span>
+                </div>
+            </div> -->
+
+            <div class="row">
+                <div class="span7">
+                    <label class="span3">Operation Director Approved By : </label>
+                    <span class="span3"><strong><?php echo $this->getDetailsRequest[0]['op_fullname'];?></strong></span>
+                </div>
+            </div>
+
+            <div class="row">
+                <div class="span7">
+                    <label class="span3">Operation Director Approved Date : </label>
+                    <span class="span3"><strong><?php echo $this->getDetailsRequest[0]['operation_director_approved_date'];?></strong></span>
+                </div>
+            </div>
+
+        </div>
+
+        <div class="row">
+            <div class="span12" style="margin-top: 30px;margin-bottom: 30px;">
+
+                <button style="margin-bottom: 15px;" class="btn pull-right hide" id="btn-image" data-rq="<?=$this->getDetailsRequest[0]['rq']?>">Image</button>
+
+                <table class="table table-bordered span12">
+                    <thead>
+                        <tr>
+                            <th>No</th>
+                            <th>Products Code</th>
+                            <th>Product Name</th>
+                            <th>Color Name</th>
+                            <th>Quantity</th>
+                        </tr>
+                    </thead>
+
+                    <tbody>
+
+                    <?php
+                    $total = 0;
+                    foreach ($this->getDetailsRequest as $key => $item):
+                        $total += $item['total_qty'];
+                    ?>
+
+                        <tr>
+                            <td><?php echo $key+1;?></td>
+                            <td><?php echo $item['good_name'];?></td>
+                            <td><?php echo $item['good_main_name'];?></td>
+                            <td><?php echo $item['color_name'];?></td>
+                            <td><?php echo $item['total_qty'];?></td>
+                        </tr>
+
+                    <?php endforeach;?>
+
+                    </tbody>
+
+                    <tfoot>
+                        <tr>
+                            <td colspan="4"><strong>SUMMARY</strong></td>
+                            <td><strong><?php echo $total;?></strong></td>
+                        </tr>
+                    </tfoot>
+                </table>
+            </div>
+        </div>
+
+        <form method="POST" action="<?=HOST."warehouse/request-process"?>">
+
+            <!-- <div style="margin-left: 30px;margin-bottom: 30px;">
+                <span>Product Type : </span> -->
+                <!-- <select class="select2-type" name="type" style="width: 100px;"> -->
+               <!-- <select class="" name="type" style="width: 100px;" required>
+                    <option value>----------</option>
+                    <option value="1">Normal</option>
+                    <option value="2">Demo</option>
+                    <option value="5">APK</option>
+                </select>
+            </div> -->
+
+            <!-- <?php if ($this->getDetailsRequest[0]['product_grade'] == '1') { ?>
+                <?php if ($this->getDetailsRequest[0]['borrowing_type'] == '4'){?>
+                    <select class="" name="warehouse" style="width: 250px;" required>
+                        <option value>----------</option>
+                        <option value="28">WMQT - คลังเครื่องทดสอบ</option>
+                        <option value="36">WMKR - Kerry</option>
+                    </select>
+                <?php }else{ ?>
+                    <input type="hidden" name="warehouse" value="36">
+                <?php } ?>
+            <?php }else{ ?>
+            <div style="margin-left: 30px;margin-bottom: 30px;">
+                <span>Warehouse : </span> -->
+                <!-- <select class="select2-warehouse" name="warehouse" style="width: 250px;"> -->
+                <!-- <select class="" name="warehouse" style="width: 250px;" required>
+                    <option value>----------</option>
+                    <option value="5">WM03 - คลังโทรศัพท์เกรด B</option>
+                    <option value="6">WM04 - คลังโทรศัพท์เคลมโรงงาน</option>
+                    <option value="28">WMQT - คลังเครื่องทดสอบ</option>
+                </select>
+            </div>
+            <?php } ?> -->
+
+            <?php 
+            // 1=A,2=B,3=Demo,4=APK,5=Prototype
+            // switch ($this->getDetailsRequest[0]['product_grade']) {
+            //     case '1':
+            //         // warehouse kerry
+            //         echo '<input type="hidden" name="warehouse" value="36">';
+            //         break;
+            //     case '2':
+            //         // WM03 - คลังโทรศัพท์เกรด B
+            //         echo '<input type="hidden" name="warehouse" value="5">';
+            //         break;
+            //     case '3':
+            //         // warehouse kerry
+            //         echo '<input type="hidden" name="warehouse" value="36">';
+            //         break;
+            //     case '4':
+            //         // warehouse kerry
+            //         echo '<input type="hidden" name="warehouse" value="36">';
+            //         break;
+            //     case '5':
+            //         // WMQT - คลังเครื่องทดสอบ
+            //         echo '<input type="hidden" name="warehouse" value="28">';
+            //         break;
+            // } ?>
+
+            <label class="span4" for="warehouse">Warehouse <span style="color: red">*</span>
+                <select id="warehouse" class="span4" name="warehouse" required="required">
+                    <option value="">Please select</option>
+                    <?php foreach ($this->warehouses as $id=>$name):?>
+                        <option value="<?php echo $id;?>" <?php if ( count($this->warehouses) == 1):?> selected<?php endif;?>><?php echo $name;?></option>
+                    <?php endforeach;?>
+                </select>
+            </label>
+
+            <div class="pull-right" style="margin-left: 30px; margin-top: 30px;margin-bottom: 30px;">
+                <button type="submit" class="btn btn-primary">Confirm</button>
+                <button type="button" class="btn btn-danger" id="btn-cancel-order">Cancel Order</button>
+                <button type="button" class="btn btn-warning" onclick="window.location.href='<?=HOST."warehouse/request-list"?>'">Back</button>
+            </div>
+
+            <input type="hidden" name="id" value="<?=$this->id?>">
+            
+        </form>
+
+    </div>
+</div>
+
+<link href="../css/select2.css" rel="stylesheet"/>
+<script src="../js/select2.js"></script>
+<script src="/js/jquery.blockUI.js"></script>
+<script>
+
+    $(document).ajaxStart(function(){
+        $.blockUI({ css: { 
+            border: 'none', 
+            padding: '15px', 
+            backgroundColor: '#000', 
+            '-webkit-border-radius': '10px', 
+            '-moz-border-radius': '10px', 
+            opacity: .5, 
+            color: '#fff' 
+        } });
+    });
+
+    $(document).ajaxStop(function(){
+        $.unblockUI();
+    });
+
+    $(document).ready(function () {
+        $('.select2-type').select2();
+        $('.select2-warehouse').select2();
+
+        <?php 
+            // 1=A,2=B,3=Demo,4=APK,5=Prototype
+            switch ($this->getDetailsRequest[0]['product_grade']) {
+                case '1':
+                    // warehouse kerry
+                    // echo '<input type="hidden" name="warehouse" value="36">';
+                    ?>
+                    $('#warehouse').val('36');
+                    <?php
+                    break;
+                case '2':
+                    // WM03 - คลังโทรศัพท์เกรด B
+                    // echo '<input type="hidden" name="warehouse" value="5">';
+                    ?>
+                    $('#warehouse').val('5');
+                    <?php
+                    break;
+                case '3':
+                    // warehouse kerry
+                    // echo '<input type="hidden" name="warehouse" value="36">';
+                    ?>
+                    $('#warehouse').val('36');
+                    <?php
+                    break;
+                case '4':
+                    // warehouse kerry
+                    // echo '<input type="hidden" name="warehouse" value="36">';
+                    ?>
+                    $('#warehouse').val('36');
+                    <?php
+                    break;
+                case '5':
+                    // WMQT - คลังเครื่องทดสอบ
+                    // echo '<input type="hidden" name="warehouse" value="28">';
+                    ?>
+                    $('#warehouse').val('28');
+                    <?php
+                    break;
+            } ?>
+
+        $(document).on("submit", "form", function(e){
+
+            $.blockUI({ css: { 
+                border: 'none', 
+                padding: '15px', 
+                backgroundColor: '#000', 
+                '-webkit-border-radius': '10px', 
+                '-moz-border-radius': '10px', 
+                opacity: .5, 
+                color: '#fff' 
+            } });
+
+            // $.unblockUI();
+
+        });
+
+        $.ajax({
+                url: '<?php echo HOST.'warehouse/ajaxgetimgborrowing';?>',
+                type: 'POST',
+                data: {rq:'<?=$this->getDetailsRequest[0]['rq'];?>'},
+        })
+        .done(function(response) {
+            var obj_response = jQuery.parseJSON(response);
+
+            var count_index = 0;
+            $.each(obj_response['img_borrowing'], function( index, value ) {
+                count_index++;
+            });
+
+            if(count_index > 0){
+                $('#btn-image').removeClass('hide');
+            }
+
+        });
+
+        $('#btn-cancel-order').click(function(event) {
+
+            var person = prompt("กรุณาใส่เหตุผลการยกเลิก");
+
+            if (person == null || person == "") {
+
+            }else{
+                
+                $.ajax({
+                    url: '<?php echo HOST.'warehouse/request-cancel';?>',
+                    type: 'POST',
+                    data: {'id':'<?=$this->id?>','remark' : person},
+                    })
+                .done(function(response) {
+                    var obj_response = jQuery.parseJSON(response);
+                    console.log("success");
+
+                     switch(obj_response.status) {
+                        case 200:
+                            console.log('done');
+                            window.location.href = "<?php echo HOST.'warehouse/request-list';?>";
+                            break;
+                        case 400:
+                            alert(obj_response.message);
+                            break;
+                        default:
+                            location.reload();
+                    }
+                        
+                });
+
+            }
+        });
+
+        <?php for($i=0;$i<=10;$i++){ ?>
+        var retate_current_<?=$i;?> = 0;
+        var retate_<?=$i;?> = 90;
+
+        var zoom_status_<?=$i;?> = 'IN';
+
+        $('#img-borrowing_<?=$i;?>').live('click',function(event) {
+            if(zoom_status_<?=$i;?> == 'IN'){
+                zoom_status_<?=$i;?> = 'OUT';
+                var width = $('#img-borrowing_<?=$i;?>').width()+zoom;
+                var modal_width = $('#modal-show-borrowing').width()+zoom;
+                $('#modal-show-borrowing').animate({width: modal_width+"px"}, 'slow');
+                $('#img-borrowing_<?=$i;?>').animate({width: width+"px"}, 'slow');
+                $('#img-borrowing_<?=$i;?>').css({'cursor':'-webkit-zoom-out'});
+                return false;
+            }
+
+            if(zoom_status_<?=$i;?> == 'OUT'){
+                zoom_status_<?=$i;?> = 'IN';
+                var width = $('#img-borrowing_<?=$i;?>').width()-zoom;
+                var modal_width = $('#modal-show-borrowing').width()-zoom;
+                $('#modal-show-borrowing').animate({width: modal_width+"px"}, 'slow');
+                $('#img-borrowing_<?=$i;?>').css({'cursor':'-webkit-zoom-in'});
+                $('#img-borrowing_<?=$i;?>').animate({width: width+"px"}, 'slow');
+                return false;
+            }
+
+        });
+
+        $('#icon-imge-l_<?=$i;?>').live('click',function(event) {
+            retate_current_<?=$i;?> = retate_current_<?=$i;?>-retate_<?=$i;?>;
+
+            $('#img-borrowing_<?=$i;?>').css({
+                 '-moz-transform':'rotate('+retate_current_<?=$i;?>+'deg)',
+                 '-webkit-transform':'rotate('+retate_current_<?=$i;?>+'deg)',
+                 '-o-transform':'rotate('+retate_current_<?=$i;?>+'deg)',
+                 '-ms-transform':'rotate('+retate_current_<?=$i;?>+'deg)',
+                 'transform':'rotate('+retate_current_<?=$i;?>+'deg)'
+            });
+        });
+
+        $('#icon-imge-r_<?=$i;?>').live('click',function(event) {
+            retate_current_<?=$i;?> = retate_current_<?=$i;?>+retate_<?=$i;?>;
+
+            $('#img-borrowing_<?=$i;?>').css({
+                 '-moz-transform':'rotate('+retate_current_<?=$i;?>+'deg)',
+                 '-webkit-transform':'rotate('+retate_current_<?=$i;?>+'deg)',
+                 '-o-transform':'rotate('+retate_current_<?=$i;?>+'deg)',
+                 '-ms-transform':'rotate('+retate_current_<?=$i;?>+'deg)',
+                 'transform':'rotate('+retate_current_<?=$i;?>+'deg)'
+            });
+        });
+
+        $('#img-borrowing_<?=$i;?>').error(function() {
+        $(this).attr('src', 'http://www.nosun.co.za/wp-content/themes/sistina/core/assets/images/no-featured-175.jpg');
+
+        });
+
+        <?php } ?>
+        var zoom = 350;
+
+        var old_width = $('.img-borrowing').width();
+        var old_modal_width = $('#modal-show-borrowing').width();
+
+        $('#btn-image').click(function(event) {
+
+            $('#show-img').empty();
+
+            <?php for($i=0;$i<=10;$i++){ ?>
+
+            if(zoom_status_<?=$i;?> == 'OUT'){
+                zoom_status_<?=$i;?> = 'IN';
+                var width_<?=$i;?> = $('#img-borrowing_<?=$i;?>').width()-zoom;
+                var modal_width_<?=$i;?> = $('#modal-show-borrowing').width()-zoom;
+                $('#modal-show-borrowing').css({width: modal_width_<?=$i;?>+"px"});
+                $('#img-borrowing_<?=$i;?>').css({'cursor':'-webkit-zoom-in'});
+                $('#img-borrowing_<?=$i;?>').css({width: width_<?=$i;?>+"px"});
+              }
+
+              retate_current_<?=$i;?> = 0;
+
+              $('#modal').css({width: old_modal_width+"px"});
+              $('#img-borrowing_<?=$i;?>').css({width: old_width+"px"});
+
+              $('#img-borrowing_<?=$i;?>').css({
+                 '-moz-transform':'rotate('+retate_current_<?=$i;?>+'deg)',
+                 '-webkit-transform':'rotate('+retate_current_<?=$i;?>+'deg)',
+                 '-o-transform':'rotate('+retate_current_<?=$i;?>+'deg)',
+                 '-ms-transform':'rotate('+retate_current_<?=$i;?>+'deg)',
+                 'transform':'rotate('+retate_current_<?=$i;?>+'deg)'
+                });
+
+              <?php } ?>
+
+            var rq = $(this).data('rq');
+            
+            $('#modal-show-borrowing').modal();
+
+            $.ajax({
+                url: '<?php echo HOST.'warehouse/ajaxgetimgborrowing';?>',
+                type: 'POST',
+                data: {rq:rq},
+            })
+            .done(function(response) {
+                var obj_response = jQuery.parseJSON(response);
+                console.log("success");
+
+                var count_index = 0;
+                $.each(obj_response['img_borrowing'], function( index, value ) {
+                    // alert( index + ": " + value );
+                    console.log(value);
+                    $('#show-img').append('<table border=0 width="100%"><tr><td style="text-align:center"><img id="img-borrowing_'+count_index+'" class="img-borrowing" src="'+value+'" alt="Image" height="400" width="400"></td></tr></table><div align="center"><span><i class="icon-imge icon-mail-reply icon-3x" id="icon-imge-l_'+count_index+'"></i></span><span><i class="icon-imge icon-mail-forward icon-3x" id="icon-imge-r_'+count_index+'"></i></span></div><br/>');
+
+                    count_index++;
+
+                });
+
+            });
+        });
+
+    });
+</script>

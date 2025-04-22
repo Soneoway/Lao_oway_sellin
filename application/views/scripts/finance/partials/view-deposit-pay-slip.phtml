@@ -1,0 +1,96 @@
+<style type="text/css">
+    .icon-imge{
+    	padding: 0 20px;
+    	cursor: pointer;
+    }
+
+    #img-slip{
+    	cursor: -webkit-zoom-in;
+    }
+
+</style>
+
+<div class="modal-header" align="center">
+  <button type="button" class="close" data-dismiss="modal" aria-hidden="true">×</button>
+  <h3 id="myModalLabel">Payment Slip</h3>
+</div>
+<div class="modal-body">
+<table border=0 width="100%">
+  <?php 
+   $file_pay_slip = $this->file_pay_slip;
+      echo "<tr >";
+      echo    '<td style="text-align:center"><img id="img-slip" src="'.$file_pay_slip.'" alt="Payment Slip" height="400" width="400"></td>';
+      echo "</tr>";
+  ?>
+</table>
+<div align="center">
+	<span><i class="icon-imge icon-mail-reply icon-3x" id="icon-imge-l"></i></span>
+	<span><i class="icon-imge icon-mail-forward icon-3x" id="icon-imge-r"></i></span>
+</div>
+</div>
+<div class="modal-footer">
+  <button class="btn" data-dismiss="modal" aria-hidden="true">Close</button>
+</div>
+
+<script>
+	$(document).ready(function(){
+
+		var retate_current = 0;
+    	var retate = 90;
+
+    	var zoom_status = 'IN';
+    	var zoom = 350;
+    
+    	$('#img-slip').click(function(event) {
+    		if(zoom_status == 'IN'){
+    			zoom_status = 'OUT';
+    			var width = $('#img-slip').width()+zoom;
+    			var modal_width = $('#modal').width()+zoom;
+    			$('#modal').animate({width: modal_width+"px"}, 'slow');
+    			$('#img-slip').animate({width: width+"px"}, 'slow');
+    			$('#img-slip').css({'cursor':'-webkit-zoom-out'});
+    			return false;
+    		}
+
+    		if(zoom_status == 'OUT'){
+    			zoom_status = 'IN';
+    			var width = $('#img-slip').width()-zoom;
+    			var modal_width = $('#modal').width()-zoom;
+    			$('#modal').animate({width: modal_width+"px"}, 'slow');
+    			$('#img-slip').css({'cursor':'-webkit-zoom-in'});
+    			$('#img-slip').animate({width: width+"px"}, 'slow');
+    			return false;
+    		}
+
+    	});
+
+    	$('#icon-imge-l').click(function(event) {
+    		retate_current = retate_current-retate;
+
+    		$('#img-slip').css({
+			     '-moz-transform':'rotate('+retate_current+'deg)',
+			     '-webkit-transform':'rotate('+retate_current+'deg)',
+			     '-o-transform':'rotate('+retate_current+'deg)',
+			     '-ms-transform':'rotate('+retate_current+'deg)',
+			     'transform':'rotate('+retate_current+'deg)'
+			});
+    	});
+
+    	$('#icon-imge-r').click(function(event) {
+    		retate_current = retate_current+retate;
+
+    		$('#img-slip').css({
+			     '-moz-transform':'rotate('+retate_current+'deg)',
+			     '-webkit-transform':'rotate('+retate_current+'deg)',
+			     '-o-transform':'rotate('+retate_current+'deg)',
+			     '-ms-transform':'rotate('+retate_current+'deg)',
+			     'transform':'rotate('+retate_current+'deg)'
+			});
+    	});
+
+        $('#img-slip').error(function() {
+        $(this).attr('src', 'http://www.nosun.co.za/wp-content/themes/sistina/core/assets/images/no-featured-175.jpg');
+    });
+
+	});
+</script>

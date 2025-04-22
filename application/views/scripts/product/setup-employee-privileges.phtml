@@ -1,0 +1,527 @@
+<link href="<?=HOST?>public/css/bootstrap.modi.min.css" rel="stylesheet">
+<style type="text/css">
+input{
+    width: 70px;
+}
+textarea{
+    width: 100px;
+}
+</style> 
+
+<div class="page-header">
+    <h1>Setup Employee Privileges</h1>
+</div>
+
+<?php
+    if (isset($this->messages_success) and $this->messages_success)
+        foreach ($this->messages_success as $message):
+            echo '<div class="alert alert-success">'.$message.'</div>';
+        endforeach;
+
+    if (isset($this->messages) and $this->messages)
+        foreach ($this->messages as $message):
+            echo '<div class="alert alert-error">'.$message.'</div>';
+        endforeach;
+?>
+
+<!-- Modal -->
+<div class="modal fade" id="modal_add" data-backdrop="static" role="dialog">
+    <div class="modal-dialog">
+
+        <!-- Modal content-->
+        <div class="modal-content">
+            <div class="modal-header">
+              <button type="button" class="close" data-dismiss="modal">&times;</button>
+              <h4 class="modal-title">Add Product</h4>
+            </div>
+            <div class="modal-body">
+            
+            <label>Company</label>
+            <select id="company_id">
+                <option value="">Choose</option>
+                <option value="1">OPPO</option>
+                <option value="2">ONEPLUS</option>
+            </select>
+
+            <label>Category</label>
+            <select id="cat_id">
+                <option value="">Choose</option>
+                <option value="11">Phone</option>
+                <option value="12">Accessories</option>
+            </select>
+
+            <label>Product</label>
+            <select id="good_id">
+                <option value="">Choose</option>
+                <?php if ($this->goods): foreach ($this->goods as $key=> $item):?>
+                    <option value="<?php echo $key;?>" <?php if (isset($this->params['good_id']) and $key==$this->params['good_id']):?> selected<?php endif;?>><?php echo $item;?></option>
+                <?php endforeach; endif;?>
+            </select>
+
+            <label>Color</label>
+            <select id="good_color">
+                <option value="">Choose</option>
+                <?php if ($this->goodColors): foreach ($this->goodColors as $key=>$item):?>
+                    <option value="<?php echo $key;?>" <?php if (isset($this->params['good_color']) and $key==$this->params['good_color']):?> selected<?php endif;?>><?php echo $item;?></option>
+                <?php endforeach; endif;?>
+            </select>
+
+            <hr>
+
+            <span>Special Product :</span>
+            <input style="margin-left: 5px;" id="checkbox_special_product_add" type="checkbox" >
+            <hr>
+
+            <span>EOL :</span>
+            <input style="margin-left: 5px;" id="checkbox_eol_add" type="checkbox" onclick="hideShowEOL('add')">
+            <br>
+            <span style="margin-top: 5px;">EOL Price :</span>
+            <input style="margin-top: 10px;margin-left: 5px;width: 135px;" id="eol_price_add" type="number" value="0" readonly>
+
+            <hr>
+
+            <label>Warehouse</label>
+            <select id="warehouse_add">
+                <option value="">Please select</option>
+                <?php foreach ($this->warehouses_cache as $id=>$name){ ?>
+                    <option value="<?php echo $id;?>"><?php echo $name;?></option>
+                <?php } ;?>
+            </select>
+
+            <label>Start Date</label>
+            <input style="width: 210px;" id="start_date_add" type="text" class="date" value="">
+
+            <label>Remark</label>
+            <textarea style="width: 210px;" id="remark_add" rows="3"></textarea>
+                
+            </div>
+            <div class="modal-footer">
+                <button type="button" id="btn-add-product" class="btn btn-success pull-left">Confirm</button>
+                <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+            </div>
+        </div>
+    </div>
+</div>
+
+<div class="container">
+    <br />
+    <form role="form" id="form" action="<?php echo HOST.'product/setup-employee-privileges';?>" method="post" >
+
+        <div class="row">
+            <div class="control-group">
+
+                <div class="span4">
+                    <button type="button" class="btn btn-primary" data-toggle="modal" data-target="#modal_add">Add Product</button>
+                    <br>
+                    <br>
+                </div>
+
+                <table class="table" border="0" style="margin-left: 33px;">
+                    <tr>
+                        <td>No.</td>
+                        <td>Company Name</td>
+                        <td>Good Name</td>
+                        <td>Good Color Name</td>
+                        <td>Special Product</td>
+                        <td>EOL</td>
+                        <td>EOL Price</td>
+                        <td>Warehouse</td>
+                        <td>Start Date</td>
+                        <td>Remark</td>
+                        <td>Update Date</td>
+                        <td>Action</td>
+                        <td>Order Pending</td>
+                    </tr>
+
+                    <?php
+                    foreach ($this->get_ep_pqp as $key => $value) {
+                        ?>
+
+                        <tr>
+                            <td><?php echo $key+1;?>
+                            <input id="no_<?php echo $value['ids'];?>" type="hidden" value="<?php echo $key+1;?>">
+                        </td>
+                            <td><?php //echo $this->goods_cache[$value['good_id']];
+                            echo $value['company_name'];
+                            ?></td>
+                            <td><?php //echo $this->goods_cache[$value['good_id']];
+                            echo $value['good_full_name'];
+                            ?></td>
+                            <td><?php //echo $this->goods_cache[$value['good_id']];
+                            echo $value['good_color_name'];
+                            ?></td>
+                            <td><input id="checkbox_sp_<?php echo $value['ids'];?>" type="checkbox" onclick="hideShowEOL('<?php echo $value['ids'];?>')" <?php if($value['special_product']){echo 'checked';} ?> onchange="useBtnUpdate(<?php echo $value['ids'];?>)" disabled></td>
+                            <td><input id="checkbox_eol_<?php echo $value['ids'];?>" type="checkbox" onclick="hideShowEOL('<?php echo $value['ids'];?>')" <?php if($value['EOL']){echo 'checked';} ?> onchange="useBtnUpdate(<?php echo $value['ids'];?>)" disabled></td>
+                            <td><input id="eol_price_<?php echo $value['ids'];?>" type="number" value="<?php if($value['price']){echo $value['price'];}else{echo '0';}?>" <?php if(!$value['EOL']){echo 'readonly';}?> onchange="useBtnUpdate(<?php echo $value['ids'];?>)"></td>
+                            <td>
+                                <select id="temp_warehouse_<?php echo $value['ids'];?>" onchange="useBtnUpdate(<?php echo $value['ids'];?>)" disabled>
+                                    <option value="">Please select</option>
+                                    <?php foreach ($this->warehouses_cache as $id=>$name){ ?>
+                                        <option value="<?php echo $id;?>" <?php if (($id == $value['warehouse_id'])):?> selected<?php endif;?>><?php echo $name;?></option>
+                                    <?php } ;?>
+                                </select>
+                                <input type="hidden" id="warehouse_<?php echo $value['ids'];?>" value="<?php echo $value['warehouse_id'];?>">
+                            </td>
+                            <td><input id="start_date_<?php echo $value['ids'];?>" type="text" class="date" value="<?php echo $value['start_date'];?>" onchange="useBtnUpdate(<?php echo $value['ids'];?>)"></td>
+                            <td><textarea id="remark_<?php echo $value['ids'];?>" rows="3" onchange="useBtnUpdate(<?php echo $value['ids'];?>)"><?php echo $value['remark'];?></textarea></td>
+                            <td><?php 
+                            if($value['update_date']){
+                                echo $value['update_date'];
+                            }else{
+                                echo $value['create_date'];
+                            }
+                            ?></td>
+                            <td>
+                                <button id="btnUpdate_<?php echo $value['ids'];?>" title="Update" type="button" class="btn btn-success" onclick="update_data('<?php echo $value['ids'];?>')" disabled> <i class="icon-save"></i></button>
+                                <button title="Delete" type="button" class="btn btn-danger" onclick="del_data('<?php echo $value['company_id'];?>','<?php echo $value['ids'];?>')"> <i class="icon-trash"></i></button>
+                            </td>
+                            <td>
+                                <span><?php if(isset($value['order_pending']) && $value['order_pending']){echo $value['order_pending'];}else{echo '0';}?></span>
+                            </td>
+                        </tr>
+
+                    <?php } ?>
+                </table>
+
+            </div>
+            <div class="clearfix"></div>
+        </div>
+    </form>
+</div>
+
+<script type="text/javascript" src="/js/jquery-ui-1.8.12.custom.min.js"></script>
+<link rel="stylesheet" type="text/css" href="/css/jquery-ui-1.8.12.custom.css"/>
+<script src="/js/jquery.blockUI.js"></script>
+<script type="text/javascript">
+
+    function reload() {
+        location.reload();
+    }
+
+    $(document).ajaxStart(function(){
+        $.blockUI({ css: { 
+            border: 'none', 
+            padding: '15px', 
+            backgroundColor: '#000', 
+            '-webkit-border-radius': '10px', 
+            '-moz-border-radius': '10px', 
+            opacity: .5, 
+            color: '#fff' 
+        } });
+    });
+
+    $(document).ajaxStop(function(){
+        $.unblockUI();
+    });
+
+    $(document).ready(function () {
+
+        $( '.date' ).datepicker({ dateFormat: "yy-mm-dd" });
+        
+        $("*").keypress(function(event){  
+           if(event.keyCode==13){  
+            return false;  
+        }
+
+    });
+
+        $('.number').keypress(function(event) {
+            if (event.which != 46 && (event.which < 47 || event.which > 59))
+            {
+                event.preventDefault();
+                if ((event.which == 46) && ($(this).indexOf('.') != -1)) {
+                    event.preventDefault();
+                }
+            }
+        });
+
+    });
+
+    function update_data(id){
+
+        $('.alert').addClass('hide');
+
+        var no = $('#no_'+id).val();
+
+        var eol = 0;
+        if($('#checkbox_eol_'+id).is(':checked')){
+            eol = 1;
+        }
+
+        var eol_price = $('#eol_price_'+id).val();
+        var warehouse = $('#warehouse_'+id).val();
+        var start_date = $('#start_date_'+id).val();
+        var remark = $('#remark_'+id).val();
+
+        if(!warehouse){
+            alert('Please select warehouse [No.'+no+']');
+            $('#warehouse_'+id).focus();
+            return false;
+        }
+
+        if(!start_date){
+            alert('Please select start date [No.'+no+']');
+            $('#start_date_'+id).focus();
+            return false;
+        }
+
+        if(eol && eol_price < 1){
+            alert('Please input EOL Price more than 0 [No.'+no+']');
+            $('#eol_price_'+id).focus();
+            return false;
+        }
+
+        if (!confirm('You confirm to update')) {
+            return false;
+        }
+
+        $.ajax({
+            url: '<?php echo HOST.'product/save-employee-privileges';?>',
+            type: 'POST',
+            data: {id:id, eol:eol, eol_price:eol_price, warehouse:warehouse, start_date:start_date, remark:remark},
+        })
+        .done(function(response) {
+            var obj_response = jQuery.parseJSON(response);
+            console.log("success");
+
+            switch(obj_response.status){
+                case 200:
+                console.log('done');
+                $('#btnUpdate_'+id).attr('disabled', true);
+                alert('Update Done.');
+                break;
+                case 400:
+                alert(obj_response.message);
+                break;
+                default:
+                location.reload();
+            }
+
+        });
+
+    }
+
+    function del_data(company_id,id){
+
+        $('.alert').addClass('hide');
+
+        if (!confirm('You confirm to delete.')) {
+            return false;
+        }
+
+        $.ajax({
+            url: '<?php echo HOST.'product/del-employee-privileges';?>',
+            type: 'POST',
+            data: {company_id:company_id,id:id},
+        })
+        .done(function(response) {
+            var obj_response = jQuery.parseJSON(response);
+            console.log("success");
+
+            switch(obj_response.status) {
+                case 200:
+                console.log('done');
+                location.reload();
+                break;
+                case 400:
+                alert(obj_response.message);
+                break;
+                default:
+                location.reload();
+            }
+
+        });
+    }
+
+    function hideShowEOL(id){
+
+        $('.alert').addClass('hide');
+
+        $('#eol_price_'+id).attr('readonly', true);
+        $('#eol_price_'+id).val('0');
+
+        if($('#checkbox_eol_'+id).is(':checked')){
+            $('#eol_price_'+id).removeAttr('readonly');
+            $('#eol_price_'+id).val('0');
+        }else{
+            $('#eol_price_'+id).attr('readonly', true);
+            $('#eol_price_'+id).val('0');
+        }
+
+    }
+ 
+
+    function useBtnUpdate(id){
+        $('.alert').addClass('hide');
+        $('#btnUpdate_'+id).removeAttr('disabled');
+    }
+
+    $('#company_id,#cat_id, #good_id').change(function(){
+
+        $('.alert').addClass('hide');
+
+        $(this).after('<span class="loading"></span>');
+        var _self = $(this);
+        var company_id = $('#company_id').val();
+        var cat_id = $('#cat_id').val();
+
+        if (_self.attr('id')=='company_id')
+        {
+            $('#good_id').find('option:not(:first)').remove();
+        }
+
+        if (_self.attr('id')=='cat_id')
+        {
+            $('#good_id').find('option:not(:first)').remove();
+        }
+
+        var good_id = $('#good_id').val();
+
+        $('#good_color').find('option:not(:first)').remove();
+
+        $('#num, #price').val('');
+
+        $.get("/get/load-staff-product",
+            {company_id: company_id,cat_id: cat_id, good_id: good_id}
+            ,function(data,status){
+                var data = $.parseJSON( data );
+                if (data.goods){
+                    var obj = data.goods;
+                    for (var i = 0; i < obj.length; i++) {
+                        $('#good_id').append('<option value="'+obj[i]['id']+'">'+obj[i]['name']+'</option>');
+                    }
+                }
+                if (data.colors){
+                    var obj = data.colors;
+                    for (var i = 0; i < obj.length; i++) {
+                        $('#good_color').append('<option value="'+obj[i]['id']+'">'+obj[i]['name']+'</option>');
+                    }
+                }
+                _self.nextAll('.loading').remove();
+            });
+    });
+
+
+    $('#company_id').change(function(){
+
+        $('.alert').addClass('hide');
+
+        $(this).after('<span class="loading"></span>');
+        var _self = $(this);
+        var company_id = $('#company_id').val();
+
+        if (_self.attr('id')=='company_id')
+        {
+            $('#warehouse_add').find('option:not(:first)').remove();
+        }
+
+        $.get("/get/load-staff-warehouse",
+            {company_id: company_id}
+            ,function(data,status){
+                var data = $.parseJSON( data );
+                if (data.warehouse){
+                    var obj = data.warehouse;
+                    for (var i = 0; i < obj.length; i++) {
+                        $('#warehouse_add').append('<option value="'+obj[i]['id']+'">'+obj[i]['name']+'</option>');
+                    }
+                }
+                
+                _self.nextAll('.loading').remove();
+            });
+    });
+
+    $('#btn-add-product').click(function(event) {
+
+        $('.alert').addClass('hide');
+
+        var company_id = $('#company_id').val();
+        var cat_id = $('#cat_id').val();
+        var good_id = $('#good_id').val();
+        var good_color = $('#good_color').val();
+
+        var eol = 0;
+        if($('#checkbox_eol_add').is(':checked')){
+            eol = 1;
+        }
+
+        var special_product = 0;
+        if($('#checkbox_special_product_add').is(':checked')){
+            special_product = 1;
+        }
+
+        var eol_price = $('#eol_price_add').val();
+        var warehouse = $('#warehouse_add').val();
+        var start_date = $('#start_date_add').val();
+        var remark = $('#remark_add').val();
+
+        if(!company_id){
+            alert('Please select company');
+            $('#company_id').focus();
+            return false;
+        }
+
+        if(!cat_id){
+            alert('Please select category');
+            $('#cat_id').focus();
+            return false;
+        }
+
+        if(!good_id){
+            alert('Please select product');
+            $('#good_id').focus();
+            return false;
+        }
+
+        if(!good_color){
+            alert('Please select color');
+            $('#good_color').focus();
+            return false;
+        }
+
+        if(eol && eol_price < 1){
+            alert('Please input EOL Price more than 0');
+            $('#eol_price_add').focus();
+            return false;
+        }
+
+        if(!warehouse){
+            alert('Please select warehous');
+            $('#warehouse_add').focus();
+            return false;
+        }
+
+        if(!start_date){
+            alert('Please select start date');
+            $('#start_date_add').focus();
+            return false;
+        }
+
+        if (!confirm('You confirm to create')) {
+            return false;
+        }
+
+        $.ajax({
+        url: '<?php echo HOST.'product/create-employee-privileges';?>',
+        type: 'POST',
+        data: {company_id:company_id,cat_id:cat_id, good_id:good_id, good_color:good_color, special_product:special_product,eol:eol, eol_price:eol_price, warehouse:warehouse, start_date:start_date, remark:remark},
+        })
+        .done(function(response) {
+            var obj_response = jQuery.parseJSON(response);
+            console.log("success");
+
+            switch(obj_response.status) {
+                case 200:
+                console.log('done');
+                $('#modal_add').modal('hide');
+                location.reload();
+                break;
+                case 400:
+                alert(obj_response.message);
+                break;
+                default:
+                location.reload();
+            }
+        });
+    });
+
+</script>

@@ -1,0 +1,286 @@
+<div class="page-header">
+    <h1>Confirm BVG Order</h1>
+</div>
+<style>
+    tr td:first-child {
+        width: 20%;
+    }
+</style>
+<?php
+    if (isset($this->warning) and $this->warning)
+        foreach ($this->warning as $message):
+            echo '<div class="alert alert-block">'.$message.'</div>';
+        endforeach;
+
+    if (isset($this->error) and $this->error)
+        foreach ($this->error as $message):
+            echo '<div class="alert alert-error">'.$message.'</div>';
+        endforeach;
+?>
+<div class="row">
+    <div class="span12">
+        <form role="form" id="form" action="<?php echo HOST.'bvg/bvg-save';?>" method="post" class="form-horizontal">
+
+            <div class="row">
+
+                <div class="span6">
+                    <label class="span4" >Retailer name <span style="color: red">*</span>
+                        <input type='text' class="span4" name='SearchBox' id="SearchBox" placeholder="Search" autocomplete="off" />
+                        <select name="distributor_id" class="span4" id="distributor_id" required="required" size="5">
+                            <option value="">Please select</option>
+                            <?php
+                            foreach($this->distributors as $distributor):
+                                $selected = '';
+                                if(isset($this->market['d_id']) and $distributor['id'] == $this->market['d_id']){
+                                    $selected = 'selected';
+                                }
+                                echo '<option '.$selected.' value="'.$distributor['id'].'">'.$distributor['title'].'</option>';
+                            endforeach;
+                            ?>
+                        </select>
+                    </label>
+
+                    <!--bvg -->
+                    <?php if ($this->sales_product):?>
+
+                        <?php foreach ($this->sales_product as $kitem => $item):
+                            $sale = $item['sale'];
+                            $goods = $item['goods'];
+                            ?>
+
+                            <div class="" >
+                                <div class="span12">
+                                    <label class="span2">Joint Circular <span style="color: red">*</span>
+                                        <select class="span2 joint" name="joint[]" required="required" >
+                                            <option value="">Please select</option>
+                                            <?php foreach ($this->joint as $k => $v):?>
+                                                <option value="<?php echo $k;?>" <?php if ($k == $sale->joint):?>selected<?php endif;?>><?php echo $v;?></option>
+                                            <?php endforeach;?>
+                                        </select>
+                                    </label>
+
+
+                                    <label class="span2">Product <span style="color: red">*</span>
+                                        <select class="span2 good_id" name="good_id_bvg[]" required="required">
+                                            <option value="">Please select</option>
+                                            <?php foreach ($goods as $good):?>
+                                                <option  value="<?php echo $good->id;?>" <?php if ($good->id == $sale->good_id):?> selected<?php endif;?>><?php echo $good->name;?></option>
+                                            <?php endforeach;?>
+                                        </select>
+                                    </label>
+
+                                    <label class="span2">Price <span style="color: red">*</span>
+                                        <input type="text" readonly min="1" required="required" class="span2 price_bvg" name="price_bvg[]" value="<?php printf(My_Number::f($sale->price));?>" />
+                                    </label>
+
+                                    <label class="span2">Quantity <span style="color: red">*</span>
+                                        <input type="number" min="1" class="span2 num_bvg" name="num_bvg[]" required="required" maxlength="5" value="<?php printf($sale->num);?>" />
+                                    </label>
+
+                                    <label class="span2">Total<span style="color: red">*</span>
+                                        <input type="text" readonly min="0" required="required" class="span2 total_bvg" name="total_bvg[]" value="<?php printf(My_Number::f($sale->total));?>" />
+                                    </label>
+
+                                    <label class="span1">&nbsp;<button type="button" class="btn-danger remove-sales"><i class="icon-minus"></i></button></label>
+
+
+                                  <!--  <label class="span12">
+                                        <select  name="bvg_imei[]" class="bvg_imei"  readonly multiple="multiple" size="5" >
+                                            <?php if(isset($this->imei) and $this->imei):
+                                                $list_imei = array();
+                                                ?>
+                                                <?php foreach($this->imei[$kitem] as $k => $v ) :
+                                                $list_imei[] = $v['id'];
+                                                ?>
+
+                                                <option selected="selected" value="<?php echo $v['id'] ?>"> <?php echo $v['imei_sn'] ?></option>
+
+                                            <?php endforeach; endif; ?>
+                                        </select>
+                                    </label>-->
+                                   
+                                    <input type="hidden" name="ids_bvg[]" class="ids"  value="<?php if(isset($sale->id)) echo $sale->id;?>" />
+                                </div>
+                            </div>
+
+                        <?php endforeach;endif;?>
+                    <!--end bvg-->
+
+                    <!-- bvg accessories -->
+
+                    <?php if ($this->bvg_accessories):?>
+
+                    <?php foreach ($this->bvg_accessories as $kitem => $item): ?>
+
+                     <div class="row">
+                             <div class="span12">
+                                 <label class="span2">Joint Circular (Accessories)<span style="color: red">*</span>
+                                     <select readonly class="span2 joint_accessories" name="joint_accessories[]" required="required">
+                                         <option value="">Please select</option>
+                                         <?php foreach ($this->joint_accessories as $k => $v):?>
+                                             <option <?php if(isset($item['joint_id']) and $item['joint_id'] == $k) echo 'selected'; ?> value="<?php echo $k;?>"><?php echo $v;?></option>
+                                         <?php endforeach;?>
+                                     </select>
+                                 </label>
+
+                                 <label class="span2">Product <span style="color: red">*</span>
+                                     <select readonly class="span2 good_id_bvg_accessories" name="good_id_bvg[]" required="required">
+                                         <option value="">Please select</option>
+                                         <?php foreach ($this->goods_cache as $k => $v):?>
+                                             <option  value="<?php echo $k;?>" <?php if ($k == $item['good_id']):?> selected<?php endif;?>><?php echo $v;?></option>
+                                         <?php endforeach;?>
+                                     </select>
+                                 </label>
+
+                                 <label class="span2">Quantity <span style="color: red">*</span>
+                                     <input type="number" min="1" class="span2 num_bvg" readonly name="num_bvg[]" required="required" maxlength="5" value="<?php if(isset($item) and $item['total_qty']) echo $item['total_qty'] ?>" />
+                                 </label>
+
+                                 <label class="span2">Total<span style="color: red">*</span>
+                                     <input type="text" min="0" required="required" readonly class="span2 total_bvg total_new" name="total_bvg[]" value="<?php if(isset($item) and $item['total_price']) echo $item['total_price'] ?>" />
+                                 </label>
+
+                                 <label class="span1">&nbsp;<button type="button" class="btn-danger remove-accessories"><i class="icon-minus"></i></button></label>
+
+                             </div>
+                     </div>
+
+                    <?php endforeach; endif;?>
+
+                    <!-- end bvg accessories -->
+
+
+
+                </div>
+
+                <div class="span6">
+
+                    <label class="span4" for="warehouse_id">Warehouse <span style="color: red">*</span>
+                        <select id="warehouse_id" class="span4" name="warehouse_id" required="required">
+                            <option value="">Please select</option>
+                            <?php foreach ($this->warehouses as $warehouse):?>
+                                <option value="<?php echo $warehouse->id;?>" <?php if (isset($this->market) and $warehouse->id == $this->market['warehouse_id']):?> selected<?php endif;?>><?php echo $warehouse->name;?></option>
+                            <?php endforeach;?>
+                        </select>
+                    </label>
+
+
+
+                    <div class="clearfix"></div>
+
+                </div>
+
+            </div>
+
+            <div class="row">
+                <div class="span6">
+                    <div class="span6">
+                        <p><button type="button" id="btn-calculate" class="btn btn-warning add-bvg">Create BVG</button></p>
+                    </div>
+                </div>
+            </div>
+
+            <div class="row">
+                <div class="span6">
+                    <div class="span6">
+                        <p><button type="button" id="btn-calculate-accessories" class="btn btn-success add-accessories">Create BVG (Accessories)</button></p>
+                    </div>
+                </div>
+            </div>
+
+
+	        <div class="row">
+		        <div class="span4">
+                    <input type="hidden" name="sn" value="<?php isset($this->market) and $this->market and printf($this->market['sn']);?>">
+		            <input type="hidden" id="back_url" name="back_url" value="/bvg/list-payment">
+                    <input  type="hidden" id="type" name="type" value="" />
+		            <button type="submit" class="btn btn-primary">Submit</button>
+		            <button type="button" class="btn btn-danger go-back">Go back</button>
+                    <button type="button" id="check" class="btn btn-success search">Check</button>
+		        </div>
+	        </div>
+        </form>
+    </div>
+
+</div>
+</div>
+
+
+
+<!-- bvg -->
+<div class="div-bvg" style="display: none;">
+    <div class="span12">
+        <label class="span2">Joint Circular <span style="color: red">*</span>
+            <select class="span2 joint" name="joint[]" required="required" disabled>
+                <option value="">Please select</option>
+                <?php foreach ($this->joint as $k => $v):?>
+                    <option value="<?php echo $k;?>"><?php echo $v;?></option>
+                <?php endforeach;?>
+            </select>
+        </label>
+
+
+        <label class="span2">Product <span style="color: red">*</span>
+            <select class="span2 good_id_bvg" name="good_id_bvg[]" required="required" disabled>
+                <option value="">Please select</option>
+            </select>
+        </label>
+
+        <label class="span2">Price <span style="color: red">*</span>
+            <input type="text" min="1" required="required" class="span2 price_bvg" readonly name="price_bvg[]" disabled />
+        </label>
+
+        <label class="span2">Quantity <span style="color: red">*</span>
+            <input type="number" min="1" class="span2 num_bvg" name="num_bvg[]" required="required" maxlength="5" disabled />
+        </label>
+
+        <label class="span2">Total<span style="color: red">*</span>
+            <input type="text" min="0" required="required" readonly class="span2 total_bvg total_new" name="total_bvg[]" disabled />
+        </label>
+
+        <label class="span1">&nbsp;<button type="button" class="btn-danger remove-sales"><i class="icon-minus"></i></button></label>
+
+       
+        <input type="hidden" name="ids_bvg[]" class="ids" disabled="disabled" />
+    </div>
+</div>
+<!-- end bvg -->
+
+
+<!-- bvg phu kien -->
+<div class="div-accessories" style="display: none;">
+    <div class="span12">
+
+        <label class="span2">Joint Circular (Accessories)<span style="color: red">*</span>
+            <select class="span2 joint_accessories" name="joint_accessories[]" required="required" disabled>
+                <option value="">Please select</option>
+                <?php foreach ($this->joint_accessories as $k => $v):?>
+                    <option value="<?php echo $k;?>"><?php echo $v;?></option>
+                <?php endforeach;?>
+            </select>
+        </label>
+
+        <label class="span2">Product <span style="color: red">*</span>
+            <select class="span2 good_id_bvg_accessories" name="good_id_bvg[]" required="required" disabled>
+                <option value="">Please select</option>
+            </select>
+        </label>
+
+        <label class="span2">Quantity <span style="color: red">*</span>
+            <input type="number" min="1" class="span2 num_bvg" readonly name="num_bvg[]" required="required" maxlength="5" disabled />
+        </label>
+
+        <label class="span2">Total<span style="color: red">*</span>
+            <input type="text" min="0" required="required" readonly class="span2 total_bvg total_new" name="total_bvg[]" disabled />
+        </label>
+
+        <label class="span1">&nbsp;<button type="button" class="btn-danger remove-accessories"><i class="icon-minus"></i></button></label>
+
+
+        <input type="hidden" name="ids_bvg_accessories[]" class="ids" disabled="disabled" />
+    </div>
+</div>
+</div>
+<!-- end bvg -->
+
+<?php  echo $this->render('bvg/partials/script.phtml'); ?>

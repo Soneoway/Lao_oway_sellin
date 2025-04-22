@@ -1,0 +1,93 @@
+<form class="form-search form-horizontal" method="get" action="<?php echo HOST ?>finance/sales">
+    <div class="row">
+        <div class="span5">
+            <div class="control-group">
+                <label for="sn" class="span2">Sales Order Number</label>
+                <input id="sn" name="sn" type="text" class="input-medium search-query form-control" value="<?php isset($this->params['sn']) and printf($this->params['sn']);?>">
+            </div>
+
+        </div>
+        <div class="span5">
+            <div class="control-group">
+                <label class="span2">Retailer Name
+                    <input type='text' class="span4" name='SearchBox' id="SearchBox" placeholder="Search" autocomplete="off" />
+                    <select name="d_id" id="d_id" class="span3" size="5" async>
+                        <option value="">Choose</option>
+                        <?php if (isset($this->distributors) && $this->distributors): foreach ($this->distributors as $id=>$distributor):?>
+                            <option value="<?php echo $id;?>" <?php if (isset($this->params['d_id']) and $id==$this->params['d_id']):?> selected="selected"<?php endif;?>><?php echo $distributor['store_code'] . ' - '. $distributor['title'];?></option>
+                        <?php endforeach; endif;?>
+                    </select>
+                </label>
+            </div>
+
+        </div>
+    </div>
+    <div class="row">
+        <div class="span5">
+            <div class="control-group">
+                <label for="warehouse_id" class="span2">Warehouse</label>
+                <select id="warehouse_id" class="span3" name="warehouse_id">
+                    <option value="">Choose</option>
+                    <?php if ($this->warehouses_cached): foreach ($this->warehouses_cached as $id=>$name):?>
+                        <option value="<?php echo $id;?>" <?php if (isset($this->params['warehouse_id']) and $id==$this->params['warehouse_id']):?> selected<?php endif;?>><?php echo $name;?></option>
+                    <?php endforeach; endif;?>
+                </select>
+            </div>
+
+            <div class="control-group">
+                <label for="cat_id" class="span2">Product Category</label>
+                <select id="cat_id" class="span3" name="cat_id">
+                    <option value="">Choose</option>
+                    <?php if ($this->good_categories): foreach ($this->good_categories as $id=>$name):?>
+                        <option value="<?php echo $id;?>" <?php if (isset($this->params['cat_id']) and $id==$this->params['cat_id']):?> selected<?php endif;?>><?php echo $name;?></option>
+                    <?php endforeach; endif;?>
+                </select>
+            </div>
+
+            <div class="control-group">
+                <label for="good_id" class="span2">Product</label>
+                <select id="good_id" class="span3" name="good_id">
+                    <option value="">Choose</option>
+                    <?php if ($this->goods): foreach ($this->goods as $key=> $item):?>
+                        <option value="<?php echo $key;?>" <?php if (isset($this->params['good_id']) and $key==$this->params['good_id']):?> selected<?php endif;?>><?php echo $item;?></option>
+                    <?php endforeach; endif;?>
+                </select>
+            </div>
+
+            <div class="control-group">
+                <label for="good_color" class="span2">Color</label>
+                <select id="good_color" class="span3" name="good_color">
+                    <option value="">Choose</option>
+                    <?php if ($this->goodColors): foreach ($this->goodColors as $key=>$item):?>
+                        <option value="<?php echo $key;?>" <?php if (isset($this->params['good_color']) and $key==$this->params['good_color']):?> selected<?php endif;?>><?php echo $item;?></option>
+                    <?php endforeach; endif;?>
+                </select>
+            </div>
+
+            
+        </div>
+        <div class="span5">
+            <div class="control-group">
+                <label for="created_at_from" class="span2">Order Time From</label>
+                <input type="text" class="form-control search-query date" id="created_at_from" name="created_at_from" value="<?php isset($this->params['created_at_from']) and printf($this->params['created_at_from']);?>">
+            </div>
+            <div class="control-group">
+                <label for="created_at_to" class="span2">Order Time To</label>
+                <input type="text" class="form-control search-query date" id="created_at_to" name="created_at_to" value="<?php isset($this->params['created_at_to']) and printf($this->params['created_at_to']);?>">
+            </div>
+            <div class="control-group">
+                <label for="myTags" class="span2">Tags</label>
+                <ul class="form-control span3" id="myTags"><?php
+                    if (isset($this->params['tags']) and $this->params['tags']):
+                        foreach ($this->params['tags'] as $ta)
+                            echo '<li>'.$ta.'</li>';
+                    endif;
+                    ?></ul>
+            </div>
+        </div>
+    </div>
+
+    <button type="submit" class="btn btn-primary">Search</button>
+    <button type="reset" class="btn btn-warning">Reset</button>
+    <button type="submit" name="export" value="1" class="btn btn-success">Export</button>
+</form>

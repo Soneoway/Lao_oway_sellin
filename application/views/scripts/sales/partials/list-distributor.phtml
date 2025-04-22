@@ -1,0 +1,207 @@
+<?php 
+    $userStorage = Zend_Auth::getInstance()->getStorage()->read(); 
+?>
+
+<table class="table table-bordered">
+    <thead>
+        <tr>
+            <td style="text-align: center; color:black; font-weight:bold; width:8%;">DISTRIBUTOR CODE</td>
+            <td style="text-align: center; color:black; font-weight:bold; width:15%;">DISTRIBUTOR NAME</td>
+            <td style="text-align: center; color:black; font-weight:bold; width:18%;">SUPERIOR DISTRIBUTOR</td>
+            <td style="text-align: center; color:black; font-weight:bold; width:12%;">CLIENTS NAME</td>
+            <td style="text-align: center; color:black; font-weight:bold; width:6%;">TYPE</td>
+            <td style="text-align: center; color:black; font-weight:bold; width:7%;">STORES QUANTITY</td>
+            <td style="text-align: center; color:black; font-weight:bold; width:4%;">PRICE SYSTEM</td>
+            <td style="text-align: center; color:black; font-weight:bold; width:10%;">PROVINCE</td>
+            <td style="text-align: center; color:black; font-weight:bold; width:10%;">STATUSR</td>
+            <td style="text-align: center; color:black; font-weight:bold; width:10%;">ACTION</td>
+
+            <!-- <?php echo $this->sorting(array(
+                'distributor code' => 'DISTRIBUTOR CODE',
+                'title' => 'DISTRIBUTOR',
+                'SUPERIOR DISTRIBUTOR',
+                'AFFILIATED CLIENTS',
+                'DISTRIBUTOR TYPE',
+                // 'TOTAL STORE QUANTITY',
+                'COOPERATIVE STORES QUANTITY',
+                'PRICE SYSTEM',
+                'province',
+                // 'EXTERNAL SERIAL NUMBER',
+                'STATUSR',
+                'ACTION'
+            ),
+            $this->url, $this->current_col, $this->desc); ?> -->
+
+        </tr>
+    </thead>
+    <tbody>
+        <?php if(isset($this->distributors) and $this->distributors) : ?>
+            <?php foreach ($this->distributors as $k => $distributor) : ?>
+                <?php
+                $QDistributor = new Application_Model_Distributor();
+                $distributor_data = $QDistributor->getSuperiorDistributor($distributor['warehouse_id']);
+
+                switch ($distributor['distributor_type']) {
+                    case 1:
+                    $type = "Regional Distributor";
+                    break;
+                    case 2:
+                    $type = "Affilate";
+                    break;
+                    case 3:
+                    $type = "Retailer";
+                    break;
+                    default:
+                    $type ="Exclusive Distributor";
+                    break;
+                }
+
+                if($distributor['status'] == 1) {
+                    $status = '<span style="color: green"> In Cooperation </span>';
+                }else if($distributor['status'] == 2) {
+                    $status = '<span style="color: orange"> Suspend Cooperation</span>';
+                }else if($distributor['status'] == 3) {
+                    $status = '<span style="color: red"> Close </span>';
+                }
+
+                ?>
+
+                <tr>
+                    <td><?php echo $distributor['distributor_code'] ?></td>
+                    <td><a href="<?php echo HOST ?>sales/create-distributor?id=<?php echo $distributor['id'];?>"><?php echo $distributor['title'] ?> </a></td>
+                    <td><?php echo $distributor_data[0]['title'] ?></td>
+                    <td><?php echo $distributor['client_name'] ?></td>
+                    <td style="text-align: center;"><?php echo $type ?></td>
+                    <!-- <td></td> -->
+                    <td style="text-align: center; color: blue; font-size:16px;"><?php echo $distributor['total_store'] ?></td>
+                    <td style="text-align: center;"><?php echo $distributor['rank'] ?></td>
+                    <td><?php if (isset($distributor['district'])) echo My_Region::getValue($distributor['district'], My_Region::Province) ?></td>
+                    <!-- <td><?php echo $distributor['external_serial'] ?></td> -->
+                    <td><?php echo $status ?></td>
+                    <td>
+
+                        <a href="<?php echo HOST ?>sales/distributor-detail?id=<?php echo $distributor['id'] ?>">Deatil<a/> 
+
+                                <?php if(in_array($userStorage->group_id,array(ADMINISTRATOR_ID))) : ?>
+
+                                <?php if(in_array($distributor['status'], array(1))) : ?>    
+
+                                | <a href="<?php echo HOST ?>sales/create-distributor?id=<?php echo $distributor['id'] ?>">Edit<a/>
+
+                                <?php endif; ?>
+
+
+                                <?php if(in_array($distributor['status'], array(1,2))) : ?>
+
+                                    | <a href="#myModal"
+                                    data-id="<?php echo $distributor['id'] ?>" 
+                                    data-name="<?php echo $distributor['title'] ?>" 
+                                    data-event ="close" 
+                                    data-title ="Close Distributor"
+                                    style="color: red;" data-toggle="modal" role="button" class="modal-function">Close</a>
+
+                                <?php endif; ?>
+
+                                <?php if(in_array($distributor['status'],array(1))) : ?>
+
+                                    | <a href="#myModal"
+                                    data-id="<?php echo $distributor['id'] ?>"
+                                    data-name="<?php echo $distributor['title'] ?>"
+                                    data-event="puss"
+                                    data-title="Suspend Distributor"
+                                    style="color: orange;" data-toggle="modal" role="button" class="modal-function">Suspend</a>
+
+                                <?php endif; ?>
+
+                                <?php if(in_array($distributor['status'],array(3,2))) : ?>
+
+                                    | <a href="#myModal"
+                                    data-id="<?php echo $distributor['id'] ?>"
+                                    data-name="<?php echo $distributor['title'] ?>"
+                                    data-event="restart"
+                                    data-title="Restart cooperation"
+                                    data-toggle="modal" role="button" class="modal-function">Restart Cooperation</a>
+
+                                <?php endif; ?>
+
+                            <?php endif; ?>
+
+                            </td>
+                        </tr>
+
+
+                    <?php endforeach; ?>
+                <?php endif; ?>
+
+
+            </tbody>
+        </table>
+
+        <!-- Modal -->
+        <div id="myModal" class="modal hide fade" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+            <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal" aria-hidden="true">×</button>
+                <h3 id="ModalLabel"></h3>
+            </div>
+            <form action="<?php echo HOST.'sales/distributor-event';?>" method="post">
+                <div class="modal-body">
+                    <div class="span5">
+                        <div class="control-group">
+                            <label class="control-label span2">Distributor :  </label>
+                            <div class="controls">
+                                <input type="text" name="d_name" id="d_name" value="" readonly />
+                            </div>
+                        </div>
+
+                        <div class="control-group">
+                            <label class="control-label span2">Reason : </label>
+                            <div class="controls">
+                                <textarea cols="2" rows="2" name="remark"></textarea>
+                            </div>
+                        </div>
+                        <p style="color: orange;">Close Distributor is irrevocable. Please enable it with</p>
+                    </div>
+
+                </div>
+                <div class="modal-footer">
+                    <input type="hidden" name="id" id="d_id">
+                    <input type="hidden" name="event" id="event">
+                    <button class="btn" data-dismiss="modal" aria-hidden="true">Close</button>
+                    <button class="btn btn-success">Save changes</button>
+                </div>
+            </form>
+
+        </div>
+
+        <div class="paging">
+            <?php echo $this->paging($this->total, $this->limit, $this->offset, $this->url);?>
+        </div>
+        <?php echo $this->load();?>
+        <?php echo $this->confirm();?>
+
+
+        <script type="text/javascript">
+            $(document).on("click", ".modal-function", function () {
+
+                var Id = $(this).data('id');
+                var Name = $(this).data('name');
+                var Event = $(this).data('event');
+                var Title = $(this).data('title');
+
+                $(".modal-body #d_name").val(Name);
+                $("#d_id").val(Id);
+                $("#event").val(Event);
+                $("#ModalLabel").append(Title);
+
+            }); 
+
+            $('#myModal').on('hidden.bs.modal', function (e) {
+
+                $(this).removeData('bs.modal');
+
+                $('#ModalLabel').empty();
+
+            });    
+
+
+        </script>

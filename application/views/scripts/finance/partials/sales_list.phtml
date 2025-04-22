@@ -1,0 +1,160 @@
+<style>
+.red
+{
+    background: #1B8324;
+    color:white;
+}
+.red:hover
+{
+    color:black;
+}
+
+.hilight
+{
+    background: #E8ADAA;
+    /*color:white;*/
+}
+.hilight:hover
+{
+    /*color:black;*/
+}
+</style>
+<table class="table table-bordered">
+    <thead>
+        <tr>
+            <?php echo $this->sorting(array(
+					'#',
+                    // 'ID'            => 'Sale ID',
+					'sn'            => 'Sale Order Number',
+					'd_id'          => 'Retailer Name',
+					'good_id'       => 'Product Name',
+					'good_color'    => 'Product Color',
+					'num'           => 'Sales Quantity',
+					// 'price'         => 'Sales Price',
+                    // 'total'         => 'Total',
+                    // 'total_discount'         => 'Discount',
+					'total_amount'  => 'Total Amount (VAT)',
+                    'warehouse_id'  => 'Warehouse',
+
+                    'bank'          => 'Bank',
+                    'payment_balance'  => 'Payment Balance',
+                    'payment_date'  => 'Payment Date',
+                    'payment_note'  => 'Payment Note',
+
+					// 'pay_time'      => 'Payment or Not',
+					// 'shipping_yes_time' => 'Shipping',
+                    // 'Discount Type',
+					/*'outmysql_time' => 'Out of Warehouse',*/
+					// 'p.add_time'          => 'Order Time',
+                    // 'p.sales_confirm_date' => 'Sales Confirm Date',
+					'Action'
+                ),
+                $this->url, $this->sort, $this->desc); ?>
+        </tr>
+    </thead>
+    <tbody>
+        <?php
+        //print_r($this->no_show_brandshop);
+        //echo $this->no_show_brandshop = 1;
+        $statuses = unserialize(DISCOUNT_STATUS);
+        if (isset($this->markets_sn) and $this->markets_sn) :
+            foreach ($this->markets_sn as $k=>$m):
+             $dt = DateTime::CreateFromFormat("Y-m-d H:i:s", isset($m['last_updated_at']) ? $m['last_updated_at'] : $m['add_time']);
+             $h = $dt->format('H');
+             $i = $dt->format('i');
+             $d = $dt->format('d');
+             $date = date('d');
+
+             $sn_ref = $m['sn_ref'];
+             if($sn_ref==''){
+                $sn_ref = $m['sn'];
+             }
+
+             $total_amount = $m['total_price_amount'] - $m['total_discount'] + $m['delivery_fee'];
+             if($m['delivery_fee']>0){
+                $delivery_fee ="Delivery fee = ".$m['delivery_fee'];
+             }else{
+                $delivery_fee ="";
+             }
+
+             //print_r($m);
+            ?>
+            <tr class="<?php
+                    if(isset($h) and isset($i) and ($h >= 16))
+                       {
+                            if($date == $d)
+                            {
+                                if($h==16 and $i>=30)
+                                    echo 'red';
+                                else if($h > 16)
+                                    echo 'red';
+                            }                            
+                       }
+            ?>">
+                <td><a href="#id" rel="<?php echo $m['sn'] ?>" class="collapse_a btn btn-default btn-small" id="m_<?php echo $m['sn'] ?>"><span class="col-sign">+</span><img class="img-loading" src="<?php echo HOST?>img/ajax-loader.gif" style="display: none" /></a></td>
+                 <!-- <td><?php echo $m['id'] ?></td> -->
+                <td><?php echo $sn_ref ?></td>
+                <td><?php if (isset($this->distributors) && $this->distributors && isset($this->distributors[$m['d_id']])) echo $this->distributors[$m['d_id']]['title'] ?></td>
+                <td></td>
+                <td></td>
+                <td><?php echo $m['total_qty'] ?></td>
+                <!-- <td></td> -->
+                <?php if($m['rank'] == '9') {?>
+                    <!-- <td><?php echo My_Number::f($m['total_price_amount_invat']) ?></td> -->
+                    <!-- <td><?php echo My_Number::f($m['total_discount']) ?></td> -->
+                    <td  title='<?=$delivery_fee?>' style="text-align: right;"><?php echo My_Number::f($m['total_price_amount_invat']); ?></td>
+                <?php }else{ ?>
+                    <!-- <td><?php echo My_Number::f($m['total_price_amount']) ?></td> -->
+                    <!-- <td><?php echo My_Number::f($m['total_discount']) ?></td> -->
+                    <td  title='<?=$delivery_fee?>' style="text-align: right;"><?php echo My_Number::f($m['total_price']*1.07); ?></td>
+                <?php } ?>
+                <td class="<?php if (isset($m['warehouse_id']) && $m['warehouse_id'] != 36) echo 'hilight'; ?>"><?php if (isset($this->warehouses_cached[$m['warehouse_id']])) echo $this->warehouses_cached[$m['warehouse_id']] ?></td>
+                <!-- <td><?php if ($m['pay_time']):?><i class="icon-ok"></i><?php else:?><i class="icon-remove"></i><?php endif;?></td> -->
+                <!-- <td><?php if ($m['shipping_yes_time']):?><i class="icon-ok"></i><?php else:?><i class="icon-remove"></i><?php endif;?></td> -->
+                <!-- <td><?php echo ( isset($statuses[ $m['discount'] ]) ? $statuses[ $m['discount'] ] : '' ); ?></td> -->
+                <!-- <td><?php echo $m['add_time'];?></td> -->
+                <!-- <td><?php echo $m['sales_confirm_date'];?></td> -->
+
+                <?php if(isset($m['payment_type']) && $m['payment_type'] == 'CA'){ ?>
+                    <td><?php if(isset($m['bank_name']) && $m['bank_name']){ echo $m['bank_name']; }else{ echo '-';} ?></td>
+                    <td style="text-align: right;"><?php if(isset($m['payment_balance']) && $m['payment_balance']){ echo number_format($m['payment_balance'], 2); }else{ echo '-';} ?></td>
+                <?php } ?>
+
+                <?php if(isset($m['payment_type']) && $m['payment_type'] == 'CR'){ ?>
+                    <td><?php if(isset($m['bank_name']) && $m['bank_name']){ echo $m['bank_name']; }else{ echo 'Credit';} ?></td>
+                    <td style="text-align: right;"><?php if(isset($m['payment_balance']) && $m['payment_balance']){ echo number_format($m['payment_balance'], 2); }else{ echo number_format($m['total_price_amount_invat'], 2);} ?></td>
+                <?php } ?>
+
+
+                <!-- <td><?php if(isset($m['bank_name']) && $m['bank_name']){ echo $m['bank_name']; }else{ echo '-';} ?></td> -->
+                <!-- <td style="text-align: right;"><?php if(isset($m['payment_balance']) && $m['payment_balance']){ echo number_format($m['payment_balance'], 2); }else{ echo '-';} ?></td> -->
+                <td><?php 
+
+                if(isset($m['payment_type']) && $m['payment_type'] == 'CA'){
+                    if(isset($m['payment_date']) && $m['payment_date']){ echo $m['payment_date']; }else{ echo '-';}
+                }
+
+                if(isset($m['payment_type']) && $m['payment_type'] == 'CR'){
+                    if(isset($m['sales_confirm_date']) && $m['sales_confirm_date']){ echo $m['sales_confirm_date']; }else{ echo '-';}
+                }
+
+                if(isset($m['payment_type']) && $m['payment_type'] == ''){
+                    if(isset($m['payment_date']) && $m['payment_date']){ echo $m['payment_date']; }else{ echo '-';}
+                }
+                ?>
+                </td>
+                <td><?php if(isset($m['pay_text']) && $m['pay_text']){ echo $m['pay_text']; }else{ echo '-';} ?></td>
+                
+
+                <td>
+                    <a title="Edit" href="/finance/sales-confirm?sn=<?php echo $m['sn'];?>&no_show_brandshop=<?php echo $this->no_show_brandshop;?>"> <i class="icon-edit"></i></a>
+                </td>
+            </tr>
+
+        <?php endforeach;?>
+		<?php endif; ?>
+    </tbody>
+</table>
+<div class="paging">
+    <?php echo $this->paging($this->total, $this->limit, $this->offset, $this->url);?>
+</div>

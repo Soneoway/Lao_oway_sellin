@@ -1,0 +1,10 @@
+<?php if (isset($this->errors)) echo $this->errors;
+else echo "OK"; ?>
+
+<?php if (isset($this->array_invalid) && count($this->array_invalid)): ?>
+    <ul>
+        <?php foreach ($this->array_invalid as $key => $value): ?>
+            <li><?php echo $value ?></li>
+        <?php endforeach ?>
+    </ul>
+<?php endif ?>

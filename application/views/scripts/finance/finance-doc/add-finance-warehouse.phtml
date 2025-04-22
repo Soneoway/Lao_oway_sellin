@@ -1,0 +1,184 @@
+<div class="page-header">
+	<?php if(isset($this->financeWarehouse) && $this->financeWarehouse) : ?>
+		<h1 style="font-family: Times New Roman;">Edit Financial Warehouse</h1>
+	<?php else: ?>
+		<h1 style="font-family: Times New Roman;">Add Financial Warehouse</h1>
+	<?php endif; ?>
+</div>
+
+<form class="form-horizontal" action="<?php echo HOST ?>finance/save-finance-warehouse" method="post">
+	<div class="row" style="border-style: solid; padding: 30px 10px 10px 10px; border-color: lavender;">
+
+		<div class="span6">
+
+			<div class="control-group">
+				<label for="dis_id" class="control-label"><span style="color: red">*</span> Distributor(My Side) : </label>
+				<div class="controls">
+					<select class="span3" name="dis_id" id="dis_id" required <?php if(isset($this->financeWarehouse) && $this->financeWarehouse) : ?> disabled <?php endif; ?>>
+						<option value=""> Please Selected </option>
+						<?php foreach ($this->distributor as $value) : ?>
+							<option value="<?php echo $value['id'] ?>" <?php if(isset($this->financeWarehouse['d_id']) && $this->financeWarehouse['d_id'] == $value['id'] ) : ?> selected <?php endif; ?>><?php echo $value['title'] ?></option>
+						<?php endforeach; ?>
+					</select>
+				</div>
+			</div>
+
+			<div class="control-group">
+				<label for="mnemonic_code" class="control-label"> <span style="color: red">*</span> Mnemonic code : </label>
+				<div class="controls">
+					<input type="text" class="span3" name="mnemonic_code" id="mnemonic_code" required value="<?php echo $this->financeWarehouse['mnemonic_code'] ?>" />
+				</div>
+			</div>
+
+			<div class="control-group">
+				<label for="warehouse_id" class="control-label"><span style="color: red">*</span> Warehouse Name : </label>
+				<div class="controls">
+					<select class="span3" name="warehouse_id" id="warehouse_id" required>
+						<option value=""> Please Selected </option>
+
+						<?php if(isset($this->financeWarehouse) && $this->financeWarehouse) : ?>
+							<?php foreach($this->warehouse as $value) : ?>
+								<option value="<?php echo $value['id'] ?>" <?php if(isset($this->financeWarehouse['warehouse_id']) && $this->financeWarehouse['warehouse_id'] == $value['id'] ) : ?> selected <?php endif; ?> ><?php echo $value['name'] ?></option>
+							<?php endforeach; ?>
+						<?php endif; ?>
+
+					</select>
+				</div>
+			</div>
+
+			<div class="control-group">
+				<label for="status" class="control-label"> Off/On : </label>
+				<div class="controls">
+					<select class="span3" name="status" id="status">
+						<option value="1" <?php if(isset($this->financeWarehouse['status']) && $this->financeWarehouse['status'] == 1) : ?> selected <?php endif; ?> > On </option>
+						<option value="2" <?php if(isset($this->financeWarehouse['status']) && $this->financeWarehouse['status'] == 2) : ?> selected <?php endif; ?> > Off </option>
+					</select>
+				</div>
+			</div>
+
+			<div class="control-group">
+				<label for="app_consignment" class="control-label"> Applicable consignment : </label>
+				<div class="controls">
+					<select class="span3" name="app_consignment" id="app_consignment">
+						<option value="2" <?php if(isset($this->financeWarehouse['app_consigment']) && $this->financeWarehouse['app_consigment'] == 1) : ?> selected <?php endif; ?> > No </option>
+						<option value="1" <?php if(isset($this->financeWarehouse['app_consigment']) && $this->financeWarehouse['app_consigment'] == 1) : ?> selected <?php endif; ?> > Yes </option>
+					</select>
+				</div>
+			</div>
+
+		</div>
+
+		<div class="span6">
+
+			<div class="control-group">
+				<label for="account_org" class="control-label"><span style="color: red">*</span> Accounting organization : </label>
+				<div class="controls">
+					<select class="span3" name="account_org" id="account_org" required>
+						<option value=""> Please Selected </option>
+
+						<?php if(isset($this->financeWarehouse) && $this->financeWarehouse) : ?>
+							<?php foreach($this->accountOrg as $value) : ?>
+								<option value="<?php echo $value['id'] ?>" <?php if(isset($this->financeWarehouse['account_org']) && $this->financeWarehouse['account_org'] == $value['id'] ) : ?> selected <?php endif; ?> ><?php echo $value['name'] ?></option>
+							<?php endforeach; ?>
+						<?php endif; ?>
+					</select>
+				</div>
+			</div>
+
+			<div class="control-group">
+				<label for="finance_warehouse_group" class="control-label"><span style="color: red">*</span> Finance Warehouse Group : </label>
+				<div class="controls">
+					<select class="span3" name="finance_warehouse_group" id="finance_warehouse_group" required>
+						<option value=""> Please Selected </option>
+
+						<?php if(isset($this->financeWarehouse) && $this->financeWarehouse) : ?>
+							<?php foreach($this->warehouseGroup as $value) : ?>
+								<option value="<?php echo $value['id'] ?>" <?php if(isset($this->financeWarehouse['finance_wh_group']) && $this->financeWarehouse['finance_wh_group'] == $value['id'] ) : ?> selected <?php endif; ?> ><?php echo $value['group_name'] ?></option>
+							<?php endforeach; ?>
+						<?php endif; ?>
+					</select>
+				</div>
+			</div>
+
+
+			<div class="control-group">
+				<label for="finance_warehouse_name" class="control-label"><span style="color: red">*</span> Finance Warehouse Name : </label>
+				<div class="controls">
+					<input type="text" name="finance_warehouse_name" id="finance_warehouse_name" class="span3" required  value="<?php echo $this->financeWarehouse['name'] ?>"/>
+				</div>
+			</div>
+
+			<div class="control-group">
+				<label for="remark" class="control-label"> Remark :</label>
+				<div class="controls">
+					<textarea cols="2" rows="2" class="span3" name="remark"><?php echo $this->financeWarehouse['remark'] ?></textarea>
+				</div>
+			</div>
+
+		</div>
+
+		<div class="span12" style="padding-bottom: 400px; padding-left: 50px; padding-top: 20px;">
+			<div class="control-group">
+				<input type="hidden" name="id" value="<?php echo $this->financeWarehouse['id'] ?>">
+				<input type="hidden" id="back_url" name="back_url" value="/finance/finance-warehouse">
+				<button type="submit" class="btn btn-success"> Save </button>
+				<button type="button" class="btn btn-danger go-back"> Back </button>
+			</div>
+		</div>
+
+	</div>
+</form>
+
+<script type="text/javascript">
+
+	$(document).ready(function () {
+
+		initGoBack();
+
+
+		$( "#dis_id" ).change(function() {
+
+			var distributor_id    = $('#dis_id').val();
+
+			$.get("/finance/load-warehouse",
+				{distributor_id : distributor_id}
+				,function(data,status){
+					var data = $.parseJSON( data );
+
+					if (data.warehouse){
+						var obj = data.warehouse;
+						$('#warehouse_id').html('<option value="0"> Please Selected </option>');
+						for (var i = 0; i < obj.length; i++) {
+							$('#warehouse_id').append('<option value="'+obj[i]['id']+'">'+obj[i]['name']+'</option>');
+						}
+					}
+
+					if (data.account){
+						var obj = data.account;
+						$('#account_org').html('<option value="0"> Please Selected </option>');
+						for (var i = 0; i < obj.length; i++) {
+							$('#account_org').append('<option value="'+obj[i]['id']+'">'+obj[i]['name']+'</option>');
+						}
+					}
+
+					if (data.warehouse_group){
+						var obj = data.warehouse_group;
+						$('#finance_warehouse_group').html('<option value="0"> Please Selected </option>');
+						for (var i = 0; i < obj.length; i++) {
+							$('#finance_warehouse_group').append('<option value="'+obj[i]['id']+'">'+obj[i]['group_name']+'</option>');
+						}
+					}
+
+				});
+		});
+
+	});
+	
+	function initGoBack(){
+		$('.go-back').click(function(e){
+			window.location.href = $('#back_url').val();
+			return false;
+		});
+	}
+
+</script>

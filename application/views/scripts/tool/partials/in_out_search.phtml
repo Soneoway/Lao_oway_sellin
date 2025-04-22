@@ -1,0 +1,93 @@
+<link rel="stylesheet" href="<?php echo HOST ?>css/bootstrap-multiselect.css" type="text/css"/>
+<form class="form-search form-horizontal" method="get" action="/tool/materail-in-out-report">
+    
+    <div class="row">
+        <div class="span5">
+           <div class="control-group">
+                <label for="warehouse" class="span2">Warehouse</label>
+               
+                    <select name="warehouse_id[]" id="warehouse" class="multiselect span3" multiple="multiple" required>
+                        <?php if (isset($this->warehouses) && $this->warehouses): foreach ($this->warehouses as $_id => $_name):?>
+                            <option value="<?php echo $_id;?>"
+                                <?php if (isset($this->params['warehouse_id'])
+                                    and ( (is_array($this->params['warehouse_id']) and in_array($_id, $this->params['warehouse_id']))
+                                    || $_id==$this->params['warehouse_id']) ):?> selected<?php endif;?>
+                                ><?php echo str_replace('Warehouse_', ' ', $_name);?></option>
+                        <?php endforeach; endif;?>
+                    </select>
+                
+            </div>
+
+            
+
+            
+
+            <div class="control-group">
+                <label for="date_from" class="span2">Date From</label>
+                <input type="text" class="form-control search-query date" id="date_from" name="date_from" required value="<?php isset($this->params['date_from']) and printf($this->params['date_from']);?>">
+            </div>
+            <div class="control-group">
+                <label for="date_to" class="span2">Date To</label>
+                <input type="text" class="form-control search-query date" id="date_to" name="date_to" required value="<?php isset($this->params['date_to']) and printf($this->params['date_to']);?>">
+            </div>
+        </div>
+        
+            
+        </div>
+    
+
+    <button type="submit" class="btn btn-primary">Search</button>
+    <button type="reset" class="btn btn-warning">Reset</button>
+    <button type="submit" name="export" value="1" class="btn btn-success">Export IN-OUT</button>
+</form>
+<script type="text/javascript" src="<?php echo HOST ?>js/bootstrap-multiselect.js"></script>
+<script type="text/javascript" src="<?php echo HOST ?>js/jets.js"></script>
+<script>
+options = {
+            selectAllText: 'Select All',
+            includeSelectAllOption: true,
+            includeSelectAllIfMoreThan: 3,
+            disableIfEmpty: true
+        };
+        function multi() {
+            $('.multiselect').multiselect(options);
+        }
+    $(document).ready(function () {
+         multi();
+        $( '.date' ).datepicker({ dateFormat: "dd/mm/yy" });
+        
+        $('#cat_id, #good_id').change(function(){
+            $(this).after('<span class="loading"></span>');
+            var _self = $(this);
+            var cat_id = $('#cat_id').val();
+
+            if (_self.attr('id')=='cat_id')
+                $('#good_id').find('option:not(:first)').remove();
+
+            var good_id = $('#good_id').val();
+
+            $('#good_color').find('option:not(:first)').remove();
+
+            $('#num, #price').val('');
+
+            $.get("/get/load",
+                {cat_id: cat_id, good_id: good_id}
+                ,function(data,status){
+                    var data = $.parseJSON( data );
+                    if (data.goods){
+                        var obj = data.goods;
+                        for (var i = 0; i < obj.length; i++) {
+                            $('#good_id').append('<option value="'+obj[i]['id']+'">'+obj[i]['name']+'</option>');
+                        }
+                    }
+                    if (data.colors){
+                        var obj = data.colors;
+                        for (var i = 0; i < obj.length; i++) {
+                            $('#good_color').append('<option value="'+obj[i]['id']+'">'+obj[i]['name']+'</option>');
+                        }
+                    }
+                    _self.nextAll('.loading').remove();
+                });
+        });
+    });
+</script>

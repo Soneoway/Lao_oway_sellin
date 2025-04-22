@@ -1,0 +1,132 @@
+<script type="text/javascript" src="<?php echo HOST ?>js/jquery-ui-1.8.12.custom.min.js"></script>
+<link rel="stylesheet" type="text/css" href="<?php echo HOST ?>css/jquery-ui-1.8.12.custom.css"/>
+
+<link href="<?php echo HOST ?>css/jquery.tagit.css" rel="stylesheet" type="text/css">
+<link href="<?php echo HOST ?>css/tagit.ui-zendesk.css" rel="stylesheet" type="text/css">
+
+<link rel="stylesheet" href="<?php echo HOST ?>css/bootstrap-multiselect.css" type="text/css"/>
+<script type="text/javascript" src="<?php echo HOST ?>js/bootstrap-multiselect.js"></script>
+
+<link href="../css/select2.css" rel="stylesheet"/>
+<script src="../js/select2.js"></script>
+
+<form class="form-search form-horizontal" method="get" action="<?php echo HOST ?>sales/distributor-management">
+	<div class="row" >
+		<div class="span4">
+			<div class="control-group">
+				<label class="control-label">Distributor Name :</label>
+				<div class="controls">
+					<input type="text" name="distributor_name" class="span3" value="<?php isset($this->params['distributor_name']) and printf($this->params['distributor_name']);?>">
+				</div>
+			</div>
+
+			<div class="control-group">
+				<label class="control-label">Superior Distributor :</label>
+				<div class="controls">
+
+					<select name="superior_d" class="span3 form-control" id="superior_d">
+						<option value=""> Please Selected </option>
+
+						<?php if(isset($this->superiorD) && $this->superiorD) : ?>
+							<?php foreach($this->superiorD as $value) : ?>
+
+								<option value="<?php echo $value['distributor_code'] ?>" <?php if (isset($this->params['superior_d']) and $this->params['superior_d']== $value['distributor_code'] ):?> selected <?php endif;?> ><?php echo $value['distributor_name'] ?></option>
+
+							<?php endforeach ?>
+						<?php endif?>
+					</select>
+
+				</div>
+			</div>
+
+			<div class="control-group">
+				<label class="control-label">Tag :</label>
+				<div class="controls">
+					<input type="text" name="tag" class="span3" readonly>
+				</div>
+			</div>
+		</div>
+
+		<div class="span4">
+			<div class="control-group">
+				<label class="control-label">Status : </label>
+				<div class="controls">
+					<select class="span3" name="status">
+						<option value="1" <?php if (isset($this->params['status']) and $this->params['status']== 1 ):?> selected <?php endif;?> >In Cooperation</option>
+						<option value="2" <?php if (isset($this->params['status']) and $this->params['status']== 2 ):?> selected <?php endif;?> >Suspend Cooperation</option>
+						<option value="3" <?php if (isset($this->params['status']) and $this->params['status']== 3 ):?> selected <?php endif;?> >Close</option>
+					</select>
+				</div>
+			</div>
+
+			<div class="control-group">
+				<label class="control-label">Type : </label>
+				<div class="controls">
+					<select class="span3" name="distributor_type">
+						<option value=""> Please Selected </option>
+						<option value="1" <?php if (isset($this->params['distributor_type']) and $this->params['distributor_type']== 1 ):?> selected <?php endif;?> >Regional Distributor</option>
+						<option value="2" <?php if (isset($this->params['distributor_type']) and $this->params['distributor_type']== 2 ):?> selected <?php endif;?> >Affiliate</option>
+						<option value="3" <?php if (isset($this->params['distributor_type']) and $this->params['distributor_type']== 3 ):?> selected <?php endif;?> >Retailer</option>
+					</select>
+				</div>
+			</div>
+
+			<div class="control-group">
+				<label class="control-label">External Code : </label>
+				<div class="controls">
+					<input type="text" name="ext_code" class="span3" value="<?php isset($this->params['ext_code']) and printf($this->params['ext_code']);?>">
+				</div>
+			</div>
+
+		</div>
+
+		<div class="span4">
+			<div class="control-group">
+				<label class="control-label">Code : </label>
+				<div class="controls">
+					<input type="text" name="distributor_code" class="span3" value="<?php isset($this->params['distributor_code']) and printf($this->params['distributor_code']);?>">
+				</div>
+			</div>
+
+			<div class="control-group">
+				<label class="control-label">Office :</label>
+				<div class="controls">
+
+					<select class="span3" name="office" id="office">
+						<option value=""> Please Select </option>
+
+						<?php if(isset($this->regional) && $this->regional): ?>
+							<?php foreach($this->regional as $key => $name): ?>
+
+								<option value="<?php echo $key ?>" <?php if (isset($this->params['office']) and $this->params['office']== $key ):?> selected <?php endif;?> ><?php echo $name ?></option>
+
+							<?php  endforeach ?>
+						<?php endif ?>
+
+					</select>
+				</div>
+			</div>
+		</div>
+
+		<div class="row">
+			<div class="span8">
+				<div class="controls">
+					<button type="submit" class="btn btn-primary">Search</button>
+					<button type="submit" class="btn btn-success" name="export" value="1"> Export </button>
+				</div>
+			</div>
+		</div>
+
+	</div>
+</form>
+
+<script type="text/javascript" src="<?php echo HOST ?>js/jets.js"></script>
+<script type="text/javascript" src="<?php echo HOST ?>js/bootstrap.min.js"></script>
+<script src="<?php echo HOST ?>js/tag-it.min.js" type="text/javascript" charset="utf-8"></script>
+
+<script>
+	$(document).ready(function () {
+
+		$("#superior_d, #office").select2();
+	})
+</script>

@@ -1,0 +1,233 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="utf-8">
+<title>Return Invoce</title>
+<script src="//ajax.googleapis.com/ajax/libs/jquery/1.10.2/jquery.min.js"></script>
+    <style type="text/css"> 
+ @media print
+  {
+  #print {display: none;}
+  .alert{display: none;}
+  }
+
+
+body{
+   font-family:'phetsarath ot';
+  font-size:14px;
+}
+.somediv{
+
+height:260px;
+}
+table, th, td {
+  border: 1px solid black;
+  border-collapse: collapse;
+  font-family:'phetsarath ot';
+  text-align:center;
+  font-size:12px;
+
+}
+th, td {
+  padding: 0px;
+  text-align: center;
+  
+}
+.boderset1{
+  border-bottom: 1px solid #fff;
+}
+.boderset2{
+  border: 1px solid black;
+  padding: 5px;
+  font-size: 14px;
+}
+.boderset3{
+  border: 1px solid black;
+  padding-left: 2px;
+  font-size: 14px;
+}
+.boderset4{
+  border: 0px solid black;
+  padding-right: : 1px;
+  font-size: 14px;
+}
+#td{
+   text-align:left;
+   padding-left: 10px;
+   font-size: 14px;
+}
+#td1{
+   text-align:left;
+   padding-left: 10px;
+}
+#tdleft{
+   text-align:left;
+   padding-left: 8px;
+}
+#tdright{
+   text-align:right;
+   padding-right: 5px;
+}
+div{
+   text-align: center;
+   font-size:18px;
+   font-weight: bold;
+}
+b{
+  font-size: 16px;
+}
+#b2{
+  font-size: 15px;
+}
+#spanright{
+  text-align:right;
+ 
+}
+#tdfont{
+  font-size: 14px;
+}
+#tdfont2{
+  font-size: 15px;
+}
+
+.single_record{page-break-after: always;} 
+</style>
+</head>
+<body>
+<?php
+ $show_item=10;
+    $totalpage= CEIL(($total/$show_item));
+
+    if($totalpage<=0)
+    {
+      $totalpage =1;
+    }
+    $num =0 ;
+    $row_count=0;
+    for ($i = 1; $i <= $totalpage; $i++)
+    {
+
+
+?>
+
+<table style="width:830px; height:100px; border: 0px;">
+  <tr>
+    <td style="width:150px" id="td1">
+       <div style="font-size: 40px; border-right-color: red;">WMS</div>
+    </td>
+    <td style="width:364px; font-size: 16px;" id="td1">
+       <div style="font-size: 22px;">ບິນເທີນ/Return Invoice</div>
+    </td> 
+    <td rowspan="2" id="td">
+       <?php if (isset($this->sales) and $this->sales):
+            $return_sn = $this->sales[0]['sale']->sn_ref;
+            $creditnote_sn = $this->sales[0]['sale']->creditnote_sn;
+            if($return_sn==''){
+                $return_sn = $this->sales[0]['sale']->sn;  
+            }
+
+            $create_cn = $this->sales[0]['sale']->create_cn;
+            $active_cn = $this->sales[0]['sale']->active_cn;
+
+            if($create_cn==1){
+                $create_nc = "checked";
+            }else{
+                $create_nc ="";
+            }
+
+            if($active_cn==1){
+                $active_cn = "checked";
+            }else{
+                $active_cn ="";
+            }
+
+            $shop_id = $this->sales[0]['return_id'];
+            if(!$shop_id){
+              $shop_id = 'Return NO retailer';
+            }else{
+              $shop_id = $this->sales[0]['return_id'];
+            }
+
+        ?>
+       ເລກທີ່: <?= $return_sn ?> / <?= $creditnote_sn ?><br>
+       ວັນທີ: <?php echo $this->sales[0]['sale']->add_time;?> <br>
+       ຜູ້ເທິນເຄື່ອງ: <?php echo $this->sales[0]['created_by_name'];?>  <br>
+       ເທີນເຂົ້າຮ້ານ : <?php echo $this->sales[0]['return_shop']; ?>
+
+       <?php endif;?>
+    </td>
+  </tr>
+   <tr style="height:50px">
+    <td id="td" colspan="2">
+       ເທິນຈາກຮ້ານ: <?php echo $this->sales[0]['retailer_name'];?> <br>
+       ເທິນເຂົ້າສາງ: <?php echo $this->sales[0]['backs_d_name'];?> <br>
+    </td>
+  </tr>
+</table>
+
+<!-- Table 2 -->
+<table style="width:830px;" class="somediv">
+  <tr>
+    <td id="tdfont"style="width:40px; padding: 5px;">ລ.ດ</td>
+    <td id="tdfont" style="height: 10px;"> ລາຍການສິນຄ້າ/Description</td>
+    <td id="tdfont" id="tdfont"style="width:51px; padding: 5px;">ຈຳນວນ</td>
+    <td id="tdfont" style="width:123px; padding: 5px;">ລາຄາ/ໜ່ວຍ</td>
+    <td id="tdfont" style="width:150px; padding: 5px;">ລາຄາລວມ</td>
+  </tr style="height:200px; ">
+
+   <?php
+                    $total_num = $total_price = $total_total = 0;
+                    foreach ($this->sales as $item):
+                        $sale = $item['sale'];
+                        $total_num += $sale->num;
+                        $total_price += $sale->price;
+                        $total_total += $sale->total;
+
+                        $num = $num + 1;
+                    ?>
+
+
+
+      <tr>
+        <td id="tdfont" class="boderset1">
+         <?= $num ?><br>
+        </td>
+        <td id="tdfont" id="tdleft" class="boderset1" style="text-align: left; padding-left: 8px;">
+          <?php echo $item['brand_name']; ?> <?php echo $item['good'];?> &nbsp;&nbsp; <?php echo $item['color'];?>
+        </td>
+        <td id="tdfont" class="boderset1"> 
+          <?php echo $sale->num;?>
+        </td>
+        <td id="tdfont" id="tdright" class="boderset1" style="text-align: right; padding-right: 6px;">
+          <?php  echo number_format($sale->price);?>
+        </td>
+        <td id="tdfont" id="tdright" class="boderset1" style="text-align: right; padding-right: 6px;">
+          <?php  echo number_format($sale->total);?>
+        </td>
+        <?php endforeach;?>
+ 
+
+    </tr>
+
+       <?php    
+        $row_count+=1;
+         $num +=0;
+      }
+    ?>
+</table>
+
+<table style="width:830px;">
+  <tr>
+    <td class="boderset2"> <span style="padding-left: 350px;"> ຈຳນວນທັງໝົດ</span></td>
+    <td style="width:62px;"><?php echo $total_num;?></td>
+    <td id="tdfont2" style="width:293px;"><span  style="padding-left: 2px;">ລວມທັງໝົດ: </span><?php echo number_format( $total_total);?><span style="padding-right: 2px;"> ກີບ</span></td>
+  </tr>
+</table>
+<br><br> &nbsp;&nbsp;&nbsp; &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;_________________ &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;  _________________ &nbsp;&nbsp;&nbsp;&nbsp;&nbsp; _________________ &nbsp;&nbsp;&nbsp;&nbsp;&nbsp; _________________  <br>
+ &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<b>ຜູ້ອອກບິນ</b> &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; <b>ຜູ້ກວດສອບ</b> &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; <b>ຜູ້ຮັບ</b> &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; <b>ບັນຊີ</b>
+
+
+
+</body>
+
+</html>

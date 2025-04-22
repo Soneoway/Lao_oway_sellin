@@ -1,0 +1,176 @@
+<link href="<?php echo HOST ?>css/select2.css" rel="stylesheet"/>
+<link rel="stylesheet" type="text/css" href="/css/jquery-ui-1.8.12.custom.css"/>
+<link href="<?php echo HOST ?>css/jquery.tagit.css" rel="stylesheet" type="text/css">
+<link href="<?php echo HOST ?>css/tagit.ui-zendesk.css" rel="stylesheet" type="text/css">
+<link href="<?php echo HOST ?>css/bootstrap-modal.css" rel="stylesheet" type="text/css">
+<style>
+    iframe {
+        width: 100%;
+        height: 500px;
+    }
+
+    .bar {
+        line-height: 18px;
+    }
+
+    #distributor_id, #d_id {
+        -webkit-appearance: menulist;
+        -moz-appearance: menulist;
+        appearance: menulist;
+    }
+</style>
+<div class="page-header">
+    <h1>Mass Orders Sim Upload</h1>
+</div>
+<div class="row-fluid">
+    <div class="span12">
+        <div class="well">
+            <div class="row-fluid">
+                <div class="span4">
+                    Mass Order Sim Template <a class="btn btn-info btn-mini" href="<?php echo HOST ?>files/sales/template/Mass_Order_Upload_-_Template.xlsx">Download</a>
+                </div>
+                <div class="span4">
+                    List of uploaded files <a class="btn btn-success btn-mini" href="<?php echo HOST ?>sales/mou-log">View Logs</a></p>
+                </div>
+            </div>
+        </div>
+        <form action="<?php echo HOST ?>sales/save-sim" id="form" target="iframe" class="form-inline" method="post" enctype="multipart/form-data">
+            <div class="row">
+                <div class="span6">
+                    <div id="tooltip_type" style="display: none">
+                        <p>For Retailer: Đơn hàng xuất cho đại lý</p>
+                        <p>For Demo: Đơn hàng trải nghiệm</p>
+                        <p>For Staffs: Đơn hàng cho nhân viên</p>
+                        <p>For Lending: Đơn hàng cho mượn</p>
+                    </div>
+                    <label class="span4 tooltip-r" for="type" data-toggle="tooltip"
+                        >Order Type <span style="color: red">*</span>
+                        <select id="type" class="span4" name="type" required="required">
+                            <option value="">Please select</option>
+                            <option value="1">For Retailer</option>
+                            <option value="2">For Demo</option>
+                            <option value="3">For Staffs</option>
+                            <option value="4">For Lending</option>
+                        </select>
+                    </label>
+
+
+
+                    
+                    <label class="span4" for="salesman">Salesman <span style="color: red">*</span>
+                        <select id="salesman" class="span4" name="salesman" required="required">
+                            <option value="">Please select</option>
+                            <?php foreach ($this->salesmans as $_id => $_username):?>
+                                <option value="<?php echo $_id;?>"><?php echo $_username;?></option>
+                            <?php endforeach;?>
+                        </select>
+                    </label>
+
+                    <label class="span2" for="warehouse">Warehouse
+                        <select class="span4" name="warehouse" id="warehouse">
+                            <option value>- Auto -</option>
+                            <?php if (isset($this->warehouses)): ?>
+                                <?php foreach ($this->warehouses as $_id => $_name): ?>
+                                    <option value="<?php echo $_id ?>"><?php echo $_name ?></option>
+                                <?php endforeach ?>
+                            <?php endif ?>
+                        </select>
+                    </label>
+                </div>
+
+                <div class="span5">
+                    <div class="control-group">
+                        <label for="myTags" class="span2">Tags</label>
+                        <ul class="form-control span3" id="myTags"><?php
+                            if (isset($this->a_tags) and $this->a_tags):
+                                foreach ($this->a_tags as $ta)
+                                    echo '<li>'.$ta.'</li>';
+                            endif;
+                            ?></ul>
+                    </div>
+                    
+                    <label for="" class="span4">PO File <span style="color: red">*</span>
+                        <input type="file" class="span4" name="file" required />
+                    </label>
+                    <?php echo $this->render('sales/partials/po-list.phtml') ?>
+                </div>
+            </div>
+
+            <div class="row">
+                <div class="span12">
+                    <button id="submit_btn" class="btn btn-info">Submit</button>
+                </div>
+            </div>
+        </form>
+    </div>
+    <div class="row">
+        <div class="span12">
+            <div class="progress progress-striped active">
+                <div class="bar" style="width: 0%;"></div>
+            </div>
+        </div>
+    </div>
+    <iframe src="" frameborder="0" name="iframe" id="iframe"></iframe>
+</div>
+
+<script src="<?php echo HOST ?>js/select2.js"></script>
+<script type="text/javascript" src="<?php echo HOST ?>js/jquery-ui-1.8.12.custom.min.js"></script>
+<script src="<?php echo HOST ?>js/tag-it.min.js" type="text/javascript" charset="utf-8"></script>
+
+<script src="<?php echo HOST ?>js/bootstrap-modal.js"></script>
+<script src="<?php echo HOST ?>js/bootstrap-modalmanager.js"></script>
+<script type="text/javascript" src="<?php echo HOST ?>js/sales.po.js"></script>
+
+<script>
+    function confirmExit() {
+        return "Đơn hàng đang được xử lý.";
+    }
+
+    function set_progress(percent) {
+        $('.bar').css('width', percent+'%');
+        $('.bar').html(percent+'%');
+    }
+
+    function initTag(){
+
+        $('#myTags').tagit({
+            allowSpaces: true,
+            fieldName: 'tags[]',
+            autocomplete: {
+                delay: 0,
+                minLength: 2,
+                source: "<?php echo HOST;?>get/get-tags"
+            }
+        });
+
+    }
+
+    function remove_all_tag() {
+        $("#myTags").tagit("removeAll");
+    }
+
+    $(document).ready(function () {
+        initTag();
+        $("#salesman").select2();
+
+        $('form').bind('submit',function(e){
+            $('.bar').css('width', '0%');
+            $('.bar').html('');
+
+            if (typeof $('#iframe').get(0).contentWindow.clear_content != "undefined")
+                $('#iframe').get(0).contentWindow.clear_content();
+
+            $('form button, form input, form select').prop('readonly', true);
+            $('.loading').remove();
+            $(this).after('<span class="pre_loading">Processing </span><span class="loading"></span>');
+            window.onbeforeunload = confirmExit;
+        });
+
+        $('#distributor_id').change(function(e) {
+            id = $(e.target).find('option:selected').val();
+            
+        });
+        get_po_list(null, "#distributor_po");
+        $('#add_po_btn').click(show_add_po_modal);
+    });
+</script>

@@ -1,0 +1,14 @@
+<?php if (isset($this->errors) and $this->errors): ?>
+    <div class="alert alert-error"><?php echo $this->errors ?></div>
+<?php endif; ?>
+<p><strong>Total: </strong> <?php if(isset($this->total)) echo $this->total ?></p>
+<p><strong>Success: </strong> <?php if(isset($this->success)) echo $this->success ?></p>
+<p><strong>Failed: </strong> <?php if(isset($this->failed)) echo $this->failed ?></p>
+
+<?php if (isset($this->error_list) && $this->error_list): ?>
+    <ul>
+    <?php foreach ($this->error_list as $key => $value): ?>
+        <li><?php echo $value; ?></li>
+    <?php endforeach ?>
+    </ul>
+<?php endif ?>

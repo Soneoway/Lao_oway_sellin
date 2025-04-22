@@ -1,0 +1,138 @@
+<link rel="stylesheet" type="text/css" href="/css/jquery-ui-1.8.12.custom.css"/>
+
+<style>
+    iframe {
+        width: 100%;
+        height: 500px;
+    }
+
+    .bar {
+        line-height: 18px;
+    }
+    .modal-scrollable
+    {
+        position: absolute;
+        z-index: 9999;
+    }
+</style>
+<div class="page-header">
+    <h1>Import ยอดใช้ ACC</h1>
+</div>
+
+<?php
+if(isset($this->messages_success) and $this->messages_success)
+    foreach ($this->messages_success as $message):
+        echo '<div class="alert alert-success">'.$message."</div>";
+    endforeach;
+
+if(isset($this->messages) and $this->messages)
+    foreach ($this->messages as $message):
+        echo '<div class="alert alert-error">'.$message."</div>";
+    endforeach;
+
+
+$path_protection_price = realpath(APPLICATION_PATH . '/../public/files/withholding_tax/import_wht_template.xlsx');    
+/*header("Content-type: public/files/protection_price_template");
+header("Content-Disposition: attachment; filename=protection_price_template.xlsx"); 
+$pdfiledata = file_get_contents($filename);
+echo $pdfiledata;
+*/
+
+?>
+<div style="display: none;" class="well">
+    <div class="row-fluid">
+
+        <div  class="span4">
+            Import ยอดใช้ ACC Upload List File <a class="btn btn-success btn-mini" href="<?php echo HOST ?>upload/withholding_tax/import_wht_template.xlsx">Download File</a></p>
+        </div>
+    </div>
+</div>
+<div class="row">
+    <div class="span12">
+        <form role="form" id="form" action="<?php echo HOST.'tool/save-service-product-stock-out-acc-upload';?>" target="iframe" class="form-inline" method="post"  enctype="multipart/form-data">
+            
+            </p>
+            <div class="row">
+                <div class="span6">
+                    <label class="span2" for="price">วันที่ข้อมูล : <span style="color: red">*</span></label>   
+                    <input type="text" required="required" value="<?php isset($this->params['data_date']) and printf($this->params['data_date']);?>" maxlength="200" size="200" class="data_date" name="data_date" />
+                </div>
+            </div>
+            </br>
+            <div class="form-group">
+                <label for="" class="span4">File <span style="color: red">*</span>
+                    <input type="file" class="span4" name="file" required />
+                </label>
+            </div>
+            </div>
+            </br></br></br></br></br></br>
+	        <div class="form-group">
+		        <div class="span6">
+		            <button type="submit" class="btn btn-primary">Save</button>
+		            <button type="button" class="btn btn-danger go-back">Go back</button>
+		        </div>
+	        </div>
+
+        </form>
+    </div>
+    <br>
+    <div class="row">
+    <div class="span12">
+        <div class="progress progress-striped active">
+            <div class="bar" style="width: 0%;"></div>
+        </div>
+    </div>
+
+    <iframe src="" frameborder="0" name="iframe" id="iframe"></iframe>
+    <div class="row-fluid">
+        <div class="span12">
+            <div id="result_div">
+                
+            </div>
+        </div>
+    </div>
+
+</div>
+</div>
+
+
+<script src="<?php echo HOST ?>js/jquery-ui.js"></script>
+<script src="<?php echo HOST ?>js/bootstrap-modal.js"></script>
+<script src="<?php echo HOST ?>js/bootstrap-modalmanager.js"></script>
+<script type="text/javascript" src="<?php echo HOST ?>js/sales.po.js"></script>
+
+<script>
+
+    $(document).on('focus',".data_date", function(){ 
+        $(this).datepicker({ dateFormat: "dd/mm/yy" });
+    });
+
+    function confirmExit() {
+        return "Orders are being processed.";
+    }
+
+    function set_progress(percent) {
+        $('.bar').css('width', percent+'%');
+        $('.bar').html(percent+'%');
+    }
+
+    $('.go-back').click(function(){
+        window.location.href = '/tool/service-report-list';
+        return false;
+    });
+
+    $(document).ready(function () {
+
+        $('form').bind('submit',function(e){
+            $('.bar').css('width', '0%');
+            $('.bar').html('');
+            $('#iframe').get(0).contentWindow.clear_content();
+            $('form button, form input, form select').prop('readonly', true);
+            $('.loading').remove();
+            $(this).after('<span class="pre_loading">Processing <span><span class="loading"></span>');
+            window.onbeforeunload = confirmExit;
+        });
+
+    });
+
+</script>

@@ -1,0 +1,61 @@
+<table class="table table-bordered">
+    <thead>
+        <tr>
+            <?php echo $this->sorting(array(
+                    '#',
+                    'staff_code'   =>'Staff Code',
+                    'username'     =>'User Name',
+                    'Company',
+                    'Name',
+                    'email'        =>'Email',
+                    'created_at'   =>'Created',
+                    'phone_number' =>'Phone No',
+                    'status' =>'Status',
+                    'group_id' =>'Group No',
+                    'Action'
+                ),
+                $this->url, $this->sort, $this->desc); ?>
+        </tr>
+    </thead>
+    <tbody>
+        <?php
+        if (isset($this->staffs) and $this->staffs)
+            foreach ($this->staffs as $k=>$staff): ?>
+        <tr>
+            <td>
+                <?php
+                    if($staff['status']==1){
+                      $status_name="<span style='color:green'>Active</span>";  
+                    }else{
+                        $status_name="<span style='color:red'>Disable</span>"; 
+                    }
+                    $inc = $this->offset + $k + 1;
+                    echo $inc;
+                ?>
+            </td>
+            <td><?php echo $staff['staff_code'];?></td>
+            <td><?php echo $staff['username'];?></td>
+            <td><?php if($staff['company'] == 1){ ?> OPPO <?php }elseif($staff['company'] == 2){ ?> Realme <?php }else{ ?> - <?php } ?>
+            <td><?php echo $staff['firstname']; ?>  <?php echo $staff['lastname'] ?></td>
+            <td <?php if (!$staff['email']):?> style="background-color: coral"<?php endif;?>><?php echo $staff['email'];?></td>
+            <td><?php echo ($staff['created_at'] ? date('d/m/Y', strtotime($staff['created_at'])) : '');?></td>
+            <td><?php echo $staff['phone_number'];?></td>
+            <td><?php echo $status_name;?></td>
+            <td><?php echo $staff['group_id'];?></td>
+            <td class="">
+                <a title="Edit" href="/staff/create?id=<?php echo $staff['id'];?>"> <i class="icon-edit"></i></a>
+                <a title="Priviledge" href="/staff/priviledge?id=<?php echo $staff['id'];?>"> <i class="icon-archive"></i></a>
+                <a title="Delete" class="confirmLink" href="/staff/del?id=<?php echo $staff['id'];?>"> <i class="icon-trash"></i></a>
+            </td>
+        </tr>
+        <?php endforeach;?>
+
+    </tbody>
+</table>
+<div class="paging">
+    <?php echo $this->paging($this->total, $this->limit, $this->offset, $this->url);?>
+</div>
+<?php echo $this->load();?>
+<script type="text/javascript" src="/js/jquery-ui-1.8.12.custom.min.js"></script>
+<link rel="stylesheet" type="text/css" href="/css/jquery-ui-1.8.12.custom.css"/>
+<?php echo $this->confirm();?>

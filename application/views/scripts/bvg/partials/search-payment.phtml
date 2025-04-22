@@ -1,0 +1,82 @@
+<form class="form-search form-horizontal" method="get">
+    <div class="row">
+        <div class="span5">
+
+            <div class="control-group">
+                <label for="imei_sn" class="span2">IMEI</label>
+                <input id="imei_sn" name="imei_sn" type="text" class="input-medium search-query form-control" value="<?php isset($this->params['imei_sn']) and printf($this->params['imei_sn']);?>">
+            </div>
+
+            <div class="control-group">
+                <label for="sales_sn" class="span2">Sales SN</label>
+                <input id="sales_sn" name="sales_sn" type="text" class="input-medium search-query form-control" value="<?php isset($this->params['sales_sn']) and printf($this->params['sales_sn']);?>">
+            </div>
+
+            <div class="control-group">
+                <label for="status" class="span2">Status</label>
+                <select name="status" id="status">
+                    <option value="-1">Select</option>
+                    <option value="0" <?php if (isset($this->params['status']) and $this->params['status']== 0) {?>selected="selected" <?php }?>>Pending</option>
+                    <option value="1" <?php if (isset($this->params['status']) and $this->params['status']== 1) {?>selected="selected" <?php }?>>Approved</option>
+                </select>
+            </div>
+
+        </div>
+
+        <div class="span5">
+            <div class="control-group">
+                <label for="joint_circular_id" class="span2">Joint Circular</label>
+                <select name="joint_circular_id" id="joint_circular_id">
+                    <option value="">Select</option>
+                    <?php foreach ( $this->jointCircularCached as $id=>$name ) {?>
+                        <option value="<?php echo $id;?>" <?php if (isset($this->params['joint_circular_id']) and $this->params['joint_circular_id'] == $id) {?> selected="selected" <?php }?>><?php echo $name;?></option>
+                    <?php } ?>
+                </select>
+            </div>
+
+            <div class="control-group">
+                <label for="good_id" class="span2">Product</label>
+                <select name="good_id" id="good_id">
+                    <option value="">Select</option>
+                    <?php foreach ( $this->goodsCached as $id=>$name ) {?>
+                        <option value="<?php echo $id;?>" <?php if (isset($this->params['good_id']) and $this->params['good_id'] == $id) {?> selected="selected" <?php }?>><?php echo $name;?></option>
+                    <?php } ?>
+                </select>
+            </div>
+
+            <div class="control-group">
+                <label for="distributor_name" class="span2">Retailer Name</label>
+                <input id="distributor_name" name="distributor_name" type="text" class="input-medium search-query form-control" value="<?php isset($this->params['distributor_name']) and printf($this->params['distributor_name']);?>">
+            </div>
+
+            <div class="control-group">
+                <label for="d_id" class="span2">Retailer</label>
+                <input type='text' class="span3" name='SearchBox' id="SearchBox" placeholder="Search" autocomplete="off" />
+                <select name="d_id" id="d_id" class="span3" size="5">
+                    <option value="">Choose</option>
+                    <?php if (isset($this->distributors) && $this->distributors): foreach ($this->distributors as $id=>$name):?>
+                        <option value="<?php echo $id;?>" <?php if (isset($this->params['d_id']) and $id==$this->params['d_id']):?> selected="selected"<?php endif;?>><?php echo $name;?></option>
+                    <?php endforeach; endif;?>
+                </select>
+
+            </div>
+        </div>
+    </div>
+   
+	<div class="row">
+        <div class="span5">
+   	        <button type="submit" class="btn btn-primary">Search</button>
+   	        <button type="submit" name="approve" value="1" class="btn btn-success">Approve</button>
+ 		    <button type="reset" class="btn btn-warning">Reset</button>
+            <button type="submit" name="export" value="1" class="btn btn-success">Export</button>
+       	</div>
+    </div>
+   
+</form>
+
+<script>
+$(document).ready(function () {
+
+    initSearchOptionDistributor('d_id', 'SearchBox');
+})
+</script>

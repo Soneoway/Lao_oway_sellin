@@ -1,0 +1,87 @@
+<?php
+
+function product_price($priceFloat) {
+    $symbol = ' THB';
+    $symbol_thousand = ',';
+    $decimal_place = 2;
+    $price = number_format($priceFloat, $decimal_place, '.', $symbol_thousand);
+    return $price;
+}
+
+?>
+<table class="table table-bordered">
+    <thead>
+        <tr>
+            <?php echo $this->sorting(array(
+                    'quater_year'    => 'Quater Year',
+                    'quater_no'      => 'Quater No',
+                    'distributor_id'     => 'Distributor ID',
+					'store_code'     => 'Distributor Code',
+					'title'          => 'Retailer Name',
+                    'level_name'     => 'Level',
+                    'total_imei'     => 'Total Imei',
+                    'decorate_status'   => 'Decorate',
+                    'creditnote_sn'  => 'Credit Note No',
+                    'creditnote_price' => 'Creditnote Amount',
+                    'creditnote_price_confirm' => 'Amount Confirm',
+					'confirm_date'   => 'Confirm Date',
+					'Action'
+                ),
+                $this->url, $this->sort, $this->desc); ?>
+        </tr>
+    </thead>
+    <tbody>
+        <?php
+        //print_r($this->reward_list_cn);
+        if (isset($this->reward_list_cn) and $this->reward_list_cn) :
+            foreach ($this->reward_list_cn as $k=>$m): 
+
+                $status_cn="-";$creditnote_sn='';$creditnote_price=0;$decorate_status="-";
+                if($m['decorate_status']==1){
+                    $decorate_status="Approve";
+                }else{
+                    $decorate_status="Wait To Check";
+                }
+                if($m['status_cn']==1){
+                    $status_cn="Confirmed";
+                }
+                if($m['creditnote_sn'] !=''){
+                    $creditnote_sn=$m['creditnote_sn'];
+                    $creditnote_price_confirm=$m['creditnote_price_confirm'];
+                    $confirm_date=$m['confirm_date'];
+                }
+                $creditnote_type_sn="reward";
+            ?>
+        <tr class="accordion-heading">
+            <td><?php echo $m['quater_year']?></td>
+            <td><?php echo $m['quater_no']?></td>
+            <td><?php echo $m['distributor_id']?></td>
+            <td><?php echo $m['store_code']?></td>
+            <td><?php echo $m['title']?></td>
+            <td><?php echo $m['level_name']?></td>
+            <td><?php echo $m['total_imei']?></td>
+            <td><?php echo $decorate_status?></td> 
+            <td><?php echo $creditnote_sn?></td>
+            <td><?php echo product_price($m['creditnote_price']);?></td>   
+            <td><?php echo product_price($creditnote_price_confirm);?></td>  
+            <td><?php echo $confirm_date?></td> 
+            <td><a title="View" target="_blank" href="/finance/cn-reward-view-print?sn=<?php echo $creditnote_sn;?>&d_id=<?php echo $m['distributor_id'];?>&creditnote_type=<?=$creditnote_type_sn?>"> <i class="icon-print"></i></a>
+
+            <a title="Print Imei List" target="_blank" href="/finance/cp-view-imei-print?sn=<?php echo $$creditnote_sn;?>&d_id=<?php echo $m['distributor_id'];?>&creditnote_type=<?=$creditnote_type_sn?>"> <i class="icon-qrcode"></i></a>
+            </td>
+        </tr>
+        		
+
+        <?php endforeach;?>
+		<?php endif; ?>
+    </tbody>
+</table>
+<div class="paging">
+    <?php echo $this->paging($this->total, $this->limit, $this->offset, $this->url);?>
+</div>
+
+<script type="text/javascript" src="/js/jquery-ui-1.8.12.custom.min.js"></script>
+<link rel="stylesheet" type="text/css" href="/css/jquery-ui-1.8.12.custom.css"/>
+<?php echo $this->load();?>
+<?php echo $this->confirm();?>
+

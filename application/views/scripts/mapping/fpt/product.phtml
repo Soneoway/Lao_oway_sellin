@@ -1,0 +1,129 @@
+<div class="page-header">
+    <h1>Product Code Mapping <small>For Mass Order Upload</small></h1>
+</div>
+<?php
+    if (isset($this->messages_success) and $this->messages_success)
+        foreach ($this->messages_success as $message):
+            echo '<div class="alert alert-success">'.$message.'</div>';
+        endforeach;
+
+    if (isset($this->messages) and $this->messages)
+        foreach ($this->messages as $message):
+            echo '<div class="alert alert-error">'.$message.'</div>';
+        endforeach;
+?>
+<div class="row">
+    <div class="span12">
+        <span class="pull-right">
+            <button class="btn-success" type="button" onclick="window.location='<?php echo HOST ?>mapping/fpt-product-create'">
+                <i class="icon-plus"></i>
+            </button>
+        </span>
+    </div>
+</div>
+
+<div class="accordion" id="accordion2">
+    <div class="accordion-group">
+        <div class="accordion-heading">
+            <a class="accordion-toggle collapsed" data-toggle="collapse" data-parent="#accordion2" href="#collapseTwo">
+                Search
+            </a>
+        </div>
+        <div id="collapseTwo" class="accordion-body collapse" style="height: 0px;">
+            <div class="accordion-inner">
+                <div class="row">
+                    <div class="span12">
+                        <form action="<?php echo HOST ?>mapping/fpt-product" action="get" class="form-inline form-search">
+                            <select name="good_id" id="good_id">
+                                <option value>---</option>
+                                <?php if (isset($this->goods) && $this->goods): ?>
+                                    <?php foreach ($this->goods as $key => $value): ?>
+
+                                        <option value="<?php echo $key ?>"
+                                            <?php if(isset($this->params['good_id']) && $key == $this->params['good_id'])
+                                                    echo 'selected' ?>><?php echo $value ?></option>
+
+                                    <?php endforeach ?>
+                                <?php endif ?>
+                            </select>
+
+                            <select name="good_color" id="good_color">
+                                <option value>---</option>
+                                <?php if (isset($this->good_colors) && $this->good_colors): ?>
+                                    <?php foreach ($this->good_colors as $key => $value): ?>
+
+                                        <option value="<?php echo $key ?>"
+                                            <?php if(isset($this->params['good_color']) && $key == $this->params['good_color'])
+                                                    echo 'selected' ?>><?php echo $value ?></option>
+
+                                    <?php endforeach ?>
+                                <?php endif ?>
+                            </select>
+
+                            <input type="text" class="input-small" placeholder="Product Code" name="code"
+                                    value="<?php if(isset($this->params['code'])) echo trim($this->params['code']) ?>">
+
+                            <button class="btn btn-info">Search</button>
+                            <button class="btn btn-danger reset" type="reset">Reset</button>
+                        </form>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<div class="row">
+    <div class="span12">
+        <table class="table table-bordered">
+            <thead>
+                <tr>
+                    <?php echo $this->sorting(array(
+                        '#',
+                        'good_name' => 'Product Name',
+                        'color_id'  => 'Product Color',
+                        'code'      => 'Code',
+                        'Action'
+                    ),
+                    $this->url, $this->sort, $this->desc); ?>
+                </tr>
+            </thead>
+            <tbody>
+                <?php if (isset($this->mapping) && $this->mapping): ?>
+                    <?php $inc = $this->offset + 1; ?>
+                    <?php foreach ($this->mapping as $_id => $_data): ?>
+                        <tr>
+                            <td><?php echo $inc++; ?></td>
+                            <td><?php if (isset($this->goods[$_data['good_id']]))  echo $this->goods[$_data['good_id']] ?></td>
+                            <td><?php if (isset($this->good_colors[$_data['color_id']])) echo $this->good_colors[$_data['color_id']] ?></td>
+                            <td><?php if (isset($_data['code']) && $_data['code']): ?>
+                                <?php foreach ($_data['code'] as $_key => $_code): ?>
+                                    <?php echo $_code ?><br />
+                                <?php endforeach ?>
+                            <?php endif ?></td>
+                            <td>
+                                <a title="Edit" href="<?php echo HOST ?>mapping/fpt-product-edit?id=<?php echo $_id;?>"> <i class="icon-edit"></i></a>
+                                <a title="Delete" class="confirmLink" href="<?php echo HOST ?>mapping/fpt-product-delete?id=<?php echo $_id;?>"> <i class="icon-trash"></i></a>
+                            </td>
+                        </tr>
+                    <?php endforeach ?>
+                <?php endif ?>
+            </tbody>
+        </table>
+        <div class="paging">
+            <?php echo $this->paging($this->total, $this->limit, $this->offset, $this->url);?>
+        </div>
+    </div>
+</div>
+<script type="text/javascript" src="<?php echo HOST ?>js/jquery-ui-1.8.12.custom.min.js"></script>
+<link rel="stylesheet" type="text/css" href="<?php echo HOST ?>css/jquery-ui-1.8.12.custom.css"/>
+<?php echo $this->confirm();?>
+<script>
+    $(document).ready(function () {
+        $('.form-search button:reset').click(function (e){
+            $('.form-search input, .form-search select').val('');
+            $('.form-search').submit();
+            return false;
+        });
+    });
+</script>

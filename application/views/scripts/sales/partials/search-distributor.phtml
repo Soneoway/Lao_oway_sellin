@@ -1,0 +1,375 @@
+<script type="text/javascript" src="<?php echo HOST ?>js/jquery-ui-1.8.12.custom.min.js"></script>
+<link rel="stylesheet" type="text/css" href="<?php echo HOST ?>css/jquery-ui-1.8.12.custom.css"/>
+
+<link href="<?php echo HOST ?>css/jquery.tagit.css" rel="stylesheet" type="text/css">
+<link href="<?php echo HOST ?>css/tagit.ui-zendesk.css" rel="stylesheet" type="text/css">
+
+<link rel="stylesheet" href="<?php echo HOST ?>css/bootstrap-multiselect.css" type="text/css"/>
+<script type="text/javascript" src="<?php echo HOST ?>js/bootstrap-multiselect.js"></script>
+
+<link href="../css/select2.css" rel="stylesheet"/>
+<script src="../js/select2.js"></script>
+
+<style type="text/css">
+label.label {
+    cursor: pointer;
+}
+</style>
+<form class="form-search form-horizontal" method="get" action="<?php echo HOST ?>sales/distributor" style="padding: 20px">
+    <div class="row" style="padding-bottom: 20px">
+        <div class="span4">
+
+<!--             <div class="control-group">
+                <label class="control-label" for="ID">Distributor ID</label>
+                <div class="controls">
+                    <input type="text" id="id" name="id" placeholder="Contact" value="<?php if( isset($this->params) && isset($this->params['id']) ) echo $this->params['id'] ?>" />
+                </div>
+            </div> -->
+
+            <div class="control-group">
+                <label class="control-label">Distributor Code</label>
+                <div class="controls">
+                    <input type="text" id="code" name="code" class="span3" placeholder="Enter" value="<?php if( isset($this->params) && isset($this->params['code']) ) echo $this->params['code'] ?>">
+                </div>
+            </div>
+
+            <div class="control-group">
+                <label class="control-label" for="title">Distributor Name</label>
+                <div class="controls">
+                    <input type="text" id="title" name="title" class="span3" placeholder="Retailer Name" value="<?php if( isset($this->params) && isset($this->params['title']) ) echo $this->params['title'] ?>" />
+                </div>
+            </div>
+            <!-- <div class="control-group">
+                <label class="control-label" for="store_code">Store Code</label>
+                <div class="controls">
+                    <input type="text" id="store_code" name="store_code" value="<?php if( isset($this->params) && isset($this->params['store_code']) ) echo $this->params['store_code'] ?>" />
+                </div>
+            </div> -->
+
+<!--             <div class="control-group">
+                <label class="control-label" for="name">Coustormer<br></label>
+                <div class="controls">
+                    <input type="text" id="name" name="name" placeholder="Contact" value="<?php if( isset($this->params) && isset($this->params['name']) ) echo $this->params['name'] ?>" />
+                </div>
+            </div> -->
+
+<!--             <div class="control-group">
+                <div class="controls">
+                    <label class="label label-default"><input type="checkbox" value="1" name="del" <?php if(isset($this->params['del']) && $this->params['del'] == 1) echo 'checked="checked"' ?> /> Del</label>
+                    <label class="label label-success"><input type="checkbox" value="1" name="ka" <?php if(isset($this->params['ka']) && $this->params['ka'] == 1) echo 'checked="checked"' ?> /> KA</label>
+                    <label class="label label-inverse"><input type="checkbox" value="1" name="internal" <?php if(isset($this->params['internal']) && $this->params['internal'] == 1) echo 'checked="checked"' ?> /> Internal</label>
+                    <label class="label label-important"><input type="checkbox" value="1" name="inactive" <?php if(isset($this->params['inactive']) && $this->params['inactive'] == 1) echo 'checked="checked"' ?> /> Inactive (3 months)</label>
+                </div>
+            </div> -->
+
+        </div>
+        <div class="span4">
+
+         <!--    <div class="control-group">
+                <label for="grand_area_multi" class="control-label">Grand Area Multi</label>
+                <div class="controls">
+                    <select name="grand_area_multi[]" id="grand_area_multi" multiple="multiple">
+                            <option value="1">BKK East-1</option>
+                            <option value="2">BKK East-2</option>
+                            <option value="3" >BKK East-3</option>
+                            <option value="4" >BKK East-4</option>
+                            <option value="5" >BKK East-5</option>
+                            <option value="6" >BKK West-1</option>
+                            <option value="7" >BKK West-2</option>
+                            <option value="8" >BKK West-3</option>
+                    </select>
+                </div>
+            </div> -->
+        <!-- 
+            <div class="control-group">
+                <label class="control-label" for="area_multi">Area</label>
+                <div class="controls">
+                    <select name="area_multi[]" id="area_multi" multiple="multiple">
+                        <?php if (isset( $this->areas ) && $this->areas): ?>
+                            <?php foreach ($this->areas as $key => $area): ?>
+                                <option value="<?php echo $key ?>"><?php echo $area ?></option>
+                            <?php endforeach ?>
+                        <?php endif ?>
+                    </select>
+                </div>
+            </div> -->
+
+            <div class="control-group">
+                <label class="control-label" for="area">Area</label>
+                <div class="controls">
+                    <select name="area" id="area" class="span3">
+                        <option value="0">---</option>
+                        <?php if (isset( $this->areas ) && $this->areas): ?>
+                            <?php foreach ($this->areas as $key => $area): ?>
+                                <option value="<?php echo $key ?>" <?php if( isset($this->params['area']) && $this->params['area'] == $key ) echo "selected='selected'" ?>><?php echo $area ?></option>
+                            <?php endforeach ?>
+                        <?php endif ?>
+                    </select>
+                </div>
+            </div>
+
+            <div class="control-group">
+                <label class="control-label" for="region">Province</label>
+                <div class="controls">
+                    <select name="region" id="region" class="span3">
+                        <option value="0">---</option>
+                        <?php if (isset( $this->region_search ) && $this->region_search): ?>
+                            <?php foreach ($this->region_search as $key => $region): ?>
+                                <option value="<?php echo $key ?>" <?php if( isset($this->params['region']) && $this->params['region'] == $key ) echo "selected='selected'" ?>><?php echo $region ?></option>
+                            <?php endforeach ?>
+                        <?php endif ?>
+                    </select>
+                </div>
+            </div>
+
+<!--             <div class="control-group">
+                <label class="control-label" for="district">District</label>
+                <div class="controls">
+                    <select name="district" id="district">
+                        <option value="0">---</option>
+                        <?php if (isset( $this->district_search ) && $this->district_search): ?>
+                            <?php foreach ($this->district_search as $key => $region): ?>
+                                <option value="<?php echo $key ?>" <?php if( isset($this->params['district']) && $this->params['district'] == $key ) echo "selected='selected'" ?>><?php echo $region ?></option>
+                            <?php endforeach ?>
+                        <?php endif ?>
+                    </select>
+                </div>
+            </div> -->
+
+<!--             <div class="control-group">
+                <label class="control-label" for="ka_type">KA Type</label>
+                <div class="controls">
+                    <select name="ka_type" id="ka_type" class="span3">
+                        <option value=>---</option>
+                        <?php if (isset( $this->ka_type ) && $this->ka_type): ?>
+                            <?php foreach ($this->ka_type as $key): ?>
+                                <option value="<?php echo $key['org_id'] ?>" <?php if( isset($this->params['ka_type']) && $this->params['ka_type'] == $key['org_id'] ) echo "selected='selected'" ?>><?php if(isset($key['org_id']) && $key['org_id'] == 1){ echo 'อื่นๆ'; }else{ echo $key['org_name']; } ?></option>
+                            <?php endforeach ?>
+                        <?php endif ?>
+                    </select>
+                </div>
+            </div> -->
+
+            <div class="control-group">
+                <label class="control-label">Distributor Type</label>
+                <div class="controls">
+                    <select name="dis_type" class="span3" id="dis_type">
+                        <option value="">Please Selected</option>
+                        <option value="1" <?php if (isset($this->params['dis_type']) && $this->params['dis_type'] == 1){echo 'selected';}?> >Regional Distributor</option>
+                        <option value="2" <?php if (isset($this->params['dis_type']) && $this->params['dis_type'] == 2){echo 'selected';}?> >Affiliate</option>
+                        <option value="3" <?php if (isset($this->params['dis_type']) && $this->params['dis_type'] == 3){echo 'selected';}?> >Retailer</option>
+                    </select>
+                </div>
+            </div>
+
+            <!-- <div class="control-group">
+                <label class="control-label" for="quota_channel">Channel Type</label>
+                <div class="controls">
+                    <select name="quota_channel" id="quota_channel">
+                        <option value=>---</option>
+                        <option value="10" <?php if (isset($this->params['quota_channel']) && $this->params['quota_channel'] == 10){echo 'selected';}?>>Brand Shop By Dealer</option>
+                        <option value="1" <?php if (isset($this->params['quota_channel']) && $this->params['quota_channel'] == 1){echo 'selected';}?>>ORG By Dealer</option>
+                    </select>
+                </div>
+            </div> -->
+
+         <!--    <div class="control-group">
+                <label class="control-label" for="group_id">Distributor Type Group</label>
+                <div class="controls">
+                    <select name="group_id" id="group_id">
+                        <option value=>---</option>
+                        <option value="10" <?php if (isset($this->params['group_id']) && $this->params['group_id'] == 10){echo 'selected';}?>>Brand Shop (10)</option>
+                        <option value="11" <?php if (isset($this->params['group_id']) && $this->params['group_id'] == 11){echo 'selected';}?>>Brand Shop By Dealer (11)</option>
+                        <option value="12" <?php if (isset($this->params['group_id']) && $this->params['group_id'] == 12){echo 'selected';}?>>Brand Shop-ORG (12)</option>
+                        <option value="13" <?php if (isset($this->params['group_id']) && $this->params['group_id'] == 13){echo 'selected';}?>>Brand Shop by KR Dealer (13)</option>
+                        <option value="1" <?php if (isset($this->params['group_id']) && $this->params['group_id'] == 1){echo 'selected';}?>>Dealer and Hub (1)</option>
+                        <option value="8" <?php if (isset($this->params['group_id']) && $this->params['group_id'] == 8){echo 'selected';}?>>Digital (8)</option>
+                        <option value="7" <?php if (isset($this->params['group_id']) && $this->params['group_id'] == 7){echo 'selected';}?>>Export (7)</option>
+                        <option value="3" <?php if (isset($this->params['group_id']) && $this->params['group_id'] == 3){echo 'selected';}?>>KA(ORG) (3)</option>
+                        <option value="2" <?php if (isset($this->params['group_id']) && $this->params['group_id'] == 2){echo 'selected';}?>>KR-Dealer (2)</option>
+                        <option value="5" <?php if (isset($this->params['group_id']) && $this->params['group_id'] == 5){echo 'selected';}?>>Online (5)</option>
+                        <option value="4" <?php if (isset($this->params['group_id']) && $this->params['group_id'] == 4){echo 'selected';}?>>Operator (4)</option>
+                        <option value="9" <?php if (isset($this->params['group_id']) && $this->params['group_id'] == 9){echo 'selected';}?>>Service Shop (9)</option>
+                        <option value="6" <?php if (isset($this->params['group_id']) && $this->params['group_id'] == 6){echo 'selected';}?>>Staff (6)</option>
+                    </select>
+                </div>
+            </div> -->
+
+            <div class="control-group">
+                <label class="control-label" for="warehouse_id"> Warehouse </label>
+                <div class="controls">
+                    <select name="warehouse_id" id="warehouse_id" class="span3">
+                        <option value=""> Choose Option </option>
+                         <?php if (isset( $this->warehouses ) && $this->warehouses): ?>
+                            <?php foreach ($this->warehouses as $key => $warehouse): ?>
+                                <option value="<?php echo $key ?>" <?php if( isset($this->params['warehouse_id']) && $this->params['warehouse_id'] == $key ) echo "selected='selected'" ?>><?php echo $warehouse ?></option>
+                            <?php endforeach ?>
+                        <?php endif ?>
+                    </select>
+                </div>
+            </div>
+
+        </div>
+
+        <div class="span4">
+            <div class="control-group">
+                <label class="control-label" for="from">Created From</label>
+                <div class="controls">
+                    <input type="text" class="input-medium date span3" id="from" name="from" placeholder="Created from date" value="<?php if( isset($this->params) && isset($this->params['from']) ) echo $this->params['from'] ?>" />
+                </div>
+            </div>
+            <div class="control-group">
+                <label class="control-label" for="to">Created To</label>
+                <div class="controls">
+                    <input type="text" class="input-medium date span3" id="to" name="to" placeholder="Created to date" value="<?php if( isset($this->params) && isset($this->params['to']) ) echo $this->params['to'] ?>" />
+                </div>
+            </div>
+
+           <!--  <div class="control-group">
+                <label class="control-label" for="admin">Sale Man</label>
+                <div class="controls">
+                    <select name="admin" id="admin" class="input-medium">
+                        <option value="0">---</option>
+                        <?php if (isset( $this->staffs ) && $this->staffs): ?>
+                            <?php foreach ($this->staffs as $key => $admin): ?>
+                                <option value="<?php echo $key ?>" <?php if( isset($this->params) && isset($this->params['admin']) && $this->params['admin'] == $key ) echo "selected='selected'" ?>><?php echo $admin ?></option>
+                            <?php endforeach ?>
+                        <?php endif ?>
+                    </select>
+                </div>
+            </div> -->
+
+<!--             <div class="control-group">
+                <label class="control-label" for="has_exported">Active (In 3 months)</label>
+                <div class="controls">
+                    <select name="has_exported" id="has_exported" class="input-medium">
+                        <option value="">All</option>
+                        <option value="1" <?php if( isset($this->params) && isset($this->params['has_exported']) && $this->params['has_exported'] == 1 ) echo "selected='selected'" ?>>Active</option>
+                        <option value="2" <?php if( isset($this->params) && isset($this->params['has_exported']) && $this->params['has_exported'] == 2 ) echo "selected='selected'" ?>>Inactive</option>
+                    </select>
+                </div>
+            </div> -->
+
+<!--             <div class="control-group">
+                <label class="control-label" for="has_exported">Verify</label>
+                <div class="controls">
+                    <select name="activate" id="activate" class="input-medium">
+                        <option value="">---</option>
+                        <option value="1" <?php if( isset($this->params) && isset($this->params['activate']) && $this->params['activate'] == 1 ) echo "selected='selected'" ?>>Verified</option>
+                        <option value="2" <?php if( isset($this->params) && isset($this->params['activate']) && $this->params['activate'] == 2 ) echo "selected='selected'" ?>>Non Verify</option>
+                    </select>
+                </div>
+            </div> -->
+
+            <div class="controls-group" style="padding-bottom: 5px;">
+                <label class="control-label">Status </label>
+                <div class="controls">
+                    <select name="status" id="status" class="span3">
+                        <option value="">Please select</option>
+                        <option value="1" <?php if (isset($this->params['status']) && $this->params['status'] == 1){echo 'selected';}?>>In Cooperation</option>
+                        <option value="2" <?php if (isset($this->params['status']) && $this->params['status'] == 2){echo 'selected';}?>>Suspend Cooperation</option>
+                        <option value="3" <?php if (isset($this->params['status']) && $this->params['status'] == 3){echo 'selected';}?>>Close</option>
+                    </select>
+                </div>
+            </div>
+
+        </div>
+
+    </div>
+    <div class="row">
+        <div class="span8">
+            <div class="controls">
+                <button type="submit" class="btn btn-primary">Search</button>
+                <!-- <button type="reset" class="btn btn-warning">Reset</button> -->
+                <?php if ($this->access('sales-report', 'distributor-list')): ?>
+                    <button type="submit" name="export" value="1" class="btn btn-success">Export</button>
+                <?php endif ?>
+            </div>            
+        </div>
+    </div>
+</form>
+
+<script type="text/javascript" src="/js/jquery-ui-1.8.12.custom.min.js"></script>
+<link rel="stylesheet" type="text/css" href="/css/jquery-ui-1.8.12.custom.css"/>
+
+<script type="text/javascript" src="<?php echo HOST ?>js/jets.js"></script>
+<script type="text/javascript" src="<?php echo HOST ?>js/bootstrap.min.js"></script>
+<script src="<?php echo HOST ?>js/tag-it.min.js" type="text/javascript" charset="utf-8"></script>
+<script>
+    $(document).ready(function () {
+
+        $("#status, #warehouse_id, #area, #region , #dis_type").select2();
+
+        <?php
+
+        if(isset($this->params['area_multi'])){
+            foreach ($this->params['area_multi'] as $key => $value) {
+
+                ?>
+                $("#area_multi option[value='<?=$value?>']").prop("selected", true);
+                <?php
+
+            }
+        }
+
+        if(isset($this->params['grand_area_multi'])){
+            foreach ($this->params['grand_area_multi'] as $key => $value) {
+
+                ?>
+                $("#grand_area_multi option[value='<?=$value?>']").prop("selected", true);
+                <?php
+
+            }
+        }
+
+        ?>
+
+        $('#area_multi').multiselect();
+        $('#grand_area_multi').multiselect();
+
+        $( '.date' ).datepicker({ dateFormat: "dd/mm/yy" });
+
+        $('#area').change(function(){
+
+            $(this).after('<span class="loading"></span>');
+            var _self = $(this);
+            var area_id = _self.val();
+
+            $('#region').find('option:not(:first)').remove();
+
+            $.get("/get/region",
+                {area_id: area_id}
+                ,function(data,status){
+                    $('#district').find('option:not(:first)').remove();
+                    var data = $.parseJSON( data );
+
+                    for (var i = 0; i < data.length; i++) {
+                        $('#region').append('<option value="'+data[i]['id']+'">'+data[i]['name']+'</option>');
+                    }
+
+                    _self.nextAll('.loading').remove();
+                });
+        });
+
+        $('#region').change(function(){
+
+            $(this).after('<span class="loading"></span>');
+            var _self = $(this);
+            var region = _self.val();
+
+            $('#district').find('option:not(:first)').remove();
+
+            $.get("/get/district",
+                {region: region}
+                ,function(data,status){
+                    var data = $.parseJSON( data );
+
+                    for (var i = 0; i < data.length; i++) {
+                        $('#district').append('<option value="'+data[i]['id']+'">'+data[i]['name']+'</option>');
+                    }
+
+                    _self.nextAll('.loading').remove();
+                });
+        });
+    });
+</script>

@@ -1,0 +1,361 @@
+<style type="text/css">
+.logo{
+        background: #00925f;
+    border-radius: 4px 4px 0px 0px;
+    padding: 15px;
+    text-align: center;
+}
+.btn-info, .btn-info.disabled {
+    background: #00925f;
+    border: 1px solid #00925f;
+    -webkit-box-shadow: 0 2px 2px 0 rgba(66, 165, 245, 0.14), 0 3px 1px -2px rgba(66, 165, 245, 0.2), 0 1px 5px 0 rgba(66, 165, 245, 0.12);
+    box-shadow: 0 2px 2px 0 rgba(66, 165, 245, 0.14), 0 3px 1px -2px rgba(66, 165, 245, 0.2), 0 1px 5px 0 rgba(66, 165, 245, 0.12);
+    -webkit-transition: 0.2s ease-in;
+    -o-transition: 0.2s ease-in;
+    transition: 0.2s ease-in;
+}
+.btn-info:hover,
+  .btn-info.disabled:hover {
+    background: #00925f;
+    border: 1px solid #00925f;
+    -webkit-box-shadow: 0 14px 26px -12px rgba(23, 105, 255, 0.42), 0 4px 23px 0 rgba(0, 0, 0, 0.12), 0 8px 10px -5px rgba(23, 105, 255, 0.2);
+    box-shadow: 0 14px 26px -12px rgba(23, 105, 255, 0.42), 0 4px 23px 0 rgba(0, 0, 0, 0.12), 0 8px 10px -5px rgba(23, 105, 255, 0.2); }
+  .btn-info.active, .btn-info:focus,
+  .btn-info.disabled.active,
+  .btn-info.disabled:focus {
+    background: #00925f;
+    -webkit-box-shadow: 0 14px 26px -12px rgba(23, 105, 255, 0.42), 0 4px 23px 0 rgba(0, 0, 0, 0.12), 0 8px 10px -5px rgba(23, 105, 255, 0.2);
+    box-shadow: 0 14px 26px -12px rgba(23, 105, 255, 0.42), 0 4px 23px 0 rgba(0, 0, 0, 0.12), 0 8px 10px -5px rgba(23, 105, 255, 0.2); }
+    .btn-info.active.focus,
+.btn-info.active:focus,
+.btn-info.active:hover,
+.btn-info.focus:active,
+.btn-info:active:focus,
+.btn-info:active:hover,
+.open > .dropdown-toggle.btn-info.focus,
+.open > .dropdown-toggle.btn-info:focus,
+.open > .dropdown-toggle.btn-info:hover,
+.btn-info.focus,
+.btn-info:focus {
+  background-color: #0C9369;
+  border: 1px solid #0C9369; }
+  .help-block{
+    color: red;
+        font-size: 12px;
+  }
+
+  .user_{
+    margin-bottom:25px;
+  }
+  .login-register {
+    background-size: cover;
+    background-repeat: no-repeat;
+    background-position: center center;
+    height: 100%;
+    width: 100%;
+    padding: 5% 0;
+    position: fixed;
+}
+.login-box {
+    width: 600px;
+    margin: 0 auto;
+}
+.match{
+    display:none;
+     background: #f1f1f1;
+    color: #000;
+    position: relative;
+}
+/* Add a green text color and a checkmark when the requirements are right */
+.valid {
+    color: green !important;
+}
+
+.valid:before {
+    position: relative;
+    left: -35px;
+    content: "✔";
+}
+
+/* Add a red text color and an "x" when the requirements are wrong */
+.invalid {
+    color: red !important;
+}
+
+.invalid:before {
+    position: relative;
+    left: -35px;
+    content: "✖";
+}
+/*.alert {
+    padding: 15px;
+    margin-bottom: 20px;
+    border: 1px solid rgba(232, 10, 10, 0.38);
+    border-radius: 4px;
+    background: rgba(255, 1, 1, 0.3);
+    color: red;
+}*/
+#message{
+    font-size: 14px;
+    line-height: 14px;
+    margin-left: 40px;
+    margin-top: 20px;
+}
+.btn-info.disabled, .btn-info:disabled {
+    background-color: #00925f;
+    border-color: #00925f;
+}
+
+.blockOverlay{
+        z-index: 10000 !important;
+    }
+.blockPage{
+    z-index: 10001 !important;
+}
+
+ body{
+    font-family: phetsarath ot;
+ }
+
+ p{
+    font-family: phetsarath ot;
+ }
+
+</style>
+
+<?php $userStorage = Zend_Auth::getInstance()->getStorage()->read();?>
+
+<div class="page-header">
+    <h1>Change password ປ່ຽນລະຫັດຜ່ານ</h1>
+</div>
+<?php
+if (isset($this->messages) and $this->messages)
+    foreach ($this->messages as $message):
+        echo '<div class="alert alert-error">'.$message.'</div>';
+    endforeach;
+?>
+
+<?php
+if (isset($this->success_messages) and $this->success_messages)
+    foreach ($this->success_messages as $message):
+        echo '<div class="alert alert-success">'.$message.'</div>';
+    endforeach;
+?>
+
+<h3 style="margin-top: 30px;margin-bottom: 30px;color: red;" class="<?php if(isset($userStorage) && $userStorage && $userStorage->re_pwd != '1'){ echo 'hide'; }?>">*ເນື່ອງຈາກນະໂຍບາຍຄວາມປອດໄພຂອງລະບົບ ຈືງບັງຄັຍ/ບໃຫ້ພະນັກງານທີ່ໃຊ້ Password ດຽວກັນກັບ Username ຫຼື Password ທີ່ບໍ່ມີຄວາມປອດໄພ ປ່ຽນ Password ໃໝ່</h3>
+
+<form role="form" action="<?php echo HOST.'/user/change-pass';?>" method="post">
+    <div class="form-group">
+        <label for="exampleInputName">Username : <?php echo $this->name;?></label>
+    </div>
+
+    <br>
+
+    <div class="form-group  m-b-40 focused">
+        <span class="bar"></span>
+        <label for="old_password" class="col-md-12 control-label">Old Password</label>
+        <input id="old_password" type="password" class="form-control old_password" name="old_password" required>
+    </div>
+    <div class="form-group m-b-40 ">
+        <span class="bar"></span>
+        <label for="password" class="col-md-12 control-label">New Password</label>
+        <input id="password" type="password" disabled class="form-control" pattern="(?=.*\d)(?=.*[a-z])(?=.*[A-Z]).{8,}" title="ต้องประกอบด้วยตัวเลขอย่างน้อยหนึ่งตัวอักษรและตัวพิมพ์ใหญ่และตัวพิมพ์เล็กและตัวอักษรอย่างน้อย 8 ตัวขึ้นไป" name="password" required>
+    </div>
+    <div class="form-group m-b-40 ">
+        <span class="bar"></span>
+        <label for="confirm_password" class="col-md-12 control-label">Confirm Password</label>
+        <input id="confirm_password" type="password" class="form-control confirm_password" name="confirm_password" disabled required>
+    </div>
+
+    <div id="message" style="display: none;">
+        <p style="color:blue; font-weight: bold; font-style: italic; font-size: 14px;">Password must contain the following:</p>
+        <p style="color:blue; font-weight: bold; font-style: italic; font-size: 14px;">ລະຫັດຜ່ານຕ້ອງປະກອບດ້ວຍຂໍ້ມູນຕໍ່ໄປນີ້:</p>
+        <p id="letter" class="invalid">A <b>lowercase </b> letter a-z (ຕົວພິມນ້ອຍ)</p>
+        <p id="capital" class="invalid">A <b>uppercase </b> letter A-Z (ຕົວພິມໃຫຍ່)</p>
+        <p id="number" class="invalid">A <b>number</b> (ຕົວເລກ 0-9)</p>
+        <p id="length" class="invalid">Minimum <b>8 characters (ຕົວອັກສອນຢ່າງນ້ອຍ 8 ຕົວ)</b></p>
+        <p id="sign" class="invalid">Special Character ( @$!%*?&<>{} ເຄື່ອງໝາຍພິເສດ )</b></p>
+        <!-- <p id="same" class="invalid">Minimum <b>8 characters (ตัวอักษรอย่างน้อย 8 ตัว)</b></p> -->
+    </div>
+
+     <h3 class="matchaaa"></h3>
+
+    <button style="margin-top: 30px;margin-bottom: 50px;" id="btn-cpw" type="submit" class="btn btn-default" disabled>Submit</button>
+</form>
+
+<script src="/js/jquery.blockUI.js"></script>
+
+<script type="text/javascript">
+
+    $(document).ajaxStart(function(){
+        $.blockUI({ css: { 
+            border: 'none', 
+            padding: '15px', 
+            backgroundColor: '#000', 
+            '-webkit-border-radius': '10px', 
+            '-moz-border-radius': '10px', 
+            opacity: .5, 
+            color: '#fff' 
+        } });
+    });
+
+    $(document).ajaxStop(function(){
+        $.unblockUI();
+    });
+
+    $(document).ready(function() {
+        $('.pagination ul').addClass('pagination');  
+        $('#btn-cpw').prop( "disabled", true );
+     });
+
+    $('.old_password').on('change',function (argument) {
+
+        $('#password').val('');
+        $('#password').attr('disabled', true);
+        $('#confirm_password').val('');
+        $('#confirm_password').attr('disabled', true);
+        $('#btn-cpw').prop( "disabled", true );
+
+        var old_password = $(this).val();
+        $.ajax({
+            url: 'check-pass',
+            type: 'POST',
+            data: {old_password: old_password},
+        })
+        .done(function(data) {
+            if (data == 1) {
+                $('#password').removeAttr("disabled");
+            }else{
+                $('#old_password').val('');
+                $('#old_password').focus();
+                alert("Old Password is incorrect (ລະຫັດເກົ່າບໍ່ຖືກຕ້ອງ)", "Old Password is incorrect ,Please try again. :(", "warning");  
+                $('#password').prop("disabled","disabled");
+            }
+        })
+        .fail(function() {
+            console.log("error");
+        })
+        .always(function() {
+            console.log("complete");
+        });
+
+    });
+
+    var myInput = document.getElementById("password");
+    var old     = document.getElementById("old_password");
+    var letter  = document.getElementById("letter");
+    var capital = document.getElementById("capital");
+    var number  = document.getElementById("number");
+    var length  = document.getElementById("length");
+    var same  = document.getElementById("same");
+
+    // When the user clicks on the password field, show the message box
+    myInput.onfocus = function() {
+        document.getElementById("message").style.display = "block";
+    }
+
+    // When the user clicks outside of the password field, hide the message box
+    myInput.onblur = function() {
+        document.getElementById("message").style.display = "none";
+    }
+
+
+    // When the user starts to type something inside the password field
+    myInput.onkeyup = function() {
+
+        $('#confirm_password').val('');
+        $('#confirm_password').attr('disabled', true);
+        $('#btn-cpw').prop( "disabled", true );
+        
+        var num = $('.num').val();
+        // Validate lowercase letters
+        var lowerCaseLetters = /[a-z]/g;
+        if(myInput.value.match(lowerCaseLetters)) {  
+          letter.classList.remove("invalid");
+          letter.classList.add("valid");
+          var d1 = 1;
+        } else {
+          letter.classList.remove("valid");
+          letter.classList.add("invalid");
+          var d1 = 0;
+        }
+        
+        // Validate capital letters
+        var upperCaseLetters = /[A-Z]/g;
+        if(myInput.value.match(upperCaseLetters)) {  
+          capital.classList.remove("invalid");
+          capital.classList.add("valid");
+          var d2 = 1;
+        } else {
+          capital.classList.remove("valid");
+          capital.classList.add("invalid");
+          var d2 = 0;
+        }      
+
+        // Validate numbers
+        var numbers = /[0-9]/g;
+        if(myInput.value.match(numbers)) {  
+          number.classList.remove("invalid");
+          number.classList.add("valid");
+          var d3 = 1;
+        } else {
+          number.classList.remove("valid");
+          number.classList.add("invalid");
+          var d3 = 0;
+        }
+        
+        // Validate length
+        if(myInput.value.length >= 8) {
+          length.classList.remove("invalid");
+          length.classList.add("valid");
+          var d4 = 1;
+        } else {
+          length.classList.remove("valid");
+          length.classList.add("invalid");
+          var d4 = 0;
+        }      
+
+        var special_character = /[@$!%*?&<>{}]/g;
+        if(myInput.value.match(special_character)) {  
+          sign.classList.remove("invalid");
+          sign.classList.add("valid");      
+          var d5 = 1;
+          
+        } else {
+          sign.classList.remove("valid");
+          sign.classList.add("invalid");
+          var d5 = 0;
+        }
+
+        if (d1 == 1 && d2 == 1 && d3 == 1 && d4 == 1 && d5 == 1) {
+            $('#confirm_password').prop( "disabled", false );
+        }else{
+            $('#confirm_password').prop( "disabled", "disabled" );
+        }
+         
+        if (myInput.value === $('#old_password').val()) {
+           alert("New Password is incorrect", "New passwords are not the same as old passwords. :(", "warning");
+           
+            $('#password').val('');
+            $('#confirm_password').val('');
+            $('#confirm_password').attr('disabled', true);
+            $('#btn-cpw').prop( "disabled", true );
+
+        }
+    }
+
+    $('#confirm_password').on('keyup',function (argument) {
+
+       if ($(this).val() === $('#password').val()) {
+       
+            $('#btn-cpw').removeAttr("disabled");
+            $('.matchaaa').css("display","none");
+
+        }else{
+           
+            $('.matchaaa').html("<span style='color:red'>Password not Match <br> &nbsp; &nbsp;&nbsp;&nbsp; ລະຫັດບໍ່ກົງກັນ </span>");
+            $('#btn-cpw').prop("disabled","disabled");
+
+        }
+    });
+</script>

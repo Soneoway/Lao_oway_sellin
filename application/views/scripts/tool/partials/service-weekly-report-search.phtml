@@ -1,0 +1,100 @@
+<form class="form-search form-horizontal" method="get" action="<?php echo HOST ?>tool/service-weekly-report-list">
+    <div class="row">
+        <div class="span5">
+    
+            <div class="control-group">
+                <label for="data_type" class="span2">ประเภทข้อมูล<span style="color: red">*</span></label>
+                <select class="span3 data_type" name="data_type" required="required">
+                    <option value="" <?php if (isset($this->params['data_type']) and $this->params['data_type']==0):?> selected<?php endif;?>>- Please Select -</option>
+                    <option value="R01" <?php if (isset($this->params['data_type']) and $this->params['data_type']=="R01"):?> selected<?php endif;?>>Report 01 : Inventory / Purchase / Consumption</option>
+                    <option value="R02" <?php if (isset($this->params['data_type']) and $this->params['data_type']=="R02"):?> selected<?php endif;?>>Report 02 : Inventory by Branch</option>
+                    <option value="R03" <?php if (isset($this->params['data_type']) and $this->params['data_type']=="R03"):?> selected<?php endif;?>>Report 03 : Turn Over Stock</option>
+                    <option value="R04" <?php if (isset($this->params['data_type']) and $this->params['data_type']=="R04"):?> selected<?php endif;?>>Report 04 : Stock Aging</option>
+                    <option value="R05" <?php if (isset($this->params['data_type']) and $this->params['data_type']=="R05"):?> selected<?php endif;?>>Report 05 : Used spare part by ITEM</option>
+                    
+                    <option value="1" <?php if (isset($this->params['data_type']) and $this->params['data_type']=="1"):?> selected<?php endif;?>>รายการ Import สินค้า</option>
+                    <option value="2" <?php if (isset($this->params['data_type']) and $this->params['data_type']=="2"):?> selected<?php endif;?>>รายการ Import สินค้าคงเหลือ</option>
+                    <option style="display: none;" value="3" <?php if (isset($this->params['data_type']) and $this->params['data_type']=="3"):?> selected<?php endif;?>>รายการสินค้าโมเดล</option>
+                    <option value="4" <?php if (isset($this->params['data_type']) and $this->params['data_type']=="4"):?> selected<?php endif;?>>รายการ Import ยอดอะไหล่เข้า</option>
+                    <option value="5" <?php if (isset($this->params['data_type']) and $this->params['data_type']=="5"):?> selected<?php endif;?>>รายการ Import ยอดใช้อะไหล่</option>
+                    <option value="6" <?php if (isset($this->params['data_type']) and $this->params['data_type']=="6"):?> selected<?php endif;?>>รายการ Import ยอดใช้ ACC</option>
+                    
+                </select>
+            </div>
+
+            <div class="control-group">
+            <label for="warehouse_name" class="span2">Warehouse</label>
+                <select id="warehouse_name" class="span3" name="warehouse_name">
+                    <option value="">Choose</option>
+                    <?php if ($this->warehouse): foreach ($this->warehouse as $id=>$item):?>
+                        <option value="<?php echo $item['warehouse_name'];?>" <?php if (isset($this->params['warehouse_name']) and $item['warehouse_name']==$this->params['warehouse_name']):?> selected<?php endif;?>><?php echo $item['warehouse_name'];?></option>
+                    <?php endforeach; endif;?>
+                </select>
+            </div>
+
+            <div class="control-group">
+            <label for="start_date" class="span2">Good Code</label>
+                <input type="text" class="span2 good_code" name="good_code" id="good_code" value="<?php isset($this->params['good_code']) and printf($this->params['good_code']);?>" />
+            </div>
+
+            <div class="control-group">
+            <label for="start_date" class="span2">วันที่นำเข้าข้อมูล</label>
+                <input type="text" class="span1 start_date" name="start_date" id="start_date" value="<?php isset($this->params['start_date']) and printf($this->params['start_date']);?>" /> - <input type="text" class="span1 end_date" name="end_date" id="end_date" value="<?php isset($this->params['end_date']) and printf($this->params['end_date']);?>" />
+            </div>
+            
+            <div class="control-group">
+            <label for="start_week" class="span2">Week Of Year</label>
+                <input type="text" readonly class="span1 start_week" name="start_week" id="start_week" value="<?php isset($this->params['start_week']) and printf($this->params['start_week']);?>" /> - <input type="text" readonly class="span1 end_week" name="end_week" id="end_week" value="<?php isset($this->params['end_week']) and printf($this->params['end_week']);?>" />
+            </div>
+        </div>
+        <div class="span5">
+
+        </div>
+    </div>
+
+    
+    <input type="hidden" name="counter" value="<?=$this->counter;?>">
+    <button type="submit" class="btn btn-primary">Search</button>
+
+    <button type="submit" name="export" value="1" class="btn btn-success">Export</button>
+</form>
+<script async="async">
+
+
+        $(document).on('focus',".start_date", function(){ 
+         $(this).datepicker({ dateFormat: "dd/mm/yy" });
+        });
+
+        $(document).on('focus',".end_date", function(){ 
+         $(this).datepicker({ dateFormat: "dd/mm/yy" });
+        });
+
+        $(document).off('change', '.start_date').on('change', '.start_date', function(e) 
+        {
+            var data_date = toDate($(this).val());
+            var week_of_year = data_date.getFullYear()+'-'+data_date.getWeek();
+            $('.start_week').val(week_of_year);
+        });
+
+        $(document).off('change', '.end_date').on('change', '.end_date', function(e) 
+        {
+            var data_date = toDate($(this).val());
+            var week_of_year = data_date.getFullYear()+'-'+data_date.getWeek();
+            $('.end_week').val(week_of_year);
+        });
+
+        function toDate(dateStr) {
+          const [day, month, year] = dateStr.split("/")
+          return new Date(year, month - 1, day)
+        }
+
+        Date.prototype.getWeek = function() 
+        {
+          var sunday = new Date(this.getFullYear(),0,7);
+          var today = new Date(this.getFullYear(),this.getMonth(),this.getDate());
+          var dayOfYear = ((today - sunday + 1)/86400000);
+          return Math.ceil(dayOfYear/7)
+        };
+
+
+</script>

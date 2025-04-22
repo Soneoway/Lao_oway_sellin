@@ -1,0 +1,254 @@
+<?php
+function product_price($priceFloat) {
+    $symbol = ' THB';
+    $symbol_thousand = ',';
+    $decimal_place = 2;
+    $price = number_format($priceFloat, $decimal_place, '.', $symbol_thousand);
+    return $price;
+}
+?>
+
+<div class="page-header">
+    <h1>Returns IN Warehouse</h1>
+</div>
+
+<?php
+if (isset($this->messages) and $this->messages)
+    foreach ($this->messages as $message):
+        echo '<div class="alert alert-error">'.$message.'</div>';
+    endforeach;
+?>
+
+<div class="row">
+    <div class="span12">
+        <iframe name="ifrmSave" id="ifrmSave" width="100%" style="display:none;"></iframe>
+        <form role="form" id="form" action="<?php echo HOST.'warehouse/return-confirm';?>" method="post" target="ifrmSave" class="form-inline">
+            <?php if (isset($this->sales) and $this->sales):
+              $sn_ref = $this->sales[0]['sale']->sn_ref;
+              if($sn_ref==''){
+                $sn_ref = $this->sales[0]['sale']->sn;
+              }
+            ?>
+                <div class="row">
+                    <div class="span6">
+                        <label class="span2">Return order number</label>
+                        <span class="span3"><strong><?php isset($this->sales) and $this->sales and printf($sn_ref);?></strong></span>
+                    </div>
+                </div>
+            <?php endif;?>
+
+            <div class="row">
+                <div class="span6">
+                    <label class="span2">Retailer name</label>
+                    <span class="span3"><strong><?php echo $this->sales[0]['retailer_name'];?></strong></span>
+                </div>
+            </div>
+
+            <div class="row">
+                <div class="span6">
+                    <label class="span2">Return to Warehouse</label>
+                    <span class="span3"><strong><?php echo $this->sales[0]['backs_d_name'];?></strong></span>
+                </div>
+            </div>
+
+            <div class="row">
+                <div class="span6">
+                    <label class="span2">Sale staffs</label>
+                    <span class="span3"><strong><?php echo $this->sales[0]['created_by_name'];?></strong></span>
+                </div>
+            </div>
+
+            <div class="row">
+                <div class="span6">
+                    <label class="span2">Order time</label>
+                    <span class="span3"><strong><?php echo $this->sales[0]['sale']->add_time;?></strong></span>
+                </div>
+            </div>
+
+            <div class="row">
+                <div class="span6">
+                    <label class="span2">Payment time</label>
+                    <span class="span3"><strong><?php echo $this->sales[0]['sale']->pay_time;?></strong></span>
+                </div>
+            </div>
+
+            <div class="row">
+                <div class="span6">
+                    <label class="span2">Payment staffs</label>
+                    <span class="span3"><strong><?php echo $this->sales[0]['pay_user_name'];?></strong></span>
+                </div>
+            </div>
+
+            <div class="row">
+                <div class="span6">
+                    <label class="span2">Payment notes</label>
+                    <span class="span3"><strong><?php printf($this->sales[0]['sale']->pay_text);?></strong></span>
+                </div>
+            </div>
+
+            <div class="row">
+                <div class="span12">
+                    <table class="table table-bordered span12">
+                        <thead>
+                        <tr>
+                            <th>Products category</th>
+                            <th>Product</th>
+                            <th>Color</th>
+                            <th>Quantity</th>
+                            <th>Price</th>
+                            <th>Total Price</th>
+                            <th>Remark</th>
+                        </tr>
+                        </thead>
+
+                        <tbody>
+
+                        <?php
+                        $total_num = $total_price = $total_total = 0;
+                        foreach ($this->sales as $item):
+                            $sale = $item['sale'];
+                            $total_num += $sale->num;
+                            $total_price += $sale->price;
+                            $total_total += $sale->total;
+                            ?>
+
+                            <tr>
+                                <td><?php echo $item['category'];?></td>
+                                <td><?php echo $item['brand_name'] ?> <?php echo $item['good'];?></td>
+                                <td><?php echo $item['color'];?></td>
+                                <td><?php printf($sale->num);?></td>
+                                <td><?php printf(product_price($sale->price));?></td>
+                                <td><?php printf(product_price($sale->total));?></td>
+                                <td><?php printf($sale->text);?></td>
+                            </tr>
+
+                        <?php if ( $sale->cat_id==$this->accessories_id ) {?>
+                            <tr>
+                                <td colspan="2">&nbsp;</td>
+                                <td>
+                                    <label class="span2">Quantity Accessories Quality Goodset
+                                        <input type="number" min="1" class="span1" name="num_good[<?php echo $sale->id;?>]" maxlength="5" style="width: 50px" />
+                                    </label>
+                                </td>
+                                <td>
+                                    <label class="span2">Quantity Accessories Broken-seal
+                                        <input type="number" min="1" class="span1" name="num_bad1[<?php echo $sale->id;?>]" maxlength="5" style="width: 50px" />
+                                    </label>
+                                </td>
+                                <td>
+                                    <label class="span2">Quantity Accessories Box-damage
+                                        <input type="number" min="1" class="span1" name="num_bad2[<?php echo $sale->id;?>]" maxlength="5" style="width: 50px" />
+                                    </label>
+                                </td>
+                                <td>
+                                    <label class="span2">Quantity Accessories Unit-damage
+                                        <input type="number" min="1" class="span1" name="num_bad3[<?php echo $sale->id;?>]" maxlength="5" style="width: 50px" />
+                                    </label>
+                                </td>
+                            </tr>
+                        <?php }?>
+
+                        <?php endforeach;?>
+                        <tr>
+                            <td colspan="3">
+                                <label class="span2">List IMEI
+                                
+                                    <textarea readonly class="span2" cols="15" rows="20"><?php 
+                                    foreach ($this->imei_returns as $imei_return):
+                                            if($this->return_product=='digital')
+                                            {
+                                                echo $imei_return->sn."\n";
+                                            }else{
+                                                echo $imei_return->imei_sn."\n"; 
+                                            }
+                                            
+                                        endforeach;?></textarea>
+                                </label>
+                            </td>
+                            <td>
+                                <label class="span2">List IMEI Goodset
+                                    <textarea name="imei_good" class="" style="width: 140px" cols="15" rows="20"><?php foreach ($this->imei_return_good_ins as $imei_return):
+                                            echo $imei_return->imei_sn."\n";
+                                        endforeach;?></textarea>
+                                </label>
+                            </td>
+                            <td>
+                                <label class="span2">List IMEI Broken-seal
+                                    <textarea name="imei_bad1" class="" style="width: 140px" cols="15" rows="20"><?php foreach ($this->imei_return_bad_ins1 as $imei_return):
+                                            echo $imei_return->imei_sn."\n";
+                                        endforeach;?></textarea>
+                                </label>
+                            </td>
+                            <td>
+                                <label class="span2">List IMEI Box-damage
+                                    <textarea name="imei_bad2" class="" style="width: 140px" cols="15" rows="20"><?php foreach ($this->imei_return_bad_ins2 as $imei_return):
+                                            echo $imei_return->imei_sn."\n";
+                                        endforeach;?></textarea>
+                                </label>
+                            </td>
+                            <td>
+                                <label class="span2">List IMEI Unit-damage
+                                    <textarea name="imei_bad3" class="" style="width: 140px" cols="15" rows="20"><?php foreach ($this->imei_return_bad_ins3 as $imei_return):
+                                            echo $imei_return->imei_sn."\n";
+                                        endforeach;?></textarea>
+                                </label>
+                            </td>
+                        </tr>
+                        </tbody>
+
+                        <tfoot>
+                        <tr>
+                            <td colspan="3"><strong>SUMMARY</strong></td>
+                            <td><strong><?php echo $total_num;?></strong></td>
+                            <td><strong><?php echo $total_price;?></strong></td>
+                            <td><strong><?php echo $total_total;?></strong></td>
+                            <td>&nbsp;</td>
+                        </tr>
+                        </tfoot>
+                    </table>
+                </div>
+            </div>
+
+            <div class="row">
+                <div class="span6">
+                    <div class="control-group">
+                        <div class="span4">
+                            <input type="hidden" id="back_url" name="back_url" value="/warehouse/return-list">
+                            <input type="hidden" name="sn" value="<?php isset($this->sales) and $this->sales and printf($this->sales[0]['sale']->sn);?>">
+                            <button type="submit" class="btn btn-primary">Confirm</button>
+                            <button type="button" class="btn btn-danger go-back">Go back</button>
+                        </div>
+                    </div>
+                    <div class="clearfix"></div>
+                </div>
+            </div>
+        </form>
+    </div>
+</div>
+
+
+<script>
+    $(document).ready(function () {
+        initGoBack();
+    });
+
+    function palert(msg){
+        $('.alert-error').remove();
+        $('.page-header').after('<div class="alert alert-error">'+msg+'</div>');
+
+        return;
+    }
+
+    function initGoBack(){
+        $('.go-back').click(function(e){
+            window.location.href = $('#back_url').val();
+            return false;
+        });
+    }
+</script>
+<style>
+    label input,
+    label select {
+        margin-right: 25px;
+    }
+</style>

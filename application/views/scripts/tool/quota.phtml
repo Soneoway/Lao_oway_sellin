@@ -1,0 +1,98 @@
+
+<div class="page-header">
+    <h1>Quota System</h1>
+</div>
+<?php
+if (isset($this->messages_success) and $this->messages_success)
+    foreach ($this->messages_success as $message):
+        echo '<div class="alert alert-success">'.$message.'</div>';
+    endforeach;
+
+if (isset($this->messages) and $this->messages)
+    foreach ($this->messages as $message):
+        echo '<div class="alert alert-error">'.$message.'</div>';
+    endforeach;
+?>
+<div class="accordion" id="accordion2">
+    <div class="accordion-group">
+        <div class="accordion-heading">
+            <a class="accordion-toggle collapsed" data-toggle="collapse" data-parent="#accordion2" href="#collapseTwo">
+                Search
+            </a>
+        </div>
+        <div id="collapseTwo" class="accordion-body collapse" style="height: 0px;">
+            <div class="accordion-inner">
+                <?php
+                    echo $this->render('tool/partials/distributor-black-list-search.phtml');
+                ?>
+            </div>
+        </div>
+    </div>
+</div>
+<div style="margin-bottom: 15px;"><a href="add-quota" class="btn btn-success">Add Quota</a></div>
+<div class="table-responsive">
+    <table class="table table-bordered">
+        <thead>
+            <tr>
+                <?php echo $this->sorting(array(
+                        '#',
+                        'Distributor ID',
+                        'Distributor Name',
+                        'Date Create',
+                        'Action'
+                    ),
+                    $this->url, $this->sort, $this->desc); ?>
+            </tr>
+        </thead>
+        <tbody>
+            <?php
+                if( $this->quota_list ):
+                    $intSTT = 1;
+                foreach($this->quota_list as $item):
+            ?>
+                    <tr>
+                        <td><?php  $inc = $this->offset + $k + 1;
+                                echo $inc;?></td>
+                        <td><?php echo $item['d_id'];?></td>
+                        <td><?php echo $item['d_name'];?></td>
+                        <td><?php echo date('d/m/Y',strtotime($item['created_at']))?></td>
+                        
+                        <td>
+                        <center>
+                            <a class="btn btn-warning" title="view" href="add-quota?quota=<?=$item['d_id']?>" >
+                                <i class="icon-edit "></i>
+                            </a>
+                            <a class="btn btn-danger" title="view" href="javascript:onclick=deleteItem(<?=$item['d_id']?>,'<?=$item['d_name']?>')"  >
+                                <i class="icon-trash "></i>
+                            </a>
+                        </center>
+                        </td>
+                    </tr>
+            <?php 
+                endforeach;
+                endif;
+            ?>
+        </tbody>
+    </table>
+    <div class="paging">
+        <?php echo $this->paging($this->total, $this->limit, $this->offset, $this->url);?>
+    </div>
+</div>
+<script>
+
+    function deleteItem(d_id,title){
+
+        if (confirm("Press Confirm Delete : "+title) == true) {
+             window.location.assign("/tool/delete-quota?dele="+d_id);
+            }
+       
+    }
+
+    $(document).ready(function () {
+        $('.form-search button:reset').click(function (e){
+            $('.form-search input, .form-search select').val('');
+            $('.form-search').submit();
+            return false;
+        });
+    });
+</script>

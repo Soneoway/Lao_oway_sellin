@@ -1,0 +1,69 @@
+<form class="form-search form-horizontal" method="get" action="<?php echo HOST ?>sales/wht-manual-list">
+    <div class="row">
+        <div class="span5">
+    
+            <div class="control-group">
+                <label for="wht_type" class="span2">ประเภทเอกสาร<span style="color: red">*</span></label>
+                <select class="span2 wht_type" name="wht_type" required="required">
+                    <option value="" <?php if (isset($this->params['wht_type']) and $this->params['wht_type']==0):?> selected<?php endif;?>>-Please Select-</option>
+                    <option value="1" <?php if (isset($this->params['wht_type']) and $this->params['wht_type']==1):?> selected<?php endif;?>>WP</option>
+                    <option value="2" <?php if (isset($this->params['wht_type']) and $this->params['wht_type']==2):?> selected<?php endif;?>>WR</option>
+                    <option value="3" <?php if (isset($this->params['wht_type']) and $this->params['wht_type']==3):?> selected<?php endif;?>>WO</option>
+                    <option value="4" <?php if (isset($this->params['wht_type']) and $this->params['wht_type']==4):?> selected<?php endif;?>>WA</option>
+                    <option value="5" <?php if (isset($this->params['wht_type']) and $this->params['wht_type']==5):?> selected<?php endif;?>>WS</option>
+                    <option value="6" <?php if (isset($this->params['wht_type']) and $this->params['wht_type']==6):?> selected<?php endif;?>>WT</option>
+
+                </select>
+            </div>
+            <div class="control-group">
+            <label for="import_name" class="span2">ชื่อหัวข้อการนำเข้าข้อมูล</label>
+            <input id="import_name" name="import_name" type="text" class="input-medium search-query form-control" value="<?php isset($this->params['import_name']) and printf($this->params['import_name']);?>">
+            </div>
+
+            <div class="control-group">
+            <label for="province_name" class="span2">จังหวัด</label>
+            <input id="province_name" name="province_name" type="text" class="input-medium search-query form-control" value="<?php isset($this->params['province_name']) and printf($this->params['province_name']);?>">
+            </div>
+
+            <div class="control-group">
+            <label for="topic" class="span2">หัวข้อ</label>
+            <input id="topic" name="topic" type="text" class="input-medium search-query form-control" value="<?php isset($this->params['topic']) and printf($this->params['topic']);?>">
+            </div>
+
+            <div class="control-group">
+            <label for="distributor_name" class="span2">Distributor Name</label>
+            <input id="distributor_name" name="distributor_name" type="text" class="input-medium search-query form-control" value="<?php isset($this->params['distributor_name']) and printf($this->params['distributor_name']);?>">
+            </div>
+            <div class="control-group">
+            <label for="wht_running_no" class="span2">Running No</label>
+            <input id="wht_running_no" name="wht_running_no" type="text" class="input-medium search-query form-control" value="<?php isset($this->params['wht_running_no']) and printf($this->params['wht_running_no']);?>">
+            </div>
+            <div class="control-group">
+            <label for="start_date" class="span2">วันที่นำเข้าข้อมูล</label>
+                <input type="text" class="span1 start_date" name="start_date" id="start_date" value="<?php isset($this->params['start_date']) and printf($this->params['start_date']);?>" /> - <input type="text" class="span1 end_date" name="end_date" id="end_date" value="<?php isset($this->params['end_date']) and printf($this->params['end_date']);?>" />
+            </div>
+        </div>
+        <div class="span5">
+
+        </div>
+    </div>
+
+    
+    <input type="hidden" name="counter" value="<?=$this->counter;?>">
+    <button type="submit" class="btn btn-primary">Search</button>
+
+    <button type="submit" name="export" value="1" class="btn btn-success">Export</button>
+</form>
+<script async="async">
+
+
+        $(document).on('focus',".start_date", function(){ 
+         $(this).datepicker({ dateFormat: "dd/mm/yy" });
+        });
+
+        $(document).on('focus',".end_date", function(){ 
+         $(this).datepicker({ dateFormat: "dd/mm/yy" });
+        });
+
+
+</script>

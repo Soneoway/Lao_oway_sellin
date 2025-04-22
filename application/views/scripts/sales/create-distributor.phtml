@@ -1,0 +1,1169 @@
+
+<script type="text/javascript" src="<?php echo HOST ?>js/jquery-ui-1.8.12.custom.min.js"></script>
+<link rel="stylesheet" type="text/css" href="<?php echo HOST ?>css/jquery-ui-1.8.12.custom.css"/>
+
+<link href="<?php echo HOST ?>css/jquery.tagit.css" rel="stylesheet" type="text/css">
+<link href="<?php echo HOST ?>css/tagit.ui-zendesk.css" rel="stylesheet" type="text/css">
+
+<link rel="stylesheet" href="<?php echo HOST ?>css/bootstrap-multiselect.css" type="text/css"/>
+<script type="text/javascript" src="<?php echo HOST ?>js/bootstrap-multiselect.js"></script>
+
+<link href="../css/select2.css" rel="stylesheet"/>
+<script src="../js/select2.js"></script>
+
+
+<style type="text/css">
+    #parent_search {
+        display: block;
+    }
+
+    iframe {
+        height: 100px;
+        width: 100%;
+        border: none;
+    }
+    .shipping{
+        border: 1px #ccc solid;
+        padding: 10PX;
+    }
+    body, option{
+        font-family: phetsarath ot;     
+    }
+</style>
+
+<div class="page-header">
+	<?php if (isset($this->distributor) && $this->distributor): ?>
+		<h1>Edit Distributor ແກ້ໄຂຮ້ານຄ້າ</h1>
+	<?php else: ?>
+		<h1>Create Distributor ສ້າງຮ້ານຄ້າ</h1>
+	<?php endif ?>
+
+</div>
+<?php
+if (isset($this->messages) and $this->messages)
+    foreach ($this->messages as $message):
+        echo '<div class="alert alert-error">'.$message.'</div>';
+    endforeach;
+    ?>
+
+    <div class="row">
+        <?php if (isset($this->update_distributor) and $this->update_distributor != 1){?>
+            <!-- <h3 style="color:red;margin-left: 30px;">ຫາກຕ້ອງການປ່ຽນແປງຂໍ້ມຼນ ກາລູນາຕິດຕໍ່ຫາແອດມິນ</h3><br> -->
+        <?php } ?>
+    </div>
+
+<div class="container" style="border-style: solid; padding: 30px; border-color: lavender;">
+    <!-- target="iframe" -->
+    <form class="form-horizontal" action="<?php echo HOST ?>sales/save-distributor" name="form" id="form" method="post" target="iframe">
+       <div class="row-fluid">
+          <div class="span5">
+            <div class="control-group">
+             <label class="control-label" for="title">Distributor Name <br>(ຊື່ຮ້ານຄ້າ)<span style="color: red">*</span></label>
+             <div class="controls">
+                <input type="text" id="title" name="title" class="span3" placeholder="Distributor Name" required="required" value="<?php if( isset($this->distributor) && isset($this->distributor['title']) ) echo $this->distributor['title'] ?>" />
+                <p class="help-block"></p>
+            </div>
+        </div>
+
+<!--             <div class="control-group">
+			    <label class="control-label" for="finance_code"> Finance Code <br>(ລະຫັດການເງິນ)<span style="color: red">*</span></label>
+			    <div class="controls">
+			    	<input type="text" id="finance_code" name="finance_code" placeholder="Finance Code" required="required" value="<?php if( isset($this->distributor) && isset($this->distributor['finance_code']) ) echo $this->distributor['finance_code'] ?>" />
+			    	<p class="help-block"></p>
+			    </div>
+			</div> -->
+
+            <div class="control-group">
+                <label class="control-label">Distributor Type <span style="color: red;">*</span></label>
+                <div class="controls">
+                    <select id="dis_type" class="span3" name="dis_type" required>
+                        <option value="">Please Selected Dsitributor Type</option>
+                        <option value="1" <?php if(isset($this->distributor['distributor_type']) and $this->distributor['distributor_type'] == 1) { ?> selected <?php } ?> >Regional Distributor</option>
+                        <option value="2" <?php if(isset($this->distributor['distributor_type']) and $this->distributor['distributor_type'] == 2) { ?> selected <?php } ?> >Affiliate</option>
+                        <option value="3" <?php if(isset($this->distributor['distributor_type']) and $this->distributor['distributor_type'] == 3) { ?> selected <?php } ?> >Retailer</option>
+                    </select>
+                </div>
+            </div>
+
+            <div class="control-group" style="padding-top: 10px;">
+                <label class="control-label" for="rank">Rank Price <br>(ລາຄາທີ່ຈະເລືອກຊື້)<span style="color: red">*</span></label>
+                <div class="controls">
+                    <?php
+                    if(isset($this->distributor['rank']) and $this->distributor['rank']){ ?>
+                        <input type="hidden" name="rank" class="rank" id="dummy_rank" value="<?php echo $this->distributor['rank'];?>">
+                    <?php } ?>
+
+                    <select id="rank" name="rank" class="rank span3" required="required" <?php
+                    if(isset($this->distributor['rank']) and $this->distributor['rank'] and !$this->allow_rank){
+                        echo 'disabled';
+                    }
+                ?>>
+                       <!-- <option value="1" <?php if( isset($this->distributor['rank']) and $this->distributor['rank']==1 ) { ?> selected<?php }?>>1. ORG-WDS(1)</option>
+                        <option value="2" <?php if( isset($this->distributor['rank']) and $this->distributor['rank']==2 ) { ?> selected<?php }?>>2. ORG(2)</option>
+
+                        <option value="3" <?php /*if( isset($this->distributor['rank']) and $this->distributor['rank']==3 ) { */?> selected<?php /*}*/?>>3</option>
+                        <option value="4" <?php /*if( isset($this->distributor['rank']) and $this->distributor['rank']==4 ) { */?> selected<?php /*}*/?>>4</option>-->
+                      <!--   <option value="5" <?php if( isset($this->distributor['rank']) and $this->distributor['rank']==5 ) { ?> selected<?php }?>>3. ORG-Dtac/Advice(5)</option>
+                        <option value="6" <?php if( isset($this->distributor['rank']) and $this->distributor['rank']==6 ) { ?> selected<?php }?>>4. ORG-Lotus/Power by(6)</option> -->
+                    <!--     <option value="7" <?php if( isset($this->distributor['rank']) and $this->distributor['rank']==7 ) { ?> selected<?php }?>>5. Dealer(7)</option>
+                        <option value="8" <?php if( isset($this->distributor['rank']) and $this->distributor['rank']==8 ) { ?> selected<?php }?>>6. HUB(8)</option> -->
+                        <option value="9" <?php if( isset($this->distributor['rank']) and $this->distributor['rank']==9 ) { ?> selected<?php }?>>7. Laos(9)</option>
+                       <!--  <option value="3" <?php if( isset($this->distributor['rank']) and $this->distributor['rank']==3 ) { ?> selected<?php }?>>8. Online and Staff(3)</option>
+                        <option value="10" <?php if( isset($this->distributor['rank']) and $this->distributor['rank']==10 ) { ?> selected<?php }?>>9. Brand Shop/Service(10)</option> -->
+                       <!--  <option value="11" <?php if( isset($this->distributor['rank']) and $this->distributor['rank']==11 ) { ?> selected<?php }?>>10. King Power(11)</option>
+                         <option value="12" <?php if( isset($this->distributor['rank']) and $this->distributor['rank']==12 ) { ?> selected<?php }?>>11. Jaymart(12)</option>
+                        <option value="13" <?php if( isset($this->distributor['rank']) and $this->distributor['rank']==13 ) { ?> selected<?php }?>>12. Brand Shop By Dealer(13)</option> 
+                        <option value="14" <?php if( isset($this->distributor['rank']) and $this->distributor['rank']==14 ) { ?> selected<?php }?>>13. KR Dealer(14)</option> 
+                        <option value="15" <?php if( isset($this->distributor['rank']) and $this->distributor['rank']==15 ) { ?> selected<?php }?>>14. TRUE(15)</option>  -->
+
+                    </select>
+                    <p class="help-block"></p>
+                </div>
+            </div>
+
+            <div class="control-group ch_type hide">
+                <label class="control-label" for="quota_channel"> Channel Type</label>
+                <div class="controls">
+                    <select id="quota_channel" name="quota_channel" class="span3">
+                        <option value>---</option>
+                        <option value="10" <?php if (isset($this->distributor['quota_channel']) && $this->distributor['quota_channel'] == 10){echo 'selected';}?>>Brand Shop By Dealer</option>
+                        <option value="1" <?php if (isset($this->distributor['quota_channel']) && $this->distributor['quota_channel'] == 1){echo 'selected';}?>>ORG By Dealer</option>
+                        <option value="3" <?php if (isset($this->distributor['quota_channel']) && $this->distributor['quota_channel'] == 3){echo 'selected';}?>>Online By Dealer</option>
+                    </select>
+                </div>
+            </div>
+
+            <div class="control-group" id="div_sales_ch" name="div_sales_ch">
+                <label class="control-label" for="sales_ch">ช่องทางการขาย<span style="color: red">*</span></label>
+                <div class="controls">
+                    <select id="sales_ch" class="sales_ch" name="sales_ch">
+
+                    </select>
+                </div>
+            </div>
+<!--             <div class="control-group">
+                <label class="control-label" for="store_code">Store Code <br>(ລະຫັດຮ້ານ)<span style="color: red">*</span></label>
+                <div class="controls"> -->
+                    <input type="hidden" readonly id="store_code" name="store_code" value="<?php if( isset($this->distributor) && isset($this->distributor['store_code']) ) echo $this->distributor['store_code'] ?>" />
+                 <!--    <p class="help-block"></p>
+                </div>
+            </div> -->
+
+            <!-- <div class="control-group">
+                <label class="control-label" for="true_code">True Code <br>(ລະຫັດຄູ່ຄ້າ)</label>
+                <div class="controls">
+                    <div class="hide" id="check-true-code"></div>
+                    <input type="text" <?php // if( isset($this->true_code) && $this->true_code) echo 'readonly'; ?> id="true_code" name="true_code" value="<?php // if( isset($this->true_code) && $this->true_code) echo $this->true_code ?>" />
+                    <p class="help-block"></p>
+                </div>
+            </div> -->
+          <!--   <div class="control-group">
+                <label class="control-label" for="true_code">Branch NO <br>(ສາຂາ)</label>
+                <div class="controls">
+                    <div class="hide" id="check-true-code"></div> -->
+                    <input type="hidden" id="branch_amout" name="branch_amout" placeholder="Branch Name" required="required" value="<?php if( isset($this->distributor) && isset($this->distributor['branch_amout']) ) echo $this->distributor['branch_amout'] ?>" />
+                  <!--   <p class="help-block"></p>
+                </div>
+            </div>  -->
+
+          <!--   <div class="control-group">
+        <label class="control-label" for="money"><span style="color: green">ບໍ່ຄິດໄລ່ເງິນ</span></label>
+        <div class="controls">
+            <input class="temp-check" type="hidden" <?php if(isset($this->distributor['not_money']) && $this->distributor['not_money']) echo 'name="not_money" value="1"'; ?> />
+            <input class="allow_use" type="checkbox" disabled id="money" name="money" value="1" <?php if(isset($this->distributor['not_money']) && $this->distributor['not_money']) echo "checked" ?> />
+        </div>
+    </div> -->
+
+         <!--    <div class="control-group">
+                <label class="control-label" for="oppo_club_grade">OPPO Club Grade <br>(ການຈັດອັນດັບ)</label>
+                <div class="controls">
+                    <div class="hide" id="check_oppo_club_grade"></div>
+                    <input type="text" readonly="true" id="oppo_club_grade" name="oppo_club_grade" value="<?php if( isset($this->oppo_club_grade) && $this->oppo_club_grade) echo $this->oppo_club_grade ?>" />
+                    <p class="help-block"></p>
+                </div>
+            </div> -->
+
+            <div class="control-group">
+                <div id="store_name_check">
+
+                </div>
+            </div>
+
+            <div class="control-group">
+                <label class="control-label" for="retailer_type">Type <br>(ປະເພດ)<span style="color: red">*</span></label>
+                <div class="controls">
+                    <select id="retailer_type" name="retailer_type" required="required" class="span3">
+                        <option value>---</option>
+                        <option value="1" <?php if( isset($this->distributor['retailer_type']) and $this->distributor['retailer_type']==1 ) { ?> selected<?php }?>>Smartphone Distributor</option>
+                        
+                    </select>
+                </div>
+            </div>
+
+            <div class="control-group">
+                <label class="control-label" for="distributor_group">Group <br>(ກຸ່ມ)<span style="color: red">*</span></label>
+                <div class="controls">
+                    <select id="distributor_group" name="distributor_group" class="span3" required="required" <?php if (in_array($this->getDistributorGroupType['group_type_id'], [9,10])){ echo 'disabled'; }?>>
+                        <option value>---</option>
+                        
+                        <?php if (!isset($this->getDistributorGroupType['group_type_id']) || $this->getDistributorGroupType['group_type_id'] == 10){?>
+                        <?php } ?>
+                        <option value="10">Brand Shop (10)</option>
+                        <option value="1">Dealer and Hub (1)</option>
+
+                        <!-- <option value="11">Brand Shop By Dealer (11)</option>
+                        <option value="12">Brand Shop-ORG (12)</option>
+                        <option value="13">Brand Shop by KR Dealer (13)</option>
+                        <option value="8">Digital (8)</option>
+                        <option value="7">Export (7)</option>
+                        <option value="3">KA(ORG) (3)</option>
+                        <option value="2">KR-Dealer (2)</option>
+                        <option value="5">Online (5)</option>
+                        <option value="4">Operator (4)</option>
+                        <option value="6">Staff (6)</option>  -->
+
+                        <option value="9">Service Shop (9)</option>
+                        <?php if (!isset($this->getDistributorGroupType['group_type_id']) || $this->getDistributorGroupType['group_type_id'] == 9){?>
+                        <?php } ?>
+                        
+                    </select>
+                </div>
+            </div>
+            
+            <?php if(isset($this->getDistributorGroupType['group_name']) && $this->getDistributorGroupType['group_name'] && in_array($this->getDistributorGroupType['group_type_id'], [9,10])) { ?>
+
+                <div class="control-group">
+                    <label class="control-label">Distributor Group Name</label>
+                    <div class="controls">
+                        <input type="text" value="<?=$this->getDistributorGroupType['group_name'];?>" disabled />
+                        <p class="help-block"></p>
+                    </div>
+                </div>
+            <?php } ?>
+
+            <?php if ($this->distributor['group_id'] > 13){ ?>
+                <input type="hidden" name="distributor_group" value="<?=$this->distributor['group_id'];?>">
+            <?php } ?>
+
+            <div class="control-group">
+                <label class="control-label" for="ka_type">KA Type <br>(ລັກສະນະຮ້ານ)<span style="color: red">*</span></label>
+                <div class="controls">
+                    <select id="ka_type" name="ka_type" required="required" class="span3">
+                        <option value>---</option>
+                        <?php if (isset($this->ka_type)): ?>
+                            <?php foreach ($this->ka_type as $key): ?>
+                                <option value="<?php echo $key['org_id']; ?>"
+                                    <?php if(isset($key['org_id']) && $key['org_id'] == $this->distributor['ka_type']) echo "selected"; ?>><?php if(isset($key['org_id']) && $key['org_id'] == 1){ echo 'ທົ່ວໄປ'; }else{ echo $key['org_name']; } ?></option>
+                                <?php endforeach ?>
+                            <?php endif ?>
+                        </select>
+                    </div>
+                </div>
+
+        <!--  
+            <div class="control-group">
+                <label class="control-label" for="credit_status">Is KR</label>
+                <div class="controls">
+
+                    <input class="" type="checkbox" id="is_kr" name="is_kr" value="1" 
+                    <?php //if(isset($this->distributor['is_kr']) && $this->distributor['is_kr']) echo "checked" ?> />
+                </div>
+            </div>
+        -->
+
+        <div class="control-group">
+            <label class="control-label" for="owner_name">Owner name<br>(ຊື່ເຈົ້າຂອງຮ້ານ)</label>
+            <div class="controls">
+                <input type="text" id="owner_name" class="span3" name="owner_name" placeholder="Owner Name" value="<?php if( isset($this->distributor) && isset($this->distributor['owner_name']) ) echo $this->distributor['owner_name'] ?>" />
+                <p class="help-block"></p>
+            </div>
+        </div>
+<!-- 
+			<div class="control-group">
+			    <label class="control-label" for="unames">Company Name<br>(ຊື່ຕາມທີ່ຈົດນຳກົມພາສີ)<span style="color: red">*</span></label>
+			    <div class="controls">
+			    	<input type="text" id="unames" name="unames" placeholder="Company Name" required="required" value="<?php if( isset($this->distributor) && isset($this->distributor['unames']) ) echo $this->distributor['unames'] ?>" />
+			    	<p class="help-block"></p>
+			    </div>
+			</div> -->
+			
+
+           <!--  <div class="control-group">
+                <label class="control-label" for="branch_no">Branch No <br>(ລະຫັດສາຂາ) <span style="color: red">*</span></label>
+                <div class="controls">
+                    <input type="text" id="branch_no" name="branch_no" required="required" value="<?php if( isset($this->distributor) && isset($this->distributor['branch_no']) ) echo $this->distributor['branch_no'] ?>" />
+                    <span style="color: red"><br>ກໍລະນີທີ່ບໍ່ໄດ້ກຳນົດລະຫັດສາຂາແມ່ນໃຫ້ໃສ່ 0</span>
+                    <p class="help-block"></p>
+                </div>
+            </div> -->
+
+            <?php
+            $textbox_no_update_payment="";
+            $textbox_no_update_sp_discount="";
+            $chkbox_no_update_payment="";
+            $dropdown_no_update_payment="";
+            if($this->update_payment==1){
+                $chk_update_payment="";
+            }else{
+                $textbox_no_update_payment="readonly";
+                $textbox_no_update_sp_discount="readonly";
+                $chkbox_no_update_payment="onclick='return false'";
+                $dropdown_no_update_payment="disabled";
+
+            }
+            ?>
+
+            <!-- <div class="control-group">
+                <label class="control-label" for="credit_status">ໃຊ້ວົງເງິນເຄຍດິດ <br> (ກໍລະນີທີ່ໂອນຜ່ານບັນຊີ)</label>
+                <div class="controls">
+
+                    <input class="temp-check" type="hidden" <?php if(isset($this->distributor['credit_status']) && $this->distributor['credit_status']) echo 'name="credit_status" value="1"'; ?> />
+
+                    <input class="allow_use" type="checkbox" disabled id="credit_status" <?=$chkbox_no_update_payment?> name="credit_status" value="1" <?php if(isset($this->distributor['credit_status']) && $this->distributor['credit_status']) echo "checked" ?> />
+                </div>
+            </div>
+
+            <div class="control-group">
+                <label class="control-label" for="store_code">Maximum Credit <br>(ຈຳນວນວົງເງິນ)<span style="color: red">*</span></label>
+                <div class="controls">
+                    <input class="allow_use" readonly type="text" id="credit_amount" <?=$textbox_no_update_payment?> name="credit_amount" required="required" value="<?php if( isset($this->distributor) && isset($this->distributor['credit_amount']) ){
+                    echo $this->distributor['credit_amount'];}else{echo '0';} ?>" />
+                    <p class="help-block"></p>
+                </div>
+            </div>
+
+             
+            <div class="control-group">
+                <label class="control-label" for="name">Credit Days <br>(ໄລຍະມື້ຊ່ຳລະບໍ່ເກີນ)<span style="color: red">*</span></label>
+                <div class="controls">
+                    <input class="temp-check" type="hidden" <?php if(isset($this->distributor['credit_type']) && $this->distributor['credit_type']){echo 'name="credit_type" value="'.$this->distributor['credit_type'].'"';}?>>
+                    <select class="allow_use" disabled name="credit_type" <?=$dropdown_no_update_payment?> id="credit_type" required>
+                        <option value>---</option>
+                        <?php if (isset( $this->credits ) && $this->credits): ?>
+                            <?php foreach ($this->credits as $key => $credit): ?>
+                                <option value="<?php echo $key ?>" <?php if( isset($this->credits) && isset($this->distributor['credit_type']) && $this->distributor['credit_type'] == $key ) echo "selected='selected'"; ?> <?php if($key=='1'){echo "selected='selected'";}?>><?php echo $credit ?></option>
+                            <?php endforeach ?>
+                        <?php endif ?>
+                    </select>
+                    <p class="help-block"></p>
+                </div>
+            </div>
+
+            <div class="control-group">
+                <label class="control-label" for="spc_discount"  >Special Discount (%) <br>(ສ່ວນຫຼູດພິເສດ)<span style="color: red">*</span></label>
+                <div class="controls shipping">
+                    <input class="allow_use" readonly type="text" id="spc_discount" <?=$textbox_no_update_sp_discount?> name="spc_discount" required="required" 
+                    value="<?php  if($this->distributor['spc_discount']>0){echo $this->distributor['spc_discount'];}else{echo 0;} ?>" />
+                    
+                    <div class="control-group">
+                
+                        </p>
+
+                        <input class="temp-check" type="hidden" <?php if(isset($this->distributor['spc_discount_phone']) && $this->distributor['spc_discount_phone']) echo 'name="spc_discount_phone" value="1"'; ?> />
+
+                        <input class="allow_use" disabled type="checkbox" id="spc_discount_phone" <?=$textbox_no_update_sp_discount?> name="spc_discount_phone" value="1" <?php if(isset($this->distributor['spc_discount_phone']) && $this->distributor['spc_discount_phone']) echo "checked" ?>> Phone</input>
+                        </p>
+
+                        <input class="temp-check" type="hidden" <?php if(isset($this->distributor['spc_discount_acc']) && $this->distributor['spc_discount_acc']) echo 'name="spc_discount_acc" value="1"'; ?> />
+
+                        <input class="allow_use" disabled type="checkbox" id="spc_discount_acc" <?=$textbox_no_update_sp_discount?> name="spc_discount_acc" value="1" <?php if(isset($this->distributor['spc_discount_acc']) && $this->distributor['spc_discount_acc']) echo "checked" ?>> Accessories</input>
+                        </p>
+
+                        <input class="temp-check" type="hidden" <?php if(isset($this->distributor['spc_discount_digital']) && $this->distributor['spc_discount_digital']) echo 'name="spc_discount_digital" value="1"'; ?> />
+
+                        <input class="allow_use" disabled type="checkbox" id="spc_discount_digital" <?=$textbox_no_update_sp_discount?> name="spc_discount_digital" value="1" <?php if(isset($this->distributor['spc_discount_digital']) && $this->distributor['spc_discount_digital']) echo "checked" ?>> Digital</input>
+
+                </div>
+                    <p class="help-block"></p>
+                </div>
+            </div> -->
+
+			<!-- <div class="control-group">
+			    <label class="control-label" for="name">Contact<br>(ຊື່ຜູ້ຮັບສິນຄ້າ)</label>
+			    <div class="controls">
+			    	<input type="text" id="name" name="name" placeholder="Contact" value="<?php if( isset($this->distributor) && isset($this->distributor['name']) ) echo $this->distributor['name'] ?>" />
+			    	<p class="help-block"></p>
+			    </div>
+			</div> -->
+
+	<!-- 		<div class="control-group">
+             <label class="control-label" for="tel">Phone<br>(ເບີໂທຜູ້ຮັບ)</label>
+             <div class="controls">
+                <input type="text" id="tel" name="tel" class="span3" value="<?php if( isset($this->distributor) && isset($this->distributor['tel']) ) echo $this->distributor['tel'] ?>" />
+                <p class="help-block"></p>
+            </div>
+        </div> -->
+
+			<!-- <div class="control-group">
+			    <label class="control-label" for="add">Address of Company<br>(ທີ່ຢູ່ຕາມໃບທະບຽນກົມພາສີ)<span style="color: red">*</span></label>
+			    <div class="controls">
+			    	<textarea name="add" required id="add" cols="30" rows="5"><?php if( isset($this->distributor) && isset($this->distributor['add']) ) echo $this->distributor['add'] ?></textarea>
+			    	<p class="help-block"></p>
+			    </div>
+			</div> -->
+            <!-- 
+            <div class="control-group">
+                <label class="control-label" for="add">Default Address <br>(ທີ່ຢູ່ທົ່ວໄປຂອງຮ້ານ)<span style="color: red">*</span></label>
+                <div class="controls">
+                <textarea name="add_tax" required id="add_tax" cols="30" rows="5"><?php if( isset($this->distributor) && isset($this->distributor['add_tax']) ) echo $this->distributor['add_tax'] ?></textarea> 
+                </div>
+            </div> -->
+
+            <!-- <div class="control-group">
+                <label class="control-label" for="email">Email (ອິເມລ)</label>
+                <div class="controls">
+                    <input type="email" id="email" class="span3" name="email" value="<?php if( isset($this->distributor) && isset($this->distributor['email']) ) echo $this->distributor['email'] ?>" />
+                    <p class="help-block"></p>
+                </div>
+            </div> -->
+            
+        </div>
+        <div class="span5">
+
+            <div class="control-group">
+                <label class="control-label"> Affiliated Clients <span style="color: red;">*</span></label>
+                <div class="controls">
+                    <select name="client" id="client" class="span3" required>
+                        <option value=""> Please Affiliated Clients </option>
+                        <?php if(isset($this->client_cache) && $this->client_cache) : ?>
+                            <?php foreach($this->client_cache as $key => $name) : ?>
+                                <option value="<?php echo $key ?>" <?php if( isset($this->distributor['client_code']) && $this->distributor['client_code'] == $key) echo "selected='selected'" ?>><?php echo $name ?></option> 
+                            <?php endforeach ?>
+                        <?php endif ?>
+                    </select>
+                </div>
+            </div>
+
+            <div class="control-group">
+                <label class="control-label" for="area">Area (ເຂດ)</label>
+                <div class="controls">
+                    <select name="area" required id="area" disabled class="span3">
+                        <option value>---</option>
+                        <?php if (isset( $this->areas ) && $this->areas): ?>
+                            <?php foreach ($this->areas as $key => $name): ?>
+                                <option value="<?php echo $key ?>" <?php if( isset($this->area_id) && $this->area_id == $key ) echo "selected='selected'" ?>><?php echo $name ?></option>
+                            <?php endforeach ?>
+                        <?php endif ?>
+                    </select>
+                    <p class="help-block"></p>
+                </div>
+            </div>
+            <div class="control-group">
+                <label class="control-label" for="region">Province <br>(ແຂວງ)<span style="color: red">*</span></label>
+                <div class="controls">
+                    <select name="region" id="region" required class="span3">
+                        <option value>---</option>
+                        <?php if (isset( $this->regions ) && $this->regions): ?>
+                            <?php foreach ($this->regions as $key => $region): ?>
+                                <option value="<?php echo $key ?>" 
+                                    <?php if( isset($this->distributor['region']) && $this->distributor['region'] == $key ) echo "selected='selected'" ?>
+                                    data-area="<?php echo $region['area_id'] ?>"><?php echo $region['name'] ?></option>
+                                <?php endforeach ?>
+                            <?php endif ?>
+                        </select>
+                        <p class="help-block"></p>
+                    </div>
+                </div>
+                <div class="control-group">
+                 <label class="control-label" for="district">District <br>(ເມືອງ)<span style="color: red">*</span></label>
+                 <div class="controls">
+                   <select name="district" id="district" required class="span3">
+                    <option value>---</option>
+                    <?php if (isset( $this->districts ) && $this->districts): ?>
+                        <?php foreach ($this->districts as $key => $region): ?>
+                            <option value="<?php echo $key ?>" <?php if( isset($this->distributor['district']) && $this->distributor['district'] == $key ) echo "selected='selected'" ?>><?php echo $region['name'] ?></option>
+                        <?php endforeach ?>
+                    <?php endif ?>
+                </select>
+                <p class="help-block"></p>
+            </div>
+        </div>
+
+        <div class="control-group">
+         <label class="control-label" for="name">Warehouse <br>(ສາງສິນຄ້າ)<span style="color: red">*</span></label>
+         <div class="controls">
+           <select name="warehouse_id" id="warehouse_id" required class="span3">
+            <option value>---</option>
+            <?php if (isset( $this->warehouses ) && $this->warehouses): ?>
+                <?php foreach ($this->warehouses as $key => $warehouses): ?>
+
+                    <?php if($key != '1'){?>
+                        <option value="<?php echo $key ?>" <?php if( isset($this->distributor) && isset($this->distributor['warehouse_id']) && $this->distributor['warehouse_id'] == $key ) echo "selected='selected'" ?>><?php echo $warehouses ?></option>
+                    <?php } ?>
+                <?php endforeach ?>
+            <?php endif ?>
+        </select>
+        <p class="help-block"></p>
+    </div>
+</div>
+
+<div class="control-group <?php if(isset($this->distributor['parent']) && $this->distributor['parent']){}else{echo 'hide';}?>" id="use_money_main">
+    <label class="control-label" for="check_use_money_main">ใช้วงเงินจากร้านเเม่</label>
+    <div class="controls">
+
+        <input class="temp-check" type="hidden" <?php if(isset($this->distributor['main_distributor_id']) && $this->distributor['main_distributor_id']) echo 'id="check_use_money_main_temp" name="check_use_money_main" value="1"'; ?> />
+
+        <input class="allow_use" disabled type="checkbox" id="check_use_money_main" name="check_use_money_main" value="1" <?php if(isset($this->distributor['main_distributor_id']) && $this->distributor['main_distributor_id']) echo "checked" ?> />               
+    </div>
+</div>
+
+        <!--
+            <div class="control-group" id="use_sub_d_id">
+                <label class="control-label" for="check_sub_d_id">ร้านลูกตู้บุญชัย</label>
+                <div class="controls">
+                    <input class="temp-check" type="hidden" <?php //if(isset($this->distributor['sub_d_id']) && $this->distributor['sub_d_id']) echo 'id="check_sub_d_id_temp" name="check_sub_d_id" value="1"'; ?> />
+
+                    <input class="allow_use" disabled type="checkbox" id="check_sub_d_id" name="check_sub_d_id" value="1" <?php //if(isset($this->distributor['sub_d_id']) && $this->distributor['sub_d_id']) echo "checked" ?> />               
+                </div>
+            </div>
+        -->
+
+		<!-- 	<div class="control-group">
+			    <label class="control-label" for="mst_sn">MST Number <br><span style="font-size: 11px;">(ເລກທະບຽນທີ່ຈົດນຳກົມພາສີ) </span><span style="color: red">*</span></label>
+			    <div class="controls">
+			    	<input class="allownumericwithoutdecimal" type="text" id="mst_sn" name="mst_sn" value="<?php if( isset($this->distributor) && isset($this->distributor['mst_sn']) ) echo $this->distributor['mst_sn'] ?>" maxlength="13" required/>
+                    <span style="color: red"><br>ເລກພາສີອາກອນຜູ້ເສຍພາສີອາກອນ 13 ຫຼັກ</span>
+			    	<p class="help-block"></p>
+			    </div>
+			</div> -->
+        <!--
+			<div class="control-group">
+			    <label class="control-label" for="nots">Note</label>
+			    <div class="controls">
+			    	<textarea name="nots" id="nots" cols="30" rows="5"><?php //if( isset($this->distributor) && isset($this->distributor['nots']) ) echo $this->distributor['nots'] ?></textarea>
+			    	<p class="help-block"></p>
+			    </div>
+			</div>
+        
+
+            <div class="control-group" >
+                <label class="control-label" for="auto_confirm_finance">ไม่ต้องผ่านการ Confirm จาก Finamce</label>
+                <div class="controls">
+
+                    <input class="temp-check" type="hidden" <?php //if(isset($this->distributor['auto_confirm_finance']) && $this->distributor['auto_confirm_finance']) echo 'name="auto_confirm_finance" value="1"'; ?> />
+
+                    <input class="allow_use" disabled type="checkbox" id="auto_confirm_finance" name="auto_confirm_finance" value="1" <?php //if(isset($this->distributor['auto_confirm_finance']) && $this->distributor['auto_confirm_finance']) echo "checked" ?> />               
+                </div>
+            </div>
+        -->
+        <div class="control-group" style="display: none;">
+            <label class="control-label" for="is_ka">Distributor is KA</label>
+            <div class="controls">
+                <input type="checkbox" id="is_ka" name="is_ka" value="1" <?php if(isset($this->distributor['is_ka']) && $this->distributor['is_ka']) echo "checked" ?> />               
+            </div>
+        </div>
+        <div class="control-group" style="display: none;">
+            <label class="control-label" for="is_internal">Internal Distributor</label>
+            <div class="controls">
+                <input type="checkbox" id="is_internal" name="is_internal" value="1" <?php if(isset($this->distributor['is_internal']) && $this->distributor['is_internal']) echo "checked" ?> />               
+            </div>
+        </div>
+
+        <!-- 
+            <div class="control-group">
+                <label class="control-label" for="finance_group">Finance Group</label>
+                <div class="controls">
+                    <input class="allow_use" readonly type="text" id="finance_group" name="finance_group" value="<?php //if( isset($this->distributor) && isset($this->distributor['finance_group']) ) echo $this->distributor['finance_group'] ?>" />
+                    <p class="help-block"></p>
+                </div>
+            </div>
+        -->
+
+        <div class="control-group">
+         <label class="control-label" for="add_time">Add Time</label>
+         <div class="controls">
+            <input type="text" id="add_time" class="span3" disabled="disabled" value="<?php if( isset($this->distributor) && isset($this->distributor['add_time']) ) echo $this->distributor['add_time'] ?>" />			    </div>
+        </div>
+
+
+            <!-- <div class="control-group">
+                <label class="control-label" for="partner_id">Partner ID</label>
+                <div class="controls">
+                    <input type="text" id="partner_id" name="partner_id" value="<?php //if( isset($this->distributor) && isset($this->distributor['partner_id']) ) echo $this->distributor['partner_id'] ?>" />
+                    <p class="help-block"></p>
+                </div>
+            </div>
+        -->
+        <div class="control-group">
+            <label class="control-label" for="modified_date">Modified Date</label>
+            <div class="controls">
+                <input type="text" id="modified_date" class="span3" disabled="disabled" value="<?php if( isset($this->distributor) && isset($this->distributor['update_date']) ) echo $this->distributor['update_date'] ?>" />               </div>
+            </div>
+
+            <div class="control-group">
+                <label class="control-label" for="modified_by">Modified By</label>
+                <div class="controls">
+                    <input type="text" id="modified_by" class="span3" disabled="disabled" value="<?php if( isset($this->modified_by) && isset($this->modified_by) ) echo $this->modified_by ?>" />
+                </div>
+            </div>
+
+            <div class="control-group">
+                <label class="control-label" for="modified_by">ເປັນຕົວແທນຈຳໜ່າຍ</label>
+                <div class="controls">
+                    <input class="allow_use" type="checkbox" id="agent_status" <?=$chkbox_no_update_payment?> name="agent_status" value="1" <?php if(isset($this->distributor['agent_status']) && $this->distributor['agent_status']) echo "checked" ?> />
+                </div>
+            </div>
+            <div class="control-group">
+                <label class="control-label" for="name">Agent Warehouse <br>(ເລືອກສາງຕົວແທນ)</label>
+                <div class="controls">
+                    <select name="agent_warehouse_id" id="agent_warehouse_id" class="span3">
+                        <option value>---</option>
+                        <?php if (isset( $this->warehouses ) && $this->warehouses): ?>
+                            <?php foreach ($this->warehouses as $key => $warehouses): ?>
+
+                                <?php if($key != '1'){?>
+                                    <option value="<?php echo $key ?>" <?php if( isset($this->distributor) && isset($this->distributor['agent_warehouse_id']) && $this->distributor['agent_warehouse_id'] == $key ) echo "selected='selected'" ?>><?php echo $warehouses ?></option>
+                                <?php } ?>
+                            <?php endforeach ?>
+                        <?php endif ?>
+                    </select>
+                    <p class="help-block"></p>
+                </div>
+            </div>
+
+<!--             <div class="control-group">
+                <label class="control-label" for="add">Address for Delivery<br>(ທີ່ຢູ່ບ່ອນຈັດສົ່ງສິນຄ້າ)<span style="color: red">*</span></label>
+                <div class="controls shipping"> -->
+
+
+                    <!-- <label class="control" for="data_Address">Address (ທີ່ຢູ່ບ້ານ, ເມືອງ, ແຂວງ)<span style="color: red">*</span></label>
+                        <textarea name="data_address" required id="data_address" cols="30" rows="5"><?php if( isset($this->ship_add) && isset($this->ship_add['address']) ) echo $this->ship_add['address'] ?></textarea>-->
+
+   <!--                  <label class="control" for="ship_province">Province (ແຂວງ)<span style="color: red">*</span></label>
+
+                    ​<select name="ship_province" id="ship_province" class="ship_province" required>
+                        <option value="0"></option>
+                        <?PHP foreach ($this->province as $key => $value) :?>
+                           <option value="<?=$key?>" <?php if( isset($this->ship_add['province_id']) && $this->ship_add['province_id'] == $key ) echo "selected='selected'" ?>><?=$value?></option>
+                       <?PHP endforeach; ?>
+                         
+                    </select> 
+                    
+                    <label class="control" for="add">District (ເມືອງ)<span style="color: red">*</span>  </label>
+                     <input type="hidden" name="hid_amphures_id" class="hid_amphures_id" value="<?php if( isset($this->ship_add) && isset($this->ship_add['amphures_id']) ) echo $this->ship_add['amphures_id'] ?>">
+                    <select name="amphures" id="amphures" required>
+                        <option value>---</option>
+                    </select>
+                  
+                    <label class="control" for="add">Village (ບ້ານ)<span style="color: red">*</span></label>
+                    <input type="hidden" name="hid_districts_id" class="hid_districts_id" value="<?php if( isset($this->ship_add) && isset($this->ship_add['districts_id']) ) echo $this->ship_add['districts_id'] ?>">
+                    <select name="districts_sipping" id="districts_sipping">
+                        <option value>---</option>
+                    </select> -->
+                    
+                    <!-- <label class="control" for="add">Zipcode<span style="color: red">*</span></label>
+                    <input type="text" name="zip_code" id="zip_code" value="<?php //if( isset($this->ship_add) && isset($this->ship_add['zipcodes']) ) echo $this->ship_add['zipcodes'] ?>" readonly>
+                    <input type="hidden" name="zip_id" id="zip_id" value="<?php //if( isset($this->ship_add) && isset($this->ship_add['zipcodes']) ) echo $this->ship_add['zipcodes'] ?>" readonly> -->
+
+<!--                     <label class="control" for="add">Phone<span style="color: red">*</span></label>
+                    <input type="text" name="contract_phone" required value="<?php if( isset($this->ship_add) && isset($this->ship_add['phone']) ) echo $this->ship_add['phone'] ?>">
+                   
+                    <label class="control" for="add">Remark (ຄຳອະທິບາຍ)</label>
+                    <textarea name="remark"  id="remark" cols="30" rows="3"><?php if( isset($this->ship_add) && isset($this->ship_add['remark']) ) echo $this->ship_add['remark'] ?></textarea> -->
+
+                    <!-- <textarea name="add_tax" required id="add_tax" cols="30" rows="5"><?php if( isset($this->distributor) && isset($this->distributor['add_tax']) ) echo $this->distributor['add_tax'] ?></textarea> -->
+     <!--                <p class="help-block"></p>
+                </div>
+            </div> -->
+
+        </div>
+    </div>
+    <input type="hidden" id="id" name="id" value="<?php if( isset($this->distributor) && isset($this->distributor['id']) ) echo $this->distributor['id'] ?>" />
+    <div class="row-fluid">
+      <div class="span12" style="padding: 70px;">
+        <input type="hidden" name="back_url" id="back_url" value="<?php echo $this->back_url?>">
+        <input type="hidden" name="chk_sales_ch" id="chk_sales_ch" value="<?php echo $this->distributor['sales_ch'];?>">
+
+        <?php
+        if (isset($this->distributor) && $this->distributor){ 
+            if ((isset($this->update_distributor) and $this->update_distributor == 1) || (isset($this->distributor['activate']) and $this->distributor['activate'] != 1)){
+                ?>
+                <button type="submit" class="btn btn-primary">Submit</button>
+            <?php } ?>
+        <?php }else{ ?>
+            <button type="submit" class="btn btn-primary">Submit</button>
+        <?php } ?>
+
+        <button type="button" class="btn btn-danger go-back">Go back</button>
+    </div>
+</div>
+</form>
+
+</div>
+
+<iframe name="iframe"></iframe>
+
+<script type="text/javascript" src="<?php echo HOST ?>js/jets.js"></script>
+<script type="text/javascript" src="<?php echo HOST ?>js/bootstrap.min.js"></script>
+<script src="<?php echo HOST ?>js/tag-it.min.js" type="text/javascript" charset="utf-8"></script>
+
+<!-- <script type="text/javascript" src="<?php echo HOST ?>js/jets.js"></script> -->
+
+<script>
+// var jets = new Jets({
+//   searchTag: '#parent_search',
+//   contentTag: '#parent'
+// });
+
+    function checkStoreName(e){
+        var timeout;
+        $("#title").on("keyup", function () {
+            var id = $("#id").val().trim();
+            var storeName = $("#title").val().trim();
+            window.clearTimeout(timeout);
+            timeout = window.setTimeout(function() {
+                checkStoreNameAction(id, storeName);
+            }, 500);
+
+        });
+    }
+
+    function checkStoreNameAction(id, storeName) {
+        $("#store_name_check").html('');
+
+        if (storeName) {
+            $.ajax({
+                url: '<?php echo HOST ?>get/check-distributor-name',
+                type: 'post',
+                dataType: 'html',
+                data: {id : id, distributor_name : storeName},
+            })
+            .done(function(data) {
+                console.log("success");
+
+                if (data) {
+                    $("#store_name_check").html(data);
+                }
+            })
+            .fail(function() {
+                console.log("error");
+            })
+            .always(function() {
+                console.log("complete");
+            });
+
+        }
+    }
+
+    function checkrank(sales_ch)
+    {
+        //alert(sales_ch);
+        var div_parent = $('.sales_ch').parent().parent().parent();
+        div_parent.find('.sales_ch').empty();
+       // div_parent.find('#div_sales_ch').disabled=true;
+        if(sales_ch=='LA'){
+            div_parent.find('#div_sales_ch').show();
+            div_parent.find('.sales_ch').append('<option selected value="LA">Lazada (Online)</option>');
+        }else if(sales_ch=='LP'){
+            div_parent.find('#div_sales_ch').show();
+            div_parent.find('.sales_ch').append('<option selected value="LP">Line Play (Online)</option>');
+        }else if(sales_ch=='EM'){
+            div_parent.find('#div_sales_ch').show();
+            div_parent.find('.sales_ch').append('<option selected value="EM">Staff</option>');
+        }else if(sales_ch=='OPBS'){
+            div_parent.find('#div_sales_ch').show();
+            div_parent.find('.sales_ch').append('<option selected value="OPBS">Brand Shop</option>');
+        }else if(sales_ch=='OPSV'){
+            div_parent.find('#div_sales_ch').show();
+            div_parent.find('.sales_ch').append('<option selected value="OPSV">Service</option>');
+        }else if(sales_ch=='ST'){
+            div_parent.find('#div_sales_ch').show();
+            div_parent.find('.sales_ch').append('<option selected value="ST">11Street (Online)</option>');
+        }else if(sales_ch=='SP'){
+            div_parent.find('#div_sales_ch').show();
+            div_parent.find('.sales_ch').append('<option selected value="SP">Shopee (Online)</option>');
+        }else if(sales_ch=='JD'){
+            div_parent.find('#div_sales_ch').show();
+            div_parent.find('.sales_ch').append('<option selected value="JD">JD (Online)</option>');
+        }else if(sales_ch=='OS'){
+            div_parent.find('#div_sales_ch').show();
+            div_parent.find('.sales_ch').append('<option selected value="OS">OPPO Official Store (Online)</option>');
+        }else{
+            div_parent.find('#div_sales_ch').hide();
+        }
+    }
+
+    $(document).ready(function () {
+
+        $("#client, #region, #district, #warehouse_id, #agent_warehouse_id").select2();
+
+        $('#true_code').keyup(function(event) {
+            $('#check-true-code').addClass('hide');
+        });
+
+        $('#true_code').change(function(event) {
+
+            var true_code = $(this).val();
+
+            if(true_code.length == 0){
+                $('#check-true-code').addClass('hide');
+                return false;
+            }
+            
+            $.ajax({
+                url: '/get/check-true-code',
+                type: 'POST',
+                data: {true_code: true_code},
+            })
+            .done(function(response) {
+
+                var obj_response = jQuery.parseJSON(response);
+
+                if(obj_response.status == 1){
+                    $('#check-true-code').css('color', 'green');
+                    $('#check-true-code').html('True Code ສາມາດໃຊ້ໄດ້');
+                    $('#check-true-code').removeClass('hide');
+                }else{
+                    $('#check-true-code').css('color', 'red');
+                    $('#check-true-code').html('True Code : "'+true_code+'" ມີຢູ່ໃນລະບົບແລ້ວ');
+                    $('#check-true-code').removeClass('hide');
+                    $('#true_code').val('');
+                    $('#true_code').focus();
+                } 
+                console.log("success");
+            });
+
+        });
+
+        $("*").keypress(function(event){  
+           if(event.keyCode==13){  
+            return false;  
+        }  
+    });
+
+        var timeOut;
+
+        $('#parent_search').live('keyup', function(event) {
+            var text = $(this).val();
+
+            if(text.length <= 3){
+                return false;
+            }
+
+            if(event.keyCode==13){  
+                getDataTimeout(text,'bypass');
+            }else{
+                getDataTimeout(text);
+            }
+
+        });
+
+
+        function getDataTimeout(text,bypass){
+            clearTimeOut();
+
+            if(bypass == 'bypass'){
+
+                $('#parent').empty();
+                $('#parent').append('<option value="">---</option>');
+
+                $.ajax({
+                    url: '/tool/list-distributor-new',
+                    type: 'POST',
+                    data: {text: text},
+                })
+                .done(function(response) {
+
+                    var obj_response = jQuery.parseJSON(response);
+
+                    $.each( obj_response, function( key, value ) {
+                        $('#parent').append('<option value="'+value.id+'">['+value.store_code+'] '+value.title+' ('+value.id+')</option>');
+                    });
+                    $('#parent').trigger('change');
+                    console.log("success");
+                });
+
+            }else{
+
+                timeOut = setTimeout(function() {
+
+                    $('#parent').empty();
+                    $('#parent').append('<option value="">---</option>');
+
+                    $.ajax({
+                        url: '/tool/list-distributor-new',
+                        type: 'POST',
+                        data: {text: text},
+                    })
+                    .done(function(response) {
+
+                        var obj_response = jQuery.parseJSON(response);
+
+                        $.each( obj_response, function( key, value ) {
+                            $('#parent').append('<option value="'+value.id+'">['+value.store_code+'] '+value.title+' ('+value.id+')</option>');
+                        });
+                        $('#parent').trigger('change');
+                        console.log("success");
+                    });
+
+                }, 3000);
+
+            }
+            
+        }
+
+        function clearTimeOut(){
+            clearTimeout(timeOut);
+        }
+
+        <?php if($this->allow_use) {?>
+
+            $('.allow_use').removeAttr('disabled');
+            $('.allow_use').removeAttr('readonly');
+
+            $('.temp-check').attr('disabled', true);
+
+
+        <?php } ?>
+
+        $('#parent').change(function(event) {
+            $('#check_use_money_main').attr('checked', false);
+            $('#check_use_money_main_temp').remove();
+            if($(this).val() > 0){
+                $('#use_money_main').removeClass('hide');
+            }else{
+                $('#use_money_main').addClass('hide');
+            }
+        });
+
+        <?php if( isset($this->distributor['rank']) and $this->distributor['rank']==7 ) { ?>
+            $('.ch_type').removeClass('hide');
+        <?php } ?>
+
+        <?php if (isset($this->getDistributorGroupType['group_type_id']) && $this->getDistributorGroupType['group_type_id']) { ?>
+            $('#distributor_group').val('<?=$this->getDistributorGroupType['group_type_id']?>');
+        <?php } ?>
+
+        var province = $('#ship_province').val();
+        var districts_id = $('.hid_districts_id').val();
+        var districts_sipping = $('#districts_sipping').val();
+        var amphures_id = $('.hid_amphures_id').val();
+        if(province!=''){
+            $(this).after('<span class="loading"></span>');
+
+            var _self = $(this);
+            var province = province;
+            $.get("/get/amphures",
+                {province: province}
+                ,function(data,status){
+
+                    var data = $.parseJSON( data );
+                    
+                    for (var i = 0; i < data.length; i++) {
+                        $('#amphures').append('<option value="'+data[i]['amphur_id']+'">'+data[i]['amphur_name']+'</option>');
+                    }
+                    //find("option[value='theValueYouWantSelected']").attr("selected",true)
+                    $('#amphures').find('option[value='+amphures_id+']').attr("selected",true);
+                    _self.nextAll('.loading').remove();
+                });
+
+        }
+
+        if (districts_id!='') {
+            $(this).after('<span class="loading"></span>');
+
+            $.get("/get/districts",
+                {amphures: amphures_id}
+                ,function(data,status){
+                    var data = $.parseJSON( data );
+
+                    for (var i = 0; i < data.length; i++) {
+                        $('#districts_sipping').append('<option value="'+data[i]['district_code']+'">'+data[i]['district_name']+'</option>');
+                    }
+                    $('#districts_sipping').find('option[value='+districts_id+']').attr("selected",true);
+
+                    _self.nextAll('.loading').remove();
+                });
+        }    
+        if(amphures_id!=''){
+            $(this).after('<span class="loading"></span>');
+
+            $.get("/get/zipcode",
+                {districts: districts_id}
+                ,function(data,status){
+                    var data = $.parseJSON( data );
+
+                    $('#zip_code').val(data[0]['zipcode']);
+                    $('#zip_id').val(data[0]['zip_id']);
+                    // for (var i = 0; i < data.length; i++) {
+                    //     // $('#districts_sipping').append('<option value="'+data[i]['DISTRICT_ID']+'">'+data[i]['DISTRICT_NAME']+'</option>');
+                    //     data[i]['zipcode'];
+                    // }
+
+                    _self.nextAll('.loading').remove();
+                });
+        }
+        $('.go-back').click(function(e){
+            e.preventDefault();
+            parent.history.back();
+            return false;
+        });
+
+        $('#div_sales_ch').hide();
+        var chk_sales_ch = $('#chk_sales_ch').val();
+        if(chk_sales_ch!='')
+        {
+            checkrank(chk_sales_ch);
+        }
+        
+        checkStoreName();
+
+        $('#rank').change(function(){
+            var _self = $(this);
+            var rank = _self.val();
+            //alert(rank);
+
+            <?php if(isset($this->distributor['rank']) and $this->distributor['rank'] and !$this->allow_rank){ ?>
+                $('#dummy_rank').val(rank);
+            <?php } ?>
+
+            var div_parent = $('.sales_ch').parent().parent().parent();
+            div_parent.find('.sales_ch').empty();
+
+            $('.ch_type').addClass('hide');
+            $('#quota_channel').val('');
+
+            if(rank==3)
+            {
+                div_parent.find('#div_sales_ch').show();
+                div_parent.find('.sales_ch').append('<option value="LA">Lazada (Online)</option>');
+                div_parent.find('.sales_ch').append('<option value="LP">Line Play (Online)</option>');
+                div_parent.find('.sales_ch').append('<option value="EM">Staff</option>');
+                div_parent.find('.sales_ch').append('<option value="ST">11Street (Online)</option>');
+                div_parent.find('.sales_ch').append('<option value="SP">Shopee (Online)</option>');
+                div_parent.find('.sales_ch').append('<option value="JD">JD (Online)</option>');
+                div_parent.find('.sales_ch').append('<option value="OS">OPPO Official Store (Online)</option>');
+            }else if(rank==10){
+                div_parent.find('#div_sales_ch').show();
+                div_parent.find('.sales_ch').append('<option value="OPBS">Brand Shop</option>');
+                div_parent.find('.sales_ch').append('<option value="OPSV">Service</option>');
+            }else if(rank==7){
+                $('.ch_type').removeClass('hide');
+            }else{
+                div_parent.find('#div_sales_ch').hide();
+            }
+        });  
+
+        $('#region').change(function(){
+            $(this).after('<span class="loading"></span>');
+            var _self = $(this);
+            var region = _self.val();
+            var area_id = _self.find('option:selected').data('area');
+
+            $('#area').val(area_id);
+
+            $('#district').find('option:not(:first)').remove();
+
+            $.get("/get/district",
+                {region: region}
+                ,function(data,status){
+                    var data = $.parseJSON( data );
+
+                    for (var i = 0; i < data.length; i++) {
+                        $('#district').append('<option value="'+data[i]['id']+'">'+data[i]['name']+'</option>');
+                    }
+
+                    _self.nextAll('.loading').remove();
+                });
+        });
+
+        $('#ship_province').change(function(){
+            // alert('55555');
+            $(this).after('<span class="loading"></span>');
+
+            var _self = $(this);
+            var province = _self.val();
+            // var area_id = _self.find('option:selected').data('area');
+
+            // $('#area').val(area_id);
+
+            $('#amphures').find('option:not(:first)').remove();
+            $('#districts_sipping').find('option:not(:first)').remove();
+            $('#zip_code').val('');
+            $('#zip_id').val('');
+            $.get("/get/amphures",
+                {province: province}
+                ,function(data,status){
+                    var data = $.parseJSON( data );
+                    for (var i = 0; i < data.length; i++) {
+                        $('#amphures').append('<option value="'+data[i]['amphur_id']+'">'+data[i]['amphur_name']+'</option>');
+                    }
+
+                    _self.nextAll('.loading').remove();
+                });
+        });
+
+        $('#amphures').change(function(){
+            $(this).after('<span class="loading"></span>');
+            var _self = $(this);
+            var amphures = _self.val();
+            // var area_id = _self.find('option:selected').data('area');
+
+            // $('#area').val(area_id);
+
+            $('#districts_sipping').find('option:not(:first)').remove();
+
+            $.get("/get/districts",
+                {amphures: amphures}
+                ,function(data,status){
+                    var data = $.parseJSON( data );
+
+                    for (var i = 0; i < data.length; i++) {
+                        $('#districts_sipping').append('<option value="'+data[i]['district_code']+'">'+data[i]['district_name']+'</option>');
+                    }
+
+                    _self.nextAll('.loading').remove();
+                });
+        });
+        $('#districts_sipping').change(function(){
+            $(this).after('<span class="loading"></span>');
+            var _self = $(this);
+            var districts = _self.val();
+            // var area_id = _self.find('option:selected').data('area');
+
+            // $('#area').val(area_id);
+
+            // $('#districts_sipping').find('option:not(:first)').remove();
+            $('#zip_code').empty();
+            $('#zip_id').empty();
+            $.get("/get/zipcode",
+                {districts: districts}
+                ,function(data,status){
+                    var data = $.parseJSON( data );
+
+                    $('#zip_code').val(data[0]['zipcode']);
+                    $('#zip_id').val(data[0]['zip_id']);
+                    // for (var i = 0; i < data.length; i++) {
+                    //     // $('#districts_sipping').append('<option value="'+data[i]['DISTRICT_ID']+'">'+data[i]['DISTRICT_NAME']+'</option>');
+                    //     data[i]['zipcode'];
+                    // }
+
+                    _self.nextAll('.loading').remove();
+                });
+        });
+
+        $(".allownumericwithoutdecimal").on("keypress keyup blur",function (event) {    
+         $(this).val($(this).val().replace(/[^\d].+/, ""));
+         if ((event.which < 48 || event.which > 57)) {
+            event.preventDefault();
+        }
+    });
+        
+        $('#form').on('submit', function(e) {
+
+            var mst = $('#mst_sn').val();
+
+            if(mst.length != 10 && mst.length != 13){
+                $('#mst_sn').focus();
+                alert('Please input MST Number 13 Digit');
+                return false;
+            }
+
+            $('input, select, textarea').prop('readonly', true);
+            $('button').hide();
+            $('iframe').before('<span class="loading"></span>');
+        });
+    });
+</script>
+
+

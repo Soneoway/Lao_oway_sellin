@@ -1,0 +1,109 @@
+<?php
+
+function product_price($priceFloat) {
+    $symbol = ' THB';
+    $symbol_thousand = ',';
+    $decimal_place = 2;
+    $price = number_format($priceFloat, $decimal_place, '.', $symbol_thousand);
+    return $price;
+}
+
+?>
+<table class="table table-bordered">
+    <thead>
+        <tr>
+            <?php echo $this->sorting(array(
+                    'round_no'              => 'Round No',
+                    'round_year'            => 'Round Year',
+                    'air_number'            => 'Air Number',
+                    'distributor_id'        => 'Distributor ID',
+                    'distributor_name'      => 'Distributor Name',
+                    'store_id'              => 'Store ID',
+                    'store_name'            => 'Store Name',
+                    'key_sn'            	=> 'Key SN',
+                    'start_date'            => 'Start Date',
+                    'end_date'          	=> 'END Date',
+                    'shop_type'             => 'Type',
+                    'total_reward_price'    => 'Total Reward Price',
+                    'tax_price'            	=> 'Tax Price',
+                    'creditnote_price'      => 'Creditnote Price',
+                    'creditnote_price_confirm'            	=> 'Creditnote Price Confirm',
+                    'asm_confirm_by'           	=> 'Asm Confirm By',
+                    'asm_confirm_date'          => 'Asm Confirm Date',
+                    'confirm_by'            	=> 'Confirm By',
+                    'confirm_date'            	=> 'Confirm Date',
+                    'status_cn'            		=> 'Status CN',
+                    'creditnote_sn'            	=> 'Creditnote SN',
+                    'reason_remark'            	=> 'Reason Remark',
+                    'Action'
+                ),
+                $this->url, $this->sort, $this->desc); ?>
+        </tr>
+    </thead>
+    <tbody>
+        <?php
+        //print_r($this->oppoAllGreen);
+        if (isset($this->oppoAllGreen) and $this->oppoAllGreen) :
+            foreach ($this->oppoAllGreen as $k=>$m): 
+
+                $status_cn="-";$creditnote_sn='';$creditnote_price=0;$decorate_status="-";
+                if($m['decorate_status']==1){
+                    $decorate_status="Approve";
+                }else{
+                    $decorate_status="Wait To Check";
+                }
+                if($m['status_cn']==1){
+                    $status_cn="Confirmed";
+                }
+                if($m['creditnote_sn'] !=''){
+                    $creditnote_sn=$m['creditnote_sn'];
+                    $creditnote_price_confirm=$m['creditnote_price_confirm'];
+                    $confirm_date=$m['confirm_date'];
+                }
+                $creditnote_type_sn="reward";
+            ?>
+        <tr class="accordion-heading">
+            <td><?php echo $m['round_no']?></td>
+            <td><?php echo $m['round_year']?></td>
+            <td><?php echo $m['air_number']?></td>
+            <td><?php echo $m['distributor_id']?></td>
+            <td><?php echo $m['distributor_name']?></td>
+            <td><?php echo $m['store_id']?></td>
+            <td><?php echo $m['store_name']?></td>
+   			<td><?php echo $m['key_sn']?></td>
+   			<td><?php echo $m['start_date']?></td>
+   			<td><?php echo $m['end_date']?></td>
+   			<td><?php echo $m['shop_type']?></td>
+   			<td><?php echo $m['total_reward_price']?></td>
+   			<td><?php echo $m['tax_price']?></td>
+   			<td><?php echo $m['creditnote_price']?></td>
+   			<td><?php echo $m['creditnote_price_confirm']?></td>
+   			<td><?php echo $m['asm_confirm_by']?></td>
+   			<td><?php echo $m['asm_confirm_date']?></td>
+   			<td><?php echo $m['confirm_by']?></td>
+   			<td><?php echo $m['confirm_date']?></td>
+   			<td><?php echo $m['status_cn']?></td>
+   			<td><?php echo $m['creditnote_sn']?></td>
+   			<td><?php echo $m['reason_remark']?></td>
+            <td>
+            <?php if($m['creditnote_sn'])
+            { ?>
+                    <a title="View OPPO All Green" target="_blank" href="/finance/cn-reward-all-green-print?sn=<?php echo $m['creditnote_sn'];?>&d_id=<?php echo $m['distributor_id'];?>&creditnote_type=oppo_all_green&cn_type=<?php echo $m['cn_type'];?>"> <i class="icon-print" style="color: red"></i></a>
+           <?php } ?>
+            </td>
+        </tr>
+                
+
+        <?php endforeach;?>
+        <?php endif; ?>
+    </tbody>
+</table>
+<div class="paging">
+    <?php echo $this->paging($this->total, $this->limit, $this->offset, $this->url);?>
+</div>
+
+<script type="text/javascript" src="/js/jquery-ui-1.8.12.custom.min.js"></script>
+<link rel="stylesheet" type="text/css" href="/css/jquery-ui-1.8.12.custom.css"/>
+<?php echo $this->load();?>
+<?php echo $this->confirm();?>
+

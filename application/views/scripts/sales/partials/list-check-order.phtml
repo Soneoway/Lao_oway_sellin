@@ -1,0 +1,101 @@
+<?php
+
+function product_price($priceFloat) {
+    $symbol = ' THB';
+    $symbol_thousand = ',';
+    $decimal_place = 2;
+    $price = number_format($priceFloat, $decimal_place, '.', $symbol_thousand);
+    return $price;
+}
+
+?>
+    <link rel="stylesheet" type="text/css" href="https://cdn.datatables.net/1.10.22/css/dataTables.bootstrap4.min.css">
+    <link rel="stylesheet" type="text/css" href="https://cdn.datatables.net/responsive/2.2.6/css/responsive.bootstrap4.min.css ">
+    <script type="text/javascript" src="https://cdn.datatables.net/1.10.22/js/jquery.dataTables.min.js"></script>
+    <script type="text/javascript" src="https://cdn.datatables.net/1.10.22/js/dataTables.bootstrap4.min.js"></script>
+<table class="table table-bordered" id="dataTables">
+    <thead>
+        <tr>
+            <?php echo $this->sorting(array(
+					'#',
+                    'Distributor ID',
+					'Distributor Name',
+					'Total Quantity',
+                    'From Warehouse',
+                    'Status'
+                ),
+                $this->url, $this->sort, $this->desc); ?>
+        </tr>
+    </thead>
+    <tbody>
+        <?php
+        if (isset($this->markets_sn) and $this->markets_sn) :
+            foreach ($this->markets_sn as $k=>$m): 
+             $sn_ref = $m['sn_ref'];
+             if($sn_ref==''){
+                $sn_ref = $m['sn'];
+             }
+
+                ?>
+        <tr class="accordion-heading">
+        	<td><center><icon class="icon-check-sign"></icon></center></td>
+            <td><?php echo $m['distributors_id'] ?></td>
+            <td><?php echo $m['distributors_name'] ?></td>            
+            <td><?php if($m['total_qulity'] > 0){ $qulity = $m['total_qulity']; }else{ $qulity = "0"; } echo $qulity; ?></td>
+            <td><?php if (isset($this->warehouses_cached[$m['warehouse_name']])) echo $this->warehouses_cached[$m['warehouse_name']] ?></td>
+            <td>
+                <?php if($m['status'] == 0){$status = '<strong style="color: green"> Enabled </strong'; }else{ $status = '<strong style="color: red"> Disabled </strong>'; } echo $status; ?>
+            </td>                              
+        </tr>
+
+        <?php endforeach;?>
+		<?php endif; ?>
+    </tbody>
+</table>
+<div class="paging">
+    <?php echo $this->paging($this->total, $this->limit, $this->offset, $this->url);?>
+</div>
+
+<script type="text/javascript" src="/js/jquery-ui-1.8.12.custom.min.js"></script>
+<link rel="stylesheet" type="text/css" href="/css/jquery-ui-1.8.12.custom.css"/>
+<?php echo $this->load();?>
+<?php echo $this->confirm();?>
+<script>
+    $('.lock').click(function(e){
+        e.preventDefault();
+        alert('Sorry,This information is blocked...You can not delete payment has been made or has been the storage of information!');
+    });
+
+    $('.collapse_a').each(function(){
+    	var _this = $(this);
+    	var _this_id = _this.attr('id');
+    	var $coll = $('.'+_this_id);
+
+    	_this.click(function(){
+
+    		$coll.toggle();
+    		if ($coll.is(':visible'))
+	    		_this.html('-');
+	    	else _this.html('+');
+    	});
+    });
+</script>
+<script type="text/javascript">
+    $('#dataTables').DataTable({
+      "aLengthMenu": [[20, 50, 100, 250, -1], [20, 50, 100, 250, "All"]],
+      "pageLength": 20,
+      "language":{
+        "sLengthMenu": "ສະແດງ _MENU_ ຈຳນວນ",
+        "info": "ຢູ່ໜ້າທີ _PAGE_ ຫາ _PAGES_",
+        "infoEmpty":      "ສະແດງໃຫ້ເຫັນ 0 ຫາ 0 ຂອງ 0 ລາຍການ",
+        "infoFiltered":   "( ຈາກ _MAX_ ລາຍການທັງໝົດ )",
+        "search": "<b>ຄົ້ນຫາ</b>",
+        "zeroRecords": "ບໍ່ມີຂໍ້ມູນ",
+        "searchPlaceholder": "ໃສ່ຂໍ້ມູນ",
+        "paginate": {
+          previous: 'ກັບຄືນ',
+          next:     'ຕໍ່ໄປ'
+        }
+      }
+    });
+</script>

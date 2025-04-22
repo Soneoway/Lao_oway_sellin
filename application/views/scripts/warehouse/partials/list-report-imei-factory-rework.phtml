@@ -1,0 +1,59 @@
+<table class="table table-bordered">
+    <thead>
+        <tr>
+            <?php echo $this->sorting(array(
+                    '#',
+                    'imei_sn' => 'Imei',
+                    'good_model' => 'Product Model',
+                    'good_name' => 'Product Name',
+                    'color_name' => 'Product Color',
+                    'good_type' => 'Product Type',
+					'flag_rework_date' => 'Flag Date',
+                    'fullname' => 'Flag By',
+                    'flag_rework_status' => 'Status'
+                ),
+                $this->url, $this->sort, $this->desc); ?>
+        </tr>
+    </thead>
+    <tbody>
+        <?php if (isset($this->data) and $this->data) :
+            foreach ($this->data as $key => $value):?>
+
+            <tr>
+                <td><?=$key+1?></td>
+                <td><?=$value['imei_sn']?></td>
+                <td><?=$value['good_model']?></td>
+                <td><?=$value['good_name']?></td>
+                <td><?=$value['color_name']?></td>
+                <td><?php 
+
+                switch ($value['type']) {
+                    case '1':
+                        echo 'Normal';
+                        break;
+                    case '2':
+                        echo 'Demo';
+                        break;
+                    case '5':
+                        echo 'APK';
+                        break;
+                }
+
+                ?></td>
+                <td><?=$value['flag_rework_date']?></td>
+                <td><?=$value['fullname']?></td>
+                <td><?php if($value['flag_rework_status'] == '1'){echo 'Flag';}?></td>
+            </tr>
+
+            <?php endforeach;?>
+        <?php endif; ?>
+    </tbody>
+</table>
+                
+<div class="paging">
+    <?php echo $this->paging($this->total, $this->limit, $this->offset, $this->url);?>
+</div>
+
+<script>
+
+</script>

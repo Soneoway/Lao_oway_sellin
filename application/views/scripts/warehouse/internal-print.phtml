@@ -1,0 +1,294 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
+<html>
+   <head>
+      <meta http-equiv="Pragma" content="no-cache">
+      <meta http-equiv="Expires" content="-1">
+      <meta http-equiv="Content-Type" content="text/html; charset=utf-8">
+      <meta name="description" content="Invoice Laser">
+      <meta name="keywords" content="Invoice Laser">
+      <meta name="author" content="Cuong seven">
+      <title>Print Internal Print</title>
+      <script src="<?php echo HOST ?>js/jquery-1.7.2.min.js"></script>
+      <link rel="stylesheet" href="<?php echo HOST ?>css/jquery-ui.css">
+      <link rel="stylesheet" href="<?php echo HOST ?>css/invoice.css">
+      <script src="<?php echo HOST ?>js/jquery-ui.js"></script>
+   </head>
+   <style>h2 {
+           font-size: 23px;
+           font-weight: bold;
+           text-transform: uppercase;
+           margin-top: 6px;
+           margin-bottom: 10px;
+       }
+
+       .name-order
+       {
+           text-transform: uppercase;
+           padding-left: 6px;
+           width: 400px;
+           padding: 0px 30px;
+       }
+       .signleft {
+           text-align: left;
+           padding-left: 50px;
+       }
+       .signname {
+           width: 225px;
+           float: left;
+           text-align: center;
+           margin-top: 16px;
+       }
+       .cn
+       {
+           float: left;
+       }
+       .cua
+       {
+           padding-left: 6px;
+           min-width: 400px;
+           display: block;
+           float: left;
+       }
+       .center
+       {
+           text-align: center;
+       }
+   </style>
+   <body>
+   <!--begin invoice print template -->
+   <div class="block">
+
+       <div class="header">
+           <div id="logo">
+               <img src="<?php echo HOST ?>img/logoprint.png" alt="logo" title="logo"/>
+           </div>
+           <div class="print">
+               <img src="<?php echo HOST ?>img/print.png" alt="print" title="print">
+           </div>
+
+           <div class="no-print">
+               <!-- <a target="_blank" href="<?php echo HOST ?>warehouse/list-good?sn=<?php echo $this->sn ?>">In bang ke</a> -->
+           </div>
+           <div class="inform">
+
+               <h2>Phiếu xuất kho kiêm vận chuyển nội bộ</h2>
+               <p>Liên 1: Lưu</p>
+               <div class="date">
+                   <div class="day">Ngày: <span><?php echo date('d' , strtotime($this->transport_date)) ?></span></div>
+                   <div class="month">Tháng: <span><?php echo date('m' , strtotime($this->transport_date)); ?></span></div>
+                   <div class="year">Năm: <span><?php echo date('Y' , strtotime($this->transport_date)); ?></span></div>
+               </div>
+           </div>
+
+           <div class="sign">
+               <p>Mẫu số: <span> <?php if(isset($this->from_invoice_prefix) and $this->from_invoice_prefix['invoice_type_number']) echo $this->from_invoice_prefix['invoice_type_number']; ?></span></p>
+               <p>Ký hiệu: <span><?php if(isset($this->from_invoice_prefix) and $this->from_invoice_prefix['name']) echo $this->from_invoice_prefix['name']; ?></span></p>
+               <p>Số: <span class="invoice_number_change"><?php if(isset($this->invoice_number) and $this->invoice_number) echo $this->invoice_number ?></span></p>
+               <p class="barcode"><img src="<?php echo HOST.'photo/barcode2/'.$this->sn.'.jpg' ?>" alt="<?php echo $this->sn ?>"></p>
+           </div>
+
+
+           <div class="clear"></div>
+       </div>
+
+       <div class="information">
+
+           <div class="row-1">
+               <div class="col"><span>Đơn vị bán hàng</span>:<strong class="name"><?php if(isset($this->from_warehouse_oppo['warehouse_name']) and $this->from_warehouse_oppo['warehouse_name']) echo $this->from_warehouse_oppo['warehouse_name']; ?></strong></div>
+               <div class="col"><span>Mã số thuế </span>:<strong class="mst"><?php if(isset($this->from_warehouse_oppo['mst']) and $this->from_warehouse_oppo['mst']) echo $this->from_warehouse_oppo['mst']; ?></strong></div>
+               <div class="col"><span>Địa chỉ </span>:<strong class="not"><?php if(isset($this->from_warehouse_oppo['address']) and $this->from_warehouse_oppo['address']) echo $this->from_warehouse_oppo['address']; ?></strong></div>
+               <div class="col"><span>Điện thoại </span>:<strong class="not"><?php if(isset($this->from_warehouse_oppo['phone']) and $this->from_warehouse_oppo['phone']) echo $this->from_warehouse_oppo['phone']; ?> </strong></div>
+            </div>
+
+           <div class="devider"></div>
+
+           <div class="row-2">
+
+               <div class="col"><span class="cn">Căn cứ theo lệnh điều động số: &nbsp;</span><strong class="name-order cua"><?php if(isset($this->order_name) and $this->order_name) echo $this->order_name; ?></strong> <span class="cns"><span class="cn"> </span></span><span class="cn"> <?php if(isset($this->transport_date) and $this->transport_date) echo ' Ngày :' . date('d' , strtotime($this->transport_date)) . ' Tháng :' . date('m' , strtotime($this->transport_date)). ' Năm: ' . date('Y' , strtotime($this->transport_date)) ?></span></div>
+               <div class="col"><span class="cn">của: &nbsp;</span><span class="cn cua">&nbsp;<?php if(isset($this->contract_for_name) and $this->contract_for_name) echo $this->contract_for_name ?></span><span class="cns"><span class="cn">về việc:  </span></span><span class="cn"> <?php if(isset($this->contract_for_work) and $this->contract_for_work) echo $this->contract_for_work ?></span></div>
+               <div class="col"><span>Họ tên người vận chuyển: </span><strong class="not"><?php if(isset($this->transport_name) and $this->transport_name )  echo $this->transport_name; ?></strong></div>
+               <div class="col"><span>Hợp đồng số:</span> <?php if(isset($this->contract_name) and $this->contract_name) echo $this->contract_name; ?></div>
+
+               <div class="col"><span>Phương tiện vận chuyển: </span><strong class="not"><?php if(isset($this->transport_type) and $this->transport_type)  echo $this->transport_type; ?></strong></div>
+               <div class="col"><span>Xuất tại kho: </span><strong ><?php if(isset($this->from_warehouse['name']) and $this->from_warehouse['name'])  echo $this->from_warehouse['name']; ?></strong></div>
+               <div class="col"><span>Nhập tại kho: </span><strong> <?php if(isset($this->to_warehouse['name']) and $this->to_warehouse['name'])  echo $this->to_warehouse['name']; ?></strong></div>
+
+           </div>
+
+       </div>
+
+       <div class="devider"></div>
+
+       <div class="tblist">
+
+            <table class="table-border" cellspacing="0">
+                <tr class="thead">
+                    <td rowspan="2">STT</td>
+                    <td class="productname" rowspan="2">Tên nhãn hiệu quy cách, phẩm chất vật tư(sản phẩm hàng hóa)</td>
+                    <td rowspan="2">Mã số</td>
+                    <td class="unit" rowspan="2">Đơn vị tính</td>
+                    <td class="quantity" colspan="2">Số lượng</td>
+                    <td class="price" rowspan="2">Đơn giá</td>
+                    <td class="total" rowspan="2">Thành tiền</td>
+                </tr>
+                <tr class="thead">
+
+                    <td>Thực xuất</td>
+                    <td style="border-right: 2px solid black !important;">Thực nhập</td>
+                </tr>
+
+                <?php for ($i = 1; $i <= 15; $i++) {?>
+                    <tr class="sp">
+                        <td></td>
+                        <td class="productname"></td>
+                        <td class="unit"></td>
+                        <td class="quantity"></td>
+                        <td class="price"></td>
+                        <td class="total"></td>
+                        <td class="total" ></td>
+                        <td class="total"></td>
+                    </tr>
+                <?php }  ?>
+
+
+                <tr class="sp">
+
+                    <td  colspan="7" style="text-align: right;padding-right: 30px;">Tổng cộng:</td>
+                    <td class="center"><?php if(isset($this->total_price) and $this->total_price) echo My_Number::product_price($this->total_price)?> </td>
+                </tr>
+
+                <?php echo $this->render('tool/partials/internal-product-out.phtml'); ?>
+
+            </table>
+
+
+
+       </div>
+
+       <div class="devider"></div>
+
+       <div class="signname signleft">
+           <div>Người lập</div>
+           <p>(Ký, ghi rõ họ tên)</p>
+       </div>
+
+       <div class="signname signleft">
+           <div>Thủ kho xuất</div>
+           <p>(Ký, ghi rõ họ tên)</p>
+       </div>
+
+
+       <div class="signname signleft">
+           <div>Người vận chuyển</div>
+           <p>(Ký, ghi rõ họ tên)</p>
+       </div>
+
+       <div class="signname signright">
+            <div>Thủ kho nhập</div>
+           <p>(Ký, đóng dấu, ghi rõ họ tên)</p>
+       </div>
+
+       <div class="clear"></div>
+
+       <div class="foot">
+           <p>(Cần kiểm tra, đối chiếu khi lập, giao, nhận hóa đơn)</p>
+       </div>
+
+      <div class="page-break"></div>
+   </div>
+   
+   <input type="hidden" id="total_invoice_price" name="total_invoice_price" value="<?php echo $this->price_before_vat ; ?>" />
+   <input type="hidden" id="service_id" name="service_id" value="<?php echo $this->service_id ; ?>" />
+   <input type="hidden" id="total_invoice_vat" name="total_invoice_vat" value="<?php echo $this->vat ; ?>" />
+   <input type="hidden" id="total_invoice_after_vat" name="total_invoice_after_vat" value="<?php echo $this->price_after_vat; ?>" />
+   <input type="hidden" id="invoice_number" value="<?php if(isset($this->invoice_number) and $this->invoice_number) echo $this->invoice_number; ?>">
+   <input type="hidden" id="invoice_prefix" value="<?php if(isset($this->invoice_prefix['id']) and $this->invoice_prefix['id']) echo $this->invoice_prefix['id']; ?>">
+   <input type="hidden" id="sn" value="<?php if(isset($this->sn)) echo $this->sn; ?>">
+       <script type="text/javascript">
+           //clone to 2 page
+           function dublicate()
+           {
+               var block = $('.block').clone();
+               block.find('.inform p').html('Liên 2: Giao cho người mua');
+               block.find('#logo').addClass('print2');
+               block.find('.invoice').addClass('print3');
+               $('.block').after(block);
+           }
+
+
+
+           dublicate();
+           window.print();
+           setTimeout(function(){var ww = window.open(window.location, '_self'); ww.close(); }, 1000);
+
+           $('.print').click(function (){
+
+               var all_values = [];
+               var url = '<?php echo HOST ?>warehouse/customer-save';
+
+               $('input[name^="invoice_price"]').each(function() {
+                   all_values.push($(this).val());
+               });
+
+               $.post(url,
+                   {
+                       invoice_number: $('#invoice_number').val(),
+                       sales_sn: $('#sn').val(),
+                       prefix: $('#invoice_prefix').val(),
+                       total_invoice_price: $('#total_invoice_price').val(),
+                       total_invoice_vat: $('#total_invoice_vat').val(),
+                       total_invoice_after_vat: $('#total_invoice_after_vat').val(),
+                       type : 1,
+                       invoice_price: all_values,
+                       service_id : 1
+                   }, function(data) {
+
+                       var text = '';
+
+                       switch (data) {
+                           case '-1':
+                               text = 'Please input Invoice number!';
+                               break;
+                           case '-2':
+                               text = 'Sales order number is invalid!';
+                               break;
+                           case '-3':
+                               text = 'This invoice number was used already!';
+                               break;
+                           case '-4':
+                               text = 'Cannot save invoice number, please try again!';
+                               break;
+
+                           case '-6':
+                               //location.reload(true);
+                               break;
+                           case '0':
+                               text = 'Saving successfully!';
+                               $('.invoice_lase').text($('#invoice_number').val());
+
+                               window.print();
+                               break;
+
+
+
+                       }
+
+                       alert(text);
+
+                   });
+           });
+
+           /*   $(document).on('keydown', function(e) {
+            if(e.ctrlKey && (e.key == "p" || e.charCode == 16 || e.charCode == 112 || e.keyCode == 80) ){
+            alert("Please don\' use this commnand!");
+            e.cancelBubble = true;
+            e.preventDefault();
+
+            e.stopImmediatePropagation();
+            }
+            });*/
+
+
+       </script>
+   </body>
+</html>

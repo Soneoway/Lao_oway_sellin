@@ -1,0 +1,167 @@
+<div class="page-header">
+    <h1>Split Sales Order <small>Tách đơn hàng</small></h1>
+</div>
+<ol>
+    <li>Điền mã đơn (Order SN), bấm Get Order</li>
+    <li>Chọn các IMEI cần tách đơn</li>
+    <li>Điền mã đại lý (New Distributor Code) cho đơn mới. Nếu để trống, đại lý sẽ lấy theo đơn cũ</li>
+    <li>Bấm Split</li>
+</ol>
+
+<form class="form-horizontal" onsubmit="return false;">
+    <div class="control-group">
+        <label class="control-label" for="sn">Order SN</label>
+        <div class="controls">
+            <input type="text" id="sn" placeholder="Order SN" />
+            <button type="button" id="get_order_btn" class="btn btn-primary">Get order</button>
+        </div>
+    </div>
+
+    <div class="control-group">
+        <label class="control-label" for="distributor_code">New Distributor Code</label>
+        <div class="controls">
+            <input type="text" id="distributor_code" placeholder="New Distributor Code" />
+            <button type="button" id="split_btn" class="btn btn-success">Split</button>
+        </div>
+    </div>
+
+    <div class="control-group">
+        <div class="controls">
+            <p class="status"></p>
+        </div>
+    </div>
+
+</form>
+
+<div id="content">
+    
+</div>
+
+<script type="text/javascript">
+    $(document).ready(function() {
+        $("#get_order_btn").click(get_order);
+        $("#split_btn").click(split_order);
+        $("#distributor_code").change(get_distributor_info);
+    });
+
+    function get_distributor_info(e) {
+        code = $("#distributor_code").val().trim();
+
+        if (!code) return false;
+
+        $.ajax({
+            url: '<?php echo HOST ?>get/distributor-info-by-code',
+            type: 'post',
+            dataType: 'json',
+            data: {
+                code: code
+            },
+        })
+        .done(function(data) {
+            if (!data || data.no_data) return false;
+            console.log("success");
+
+            $('.status').html('<ul><li>'+data.title+'</li><li>'+data.store_code+'</li><li>'+data.address+'</li></ul>')
+        })
+        .fail(function() {
+            console.log("error");
+        })
+        .always(function() {
+            console.log("complete");
+        });
+        
+    }
+
+    function get_order(e) {
+        $('.loading').remove();
+        $('.status').text('');
+        
+        $('#content').html('');
+        sn = $('#sn').val().trim();
+
+        if (!sn) {
+            $('.status').text('Please fill in Order SN');
+            return false;
+        }
+
+        $("#get_order_btn").after('<span class="loading"></span>');
+
+        $.ajax({
+            url: '<?php echo HOST ?>sales/split-get-order',
+            type: 'post',
+            dataType: 'html',
+            data: {
+                sn: sn
+            },
+        })
+        .done(function(html) {
+            console.log("success");
+
+            if (html) $('#content').html(html);
+        })
+        .fail(function() {
+            console.log("error");
+        })
+        .always(function() {
+            $('.loading').remove();
+            console.log("complete");
+        });
+        
+    }
+
+    function split_order(e) {
+        $('.loading').remove();
+        $('.status').text('');
+        
+        market_ids = [];
+        imei_ids = [];
+        sn = $('#sn').val().trim();
+        distributor_code = $('#distributor_code').val().trim();
+
+        if (!sn) {
+            $('#content').text('Please fill in Order SN');
+            return false;
+        }
+
+        $('.item :checkbox:checked').each(function() {
+            market_ids.push($(this).data('market-id'));
+            imei_ids.push($(this).data('imei-id'));
+        });
+
+        if (!market_ids.length || !imei_ids.length) {
+            $('.status').text('Choose one or more order item');
+            return false;
+        }
+
+        $("#split_btn").after('<span class="loading"></span>');
+
+        $.ajax({
+            url: '<?php echo HOST ?>sales/split-act',
+            type: 'post',
+            dataType: 'json',
+            data: {
+                market_ids      : market_ids,
+                imei_ids        : imei_ids,
+                distributor_code: distributor_code
+            },
+        })
+        .done(function(data) {
+            console.log("success");
+
+            if (data && typeof data.message !== 'undefined')
+                $('.status').text(data.message + '/' + data.new_sn);
+
+            $('.item :checkbox:checked').remove();
+        })
+        .fail(function() {
+            console.log("error");
+        })
+        .always(function() {
+            $('#sn').val('');
+            $('#distributor_code').val('');
+            $('.loading').remove();
+            console.log("complete");
+        });
+        
+    }
+</script>

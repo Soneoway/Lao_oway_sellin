@@ -1,0 +1,145 @@
+<style type="text/css">
+    textarea {
+        max-width: 100%;
+    }
+</style>
+
+<div class="page-header">
+    <h1>Hub Order <small>Detail Information</small></h1>
+</div>
+
+<?php if (isset($this->messages) && is_array($this->messages)): ?>
+    <?php foreach ($this->messages as $key => $value): ?>
+        <div class="alert alert-block">
+            <button type="button" class="close" data-dismiss="alert">&times;</button>
+            <h4>Error!</h4> <?php echo $value ?>
+        </div>
+    <?php endforeach ?>
+<?php endif ?>
+
+<div class="table-responsive load-ajax" id="table">
+    <?php
+        echo $this->render('delivery/partials/order-control-view-list.phtml');
+    ?>
+</div>
+
+<form action="" onsubmit="return false;" class="form-horizontal">
+    <fieldset>
+        <legend>Order Information</legend>
+        <div class="row">
+            <div class="span6">
+                <div class="control-group">
+                    <label class="control-label">Distributor</label>
+                    <div class="controls">
+                        <input type="text" value="<?php if(isset($this->distributor_cache[ $this->order['distributor_id'] ])) echo $this->distributor_cache[ $this->order['distributor_id'] ] ?>" disabled>
+                    </div>
+                </div>
+
+                <div class="control-group">
+                    <label class="control-label">Receiver</label>
+                    <div class="controls">
+                        <input type="text" value="<?php echo $this->order['receiver'] ?>" disabled />
+                    </div>
+                </div>
+
+                <div class="control-group">
+                    <label class="control-label">Address</label>
+                    <div class="controls">
+                        <textarea disabled rows="5"><?php echo trim($this->order['address']) ?></textarea>
+                    </div>
+                </div>
+
+                <div class="control-group">
+                    <label class="control-label">Province</label>
+                    <div class="controls">
+                        <input type="text" value="<?php if(isset($this->order['district'])) echo My_Region::getValue($this->order['district'], My_Region::Province) ?>" disabled>
+                    </div>
+                </div>
+
+                <div class="control-group">
+                    <label class="control-label">District</label>
+                    <div class="controls">
+                        <input type="text" value="<?php if(isset($this->order['district'])) echo My_Region::getValue($this->order['district'], My_Region::District) ?>" disabled>
+                    </div>
+                </div>
+
+                <div class="control-group">
+                    <label class="control-label" for="phone">Tel/Mobile</label>
+                    <div class="controls">
+                        <input type="text" value="<?php echo $this->order['phone_number'] ?>" disabled />
+                    </div>
+                </div>
+
+            </div>
+            <div class="span6">
+                <div class="control-group">
+                    <label class="control-label" for="">Type</label>
+                    <div class="controls">
+                        <input type="text" value="<?php if(isset(My_Delivery_Type::$name[$this->order['type']])) echo My_Delivery_Type::$name[$this->order['type']] ?>" disabled>
+                    </div>
+                </div>
+
+                <?php if (isset($this->hub) && $this->hub): ?>
+                    <div class="control-group">
+                        <label class="control-label" for="">Hub</label>
+                        <div class="controls">
+                            <input type="checkbox"
+                                <?php if(isset($this->order['hub']) && $this->order['hub']) echo "checked" ?>
+                                value="<?php if(isset(My_Delivery_Type::$name[$this->order['type']])) echo My_Delivery_Type::$name[$this->order['type']] ?>"
+                                disabled> <?php if (isset($this->hub['name'])) echo $this->hub['name'] ?>
+                        </div>
+                    </div>
+                <?php endif ?>
+
+                <?php if ($this->order['type'] == My_Delivery_Type::Inhouse): ?>
+                    <div class="control-group">
+                        <label class="control-label" for="carrier">Staff</label>
+                        <div class="controls">
+                            <input type="text" value="<?php if(isset($this->staffs[$this->order['staff_id']])) echo $this->staffs[$this->order['staff_id']] ?>" disabled>
+                        </div>
+                    </div>
+
+                <?php elseif($this->order['type'] == My_Delivery_Type::Outside): ?>
+                    <div class="control-group">
+                        <label class="control-label" for="carrier">Carrier</label>
+                        <div class="controls">
+                            <input type="text" value="<?php if(isset(My_Carrier::$name[$this->order['carrier_id']])) echo My_Carrier::$name[$this->order['carrier_id']] ?>" disabled>
+                        </div>
+                    </div>
+
+                    <div class="control-group">
+                        <label class="control-label" for="delivery_sn">Delivery Code</label>
+                        <div class="controls">
+                            <input type="text" name="delivery_sn" id="delivery_sn" disabled value="<?php if(isset($this->order['sn'])) echo $this->order['sn']; ?>" />
+                        </div>
+                    </div>
+
+                    <div class="control-group">
+                        <label class="control-label" for="number_of_package">Number of Packages</label>
+                        <div class="controls">
+                            <input type="number" name="number_of_package" id="number_of_package"  value="<?php if(isset($this->order['number_of_package'])) echo $this->order['number_of_package']; ?>" disabled />
+                        </div>
+                    </div>
+
+                    <div class="control-group">
+                        <label class="control-label" for="weight">Weight</label>
+                        <div class="controls">
+                            <input type="text" name="weight" id="weight" value="<?php if(isset($this->order['weight'])) echo $this->order['weight']; ?>"  disabled />
+                        </div>
+                    </div>
+
+                <?php elseif($this->order['type'] == My_Delivery_Type::Customer_Pickup): ?>
+                        <label class="control-label" for="carrier">Customer Pickup</label>
+                <?php endif ?>
+
+                
+            </div>
+        </div>
+
+        <div class="row">
+            <div class="span12">
+                <a class="btn btn-default" href="<?php echo My_Url::refer(HOST.'delivery/order-control') ?>">Back</a>
+            </div>
+        </div>
+    </fieldset>
+</form>

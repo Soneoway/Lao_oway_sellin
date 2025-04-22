@@ -1,0 +1,162 @@
+<script type="text/javascript" src="<?php echo HOST ?>js/jquery-ui-1.8.12.custom.min.js"></script>
+<link rel="stylesheet" type="text/css" href="<?php echo HOST ?>css/jquery-ui-1.8.12.custom.css"/>
+
+<link href="<?php echo HOST ?>css/jquery.tagit.css" rel="stylesheet" type="text/css">
+<link href="<?php echo HOST ?>css/tagit.ui-zendesk.css" rel="stylesheet" type="text/css">
+
+<link rel="stylesheet" href="<?php echo HOST ?>css/bootstrap-multiselect.css" type="text/css"/>
+<script type="text/javascript" src="<?php echo HOST ?>js/bootstrap-multiselect.js"></script>
+
+<link href="../css/select2.css" rel="stylesheet"/>
+<script src="../js/select2.js"></script>
+
+<style type="text/css">
+	.text-red {
+		color: red;
+	}
+</style>
+
+<div class="page-header">
+	<?php if(isset($this->distributor) && $this->distributor) : ?>
+		<h1> Edit Distributor </h1>
+	<?php else: ?>
+		<h1> Create Distributor </h1>
+	<?php endif ?>
+</div>
+
+
+<div class="container" style="border-style: solid; padding: 30px; border-color: lavender;">
+	<div class="card">
+		<form class="form-horizontal" action="<?php echo HOST.'sales/save-distributor-new';?>" method="post">
+			<div class="row-fluid">
+
+				<div class="span4">
+					<div class="control-group">
+						<label>Distributor Name : <span class="text-red">*</span></label>
+						<input type="text" name="distributor_name" class="span3" value="<?php echo $this->distributor['distributor_name'] ?>">
+					</div>
+
+					<div class="control-group">
+						<label>Affiliated Clients : <span class="text-red">*</span></label>
+						<select name="cilent_code" class="span3" id="cilent_code">
+							<option value=""> Please Selected </option>
+						<?php if (isset( $this->client ) && $this->client): ?>
+                            <?php foreach ($this->client as $key => $name): ?>
+
+								<option value="<?php echo $key ?>" <?php if (isset($this->distributor['client_code']) and $this->distributor['client_code']== $key ):?> selected <?php endif;?> ><?php echo $name ?></option>
+
+                            <?php endforeach ?>
+                        <?php endif ?>
+						</select>
+					</div>
+
+					<div class="control-group">
+						<label>Leader : <span class="text-red">*</span></label>
+						<input type="text" name="leader" class="span3" value="<?php echo $this->distributor['leader'] ?>">
+					</div>
+
+					<div class="control-group">
+						<label>Remark</label>
+						<textarea class="span3" cols="2" rows="3" name="remark"><?php echo $this->distributor['remark'] ?></textarea>
+					</div>
+					
+				</div>
+
+				<div class="span4">
+					<div class="control-group">
+						<label>Superior Distributor : <span class="text-red">*</span></label>
+						<select name="superior_d" class="span3 form-control" id="superior_d">
+							<option value=""> Please Selected </option>
+
+							<?php if(isset($this->superiorD) && $this->superiorD) : ?>
+								<?php foreach($this->superiorD as $value) : ?>
+
+									<option value="<?php echo $value['distributor_code'] ?>" <?php if (isset($this->distributor['superior_distributor']) and $this->distributor['superior_distributor']== $value['distributor_code'] ):?> selected <?php endif;?> ><?php echo $value['distributor_name'] ?></option>
+
+								<?php endforeach ?>
+							<?php endif?>
+						</select>
+					</div>
+
+					<div class="control-group">
+						<label>Price System : <span class="text-red">*</span></label>
+						<input type="text" name="rank_price" class="span3" readonly>
+					</div>
+
+					<div class="control-group">
+						<label> External Serial Number :</label>
+						<input type="text" name="ex_serial" class="span3" value="<?php echo $this->distributor['external_serial'] ?>">
+					</div>
+				</div>
+
+				<div class="span4">
+					<div class="control-group">
+						<label>Distributor Type : <span class="text-red">*</span></label>
+						<select id="dis_type" class="span3 form-control  " name="dis_type">
+							<option value="">Please Selected Dsitributor Type</option>
+							<option value="1" <?php if (isset($this->distributor['distributor_type']) and $this->distributor['distributor_type'] == 1 ):?> selected <?php endif;?> >Regional Distributor</option>
+							<option value="2" <?php if (isset($this->distributor['distributor_type']) and $this->distributor['distributor_type'] == 2 ):?> selected <?php endif;?> >Affiliate</option>
+							<option value="3" <?php if (isset($this->distributor['distributor_type']) and $this->distributor['distributor_type'] == 3 ):?> selected <?php endif;?> >Retailer</option>
+						</select>
+					</div>
+
+					<div class="control-group">
+						<label>Office : <span class="text-red">*</span></label>
+
+						<select name="provience_id" class="span3" id="provience_id">
+							<option value="">Please Selected</option>
+							<?php if(isset($this->regional) && $this->regional): ?>
+								<?php foreach($this->regional as $key => $name): ?>
+
+									<option value="<?php echo $key ?>" <?php if (isset($this->distributor['provience_id']) and $this->distributor['provience_id'] == $key ):?> selected <?php endif;?> ><?php echo $name ?></option>
+
+								<?php  endforeach ?>
+							<?php endif ?>
+						</select>
+					</div>
+
+					<div class="control-group">
+						<label>Tag :</label>
+						<input type="text" name="tag" class="span3" readonly>
+					</div>
+				</div>
+
+			</div>
+
+			<?php if(isset($this->distributor) && $this->distributor) : ?>
+
+			<div class="span12" style="padding-top: 50px; justify-items: center;">
+				<div class="control-group">
+					<input type="hidden" name="id" value="<?php echo $this->distributor['id'] ?>">
+					<button type="Submit" class="btn btn-success">Save</button>
+					<button type="reset" class="btn btn-danger" onclick="window.history.go(-1); return false;" >Back</button>
+				</div>
+			</div>
+
+			<?php else: ?>
+
+			<div class="span12" style="padding-top: 50px; justify-items: center;">
+				<div class="control-group">
+					<button type="Submit" class="btn btn-success">Submit</button>
+					<button type="reset" class="btn btn-danger">Cancel</button>
+				</div>
+			</div>
+
+			<?php endif ?>
+
+		</form>
+	</div>
+</div>
+
+
+
+<script type="text/javascript" src="<?php echo HOST ?>js/jets.js"></script>
+<script type="text/javascript" src="<?php echo HOST ?>js/bootstrap.min.js"></script>
+<script src="<?php echo HOST ?>js/tag-it.min.js" type="text/javascript" charset="utf-8"></script>
+
+<script>
+    $(document).ready(function () {
+
+        $("#cilent_code, #provience_id, #superior_d").select2();
+    })
+</script>

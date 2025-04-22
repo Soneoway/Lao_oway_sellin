@@ -1,0 +1,841 @@
+<link href="https://cdn.jsdelivr.net/npm/select2@4.1.0-rc.0/dist/css/select2.min.css" rel="stylesheet" />
+<script src="https://cdn.jsdelivr.net/npm/select2@4.1.0-rc.0/dist/js/select2.min.js"></script>
+
+<div class="page-header">
+    <h1>Change Imei Distibutor  <small style="font-family: phetsarath ot; font-size: 24px;">  ຍ້າຍ IMEI ລະຫວ່າງຮ້ານ</small></h1>
+</div>
+
+<?php
+
+$userStorage = Zend_Auth::getInstance()->getStorage()->read();
+
+if (isset($this->messages) and $this->messages)
+    foreach ($this->messages as $message):
+        echo '<div class="alert alert-error">'.$message.'</div>';
+    endforeach;
+    ?>
+    <div class="container" style="border-style: solid; border-color: lavender; padding: 30px; padding-bottom: 200px;">
+        <div class="row">
+            <div class="span12">
+                <iframe name="ifrmSave" id="ifrmSave" width="100%" style="display:none;"></iframe>
+                <form role="form" id="form" action="<?php echo HOST.'sales/save-change';?>" method="post" target="ifrmSave" class="form-inline">
+                    <div class="row">
+                        <div class="span6">
+
+                            <span><strong id="num_imei">
+                               <?php
+                               if ($this->sales){
+                                 echo $num_imei;     
+                             }else{
+                                 echo "0";     
+                             }
+                             ?>
+                         </strong> IMEI</span>
+
+                         <label for="" class="span2">IMEI Code:
+                            <?php if ($this->sales){
+                                $num_imei=0; 
+                                foreach ($this->imei_return as $imei){
+                                   $imei_return_list .= $imei['imei_sn']."\n";
+                                   $num_imei +=1;
+                               }
+
+                               ?>
+                               <textarea name="imei" id="imei" cols="20" rows="10"><?=$imei_return_list?></textarea>
+                           <?php }else{ ?>
+                            <textarea name="imei" id="imei" cols="20" rows="10"></textarea>
+                        <?php } ?>
+                    </label>
+                    <div class="span12">
+                        <button type="button" class="btn btn-check-imei btn-success">Check Imei</button>
+                    </div>
+                </div>
+
+
+                <div class="span6">
+                    <?php
+
+        // IF Adminstator and After Sale Service Account
+                    if(!in_array($userStorage->id, array(724, 1))){
+                        ?> 
+
+                    <div class="control-group" style="padding-left: 20px">
+                        <input type="checkbox" name="change_to" class="dis_change" value="1" id="dis_change" style="width: 20px;" /> <span> Change to Distributor ( ຢ້າຍເຄືອງໄປຮ້ານຄ້າ ) </span>
+                    </div>
+
+                    <div class="control-group dis_list" style="padding-top: 10px; padding-left: 30px;">
+                        <label> Distributor name : <span style="color: red;">*</span> </label>
+                        <div class="controls">
+                            <select name="dis_id" id="dis_id" class="span3 select2" required>
+                                <option value=""> Please Select Store </option>
+                                <?php foreach ($this->distributors_data as $item):?>
+                                    <option value="<?php echo $item->id ?>">[ <?php echo $item->id ?> ] <?php echo $item->title ?> </option>
+                                <?php endforeach; ?>
+                            </select>
+                        </div>
+                    </div>
+                    <div class="control-group dis_list" style="padding-top: 10px; padding-left: 30px; padding-bottom: 30px;">
+                        <label>Store Name : <span style="color: red">*</span></label>
+                        <div class="controls">
+                            <select name="store_id" id="store_id" class="span3 select2" required>
+                                <option value=""> Please Selected </option>
+                            </select>
+                        </div>
+                    </div>
+
+                <?php }else{ ?>
+
+                    <div class="control-group" style="padding-left: 20px">
+                        <input type="checkbox" name="change_to" class="dis_change" value="1" id="dis_change" style="width: 20px;" /> <span> Change to Distributor ( ຢ້າຍເຄືອງໄປຮ້ານຄ້າ ) </span>
+                    </div>
+
+                    <div class="control-group dis_list" style="padding-top: 10px; padding-left: 30px;">
+                        <label> Distributor name : <span style="color: red;">*</span> </label>
+                        <div class="controls">
+                            <select name="dis_id" id="dis_id" class="span3 select2" required>
+                                <option value=""> Please Select Store </option>
+                                <?php foreach ($this->distributors_data as $item):?>
+                                    <option value="<?php echo $item->id ?>">[ <?php echo $item->id ?> ] <?php echo $item->title ?> </option>
+                                <?php endforeach; ?>
+                            </select>
+                        </div>
+                    </div>
+                    <div class="control-group dis_list" style="padding-top: 10px; padding-left: 30px; padding-bottom: 30px;">
+                        <label>Store Name : <span style="color: red">*</span></label>
+                        <div class="controls">
+                            <select name="store_id" id="store_id" class="span3 select2" required>
+                                <option value=""> Please Selected </option>
+                            </select>
+                        </div>
+                    </div>
+
+                    <div class="control-group" style="padding-left: 20px;">
+                        <input type="checkbox" name="change_to" value="2" class="wh_change" id="wh_change" style="width: 20px;" /> <span> Change to Warehouse ( ຢ້າຍເຄືອງເຂົ້າສ້າງ )</span>
+                    </div>
+
+                    <div class="control-group wh_list" style="padding-top: 10px; padding-left: 30px;">
+                        <label>Warehouse Name : <span style="color: red">*</span></label>
+                        <div class="controls">
+                            <select name="wh_id" id="wh_id" class="span3 select2">
+                                <option value=""> Please Select Warehouse </option>
+                                <?php foreach ($this->warehouses as $item):?>
+                                    <option value="<?php echo $item->id ?>">[ <?php echo $item->id ?> ] - <?php echo $item->name ?> </option>
+                                <?php endforeach; ?>
+                            </select>
+                        </div>
+                    </div>
+
+                    <div class="control-group" style="padding-left: 20px; padding-top: 30px;">
+                        <div>
+                            <label class="" for="rank">Remark:<span style="color: red">*</span></label>
+                        </div>
+                        <textarea cols="3" rows="3" name="remark"></textarea>
+                    </div>
+                </div>
+
+            <?php } ?>
+        </div>
+    </div>
+    <!----------- end ---------------------->
+    <div class="span6">
+        <label class="span4">
+            &nbsp;
+        </label>
+    </div>
+</div>
+
+
+
+<?php if ($this->sales):?>
+
+    <?php foreach ($this->sales as $item):
+        $sale = $item['sale'];
+        $goods = $item['goods'];
+        $colors = $item['colors'];
+        $invoice_sn = $item['invoice'];
+        ?>
+        <div class="row">
+
+            <div class="span12">
+
+                <label class="span2">Products category <span style="color: red">*</span>
+                    <select class="span2 cat_id" name="cat_id[]" required="required" disabled>
+                        <option value="">Please select</option>
+                        <?php foreach ($this->good_categories as $good_category):?>
+                            <option value="<?php echo $good_category->id;?>" <?php if ($good_category->id == $sale->cat_id):?> selected<?php endif;?>><?php echo $good_category->name;?></option>
+                        <?php endforeach;?>
+                    </select>
+                </label>
+
+                <label class="span2">Product <span style="color: red">*</span>
+                    <select class="span2 good_id" name="good_id[]" required="required" disabled readonly>
+                        <option value="">Please select</option>
+                        <?php foreach ($goods as $good):?>
+                            <option value="<?php echo $good->id;?>" <?php if ($good->id == $sale->good_id):?> selected<?php endif;?>><?php echo $good->name;?></option>
+                        <?php endforeach;?>
+                    </select>
+                </label>
+
+                <label class="span1">Color <span style="color: red">*</span>
+                    <select class="span1 good_color" name="good_color[]" required="required" readonly disabled>
+                        <option value="">Please select</option>
+                        <?php foreach ($colors as $color):?>
+                            <option value="<?php echo $color->id;?>" <?php if ($color->id == $sale->good_color):?> selected<?php endif;?>><?php echo $color->name;?></option>
+                        <?php endforeach;?>
+                    </select>
+                </label>
+
+                <label class="span1">Quantity <span style="color: red">*</span>
+                    <input type="number" min="1" class="span1 num" name="num[]" required="required" readonly disabled maxlength="5" style="width: 50px" value="<?php printf($sale->num);?>" />
+                </label>
+
+                <label class="span1">Price <span style="color: red">*</span>
+                    <input type="number" min="1" required="required" readonly class="span1 price" readonly disabled name="price[]" value="<?php printf($sale->price);?>" />
+                </label>
+
+                <label class="span1">Total <span style="color: red">*</span>
+                    <input type="number" min="0" step="0.01" required="required" class="span1 total" readonly disabled name="total[]" value="<?php printf($sale->total);?>" />
+                </label>
+                <label class="span2">Invoice No<span style="color: red">*</span>
+                    <select class="span2 invoice_sn" required="required" readonly disabled name="invoice_sn[]" >
+                        <option value="">Please select</option>
+                        <?php foreach ($invoice_sn as $invoice):?>
+                            <option value="<?php echo $invoice['invoice_number'];?>" 
+                                <?php if ($invoice['invoice_number'] == $sale->invoice_number):?> selected<?php endif;?>><?php echo $invoice['invoice_number_show'];?></option>
+                            <?php endforeach;?>
+                        </select>
+                    </label>
+
+                    <label class="span1">&nbsp;<button type="button" class="btn-danger remove-sales hidden"></button></label>
+                    <label class="span2">
+                        <input type="hidden" name="ids[]" class="ids" value="<?php printf($sale->id);?>">
+                    </label>
+                </div>
+            </div>
+
+        <?php endforeach;?>
+
+    <?php else:?>
+        <div class="row">
+            <div class="span12">
+
+                <label class="span2">Products category <span style="color: red">*</span>
+                    <select class="span2 cat_id" name="cat_id[]" required="required" disabled readonly>
+                        <option value="">Please select</option>
+                        <?php foreach ($this->good_categories as $good_category):?>
+                            <option value="<?php echo $good_category->id;?>"><?php echo $good_category->name;?></option>
+                        <?php endforeach;?>
+                    </select>
+                </label>
+
+                <label class="span2">Product <span style="color: red">*</span>
+                    <select class="span2 good_id" name="good_id[]" required="required" disabled readonly>
+                        <option value="">Please select</option>
+                    </select>
+                </label>
+
+                <label class="span1">Color <span style="color: red">*</span>
+                    <select class="span1 good_color" name="good_color[]" required="required" disabled readonly>
+                        <option value="">Please select</option>
+                    </select>
+                </label>
+
+                <label class="span1">Quantity <span style="color: red">*</span>
+                    <input type="number" min="1" class="span1 num" name="num[]" readonly disabled required="required" maxlength="5" style="width: 50px" />
+                </label>
+
+                <label class="span1">Price <span style="color: red">*</span>
+                    <input type="number" min="1" required="required" readonly disabled class="span1 price" name="price[]" />
+                </label>
+
+                <label class="span1">Total <span style="color: red">*</span>
+                    <input type="number" min="0" step="0.01" required="required" readonly disabled class="span1 total" name="total[]" />
+                </label>
+
+                <label class="span1">&nbsp;<button type="button" class="btn-danger remove-sales hidden"><i class="icon-minus"></i></button></label>
+                <label class="span2">
+                    <input type="hidden" name="ids[]" class="ids">
+                </label>
+            </div>
+
+        <?php endif;?>
+    </div>
+    <div class="row">
+        <div class="span12">
+            <label class="span2"><button type="button" class="btn-success add-sales hidden"><i class="icon-plus"></i></button></label>
+        </div>
+    </div>
+
+    <div class="row">
+        <div class="span6">
+            <label class="span4">
+                      <!--   <span><strong id="num_imei">
+                     <?php
+                                if ($this->sales){
+                                   echo $num_imei;     
+                                }else{
+                                   echo "0";     
+                                }
+                            ?>
+                        </strong> IMEI(s)</span> -->
+                    </label>
+                </div>
+
+            </div>
+
+            <div class="row">
+                <div class="span6">
+                    <div class="control-group">
+                        <input type="hidden" name="data_phone_return" id="data_phone_return" />
+                        <input type="hidden" id="back_url" name="back_url" value="/sales/change-list">
+                        <input type="hidden" name="sn" value="<?php isset($this->sales) and $this->sales and printf($this->sales[0]['sale']->sn);?>">
+                        <div class="span4">
+                            <button type="submit" class="btn btn-primary">Submit</button>
+                            <button type="button" class="btn btn-warning btn-reset">Reset</button>
+                            
+                            <button type="button" class="btn btn-danger go-back">Go back</button>
+                        </div>
+                    </div>
+                    <div class="clearfix"></div>
+                </div>
+            </div>
+        </form>
+    </div>
+</div>
+
+<br><br><br>
+
+<div style="display: none" class="row div-add">
+    <div class="span12">
+
+        <label class="span2">Products category <span style="color: red">*</span>
+            <select class="span2 cat_id" name="cat_id[]" readonly required="required" disabled>
+                <option value="">Please select</option>
+                <?php foreach ($this->good_categories as $good_category):?>
+                    <option value="<?php echo $good_category->id;?>"><?php echo $good_category->name;?></option>
+                <?php endforeach;?>
+            </select>
+        </label>
+
+        <label class="span2">Product <span style="color: red">*</span>
+            <select class="span2 good_id" name="good_id[]" readonly required="required" disabled>
+                <option value="">Please select</option>
+            </select>
+        </label>
+
+        <label class="span1">Color <span style="color: red">*</span>
+            <select class="span1 good_color" name="good_color[]" readonly required="required" disabled>
+                <option value="">Please select</option>
+            </select>
+        </label>
+
+        <label class="span1">Quantity <span style="color: red">*</span>
+            <input type="number" min="1" class="span1 num" name="num[]" readonly required="required" maxlength="5" style="width: 50px" disabled />
+        </label>
+
+        <label class="span1">Price <span style="color: red">*</span>
+            <input type="number" min="1" required="required" readonly class="span1 price" name="price[]" disabled />
+        </label>
+
+        <label class="span1">Total <span style="color: red">*</span>
+            <input type="number" min="0" step="0.01" required="required" readonly class="span1 total" name="total[]" disabled />
+        </label>
+
+        <input type="hidden" name="ids[]" disabled />
+        
+
+    </div>
+</div>
+
+<script src="/js/jquery.blockUI.js"></script>
+<script type="text/javascript" src="<?php echo HOST ?>js/jets.js"></script>
+
+<style>
+    .blockOverlay{
+        z-index: 10000 !important;
+    }
+    .blockPage{
+        z-index: 10001 !important;
+    }
+    #SearchBox{
+        width: 260px!important;
+    }
+    #distributor_id{
+        z-index: 0!important;
+    }
+    .dropdown{
+        z-index: 2;
+    }
+</style>
+<script>
+    $(document).ready(function () {
+
+        $('.select2').select2();
+
+        $("#dis_id").change(function(){
+           var _self = $(this);
+           var dis_id = $(this).val();
+           $.get("/sales/list-store-for-create",
+            {distributor_id : dis_id}
+            ,function(data, status){
+                var obj = $.parseJSON( data );
+                $('#store_id').find('option:not(:first)').remove();
+                for (var i = 0; i < obj.length; i++) {
+                    $('#store_id').append('<option value="'+obj[i]['id']+'">'+obj[i]['store_code']+' - '+obj[i]['name']+'</option>');
+                }
+
+                $("#store_id").select2("val", "");
+            });
+       });
+
+
+        <?php if(isset($this->rank)) { ?>
+            $('#rank').val(<?= $this->rank ?>);
+            get_distributor_cached_for_search(<?= $this->rank ?>);
+        <?php }?>
+
+        $('.rank').change(function(event) {
+            get_distributor_cached_for_search($(this).val());
+        });
+
+        function get_distributor_cached_for_search(rank_id){
+
+            var rank_id = rank_id;
+            $.ajax({
+              url: '<?php echo HOST ?>get/distributor-cached-for-search',
+              type: 'POST',
+              dataType: 'html',
+              data: {rank_id: rank_id},
+          })
+            .done(function(data) {
+              $('.retailer_name_list').empty();
+              $('.retailer_name_list').append(data);
+              var jets = new Jets({
+                searchTag: '#SearchBox',
+                contentTag: '#d_id'
+            });
+              <?php if(isset($this->d_id)){ ?>
+                $('#d_id').val(<?= $this->d_id ?>);
+            <?php }?>
+            console.log("success");
+        })
+            .fail(function() {
+              console.log("error");
+          })
+            .always(function() {
+              console.log("complete");
+          });
+
+        }
+
+        $("input:checkbox").click(function() {
+            if ($(this).is(":checked")) {
+                var group = "input:checkbox[name='" + $(this).attr("name") + "']";
+                $(group).prop("checked", false);
+                $(this).prop("checked", true);
+            } else {
+                $(this).prop("checked", false);
+            }
+        });
+
+        $(".wh_list").hide();
+        $(".dis_list").hide();
+
+        $(".wh_change").click(function() {
+            if($(this).is(":checked")) {
+                $(".wh_list").show();
+                $(".dis_list").hide();
+            } else {
+                $(".wh_list").hide();
+            }
+        });
+
+        $(".dis_change").click(function() {
+            if($(this).is(":checked")) {
+                $(".dis_list").show();
+                $(".wh_list").hide();
+            } else {
+                $(".dis_list").hide();
+            }
+        });
+        
+        initSearchOptionDistributor('d_id', 'SearchBox');
+        initGoBack();
+        initAddSales();
+        initRemoveSales();
+        initSelectProduct();
+        initSelectQuantity();
+        initReset();
+        initShowIMEINum();
+        initCheckReturnImei();
+
+        $(document).ajaxStart(function(){
+            $.blockUI({ css: { 
+                border: 'none', 
+                padding: '15px', 
+                backgroundColor: '#000', 
+                '-webkit-border-radius': '10px', 
+                '-moz-border-radius': '10px', 
+                opacity: .5, 
+                color: '#fff' 
+            } });
+        });
+
+        $(document).ajaxStop(function(){
+            $.unblockUI();
+        });
+
+        $(document).on("submit", "form", function(e){
+
+            $.blockUI({ css: { 
+                border: 'none', 
+                padding: '15px', 
+                backgroundColor: '#000', 
+                '-webkit-border-radius': '10px', 
+                '-moz-border-radius': '10px', 
+                opacity: .5, 
+                color: '#fff' 
+            } });
+
+        });
+
+        $('#ifrmSave').load(function() {
+            $.unblockUI();
+        });
+
+        $('#create_cn').change(function(e) {
+            if(this.checked) {
+                $('.div-return-type').removeClass('hide');
+            }else{
+                $('.div-return-type').addClass('hide');
+            }
+        });
+    });
+
+    <?php if(isset($this->sales[0]['sale']->return_type) && $this->sales[0]['sale']->return_type){?>
+        $('#return_type').val('<?=$this->sales[0]['sale']->return_type;?>');
+    <?php } ?>
+
+
+    function initShowIMEINum(){
+        $('#imei').keyup(function (e){
+
+            var inputnum = 0;
+
+            if ($(this).val() != '')
+                inputnum = ($(this).val().split("\n").length).toString();
+
+
+            $('#num_imei').html(inputnum);
+
+        });
+    }
+
+    function palert(msg){
+        $('.alert-error').remove();
+        $('.page-header').after('<div class="alert alert-error">'+msg+'</div>');
+
+        return;
+    }
+
+    function initGoBack(){
+        $('.go-back').click(function(e){
+            window.location.href = $('#back_url').val();
+            return false;
+        });
+    }
+
+    function initRemoveSales(){
+        $('.remove-sales').click(function(e){
+            $(this).parent().parent().parent().remove();
+            return false;
+        });
+    }
+
+    function initAddSales(){
+        $('.add-sales').click(function(e){
+            var old_div = $('.div-add');
+            var new_div = old_div.clone();
+
+            new_div.removeClass('div-add').find('select, input, textarea').removeAttr('disabled');
+
+            new_div.insertBefore($(this).parent().parent().parent()).show();
+
+            initSelectProduct();
+            initSelectQuantity();
+            initRemoveSales();
+
+            return false;
+        });
+    }
+
+    function SelectProduct(this_id,cat_id,good_id,good_color,qty,price,total_price,sn_ref,invoice_number,distributor_id){
+        var div_parent = this_id.parent().parent().parent();
+        var _self = this_id;
+
+        $.get("/get/load",
+            {cat_id: cat_id, good_id: ''}
+            ,function(data,status){
+                var data = $.parseJSON( data );
+                if (data.goods){
+                    var obj = data.goods;
+                    for (var i = 0; i < obj.length; i++) {
+                        var select ='';
+                        if(good_id==obj[i]['id'])
+                        {
+                            select='selected';    
+                            div_parent.find('.good_id').append('<option '+select+' value="'+obj[i]['id']+'">'+obj[i]['name']+'</option>');
+                        }else{
+                            div_parent.find('.good_id').append('<option value="'+obj[i]['id']+'">'+obj[i]['name']+'</option>');
+                        } 
+                    }
+                }
+
+            });
+
+        $.get("/get/load",
+            {cat_id: cat_id, good_id: good_id}
+            ,function(data,status){
+                var data = $.parseJSON( data );
+                if (data.colors){
+                    div_parent.find('.good_color').empty();
+                    var obj = data.colors;
+                    for (var i = 0; i < obj.length; i++) {
+                        var select ='';
+                        if(good_color==obj[i]['id']){
+                            select='selected'; 
+                            div_parent.find('.good_color').append('<option '+select+' value="'+obj[i]['id']+'">'+obj[i]['name']+'</option>');
+                        }else{
+                            div_parent.find('.good_color').append('<option value="'+obj[i]['id']+'">'+obj[i]['name']+'</option>');
+                        }
+                    }
+                }
+
+            });
+
+        div_parent.find('.ids').val(distributor_id);
+        div_parent.find('.num').val(qty);
+        div_parent.find('.price').val(price);
+        div_parent.find('.total').val(total_price);
+
+        div_parent.find('.invoice_sn').empty();
+        $.get("/get/load-invoice",
+            {distributor_id: distributor_id, good_id: good_id, good_color: good_color}
+            ,function(data,status){
+                var data = $.parseJSON( data );
+                if (data.invoice_sn){
+                    var obj = data.invoice_sn;
+                    for (var i = 0; i < obj.length; i++){
+                        var select ='';
+                        if(sn_ref==obj[i]['sn_ref']){
+                            select='selected'; 
+                            div_parent.find('.invoice_sn').append('<option '+select+' value="'+obj[i]['invoice_number']+'">'+obj[i]['invoice_number']+'/'+obj[i]['sn_ref']+'</option>');
+                        }else{
+                            div_parent.find('.invoice_sn').append('<option value="'+obj[i]['invoice_number']+'">'+obj[i]['invoice_number']+'/'+obj[i]['sn_ref']+'</option>');
+                        }
+                    }
+                }
+
+                _self.nextAll('.loading').remove();
+            });
+    }
+
+    function AddSales(total_row,index_row,cat_id,good_id,good_color,qty,price,total_price,sn_ref,invoice_number,distributor_id)
+    {
+        if(index_row>0)
+        {
+            var i=0;
+            $('.cat_id').each(function(){
+                if(i>total_row)
+                {
+                    $(this).parent().parent().parent().remove();
+                }
+                i+=1;
+            });
+            var old_div = $('.div-add');
+            var new_div = old_div.clone();
+            new_div.removeClass('div-add').find('select, input, textarea').removeAttr('disabled');
+            new_div.insertBefore($('.add-sales').parent().parent().parent()).show();
+            initSelectProduct();
+            initSelectQuantity();
+            initRemoveSales();
+        }
+        var i=0;
+        $('.cat_id').each(function(){
+            if(index_row==i){
+                $('.cat_id option[value='+cat_id+']').attr('selected','selected');
+                SelectProduct($(this),cat_id,good_id,good_color,qty,price,total_price,sn_ref,invoice_number,distributor_id);
+            }
+            i+=1;
+        });
+
+    }
+
+    function initCheckReturnImei()
+    {
+        $('.btn-check-imei').click(function(e){
+
+            var imei = $('#imei').val();
+            if (imei == ''){
+                alert('Please Input Imei SN !');
+                return;
+            }
+            var imei_v = $.trim(imei).split("\n");
+            var imei_list = '';
+            
+            $.each(imei_v , function(i, val) { 
+                imei_list += "'"+$.trim(imei_v[i])+"',";
+            });
+
+            var warehouse_id = $('#warehouse_id').val();
+            var distributor_id = $('#dis_id').val();
+            var store_id = $('#store_id').val();
+
+            $.post("/get/check-change-imei-distributor",
+                {warehouse_id: warehouse_id, distributor_id: distributor_id, store_id: store_id, imei_list: imei_list.slice(0, -1)}
+                ,function(data,status){
+                    $('#data_phone_return').val(data);
+                    var data = $.parseJSON(data);
+                    if (data.check==1){
+                        var obj = data.result_market;
+
+                        var total_row = obj.length-1;
+                        for (var i = 0; i < obj.length; i++) {
+                            var cat_id=obj[i]['cat_id'];
+                            var good_id=obj[i]['good_id'];
+                            var good_color=obj[i]['good_color'];
+                            var qty=obj[i]['qty'];
+                            var price=obj[i]['out_price'];
+                            var total_price=obj[i]['total_price'];
+                            var sn_ref=obj[i]['sn_ref'];
+                            var invoice_number=obj[i]['invoice_number'];
+                            var distributor_id=obj[i]['distributor_id'];    
+
+                            AddSales(total_row,i,cat_id,good_id,good_color,qty,price,total_price,sn_ref,invoice_number,distributor_id);
+                        }
+
+                    }else if(data.check==2){
+                        alert('Imei Exist in Return Data!');
+                        $('select, input:text, input.num, input.price, input.total').val('');
+                    }else if(data.check==3){
+                        alert(data.error);
+                        $('select, input:text, input.num, input.price, input.total').val('');
+                    }else{
+                        alert('No Data !');
+                        $('select, input:text, input.num, input.price, input.total').val('');
+                    }
+                });
+
+            return false;
+        });
+    }
+
+
+
+    function initSelectProduct(){
+        $('.cat_id, .good_id').change(function(){
+            $(this).after('<span class="loading"></span>');
+            var div_parent = $(this).parent().parent().parent();
+            var _self = $(this);
+            var cat_id = div_parent.find('.cat_id').val();
+
+            if (_self.hasClass('cat_id'))
+                div_parent.find('.good_id').find('option:not(:first)').remove();
+
+            var good_id = div_parent.find('.good_id').val();
+
+            div_parent.find('.good_color').find('option:not(:first)').remove();
+
+            div_parent.find('.num, .price, .total').val('');
+
+            $.get("/get/load",
+                {cat_id: cat_id, good_id: good_id}
+                ,function(data,status){
+                    var data = $.parseJSON( data );
+                    if (data.goods){
+                        var obj = data.goods;
+                        for (var i = 0; i < obj.length; i++) {
+                            div_parent.find('.good_id').append('<option value="'+obj[i]['id']+'">'+obj[i]['name']+'</option>');
+                        }
+                    }
+                    if (data.colors){
+                        div_parent.find('.good_color').empty();
+                        var obj = data.colors;
+                        for (var i = 0; i < obj.length; i++) {
+                            div_parent.find('.good_color').append('<option value="'+obj[i]['id']+'">'+obj[i]['name']+'</option>');
+                        }
+                    }
+                    _self.nextAll('.loading').remove();
+                });
+        });
+    }
+
+    function initSelectQuantity(){
+        $('.num').change(function(){
+            $('.loading').remove();
+            var div_parent = $(this).parent().parent().parent();
+            var _self = $(this);
+            var num = _self.val();
+            var good_id = div_parent.find('.good_id').val();
+            var good_color = div_parent.find('.good_color').val();
+            var distributor_id = $('#distributor_id').val();
+            if (distributor_id) {
+                $(this).after('<span class="loading"></span>');
+                $.get("/get/load-price-return",
+                    {num: num, good_id: good_id, good_color: good_color, is_sales_price: 1, is_return: 1, distributor_id: distributor_id}
+                    ,function(data,status){
+                        if (data=='-1'){
+                            alert('The product quantity is 0');
+                        } else if (data.indexOf("-2") !== -1){
+                            var myarr = data.split("|");
+                            alert('The product quantity is only '+myarr[1]);
+                        } else {
+                            var price = 0;
+
+                            if (data > 0 && num > 0) price = data/num;
+
+                            div_parent.find('.price').val(price);
+                            div_parent.find('.total').val(data);
+                        }
+                        _self.nextAll('.loading').remove();
+                    });
+
+                div_parent.find('.invoice_sn').empty();
+
+                $.get("/get/load-invoice",
+                    {distributor_id: distributor_id, good_id: good_id, good_color: good_color}
+                    ,function(data,status){
+                        var data = $.parseJSON( data );
+                        if (data.invoice_sn){
+                            var obj = data.invoice_sn;
+                            for (var i = 0; i < obj.length; i++) {
+                                div_parent.find('.invoice_sn').append('<option value="'+obj[i]['invoice_number']+'">'+obj[i]['invoice_number']+'/'+obj[i]['sn_ref']+'</option>');
+                            }
+                        }
+
+                        _self.nextAll('.loading').remove();
+                    });
+
+            } else{
+                _self.val('');
+                alert('Please select Retailer!');
+            }
+        });
+    }
+
+    function initReset(){
+        $('button.btn-reset').click(function(e){
+            e.preventDefault();
+            $('select, input:text, input.num, input.price').val('');
+            $('textarea').val('');
+
+            $('#num_imei').html(0);
+        })
+    }
+</script>
+<style>
+    label input,
+    label select {
+        margin-right: 25px;
+    }
+</style>

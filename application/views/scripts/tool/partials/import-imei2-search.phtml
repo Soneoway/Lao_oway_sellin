@@ -1,0 +1,48 @@
+<form class="form-search form-horizontal" method="get" action="<?php echo HOST ?>tool/import-imei2-upload-list">
+    <div class="row">
+        <div class="span5">
+            <div class="control-group">
+
+            <div class="control-group">
+            <label for="imei1" class="span2">Imei 1</label>
+                <input type="text" class="span2 imei1" name="imei1" id="imei1" value="<?php isset($this->params['imei1']) and printf($this->params['imei1']);?>" />
+            </div>
+
+            <label for="imei2" class="span2">Imei 2</label>
+                <input type="text" class="span2 imei2" name="imei2" id="imei2" value="<?php isset($this->params['imei2']) and printf($this->params['imei2']);?>" />
+            </div>
+
+            <div class="control-group">
+            <label for="good_code" class="span2">Good Code</label>
+                <input type="text" class="span2 good_code" name="good_code" id="good_code" value="<?php isset($this->params['good_code']) and printf($this->params['good_code']);?>" />
+            </div>
+
+            <div class="control-group">
+            <label for="start_date" class="span2">วันที่นำเข้าข้อมูล</label>
+                <input type="text" class="span1 start_date" name="start_date" id="start_date" value="<?php isset($this->params['start_date']) and printf($this->params['start_date']);?>" /> - <input type="text" class="span1 end_date" name="end_date" id="end_date" value="<?php isset($this->params['end_date']) and printf($this->params['end_date']);?>" />
+            </div>
+        </div>
+        <div class="span5">
+
+        </div>
+    </div>
+
+    
+    <input type="hidden" name="counter" value="<?=$this->counter;?>">
+    <button type="submit" class="btn btn-primary">Search</button>
+
+    <button type="submit" name="export" value="1" class="btn btn-success">Export</button>
+</form>
+<script async="async">
+
+
+        $(document).on('focus',".start_date", function(){ 
+         $(this).datepicker({ dateFormat: "dd/mm/yy" });
+        });
+
+        $(document).on('focus',".end_date", function(){ 
+         $(this).datepicker({ dateFormat: "dd/mm/yy" });
+        });
+
+
+</script>

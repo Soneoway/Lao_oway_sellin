@@ -1,0 +1,34 @@
+<label class="span4">PO Number
+    <select name="distributor_po" class="span4" id="distributor_po">
+        <option value>---</option>
+    </select>
+</label>
+
+<label class="span4">
+    <div class="well" id="po_note" style="display:none;">
+
+    </div>
+</label>
+<!-- 
+<label class="span4">Không tìm thấy PO của đại lý này?
+    <button class='btn btn-mini btn-default' id="add_po_btn" type="button"><i class="icon-plus"></i> Add PO</button>
+</label> 
+-->
+<label class="span4">PO Number not found agents?
+    <button class='btn btn-mini btn-default' id="add_po_btn" type="button"><i class="icon-plus"></i> Add PO</button>
+</label>
+
+<div class="modal hide fade" id="add_po_modal">
+    <div class="modal-header">
+        <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
+        <h3>Add New PO</h3>
+    </div>
+    <div class="modal-body">
+
+
+    </div>
+    <div class="modal-footer">
+        <a href="#" class="btn" data-dismiss="modal">Cancel</a>
+        <a href="#" class="btn btn-primary" id="save_po_btn">Save</a>
+    </div>
+</div>

@@ -1,0 +1,214 @@
+<style>
+.page-header{margin-top: 70px;}
+#submit_btn{margin-left: 10px;}
+#delete_shipment{cursor: pointer;}
+#show_detail{cursor: pointer;}
+</style>
+<div class="page-header">
+    <?php if(isset($this->data) && $this->data): ?>
+    <h1><?php echo $this->data->name;?></h1>
+    <?php endif;?>
+</div>
+
+<div class="content_sale_phone">
+    <form action="<?php echo HOST;?>/sales/sale-phone">
+    <table class="table table-bordered">
+        <thead>
+            <tr>
+				<th>STT</th>
+                <th>Name</th>
+                <th>Type</th>
+                <th>Price</th>
+                <th>Action</th>
+            </tr>
+        </thead>
+        
+        <tbody>
+			<?php $stt = 0;?>
+            <?php if(isset($this->dataPhone) && $this->dataPhone) : ?> 
+            <?php foreach($this->dataPhone as $key => $value) : ?> 
+			<?php $stt++;?>
+            <tr>
+				<th><?php echo $stt;?></th>
+                <td><?php echo $value['name'];?></td>
+                <td>
+                <?php
+                switch ($value['type'])
+                {
+                    case 1:
+                        echo "A";
+                        break;
+                    case 2:
+                        echo "B";
+                        break;
+                    case 3:
+                        echo "C";
+                        break;
+                    case 4:
+                        echo "D";
+                        break;
+                }
+                ?>
+                </td>
+				<td><?php echo number_format($value['price']);?> VNĐ</td>
+                <td>
+                    <a title="Edit" href="/sales/create-shipment-phone?id=<?php echo $value['id'];?>"> <i class="icon-edit"></i></a>
+                    <a title="Delete" class="confirmLink" id="delete_shipment" id_shipment="<?php echo $value['id'];?>"> <i class="icon-trash"></i></a>
+                </td>
+            </tr>
+            <?php endforeach; ?>
+            <?php endif; ?>
+        </tbody>
+    </table>
+		<a href="<?php echo HOST."sales/shipment";?>" class="pull-right btn btn-primary btn btn-danger" style='margin-left:5px'>Go Back</a>
+        <button type="button" class="btn btn-primary pull-right btn btn-warning" id="add_category_btn">Add</button>
+    </form>
+</div>
+
+<form action="<?php echo HOST."sales/save-shipment-phone";?>" method="POST">
+<div id="modal_new_category" class="modal hide fade in" tabindex="-1" role="dialog" aria-labelledby="newCategoryLabel" aria-hidden="true" style="display: block;">
+    <div class="modal-header">
+        <button type="button" class="close" data-dismiss="modal" aria-hidden="true">×</button>
+        <h3 id="newCategoryLabel">Add New Phone Shipment</h3>
+    </div>
+    <div class="modal-body">
+        <div class="row-fluid">
+            <div class="row">
+                <div class="span1">
+                    <div class="control-group">
+                        <label for="category_name">Category</label>
+                        <select class="cat_id" name="cat_id" style="width: 100%;">
+                            <option value="">Please select</option>
+                            <?php foreach ($this->good_categories as $good_category):?>
+                            <option value="<?php echo $good_category->id;?>"><?php echo $good_category->name;?></option>
+                            <?php endforeach;?>
+                        </select>
+                    </div>
+                </div>
+                <div class="span1">
+                    <div class="control-group">
+                        <label for="category_name">Product</label>
+                        <select name="id_good" class="good_id" style="width: 100%;">
+                            <option value="">Please select</option>
+                        </select>
+                    </div>
+                </div>
+                <div class="span1">
+                    <div class="control-group">
+                        <label for="category_name">Type</label>
+                        <select name="type" class="type_id" style="width: 100%;">
+                            <option value="1">A</option>
+                            <option value="2">B</option>
+                            <option value="3">C</option>
+                            <option value="4">D</option>
+                        </select>
+                    </div>
+                </div>
+                <div class="span2">
+                    <div class="control-group">
+                        <label for="category_name">Price</label>
+                        <input type="number" name="price" value="" style="width: 100%;"/>
+                    </div>
+                </div>
+            </div>            
+        </div>
+    </div>
+    <div class="modal-footer">
+        <input type="hidden" name="check" value="3" />
+        <input type="hidden" name="id_shipment" value="<?php if(isset($this->data) && $this->data): echo $this->data->id;endif;?>" />
+        <button class="btn btn-primary" type="submit" id="save_category_btn">Save</button>
+        <button class="btn" data-dismiss="modal" aria-hidden="true">Cancel</button>
+    </div>
+</div>
+</form>
+
+<script>
+$(document).ready(function() {
+    /*Select category */
+    $(document).off('change', '.cat_id')
+    .on('change', '.cat_id', function(e) {
+        $('button[type=submit]').prop('disabled', true);
+        $('form').bind('submit',function(e){e.preventDefault();});
+
+        $('.loading').remove();
+        $(this).after('<span class="loading"></span>');
+        var div_parent = $(this).parent().parent().parent();
+        var _self = $(this);
+        var cat_id = $(this).val();
+
+        $.get("/get/load",
+            {cat_id: cat_id}
+            ,function(data,status){
+                var data = $.parseJSON( data );
+                if (data.goods){
+                    var obj = data.goods;
+                    div_parent.find('.good_id').html('<option value="0">Please select</option>');
+                    for (var i = 0; i < obj.length; i++) {
+                        div_parent.find('.good_id').append('<option value="'+obj[i]['id']+'">'+obj[i]['name']+'</option>');
+                    }
+                }
+                $('button[type=submit]').prop('disabled', false);
+                $('form').unbind('submit');
+                _self.nextAll('.loading').remove();
+            });
+    });
+    /* end */
+    
+    $new_category_modal = $("#modal_new_category");
+    $new_category_modal.hide();
+    $("#add_category_btn").click(show_new_category_modal);
+    function show_new_category_modal(e) {
+        $new_category_modal.modal({backdrop: 'static'})
+    }
+    
+    $(document).on('click', "#delete_shipment", function() {  
+        id = $(this).attr("id_shipment");
+        if (confirm('Remove this ??')) {
+            $.ajax({
+    			  url: "<?php echo HOST."sales/delete-shippment";?>",
+    		      type: "POST",
+    		      dataType: "text",
+    		      context: this,
+    		      data: "id_shipment="+id,
+    		      beforeSend: function() {				
+    				},
+    		      success: function(result){
+    					if(result)
+    					{
+                            $(this).closest('tr').hide();
+                            alert(result);
+    					}
+    					else
+    					{	
+    						alert("Có lỗi 1 !!");
+    					}						
+    		      },
+    		      error:function(){
+    		    	  alert("Có lỗi 2!!");
+    		      }
+    		});
+        }
+    });
+    
+    //Show good_shipment_phone
+    $(document).on('click', "#show_detail", function() {
+        
+    });
+    
+});
+
+</script>
+
+
+
+
+
+
+
+
+
+
+
+
+
+

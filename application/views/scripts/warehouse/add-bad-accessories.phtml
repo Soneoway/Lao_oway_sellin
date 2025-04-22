@@ -1,0 +1,110 @@
+<div class="page-header">
+    <h1>Add Bad Accessories</h1>
+    <h2><?php echo $this->good['name'].' - '.$this->good['desc']. ' / '. $this->goodColor['name'] ;?></h2>
+</div>
+
+<form role="form" id="form" action="<?php echo HOST.'warehouse/add-bad-accessories';?>" method="post" class="form-horizontal">
+    <div class="row">
+        <div class="span3">
+            <div class="control-group">
+                <label for="warehouse_id" class="span2">Warehouse <span style="color: red">*</span></label>
+                <select id="warehouse_id" class="span3" name="warehouse_id" required="required">
+                    <option value="">Please select</option>
+                    <?php foreach ($this->warehouses_cached as $id=>$warehouse):?>
+                        <option value="<?php echo $id;?>" <?php if ($id==$this->warehouse_id):?> selected<?php endif;?>><?php echo $warehouse;?></option>
+                    <?php endforeach;?>
+                </select>
+            </div>
+        </div>
+
+        <div class="span3">
+            <div class="control-group">
+                <label for="unavailable" class="span2">Unavailable</label>
+                <input type="number" name="unavailable" id="unavailable" value="<?php
+                    if ($this->warehouse_id and $this->wh_product)
+                        echo $this->wh_product['damage_quantity'];
+                    else
+                        echo 0;
+                ?>" required="required"/>
+            </div>
+        </div>
+
+        <div class="span3">
+            <div class="control-group">
+                <label for="available" class="span2">Available</label>
+                <input type="number" name="available" id="available" required="required" value="<?php
+                if ($this->warehouse_id and $this->wh_product)
+                    echo $this->wh_product['quantity'];
+                else
+                    echo 0;
+                ?>"/>
+            </div>
+        </div>
+
+    </div>
+    <div class="row">
+        <div class="span3">
+            <input type="hidden" id="good_id" name="good_id" value="<?php isset($this->good_id) and $this->good_id and printf($this->good_id);?>">
+            <input type="hidden" id="good_color" name="good_color" value="<?php isset($this->good_color) and $this->good_color and printf($this->good_color);?>">
+            <input type="hidden" id="back_url" name="back_url" value="<?php echo HOST ?>warehouse/bad-accessories-management">
+            <button type="submit" class="btn btn-primary">Submit</button>
+            <button type="button" class="btn btn-danger go-back">Go back</button>
+        </div>
+    </div>
+
+</form>
+
+
+<script>
+    $(document).ready(function () {
+        $('.go-back').click(function(e){
+            window.location.href = $('#back_url').val();
+            return false;
+        });
+
+        initClickOnUnavailable();
+        initChooseWarehouse();
+    });
+
+    function initClickOnUnavailable(){
+        $('#unavailable, #available').click(function (){
+            if ($('#warehouse_id').val()==''){
+                alert('Please choose warehouse!');
+                $('#warehouse_id').focus();
+                return false;
+            }
+        });
+    }
+
+    function initChooseWarehouse(){
+        $('#warehouse_id').change(function (){
+            var warehouse_id = $(this).val();
+            var good_id = $('#good_id').val();
+            var good_color = $('#good_color').val();
+
+            if (warehouse_id == ''){
+                $('#unavailable').val(0);
+                $('#available').val(0);
+                return false;
+            }
+
+            $.ajax({
+                dataType: "json",
+                url: '<?php echo HOST ?>warehouse/add-bad-accessories',
+                data: {
+                    'good_id': good_id,
+                    'good_color': good_color,
+                    'warehouse_id': warehouse_id
+                },
+                success: function(data){
+                    $('#unavailable').val(data.damage_quantity);
+                    $('#available').val(data.quantity);
+                },
+                error:function(){
+                    alert('There is an error when loading stock!');
+                }
+            });
+        });
+    }
+		
+</script>

@@ -1,0 +1,130 @@
+
+<div class="page-header">
+    <h1>Black List Distributor</h1>
+</div>
+<?php
+if (isset($this->messages_success) and $this->messages_success)
+    foreach ($this->messages_success as $message):
+        echo '<div class="alert alert-success">'.$message.'</div>';
+    endforeach;
+
+if (isset($this->messages) and $this->messages)
+    foreach ($this->messages as $message):
+        echo '<div class="alert alert-error">'.$message.'</div>';
+    endforeach;
+?>
+<div class="accordion" id="accordion2">
+    <div class="accordion-group">
+        <div class="accordion-heading">
+            <a class="accordion-toggle collapsed" data-toggle="collapse" data-parent="#accordion2" href="#collapseTwo">
+                Search
+            </a>
+        </div>
+        <div id="collapseTwo" class="accordion-body collapse" style="height: 0px;">
+            <div class="accordion-inner">
+                <?php
+                    echo $this->render('tool/partials/distributor-black-list-search.phtml');
+                ?>
+            </div>
+        </div>
+    </div>
+</div>
+<div style="margin-bottom: 15px;"><a href="add-black-list-distributor" class="btn btn-success">Add Black List</a>  <a href="black-list-distributor-log" class="btn btn-primary">History Black List</a></div>
+<div class="table-responsive">
+    <table class="table table-bordered">
+        <thead>
+            <tr>
+                <?php echo $this->sorting(array(
+                        '#',
+                        'Distributor ID',
+                        'Distributor Name',
+                        'Area',
+                        'Reason',
+                        'Type',
+                        'Remark',
+                        'Date Create',
+                        'Action'
+                    ),
+                    $this->url, $this->sort, $this->desc); ?>
+            </tr>
+        </thead>
+        <tbody>
+            <?php
+                if( $this->blacklist ):
+                    $intSTT = 1;
+                foreach($this->blacklist as $item):
+            ?>
+                    <tr>
+                        <td><?php echo $intSTT++;?></td>
+                        <td><?php echo $item['d_id'];?></td>
+                        <td><?php echo $item['title'];?></td>
+                        <td><?php echo $item['hrarea_name'];?></td>
+                        <td><?php echo $this->reason[$item['remark']];?></td>
+                        <td><?php 
+                        switch ($item['type']) {
+                            case '1':
+                                echo 'FOR RETAILER';
+                                break;
+                            case '2':
+                                echo 'FOR DEMO';
+                                break;
+                            case '3':
+                                echo 'FOR STAFF';
+                                break;
+                            case '4':
+                                echo 'FOR LENDING';
+                                break;
+                            case '5':
+                                echo 'FOR APK';
+                                break;
+                            case '10':
+                                echo 'ALL';
+                                break;
+                        }
+                        ?></td>
+                        <td><?php echo $item['text_remark'];?></td>
+                        <td><?php echo date('d/m/Y H:i:s',strtotime($item['created_at']))?></td>
+                        <td style="width: 80px;">
+                        <center>
+                            <a class="btn btn-warning" title="view" href="javascript:onclick=unblock(<?=$item['d_id']?>,'<?=$item['title']?>')" >
+                                <i class="icon-unlock-alt "></i>
+                            </a>
+                            <a class="btn btn-default" title="upload" href="javascript:onclick=upload_page('<?=$item['d_id']?>')" >
+                                <i class="icon-upload "></i>
+                            </a>
+                        </center>
+                        </td>
+                    </tr>
+            <?php 
+                endforeach;
+                endif;
+            ?>
+        </tbody>
+    </table>
+    <div class="paging">
+        <?php echo $this->paging($this->total, $this->limit, $this->offset, $this->url);?>
+    </div>
+</div>
+<script>
+
+    function unblock(id,title){
+
+        if (confirm("Press Confirm Unblock : "+title) == true) {
+                window.location.assign("/tool/un-black-list?d_id="+id);
+            }
+       
+    }
+
+    function upload_page(id,title){
+        window.location.assign("/tool/blacklist-image?d_id="+id);
+       
+    }
+
+    $(document).ready(function () {
+        $('.form-search button:reset').click(function (e){
+            $('.form-search input, .form-search select').val('');
+            $('.form-search').submit();
+            return false;
+        });
+    });
+</script>

@@ -1,0 +1,117 @@
+<style>
+    .color-timeout{
+        background-color: #FF9797;
+    }
+    .color-wroning{
+        background-color: #F4EFAF;
+    }
+</style>
+
+<table class="table table-bordered">
+    <thead>
+        <tr>
+            <?php echo $this->sorting(array(
+					'#',
+                    'rq' => 'Request Number',
+					'product_grade' => 'Grade',
+                    // 'borrowing_type' => 'Type',
+                    'hrs_department_name' => 'Type',
+                    'code' => 'Code',
+                    'fullname' => 'Request By',
+                    'position_name' => 'Position',
+                    'created_date' => 'Request Date',
+                    'rm_fullname' => 'RD Approved By',
+                    'rm_approved_date' => 'RD Approved Date',
+                    'mg_fullname' => 'Manager Approved By',
+                    'manager_approved_date' => 'Manager Approved Date',
+                    'return_date' => 'Return Date',
+                    'Remaining Time',
+					'remark' => 'Remark',
+                    'Action
+'                ),
+                $this->url, $this->sort, $this->desc); ?>
+        </tr>
+    </thead>
+    <tbody>
+        <?php if (isset($this->data) and $this->data) :
+            foreach ($this->data as $key => $value):
+                $date1=date_create($value['return_date']);
+                $date2=date_create(date('Y-m-d'));
+                $diff=date_diff($date2,$date1);
+                $diffDate = $diff->format("%R%a");
+        ?>
+            <tr class="<?php
+                if($diffDate <= 0){
+                    echo 'color-timeout';
+                }else if($diffDate > 0 && $diffDate <= 15){
+                    echo 'color-wroning';
+                }
+            ?>">
+                <td><?=($key+1)?></td>
+                <td><?=$value['rq']?></td>
+                <td><?php switch ($value['product_grade']) {
+                    case '1':
+                        echo 'A';
+                        break;
+                    case '2':
+                        echo 'B';
+                        break;
+                    case '3':
+                        echo 'Demo';
+                        break;
+                    case '4':
+                        echo 'APK';
+                        break;
+                    case '5':
+                        echo 'Prototype';
+                        break;
+                } ?></td>
+                <!-- <td><?php switch ($value['borrowing_type']) {
+                    case '1':
+                        // echo 'Demo for Event';
+                        echo 'เบิกยืมพนักงาน';
+                        break;
+                    case '2':
+                        // echo 'Complimentary';
+                        echo 'อภินันทนาการ';
+                        break;
+                    case '3':
+                        // echo 'Replace Customer Service';
+                        echo 'เบิกเปลี่ยนเครื่องลูกค้า';
+                        break;
+                    case '4':
+                        echo 'Prototype';
+                        break;
+                } ?></td> -->
+                <td><?=$value['hrs_department_name']?></td>
+                <td><?=$value['code']?></td>
+                <td><?=$value['fullname']?></td>
+                <td><?=$value['position_name']?></td>
+                <td><?=$value['created_date']?></td>
+                <td><?=$value['rm_fullname']?></td>
+                <td><?=$value['rm_approved_date']?></td>
+                <td><?=$value['mg_fullname']?></td>
+                <td><?=$value['manager_approved_date']?></td>
+                <td><?=$value['return_date']?></td>
+                <td><?php 
+                    if($diffDate < 0){
+                        echo $diffDate;
+                    }else{
+                        echo substr($diffDate,1);
+                    }?></td>
+                <td><?=$value['remark']?></td>
+                <td style="text-align: center;"><a href="<?=HOST."warehouse/borrowing-return-process?id=".$value['id']?>" title="Approve"><i class="icon-ok"></i></a></td>
+            </tr>
+
+            <?php endforeach;?>
+        <?php endif; ?>
+    </tbody>
+</table>
+                
+<div class="paging">
+    <?php echo $this->paging($this->total, $this->limit, $this->offset, $this->url);?>
+</div>
+
+<script>
+    
+</script>

@@ -1,0 +1,91 @@
+<style  >
+    body{
+        font-family: phetsarath ot;
+    }
+</style>
+
+<div class="page-header">
+    <h1>Change ORDER - CREATE ຍ້າຍເຄື່ອງລະຫວ່າງ warehouse to warehouse</h1>
+</div>
+<link rel="stylesheet" type="text/css" href="/css/jquery-ui-1.8.12.custom.css"/>
+<script type="text/javascript" src="<?php echo HOST ?>js/jquery-ui-1.8.12.custom.min.js"></script>
+<script type="text/javascript" src="<?php echo HOST ?>js/jquery.ui.timepicker.js"></script>
+
+<?php
+if (isset($this->messages) and $this->messages)
+    foreach ($this->messages as $message):
+        echo '<div class="alert alert-error">'.$message.'</div>';
+    endforeach;
+?>
+
+<iframe name="iframe" id="iframe" width="100%"  style="display:none;"></iframe>
+
+<form role="form" id="form" method="post" target="iframe"  class="form-inline">
+
+    <?php echo $this->render('warehouse/partials/change-sales-add-type.phtml');?>
+
+    <div style="margin-top: 10px;">
+        <label class="span4" >Remark<span style="color: red">*</span>
+            <input type='text' class="span4" name='remark' id="remark" placeholder="" autocomplete="off" value="<?php if (isset($this->changeSalesOrder['remark']) and $this->changeSalesOrder['remark']) echo $this->changeSalesOrder['remark'];?>" maxlength="255" required>
+        </label>
+    </div>
+
+    <?php echo $this->render('warehouse/partials/change-sales-add-form.phtml');?>
+
+    <div class="row">
+        <div class="span12">
+            <label class="span3"><button type="button" class="btn btn-success add-sales"><i class="icon-plus"></i></button></label>
+        </div>
+    </div>
+
+    <div class="row">
+        <div class="span6">
+            <div class="control-group">
+                <div class="span4">
+                    <button type="submit" class="btn btn-primary">Submit</button>
+                    <input type="hidden" name="id" value="<?php if (isset($this->changeSalesOrder['id']) and $this->changeSalesOrder['id']) echo $this->changeSalesOrder['id'];?>" />
+                    <input type="hidden" name="back_url" id="back_url" value="/warehouse/change-sales-list">
+                    <button type="button" class="btn btn-danger go-back">Go back</button>
+                </div>
+            </div>
+            <div class="clearfix"></div>
+        </div>
+    </div>
+</form>
+
+<div style="display: none" class="row div-add">
+    <div class="span12">
+
+        <label class="span2">Category <span style="color: red">*</span>
+            <select class="span2 cat_id" name="cat_id[]" required="required" disabled>
+                <option value="">Please select</option>
+                <?php foreach ($this->good_categories as $good_category):?>
+                    <option value="<?php echo $good_category->id;?>"><?php echo $good_category->name;?></option>
+                <?php endforeach;?>
+            </select>
+        </label>
+
+        <label class="span2">Product <span style="color: red">*</span>
+            <select class="span2 good_id" name="good_id[]" required="required" disabled>
+                <option value="">Please select</option>
+            </select>
+        </label>
+
+        <label class="span2">Color <span style="color: red">*</span>
+            <select class="span2 good_color" name="good_color[]" required="required" disabled>
+                <option value="">Please select</option>
+            </select>
+        </label>
+
+        <label class="span1">Quantity <span style="color: red">*</span>
+            <input type="number" min="1" class="span1 num" name="num[]" required="required" maxlength="5" style="width: 50px" disabled />
+        </label>
+
+
+        <label class="span1">&nbsp;<button type="button" class="btn btn-danger remove-sales"><i class="icon-minus"></i></button></label>
+
+        <input type="hidden" name="ids[]" class="ids" disabled />
+    </div>
+</div>
+
+<?php echo $this->render('warehouse/partials/change-sales-add-script.phtml');?>

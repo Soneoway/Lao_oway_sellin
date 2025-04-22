@@ -1,0 +1,57 @@
+
+    <table class="table table-bordered">
+        <thead>
+            <tr>
+                <?php echo $this->sorting(array(
+                        '#',
+                        'lot_name'      =>'Lot Name',
+                        'imei_count'      =>'Imei Total',
+                        'user'          =>'Create By',
+                        'created_at'    =>'Create Date',
+                        'Action'
+                    ),
+                    $this->url, $this->sort, $this->desc); ?>
+            </tr>
+        </thead>
+        <tbody>
+            <?php
+            
+                if(isset($this->imeilot) and $this->imeilot)
+                foreach($this->imeilot as $k => $imei):
+            ?> 
+                    <tr>
+                        <td width="5%" style="text-align: center;">
+                            <?php 
+                            $inc = $this->offset + $k + 1;
+                            echo $inc;
+                            ?>
+                        </td>
+                        
+                        <td width="50%"><?php echo $imei['lot_name'];?></td>
+                        <td width="10%"><?php echo $imei['imei_count'];?></td>
+                        <td width="10%"><?php echo $imei['username'];?></td>
+                        <td width="10%"><?php echo ($imei['created_date'] ? date('d/m/Y', strtotime($imei['created_date'])) : '');?></td>
+                        <td width="10%">
+                        <center>
+                            <a title="Unlock" class="confirmLink btn btn-warning" target="_blank" href="/tool/print-imei-lot?id=<?php echo $imei['lot_sn']; ?>">
+                                <i class="icon-print"></i>
+                            </a>
+                            &nbsp;
+                            <a title="Unlock" class="confirmLink btn btn-danger" href="/tool/del-imei-lot?id=<?php echo $imei['lot_sn']; ?>" onclick="return confirm('Are you sure you want to delete!')">
+                                <i class="icon-trash"></i>
+                            </a>
+                        </center>
+                        </td>
+                    </tr>
+            <?php endforeach; ?>
+        </tbody>
+    </table>
+
+    <div class="paging">
+        <?php echo $this->paging($this->total, $this->limit, $this->offset, $this->url);?>
+    </div>
+    <script type="text/javascript" src="/js/jquery-ui-1.8.12.custom.min.js"></script>
+    <link rel="stylesheet" type="text/css" href="/css/jquery-ui-1.8.12.custom.css"/>
+<?php echo $this->load();?>
+<?php echo $this->confirm();?> 
+

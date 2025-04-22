@@ -1,0 +1,139 @@
+
+<div class="page-header">
+    <h1>IMEI</h1>
+</div>
+<?php
+if (isset($this->messages) and $this->messages)
+    foreach ($this->messages as $message):
+        echo '<div class="alert alert-error">'.$message.'</div>';
+    endforeach;
+?>
+<div class="accordion" id="accordion2">
+    <div class="accordion-group">
+        <div class="accordion-heading">
+            <a class="accordion-toggle collapsed" data-toggle="collapse" data-parent="#accordion2" href="#collapseTwo">
+                Search
+            </a>
+        </div>
+        <div id="collapseTwo" class="accordion-body collapse" style="height: 0px;">
+            <div class="accordion-inner">
+                <?php
+                    echo $this->render('tool/partials/search-imei-edit.phtml');
+                ?>
+            </div>
+        </div>
+    </div>
+</div>
+
+<div class="table-responsive">
+    
+    <table class="table table-bordered" id="table">
+        <thead>
+            <tr>
+                <?php echo $this->sorting(array(
+                        '#',
+                        'imei'          =>'imei',
+                        'warehouse'      =>'warehouse',
+                        'distributor'    =>'distributor',
+                        'good_id'       => 'good_id',
+                        'good_color'        =>'good_color',
+                        'Action'
+                    ),
+                    $this->url, $this->sort, $this->desc); ?>
+            </tr>
+        </thead>
+        <tbody>
+            <?php
+
+            $QWarehouse = new Application_Model_Warehouse();
+            $QDistributor = new Application_Model_Distributor();
+            $QGood = new Application_Model_Good();
+            $QGood_color = new Application_Model_GoodColor();
+
+            $goods = $QGood->get_cache();
+            $colors = $QGood_color->get_cache();
+            $distributor = $QDistributor->get_cache();
+            $warehouse_cache = $QWarehouse->get_cache();
+            
+                if(isset($this->editimei) and $this->editimei)
+                foreach($this->editimei as $k => $editimei):
+            ?> 
+                    <tr>
+                        <td>
+                            <?php 
+                            $inc = $this->offset + $k + 1;
+                            echo $inc;
+                            ?>
+                        </td>
+                        <td><?php echo $editimei['imei_sn'];?></td>
+                        <td><?php echo $warehouse_cache[$editimei['warehouse_id']];?></td>
+                        <td><?php echo $distributor[$editimei['distributor_id']] ?></td>
+                        <td><?php echo $goods[$editimei['good_id']] ?></td>
+                        <td><?php echo $colors[$editimei['good_color']] ?></td>
+                        <td>
+                        <center>
+                            <a title="unset" class="confirmLink btn btn-primary" href="/tool/imei-edit-create?imei=<?php echo $editimei['imei_sn'] ?>">
+                                <i class="icon-unlock-alt"></i>
+                            </a>
+                        </center>
+                        </td>
+                    </tr>
+            <?php endforeach; ?>
+        </tbody>
+    </table>
+</div>
+<div class="paging">
+        <?php echo $this->paging($this->total, $this->limit, $this->offset, $this->url);?>
+    </div>
+<script>
+    $(document).ready(function () {
+        $('.form-search button:reset').click(function (e){
+            $('.form-search input, .form-search select').val('');
+            $('.form-search').submit();
+            return false;
+        });
+    });
+</script>
+<script>
+    $("#check-all").click(function () {
+        $(".data-check").prop('checked', $(this).prop('checked'));
+    });
+function bulk_delete()
+{
+    var list_id = [];
+    $(".data-check:checked").each(function() {
+            list_id.push(this.value);
+    });
+    if(list_id.length > 0)
+    {
+        Swal.fire({
+        title: '<font style="font-family: phetsarath ot">ທ່ານຕ້ອງການຍົກເລີກ Old Data?</font>',
+        text: "Are you sure cancle this "+list_id.length+" data?",
+        icon: 'warning',
+        showCancelButton: true,
+        confirmButtonColor: '#ed9a03',
+        cancelButtonColor: '#ababab',
+        confirmButtonText: '<font style="font-family: phetsarath ot">ຢືນຢັ້ນ</font>',
+        cancelButtonText: '<font style="font-family: phetsarath ot">ຍົກເລີກ</font>'
+        }).then((result) => {
+        if (result.isConfirmed) {
+            location.reload();
+            $.ajax({
+                type: "POST",
+                data: {imei:list_id},
+                url: "/tool/unset2",
+                dataType: "JSON",
+            });
+        }else{
+        Swal.fire("Error","no data selected", "error");
+        }
+    });
+
+    }
+    else
+    {
+        Swal.fire("Error","no data selected", "error");
+    }
+}
+</script>
+<?php echo $this->load('combobox');?>

@@ -1,0 +1,144 @@
+<script type="text/javascript" src="<?php echo HOST ?>js/jquery-ui-1.8.12.custom.min.js"></script>
+<link rel="stylesheet" type="text/css" href="<?php echo HOST ?>css/jquery-ui-1.8.12.custom.css"/>
+<link rel="stylesheet" href="<?php echo HOST ?>css/bootstrap-multiselect.css" type="text/css"/>
+<script type="text/javascript" src="<?php echo HOST ?>js/bootstrap-multiselect.js"></script>
+<?php
+    //print_r($_GET);
+    //print_r($this->params['cancel']);
+?>
+<form class="form-search form-horizontal" method="get" action="<?php echo HOST ?>delivery/order-cancel">
+    <div class="row">
+        <div class="span5">
+            <div class="control-group">
+                <label for="sn" class="span2">Sales Order Number</label>
+                <input id="sn" name="sn" type="text" class="input-medium search-query form-control" value="<?php isset($this->params['sn']) and printf($this->params['sn']);?>">
+            </div>
+
+            <div class="control-group">
+                <label for="cat_id" class="span2">Product Category</label>
+                <select id="cat_id" class="span3" name="cat_id">
+                    <option value="">Choose</option>
+                    <?php if ($this->good_categories): foreach ($this->good_categories as $id=>$name):?>
+                        <option value="<?php echo $id;?>" <?php if (isset($this->params['cat_id']) and $id==$this->params['cat_id']):?> selected<?php endif;?>><?php echo $name;?></option>
+                    <?php endforeach; endif;?>
+                </select>
+            </div>
+
+            <div class="control-group">
+                <label for="good_id" class="span2">Product</label>
+                <select id="good_id" class="span3" name="good_id">
+                    <option value="">Choose</option>
+                    <?php if ($this->goods): foreach ($this->goods as $key=> $item):?>
+                        <option value="<?php echo $key;?>" <?php if (isset($this->params['good_id']) and $key==$this->params['good_id']):?> selected<?php endif;?>><?php echo $item;?></option>
+                    <?php endforeach; endif;?>
+                </select>
+            </div>
+
+            <div class="control-group">
+                <label for="good_color" class="span2">Color</label>
+                <select id="good_color" class="span3" name="good_color">
+                    <option value="">Choose</option>
+                    <?php if ($this->goodColors): foreach ($this->goodColors as $key=>$item):?>
+                        <option value="<?php echo $key;?>" <?php if (isset($this->params['good_color']) and $key==$this->params['good_color']):?> selected<?php endif;?>><?php echo $item;?></option>
+                    <?php endforeach; endif;?>
+                </select>
+            </div>
+
+            <div class="control-group">
+                <label for="d_id" class="span2">Retailer</label>
+                    <input type='text' class="span3" name='SearchBox' id="SearchBox" placeholder="Search" autocomplete="off" />
+                    <select name="d_id" id="d_id" class="span3" size="5">
+                        <option value="">Choose</option>
+                        <?php /*if (isset($this->distributors) && $this->distributors): foreach ($this->distributors as $id=>$name):*/?><!--
+                            <option value="<?php /*echo $id;*/?>" <?php /*if (isset($this->params['d_id']) and $id==$this->params['d_id']):*/?> selected="selected"<?php /*endif;*/?>><?php /*echo $name;*/?></option>
+                        --><?php /*endforeach; endif;*/?>
+                    </select>
+                
+            </div>
+
+        </div>
+        <div class="span5">
+            <div class="control-group">
+                <label for="cancel_at_form" class="span2">Cancel Time Form</label>
+                <input type="text" class="form-control search-query date" id="cancel_at_form" name="cancel_at_form" value="<?php isset($this->params['cancel_at_form']) and printf($this->params['cancel_at_form']);?>">
+            </div>
+            <div class="control-group">
+                <label for="cancel_at_to" class="span2">Cancel Time To</label>
+                <input type="text" class="form-control search-query date" id="cancel_at_to" name="cancel_at_to" value="<?php isset($this->params['cancel_at_to']) and printf($this->params['cancel_at_to']);?>">
+            </div>
+            <div class="control-group">
+                <label for="cancel_delivery_form" class="span2">Cancel Delivery Time Form</label>
+                <input type="text" class="form-control search-query date" id="cancel_delivery_form" name="cancel_delivery_form" value="<?php isset($this->params['cancel_delivery_form']) and printf($this->params['cancel_delivery_form']);?>">
+            </div>
+            <div class="control-group">
+                <label for="cancel_delivery_to" class="span2">Cancel Delivery Time To</label>
+                <input type="text" class="form-control search-query date" id="cancel_delivery_to" name="cancel_delivery_to" value="<?php isset($this->params['cancel_delivery_to']) and printf($this->params['cancel_delivery_to']);?>">
+            </div>
+            <div class="control-group">
+                <label for="cancel" class="span2">Cancel or Not Confrim</label>
+                <select name="cancel" id="cancel" class="span3">
+                    <option value="">Choose</option>
+                    <option value="-1" <?php if (isset($this->params['cancel']) and $this->params['cancel']==-1):?> selected<?php endif;?>>Not Cancel</option>
+                    <option value="1" <?php if (isset($this->params['cancel']) and $this->params['cancel']==1):?> selected<?php endif;?>>Canceled</option>
+                </select>
+            </div>
+        </div>
+    </div>
+
+    <button type="submit" class="btn btn-primary">Search</button>
+    <button type="reset" class="btn btn-warning">Reset</button>
+    <button type="submit" name="export" value="1" class="btn btn-success">Export</button>
+    
+</form>
+<script async="async">
+    getDistributor(<?php echo ((isset($this->params['d_id']) and $this->params['d_id']) ? $this->params['d_id'] : '');?>);
+
+    options = {
+        selectAllText: 'Select All',
+        includeSelectAllOption: true,
+        includeSelectAllIfMoreThan: 3,
+        disableIfEmpty: true
+    };
+
+    function multi() {
+        $('.multiselect').multiselect(options);
+    }
+
+    function getDistributor(currentDistributorID) {
+
+        $.ajax({
+            url: '<?php echo HOST ?>get/distributor-cached',
+            type: 'post',
+            dataType: 'json'
+        })
+            .done(function(data) {
+                if (!data || data.no_data) return false;
+                $('#d_id option').not(':first').remove();
+                d_list = [];
+                $.each(data, function(key, value) {
+                    var selected = currentDistributorID == key ? 'selected' :'';
+                    var op = '<option value="'+key+'" ' + selected + '>'+value.store_code+' - '+value.title+'</option>';
+                    d_list.push(op);
+                });
+                document.getElementById('d_id').innerHTML = d_list.join();
+
+                var jets = new Jets({
+                    searchTag: '#SearchBox',
+                    contentTag: '#d_id'
+                });
+            })
+            .fail(function() {
+                console.log("error");
+            })
+            .always(function() {
+                /*console.log("complete");*/
+            });
+
+    }
+
+    $(document).ready(function () {
+        multi();
+
+    });
+
+</script>

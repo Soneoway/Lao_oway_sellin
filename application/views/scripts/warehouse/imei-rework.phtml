@@ -1,0 +1,232 @@
+<style>
+    .blockOverlay{
+        z-index: 10000 !important;
+    }
+    .blockPage{
+        z-index: 10001 !important;
+    }
+</style>
+
+<div class="page-header">
+    <h1>Imei Rework</h1>
+    <span style="color: red">***IMEI เก่าต้องอยู่ในคลัง [WMFT - China Warranty Factory] เท่านั้น***</span>
+</div>
+<?php
+    if (isset($this->messages_success) and $this->messages_success)
+        foreach ($this->messages_success as $message):
+            echo '<div class="alert alert-success">'.$message.'</div>';
+        endforeach;
+
+    if (isset($this->messages) and $this->messages)
+        foreach ($this->messages as $message):
+            echo '<div class="alert alert-error">'.$message.'</div>';
+        endforeach;
+?>
+
+<div class="row" style="margin-left: 30px;">
+    <form id="form">
+
+    <table>
+        <tr>
+            <td>
+                <div style="margin-right: 50px;">
+                    <div>Old IMEI [Count : <span id="count_old_imei">0</span>]</div>
+                    <div>
+                        <textarea name="old_imei" id="old_imei" cols="30" rows="10"></textarea>
+                    </div>
+                </div>
+            </td>
+            <td>
+                <div>New IMEI [Count : <span id="count_new_imei">0</span>]</div>
+                <div>
+                    <textarea name="new_imei" id="new_imei" cols="30" rows="10"></textarea>
+                </div>
+            </td>
+        </tr>
+        <tr class="div-invalid-data hide">
+            <td colspan="2">
+                <br>
+                <div style="color: red">Invalid Data</div>
+                <textarea style="color: red;width: 483px;" name="invalid_data" id="invalid_data" cols="30" rows="5" disabled></textarea>
+            </td>
+        </tr>
+    </table>
+
+    <div style="margin-top: 30px;">
+        New Imei Color : 
+        <select style="margin-bottom: 0px;" id="good_color_id" name="good_color_id">
+            <option value="" selected>Choose</option>
+        </select>
+
+        <button class="btn btn-default" id="btn-get-color" type="button">Get color</button>
+    </div>
+
+    <div class="" style="margin-top: 30px;margin-bottom: 50px;">
+        <!-- <button style="margin-right: 15px;" type="button" class="btn btn-default" onclick="window.location.href='<?=HOST."warehouse/"?>'">Back</button> -->
+        <button type="button" class="btn btn-primary" id="btn-submit">Confirm</button>
+
+    </div>
+        
+    </form>
+</div>
+
+<script src="/js/jquery.blockUI.js"></script>
+<script>
+
+    $(document).ajaxStart(function(){
+        $.blockUI({ css: { 
+            border: 'none', 
+            padding: '15px', 
+            backgroundColor: '#000', 
+            '-webkit-border-radius': '10px', 
+            '-moz-border-radius': '10px', 
+            opacity: .5, 
+            color: '#fff' 
+        } });
+    });
+
+    $(document).ajaxStop(function(){
+        $.unblockUI();
+    });
+
+    $(document).ready(function () {
+
+        var count_old_imei = 0;
+        var count_new_imei = 0;
+
+        $('#old_imei').keyup(function(event) {
+
+            $('.alert').remove();
+
+            $('#good_color_id').empty();
+            $('#good_color_id').append('<option value="" selected>Choose</option>');
+
+            var old_imei = this;
+
+            var array_old_imei = (old_imei.value.split('\n'));
+
+
+            if(array_old_imei.length > 0){
+                count_old_imei = array_old_imei.length;
+            }
+
+            if(old_imei.value.length < 1){
+                count_old_imei = 0;
+            }
+
+            $('#count_old_imei').html(count_old_imei);
+        });
+
+        $('#new_imei').keyup(function(event) {
+
+            $('.alert').remove();
+
+            var new_imei = this;
+
+            var array_new_imei = (new_imei.value.split('\n'));
+
+
+            if(array_new_imei.length > 0){
+                count_new_imei = array_new_imei.length;
+            }
+
+            if(new_imei.value.length < 1){
+                count_new_imei = 0;
+            }
+
+            $('#count_new_imei').html(count_new_imei);
+        });
+
+        $('#btn-submit').click(function(event) {
+
+            $('.alert').remove();
+
+            var old_imei = $('#old_imei').val();
+            var new_imei = $('#new_imei').val();
+            var good_color_id = $('#good_color_id').val();
+
+            if(old_imei.length < 1){
+                alert('Please input old imei!');
+                return false;
+            }
+            if(new_imei.length < 1){
+                alert('Please input new imei!');
+                return false;
+            }
+            if(good_color_id == ''){
+                alert('Please select imei color');
+                return false;
+            }
+           
+            if(count_old_imei != count_new_imei){
+                alert('Please check count imei!');
+                return false;
+            }
+
+            if (!confirm('you sure to confirm')) {
+                return false;
+            }
+
+            $.ajax({
+                url: '<?php echo HOST.'warehouse/imei-rework';?>',
+                type: 'POST',
+                data: {old_imei:old_imei,new_imei:new_imei,good_color_id:good_color_id},
+            })
+            .done(function(response) {
+                var obj_response = jQuery.parseJSON(response);
+                console.log("success");
+
+                 switch(obj_response.status) {
+                    case 200:
+                        console.log('done');
+                        $('.div-invalid-data').addClass('hide');
+                        location.reload();
+                        break;
+                    case 400:
+                        alert(obj_response.message);
+                        break;
+                    case 401:
+                        $('.div-invalid-data').removeClass('hide');
+                        $('#invalid_data').text(obj_response.message);
+                        break;
+                    default:
+                        location.reload();
+                }
+                
+            });
+
+        });
+
+        $('#btn-get-color').click(function(event) {
+
+            $('.alert').remove();
+
+            var old_imei = $('#old_imei').val();
+
+            if(old_imei.length < 1){
+                alert('Please input old imei!');
+                return false;
+            }
+
+            $('#good_color_id').empty();
+           
+            $.ajax({
+                url: '<?php echo HOST.'warehouse/get-color-by-imei';?>',
+                type: 'POST',
+                data: {old_imei:old_imei},
+            })
+            .done(function(response) {
+                var obj_response = jQuery.parseJSON(response);
+                console.log("success");
+
+                $.each(obj_response, function(index, item) {
+                  $('#good_color_id').append(new Option(item.name, item.id));
+                });
+                
+            });
+
+        });
+
+
+    });
+</script>

@@ -1,0 +1,160 @@
+<?php
+function product_price($priceFloat) {
+$symbol_thousand = '.';
+$decimal_place = 0;
+$price = number_format($priceFloat, $decimal_place, '', $symbol_thousand);
+return $price;
+}
+?>
+<div class="page-header" xmlns="http://www.w3.org/1999/html">
+    <h1>Audited Sales Order</h1>
+</div>
+
+<?php
+if (isset($this->messages) and $this->messages)
+    foreach ($this->messages as $message):
+        echo '<div class="alert alert-error">'.$message.'</div>';
+    endforeach;
+?>
+
+<div class="row">
+	<div class="span12">
+        <form role="form" id="form" action="<?php echo HOST.'bvg/confirm-bvg';?>" method="post" class="form-inline">
+        	<?php if (isset($this->market) and $this->market):?>
+        		<div class="row">
+        			<div class="span12">
+        				<label class="span2">Sales order number</label>
+		                <span class="span8"><strong><?php if(isset($this->market) and isset($this->market['sn'])) echo $this->market['sn']?></strong></span>
+        			</div>
+        		</div>
+            <?php endif;?>
+
+            <div class="row">
+                <div class="span12">
+                    <label class="span2">Warehouse</label>
+                    <span class="span8"><strong><?php  echo $this->warehouses[$this->market['warehouse_id']];?></strong></span>
+                </div>
+            </div>
+
+
+			<div class="row">
+    			<div class="span12">
+                    <label class="span2">Retailer name</label>
+                    <span class="span8"><strong><?php echo $this->distributor;?></strong></span>
+            	</div>
+    		</div>
+
+
+
+            <div class="row">
+                <div class="span12">
+                    <label class="span2">Joint Circular</label>
+                    <span class="span8"><strong><?php echo $this->joint;?></strong></span>
+                </div>
+            </div>
+
+            <div class="row">
+                <div class="span12">
+                    <label class="span2">Products</label>
+                    <span class="span8"><strong><?php echo $this->goods[$this->market['good_id']];?></strong></span>
+                </div>
+            </div>
+            <!-- 
+            <div class="row">
+                <div class="span12">
+                    <label class="span2">Number</label>
+                    <span class="span8"><strong><?php //if(isset($this->market['num']) and $this->market['num']) echo $this->market['num'] ?></strong></span>
+                </div>
+            </div>
+
+            <div class="row">
+                <div class="span12">
+                    <label class="span2">Total</label>
+                    <span class="span8"><strong><?php //if(isset($this->market['total']) and $this->market['total']) echo My_Number::product_price($this->market['total']) ?></strong></span>
+                </div>
+            </div>
+
+
+            <div class="row">
+                <div class="span12">
+                    <label class="span2">Discount (BVG):</label>
+                    <span class="span8"><strong><?php //echo number_format($this->discount_bvg);?></strong></span>
+                </div>
+            </div>
+            -->
+            <?php echo $this->render('finance/partials/table-bvg.phtml'); ?>
+            
+            <div class="row">
+                <div class="span12">
+                    <span class="span4" style="color: red">* Please confirm information,This action can not be reversed!!...</span>
+                </div>
+            </div>
+
+            <div class="row">
+                <div class="span6">
+                    <div class="control-group">
+                        <input type="hidden" name="sn" value="<?php isset($this->market) and $this->market and printf($this->market['sn']);?>">
+                        <div class="span4">
+                            <button type="submit" class="btn btn-primary">Submit</button>
+                            <input type="hidden" name="back_url" id="back_url" value="/bvg/list-payment">
+                            <button type="button" class="btn btn-danger go-back">Go back</button>
+                        </div>
+                    </div>
+                    <div class="clearfix"></div>
+                </div>
+            </div>
+        </form>
+    </div>
+</div>
+<div id='dialog' title='message'></div>
+<link rel="stylesheet" href="<?php echo HOST?>css/jquery-ui.css">
+<script src="<?php echo HOST?>js/jquery-ui.js"></script>
+<script src="<?php echo HOST?>js/numeral.min.js"></script>
+
+<script src="../js/tag-it.min.js" type="text/javascript" charset="utf-8"></script>
+<link href="../css/jquery.tagit.css" rel="stylesheet" type="text/css">
+<link href="../css/tagit.ui-zendesk.css" rel="stylesheet" type="text/css">
+
+<script>
+function initTag(){
+
+    $('#myTags').tagit({
+        allowSpaces: true,
+        fieldName: 'tags[]',
+        autocomplete: {
+            delay: 0,
+            minLength: 2,
+            source: "<?php echo HOST;?>get/get-tags"
+        }
+    });
+
+}
+
+    $(document).ready(function () {
+        initTag();
+        initGoBack();
+
+
+        $('#form').submit(function (e){
+
+                if (!confirm('This action can not be reversed, please exercise caution...'))
+                    return false;
+
+			
+        });
+        initGoBack();
+    });
+
+    function initGoBack(){
+        $('.go-back').click(function(e){
+            window.location.href = $('#back_url').val();
+            return false;
+        });
+    }
+</script>
+<style>
+	label input,
+	label select {
+		margin-right: 25px;
+	}
+</style>

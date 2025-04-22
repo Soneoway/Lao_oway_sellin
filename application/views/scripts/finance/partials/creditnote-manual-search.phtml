@@ -1,0 +1,135 @@
+<form class="form-search form-horizontal" method="get" action="<?php echo HOST ?>finance/creditnote-manual-list">
+    <div class="row">
+        <div class="span5">
+
+            <div class="control-group">
+             <label class="span2" for="rank">ประเภทร้านค้า</label>
+                
+                    <select id="rank" name="rank" class="rank span3">
+                        <option value="">---</option>
+                        <option value="1" <?php if( isset($this->params['rank']) and $this->params['rank']==1 ) { ?> selected<?php }?>>1. ORG-WDS(1)</option>
+                        <option value="2" <?php if( isset($this->params['rank']) and $this->params['rank']==2 ) { ?> selected<?php }?>>2. ORG(2)</option>
+                        <option value="5" <?php if( isset($this->params['rank']) and $this->params['rank']==5 ) { ?> selected<?php }?>>3. ORG-Dtac/Advice(5)</option>
+                        <option value="6" <?php if( isset($this->params['rank']) and $this->params['rank']==6 ) { ?> selected<?php }?>>4. ORG-Lotus/Power by(6)</option>
+                        <option value="7" <?php if( isset($this->params['rank']) and $this->params['rank']==7 ) { ?> selected<?php }?>>5. Dealer(7)</option>
+                        <option value="8" <?php if( isset($this->params['rank']) and $this->params['rank']==8 ) { ?> selected<?php }?>>6. HUB(8)</option>
+                        <option value="9" <?php if( isset($this->params['rank']) and $this->params['rank']==9 ) { ?> selected<?php }?>>7. Laos(9)</option>
+                        <option value="3" <?php if( isset($this->params['rank']) and $this->params['rank']==3 ) { ?> selected<?php }?>>8. Online and Staff(3)</option>
+                        <option value="10" <?php if( isset($this->params['rank']) and $this->params['rank']==10 ) { ?> selected<?php }?>>9. Brand Shop/Service(10)</option>
+                        <option value="11" <?php if( isset($this->params['rank']) and $this->params['rank']==11 ) { ?> selected<?php }?>>10. King Power(11)</option>
+                        <option value="12" <?php if( isset($this->params['rank']) and $this->params['rank']==12 ) { ?> selected<?php }?>>11. Jaymart(12)</option>
+                        <option value="13" <?php if( isset($this->params['rank']) and $this->params['rank']==13 ) { ?> selected<?php }?>>12. Brand Shop By Dealer(13)</option>
+                        <option value="14" <?php if( isset($this->params['rank']) and $this->params['rank']==14 ) { ?> selected<?php }?>>13. KR Dealer(14)</option>
+                        <option value="15" <?php if( isset($this->params['rank']) and $this->params['rank']==15 ) { ?> selected<?php }?>>14. TRUE(15)</option>
+                    </select>
+                
+             </div>       
+                
+            <div class="retailer_name_list"></div> 
+
+            <div class="control-group">
+            <label for="distributor_name" class="span2">Distributor Name</label>
+            <input id="distributor_name" name="distributor_name" type="text" class="input-medium search-query form-control" value="<?php isset($this->params['distributor_name']) and printf($this->params['distributor_name']);?>">
+            </div>
+            <div class="control-group">
+            <label for="creditnote_sn" class="span2">Creditnote No</label>
+            <input id="creditnote_sn" name="creditnote_sn" type="text" class="input-medium search-query form-control" value="<?php isset($this->params['creditnote_sn']) and printf($this->params['creditnote_sn']);?>">
+            </div>
+            
+            <div class="control-group">
+            <label for="view_status" class="span2">Creditnote Status</label>
+                <select id="view_status" name="view_status" >
+                    <option value="0" <?php if (isset($this->params['view_status']) and $this->params['view_status']==0):?> selected<?php endif;?>>-ทั้งหมด-</option>
+                    <option value="1" <?php if (isset($this->params['view_status']) and $this->params['view_status']==1):?> selected<?php endif;?>>รออนุมัติ</option>
+                    <option value="2" <?php if (isset($this->params['view_status']) and $this->params['view_status']==2):?> selected<?php endif;?>>อนุมัติแล้ว</option>
+                </select>
+            </div>
+        </div>
+        <div class="span5">
+
+        </div>
+    </div>
+
+    
+    <input type="hidden" name="counter" value="<?=$this->counter;?>">
+    <button type="submit" class="btn btn-primary">Search</button>
+    <button type="reset" class="btn btn-warning">Reset</button>
+    <button type="submit" name="export" value="1" class="btn btn-success">Export</button>
+</form>
+<script async="async">
+    //getDistributor(<?php echo ((isset($this->params['d_id']) and $this->params['d_id']) ? $this->params['d_id'] : '');?>);
+
+    <?php if(isset($this->params['finance_group']) && $this->params['finance_group']){?>
+        $('#finance_group').val('<?php echo $this->params['finance_group'];?>');
+    <?php } ?>
+    
+        <?php if(isset($this->rank)) { ?>
+            $('#rank').val(<?= $this->rank ?>);
+            get_distributor_cached_for_search(<?= $this->rank ?>);
+        <?php }?>
+
+        $('.rank').change(function(event) {
+            get_distributor_cached_for_search($(this).val());
+          });
+
+        function get_distributor_cached_for_search(rank_id){
+
+            var rank_id = rank_id;
+                  $.ajax({
+                      url: '<?php echo HOST ?>get/distributor-cached-for-search',
+                      type: 'POST',
+                      dataType: 'html',
+                      data: {rank_id: rank_id},
+                  })
+                  .done(function(data) {
+                      $('.retailer_name_list').empty();
+                      $('.retailer_name_list').append(data);
+                        var jets = new Jets({
+                        searchTag: '#SearchBox',
+                        contentTag: '#d_id'
+                    });
+                        <?php if(isset($this->d_id)){ ?>
+                            $('#d_id').val(<?= $this->d_id ?>);
+                        <?php }?>
+                      console.log("success");
+                  })
+                  .fail(function() {
+                      console.log("error");
+                  })
+                  .always(function() {
+                      console.log("complete");
+                  });
+
+        }
+
+    function getDistributor(currentDistributorID) {
+
+        $.ajax({
+            url: '<?php echo HOST ?>get/distributor-cached',
+            type: 'post',
+            dataType: 'json'
+        })
+            .done(function(data) {
+                if (!data || data.no_data) return false;
+                $('#d_id option').not(':first').remove();
+
+                $.each(data, function(key, value) {
+                    var selected = currentDistributorID == key ? 'selected' :'';
+                    var op = '<option value="'+key+'" ' + selected + '>'+value.store_code+' - '+value.title+'</option>';
+                    $('#d_id').append(op);
+                });
+
+                var jets = new Jets({
+                    searchTag: '#SearchBox',
+                    contentTag: '#d_id'
+                });
+            })
+            .fail(function() {
+                console.log("error");
+            })
+            .always(function() {
+                /*console.log("complete");*/
+            });
+
+    }
+</script>

@@ -1,0 +1,68 @@
+<style>
+.page-header{margin-top: 70px;}
+#submit_btn{margin-left: 10px;}
+</style>
+<div class="page-header">
+    <?php if(isset($this->data) && $this->data): ?>
+    <h1>Edit shipment: <?php echo $this->data->name;?></h1>
+    <?php endif; ?>
+</div>
+
+<div class="content_sale_phone">
+    <form action="<?php echo HOST;?>sales/save-shipment?id=<?php echo $this->data->id;?>"  method="POST">
+        <div class="shipment_wrap">
+            <div class="row-fluid">
+                <div class="row">
+                    <div class="span12">
+                        <div class="control-group">
+                            <label for="category_name">Name</label>
+                            <input type='text' name='name' value='<?php if(isset($this->data) && $this->data): echo $this->data->name;endif;?>'/>
+                        </div>
+                    </div>
+                    <div class="span12">
+                        <div class="control-group">
+                            <label for="category_name">Number shipment</label>
+                            <input type='text' name='number_shipment' value='<?php if(isset($this->data) && $this->data): echo $this->data->number;endif;?>'/>
+                        </div>
+                    </div>
+                    <div class="span12">
+                        <div class="control-group">
+                            <label for="category_name">Content</label>
+                            <textarea name="content" cols="10" rows="3"><?php if(isset($this->data) && $this->data): echo $this->data->content;endif;?></textarea>
+                        </div>
+                    </div>
+                    <div class="span12">
+                        <div class="control-group">
+                            <label for="category_name">Active</label>
+                            <select name="active">
+                                <option value="1">Active</option>
+                                <option value="0" <?php if(($this->data->active) == 0 && $this->data): echo "selected";endif;?>>No Active</option>
+                            </select>
+                        </div>
+                    </div>
+                </div>            
+            </div>
+        </div>
+        <input type="hidden" value="1" name="check" />
+        <button type="submit" class="btn btn-primary btn btn-warning" id="add_category_btn">Edit</button>
+        <a href="<?php echo HOST."sales/shipment";?>" class="btn btn-primary btn btn-danger" id="add_category_btn">Go Back</a>
+    </form>
+</div>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+

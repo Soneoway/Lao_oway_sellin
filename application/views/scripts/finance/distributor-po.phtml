@@ -1,0 +1,100 @@
+<meta http-equiv="refresh" content="30">
+<div class="page-header">
+    <h1>Distributor Po</h1>
+</div>
+<?php
+if (isset($this->messages_success) and $this->messages_success)
+    foreach ($this->messages_success as $message):
+        echo '<div class="alert alert-success">'.$message.'</div>';
+    endforeach;
+
+if (isset($this->messages) and $this->messages)
+    foreach ($this->messages as $message):
+        echo '<div class="alert alert-error">'.$message.'</div>';
+    endforeach;
+?>
+<div class="accordion" id="accordion2">
+    <div class="accordion-group">
+        <div class="accordion-heading">
+            <a class="accordion-toggle collapsed" data-toggle="collapse" data-parent="#accordion2" href="#collapseTwo">
+                Search
+            </a>
+        </div>
+        <div id="collapseTwo" class="accordion-body collapse" style="height: 0px;">
+            <div class="accordion-inner">
+                <?php
+                    echo $this->render('finance/partials/distributor-po-search.phtml');
+                ?>
+            </div>
+        </div>
+    </div>
+</div>
+
+<div class="table-responsive">
+    <table class="table table-bordered">
+        <thead>
+            <tr>
+                <?php echo $this->sorting(array(
+                        '#',
+                        'po_name'    => 'Po name',
+                        'status',
+                        'created_at' => 'Created at',
+                        'created_by' => 'Created By',
+                        'Action'
+                    ),
+                    $this->url, $this->sort, $this->desc); ?>
+            </tr>
+        </thead>
+        <tbody>
+            <?php
+                if( $this->list ):
+                    $intSTT = 1;
+                foreach($this->list as $item):
+            ?>
+                    <tr>
+                        <td><?php echo $intSTT++;?></td>
+                        <td><?php echo $item['po_name'];?></td>
+                        <td>
+
+                            <?php
+            
+                                if($item['status_check'] == NULL OR $item['status_check'] == 0){
+                            ?>
+                                    <i class="icon-remove">
+                            <?php
+                                }else{
+                            ?>
+                                        <i class="icon-ok">
+                            <?php
+                                }
+                            ?>
+                        </td>
+                        <td><?php echo date('d/m/Y',strtotime($item['created_at']))?></td>
+                        <td>
+                            <?php echo $item['fullname'];?>
+                        </td>
+                        <td>
+                            <a title="view" href="/finance/order-by-po?po_id=<?php echo $item['id'];?>">
+                                <i class="icon-eye-open"></i>
+                            </a>
+                        </td>
+                    </tr>
+            <?php 
+                endforeach;
+                endif;
+            ?>
+        </tbody>
+    </table>
+    <div class="paging">
+        <?php echo $this->paging($this->total, $this->limit, $this->offset, $this->url);?>
+    </div>
+</div>
+<script>
+    $(document).ready(function () {
+        $('.form-search button:reset').click(function (e){
+            $('.form-search input, .form-search select').val('');
+            $('.form-search').submit();
+            return false;
+        });
+    });
+</script>

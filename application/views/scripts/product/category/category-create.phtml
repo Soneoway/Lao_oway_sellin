@@ -1,0 +1,42 @@
+<div class="page-header">
+	<?php if (isset($this->category) && $this->category): ?>
+		<h1>Edit Category</h1>
+	<?php else: ?>
+		<h1>Create Category</h1>
+	<?php endif ?>
+    
+</div>
+<?php
+    if (isset($this->messages) and $this->messages)
+        foreach ($this->messages as $message):
+            echo '<div class="alert alert-error">'.$message.'</div>';
+        endforeach;
+?>
+<form class="form-horizontal" action="<?php echo HOST ?>product/category-save" name="form" id="form" method="post">
+	<div class="row-fluid">
+		<div class="span4">
+			<div class="control-group">
+			    <label class="control-label" for="name">Name</label>
+			    <div class="controls">
+			    	<input type="text" id="name" name="name" placeholder="Category Name" required="required" value="<?php if( isset($this->category) && isset($this->category['name']) ) echo $this->category['name'] ?>" />
+			    	<p class="help-block"></p>
+			    </div>
+			</div>
+			
+		</div>
+	</div>
+	<input type="hidden" name="id" value="<?php if( isset($this->category) && isset($this->category['id']) ) echo $this->category['id'] ?>" />
+	<div class="row-fluid">
+		<div class="span4">
+			<div class="pull-right">
+				<button type="submit" id="submit_btn" class="btn btn-primary">Submit</button>
+				<button type="button" id="cancel_btn" class="btn btn-warning">Cancel</button>
+			</div>
+		</div>
+	</div>
+</form>
+<script>
+    $('#cancel_btn').click(function(){
+    	window.location = '<?php echo HOST ?>product/category';
+    });
+</script>

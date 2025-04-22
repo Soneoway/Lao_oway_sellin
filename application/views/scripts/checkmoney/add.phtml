@@ -1,0 +1,410 @@
+<link rel="stylesheet" href="<?php echo HOST?>css/jquery-ui.css">
+<link rel="stylesheet" href="<?php echo HOST?>css/jquery.datetimepicker.css" />
+<link rel="stylesheet" href="<?php echo HOST?>css/checkmoney.css" />
+<link rel="stylesheet" href="<?php echo HOST?>css/select2.css" />
+<style>
+	.required{
+		color: red;
+	}
+
+    #d_id{
+        margin-left: 0px!important;
+        left: 0px!important;
+        top: -28px!important;
+        width: 360px!important;
+    }
+
+	.select2-container-multi .select2-choices{
+		border: 1px solid #ccc;
+		border-radius: 3px;
+		box-shadow: none;
+		background-image: none;
+	}
+    span.highlight{
+        display: inline!important;
+        padding: 0px!important;
+        margin: 0px!important;
+    }
+
+    input[type='text'],select{
+    	width: 360px;
+    }
+    input[type='number']{
+    	width: 340px;
+    }
+</style>
+
+<div class="page-header">
+    <h1><?php echo $this->title;?></h1>
+</div>
+
+<div class='check-money'>
+<?php
+	//print_r($this->row);
+	$pay_money=0;
+	if($this->action=='edit'){
+		$pay_money=$this->row['pay_money'];
+		$pay_time=$this->row['pay_time'];
+		$pay_banktransfer=$this->row['pay_banktransfer'];
+		$pay_servicecharge=$this->row['pay_servicecharge'];
+		$pay_service=$this->row['pay_service'];
+		$sn_ref=$this->row['sn_ref'];
+
+		$uploaded_dir = HOST . 'public' . DIRECTORY_SEPARATOR . 'files'
+		. DIRECTORY_SEPARATOR . 'finance';
+
+		$file_pay_slip = $uploaded_dir.$this->row['file_pay_slip'];
+
+	}else{
+		$pay_money=$this->row['pay_money']*-1;
+		$pay_time=date('Y-m-d H:i:s');
+		$pay_banktransfer=0;
+		$pay_servicecharge=0;
+		$pay_service=0;
+		$sn_ref=$this->row['sn_ref'];
+	}
+
+
+	$total_money=$this->total_money;
+
+    if (isset($this->messages_success) and $this->messages_success)
+        foreach ($this->messages_success as $message):
+            echo '<div class="alert alert-success">'.$message.'</div>';
+        endforeach;
+
+    if (isset($this->messages) and $this->messages)
+        foreach ($this->messages as $message):
+            echo '<div class="alert alert-error">'.$message.'</div>';
+        endforeach;
+?>
+		<form action="/checkmoney/save-checkmoney" enctype="multipart/form-data" role='form' method="post" id='add-transaction'>
+			<div class='row'>
+				<div class='span6'>
+					<div class="form-group">
+						<label>Retailer:</label>
+                        <input type='text' class="span4" name='SearchBox' id="SearchBox" placeholder="Search" autocomplete="off" />
+						<select name="d_id" id="d_id" size="5" required='required'>
+							<?php
+								foreach($this->distributors as $item):
+							?>
+								<option value="<?php echo $item['id']?>" <?php if(isset($this->row['d_id']) AND $this->row['d_id'] == $item['id']) echo 'selected=selected';?>><?php echo (isset($item['store_code']) ? $item['store_code'].' - ' : '').$item['title']?></option>
+							<?php		
+								endforeach;
+							?>
+						</select>
+					</div>
+
+                    <div class="form-group">
+                        <label for="">Company<span class='required'>*</span></label>
+                        <select name="company_id" id="company_id" class="company_id form-control" required>
+                            <option value="">CHOOSE A COMPANY</option>
+                            <?php
+                            $companies = unserialize(COMPANIES);
+
+                            foreach($companies as $key => $value):
+                                ?>
+                                <option value="<?php echo $key;?>" <?php if(isset($this->row['company_id']) and $this->row['company_id'] == $key) echo 'selected=selected';?>><?php echo $value;?></option>
+                            <?php
+                            endforeach;
+                            ?>
+                        </select>
+                    </div>
+
+					<div class="form-group">
+						<label>Bank:</label>
+						<select name='bank' id='bank'>
+							<option value="">CHOOSE A BANK</option>
+							<?php
+								if(isset($this->banks) && $this->banks){
+									foreach($this->banks as $bank){
+							?>
+									<option value="<?php echo $bank['id']?>" <?php if(isset($this->row['bank']) AND $this->row['bank'] == $bank['id']) echo 'selected=selected';?>><?php echo $bank['name']?></option>
+							<?php 
+									}
+								}
+							?>
+						</select>
+					</div>
+						
+					<div class="form-group">
+						<label>Money ( THB ) <span class='required'>*</span>			
+						</label>
+						<input type='number' step='0.01' class='form-control pay_money' name='pay_money' required='true' autocomplete='off' value="<?=$pay_money?>" />
+					</div>
+
+					<div class="form-group">
+						<label>Fee Bank Transfer ( THB )			
+						</label>
+						<input type='number' step='0.01' class='form-control pay_banktransfer' name='pay_banktransfer'  autocomplete='off' value="<?=$pay_banktransfer?>" />
+					</div>
+
+					<div class="form-group">
+						<label>Service Charge ( THB )		
+						</label>
+						<input type='number' step='0.01' class='form-control pay_servicecharge' name='pay_servicecharge'  autocomplete='off' value="<?php echo $pay_servicecharge?>" />
+					</div>
+
+					<div class="form-group">
+						<label>ค่าอะไหล่และค่าบริการ ( THB )			
+						</label>
+						<input type='number' step='0.01' class='form-control pay_service' name='pay_service'  autocomplete='off' value="<?php echo $pay_service?>" />
+					</div>
+	
+					<div class="form-group">
+						<label>Type:<span class='required'>*</span></label>							
+						<select name='type' required="required" id='type'>
+						<?php
+                            $arr = unserialize(MONEY_TYPE);
+                            unset($arr[2]);
+							foreach(  $arr as $key=> $value   ):
+						?>
+							<option value="<?php echo $key;?>" <?php if(isset($this->row['type']) AND $this->row['type'] == $key) echo 'selected=selected';?>>
+								<?php echo $value;?>
+							</option>
+						<?php 
+							endforeach;					
+						?>
+						</select>												
+					</div>	
+							
+					<div class="form-group">
+						<label>Date time:<span class='required'>*</span></label>
+						<input type='text' name='pay_time' id='pay_time' class='form-control datepicker' autocomplete='off' 
+						value="<?=$pay_time?>" 
+						/>
+					</div>
+								
+				</div><!--  End span -->
+				<div  class='span6'>
+			
+
+					<div class="form-group">
+						<label>Bank serial:</label>
+						<input type='text' name='bank_serial' class='form-control'
+							autocomplete='off' value="<?php if(isset($this->row['bank_serial']) AND printf($this->row['bank_serial']))?>" />
+						
+					</div>
+					
+					<div class="form-group">
+						<label>Bank transaction code:</label>
+						<input type='text' name='bank_transaction_code' class='form-control' id='bank_transaction_code'
+							autocomplete='off' value="<?php if(isset($this->row['bank_transaction_code']) AND printf($this->row['bank_transaction_code']))?>">
+					</div>
+
+                    <div class="form-group">
+                        <label>For sn:</label>
+                        <input type="text" name="sn" class="sn" value="<?php echo $sn_ref;?>"/>
+                    </div>
+					
+					<div class="form-group">
+						<label>Content:</label>
+						<textarea name='content'><?php if(isset($this->row['content']) AND $this->row['content']) echo $this->row['content']?></textarea>
+						
+					</div>
+
+					<div class="form-group">
+						<label>Note:</label>
+						<textarea name='note'><?php if(isset($this->row['note']) And printf($this->row['note']))?></textarea>							
+					</div>
+
+                    <div class="form-group">
+					<label>File Payment Slip (ขนาดไฟล์ ไม่เกิน 2MB) (*.jpg,jpeg,gif,png)</label>
+						<input type="file" class="span4" id="file" name="file[]" multiple />
+					</div>
+
+					<?php if(isset($this->row['file_pay_slip'])){ ?>
+					<div class="form-group">
+						<label>Payment Slip:</label>
+						<img src="<?php echo $file_pay_slip; ?>" alt="Payment Slip" height="200" width="200">							
+					</div>
+					<?php } ?>
+				</div><!--  End span -->
+
+			</div><!--  End row -->
+			<div class='row'>
+				<div class='span12'>
+					<div class="form-group">
+						<input type='submit' name='add_time' class='form-control btn btn-success' id='btn-add'  value='Save'/>
+						<input type="hidden" class="total_money" name="total_money" id="total_money" value="<?=$total_money?>">
+						<input type="hidden" class="ac" name="ac" id="ac" value="<?=$this->action?>">
+						<input type="hidden" name="back_url" id="back_url" value="/checkmoney/list">
+						<button type="button" class="btn btn-danger go-back">Go back</button>	
+						<input type="hidden" value="<?php if(isset($this->row['id']) AND printf($this->row['id']))?>" name='id'>
+						<input type="hidden" class="id_key" name="id_key" id="id_key" value="<?=$this->id_key;?>">
+					</div>
+				</div>	
+			</div>
+		</form>
+		
+		
+</div>
+<script src="<?php echo HOST?>js/jets.js"></script>
+<script src="<?php echo HOST?>js/jquery-ui.js"></script>
+<script src="<?php echo HOST?>js/jquery.datetimepicker.js"></script>
+<script src="<?php echo HOST?>js/select2.js"></script>
+
+<script>
+
+	
+
+    $(document).ready(function () {
+        var jets = new Jets({
+          searchTag: '#SearchBox',
+          contentTag: '#d_id'
+        });
+
+        initSelectOrderCode();
+        initGoBack();
+        initDatepicker();
+        initAddTransaction();
+        initSelectOrder();
+        loadBank();
+        //$('#company_id').trigger('change');
+        $('input, select').keydown(function(event){
+            if(event.keyCode == 13) {
+                event.preventDefault();
+                return false;
+            }
+        });
+    });
+
+	function Comma(Num) {
+        Num += '';
+        Num = Num.replace(',', ''); Num = Num.replace(',', ''); Num = Num.replace(',', '');
+        Num = Num.replace(',', ''); Num = Num.replace(',', ''); Num = Num.replace(',', '');
+        x = Num.split('.');
+        x1 = x[0];
+        x2 = x.length > 1 ? '.' + x[1] : '';
+        var rgx = /(\d+)(\d{3})/;
+        while (rgx.test(x1))
+            x1 = x1.replace(rgx, '$1' + ',' + '$2');
+        return x1 + x2;
+    }
+
+	function initFormatPrice(){
+
+		$('.price').on('keyup',function(e){
+			
+			if(e.which >= 48 && e.which <= 57 ){
+				var vl = Comma($(this).val());
+				return $(this).val(vl);
+			}
+			return false;
+		});
+	}
+	
+    function loadBank(){
+        $('#company_id').change(function(){
+            var company_id = $(this).val();
+            $.ajax({
+                url: '/get/get-bank',
+                type: 'get',
+                data: {'company_id': company_id},
+                success:function(data){
+                    $('#bank').html('');
+                    var html = '<option value="">CHOOSE BANK</option>';
+                    $.each(data,function(k,v){
+                        html += '<option value="'+k+'">'+ v+'</option>';
+                        $('#bank').html(html);
+                    });
+                }
+            })
+        });
+    }
+
+	function initGoBack(){
+        $('.go-back').click(function(e){
+            window.location.href = $('#back_url').val();
+            return false;
+        });
+    }
+
+    function initDatepicker(){
+        $( ".datepicker" ).datetimepicker({
+            format:'Y-m-d H:i:s'
+        });
+    }
+
+    function initAddTransaction(){
+        $("#add-transaction").submit(function(){
+            $('button, input[type=submit]').prop('disabled', true);
+        });
+
+        // Bắt buộc chọn ngân hàng và ngày nếu là tiền vào   
+        $('input[type="submit"]').click(function(){
+        	var type = $('#type').val();
+        	if(type == 1){
+        		var company_id = $('#company_id').val();
+        		var bank = $('#bank').val();
+        		var pay_time = $('#pay_time').val();
+        		
+        		if(company_id == ''){
+        			alert('Please choose a company');
+        			return false;
+        		}
+				
+        		if( pay_time == '' ){
+        			alert('Please input the time');
+        			return false;	
+        		}
+
+        		var id_key =$('.id_key').val();
+        		var sn =$('.sn').val();
+        		var sum_total_money = 0;
+	        	var total_money = parseFloat($('.total_money').val().split(',').join(''));
+		        var pay_money = parseFloat($('.pay_money').val().split(',').join(''));
+		        var pay_banktransfer = parseFloat($('.pay_banktransfer').val().split(',').join(''));
+		        var pay_servicecharge = parseFloat($('.pay_servicecharge').val().split(',').join(''));
+
+		        sum_total_money = pay_money+pay_banktransfer+pay_servicecharge;
+		        //alert(parseFloat(total_money.toFixed(2)));alert(parseFloat(sum_total_money).toFixed(2));
+		        if(id_key !=''){
+			        if(total_money.toFixed(2) != sum_total_money.toFixed(2))
+			        {
+			            if (confirm('ยอดเงินไม่ถูกต้อง ! ต้องการดำเนินการต่อหรือไม่ ?')) {
+			                return  true;
+			            }else{
+			                return  false;
+			            }
+		       	 	}else{
+		       	 		return true;
+		       	 	}     
+	       	 	}else{
+	       	 		return true;
+	       	 	} 		
+        	}else{
+        		return true;
+        	}
+        });
+    }
+
+    // using select2 jquery plugin
+	function initSelectOrder(){
+	    $("#select-order").select2();
+    }
+
+	function initSelectOrderCode(){
+		
+		$("#d_id").change(function(){
+			var id = $("#d_id").val();
+			$("#select-order").select2("val", "");
+			$.ajax({
+				type: 'post',
+				url: '/checkmoney/getorder',
+				data: { 'id':id },
+				error: function(){
+					alert('error');
+				},
+				success: function(data){
+					var html = '';
+					$.each(data,function(i,item){
+						html += '<option value="'+ item.sn +'">'+item.sn+'</option>'	;
+
+					});
+					$("#select-order").html(html);
+				}
+			})
+		});
+	}
+
+</script>

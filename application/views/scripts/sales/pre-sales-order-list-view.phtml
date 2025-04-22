@@ -1,0 +1,387 @@
+
+
+<div class="page-header">
+    <h1>Sales Request Order View</h1>
+</div>
+
+<?php
+
+if (isset($this->messages) and $this->messages)
+    foreach ($this->messages as $message):
+        echo '<div class="alert alert-error">'.$message.'</div>';
+    endforeach;
+    ?>
+
+    <div class="row">
+       <div class="span12">
+        <iframe name="ifrmSave" id="ifrmSave" width="100%" style="display:none;"></iframe>
+        <form role="form" id="form" action="<?php echo HOST.'sales/save-pre-sales-order-list';?>" method="post" target="ifrmSave" class="form-inline">
+
+            <div class="row">
+                <div class="span5">
+                    <div class="control-group">
+                        <label for="presales_no" class="span2">รหัสการจองสินค้า<span style="color: red">*</span></label>
+                        <input type="text" readonly="true" name="presales_no" id="presales_no" required="required" value="<?php isset($this->get_resule) and $this->get_resule and printf($this->get_resule[0]['presales_no']);?>" />
+                    </div>
+                    <div class="control-group">
+                        <label for="request_staff_code" class="span2">รหัสพนักงานผู้จองสินค้า<span style="color: red">*</span></label>
+                        <input type="text" readonly="true" name="request_staff_code" id="request_staff_code" required="required" value="<?php isset($this->get_resule) and $this->get_resule and printf($this->get_resule[0]['request_staff_code']);?>" />
+                    </div>
+                    <div class="control-group">
+                        <label for="sell_name" class="span2">ผู้จองสินค้า<span style="color: red">*</span></label>
+                        <input type="text" readonly="true" name="sell_name" id="sell_name" required="required" value="<?php isset($this->get_resule) and $this->get_resule and printf($this->get_resule[0]['sell_name']);?>" />
+                    </div>
+                    
+                    <div class="control-group">
+                        <label for="sell_request_date" class="span2">วันที่รับจองสินค้า<span style="color: red">*</span></label>
+                        
+                        <input type="text" readonly="true" class="sell_request_date" name="sell_request_date" id="sell_request_date" required="required" value="<?php isset($this->get_resule) and $this->get_resule and printf($this->get_resule[0]['sell_request_date']);?>" />
+
+                    </div> 
+                    <div class="control-group">
+                        <label for="order_type_name" class="span2">Order Type<span style="color: red">*</span></label>
+                        
+                        <input type="text" readonly="true" class="order_type_name" name="order_type_name" id="order_type_name" required="required" value="<?php isset($this->get_resule) and $this->get_resule and printf($this->get_resule[0]['order_type_name']);?>" />
+
+                    </div> 
+                    <div class="control-group">
+                        <label for="user_cn" class="span2">ใช้ CN <span style="color: red">*</span></label>
+                        
+                        <input type="checkbox" disabled="true" class="user_cn" name="user_cn" <?php if($this->get_resule[0]['use_cn']==1) :?> checked<?php endif;?> />
+
+                    </div> 
+
+                    <br><br>
+                    <?php
+                        $chk_sales_order_no="";$chk_sales_order_no_view="";
+                        $chk_show_cancel= ' style="display: none;" ';
+                        $chk_show_confirm="";
+                        if($this->get_resule[0]['sales_order_no'] !=""){
+                            $chk_sales_order_no= ' style="display: none;" ';
+                        }
+
+                        if($this->get_resule[0]['status'] =="3"){
+                            $chk_sales_order_no= ' style="display: none;" ';
+                            $chk_show_confirm= ' style="display: none;" ';
+                            $chk_show_cancel= '';
+                        }
+                        
+
+                        if($this->get_resule[0]['sales_order_no'] ==""){
+                            $chk_sales_order_no_view= ' style="display: none;" ';
+                            $chk_show_confirm= ' style="display: none;" ';
+                        }
+                    ?>
+                    <div class="control-group"  > 
+                        <label for="status" class="span2">สถานะ<span style="color: red">*</span></label>
+                        <label for="status" <?php echo $chk_show_cancel;?> style="color: red" class="span2">ยกเลิก</label>
+                        <label for="status" <?php echo $chk_show_confirm;?> style="color: green" class="span2">ยืนยันแล้ว</label>
+                        <select <?php echo $chk_sales_order_no; ?> id="status"   name="status" <?php if($this->get_resule[0]['status']==2){echo "disabled";}?>  > <?php if($this->get_resule[0]['status']==3){echo "disabled";}?>  >
+                            <option  <?php if($this->get_resule[0]['status']==0) :?> selected <?php endif;?> value="0" >-- กรุณาเลือก --</option>
+                            <option  <?php if($this->get_resule[0]['status']==2) :?> selected <?php endif;?> value="2" >สร้าง SO และบันทึกรายการ</option>
+                            <option <?php if($this->get_resule[0]['status']==3) :?> selected <?php endif;?> value="3" >ยกเลิกรายการ</option>
+                        </select>
+                    </div> 
+
+                    <div class="control-group">
+                        <label for="sales_order_no" class="span2">เลขที่ SO ที่ได้<span style="color: red">*</span></label>
+                        
+                        <input  type="text" <?php if($this->action_frm=='view'){echo "disabled";}?> class="sales_order_no span2" name="sales_order_no" id="sales_order_no" value="<?php isset($this->get_resule) and $this->get_resule and printf($this->get_resule[0]['sales_order_no']);?>" />
+                        <?php ?>
+                        <a <?php echo $chk_sales_order_no_view; ?> target="_blank" href="<?php echo $this->url_link; ?>">
+                            <button type="button" class="btn btn-success">View</button>
+                        </a>
+                    </div>
+                      
+                    <div class="control-group">
+                        <label for="admin_remark" class="span2">หมายเหตุ</label>
+                        <textarea  id="admin_remark" <?php if($this->action_frm=='view'){echo "disabled";}?> name="admin_remark"><?php isset($this->get_resule) and $this->get_resule and printf($this->get_resule[0]['admin_remark']);?></textarea>
+                    </div> 
+
+                    
+                </div> 
+                <div class="span5">
+                    <div class="control-group">
+                        <label for="title" class="span2">ร้านค้า<span style="color: red">*</span></label>
+                        <input type="text" readonly="true" name="title" id="title" value="<?php isset($this->get_resule) and $this->get_resule and printf($this->get_resule[0]['title']);?>" />
+                    </div>
+                    <div class="control-group">
+                        <label for="sell_remark" class="span2">หมายเหตุ</label>
+                        <textarea id="sell_remark" readonly="true" name="sell_remark"><?php isset($this->get_resule) and $this->get_resule and printf($this->get_resule[0]['sell_remark']);?></textarea>
+                    </div> 
+                    <div class="control-group">
+                        <label for="delivery_address" class="span2">ที่อยู่จัดส่ง</label>
+                        <textarea rows="6" id="delivery_address" readonly="true" name="delivery_address"><?php isset($this->get_resule) and $this->get_resule and printf($this->get_resule[0]['delivery_address']);?></textarea>
+                    </div>
+                </div> 
+
+                <div class="span5"><br><br>
+                    <div class="control-group">
+                        <label for="admin_name" class="span2">Admin ผู้บันทึกรายการ</label>
+                        
+                        <input type="text" readonly="true" class="admin_name" name="admin_name" id="admin_name" value="<?php isset($this->get_resule) and $this->get_resule and printf($this->get_resule[0]['admin_name']);?>" />
+                    </div>
+                    <div class="control-group">
+                        <label for="admin_confirm_date" class="span2">วันที่บันทึกรายการ</label>
+                        
+                        <input type="text" readonly="true" class="admin_confirm_date" name="admin_confirm_date" id="admin_confirm_date" required="required" value="<?php isset($this->get_resule) and $this->get_resule and printf($this->get_resule[0]['admin_confirm_date']);?>" />
+                    </div>
+                </div>      
+            </div>
+            
+            <?php
+                $userStorage = Zend_Auth::getInstance()->getStorage()->read();
+                if (My_Staff_Group::inGroup($userStorage->group_id, array(ADMINISTRATOR_ID, 23)) or ($exception_case and in_array
+                ($userStorage->id, $exception_case))){
+                    $view_create_so="";    //Sales Admin = 23
+                }else{
+                    $view_create_so='style="display: none;"';
+                }
+            ?>
+            <div class="row">
+                <div class="span4">
+                    <div class="control-group">
+                        <input type="hidden" name="presales_sn" id="presales_sn" value="<?php isset($this->get_resule) and $this->get_resule and printf($this->get_resule[0]['presales_sn']);?>" />
+
+                        <input type="hidden" id="back_url" name="back_url" value="/sales/pre-sales-order-list">
+                        <div class="span4">
+                            <button type="submit" id="save" name="save" <?php if($this->action_frm=='view'){echo "disabled";}?> class="btn btn-primary">Update Remark</button>
+                            <button type="button" class="btn btn-danger go-back">Go back</button>
+                            
+                        </div>
+                    </div>
+                    <div class="clearfix"></div>
+                </div>
+            </div>
+        </p>
+        <div class="row">
+            <div class="span8">
+                <table id="return_by_imeiTable" class="table table-bordered">
+                    <thead>
+                        <tr>
+                            <?php echo $this->sorting(array(
+                                '#',
+                                'product_name'  => 'รหัสสินค้า',
+                                'product_detail_name'  => 'ชื่อสินค้า',
+                                'product_color'  => 'สี',
+                                'total_amount'  => 'จำนวน',
+                            ),
+                            $this->url, $this->sort, $this->desc); ?>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <?php 
+                        //print_r($this->get_resule);
+                        
+                        $row=1;
+                        $stock_error_message =0;
+                        $quota_error_message =0;$unit_price=0;
+                        foreach ($this->get_resule as $imei){
+                            //print_r($imei);die;
+                                if($imei['stock_error_message'] !=""){
+                                    $stock_error_message +=1;
+                                }
+                                if($imei['quota_error_message'] !=""){
+                                    $quota_error_message +=1;
+                                }
+                                $unit_price = $imei['total_price']/$imei['qty'];
+                                ?>
+                        <tr>
+                        <td><?php echo $row;?></td>
+                        <td><input type="hidden" name="good_id[]" value="<?php echo $imei['good_id'];?>" /><?php echo $imei['good_name'];?></td>
+                        <td><?php echo $imei['desc'];?></td>
+    <td><input type="hidden" name="good_color[]" value="<?php echo $imei['imei_oppo'];?>-<?php echo $imei['good_color'];?>" /><?php echo $imei['good_color_name'];?></td>
+                        <td><?php echo $imei['qty'];?></td>
+                        </tr>
+                        <?php $row +=1; } ?>
+                    </tbody>
+                </table>
+
+
+            </div>
+        </div> 
+
+    </p>
+        
+
+</div>
+
+</div>
+
+</br>
+
+</form>
+</div>
+</div>
+
+
+<script src="/js/jquery.blockUI.js"></script>
+<script type="text/javascript" src="/js/jets.js"></script>
+<script type="text/javascript" src="/js/jquery-ui-1.8.12.custom.min.js"></script>
+<script src="<?php echo HOST ?>js/tag-it.min.js" type="text/javascript" charset="utf-8"></script>
+
+<style>
+.blockOverlay{
+    z-index: 10000 !important;
+}
+.blockPage{
+    z-index: 10001 !important;
+}
+#SearchBox{
+  width: 360px!important;
+}
+#distributor_id{
+  z-index: 0!important;
+}
+.dropdown{
+  z-index: 2;
+  }.span122 {
+    margin-left: : 25px;
+}
+
+blockOverlay{
+    z-index: 10000 !important;
+}
+.blockPage{
+    z-index: 10001 !important;
+}
+
+</style>
+
+<script src="/js/jquery.blockUI.js"></script>
+<script async="async">
+    //alert(1);
+    $(document).ajaxStart(function(){
+        $.blockUI({ css: { 
+            border: 'none', 
+            padding: '15px', 
+            backgroundColor: '#000', 
+            '-webkit-border-radius': '10px', 
+            '-moz-border-radius': '10px', 
+            opacity: .5, 
+            color: '#fff' 
+        } });
+    });
+
+    $(document).ajaxStop(function(){
+        $.unblockUI();
+    });
+
+    $(document).ready(function () 
+    {
+        initCheckError();
+        initGoBack();
+        $('.sales_order_no').attr('readonly', true);
+        //$('#status').attr('disabled', true);
+     });   
+
+    function initCheckError()
+    {
+        var stock_error_message = $('.stock_error_message').val();
+        var quota_error_message = $('.quota_error_message').val();
+
+        //alert(stock_error_message);alert(quota_error_message);
+        if(stock_error_message>0 || quota_error_message >0){
+           $('#status').attr('disabled', true); 
+        }else{
+           $('#status').attr('disabled', false);
+        }
+        
+    }
+
+    function initGoBack(){
+        //alert(1);
+        $('.go-back').click(function(e){
+            window.location.href = $('#back_url').val();
+            return false;
+        });
+    }
+
+    $('#status').change(function(event)
+    {
+
+      var status = $(this).val();
+      //alert(status);
+      if(status==2){
+        if(confirm('ยืนยันการสร้าง SO ?')) {
+            $('#status').attr('disabled', true);
+            save_order();
+        }else{
+            $(this).val(0);
+        }
+      }else if(status==3){
+        $('#status').attr('disabled', false);
+        /*if(confirm('ยกเลิกรายการ ?')) {
+
+        }*/
+      }
+
+    });
+
+    
+    function save_order()
+    {
+        var presales_sn = $('#presales_sn').val();
+        var unit_price = $('input[name="unit_price[]"]').map(function(){ 
+            return this.value; 
+        }).get();
+
+        var total_price = $('input[name="total_price[]"]').map(function(){ 
+            return this.value; 
+        }).get();
+
+        //var qty = $( "#qty" ).serializeArray();
+        //var total_price = $( "#total_price" ).serializeArray();
+        //return;
+        var form_data = new FormData();
+        form_data.append("presales_sn",presales_sn);
+        form_data.append("unit_price",JSON.stringify(unit_price));
+        form_data.append("total_price",JSON.stringify(total_price));
+
+        $.ajax({
+          url: '/sales/pre-sales-create-sales-order',
+          type : 'POST',
+          cache: false,
+          processData: false,
+          contentType : false,
+          data : form_data
+        }).done(function(data,status){
+            //alert(data.code);
+            var obj = jQuery.parseJSON(data);
+            //alert(obj.code);
+            if (data)
+            {
+                if (obj.code != 1)
+                {
+                    alert(obj.messege);
+                    $('#status').attr('disabled', false);
+                    return false;
+                } else {
+                    //alert(obj.messege);
+                    $.get('<?=HOST?>cron/gen-sn-ref', function( data_sn ) {
+                        
+                    });
+
+                    alert(obj.messege);
+                    setTimeout(window.location.reload(), 300);
+                    $('#status').attr('disabled', true);
+                }
+            } else {
+                alert("Error");
+                $('#status').attr('disabled', false);
+                return false;
+            }
+        });
+
+
+    }
+
+</script>
+<style>
+label input,
+label select {
+  margin-right: 25px;
+}
+</style>
+
+

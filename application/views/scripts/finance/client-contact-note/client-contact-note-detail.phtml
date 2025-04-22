@@ -1,0 +1,623 @@
+<style type="text/css">
+	.td-text-align {
+		font-family: time new romans;
+		font-size: 20px;
+		color: green;
+		padding-bottom: 10px;
+	}
+
+	.td-sub-text-align {
+		font-family: time new romans;
+		font-size: 16px;
+		font-weight: bold;
+		padding-bottom: 10px;
+	}
+
+	.td-space {
+		padding-bottom: 10px;
+		font-weight: bold;
+		font-size: 16px;
+	}
+
+</style>
+
+<div class="page-header">
+	<h1 style="font-family: Times New Roman; font-size: 54px;">Client Contact Note Detail</h1>
+</div>
+
+<?php
+if (isset($this->messages_success) and $this->messages_success)
+	foreach ($this->messages_success as $message):
+		echo '<div class="alert alert-success">'.$message.'</div>';
+	endforeach;
+
+	if (isset($this->messages) and $this->messages)
+		foreach ($this->messages as $message):
+			echo '<div class="alert alert-error">'.$message.'</div>';
+		endforeach;
+		?>
+
+
+		<?php if(isset($this->contactdetail) && $this->contactdetail[0]['type'] == 1): ?>
+
+			<div class="row" style="border-style: solid; padding: 30px 10px 300px 10px; border-color: lavender; margin-right: 0px">
+
+				<div class="span12">
+
+					<h1 style="font-family: time new romans">Sale Order Detail</h1>
+					<hr />
+
+					<div class="row" style="padding-bottom: 50px;">
+						<div class="span6">
+							<div class="row">
+								<div class="span2">
+									<label class="td-text-align">Type <span style="text-align: left;"> : </span></label> 
+								</div>
+								<div class="span4">
+									<label class="td-sub-text-align" style="font-weight: bold;">Sale Order</label>
+								</div>
+							</div>
+
+							<div class="row">
+								<div class="span2">
+									<label class="td-text-align">SN <span style="text-align: left;"> : </span></label> 
+								</div>
+								<div class="span4">
+									<label class="td-sub-text-align"><?php echo $this->data[0]['sn'] ?></label>
+								</div>
+							</div>
+
+							<div class="row">
+								<div class="span2">
+									<label class="td-text-align">Document No <span style="text-align: left;"> : </span></label> 
+								</div>
+								<div class="span4">
+									<label class="td-sub-text-align"><?php echo $this->data[0]['sn_ref'] ?></label>
+								</div>
+							</div>
+
+							<div class="row">
+								<div class="span2">
+									<label class="td-text-align">Sale Order <span style="text-align: left;"> : </span></label> 
+								</div>
+								<div class="span4">
+									<label class="td-sub-text-align"><?php echo $this->staff[$this->data[0]['user_id']] ?></label>
+								</div>
+							</div>
+
+							<div class="row">
+								<div class="span2">
+									<label class="td-text-align">Order Date <span style="text-align: left;"> : </span></label> 
+								</div>
+								<div class="span4">
+									<label class="td-sub-text-align"><?php echo $this->data[0]['add_time'] ?></label>
+								</div>
+							</div>
+
+							<div class="row">
+								<div class="span2">
+									<label class="td-text-align">Bill Date <span style="text-align: left;"> : </span></label> 
+								</div>
+								<div class="span4">
+									<label class="td-sub-text-align"><?php echo $this->data[0]['bill_date'] ?></label>
+								</div>
+							</div>
+
+							<div class="row">
+								<div class="span2">
+									<label class="td-text-align">Bill Remark <span style="text-align: left;"> : </span></label> 
+								</div>
+								<div class="span4">
+									<label class="td-sub-text-align"><?php echo $this->data[0]['bill_remark'] ?></label>
+								</div>
+							</div>
+
+							<div class="row">
+								<div class="span2">
+									<label class="td-text-align">Out Warehouse <span style="text-align: left;"> : </span></label> 
+								</div>
+								<div class="span4">
+									<label class="td-sub-text-align"><?php echo $this->data[0]['outmysql_time'] ?></label>
+								</div>
+							</div>
+						</div>
+
+						<div class="span6">
+							<div class="row">
+								<div class="span2">
+									<label class="td-text-align">Finance Client <span style="text-align: left;"> : </span></label> 
+								</div>
+								<div class="span4">
+									<label class="td-sub-text-align"><?php echo $this->finance_client[$this->data[0]['finance_client_id']] ?></label>
+								</div>
+							</div>
+
+							<div class="row">
+								<div class="span2">
+									<label class="td-text-align">Finance Warehouse <span style="text-align: left;"> : </span></label> 
+								</div>
+								<div class="span4">
+									<label class="td-sub-text-align"><?php echo $this->finance_warehouse[$this->data[0]['finance_warehouse']] ?></label>
+								</div>
+							</div>
+
+							<div class="row">
+								<div class="span2">
+									<label class="td-text-align">Store Code <span style="text-align: left;"> : </span></label> 
+								</div>
+								<div class="span4">
+									<label class="td-sub-text-align"><?php echo $this->store[$this->data[0]['store_id']]['store_code'] ?></label>
+								</div>
+							</div>
+
+							<div class="row">
+								<div class="span2">
+									<label class="td-text-align">Store Name <span style="text-align: left;"> : </span></label> 
+								</div>
+								<div class="span4">
+									<label class="td-sub-text-align"><?php echo $this->store[$this->data[0]['store_id']]['store_name'] ?></label>
+								</div>
+							</div>
+						</div>
+					</div>
+
+					<h1 style="font-family: time new romans">Product Detail</h1>
+					<hr />
+
+					<table class="table">
+						<thead>
+							<tr>
+								<th>Product Model</th>
+								<th>Qulity</th>
+								<th>Unit / Price</th>
+								<th>Total Price</th>
+							</tr>
+						</thead>
+						<tbody>
+							<?php if(isset($this->data) && $this->data) : ?>
+								<?php foreach($this->data as $val) : ?>
+
+									<tr>
+										<td>
+											OPPO <?php echo $this->good[$val['good_id']] ?>
+											<?php echo $this->good_color[$val['good_color']] ?>	
+										</td>
+										<td><?php echo $val['num'] ?></td>
+										<td><?php echo number_format($val['price'],0) ?> LAK</td>
+										<td><?php echo number_format($val['total'],0) ?> LAK</td>
+									</tr>
+
+								<?php endforeach; ?>
+							<?php endif; ?>
+						</tbody>
+					</table>
+
+				</div>
+
+			</div>
+
+		<?php elseif (isset($this->contactdetail) && $this->contactdetail[0]['type'] == 2) : ?>
+
+			<div class="row" style="border-style: solid; padding: 30px 10px 300px 10px; border-color: lavender; margin-right: 0px">
+				<div class="span12">
+					<h1 style="font-family: time new romans">Return Order Detail</h1>
+					<hr />
+
+					<div class="row" style="padding-bottom: 50px;">
+						<div class="span6">
+							<div class="row">
+								<div class="span2">
+									<label class="td-text-align">Type <span style="text-align: left;"> : </span></label> 
+								</div>
+								<div class="span4">
+									<label class="td-sub-text-align" style="font-weight: bold;">Return Order</label>
+								</div>
+							</div>
+
+							<div class="row">
+								<div class="span2">
+									<label class="td-text-align">SN <span style="text-align: left;"> : </span></label> 
+								</div>
+								<div class="span4">
+									<label class="td-sub-text-align"><?php echo $this->data[0]['sn'] ?></label>
+								</div>
+							</div>
+
+							<div class="row">
+								<div class="span2">
+									<label class="td-text-align">Document No <span style="text-align: left;"> : </span></label> 
+								</div>
+								<div class="span4">
+									<label class="td-sub-text-align"><?php echo $this->data[0]['sn_ref'] ?></label>
+								</div>
+							</div>
+
+							<div class="row">
+								<div class="span2">
+									<label class="td-text-align">Sale Order <span style="text-align: left;"> : </span></label> 
+								</div>
+								<div class="span4">
+									<label class="td-sub-text-align"><?php echo $this->staff[$this->data[0]['user_id']] ?></label>
+								</div>
+							</div>
+
+							<div class="row">
+								<div class="span2">
+									<label class="td-text-align">Order Date <span style="text-align: left;"> : </span></label> 
+								</div>
+								<div class="span4">
+									<label class="td-sub-text-align"><?php echo $this->data[0]['add_time'] ?></label>
+								</div>
+							</div>
+
+							<div class="row">
+								<div class="span2">
+									<label class="td-text-align">In Warehouse <span style="text-align: left;"> : </span></label> 
+								</div>
+								<div class="span4">
+									<label class="td-sub-text-align"><?php echo $this->data[0]['outmysql_time'] ?></label>
+								</div>
+							</div>
+						</div>
+
+						<div class="span6">
+							<div class="row">
+								<div class="span2">
+									<label class="td-text-align">Finance Client <span style="text-align: left;"> : </span></label> 
+								</div>
+								<div class="span4">
+									<label class="td-sub-text-align"><?php echo $this->finance_client[$this->data[0]['finance_client_id']] ?></label>
+								</div>
+							</div>
+
+							<div class="row">
+								<div class="span2">
+									<label class="td-text-align">Finance Warehouse <span style="text-align: left;"> : </span></label> 
+								</div>
+								<div class="span4">
+									<label class="td-sub-text-align"><?php echo $this->finance_warehouse[$this->data[0]['finance_warehouse']] ?></label>
+								</div>
+							</div>
+
+							<div class="row">
+								<div class="span2">
+									<label class="td-text-align">Store Code <span style="text-align: left;"> : </span></label> 
+								</div>
+								<div class="span4">
+									<label class="td-sub-text-align"><?php echo $this->store[$this->data[0]['store_id']]['store_code'] ?></label>
+								</div>
+							</div>
+
+							<div class="row">
+								<div class="span2">
+									<label class="td-text-align">Store Name <span style="text-align: left;"> : </span></label> 
+								</div>
+								<div class="span4">
+									<label class="td-sub-text-align"><?php echo $this->store[$this->data[0]['store_id']]['store_name'] ?></label>
+								</div>
+							</div>
+						</div>
+					</div>
+
+					<h1 style="font-family: time new romans">Product Detail</h1>
+					<hr />
+
+					<table class="table">
+						<thead>
+							<tr>
+								<th>Product Model</th>
+								<th>Qulity</th>
+								<th>Unit / Price</th>
+								<th>Total Price</th>
+							</tr>
+						</thead>
+						<tbody>
+							<?php if(isset($this->data) && $this->data) : ?>
+								<?php foreach($this->data as $val) : ?>
+
+									<tr>
+										<td>
+											OPPO <?php echo $this->good[$val['good_id']] ?>
+											<?php echo $this->good_color[$val['good_color']] ?>	
+										</td>
+										<td><?php echo $val['num'] ?></td>
+										<td><?php echo number_format($val['price'],0) ?> LAK</td>
+										<td><?php echo number_format($val['total'],0) ?> LAK</td>
+									</tr>
+
+								<?php endforeach; ?>
+							<?php endif; ?>
+						</tbody>
+					</table>
+
+
+				</div>
+			</div>
+
+
+		<?php elseif (isset($this->contactdetail) && $this->contactdetail[0]['type'] == 3) : ?>
+
+			<div class="row" style="border-style: solid; padding: 30px 10px 300px 10px; border-color: lavender; margin-right: 0px">
+				<div class="span12">
+					<h1 style="font-family: time new romans">Sale Receipt Detail</h1>
+					<hr />
+
+					<div class="row" style="padding-bottom: 50px;">
+						<div class="span6">
+							<div class="row">
+								<div class="span2">
+									<label class="td-text-align">Type <span style="text-align: left;"> : </span></label> 
+								</div>
+								<div class="span4">
+									<label class="td-sub-text-align" style="font-weight: bold;">Sale Receipt</label>
+								</div>
+							</div>
+
+							<div class="row">
+								<div class="span2">
+									<label class="td-text-align">Document No <span style="text-align: left;"> : </span></label> 
+								</div>
+								<div class="span4">
+									<label class="td-sub-text-align"><?php echo $this->data[0]['document_no'] ?></label>
+								</div>
+							</div>
+
+							<div class="row">
+								<div class="span2">
+									<label class="td-text-align">Creator. <span style="text-align: left;"> : </span></label> 
+								</div>
+								<div class="span4">
+									<label class="td-sub-text-align"><?php echo $this->staff[$this->data[0]['created_by']] ?></label>
+								</div>
+							</div>
+
+							<div class="row">
+								<div class="span2">
+									<label class="td-text-align">Creator Date <span style="text-align: left;"> : </span></label> 
+								</div>
+								<div class="span4">
+									<label class="td-sub-text-align"><?php echo $this->data[0]['created_at'] ?></label>
+								</div>
+							</div>
+
+							<?php if($this->data[0]['stm_type'] == 1) : ?>
+
+								<div class="row">
+									<div class="span2">
+										<label class="td-text-align">Settlement Type <span style="text-align: left;"> : </span></label> 
+									</div>
+									<div class="span4">
+										<label class="td-sub-text-align"><?php echo $this->accounttype[$this->data[0]['stm_type']] ?></label>
+									</div>
+								</div>
+
+								<div class="row">
+									<div class="span2">
+										<label class="td-text-align">Bank Account <span style="text-align: left;"> : </span></label> 
+									</div>
+									<div class="span4">
+										<label class="td-sub-text-align"><?php echo $this->bankaccount[$this->data[0]['bank_account']] ?></label>
+									</div>
+								</div>
+
+							<?php else: ?>
+
+								<div class="row">
+									<div class="span2">
+										<label class="td-text-align">Settlement Type <span style="text-align: left;"> : </span></label> 
+									</div>
+									<div class="span4">
+										<label class="td-sub-text-align"><?php echo $this->accounttype[$this->data[0]['stm_type']] ?></label>
+									</div>
+								</div>
+
+							<?php endif; ?>
+
+							<div class="row">
+								<div class="span2">
+									<label class="td-text-align">Pay Date <span style="text-align: left;"> : </span></label> 
+								</div>
+								<div class="span4">
+									<label class="td-sub-text-align"><?php echo $this->data[0]['pay_date'] ?></label>
+								</div>
+							</div>
+						</div>
+
+						<div class="span6">
+							<div class="row">
+								<div class="span2">
+									<label class="td-text-align">Finance Client <span style="text-align: left;"> : </span></label> 
+								</div>
+								<div class="span4">
+									<label class="td-sub-text-align"><?php echo $this->finance_client[$this->data[0]['finance_client']] ?></label>
+								</div>
+							</div>
+
+							<div class="row">
+								<div class="span2">
+									<label class="td-text-align">Dsitributor My <span style="text-align: left;"> : </span></label> 
+								</div>
+								<div class="span4">
+									<label class="td-sub-text-align"><?php echo $this->distributor[$this->data[0]['dis_my']] ?></label>
+								</div>
+							</div>
+
+							<div class="row">
+								<div class="span2">
+									<label class="td-text-align">Distributor You <span style="text-align: left;"> : </span></label> 
+								</div>
+								<div class="span4">
+									<label class="td-sub-text-align"><?php echo $this->distributor[$this->data[0]['dis_you']] ?></label>
+								</div>
+							</div>
+						</div>
+					</div>
+
+					<h1 style="font-family: time new romans">Receipt Detail</h1>
+					<hr />
+
+					<table class="table">
+						<thead>
+							<tr>
+								<th>Store.</th>
+								<th>Finance Client.</th>
+								<th>Amount</th>
+								<th>Finance Date</th>
+							</tr>
+						</thead>
+						<tbody>
+							<?php if(isset($this->data) && $this->data) : ?>
+								<?php foreach($this->data as $val) : ?>
+
+									<tr>
+										<td><?php echo $this->store[$val['store_id']]['store_name'] ?> <?php echo $this->warehouse[$val['warehouse_id']] ?></td>
+										<td><?php echo $this->finance_client[$val['finance_client']] ?></td>
+										<td><?php echo number_format($val['amount'],0) ?></td>
+										<td><?php echo $val['finance_date'] ?></td>
+									</tr>
+
+								<?php endforeach; ?>
+							<?php endif; ?>
+						</tbody>
+					</table>
+
+				</div>
+			</div>
+
+		<?php elseif (isset($this->contactdetail) && $this->contactdetail[0]['type'] == 4) : ?>
+
+			<div class="row" style="border-style: solid; padding: 30px 10px 300px 10px; border-color: lavender; margin-right: 0px">
+				<div class="span12">
+					<h1 style="font-family: time new romans">Sale Refund Detail</h1>
+					<hr />
+
+					<div class="row" style="padding-bottom: 50px;">
+						<div class="span6">
+							<div class="row">
+								<div class="span2">
+									<label class="td-text-align">Type <span style="text-align: left;"> : </span></label> 
+								</div>
+								<div class="span4">
+									<label class="td-sub-text-align" style="font-weight: bold;">Sale Refund</label>
+								</div>
+							</div>
+
+							<div class="row">
+								<div class="span2">
+									<label class="td-text-align">Document No <span style="text-align: left;"> : </span></label> 
+								</div>
+								<div class="span4">
+									<label class="td-sub-text-align"><?php echo $this->data[0]['code'] ?></label>
+								</div>
+							</div>
+
+							<div class="row">
+								<div class="span2">
+									<label class="td-text-align">Creator. <span style="text-align: left;"> : </span></label> 
+								</div>
+								<div class="span4">
+									<label class="td-sub-text-align"><?php echo $this->staff[$this->data[0]['created_by']] ?></label>
+								</div>
+							</div>
+
+							<div class="row">
+								<div class="span2">
+									<label class="td-text-align">Creator Date <span style="text-align: left;"> : </span></label> 
+								</div>
+								<div class="span4">
+									<label class="td-sub-text-align"><?php echo $this->data[0]['created_at'] ?></label>
+								</div>
+							</div>
+
+							<div class="row">
+								<div class="span2">
+									<label class="td-text-align">Pay Date <span style="text-align: left;"> : </span></label> 
+								</div>
+								<div class="span4">
+									<label class="td-sub-text-align"><?php if($this->data[0]['finance_date']): echo $this->data[0]['finance_date']; else: echo "-"; endif; ?></label>
+								</div>
+							</div>
+
+							<div class="row">
+								<div class="span2">
+									<label class="td-text-align">Remark <span style="text-align: left;"> : </span></label> 
+								</div>
+								<div class="span4">
+									<label class="td-sub-text-align"><?php echo $this->data[0]['remark'] ?></label>
+								</div>
+							</div>
+						</div>
+
+						<div class="span6">
+							<div class="row">
+								<div class="span2">
+									<label class="td-text-align">Finance Client <span style="text-align: left;"> : </span></label> 
+								</div>
+								<div class="span4">
+									<label class="td-sub-text-align"><?php echo $this->finance_client[$this->data[0]['finance_client_id']] ?></label>
+								</div>
+							</div>
+
+							<div class="row">
+								<div class="span2">
+									<label class="td-text-align">Refund <span style="text-align: left;"> : </span></label> 
+								</div>
+								<div class="span4">
+									<label class="td-sub-text-align"><?php echo $this->store[$this->data[0]['refund_dealer']] ?> <?php echo $this->warehouse[$this->data[0]['refund_dealer']] ?></label>
+								</div>
+							</div>
+						</div>
+					</div>
+
+					<h1 style="font-family: time new romans">Refund Detail</h1>
+					<hr />
+
+					<table class="table">
+						<thead>
+							<tr>
+								<th>Store.</th>
+								<th>Finance Client.</th>
+								<th>Amount</th>
+								<th>Finance Date</th>
+							</tr>
+						</thead>
+						<tbody>
+							<?php if(isset($this->data) && $this->data) : ?>
+								<?php foreach($this->data as $val) : ?>
+
+									<tr>
+										<td><?php echo $this->store[$val['refund_dealer']]['store_name'] ?> <?php echo $this->warehouse[$val['refund_dealer']] ?></td>
+										<td><?php echo $this->finance_client[$val['finance_client_id']] ?></td>
+										<td><?php echo number_format($val['amount'],0) ?></td>
+										<td><?php if($val['finance_date']) : echo $val['finance_date']; else: echo "-"; endif; ?></td>
+									</tr>
+
+								<?php endforeach; ?>
+							<?php endif; ?>
+						</tbody>
+					</table>
+
+				</div>
+			</div>
+
+		<?php elseif (isset($this->contactdetail) && $this->contactdetail[0]['type'] == 5) : ?>
+
+			<div class="row" style="border-style: solid; padding: 30px 10px 300px 10px; border-color: lavender; margin-right: 0px">
+				<div class="span12">
+					<h1 style="font-family: time new romans">Policy Support Detail</h1>
+					<hr />
+
+				</div>
+			</div>
+
+		<?php elseif (isset($this->contactdetail) && $this->contactdetail[0]['type'] == 6) : ?>
+
+			<div class="row" style="border-style: solid; padding: 30px 10px 300px 10px; border-color: lavender; margin-right: 0px">
+				<div class="span12">
+					<h1 style="font-family: time new romans">Contact Note Detail</h1>
+					<hr />
+
+				</div>
+			</div>
+
+		<?php endif; ?>

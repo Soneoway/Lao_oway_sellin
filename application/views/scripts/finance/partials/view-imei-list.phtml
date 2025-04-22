@@ -1,0 +1,23 @@
+
+
+<div class="modal-header" align="center">
+  <button type="button" class="close" data-dismiss="modal" aria-hidden="true">×</button>
+  <h3 id="myModalLabel">Imei List</h3>
+</div>
+<div class="modal-body">
+<table border=0 width="100%">
+  <?php 
+   $imei_list = $this->imei_list;
+   //print_r($imei_list);
+   	for($i=0;$i<=count($imei_list);$i++){
+      echo "<tr >";
+      echo    '<td style="text-align:center">'.$imei_list[$i]['imei_sn'].'</td>';
+      echo "</tr>";
+  	}
+  ?>
+</table>
+
+</div>
+<div class="modal-footer">
+  <button class="btn" data-dismiss="modal" aria-hidden="true">Close</button>
+</div>

@@ -1,0 +1,308 @@
+<div class="page-header">
+    <h1>List Sales Order</h1>
+</div>
+<?php
+if (isset($this->messages_success) and $this->messages_success)
+    foreach ($this->messages_success as $message):
+        echo '<div class="alert alert-success">'.$message.'</div>';
+    endforeach;
+
+if (isset($this->messages) and $this->messages)
+    foreach ($this->messages as $message):
+        echo '<div class="alert alert-error">'.$message.'</div>';
+    endforeach;
+?>
+<div class="accordion" id="accordion2">
+    <div class="accordion-group">
+        <div class="accordion-heading">
+            <a class="accordion-toggle collapsed" data-toggle="collapse" data-parent="#accordion2" href="#collapseTwo">
+                Search
+            </a>
+        </div>
+        <div id="collapseTwo" class="accordion-body collapse" style="height: 0px;">
+            <div class="accordion-inner">
+                <?php
+                    //echo $this->render('sales/partials/search.phtml');
+                ?>
+            </div>
+        </div>
+    </div>
+</div>
+<style>
+    .red
+    {
+        background: #1B8324;color:white;
+    }
+</style>
+<div class="row">
+    <div class="span12">
+        <h3 class='alert alert-success' style="border-radius: 0px;">
+            PO Name: <?php echo (isset($this->currentPo) AND $this->currentPo) ? $this->currentPo['po_name'] : '';?>    
+        </h3>
+    </div>
+    <div class="span12">
+        <p>
+            <button class="hide-col btn btn-success">Hide</button>
+            <a class="btn btn-primary" href="<?php echo HOST;?>sales?distributor_po=<?php echo $this->currentPo['id'] ?>&export=1">Export</a>
+            <button class="pull-right btn btn-danger del_all_po" type="button" data-po=<?php echo $this->currentPo['id'] ?>>Delete ALL Orders in this PO</button>
+        </p>
+    </div>
+</div>
+<form action="<?php echo HOST.'finance/save-distributor-po'?>" method="post" id="frmDistributorPo">
+    <table class="table table-bordered">
+        <thead>
+        <tr>
+            <?php echo $this->sorting(array(
+                    '#',
+                    '<input type="checkbox" value="" name="check_all" id="check_all"/>',
+                    'sn'                => 'Sale Order Number',
+                    'd_id'              => 'Retailer Name',
+                    'good_id'           => 'Product Name',
+                    'good_color'        => 'Product Color',
+                    'num'               => 'Sales Quantity',
+                    'price'             => 'Sales Price',
+                    'total'             => 'Total',
+                    'pay_time'          => 'Payment or Not',
+                    'shipping_yes_time' => 'Shipping',
+                    'outmysql_time'     => 'Out of Warehouse',
+                    'warehouse_id'      => 'Warehouse',
+                    'status'            => 'Status',
+                    'p.id'              => 'Order Time',
+
+                ),
+                $this->url, $this->sort, $this->desc); ?>
+        </tr>
+        </thead>
+        <tbody>
+        <?php
+            $intTotal = 0;
+            $intCountSn = 0;
+            $intTotalQuantity = 0;
+        if (isset($this->markets_sn) and $this->markets_sn) :
+            foreach ($this->markets_sn as $k=>$m):
+                $dt = DateTime::CreateFromFormat("Y-m-d H:i:s", $m['add_time']);
+                $h = $dt->format('H');
+                $i = $dt->format('i');
+                $d = $dt->format('d');
+                $date = date('d');
+                $intTotal         += $m['total_price'];
+                $intCountSn       += 1;
+                $intTotalQuantity += $m['total_qty'];
+                ?>
+                <tr class="<?php
+                if(isset($h) and isset($i) and ($h >= 16))
+                {
+                    if($date == $d)
+                    {
+                        if($h==16 and $i>=30)
+                            echo 'red';
+                        else if($h > 16)
+                            echo 'red';
+                    }
+                }
+                ?>">
+                    <td>
+                        <a href="#id" rel="<?php echo $m['sn'] ?>" class="collapse_a btn btn-default btn-small" id="m_<?php echo $m['sn'] ?>"><span class="col-sign">+</span><img class="img-loading" src="<?php echo HOST?>img/ajax-loader.gif" style="display: none" /></a>
+                    </td>
+                    <td>
+                        <input type="checkbox" name="sns[]" class="checkItem" value="<?php echo $m['sn']?>"/>
+                    </td>
+                    <td>
+                        <?php echo $m['sn'] ?>
+                        <br />
+                        <a target="_blank" href="<?php echo HOST ?>sales/view?sn=<?php echo $m['sn'] ?>" class="label label-success">View</a>
+                        <a target="_blank" href="<?php echo HOST ?>sales/create?sn=<?php echo $m['sn'] ?>" class="label label-info">Edit</a>
+                        <a target="_blank" href="<?php echo HOST ?>sales/del?sn=<?php echo $m['sn'] ?>" class="label label-important confirmLink">Delete</a>
+                    </td>
+                    <td><?php if (isset($this->distributors2) && $this->distributors2 && isset($this->distributors2[$m['d_id']])) echo $this->distributors2[$m['d_id']]['title']; ?></td>
+                    <td></td>
+                    <td></td>
+                    <td><?php echo $m['total_qty'] ?></td>
+                    <td></td>
+                    <td><?php echo number_format($m['total_price'], 0, ',', '.'); ?></td>
+                    <td><?php if ($m['pay_time']):?><i class="icon-ok"></i><?php else:?><i class="icon-remove"></i><?php endif;?></td>
+                    <td><?php if ($m['shipping_yes_time']):?><i class="icon-ok"></i><?php else:?><i class="icon-remove"></i><?php endif;?></td>
+                    <td><?php if ($m['outmysql_time']):?><i class="icon-ok"></i><?php else:?><i class="icon-remove"></i><?php endif;?></td>
+                    <td><?php if (isset($this->warehouses_cached[$m['warehouse_id']])) echo $this->warehouses_cached[$m['warehouse_id']] ?></td>
+                    <td><?php if ($m['status']==1):?>Active<?php else:?>Expired<?php endif;?></td>
+                    <td><?php echo $m['add_time'] ?></td>
+
+                </tr>
+
+            <?php endforeach;?>
+        <?php endif; ?>
+        </tbody>
+        <tfoot>
+            <tr>
+                <td></td>
+                <td></td>
+                <td>Quantity sn: <?php echo $intCountSn;?></td>
+                <td></td> 
+                <td></td>
+                <td></td>
+                <td>Product: <?php echo $intTotalQuantity;?></td>
+                <td></td>
+                <td><?php echo number_format($intTotal);?></td>
+                <td></td>
+                <td></td>
+                <td></td>
+                <td></td>
+                <td></td>
+                <td></td>
+                
+            </tr>
+        </tfoot>
+    </table>
+    <input type="hidden" name="po_id" value="<?php if( isset($this->po_id) AND $this->po_id) echo $this->po_id;?>"/>
+    <input type="submit" name="submit_po" id='submit_po' value="Submit" class="pull-right btn btn-success btn_ctr"/>
+    <a href="<?php echo HOST.'finance/distributor-po'?>" class="pull-right btn btn-danger btn_ctr">Back</a>
+</form>
+<div class="paging">
+    <?php //echo $this->paging($this->total, $this->limit, $this->offset, $this->url);?>
+</div>
+
+
+<script type="text/javascript" src="/js/jquery-ui-1.8.12.custom.min.js"></script>
+<link rel="stylesheet" type="text/css" href="/css/jquery-ui-1.8.12.custom.css"/>
+<?php echo $this->load();?>
+<?php echo $this->confirm(true);?>
+<script>
+    $(document).ready(function(){
+        $('#submit_po').click(function(){
+            $(this).prop('disabled',true);
+            $("#frmDistributorPo").submit();
+        });
+        $('#submit_po').click(function(){
+            $(this).prop('disabled',true);
+            $("#frmDistributorPo").submit();
+        });
+        check_all();
+        hidenColumn();
+
+        $(".del_all_po").click(del_all_po);
+    });
+    function hidenColumn(){
+        $('.hide-col').click(function(){
+            $('table tr td, table tr th').toggle();
+            $('table tr th:nth-of-type(4),table tr th:nth-of-type(7),table tr th:nth-of-type(13)').toggle();
+            $('table tr td:nth-of-type(4),table tr td:nth-of-type(7),table tr td:nth-of-type(13)').toggle();
+        });
+    }
+    $(".cancel").click(function(e) {
+        e.preventDefault();
+
+        var _self = $(this);
+        var sn = _self.attr('rel');
+
+        $("#dialog").dialog({
+            buttons : {
+                "Confirm" : function() {
+                    $.post('<?php echo HOST ?>get/mark-cancel-order', {sn: sn}, function(data) {
+                        if (data==0){ //success
+                            _self.replaceWith('<span>Canceled</span>');
+                        } else if (data==-1){
+                            alert('Order number is empty!');
+                        } else if (data==-2){
+                            alert('Order number is invalid!');
+                        } else if (data==-3){
+                            alert('Order status is invalid!');
+                        } else if (data==-4){
+                            alert('Cannot update, please try again!');
+                        } else if (data==-5){
+                            alert('You cannot cancel this Order!');
+                        }
+                    });
+                    $(this).dialog("close");
+                },
+                "Cancel" : function() {
+                    $(this).dialog("close");
+                }
+            }
+        });
+
+        $("#dialog").dialog("open");
+    });
+
+    $('.lock').click(function(e){
+        e.preventDefault();
+        alert('Sorry,This information is blocked...You can not delete payment has been made or has been the storage of information!');
+    });
+
+    $('.collapse_a').click(function(){
+        var _this = $(this);
+        var _this_id = _this.attr('id');
+        var sn = _this.attr('rel');
+
+        if (_this.parent().parent().next().hasClass('accordion-body')){
+
+            $('.m_'+sn).toggle();
+
+            if ($('.m_'+sn).is(':visible'))
+                _this.find('.col-sign'). html('-');
+            else _this.find('.col-sign'). html('+');
+
+        } else {
+            _this.find('.col-sign'). html('');
+
+            getMarketDetail(sn);
+        }
+
+    });
+
+    function getMarketDetail(sn){
+        if (! $('#m_'+sn).parent().parent().next().hasClass('accordion-body')){
+            $('#m_'+sn+' .col-sign').html('');
+            $('#m_'+sn+' .img-loading').show();
+
+            $.ajax({
+                type: 'post',
+                url: '/get/market-detail',
+                data: {
+                    'sn': sn,
+                    'list': 'po',
+                    'params': '<?php echo (isset($this->params) ? serialize($this->params) : '')?>'
+                },
+                error: function(){
+                },
+                success: function(data){
+                    $('.m_'+sn).remove();
+                    $('#m_'+sn).parent().parent().after(data);
+                    $('#m_'+sn).find('.col-sign').html('-');
+                    $('#m_'+sn+' .img-loading').hide();
+                }
+            });
+        }
+    }
+
+    function check_all(){
+        $('#check_all').click(function () {
+            var _this = $(this);
+            if( _this.is(':checked') == true ){
+                $(".checkItem").prop('checked',true);
+            }else{
+                $(".checkItem").prop('checked',false);
+            }
+        });
+
+        $('.checkItem').click(function(){
+            var _this = $(this);
+            if( _this.is(':checked') == true ){
+
+            }else{
+                $('#check_all').prop('checked',false);
+            }
+        });
+    }
+
+    function del_all_po(e) {
+        e.preventDefault();
+        po = $('.del_all_po').data('po');
+        if (!po) return false;
+
+        alertify.prompt("Nhập chữ 'OK' vào ô bên dưới", function(e, str) {
+            if (e && str == 'OK') {
+                window.location.href = "<?php echo HOST ?>sales/del-po?po_id="+po;
+            }
+        }, '');
+    }
+</script>

@@ -1,0 +1,156 @@
+<link href="<?php echo HOST ?>css/bootstrap.min.css" rel="stylesheet" />
+<link href="<?php echo HOST ?>css/default.css" rel="stylesheet" />
+
+
+<style>
+    body {
+        background: #f9f6f1;
+        padding: 10px;
+    }
+
+    .info {
+        margin-bottom: 20px;
+    }
+
+    .tbl_col1_list{width:10px;padding: 5px;text-align: center;}
+    .tbl_col2_list{width:200px;padding: 5px;}
+    .tbl_col3_list{width:200px;padding: 5px;}
+    .tbl_col4_list{width:30px;margin-left: 50px;text-align: left;padding: 5px;}
+
+
+</style>
+<div id="content_wrapper">
+    
+    <?php if (isset($this->error) && $this->error): ?>
+        <div class="alert alert-error">
+            <button type="button" class="close" data-dismiss="alert">&times;</button>
+            <strong>ERROR!</strong> <?php echo $this->error ?>
+        </div>
+    <?php elseif(isset($this->number_of_order)): ?>
+        <div class="row info">
+            <div class="span3">
+                <strong>Number of import</strong>: <span class="badge"><?php echo $this->number_of_order ?></span>
+            </div>
+            <div class="span3">
+                <strong>Success</strong>: <span class="badge badge-success"><?php echo $this->number_of_order - count($this->error_list) ?></span>
+            </div>
+            <div class="span3">
+                <strong>Failed</strong>: <span class="badge badge-warning"><?php echo count($this->error_list) ?></span>
+            </div>
+
+        </div>
+
+        <div class="row">
+            <div class="span12">
+                <legend>List of Check Imei Stock</legend>
+                <table class="table table-bordered">
+                    <thead>
+                        <tr>
+                            <th class="tbl_col1_list">No</th>
+                            <th class="tbl_col2_list">Name</th>
+                            <th class="tbl_col3_list">Result</th>
+                            <th class="tbl_col4_list">File Export</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr>
+                            <td>1</td>
+                            <td>รายการ Imei ที่ตรวจสอบทั้งหมด</td>
+                            <td><?php echo number_format($this->total_imei_import,0); ?></td>
+                            <td></td>
+                        </tr>
+                        <tr>
+                            <td>2</td>
+                            <td>รายการ Imei ที่พบในระบบ</td>
+                            <td><?php 
+                            echo number_format($this->total_imei_exist,0); ?> </td>
+                            <td></td>
+                        </tr>
+                        <tr>
+                            <td>3</td>
+                            <td>รายการ Imei ที่ไม่พบในระบบ</td>
+                            <td><?php echo number_format($this->total_imei_no_exist,0);?> </td>
+                            <td><a class="btn btn-success btn-mini" href="<?php echo HOST ?>warehouse/check-stock-imei?export=1">Download File</a></td>
+                        </tr>
+                        <tr>
+                            <td>4</td>
+                            <td>รายการ Imei ที่ควรอยู่ในคลัง</td>
+                            <td><?php echo number_format($this->total_imei_all_no_sales_out,0);?> </td>
+                            <td><a class="btn btn-success btn-mini" href="<?php echo HOST ?>warehouse/check-stock-imei?export=2">Download File</a></td>
+                        </tr>
+                        <tr>
+                            <td>5</td>
+                            <td>รายการ Imei ที่ควรอยู่ในคลังแต่หายไป</td>
+                            <td><?php echo number_format($this->total_imei_no_sales_out,0);?> </td>
+                            <td><a class="btn btn-success btn-mini" href="<?php echo HOST ?>warehouse/check-stock-imei?export=3">Download File</a></td>
+                        </tr>
+                        <tr>
+                            <td>6</td>
+                            <td>รายการ Imei ที่ไม่ควรอยู่ในคลัง</td>
+                            <td><?php echo number_format($this->total_imei_have_sales_out,0);?> </td>
+                            <td><a class="btn btn-success btn-mini" href="<?php echo HOST ?>warehouse/check-stock-imei?export=4">Download File</a></td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+        </div>
+
+        <div class="row">
+            <?php if (isset($this->error_file) && $this->error_file): ?>
+                <div class="span12">
+                    <p>
+                        You can download and modify <strong>ERROR</strong> orders file:
+                        <strong><a href="<?php echo $this->error_file ?>">Click here to download</a></strong>
+                    </p>
+                </div>
+            <?php endif ?>
+
+            <?php if (isset($this->success_file) && $this->success_file): ?>
+                <div class="span12">
+                    <p>
+                        You can download and view <strong>SUCCESSFUL</strong> orders file:
+                        <strong><a href="<?php echo $this->success_file ?>">Click here to download</a></strong>
+                    </p>
+                </div>
+            <?php endif ?>
+        </div>
+
+        <div class="row">
+            <div class="span12">
+                <?php if (isset($this->error_list) && $this->error_list): ?>
+                <legend>List of failed</legend>
+                <table class="table table-bordered">
+                    <thead>
+                        <tr>
+                            <th>Imei SN</th>
+                            <th>Reason</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <?php foreach ($this->error_list as $key => $row): ?>
+                            <tr>
+                                <td><?php echo $row['imei_sn']?></td>
+                                <td><?php echo $row['message']?></td>
+                            </tr>
+                        <?php endforeach ?>
+                    </tbody>
+                </table>
+                <?php endif ?>
+            </div>
+        </div>
+    <?php else: ?>
+
+    <?php endif ?>
+</div>
+<script>
+    parent.$('.loading, .pre_loading').remove();
+    parent.$('form button, form input, form select').prop('readonly', false);
+    parent.$('form input').val('');
+    parent.clear_interval();
+    parent.window.onbeforeunload = null;
+
+    function clear_content() {
+        document.getElementById('content_wrapper').innerHTML = '';
+    }
+</script>
+

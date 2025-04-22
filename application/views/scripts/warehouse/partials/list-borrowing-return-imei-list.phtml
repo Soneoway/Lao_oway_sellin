@@ -1,0 +1,201 @@
+<style>
+    .color-timeout{
+        background-color: #FF9797;
+    }
+    .color-wroning{
+        background-color: #F4EFAF;
+    }
+
+    .blockOverlay{
+        z-index: 10000 !important;
+    }
+    .blockPage{
+        z-index: 10001 !important;
+    }
+</style>
+
+<?php 
+    $userStorage = Zend_Auth::getInstance()->getStorage()->read();
+?>
+
+<?php if (My_Staff_Group::inGroup($userStorage->group_id, WAREHOUSE_LEADER) || $userStorage->group_id == ADMINISTRATOR_ID )
+            { ?>
+<button class="btn btn-success pull-right" id="attach-return">Return Imei</button>
+
+<?php } ?>
+
+<?php if (My_Staff_Group::inGroup($userStorage->group_id, FINANCE) || $userStorage->group_id == ADMINISTRATOR_ID )
+            { ?>
+<button class="btn btn-info pull-right" style="margin-right: 15px; margin-bottom: 15px;" id="attach-so">Prepare Create So</button>
+<?php } ?>
+
+<table class="table table-bordered">
+    <thead>
+        <tr>
+            <?php 
+
+                echo $this->sorting(array(
+                    'All <input type="checkbox" class="check_all" name="check_all" />',
+                    'imei' => 'IMEI Number',
+                    'good_model' => 'Product Code',
+                    'good_name' => 'Product Name',
+                    'good_color' => 'Product Color',
+                    'rq' => 'Request Number',
+                    'product_grade' => 'Grade',
+                    'hrs_department_name' => 'Type',
+                    'code' => 'Code',
+                    'fullname' => 'Request By',
+                    'position_name' => 'Position',
+                    'name' => 'Area',
+                    'created_date' => 'Request Date',
+                    'first_sn_ref' => 'Co Issued Number',
+                    'completed_date' => 'Receive Date',
+                    'org_full_name' => 'ORG Full Name',
+                    'event_program_name' => 'Event / Program Name',
+                    'event_program_start_period_date' => 'Event / Program Start Period',
+                    'return_date' => 'Event / Program End Period',
+                    'update_datetime' => 'Return Date',
+                    'sn_ref' => 'Co Closed Number',
+                    'status' => 'Status',
+                    'Monitoring Flag',
+                    'remark' => 'Remark'
+                ),
+                $this->url, $this->sort, $this->desc); 
+
+                ?>
+        </tr>
+    </thead>
+    <tbody>
+        <?php if (isset($this->data) and $this->data) :
+            foreach ($this->data as $key => $value):
+                $date1=date_create($value['return_date']);
+                $date2=date_create(date('Y-m-d'));
+                $diff=date_diff($date2,$date1);
+                $diffDate = $diff->format("%R%a");
+
+                $bucket_status = 'Open';
+                    $update_datetime = '';
+
+                    if($value['status'] == '13' || $value['status'] == '14'){
+                        $update_datetime = $value['imei_return_date'];
+                        if($update_datetime || !$value['return_date']){
+                            $bucket_status = 'Closed';
+                        }
+                    }
+
+                    // $so_lose = '';
+
+                    // if($value['first_sn_ref'] != $value['sn_ref']){
+                    //     if($textMissing != ''){
+                    //         $so_lose = 'Lose';
+                    //     }else{
+                    //         $so_lose = $value['sn_ref'];
+                    //     }
+                    // }
+
+                    $text_diffDate = '';
+
+                    if($diffDate < 0 && $bucket_status == 'Open'){
+                        $text_diffDate = '! (' . $diffDate . ' Day)';
+                    }
+
+        ?>
+            <tr class="<?php
+                if($diffDate <= 0 && $text_diffDate != ''){
+                    echo 'color-timeout';
+                }else if($diffDate > 0 && $diffDate <= 15 && $text_diffDate != ''){
+                    echo 'color-wroning';
+                }
+            ?>">
+                <td>
+                    <?php if($value['return_status'] == 1){ ?>
+                        <input type="checkbox" name="id" class="attach-id" data-imei="<?php echo $value['imei'] ?>" data-id="<?php echo $value['id'] ?>">
+                    <?php } ?>
+                </td>
+                <td><?=$value['imei']?></td>
+                <td><?=$value['good_model']?></td>
+                <td><?=$value['good_name']?></td>
+                <td><?=$value['good_color']?></td>
+                <td><?=$value['rq']?></td>
+                <td><?php switch ($value['product_grade']) {
+                    case '1':
+                        echo 'A';
+                        break;
+                    case '2':
+                        echo 'B';
+                        break;
+                    case '3':
+                        echo 'Demo';
+                        break;
+                    case '4':
+                        echo 'APK';
+                        break;
+                    case '5':
+                        echo 'Prototype';
+                        break;
+                } ?></td>
+                <!-- <td><?php switch ($value['borrowing_type']) {
+                    case '1':
+                        // echo 'Demo for Event';
+                        echo 'เบิกยืมพนักงาน';
+                        break;
+                    case '2':
+                        // echo 'Complimentary';
+                        echo 'อภินันทนาการ';
+                        break;
+                    case '3':
+                        // echo 'Replace Customer Service';
+                        echo 'เบิกเปลี่ยนเครื่องลูกค้า';
+                        break;
+                    case '4':
+                        echo 'Prototype';
+                        break;
+                } ?></td> -->
+                <td><?=$value['hrs_department_name']?></td>
+                <td><?=$value['code']?></td>
+                <td><?=$value['fullname']?></td>
+                <td><?=$value['position_name']?></td>
+                <td><?=$value['name']?></td>
+                <td><?=$value['created_date']?></td>
+                <td><?=$value['first_sn_ref']?></td>
+                <td><?=$value['completed_date']?></td>
+                <td><?=$value['org_full_name']?></td>
+                <td><?=$value['event_program_name']?></td>
+                <td><?=$value['event_program_start_period_date']?></td>
+                <td><?=$value['return_date'] ? $value['return_date'] : 'No Return'?></td>
+                <td><?=$update_datetime?></td>
+                <td><?=$value['co_return']?></td>
+                <!-- <td><?=$so_lose?></td> -->
+                <td><?=$bucket_status?></td>
+                <td><?=$text_diffDate?></td>
+                <td><?=$value['remark']?></td>
+            </tr>
+
+            <?php endforeach;?>
+        <?php endif; ?>
+    </tbody>
+</table>
+                
+<div class="paging">
+    <?php echo $this->paging($this->total, $this->limit, $this->offset, $this->url);?>
+</div>
+
+<script src="/js/jquery.blockUI.js"></script>
+
+<script>
+    $(document).ajaxStart(function(){
+        $.blockUI({ css: { 
+            border: 'none', 
+            padding: '15px', 
+            backgroundColor: '#000', 
+            '-webkit-border-radius': '10px', 
+            '-moz-border-radius': '10px', 
+            opacity: .5, 
+            color: '#fff' 
+        } });
+    });
+
+    $(document).ajaxStop(function(){
+        $.unblockUI();
+    });
+</script>

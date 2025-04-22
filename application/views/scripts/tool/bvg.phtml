@@ -1,0 +1,174 @@
+<div class="page-header">
+    <h1>Check BVG</h1>
+</div>
+<style>
+	textarea {
+		resize: none;
+	}
+</style>
+<form role="form" id="timing_form" action="<?php echo HOST.'tool/export-excel-bvg';?>" method="post" enctype="multipart/form-data" class="form-inline">
+	<div class="row-fluid">
+        <div class="span3">
+	    	<p>Fill in IMEI, one per line.</p>
+        	<label for="" class="">IMEI Code: <span><strong id="num_imei">0</strong> IMEI(s)</span></label>
+        </div>
+        <div class="span5">
+        	<div class="control-group">
+        		<input type="checkbox" id="auto" name="auto" checked="checked" value="1" />
+        		<label for="auto">Auto check IMEI when scanning</label>
+        	</div>
+        	<p id="checking"></p>
+        </div>
+    </div>
+	<div class="row-fluid">
+        <div class="span3">
+        	<div class="control-group">
+        		<textarea name="imei" id="imei" cols="20" rows="20" required="required"></textarea>
+        	</div>
+        	<div class="clearfix"></div>
+	        	<div class="control-group">
+	        	<button id="valid_btn" type="button" class="btn btn-primary">Get Info</button>
+	            <button  id="export_excel" type="submit" class="btn btn-success">Export</button>
+	        	<span></span>
+        	</div>
+        </div>
+        <div class="span5">
+        	<div id="check_res"></div>
+	    </div>
+        <div class="clearfix"></div>
+	</div>
+</form>
+<div class="row-fluid">
+	<div class="span12">
+		<div class="ajax-load">
+			
+		</div>
+	</div>
+</div>
+<script>
+	$(document).ready(function(){
+	    /**
+ * $('#export_excel').click(function(){
+ * 			_self = $(this);
+ * 			_self.nextAll('span').addClass('loading');
+ * 			imei = $('#imei').val();
+ * 			$.post(
+ * 				"<?php echo HOST . 'tool/check-imei'?>",
+ * 				{
+ * 					value : imei,
+ *                     export: 1,
+ * 					is_check : 1
+ * 				},
+ * 				function(data){
+ * 					$('.ajax-load').html(data);
+ * 					_self.nextAll('span').removeClass('loading');
+ * 			});
+ * 		});
+ */
+
+       
+	   	$('#valid_btn').click(function(){
+			_self = $(this);
+			_self.nextAll('span').addClass('loading');
+			imei = $('#imei').val();
+			$.post(
+				"<?php echo HOST . 'tool/check-bvg'?>",
+				{
+					value : imei,
+					is_check : 1
+				},
+				function(data){
+					$('.ajax-load').html(data);
+					_self.nextAll('span').removeClass('loading');
+			});
+		});
+
+		initShowIMEINum();
+		checkIMEI();
+	});
+ 
+
+
+
+	function initShowIMEINum(){
+        $('#imei').keyup(function (e){
+
+            var inputnum = 0;
+
+            if ($(this).val() != '')
+                inputnum = ($(this).val().split("\n").length).toString();
+
+
+            $('#num_imei').html(inputnum);
+
+        });
+    }
+
+    function checkIMEI() {
+    	var pressed = false; 
+	    var chars = []; 
+	    $(window).keypress(function(e) {
+	        if (e.which >= 48 && e.which <= 57) {
+	            chars.push(String.fromCharCode(e.which));
+	        }
+
+	        if (pressed == false) {
+	            setTimeout(function(){
+	                if (chars.length >= 10) {
+
+	                    // chỉ check ajax khi check vào checkbox
+	                    var n = $( "#auto:checked" ).length;
+				    	if (n == 1) {
+	                    var barcode = chars.join("");
+
+	                		$('#checking').html('<span class="loading"></span>checking...');
+
+		                    // AJAX checking
+		                    $.post('<?php echo HOST ?>tool/check-imei-out', {imei: barcode}, function(data) {
+		                    	text = '';
+
+		                    	switch (data) {
+		                    		case '1':
+		                    			text = '<div class="alert alert-success"><strong>OK</strong></div>';
+	                    				break;
+	                    			case '0':
+	                    				text = '<div class="alert alert-error"><strong>IMEI ' + barcode + ' NOT in warehouse</strong></div>';
+	                					break;
+	                				case '-1':
+	                    				text = '<div class="alert alert-warning"><strong>No data sent to server</strong></div>';
+	                					break;
+	                				case '-2':
+	                    				text = '<div class="alert alert-error"><strong>IMEI ' + barcode + ' in WRONG FORMAT</strong></div>';
+	                					break;
+	            					case '-3':
+	                    				text = '<div class="alert alert-warning"><strong>IMEI ' + barcode + ' is RETURNED and CANNOT back to sales</strong></div>';
+	                					break;
+	            					default:
+	            						text = '<div class="alert alert-warning"><strong>Unknown Error ' + data+ '</strong></div>';
+	            						break;
+		                    	}
+	                    			
+                    			$('#checking').html('');
+
+	                    		if ( $('#check_res .alert').length >= 7 ) {
+	                    			$('#check_res .alert').first().remove();
+	                    		}
+                    			
+                    			$('#check_res').append(text);
+		                    });
+						}
+	                }
+	                chars = [];
+	                pressed = false;
+	            },300);
+	        }
+	        pressed = true;
+	    });
+		
+		$("#barcode").keypress(function(e){
+		    if ( e.which === 13 ) {
+
+		    }
+		});
+    }
+</script>

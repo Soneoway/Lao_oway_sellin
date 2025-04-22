@@ -1,0 +1,61 @@
+<table class="table table-bordered">
+    <thead>
+        <tr>
+            <?php echo $this->sorting(array(
+                    'id'=>'ID',
+                    'sn'=>'PO number',
+                    'staff_username'=>'PO name',
+                    'good_category_name'=>'Product Category',
+                    'good_name'=>'Product',
+                    'good_color_name'=>'Color',
+                    'num'=>'Quantity',
+                    'price'=>'Price',
+                    'Payment',
+                    'Whether to enter the warehouse',
+                    'warehouse_name'=>'Purchaser',
+                    'Remark',
+                    'created_at'=>'Order time',
+                    'Action'
+                ),
+                $this->url, $this->sort, $this->desc); ?>
+        </tr>
+    </thead>
+    <tbody>
+        <?php
+        if (isset($this->POs) and $this->POs)
+            foreach ($this->POs as $k=>$PO): 
+
+        $sn_ref = $PO['sn_ref'];
+         if($sn_ref==''){
+            $sn_ref = $PO['sn'];
+         }
+            ?>
+        <tr>
+            <td><?php echo $PO['id'];?></td>
+            <td><?php echo $sn_ref;?></td>
+            <td><?php echo $PO['staff_username'];?></td>
+            <td><?php echo $PO['good_category_name'];?></td>
+            <td><?php echo $PO['brand_name']; ?> <?php echo $PO['good_name'];?></td>
+            <td><?php echo $PO['good_color_name'];?></td>
+            <td><?php echo $PO['num'];?></td>
+            <td><?php echo My_Number::f($PO['price']);?></td>
+            <td><?php if ($PO['flow']):?><i class="icon-ok"></i><?php else:?><i class="icon-remove"></i><?php endif;?></td>
+            <td><?php if ($PO['mysql_user']):?><i class="icon-ok"></i><?php else:?><i class="icon-remove"></i><?php endif;?></td>
+            <td><?php echo $PO['warehouse_name'];?></td>
+            <td><?php echo $PO['text'];?></td>
+            <td><?php echo $PO['created_at'];?></td>
+            <td class="">
+                <a title="Confirming" href="/finance/po-confirm?id=<?php echo $PO['id'];?>"> <i class="icon-ok"></i></a>
+            </td>
+        </tr>
+        <?php endforeach;?>
+
+    </tbody>
+</table>
+<div class="paging">
+    <?php echo $this->paging($this->total, $this->limit, $this->offset, $this->url);?>
+</div>
+
+<script type="text/javascript" src="/js/jquery-ui-1.8.12.custom.min.js"></script>
+<link rel="stylesheet" type="text/css" href="/css/jquery-ui-1.8.12.custom.css"/>
+<?php echo $this->load();?>

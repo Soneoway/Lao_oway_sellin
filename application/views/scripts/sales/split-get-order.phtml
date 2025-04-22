@@ -1,0 +1,66 @@
+<?php if (isset($this->error) && $this->error): ?>
+    <div class="alert alert-error">
+        <button type="button" class="close" data-dismiss="alert">&times;</button>
+        <strong>Error!</strong> <?php echo $this->error ?>
+    </div>
+<?php endif ?>
+
+<?php if (isset($this->order) && $this->order): ?>
+    <style type="text/css">
+        #total {
+            font-weight: bold;
+        }
+    </style>
+
+    <div class="row">
+        <div class="span12">
+            <p id="total"></p>        
+        </div>
+    </div>
+
+    <table class="table">
+        <thead>
+            <tr>
+                <th>#</th>
+                <th>IMEI</th>
+                <th>SN</th>
+                <th>RETAILER NAME</th>
+                <th>PRODUCT NAME</th>
+                <th>PRODUCT COLOR</th>
+                <th>PRICE</th>
+            </tr>
+        </thead>
+
+        <tbody>
+            <?php foreach ($this->order as $key => $item): ?>
+                <tr data-total="<?php printf('%0d', $item['price']) ?>" class="item">
+                    <td><input type="checkbox" data-market-id="<?php echo $item['market_id'] ?>" data-imei-id="<?php echo $item['imei_id'] ?>" class="checkbox"></td>
+                    <td><?php echo $item['imei_sn'] ?></td>
+                    <td><?php echo $item['sn'] ?></td>
+                    <td><?php if(isset($this->distributor_cache[ $item['d_id'] ])) echo $this->distributor_cache[ $item['d_id'] ] ?></td>
+                    <td><?php if(isset($this->good_cache[ $item['good_id'] ])) echo $this->good_cache[ $item['good_id'] ] ?></td>
+                    <td><?php if(isset($this->good_color_cache[ $item['good_color'] ])) echo $this->good_color_cache[ $item['good_color'] ] ?></td>
+                    <td><?php echo $item['price'] ?></td>
+                </tr>
+            <?php endforeach ?>
+        </tbody>
+    </table>
+
+    <script type="text/javascript">
+        $('.checkbox').click(function() {
+            total = 0;
+
+            $('.item :checkbox:checked').each(function() {
+                total += $(this).parents('.item').data('total');
+            });
+
+            $('#total').text(total.formatMoney(0));
+        });
+    </script>
+<?php else: ?>
+    <div class="alert alert-warning">
+        <button type="button" class="close" data-dismiss="alert">&times;</button>
+        <strong>Warning!</strong> Order not found
+    </div>
+<?php endif ?>
+

@@ -1,0 +1,282 @@
+<meta http-equiv="refresh" content="30"/>
+
+<link rel="stylesheet" type="text/css" href="/css/jquery-ui-1.8.12.custom.css"/>
+
+<?php 
+
+$data = array();
+if (isset($this->SelectStaff) and $this->SelectStaff)
+    $user = array();
+    $product = array();
+    foreach ($this->SelectStaff as $staff):
+        $user[$staff['user']] = 0;
+        $product[$staff['user']] = 0;
+    endforeach;
+     foreach ($this->ScanMarketUnit as $scan):
+        if(isset($user[$scan['outmysql_user']])){
+            $user[$scan['outmysql_user']]++;
+         
+        }
+
+     endforeach;
+     foreach ($this->UnitProduct as $scan2):
+
+        if(isset($product[$scan2['outmysql_user']])){
+            
+            $product[$scan2['outmysql_user']] += $scan2['sum'];
+        }
+       
+     endforeach;
+     
+    foreach($user as $key=>$val):
+        $data[] = "['".$this->staffs[$key]."',".$val."]";
+    endforeach;
+    foreach($product as $key=>$val):
+        $data2[] = "['".$this->staffs[$key]."',".$val."]";
+    endforeach;
+    if (!isset($this->params['invoice_time_from'])) {
+        $show_date = $this->params['date_now'];
+    }elseif (isset($this->params['invoice_time_from']) and $this->params['invoice_time_from']) {
+        $show_date = $this->params['invoice_time_from'].' to '. $this->params['invoice_time_to'];
+    }
+
+    
+?>
+<script type="text/javascript">
+    $(function () {
+
+        $('#new').highcharts({
+            chart: {
+                type: 'column'
+            },
+            title: {
+                text: 'Invoice <?PHP echo $this->warehouses_cached[$this->params["warehouse_id"]] ?>( Total  <?PHP echo array_sum($user) ?> ) | Product <?PHP echo $this->warehouses_cached[$this->params["warehouse_id"]] ?>( Total  <?PHP echo array_sum($product) ?> ) '
+            },
+            subtitle: {
+                text: 'Date: <?PHP echo $show_date ?>'
+            },
+            xAxis: {
+                type: 'category',
+                labels: {
+                    rotation: -45,
+                    style: {
+                        fontSize: '13px',
+                        fontFamily: 'Verdana, sans-serif'
+                    }
+                }
+            },
+            yAxis: {
+                min: 0,
+                title: {
+                    text: 'Scanner'
+                }
+            },
+
+            legend: {
+                enabled: true
+            },
+            tooltip: {
+                pointFormat: 'Invoice: <b>{point.y} </b>',
+                pointFormat: 'Product: <b>{point.y} </b>'
+            },
+
+            series: [{
+                name: 'Invoice',
+                data: [<?php echo join($data, ',') ?>],
+                dataLabels: {
+                    enabled: true,
+                    rotation: 0,
+                    color: '#000000',
+                    align: 'right',
+                    format: '{point.y}', // one decimal
+                    y: 0, // 10 pixels down from the top
+                    x: 0,
+                    style: {
+                        fontSize: '12px',
+                        fontFamily: 'Verdana, sans-serif',
+                        color: '#00925F'
+                    }
+                }
+            },
+            {
+                color: '#ed6d00',
+                name: 'Product',
+                data: [<?php echo join($data2, ',') ?>],
+                dataLabels: {
+                    enabled: true,
+                    rotation: 0,
+                    color: '#000000',
+                    align: 'right',
+                    format: '{point.y}', // one decimal
+                    y: 0, // 10 pixels down from the top
+                    x: 0,
+                    style: {
+                        fontSize: '12px',
+                        fontFamily: 'Verdana, sans-serif',
+                        color: '#00925F'
+                    }
+                }
+            }]
+        });
+
+
+        $('#container').highcharts({
+            chart: {
+                type: 'column'
+            },
+            title: {
+                text: 'Scan Out Report <?PHP echo $this->warehouses_cached[$this->params["warehouse_id"]] ?>( Total  <?PHP echo array_sum($user) ?> ) '
+            },
+            subtitle: {
+                text: 'Date: <?PHP echo $show_date ?>'
+            },
+            xAxis: {
+                type: 'category',
+                labels: {
+                    rotation: -45,
+                    style: {
+                        fontSize: '13px',
+                        fontFamily: 'Verdana, sans-serif'
+                    }
+                }
+            },
+            yAxis: {
+                min: 0,
+                title: {
+                    text: 'Invoice'
+                }
+            },
+
+            legend: {
+                enabled: true
+            },
+            tooltip: {
+                pointFormat: 'Invoice: <b>{point.y:.1f} </b>'
+            },
+
+            series: [{
+                name: 'Scanner',
+                data: [<?php echo join($data, ',') ?>],
+                dataLabels: {
+                    enabled: true,
+                    rotation: 0,
+                    color: '#000000',
+                    align: 'right',
+                    format: '{point.y:.1f}', // one decimal
+                    y: 0, // 10 pixels down from the top
+                    x: 0,
+                    style: {
+                        fontSize: '12px',
+                        fontFamily: 'Verdana, sans-serif',
+                        color: '#00925F'
+                    }
+                }
+            }]
+        });
+ 
+
+        $('#product').highcharts({
+            chart: {
+                type: 'column'
+            },
+            title: {
+                text: 'Scan Out Report Product <?PHP echo $this->warehouses_cached[$this->params["warehouse_id"]] ?>( Total  <?PHP echo array_sum($product) ?> ) '
+            },
+            subtitle: {
+                text: 'Date: <?PHP echo $show_date ?>'
+            },
+            xAxis: {
+                type: 'category',
+                labels: {
+                    rotation: -45,
+                    style: {
+                        fontSize: '13px',
+                        fontFamily: 'Verdana, sans-serif'
+                    }
+                }
+            },
+            yAxis: {
+                min: 0,
+                title: {
+                    text: 'Product'
+                }
+            },
+            
+            legend: {
+                enabled: true
+            },
+            tooltip: {
+                pointFormat: 'Product: <b>{point.y:.1f} Unit</b>'
+            },
+
+            series: [{
+                color: '#00925f',
+                name: 'Scanner',
+                data: [<?php echo join($data2, ',') ?>],
+                dataLabels: {
+                    enabled: true,
+                    rotation: 0,
+                    color: '#000000',
+                    align: 'right',
+                    format: '{point.y:.1f}', // one decimal
+                    y: 0, // 10 pixels down from the top
+                    x: 0,
+                    style: {
+                        fontSize: '12px',
+                        fontFamily: 'Verdana, sans-serif',
+                        color: '#00925F'
+                    }
+                }
+            }]
+        });
+    });
+
+  $(function() {
+    $( "#tabs" ).tabs();
+  });
+ 
+</script>
+    
+    <div class="page-header">
+    <h1>Scan Out Report </h1>
+</div>
+
+<div class="accordion" id="accordion2">
+    <div class="accordion-group">
+        <div class="accordion-heading">
+            <a class="accordion-toggle collapsed" data-toggle="collapse" data-parent="#accordion2" href="#collapseTwo">
+                Search
+            </a>
+        </div>
+        <div id="collapseTwo" class="accordion-body collapse" style="height: 0px;">
+            <div class="accordion-inner">
+                <?php
+                    echo $this->render('tool/partials/search.phtml');
+                ?>
+            </div>
+        </div>
+    </div>
+</div>
+<script type="text/javascript" src="<?php echo HOST ?>js/jquery-ui-1.8.12.custom.min.js"></script>
+<script src="//code.highcharts.com/highcharts.js"></script>
+<script src="//code.highcharts.com/modules/exporting.js"></script>
+<div id="tabs">
+  <ul>
+    <!-- <li><a href="#tabs-1">Scan Out Report</a></li> -->
+    <!-- <li><a href="#tabs-2">Scan Product Out Report</a></li> -->
+    <li><a href="#tabs-3">Scaner Report</a></li>
+  
+  </ul>
+  <!-- <div id="tabs-1" style="    padding: 0;">
+        <div id="container" style="min-width: 300px; height: 400px; margin: 0 auto"></div>
+  </div>
+  <div id="tabs-2" style="padding: 0;">
+        <div id="product" style="min-width: 300px; height: 400px; margin: 0 auto"></div>
+  </div> -->
+  <div id="tabs-3" style="padding: 0;">
+        <div id="new" style="min-width: 300px; height: 400px; margin: 0 auto"></div>
+  </div>
+  
+</div>
+
+

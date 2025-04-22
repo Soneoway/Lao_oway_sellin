@@ -1,0 +1,50 @@
+<table class="table table-bordered">
+    <thead>
+        <tr>
+            <?php echo $this->sorting(array(
+                '#', 
+                'title'  => 'Retailer Name',
+                'unames' => 'Company Name',
+                'add'    => 'Address of Company',
+                'region' => 'Region',
+                'area'   => 'Area',
+                'Parent',
+                ),
+            $this->url, $this->current_col, $this->desc); ?>
+        </tr>
+    </thead>
+    <tbody>
+        <?php
+        if (isset($this->distributors) and $this->distributors) :
+            foreach ($this->distributors as $k => $distributor): ?>
+        <tr>
+            <td>
+                <?php
+                    $inc = $this->offset + $k + 1;
+                    echo $inc;
+                ?>
+            </td>
+            <td>
+                <?php if (isset($distributor['del']) && $distributor['del'] == 1): ?>
+                    <strike><?php echo $distributor['title'] ?></strike>
+                <?php else: ?>
+                    <a title="Map" href="<?php echo HOST ?>mapping/distributor-edit?id=<?php echo ($distributor['parent'] == 0 OR $distributor == NULL ) ?  $distributor['id'] : $distributor['parent'] ;?>">
+                        <?php echo $distributor['title'] ?>
+                    </a>
+                <?php endif ?>
+            </td>               
+            <td><?php echo $distributor['unames'] ?></td>
+            <td><?php echo $distributor['add'] ?></td>
+            <td><?php if( isset($this->regions) && isset($this->regions[$distributor['region']]['name']) ) echo $this->regions[$distributor['region']]['name'] ?></td>
+            <td><?php if ( isset( $this->areas[ $this->regions[$distributor['region']]['area_id'] ] ) 
+                            && $this->areas[ $this->regions[$distributor['region']]['area_id'] ]) 
+                            echo $this->areas[ $this->regions[$distributor['region']]['area_id'] ] ?></td>
+            <td><?php echo ($distributor['parent'] == 0 OR $distributor == NULL ) ? 'Parent' : 'Child';?></td>
+        </tr>
+        <?php endforeach;?>
+        <?php endif; ?>
+    </tbody>
+</table>
+<div class="paging">
+    <?php echo $this->paging($this->total, $this->limit, $this->offset, $this->url);?>
+</div>

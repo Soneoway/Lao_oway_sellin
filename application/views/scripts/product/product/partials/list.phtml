@@ -1,0 +1,100 @@
+<table class="table table-bordered">
+    <thead>
+        <tr>
+            <?php echo $this->sorting(array(
+                '#',
+                'category' => 'Category',
+                'brand'    => 'Brand',
+                'name'     => 'Model Name',
+                'Color'    =>  'Color',
+                'price_9'  => 'Wholesale price',
+                'price_3'  => 'Retailer Price',
+                'price_2'  => 'DEMO Price',
+                'price_1'  => 'Staff Price',
+                // 'price_4'  => 'ImportPrice ລາຄານຳເຂົ້າ',
+                // 'details'  => 'Product Details',
+                'product_status'  => 'Status',
+                // 'remark'  => 'Remark',
+                'Action'
+            ),
+            $this->url, $this->sort, $this->desc); ?>
+        </tr>
+    </thead>
+    <tbody>
+        <?php
+        if (isset($this->goods) and $this->goods)
+            foreach ($this->goods as $k=>$good): ?>
+        <tr>
+            <td>
+                <?php
+                        $inc = $this->offset + $k + 1;
+                        echo $inc;
+                        ?>
+            </td>
+            <td style="width: 4%;"><?php if ( isset( $this->good_categories ) && isset( $this->good_categories[$good['cat_id']] ) ) echo $this->good_categories[$good['cat_id']] ?></td>
+            <td style="width: 4%;"><?php if ( isset( $this->brands ) && isset( $this->brands[$good['brand_id']] ) ) echo $this->brands[$good['brand_id']] ?> </td>
+            <td style="width: 20%;"><?php echo $good['brand_name'] ?> <?php echo $good['name'] ?></td>
+            <td style="width: 15%;">
+                <?php
+                        if(!empty($good['color']))
+                            $colors = explode(',', $good['color']);
+                        else $colors = array();
+                        ?>
+                <?php foreach ($colors as $color): ?>
+                <span class="label"><?php echo $this->colors[$color] ?></span>
+                <?php endforeach ?>
+            </td>
+
+            <td style="width: 10%;"><?php echo My_Number::f($good['price_9']) ?></td>
+            <td style="width: 10%;"><?php echo My_Number::f($good['price_3']) ?></td>
+            <td style="width: 10%;"><?php echo My_Number::f($good['price_2']) ?></td>
+            <td style="width: 10%;"><?php echo My_Number::f($good['price_1']) ?></td>
+            <!-- <td><?php echo My_Number::f($good['price_4']) ?></td> -->
+            <!-- <td>
+                <?php if($good['discount']){
+                       $total_price = $good['price_9'] - (($good['price_9']*$good['discount']/100)*100)/100;
+                   }else{
+                    $total_price = 0;
+                } 
+                echo My_Number::f($total_price);
+                ?>
+            </td> -->
+            <!-- <td><?php echo $good['desc'] ?></td> -->
+            <td><?php switch ($good['product_status']) {
+                case '1':
+                echo 'Active';
+                break;
+                case '2':
+                echo 'Pre EOL';
+                break;
+                case '3':
+                echo 'EOL';
+                break;
+            } ?></td>
+            <!-- <td><?php echo $good['remark'] ?></td> -->
+
+            <td style="width: 4%;" class="">
+                <a title="Edit" href="/product/product-create?id=<?php echo $good['id'];?>"> <i
+                        class="icon-edit"></i></a>
+                <a title="Delete" class="confirmLink pull-right"
+                    href="/product/product-delete?id=<?php echo $good['id'];?>"> <i class="icon-trash"></i></a>
+                <!-- Update By PungPond -->
+                <!-- <a title="Edit" href="#" onclick="change_price(<?php echo $good['id'];?>,'<?php echo $good['price_3']?>','<?PHP echo $good['name'] ?>')"  > <i class="icon-usd"></i></a> -->
+            </td>
+        </tr>
+        <?php endforeach;?>
+
+    </tbody>
+</table>
+<div class="paging">
+    <?php echo $this->paging($this->total, $this->limit, $this->offset, $this->url);?>
+</div>
+
+<?php echo $this->load();?>
+<?php echo $this->confirm();?>
+
+<script>
+$(document).ready(function() {
+    $('#dialog').html('Are you sure to delete!');
+});
+</script>

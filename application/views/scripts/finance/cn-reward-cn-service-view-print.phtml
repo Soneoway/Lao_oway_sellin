@@ -1,0 +1,318 @@
+<?php
+  function format_number($num){
+     return number_format($num, 2);
+  }
+
+ 
+function thai_date_fullmonth($time){   // 19 ธันวาคม 2556  
+  
+    $thai_month_arr=array(  
+        "0"=>"",  
+        "1"=>"มกราคม",  
+        "2"=>"กุมภาพันธ์",  
+        "3"=>"มีนาคม",  
+        "4"=>"เมษายน",  
+        "5"=>"พฤษภาคม",  
+        "6"=>"มิถุนายน",   
+        "7"=>"กรกฎาคม",  
+        "8"=>"สิงหาคม",  
+        "9"=>"กันยายน",  
+        "10"=>"ตุลาคม",  
+        "11"=>"พฤศจิกายน",  
+        "12"=>"ธันวาคม"                    
+    );   
+    $time = strtotime($time);    
+    $thai_date_return.=date("j",$time);     
+ 
+   $thai_date_return.=" ".$thai_month_arr[date("n",$time)];     
+   $thai_date_return.= " ".(date("Y",$time)+543);  
+
+   //$date =explode('/', date('d/m/Y',strtotime($this->oppo['create_date']))); 
+   //$year = $date[2]+543;
+   //$dateCreate = $date[0].'/'.$date[1].'/'.$year;
+
+    return $thai_date_return;     
+  //  print_r($this->oppo);
+
+} 
+?>
+
+<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
+<html>
+    <head>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8">
+    <title>Print</title>
+    <link rel="stylesheet" type="text/css" href="<?php echo HOST ?>css/thaiSalaban.css">
+    <script src="//ajax.googleapis.com/ajax/libs/jquery/1.10.2/jquery.min.js"></script>
+    <link href="<?php echo HOST ?>css/bootstrap.min.css" rel="stylesheet">
+    <style type="text/css">
+
+
+      body{width: 323mm; height: 276mm;font-size:22px;font-family:"thaiSalaban"!important;}
+
+      .hid{visibility:hidden;}
+
+
+      .blank10{height:10px;clear:both}
+
+      .title_page_logo {font-weight:bold;font-size: 27px}
+      .title_page_logo_small{font-weight: normal;}
+      .title_page{width: auto;text-align:center;font-size:15px;font-weight:bold;margin-top: 5px}
+      .title_page_small_left{width: auto;text-align:left;height:12px;font-size:12px;line-height:12px;float:left;}
+      .title_page_small_right{width: auto;text-align:right;height:12px;font-size:12px;line-height:12px;float:right;margin-top: -10px;}
+
+      .tbllist{width:88%;margin-top: 5px;}
+
+      .tbl_col1_list{width:50px;padding: 5px;}
+      .tbl_col2_list{width:400px;padding: 5px;}
+      .tbl_col3_list{width:50px;margin-right: 10px;text-align: left;padding: 5px;}
+
+      .tbl_col1_list_sum{width:230px;}
+      .tbl_col2_list_sum{width:350px;}
+      .tbl_tr_list_sum{margin-left: 410px;margin-top: -13px;position: absolute;width:750px;height: 30px;}
+      .tbl_col3_list_sum{margin-left: 5px;text-align: center;position: absolute;}
+      .tbl_col4_list_sum{margin-left: -50px;text-align: right;position: absolute;}
+      .tbl_col5_list_sum{margin-left: 170px;text-align: right;position: absolute;}
+      .tbl_col6_list_sum{margin-left: 280px;text-align: right;position: absolute;}
+      .tbl_col7_list_sum{margin-left: 390px;text-align: right;position: absolute;}
+      .tbl_col8_list_sum{margin-left: 500px;text-align: right;position: absolute;}
+      .tbl_col9_list_sum{margin-left: 600px;text-align: right;position: absolute;}
+      .box{float: right;border: 2px solid #222222;border-radius: 20px;margin-right: 147px;margin-top: -40px;padding: 18px;font-size: 35px;}
+      .box2{    border: 2px solid #222222;border-radius: 15px;padding: 10px;}
+      #logo{float:left;display:block;left: 1111px;top: 10px;}
+      #logo img{width:136px;margin-top:10px}
+
+         .title_page_col_left{float:left;width: 500px; margin-top: -70px;}
+         .title_page_col_right{float:right;width: 260px;margin-top: -70px;margin-right: 160px;}
+
+         .detail .col1{width:209px;float:left}
+         .detail .col1 span{width:209px;float:left;font-weight:bold}
+         .detail .col2{width:150px;float:left;margin-left: -100px;}
+         .detail .col2_title{width:400px;float:left}
+         .detail .col2 span{font-weight:bold}
+         .detail .col3{width:100px;float:left}
+         .detail .col3 span{font-weight:bold}
+         .clear{clear:both}
+
+        .imgbutton{width:40px !important;cursor:pointer;position:  absolute;}
+        @media print{.print,.no-print{display:none!important}}
+        .print{width:20px !important;.print,.no-print{display:none!important}}
+        .scroll{overflow:hidden;}
+        .single_record{page-break-after: always;}
+    </style>
+
+    <script type="text/javascript">
+        function Print()
+        {
+            //$( ".imgbutton" ).remove();
+            window.print();
+        }
+
+    </script>
+        <?php
+            $item=$this->sales;
+            //print_r($item);
+            $item_total=count($item);
+            $item_per_page=12;
+            $item_imei_per_page=7;
+
+            $max_show_imei=100;
+
+            $row_product=0;$row_product_imei=0;
+            $pg_total= ceil($item_total/$item_per_page);
+
+            $g_total_num=0;
+            $g_correct_amount=0;$g_difference_amount=0;
+            $g_total_balance=0;$g_total_VAT=0;$g_total_amount=0;
+            $g_total_price=0;$g_correct_bal_amount=0;
+
+            $retailer_name="";$prepared_by_name="";
+            //print_r($this->sales[0]);
+            $retailer_name= $this->sales[0]['unames'];
+            //$prepared_by_name= $this->sales[0]['prepared_by'];
+
+            $add_tax = $this->sales[0]['add_tax'];
+            $distributor_tax = $this->sales[0]['mst_sn'];
+            $cn_no= $this->sales[0]['creditnote_sn_view'];
+            $create_date=$this->sales[0]['create_date_cn_view'];
+            $create_date= date("d-m-Y", strtotime($create_date));
+
+            $date =explode('/', date('d/m/Y',strtotime($this->oppo['create_date']))); 
+            $year = $date[2]+543;
+            $dateCreate = $date[0].'/'.$date[1].'/'.$year;
+            $month_id = $date[1];
+            
+            $parent=$this->sales[0]['parent'];
+            if($parent==0){
+                $branch_name='สำนักงานใหญ่';
+                $branch_no=$this->sales[0]['branch_no'];
+
+            }else{
+                $branch_name='สาขา';
+                $branch_no=$this->sales[0]['branch_no'];
+            }
+
+        ?>
+</head>
+<body>
+
+    <div class="top_page" ></div>
+    <div id="logo">
+        <?php if ($this->market['warehouse_id'] != 8){?>
+        <img src="<?php echo HOST ?>img/logoprint.png" />
+        <br />
+        <?php } ?>
+        
+    </div>
+
+    <br>
+    <div class="top">
+
+        <div style="float:right;" class="title_page_logo"><?php echo $pg_number;?></div>
+        <div class="title_page_logo" style="margin-top: -9px;">บริษัท ไทย ออปโป้ จำกัด</div>
+        <div style="margin-left: 140px;" class="title_page_logo">THAI OPPO CO., LTD</div>
+
+        <!-- <div class="title_page_logo box">สำเนาใบลดหนี้/ใบกำกับภาษี/ใบรับคืนสินค้า</div> -->
+        <div class="title_page_logo box">ต้นฉบับใบลดหนี้/ใบกำกับภาษี/ใบรับคืนสินค้า</div>
+        </br>
+
+
+
+        <div class="title_page_logo_small">สำนักงานใหญ่: อาคาร เอไอเอ แคปปิตอล เซ็นเตอร์ ชั้น 31 ห้อง 5-7 เลขที่ 89 ถนนรัชดาภิเษก แขวงดินแดง เขตดินแดง กรุงเทพฯ 10400</div>
+        <div class="title_page_logo_small">Head office: AIA Capital Center Building Fl 31 Unit 5-7  89 Ratchadaphisek Road, DinDaeng, DinDaeng, Bangkok 10400</div>
+        <div class="title_page_logo_small">โทร. Tel. 02-013-1810 โทรสาร Fax 02-013-1820</div>
+        <div class="title_page_logo_small">&nbsp;</div>
+        <div class="title_page_logo_small"><strong>เลขประจำตัวผู้เสียภาษี : </strong> 0745552000866</div>
+    </div>
+    <div style="float:right;margin-right: 140px;"><?php echo $pg_number;?></div>
+    <!-- <div class="title_page  hid">ต้นฉบับใบลดหนี้/ใบกำกับภาษี/ใบรับคืนสินค้า</div> -->
+    <div class="title_page  hid">ต้นฉบับใบลดหนี้/ใบกำกับภาษี/ใบรับคืนสินค้า</div>
+    <div class="title_page_small_left hid">เลขประจำตัวผู้เสียภาษี : <?=$distributor_tax?></div></br>
+    <div class="title_page_small_right hid">(เอกสารออกเป็นชุด)</div></br></br>
+    <div class="title_page_col_left box2">
+        <div class="detail clear">
+            <div class="title_page_logo_small"><strong>ชื่อลูกค้า : </strong><?=$this->oppo['title']?></div>
+            <div class="title_page_logo_small" style="margin-top: 15px;height: 60px;"><strong>ที่อยู่ : </strong><?=$this->oppo['add_tax']?></div>
+            <div class="title_page_logo_small"><strong>เลขประจำตัวผู้เสียภาษี : </strong><?=$this->oppo['mst_sn']?></div>
+            
+        </div>
+    </div>
+    <div class="title_page_col_right box2">
+        <div class="detail clear">
+            <div class="title_page_logo_small"><strong>เลขที่ / No. : </strong><?=$this->oppo['creditnote_sn']?></div>
+            <div class="title_page_logo_small" style="margin-top: 15px;"><strong>วันที่ / Date : </strong> <?=$dateCreate?></div> 
+        </div>
+    </div>
+    </br>
+    <div class="blank10"></div>
+<?PHP
+
+    $creditnote = $this->oppo['total_amount'];
+    switch ($month_id) {
+    case "1":
+        $month = "มกราคม";
+        break;
+    case "2":
+        $month = "กุมภาพันธ์";
+        break;
+    case "3":
+        $month = "มีนาคม";
+        break;
+    case "4":
+        $month = "เมษายน";
+        break;
+    case "5":
+        $month = "พฤษภาคม";
+        break;   
+    case "6":
+        $month = "มิถุนายน";
+        break;    
+    case "7":
+        $month = "กรกฎาคม";
+        break;     
+    case "8":
+        $month = "สิงหาคม";
+        break;
+    case "9":
+        $month = "กันยายน";
+        break;  
+    case "10":
+        $month = "ตุลาคม";
+        break;  
+    case "11":
+        $month = "พฤศจิกายน";
+        break; 
+    case "12":
+        $month = "ธันวาคม";
+        break;              
+    }
+
+    //$creditnote_befor = ($creditnote/0.97); //3%
+    $creditnote_befor = $creditnote-(($creditnote*7)/107); //7%
+    $total = $creditnote-$creditnote_befor;
+    $sum = $creditnote_befor+$total;
+    $remark_detail='ค่าบริการ ประจำเดือน ปี 2560';
+    if($this->oppo['creditnote_sn']=='CN600206-00001'){
+    	$remark_detail='ค่าบริการ ประจำเดือน มกราคม 2560';
+    }else if($this->oppo['creditnote_sn']=='CN600223-00001'){
+    	$remark_detail='ค่าบริการ ประจำเดือน กุมภาพันธ์ 2560';
+    }else{
+      $remark_detail='ค่าบริการ';
+    }
+ ?>
+<div class="blank10"></div>
+</br>
+<table class="tbllist" cellspacing="1" border="1px" cellpadding="11">
+    <tr class="tbllist_height" style="background-color : #E6E6E6">
+        <td class="tbl_col1_list" style="font-weight: bold;text-align: center;">ลำดับที่</br>Item</td>
+        <td class="tbl_col2_list" style="font-weight: bold;text-align: center;">รายการ</br>Description</td>
+        <td class="tbl_col3_list" style="text-align: center;font-weight: bold;">จำนวนเงิน(บาท)</br>Total (Baht)</td>
+    </tr> 
+    <tr style="height: 200px; vertical-align: text-top;">
+         <td class="tbl_col1_list" style="text-align: center;">1</td>
+         <td class="tbl_col2_list" style="text-align: left;"><?=$remark_detail?> </td>
+         <td class="tbl_col3_list" style="text-align: right;"><?=format_number($creditnote_befor)?></td>
+    </tr>
+    <tr>
+         <td class="tbl_col1_list" colspan="2" style="text-align: left;font-weight: bold;">จำนวนเงินสุทธิ</td>
+         <td class="tbl_col3_list" style="text-align: right;"><?=format_number($creditnote_befor)?></td>
+    </tr>
+    <tr>
+         <td class="tbl_col1_list" colspan="2" style="text-align: left;font-weight: bold;">ภาษีมูลค่าเพิ่ม. 7% </td>
+         <td class="tbl_col3_list" style="text-align: right;"><?=format_number($total)?></td>
+    </tr>
+    <tr>
+         <td class="tbl_col1_list" colspan="2" style="text-align: left;font-weight: bold;">รวมเงินทั้งสิ้น (บาท) </td>
+         <td class="tbl_col3_list" style="text-align: right;font-weight: bold;"><?=format_number($sum)?></td>
+    </tr>
+</table>
+<div style="margin-top:20px;width: 800px;height: 50px;float:left;">
+  <p style="font-size:16px;">เหตุผลการออกใบลดหนี้ Reason for issue credit note : </p>
+  <p>อ้างอิงรายละเอียดค่าบริการ</p>
+</div>
+<div style="width: 490px;height: 200px;margin-right: 147px;float:right;margin-top: 350px;">
+    <div style="float: left;width: 225px;height: 120px;border-bottom: 2px dashed #222222;border-right: 2px dashed #222222;"><p style="margin-top: 50px">รับโดย Received by</p></div>
+    <div style="float: right;width: 260px;height: 120px;border-bottom: 2px dashed #222222;">
+      <p>จัดทำโดย Prepared by</p>
+      <p style="margin-top: 30px;">อนุมัติโดย Authorized by</p>
+    </div>
+    <div style="float: left;width: 225px;height: 30px;"><p>ผู้รับลงนาม Receive Bill Signature</p></div>
+    <div style="float: right;width: 260px;height: 30px"><p>ผู้มีอำนาจลงนาม Authorized Signature</p></div>
+
+</div>
+
+<?php
+
+    $pg_number= $pg."/".$pg_total; 
+
+?>
+
+</br>
+<div id="logo" style="position:  absolute;" >
+    <img src="<?php echo HOST ?>img/print.png" class="imgbutton print"  onclick="Print()" id="print"  />
+</div>
+<div class="single_record"></div>
+<?php //} ?>
+</body>
+</html>
+

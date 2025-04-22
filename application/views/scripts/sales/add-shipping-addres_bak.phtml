@@ -1,0 +1,282 @@
+<style type="text/css">
+    #parent_search {
+        display: block;
+    }
+
+    iframe {
+        height: 100px;
+        width: 100%;
+        border: none;
+    }
+</style>
+
+<div class="page-header">
+	<?php if (isset($this->shipping_address) && $this->shipping_address): ?>
+		<h1>Edit Sipping Address</h1>
+	<?php else: ?>
+		<h1>Add Sipping Address</h1>
+	<?php endif ?>
+    
+</div>
+<?php
+    if (isset($this->messages) and $this->messages)
+        foreach ($this->messages as $message):
+            echo '<div class="alert alert-error">'.$message.'</div>';
+        endforeach;
+?>
+<!-- //target="iframe" -->
+<form class="form-horizontal" action="<?php echo HOST ?>sales/save-shipping" name="form" id="form" method="post" >
+	<div class="row-fluid">
+		<div class="span5">
+
+			     <div class="control-group">
+                
+                    <label class="control-label" for="contract_name">Contract Name<span style="color: red">*</span></label>
+                    <div class="controls">
+                        <input type="text" name="contract_name" required value="<?php if( isset($this->shipping_address) && isset($this->shipping_address['contact_name']) ) echo $this->shipping_address['contact_name'] ?>">
+                    </div>
+                </div>
+                <div class="control-group">
+                    <label class="control-label" for="data_Address">Address<span style="color: red">*</span></label>
+                    <div class="controls">
+                    <textarea name="data_address" required id="data_address" cols="30" rows="5"><?php if( isset($this->shipping_address) && isset($this->shipping_address['address']) ) echo $this->shipping_address['address'] ?></textarea>
+                    </div>
+                </div>
+                <div class="control-group">    
+                    <label class="control-label" for="ship_province">province<span style="color: red">*</span></label>
+                    <div class="controls">
+                    ​<select name="ship_province" id="ship_province" class="ship_province" required>
+                        <option value="0"></option>
+                        <?PHP foreach ($this->province as $key => $value) :?>
+                           <option value="<?=$key?>" <?php if( isset($this->shipping_address['province_id']) && $this->shipping_address['province_id'] == $key ) echo "selected='selected'" ?>><?=$value?></option>
+                       <?PHP endforeach; ?>
+                         
+                    </select>
+                    </div>
+                </div>
+                <div class="control-group">
+                    <label class="control-label" for="add">amphures<span style="color: red">*</span>  </label>
+                    <div class="controls">
+                    <input type="hidden" name="hid_amphures_id" class="hid_amphures_id" value="<?php if( isset($this->shipping_address) && isset($this->shipping_address['amphures_id']) ) echo $this->shipping_address['amphures_id'] ?>">
+                    <select name="amphures" id="amphures" required>
+                        <option value>---</option>
+                         <?php if (isset( $this->amphures ) && $this->amphures): ?>
+                            <?php foreach ($this->amphures as $key => $region): ?>
+                                <option value="<?php echo $key ?>" <?php if( isset($this->shipping_address['amphures_id']) && $this->shipping_address['amphures_id'] == $key ) echo "selected='selected'" ?>><?php echo $region['name'] ?></option>
+                            <?php endforeach ?>
+                        <?php endif ?>
+                    </select>
+                    </div>
+                </div>
+                <div class="control-group">
+                    <label class="control-label" for="add">districts<span style="color: red">*</span></label>
+                    <div class="controls">
+                    <input type="hidden" name="hid_districts_id" class="hid_districts_id" value="<?php if( isset($this->shipping_address) && isset($this->shipping_address['districts_id']) ) echo $this->shipping_address['districts_id'] ?>">
+                    <select name="districts_sipping" id="districts_sipping">
+                        <option value>---</option>
+                        <?php if (isset( $this->districts ) && $this->districts): ?>
+                            <?php foreach ($this->districts as $key => $region): ?>
+                                <option value="<?php echo $key ?>" <?php if( isset($this->shipping_address['districts_id']) && $this->shipping_address['districts_id'] == $key ) echo "selected='selected'" ?>><?php echo $region['name'] ?></option>
+                            <?php endforeach ?>
+                        <?php endif ?>
+                    </select>
+                    </div>
+                </div>
+                <div class="control-group">
+                    <label class="control-label" for="add">Zipcode<span style="color: red">*</span></label>
+                    <div class="controls">
+                    <input type="text" name="zip_code" id="zip_code" value="<?php if( isset($this->shipping_address) && isset($this->shipping_address['zipcodes']) ) echo $this->shipping_address['zipcodes'] ?>" readonly>
+                    <input type="hidden" name="zip_id" id="zip_id" readonly>
+                    </div>
+                </div>
+                <div class="control-group">
+                    <label class="control-label" for="add">Phone<span style="color: red">*</span></label>
+                    <div class="controls">
+                       <input type="text" name="contract_phone" required value="<?php if( isset($this->shipping_address) && isset($this->shipping_address['phone']) ) echo $this->shipping_address['phone'] ?>">
+                   </div>
+                </div>
+                 <div class="control-group">
+                    <label class="control-label" for="add">Remark<span style="color: red">*</span></label>
+                    <div class="controls">
+                       <textarea name="remark" required id="remark" cols="30" rows="5"><?php if( isset($this->shipping_address) && isset($this->shipping_address['remark']) ) echo $this->shipping_address['remark'] ?></textarea>
+                   </div>
+                </div>       
+                    <p class="help-block"></p>
+                </div>
+            </div>
+		</div>
+		
+	</div>
+    <input type="hidden" id="id" name="id" value="<?=$_GET['id']?>" />
+	<input type="hidden" id="ship_id" name="ship_id" value="<?=$_GET['ship_id']?>" />
+	<div class="row-fluid" style="    margin-left: 50px;">
+		<div class="span10">
+            <input type="hidden" name="back_url" id="back_url" value="<?php echo $this->back_url?>">
+
+            <button type="submit" class="btn btn-primary">Submit</button>
+            <button type="button" class="btn btn-danger go-back">Go back</button>
+        </div>
+	</div>
+</form>
+
+<!-- <iframe name="iframe"></iframe> -->
+
+<script>
+
+    
+   
+
+    $(document).ready(function () {
+
+        var province = $('#ship_province').val();
+        var districts_id = $('.hid_districts_id').val();
+        var districts_sipping = $('#districts_sipping').val();
+        var amphures_id = $('.hid_amphures_id').val();
+        if(province!=''){
+            $(this).after('<span class="loading"></span>');
+
+            var _self = $(this);
+            var province = province;
+            $.get("/get/amphures",
+                {province: province}
+                ,function(data,status){
+                    var data = $.parseJSON( data );
+
+                    for (var i = 0; i < data.length; i++) {
+                        $('#amphures').append('<option value="'+data[i]['amphur_id']+'">'+data[i]['amphur_name']+'</option>');
+                    }
+                    //find("option[value='theValueYouWantSelected']").attr("selected",true)
+                    $('#amphures').find('option[value='+amphures_id+']').attr("selected",true);
+                    _self.nextAll('.loading').remove();
+                });
+
+        }
+
+        if (districts_id!='') {
+                        $(this).after('<span class="loading"></span>');
+           
+            $.get("/get/districts",
+                {amphures: amphures_id}
+                ,function(data,status){
+                    var data = $.parseJSON( data );
+
+                    for (var i = 0; i < data.length; i++) {
+                        $('#districts_sipping').append('<option value="'+data[i]['district_code']+'">'+data[i]['district_name']+'</option>');
+                    }
+                    $('#districts_sipping').find('option[value='+districts_id+']').attr("selected",true);
+
+                    _self.nextAll('.loading').remove();
+                });
+        }    
+        if(amphures_id!=''){
+            $(this).after('<span class="loading"></span>');
+
+            $.get("/get/zipcode",
+                {districts: districts_id}
+                ,function(data,status){
+                    var data = $.parseJSON( data );
+                 
+                    $('#zip_code').val(data[0]['zipcode']);
+                    $('#zip_id').val(data[0]['zip_id']);
+                    // for (var i = 0; i < data.length; i++) {
+                    //     // $('#districts_sipping').append('<option value="'+data[i]['DISTRICT_ID']+'">'+data[i]['DISTRICT_NAME']+'</option>');
+                    //     data[i]['zipcode'];
+                    // }
+
+                    _self.nextAll('.loading').remove();
+                });
+        }
+        
+        $('.go-back').click(function(e){
+            e.preventDefault();
+            parent.history.back();
+            return false;
+        });
+
+        
+        $('#ship_province').change(function(){
+            $(this).after('<span class="loading"></span>');
+            var _self = $(this);
+            var province = _self.val();
+            // var area_id = _self.find('option:selected').data('area');
+
+            // $('#area').val(area_id);
+
+            $('#amphures').find('option:not(:first)').remove();
+            $('#districts_sipping').find('option:not(:first)').remove();
+            $('#zip_code').val('');
+            $('#zip_id').val('');
+            $.get("/get/amphures",
+                {province: province}
+                ,function(data,status){
+                    var data = $.parseJSON( data );
+
+                    for (var i = 0; i < data.length; i++) {
+                        $('#amphures').append('<option value="'+data[i]['amphur_id']+'">'+data[i]['amphur_name']+'</option>');
+                    }
+
+                    _self.nextAll('.loading').remove();
+                });
+        });
+
+        $('#amphures').change(function(){
+            $(this).after('<span class="loading"></span>');
+            var _self = $(this);
+            var amphures = _self.val();
+            // var area_id = _self.find('option:selected').data('area');
+
+            // $('#area').val(area_id);
+
+            $('#districts_sipping').find('option:not(:first)').remove();
+
+            $.get("/get/districts",
+                {amphures: amphures}
+                ,function(data,status){
+                    var data = $.parseJSON( data );
+
+                    for (var i = 0; i < data.length; i++) {
+                        $('#districts_sipping').append('<option value="'+data[i]['district_code']+'">'+data[i]['district_name']+'</option>');
+                    }
+
+                    _self.nextAll('.loading').remove();
+                });
+        });
+        $('#districts_sipping').change(function(){
+            $(this).after('<span class="loading"></span>');
+            var _self = $(this);
+            var districts = _self.val();
+            // var area_id = _self.find('option:selected').data('area');
+
+            // $('#area').val(area_id);
+
+            // $('#districts_sipping').find('option:not(:first)').remove();
+            $('#zip_code').empty();
+            $('#zip_id').empty();
+            $.get("/get/zipcode",
+                {districts: districts}
+                ,function(data,status){
+                    var data = $.parseJSON( data );
+                 
+                    $('#zip_code').val(data[0]['zipcode']);
+                    $('#zip_id').val(data[0]['zip_id']);
+                    // for (var i = 0; i < data.length; i++) {
+                    //     // $('#districts_sipping').append('<option value="'+data[i]['DISTRICT_ID']+'">'+data[i]['DISTRICT_NAME']+'</option>');
+                    //     data[i]['zipcode'];
+                    // }
+
+                    _self.nextAll('.loading').remove();
+                });
+        });
+
+
+       
+
+        $('#form').on('submit', function(e) {
+            $('input, select, textarea').prop('readonly', true);
+            $('button').hide();
+            // $('iframe').before('<span class="loading"></span>');
+        })
+    });
+</script>
+
+

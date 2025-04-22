@@ -1,0 +1,80 @@
+<link rel="stylesheet" href="<?php echo HOST?>css/jquery-ui-1.8.12.custom.css" />
+<link rel="stylesheet" href="<?php echo HOST?>css/checkmoney.css" />
+<link rel="stylesheet" href="<?php echo HOST?>js/chosen.css" />
+
+<div class="page-header">
+    <h1>Transactions</h1>
+</div>
+<?php
+    if (isset($this->messages_success) and $this->messages_success)
+        foreach ($this->messages_success as $message):
+            echo '<div class="alert alert-success">'.$message.'</div>';
+        endforeach;
+
+    if (isset($this->messages) and $this->messages)
+        foreach ($this->messages as $message):
+            echo '<div class="alert alert-error">'.$message.'</div>';
+        endforeach;
+?>
+<div class="row">
+    <div class="span12">
+        <span class="pull-right">
+            <button class="btn-success" type="button" onclick="window.location='<?php echo HOST ?>checkmoney/add'">
+                <i class="icon-plus"></i>
+            </button>
+        </span>
+    </div>
+</div>
+<div class="accordion" id="accordion2">
+    <div class="accordion-group">
+        <div class="accordion-heading">
+            <a class="accordion-toggle collapsed" data-toggle="collapse" data-parent="#accordion2" href="#collapseTwo">
+                Search
+            </a>
+        </div>
+        <div id="collapseTwo" class="accordion-body collapse" style="height: 0px;">
+            <div class="accordion-inner">
+                <?php
+                    echo $this->render('checkmoney/partials/search.phtml');
+                ?>
+            </div>
+        </div>
+    </div>
+</div>
+<!-- <div class='control clearfix'> -->
+<!-- 	<a href='/checkmoney/add' class='btn btn-success pull-right'>Add</a> -->
+<!-- </div> -->
+<div class="table-responsive">
+    <?php
+        echo $this->render('checkmoney/partials/list.phtml');
+    ?>
+</div>
+
+<script src="<?php echo HOST?>js/jquery-ui-1.8.12.custom.min.js"></script>
+<script src="<?php echo HOST?>js/chosen.jquery.js"></script>
+<script>
+    
+    $(document).ready(function () {
+    	$( ".datepicker" ).datepicker({ dateFormat: "yy-mm-dd" });   	
+        $('.form-search button:reset').click(function (e){
+            $('.form-search input, .form-search select').val('');
+            $('.form-search').submit();
+            return false;
+        });
+
+        function initSelectChosen(){
+            $("#d_id").chosen();
+            $("#bank_id").chosen();
+        }
+        initSelectChosen();
+
+        $('.confirmLink').bind("contextmenu",function(e){
+            return false;
+        });
+        
+        $('.lock').click(function(e){
+            e.preventDefault();
+            alert('Sorry,This information is blocked...You can not delete payment has been made or has been the storage of information!');
+        });
+    });
+</script>

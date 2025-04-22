@@ -1,0 +1,399 @@
+
+
+<div class="page-header">
+    <h1>Check Return Box Imei Number Confirm</h1>
+</div>
+
+<?php
+
+if (isset($this->messages) and $this->messages)
+    foreach ($this->messages as $message):
+        echo '<div class="alert alert-error">'.$message.'</div>';
+    endforeach;
+    ?>
+
+    <div class="row">
+     <div class="span12">
+        <iframe name="ifrmSave" id="ifrmSave" width="100%" style="display:none;"></iframe>
+        <form role="form" id="form" action="<?php echo HOST.'finance/save-return-box-number-imei-check-confirm';?>" method="post" target="ifrmSave" class="form-inline">
+
+            <div style="display: none;" class="row">
+                <div class="span5">
+                    <div class="control-group">
+                        <label for="box_number" class="span2">รหัส Box No<span style="color: red">*</span></label>
+                        <input type="text" readonly="true" name="box_number" id="box_number" required="required" value="<?php isset($this->box_imei) and $this->box_imei and printf($this->box_imei[0]['box_number']);?>" />
+                    </div>
+                    <div class="control-group">
+                        <label for="box_post_number" class="span2">รหัสพัสดุ</label>
+                        <input type="text" name="box_post_number" id="box_post_number" value="<?php isset($this->box_imei) and $this->box_imei and printf($this->box_imei[0]['box_post_number']);?>" />
+                    </div>
+                    <div class="control-group">
+                        <label for="sender_name" class="span2">ผู้จัดส่ง/ร้านค้า<span style="color: red">*</span></label>
+                        <input type="text" name="sender_name" id="sender_name" required="required" value="<?php isset($this->box_imei) and $this->box_imei and printf($this->box_imei[0]['sender_name']);?>" />
+                    </div>
+
+                     
+
+                    <div class="control-group" style="display: none;">
+                        <label for="receive_date" class="span2">วันที่รับพัสดุ<span style="color: red">*</span></label>
+                        
+                        <input type="text" class="create_date" name="create_date" id="create_date"  value="<?php isset($this->box_imei) and $this->box_imei and printf($this->box_imei[0]['create_date']);?>" />
+
+                    </div> 
+
+                </div> 
+                <div class="span5"  >
+                    <div class="control-group">
+                        <label for="create_date" class="span2">วันที่รับพัสดุเข้าระบบ<span style="color: red">*</span></label>
+                        
+                        <input type="text" readonly="true" class="create_date" name="create_date" id="create_date" required="required" value="<?php isset($this->box_imei) and $this->box_imei and printf($this->box_imei[0]['create_date']);?>" />
+
+                    </div>
+                    <div class="control-group">
+                        <label for="box_remark" class="span2">หมายเหตุ</label>
+                        <textarea id="box_remark" name="box_remark"><?php isset($this->box_imei) and $this->box_imei and printf($this->box_imei[0]['box_remark']);?></textarea>
+                    </div> 
+                </div>      
+            </div>
+           
+            <div class="row">
+                <div class="span4">
+                    <div class="control-group">
+                        <input type="hidden" name="frm_action" id="frm_action" value="finance_confirm" />
+                        <input type="hidden" name="box_sn" id="box_sn" value="<?php isset($this->box_sn) and $this->box_sn and printf($this->box_sn);?>" />
+                        <input type="hidden" id="back_url" name="back_url" value="/finance/return-box-number-imei-confirm-list">
+                        <div class="span9">
+                                <div class="span2">    
+                                    <button type="submit" class="btn btn-primary">Save</button>
+                                    <button type="button" class="btn btn-danger go-back">Go back</button>
+                                </div>
+                                <div class="span6">
+                                    <button type="submit" value="finance_confirm" name="imei_confirm" id="imei_confirm" style="text-align: right;" class="btn btn-success imei_confirm">Finance Confirm</button>
+                                </div>
+                            </div>
+                    </div>
+                    <div class="clearfix"></div>
+                </div>
+            </div>
+        </p>
+        
+
+        <div style="margin-left: -50px;" class="row">
+                    <div class="span4">
+                        <p/>Imei ที่สามารถทำรายการได้ (เครื่องขาย) <span style="color: red">*</span><p/>
+
+                        <table id="return_by_imeiTable" class="table table-bordered">
+                            <thead>
+                                <tr>
+                                    <?php echo $this->sorting(array(
+                                        '#',
+                                        'action_imei'  => '<input type="checkbox" class="check_all" name="check_all" />',
+                                        'box_number'  => 'Box Number',
+                                        'imei_sn'  => 'Imei',
+                                        'product_name'  => 'PRODUCT CODE',
+                                        'product_detail_name'  => 'PRODUCT NAME',
+                                        'product_color'  => 'PRODUCT COLOR',
+                                        'invoice_number'  => 'Invoice number',
+                                        'total_amount'  => 'Total Amount',
+                                        'imei_type_name'  => '1. Imei Type',
+                                        'return_type'  => '2. สาเหตุที่คืน',
+                                        'damage_detail'  => '3. คำอธิบายสาเหตุที่คืน อาการที่เสีย (แสดงในใบลดหนี้)',
+                                        'rtn'  => '4. เลขที่ใบลดหนี้ลูกค้า (โลตัส เพาเวอร์บาย ไอทีซิตี้)',
+                                        'remark'  => '5. คำอธิบายอื่น (ไม่แสดงบนใบลดหนี้)',
+                                        'create_cn'  => '6. สร้าง CN <input type="checkbox" class="create_cn_all" name="create_cn_all" />',
+                                        'active_cn'  => '7. เปิดใช้งาน <input type="checkbox" class="active_cn_all" name="active_cn_all" />',
+                                        'return_to'  => '8. ย้ายไปคลัง',
+                                        'store_code'  => 'Store Code',
+                                        'title'  => 'Distributor Name',
+                                        'warehouse_name'  => 'Warehouse'
+                                    ),
+                                    $this->url, $this->sort, $this->desc); ?>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <?php 
+                        //print_r($this->box_imei);
+                                $row=1;
+                                foreach ($this->box_imei as $imei){
+                            //print_r($imei);
+                                    if($imei['imei_oppo'] !="" && $imei['imei_return'] !=""){
+                                //print_r($imei);
+                                        ?>
+                                        <tr>
+                                            <td><?php echo $row;?></td>
+                                            <td><input class='attach-id' <?php //if($imei['action_imei']==1){echo "checked=true";} ?> name='action_imei[]' value='<?php echo $imei['imei_oppo'];?>-<?php echo $imei['box_sn'];?>' type='checkbox'</input></td>
+
+                                            <td><?php echo $imei['box_number'];?></td>
+
+                                            <td><?php echo $imei['imei_oppo'];?></td>
+
+                                            <td><input type="hidden" name="good_id[]" value="<?php echo $imei['imei_oppo'];?>-<?php echo $imei['good_id'];?>" /><?php echo $imei['product_name'];?></td>
+                                            <td><?php echo $imei['product_detail_name'];?></td>
+                                            <td><input type="hidden" name="good_color[]" value="<?php echo $imei['imei_oppo'];?>-<?php echo $imei['good_color'];?>" /><?php echo $imei['product_color'];?></td>
+                                            <td><input type="hidden" name="sales_sn[]" value="<?php echo $imei['imei_oppo'];?>-<?php echo $imei['sales_sn'];?>" /><?php echo $imei['invoice_number'];?></td>
+                                            <td style="text-align: right;" ><input type="hidden" name="sum_unit_price[]" value="<?php echo $imei['imei_oppo'];?>-<?php echo $imei['sum_unit_price'];?>" /><?php echo number_format($imei['sum_unit_price'],2);?></td>
+                                            <td><?php echo $imei['imei_type_name'];?></td>
+                                            <td>
+
+                                                <select class="span2 return_type" name="return_type[]" required="required">
+                                                    <option value="">Please select</option>
+                                                    <option <?php if($imei['return_type']==5){echo "selected=true";} ?> value="<?php echo $imei['imei_oppo'];?>-5-<?php echo $imei['distributor_id'];?>">EOL</option>
+                                                    <option <?php if($imei['return_type']==1){echo "selected=true";}else if($imei['return_type']==''){if($imei['imei_type_name']=='Normal'){echo " selected ";}} ?> value="<?php echo $imei['imei_oppo'];?>-1-<?php echo $imei['distributor_id'];?>" >เครื่องเสีย DOA/DAP</option>
+                                                    <option <?php if($imei['return_type']==3){echo "selected=true";}else if($imei['return_type']==''){if($imei['imei_type_name']=='Demo' || $imei['imei_type_name']=='APK'){echo " selected ";}} ?> value="<?php echo $imei['imei_oppo'];?>-3-<?php echo $imei['distributor_id'];?>">Demo</option>
+                                                    <option <?php if($imei['return_type']==4){echo "selected=true";} ?> value="<?php echo $imei['imei_oppo'];?>-4-<?php echo $imei['distributor_id'];?>">กรณีพิเศษ/อื่นๆ</option>
+                                                </select>
+                                            </td>
+                                            <td style="width: 150px;" ><textarea name="damage_detail[]" class="span2 damage_detail"><?php echo $imei['damage_detail']; ?></textarea></td>
+                                            <td><input type="text" value="<?php echo $imei['rtn_number']; ?>" class="span2 rtn_number" name="rtn_number[]" /></td>
+                                            <td style="width: 150px;" ><textarea name="remark[]" class="span2 remark"><?php echo $imei['remark']; ?></textarea></td>
+                                            <td><input <?php if($imei['create_cn']==1){echo "checked=true";} ?> class='create_cn' name='create_cn[]' value='<?php echo $imei['imei_oppo'];?>-<?php echo $imei['distributor_id'];?>' type='checkbox'</input></td>
+                                            <td><input <?php if($imei['active_cn']==1){echo "checked=true";} ?> class='active_cn' name='active_cn[]' value='<?php echo $imei['imei_oppo'];?>-<?php echo $imei['distributor_id'];?>' type='checkbox'</input></td>
+                                            <td>
+                                                <select id='warehouse_id' class='span2 warehouse_id' name='warehouse_id[]' required='required'>
+                                                    <option value=''>Please select</option>
+                                                    <?php foreach ($this->warehouses as $warehouse):
+                                                    if (in_array($warehouse->id,array(26, 28,5))){
+                                                        ?> 
+                                                        <option value='<?php echo $imei['imei_oppo'];?>-<?php echo $imei['distributor_id'];?>-<?php echo $warehouse->id;?>' <?php if($warehouse->id==$imei['warehouse_id']){?> selected<?php }else if($imei['warehouse_id']==''){if($warehouse->id==26){ echo ' selected ';}};?>><?php echo $warehouse->name;?></option> 
+                                                        <?php 
+                                                    }
+                                                    endforeach;?>
+                                                </select>
+                                            </td>
+                                            <td><?php echo $imei['store_code'];?></td>
+                                            <td><?php echo $imei['title'];?></td>
+                                            <td><?php echo $imei['warehouse_name'];?></td>
+                                        </tr>
+                                        <?php $row +=1; }} ?>
+                                    </tbody>
+                                </table>
+
+
+                            </div>
+                        </div> 
+
+    </p>
+    <div class="row">
+        <div class="span3">
+            <p/><span style="color: red">Imei ที่ไม่สามารถทำรายการได้ *</span><p/>
+            <label for="" class="span2">
+                <?php 
+                $num_imei=0; $imei_not_return_list="";
+                foreach ($this->box_imei as $imei){
+                   if($imei['imei_oppo']!="" && $imei['imei_return']==""){
+                       $imei_not_return_list .= $imei['imei_oppo']."\n";
+                       $num_imei +=1;
+                   }
+               }
+               ?>
+               <textarea readonly="true" class="imei_not_return" name="imei_not_return" id="imei_not_return" cols="20" rows="10"><?=$imei_not_return_list?></textarea>
+               <?php  ?>
+           </label>
+       </div>
+
+       <div class="span3">
+        <p/><span style="color: red">Imei ที่ไม่พบในระบบ *</span><p/>
+        <label for="" class="span2">
+            <?php 
+            $num_imei=0;$imei_not_oppo_list="";
+            foreach ($this->box_imei as $imei){
+               if($imei['imei_oppo']=="" && $imei['imei_return']==""){
+                   $imei_not_oppo_list .= $imei['imei_scan']."\n";
+                   $num_imei +=1;
+               }
+           }
+           ?>
+           <textarea readonly="true" class="imei_not_oppo" name="imei_not_oppo" id="imei_not_oppo" cols="20" rows="10"><?=$imei_not_oppo_list?></textarea>
+           <?php  ?>
+       </label>
+   </div>
+
+     
+</div>    
+
+</div>
+
+</div>
+
+</br>
+
+</form>
+</div>
+</div>
+
+
+<script src="/js/jquery.blockUI.js"></script>
+
+<style>
+.blockOverlay{
+    z-index: 10000 !important;
+}
+.blockPage{
+    z-index: 10001 !important;
+}
+#SearchBox{
+  width: 360px!important;
+}
+#distributor_id{
+  z-index: 0!important;
+}
+.dropdown{
+  z-index: 2;
+  }.span122 {
+    margin-left: : 25px;
+}
+
+
+</style>
+<script>
+    $(document).ready(function () {
+        //initSearchOptionDistributor('distributor_id', 'SearchBox');
+        initGoBack();
+
+        $('.check_all').change(check_all);
+        $('.create_cn_all').change(create_cn_all);
+        $('.active_cn_all').change(active_cn_all);
+        $('.create_cn').change(check_create_cn);
+
+        $('.imei_confirm').click(function(e){
+            $('#form').submit();
+        });
+
+        $(".damage_detail").on("keypress", function (e)
+        {
+            _self = $(this);
+            var div_parent = _self.parent().parent();
+            div_parent.find('.attach-id').attr('checked', true);
+        });
+
+        $(".rtn_number").on("keypress", function (e)
+        {
+            _self = $(this);
+            var div_parent = _self.parent().parent();
+            div_parent.find('.attach-id').attr('checked', true);
+        });
+
+        $(".remark").on("keypress", function (e)
+        {
+            _self = $(this);
+            var div_parent = _self.parent().parent();
+            div_parent.find('.attach-id').attr('checked', true);
+        });
+
+        $(".return_type").on("change", function (e)
+        {
+            _self = $(this);
+            var div_parent = _self.parent().parent();
+            div_parent.find('.attach-id').attr('checked', true);
+        });
+
+        $(".warehouse_id").on("change", function (e)
+        {
+            _self = $(this);
+            var div_parent = _self.parent().parent();
+            div_parent.find('.attach-id').attr('checked', true);
+        });
+        
+        function check_create_cn(e) {
+            var _self = $(this);
+            //alert(1);
+            var div_parent = _self.parent().parent();
+            //console.log();
+
+            if(!div_parent.find('.attach-id').is(':checked'))
+            {
+              div_parent.find('.attach-id').prop('checked', _self.is(":checked"));
+          }
+
+          div_parent.find('.active_cn').prop('checked', _self.is(":checked"));
+            // div_parent.find('.attach-id').prop('checked', _self.is(":checked"));
+
+            //div_parent.find('.attach-id').prop('checked', _self.is(":checked"));
+        }
+
+        function check_all(e) {
+            _self = $(e.target);
+            $('.attach-id').prop('checked', _self.is(":checked"));
+        }
+
+        function create_cn_all(e) {
+            _self = $(e.target);
+            var div_parent = _self.parent().parent();
+            $('.create_cn').prop('checked', _self.is(":checked"));
+            if(!div_parent.find('.attach-id').is(':checked'))
+            {
+                $('.attach-id').prop('checked', _self.is(":checked"));
+            }
+        }
+
+        function active_cn_all(e) {
+            _self = $(e.target);
+            var div_parent = _self.parent().parent();
+            $('.active_cn').prop('checked', _self.is(":checked"));
+            $('.create_cn').prop('checked', _self.is(":checked"));
+            if(!div_parent.find('.attach-id').is(':checked'))
+            {
+                $('.attach-id').prop('checked', _self.is(":checked"));
+            }
+        }
+
+        $(document).ajaxStart(function(){
+            $.blockUI({ css: { 
+                border: 'none', 
+                padding: '15px', 
+                backgroundColor: '#000', 
+                '-webkit-border-radius': '10px', 
+                '-moz-border-radius': '10px', 
+                opacity: .5, 
+                color: '#fff' 
+            } });
+        });
+
+        $(document).ajaxStop(function(){
+            $.unblockUI();
+        });
+
+        $(document).on('focus',".receive_date", function(){ 
+           $(this).datepicker({ dateFormat: "dd/mm/yy" });
+       });
+
+        $(document).on("submit", "form", function(e){
+
+            $.blockUI({ css: { 
+                border: 'none', 
+                padding: '15px', 
+                backgroundColor: '#000', 
+                '-webkit-border-radius': '10px', 
+                '-moz-border-radius': '10px', 
+                opacity: .5, 
+                color: '#fff' 
+            } });
+
+            // $.unblockUI();
+
+        });
+
+        $('#ifrmSave').load(function() {
+            $.unblockUI();
+        });
+
+    });
+
+
+    function initGoBack(){
+        $('.go-back').click(function(e){
+            window.location.href = $('#back_url').val();
+            return false;
+        });
+    }
+
+
+</script>
+<style>
+label input,
+label select {
+  margin-right: 25px;
+}
+</style>
+
+<?php echo $this->render('sales/partials/return_box_number_imei_script.phtml'); ?>

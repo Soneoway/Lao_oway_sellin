@@ -1,0 +1,55 @@
+<table class="table table-bordered" id='main-table'>
+    <thead>
+        <tr>
+            <th>STT</th>
+            <th>Distributor</th>
+            <th>Is parent</th>
+            <th>Action</th>
+        </tr>
+    </thead>
+    <tbody>
+        <?php 
+            if(isset($this->list) and count($this->list)):
+                $intStt = $this->offset;
+                foreach($this->list as $item):
+        ?>
+        <tr>
+            <td>
+                <?php 
+                    echo ++$intStt;
+                ?>
+            </td>
+            <td>
+                <?php 
+                    echo $item['title'];
+                ?>
+            </td>
+            <td>
+                <?php 
+                    if(intval($item['parent']) ==0){
+                        echo 'Parent';
+                    }
+                ?>
+            </td>
+            <td>
+                <a href="/checkmoney/del-checkmoney-ka?id=<?php echo $item['id']?>" class='confirmLink'><i class="icon-trash"></i></a>
+            </td>
+        </tr>
+        <?php 
+                endforeach;
+            endif;
+        ?>
+    </tbody>
+</table>
+<?php 
+    if(isset($this->list) and count($this->list)):
+?>
+<div class="paging">
+    <?php  echo $this->paging($this->total, $this->limit, $this->offset, $this->url);?>
+</div>
+<?php 
+    endif;
+?>
+<?php 
+    echo $this->confirm();
+?>

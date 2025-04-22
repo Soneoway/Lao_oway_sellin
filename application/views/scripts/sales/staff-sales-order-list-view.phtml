@@ -1,0 +1,493 @@
+
+<style type="text/css">
+    
+    .icon-imge{
+        padding: 0 20px;
+        cursor: pointer;
+    }
+    .img-slip{
+        cursor: -webkit-zoom-in;
+    }
+    .modal-backdrop.fade.in{
+        opacity: 0 !important;
+    }
+    .title_head{
+        margin-right: 25px;
+    }
+
+    
+
+</style>
+
+<div class="page-header">
+    <h1>Staff Sales Order View</h1>
+</div>
+
+
+<?php
+
+if (isset($this->messages) and $this->messages)
+    foreach ($this->messages as $message):
+        echo '<div class="alert alert-error">'.$message.'</div>';
+    endforeach;
+    ?>
+
+    <div class="row">
+       <div class="span12">
+        <iframe name="ifrmSave" id="ifrmSave" width="100%" style="display:none;"></iframe>
+        <form role="form" id="form" action="<?php echo HOST.'sales/save-staff-sales-order-list';?>" method="post" target="ifrmSave" class="form-inline">
+
+            <div class="row">
+                <div class="span5">
+                    <div class="control-group">
+                        <label for="privileges_no" class="span2">รหัสการจองสินค้า<span style="color: red">*</span></label>
+                        <input type="text" readonly="true" name="privileges_no" id="privileges_no" required="required" value="<?php isset($this->get_resule) and $this->get_resule and printf($this->get_resule[0]['privileges_no']);?>" />
+                    </div>
+                    <div class="control-group">
+                        <label for="company_name" class="span2">บริษัท<span style="color: red">*</span></label>
+                        <input type="text" readonly="true" name="company_name" id="company_name" required="required" value="<?php isset($this->get_resule) and $this->get_resule and printf($this->get_resule[0]['company_name']);?>" />
+                    </div>
+                    <div class="control-group">
+                        <label for="staff_code" class="span2">รหัสพนักงาน<span style="color: red">*</span></label>
+                        <input type="text" readonly="true" name="staff_code" id="staff_code" required="required" value="<?php isset($this->get_resule) and $this->get_resule and printf($this->get_resule[0]['staff_code']);?>" />
+                    </div>
+                    <div class="control-group">
+                        <label for="staff_name" class="span2">พนักงาน<span style="color: red">*</span></label>
+                        <input type="text" readonly="true" name="staff_name" id="staff_name" required="required" value="<?php isset($this->get_resule) and $this->get_resule and printf($this->get_resule[0]['staff_name']);?>" />
+                    </div>
+                    
+                    <div class="control-group">
+                        <label for="create_date" class="span2">วันที่รับจองสินค้า<span style="color: red">*</span></label>
+                        
+                        <input type="text" readonly="true" class="create_date" name="create_date" id="create_date" required="required" value="<?php isset($this->get_resule) and $this->get_resule and printf($this->get_resule[0]['create_date']);?>" />
+
+                    </div> 
+                     
+                    <br><br>
+                    
+                    <div class="control-group">
+                        <label for="status" class="span2">สถานะรายการ<span style="color: red">*</span></label>
+                        <?php //print_r($this->get_resule[0]);  ?>
+                        <select id="status" name="status" <?php if($this->action_frm=='view'){echo "disabled";}?>
+                        <?php if($this->get_resule[0]['status']==3){echo "disabled";}?> >
+                            <option  <?php if($this->get_resule[0]['status']==0) :?> selected <?php endif;?> value="0" >-- กรุณาเลือก --</option>
+                            <option  <?php if($this->get_resule[0]['status']==3) :?> selected <?php endif;?> value="3" >สร้าง SO และบันทึกรายการ</option>
+                            <option <?php if($this->get_resule[0]['status']==6) :?> selected <?php endif;?> value="6" >ยกเลิกรายการ</option>
+                        </select>
+
+                    </div> 
+
+                    <div class="control-group">
+                        <label for="sales_order_no" class="span2">เลขที่ SO ที่ได้<span style="color: red">*</span></label>
+                        
+                        <input type="text" <?php if($this->action_frm=='view'){echo "disabled";}?> class="sales_order_no" name="sales_order_no" id="sales_order_no" value="<?php isset($this->get_resule) and $this->get_resule and printf($this->get_resule[0]['sales_order_no']);?>" />
+
+                    </div>
+                      
+                    <div class="control-group">
+                        <label for="hr_remark" class="span2">หมายเหตุ</label>
+                        <textarea id="hr_remark" <?php if($this->action_frm=='view'){echo "disabled";}?> name="hr_remark"><?php isset($this->get_resule) and $this->get_resule and printf($this->get_resule[0]['hr_remark']);?></textarea>
+                    </div> 
+
+                    
+                </div> 
+                <div class="span7">
+                    <div class="control-group">
+                        <label for="remark" class="span2">หมายเหตุ (พนักงาน)</label>
+                        <textarea id="remark" readonly="true" name="remark"><?php isset($this->get_resule) and $this->get_resule and printf($this->get_resule[0]['remark']);?></textarea>
+                    </div> 
+                    <div class="control-group">
+                        <label for="delivery_address" class="span2">ที่อยู่จัดส่ง</label>
+                        <textarea id="delivery_address" rows="9" readonly="true" name="delivery_address"><?php isset($this->get_resule) and $this->get_resule and printf($this->get_resule[0]['delivery_address']);?></textarea>
+                    </div>
+                </div> 
+
+     
+            </div>
+            
+            <?php
+                $userStorage = Zend_Auth::getInstance()->getStorage()->read();
+                if (My_Staff_Group::inGroup($userStorage->group_id, array(ADMINISTRATOR_ID, 23)) or ($exception_case and in_array
+                ($userStorage->id, $exception_case))){
+                    $view_create_so="";    //Sales Admin = 23
+                }else{
+                    $view_create_so='style="display: none;"';
+                }
+            ?>
+            <div class="row">
+                <div class="span4">
+                    <div class="control-group">
+                        <input type="hidden" name="privileges_sn" id="privileges_sn" value="<?php isset($this->get_resule) and $this->get_resule and printf($this->get_resule[0]['privileges_sn']);?>" />
+                        <input type="hidden" name="company_id" id="company_id" value="<?php isset($this->get_resule) and $this->get_resule and printf($this->get_resule[0]['company_id']);?>" />
+
+                        <div class="span4">
+                            <button type="submit" <?php if($this->get_resule[0]['status']==3){echo "disabled";}?> <?php if($this->action_frm=='view'){echo "disabled";}?> class="btn btn-primary">Save</button>
+                            <button type="button" class="btn btn-danger go-back">Go back</button>
+                            
+                        </div>
+                    </div>
+                    <div class="clearfix"></div>
+                </div>
+            </div>
+        </p>
+        <div class="row">
+            <div class="span8">
+                <table id="return_by_imeiTable" class="table table-bordered">
+                    <thead>
+                        <tr>
+                            <?php echo $this->sorting(array(
+                                '#',
+                                'product_name'  => 'รหัสสินค้า',
+                                'product_detail_name'  => 'ชื่อสินค้า',
+                                'product_color'  => 'สี',
+                                'master_unit_price'  => 'ราคาก่อนลด',
+                                'discount_type'  => 'ส่วนลด',
+                                'unit_price'  => 'ราคาหลังลด',
+                                'qty'  => 'จำนวน',
+                                'total_price'  => 'ราคารวม',
+                            ),
+                            $this->url, $this->sort, $this->desc); ?>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <?php 
+                        //print_r($this->get_resule[0]);
+                        $row=1;$total_qty=0;$total_amount=0;
+                        foreach ($this->get_resule as $imei){
+                            //print_r($imei);die;
+                            $total_qty += $imei['qty'];
+                            $total_amount += $imei['total_price'];
+                        ?>
+                            <tr>
+                                <td><?php echo $row;?></td>
+                                <td><input type="hidden" name="good_id[]" value="<?php echo $imei['good_id'];?>" /><?php echo $imei['good_name'];?></td>
+                                <td><?php echo $imei['desc'];?></td>
+                                <td><input type="hidden" name="good_color[]" value="<?php echo $imei['imei_oppo'];?>-<?php echo $imei['good_color'];?>" /><?php echo $imei['good_color_name'];?></td>
+                                <td style="text-align: right;"><?php echo number_format($imei['master_unit_price'],2);?></td>
+                                <td style="text-align: center;" ><?php echo $imei['discount_type'];?>%</td>
+                                <td style="text-align: right;"><?php echo number_format($imei['unit_price'],2);?></td>
+                                <td style="text-align: center;" ><?php echo $imei['qty'];?></td>
+                                <td style="text-align: right;"><?php echo number_format($imei['total_price'],2);?></td>
+                            </tr>
+                        <?php $row +=1; } ?>
+
+                            <tr>
+                                <td></td>
+                                <td></td>
+                                <td></td>
+                                <td></td>
+                                <td></td>
+                                <td></td>
+                                <td></td>
+                                <td style="text-align: center;"><?php echo number_format($total_qty,0);?></td>
+                                <td style="text-align: right;"><?php echo number_format($total_amount,2);?></td>
+                            </tr>
+
+                    </tbody>
+                </table>
+
+
+            </div>
+        </div> 
+        <div class="row">
+            <div class="span8">
+                
+                <div class="modal-body">
+                <table border=0 width="100%">
+                  <?php 
+                   //$file_pay_slip = $this->get_resule[0]['payment_slip_image'];
+                      $file_pay_slip = API_IOPPO_STAFF_URL."staff_slip_payment/".$this->get_resule[0]['staff_code']."/".$this->get_resule[0]['payment_slip_image'];
+                   //$file_pay_slip = "http://api-training.ioppo.oppo.in.th/staff_slip_payment/5900923/slip-5900923-201808311555229430-5b8926b796178.jpg";
+
+                      echo "<tr >";
+                      echo    '<td style="text-align:center"><img class="form-control img-slip badge badge-default" id="img-slip_0" src="'.$file_pay_slip.'" alt="Payment Slip" height="400" width="400" data-file-pay-order-staff="'.$file_pay_slip.'"></td>';
+                      echo "</tr>";
+
+                  ?>
+                </table>
+                <div align="center">
+                    <!-- <span><i class="icon-imge icon-mail-reply icon-3x" id="icon-imge-l"></i></span>
+                    <span><i class="icon-imge icon-mail-forward icon-3x" id="icon-imge-r"></i></span> -->
+                </div>
+                </div>
+                <div class="modal-header" align="center">
+                  <h3 id="myModalLabel">วันที่ชำระเงิน : <?php echo $this->get_resule[0]['payment_date'];?></h3>
+                </div>
+                <div class="modal-header" align="center">
+                  <h3 id="myModalLabel">Payment Slip</h3>
+                </div>
+            </div>
+            <div class="span8">
+                
+                <div class="modal-body">
+                <table border=0 width="100%">
+                  <?php 
+                   //$file_pay_slip = $this->get_resule[0]['payment_slip_image'];
+                   //echo $file_pay_slip = API_IOPPO_STAFF_URL."staff_slip_payment/".$this->get_resule[0]['staff_card_image'];
+                   //$staff_card_image = "http://api-training.ioppo.oppo.in.th/staff_slip_payment/5900923/slip-5900923-201808311555229430-5b8926b796178.jpg";
+                      $staff_card_image =API_IOPPO_STAFF_URL."staff_slip_payment/".$this->get_resule[0]['staff_code']."/".$this->get_resule[0]['staff_card_image'];
+                      echo "<tr >";
+                      echo    '<td style="text-align:center"><img class="form-control img-slip badge badge-default" id="img-slip_1" src="'.$staff_card_image.'" alt="Payment Slip" height="400" width="400" data-file-pay-order-staff="'.$staff_card_image.'"></td>';
+                      echo "</tr>";
+                  ?>
+                </table>
+                <div align="center">
+                    <!-- <span><i class="icon-imge icon-mail-reply icon-3x" id="icon-imge-l"></i></span>
+                    <span><i class="icon-imge icon-mail-forward icon-3x" id="icon-imge-r"></i></span> -->
+                </div>
+                
+                </div>
+                <div class="modal-header" align="center">
+                  <h3 id="myModalLabel">บัตรพนักงาน</h3>
+                </div>
+            </div>
+            <div class="span8">
+                
+                <div class="modal-body">
+                <table border=0 width="100%">
+                  <?php 
+                   //$file_pay_slip = $this->get_resule[0]['payment_slip_image'];
+                   //echo $file_pay_slip = API_IOPPO_STAFF_URL."staff_slip_payment/".$this->get_resule[0]['staff_card_image'];
+                    //$id_card_image = "http://api-training.ioppo.oppo.in.th/staff_slip_payment/5900923/slip-5900923-201808311555229430-5b8926b796178.jpg";
+                      $id_card_image =API_IOPPO_STAFF_URL."staff_slip_payment/".$this->get_resule[0]['staff_code']."/".$this->get_resule[0]['id_card_image'];
+                      echo "<tr >";
+                      echo    '<td style="text-align:center"><img class="form-control img-slip badge badge-default" id="img-slip_2" src="'.$id_card_image.'" alt="Payment Slip" height="400" width="400" data-file-pay-order-staff="'.$id_card_image.'"></td>';
+                      echo "</tr>";
+                  ?>
+                </table>
+                <div align="center">
+                    <!-- <span><i class="icon-imge icon-mail-reply icon-3x" id="icon-imge-l"></i></span>
+                    <span><i class="icon-imge icon-mail-forward icon-3x" id="icon-imge-r"></i></span> -->
+                </div>
+                </div>
+                <div class="modal-header" align="center">
+                  <h3 id="myModalLabel">บัตรประชาชน</h3>
+                </div>
+            </div>
+        </div>
+
+
+    </p>
+        
+
+</div>
+
+</div>
+
+</br>
+
+</form>
+</div>
+</div>
+
+<div id="modal" class="modal hide fade" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+</div>
+
+<link rel="stylesheet" href="<?php echo HOST?>css/jquery.datetimepicker.css" />
+
+<script src="<?php echo HOST?>js/jquery-1.7.2.min.js"></script>
+<script src="<?php echo HOST?>js/jquery.datetimepicker.full.js"></script>
+
+<link rel="stylesheet" href="<?php echo HOST?>css/jquery-ui.css">
+<script src="<?php echo HOST?>js/jquery-ui.js"></script>
+<script src="<?php echo HOST?>js/numeral.min.js"></script>
+
+<script src="../js/tag-it.min.js" type="text/javascript" charset="utf-8"></script>
+<link href="../css/jquery.tagit.css" rel="stylesheet" type="text/css">
+<link href="../css/tagit.ui-zendesk.css" rel="stylesheet" type="text/css">
+
+<link rel="stylesheet" type="text/css" href="/css/bootstrap-modal.css"/>
+<script type="text/javascript" src="/js/bootstrap-modal.js"></script>
+<script type="text/javascript" src="/js/bootstrap-modalmanager.js"></script>
+<link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
+
+<script src="/js/jquery.blockUI.js"></script>
+
+<style>
+.blockOverlay{
+    z-index: 10000 !important;
+}
+.blockPage{
+    z-index: 10001 !important;
+}
+#SearchBox{
+  width: 360px!important;
+}
+#distributor_id{
+  z-index: 0!important;
+}
+.dropdown{
+  z-index: 2;
+  }.span122 {
+    margin-left: : 25px;
+}
+
+.icon-imge{
+    padding: 0 20px;
+    cursor: pointer;
+}
+
+#img-slip{
+    cursor: -webkit-zoom-in;
+}
+
+
+
+</style>
+<script>
+    $(document).ajaxStart(function(){
+        $.blockUI({ css: { 
+            border: 'none', 
+            padding: '15px', 
+            backgroundColor: '#000', 
+            '-webkit-border-radius': '10px', 
+            '-moz-border-radius': '10px', 
+            opacity: .5, 
+            color: '#fff' 
+        } });
+    });
+
+    $(document).ajaxStop(function(){
+        $.unblockUI();
+    });
+
+    $(document).ready(function () {
+        initGoBack();
+        $('.sales_order_no').attr('readonly', true);
+
+    });
+
+
+    function initGoBack(){
+        $('.go-back').click(function(e){
+            window.location.href = "/sales/staff-sales-order-list";
+            return false;
+        });
+    }
+
+    
+
+    $('#status').change(function(event) {
+      var status = $(this).val();
+      if(status==3){
+        if(confirm('ยืนยันการสร้าง SO ?')) {
+            $('#status').attr('disabled', true);
+            save_order();
+        }else{
+            $(this).val(0);
+        }
+      }
+
+    });
+
+
+    function save_order()
+    {
+        var company_id = $('#company_id').val();
+        var privileges_sn = $('#privileges_sn').val();
+
+        //alert(company_id);
+
+        $.ajax({
+            url: '/sales/save-create-staff-sales-order',
+            type: 'post',
+            dataType: 'json',
+            processData: true,
+            data: {
+                company_id : company_id,
+                privileges_sn : privileges_sn
+            }
+        })
+            .done(function(data) {
+                if (data) {
+                    if (data.code != 1) {
+                        alert(data.messege);
+                        return false;
+                    } else {
+                        //alert(data.messege);
+                        if(company_id==1){
+                            $.get('<?=HOST?>cron/gen-sn-ref', function( data_sn ) {});
+                        }else if(company_id==2){
+                            $.get('<?=HOST_ONEPLUS?>cron/gen-sn-ref', function( data_sn ) {});
+                        }
+                        
+                        alert(data.messege);
+                        setTimeout(window.location.reload(), 300);
+                    }
+                } else {
+                    alert("Error");
+                    return false;
+                }
+            });
+    }
+
+    $('.img-slip').error(function() {
+            $(this).attr('src', 'http://www.nosun.co.za/wp-content/themes/sistina/core/assets/images/no-featured-175.jpg');
+        });
+
+    <?php for($i=0;$i<3;$i++){?>
+        var retate_current_<?=$i;?> = 0;
+        var retate_<?=$i;?> = 90;
+
+        $('#icon-imge-l_<?=$i;?>').click(function(event) {
+            retate_current_<?=$i;?> = retate_current_<?=$i;?>-retate_<?=$i;?>;
+
+            $('#img-slip_<?=$i;?>').css({
+                 '-moz-transform':'rotate('+retate_current_<?=$i;?>+'deg)',
+                 '-webkit-transform':'rotate('+retate_current_<?=$i;?>+'deg)',
+                 '-o-transform':'rotate('+retate_current_<?=$i;?>+'deg)',
+                 '-ms-transform':'rotate('+retate_current_<?=$i;?>+'deg)',
+                 'transform':'rotate('+retate_current_<?=$i;?>+'deg)'
+            });
+        });
+
+        $('#icon-imge-r_<?=$i;?>').click(function(event) {
+            retate_current_<?=$i;?> = retate_current_<?=$i;?>+retate_<?=$i;?>;
+
+            $('#img-slip_<?=$i;?>').css({
+                 '-moz-transform':'rotate('+retate_current_<?=$i;?>+'deg)',
+                 '-webkit-transform':'rotate('+retate_current_<?=$i;?>+'deg)',
+                 '-o-transform':'rotate('+retate_current_<?=$i;?>+'deg)',
+                 '-ms-transform':'rotate('+retate_current_<?=$i;?>+'deg)',
+                 'transform':'rotate('+retate_current_<?=$i;?>+'deg)'
+            });
+        });
+
+    <?php } ?>
+
+    //------------View Pay Slip------------------
+        
+        $modal = $('#modal');
+        $('.badge.badge-default').click(function(){
+            _self = $(this);
+            $('body').modalmanager('loading');
+            $.post('<?php echo HOST ?>finance/view-pay-slip',
+                {
+                    file_pay_slip : _self.data('file-pay-slip'),
+                    file_pay_slip_mobile : _self.data('file-pay-slip-mobile'),
+                    file_pay_order_staff : _self.data('file-pay-order-staff')
+                },
+                function(data){
+                    //alert(data);
+                    $modal.html(data);
+                    $modal.modal();
+                    // var name = _self.parents('tr').children('td:nth-child(1)').html();
+                    // $modal.find('h3').append(' <small>&bull; '+name+'</small>');
+                    // $modal.css('margin-left', '-120px');
+            });
+            
+        });
+
+
+        //------------------------------
+
+
+</script>
+<style>
+label input,
+label select {
+  margin-right: 25px;
+}
+</style>
+
+

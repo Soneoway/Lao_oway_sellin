@@ -1,0 +1,385 @@
+   <link href="<?=HOST?>public/css/bootstrap.modi.min.css" rel="stylesheet">
+     <style type="text/css">
+        .list-group{
+            height: 200px;
+            overflow: hidden;
+            overflow-y: scroll;
+        }
+
+        .so {
+            width: 80px;
+            padding-left: 15px;
+            display: -webkit-inline-box;
+            display: inline-block;
+        }
+        .price_ori {
+            width: 320px;
+            display: -webkit-inline-box;
+            display: inline-block;
+            text-align: left;
+        }
+        .so-title {
+            padding-left: 20px;
+            width: 100px;
+            display: -webkit-inline-box;
+            display: inline-block;
+        }
+        .price_text{
+            margin-top: 10px;
+        }
+
+        .show_rank{
+            display: none;
+        }
+    </style> 
+<div class="page-header">
+	<?php if (isset($this->good) && $this->good): ?>
+		<h1>Add Hold Product</h1>
+	<?php else: ?>
+		<h1>Create Product</h1>
+	<?php endif ?>
+    
+</div>
+<?php
+    if (isset($this->messages_success) and $this->messages_success)
+        foreach ($this->messages_success as $message):
+            echo '<div class="alert alert-success">'.$message.'</div>';
+        endforeach;
+
+    if (isset($this->messages) and $this->messages)
+        foreach ($this->messages as $message):
+            echo '<div class="alert alert-error">'.$message.'</div>';
+        endforeach;
+?>
+<form class="form-horizontal" action="<?php echo HOST ?>product/hold-product-save" name="form" id="form" method="post">
+	<div class="row-fluid">
+		<div class="span6">
+			<div class="control-group">
+			    <label class="control-label" for="name">Product Code : </label>
+			    <span style="margin: 20px"> <?php if( isset($this->good) && isset($this->good['name']) ) echo $this->good['name'] ?></span>
+			    
+			</div>
+
+           <?PHP $disabled = '';
+			      $readonly = '';
+            //       if (isset($this->hold_all) and $this->hold_all) {
+            //         $disabled = 'disabled';
+            //         $readonly = 'readonly';
+            // }   
+            //      if (isset($this->hold_dis) and $this->hold_dis) {
+            //         $disabled2 = 'disabled';
+            // }
+            // if (isset($this->hold_all) and $this->hold_all[0]['type_all']==1) {
+            //         $disabled3 = 'disabled checked';
+            // }
+            ?> 
+            <div class="control-group">
+                <label class="control-label" for="no_kpi">Warehouse : </label>
+                <div class="controls">
+                    <select id="warehouse_id" class="span4" name="warehouse_id" <?=$disabled?> required="required">
+                        <option value="">Please select</option>
+                        <?php foreach ($this->warehouses as $id=>$name):?>
+                            <option value="<?php echo $id;?>" <?php if (isset($this->hold_all) and $id == $this->hold_all[0]['warehouse_id']):?> selected<?php endif;?>><?php echo $name;?></option>
+                        <?php endforeach;?>
+                    </select>
+                </div>
+            </div>    
+			<div class="control-group">
+			    <label class="control-label" for="no_kpi">Hold : </label>
+			    <div class="">
+			    	<input type="radio" class="specific_off" name="hold" <?=$disabled2?> required  placeholder="Product Details"  value="1" <?php if (isset($this->hold_all) && $this->hold_all) echo "checked" ?>/> All Distributor&nbsp;&nbsp;&nbsp;
+
+			    	<input type="radio" class="specific_on" name="hold" <?=$disabled?> required placeholder="Product Details"  value="2" <?php if (isset($this->good['no_kpi']) && $this->good['no_kpi']) echo "checked" ?>/> Specific
+			    </div>
+			</div>
+			
+			
+			
+			
+		</div>
+		<div class="span4">
+			<div class="control-group">
+			    <label class="control-label" for="color">Color : </label>
+			    <div class="controls">
+			    <input type="checkbox" name="color[]" id="checkAll" <?=$disabled3?>  value="0"> All&nbsp;&nbsp;&nbsp;<br/>
+			    	<?php 
+			    		if (isset($this->good) && $this->good)
+			    			$colors = explode(',', $this->good['color']);
+			    	?>
+			    	<?php foreach ($colors as $color): ?>
+				    	<input type="checkbox" class="color" name="color[]" <?=$disabled3?> value="<?php echo $color ?>"> <?php echo $this->goodColors[$color] ?>&nbsp;&nbsp;&nbsp;<br/>
+				   <?php endforeach ?>
+
+			    	
+			    </div>
+			</div>
+		</div>
+		<div class="span12 rank_box show_rank">
+		<div class="control-group">
+                <label class="control-label" for="rank">Rank<span style="color: red">*</span></label>
+                <div class="controls">
+                    <select id="rank" name="rank" class="rank" disabled>
+                        <option value="">---</option>
+                        <option value="1" <?php if( isset($this->distributor['rank']) and $this->distributor['rank']==1 ) { ?> selected<?php }?>>1. ORG-WDS(1)</option>
+                        <option value="2" <?php if( isset($this->distributor['rank']) and $this->distributor['rank']==2 ) { ?> selected<?php }?>>2. ORG(2)</option>
+                        <option value="5" <?php if( isset($this->distributor['rank']) and $this->distributor['rank']==5 ) { ?> selected<?php }?>>3. ORG-Dtac/Advice(5)</option>
+                        <option value="6" <?php if( isset($this->distributor['rank']) and $this->distributor['rank']==6 ) { ?> selected<?php }?>>4. ORG-Lotus/Power by(6)</option>
+                        <option value="7" <?php if( isset($this->distributor['rank']) and $this->distributor['rank']==7 ) { ?> selected<?php }?>>5. Dealer(7)</option>
+                        <option value="8" <?php if( isset($this->distributor['rank']) and $this->distributor['rank']==8 ) { ?> selected<?php }?>>6. HUB(8)</option>
+                        <option value="9" <?php if( isset($this->distributor['rank']) and $this->distributor['rank']==9 ) { ?> selected<?php }?>>7. Laos(9)</option>
+                        <option value="3" <?php if( isset($this->distributor['rank']) and $this->distributor['rank']==3 ) { ?> selected<?php }?>>8. Online and Staff(3)</option>
+                        <option value="10" <?php if( isset($this->distributor['rank']) and $this->distributor['rank']==10 ) { ?> selected<?php }?>>9. Brand Shop/Service(10)</option>
+                        <option value="11" <?php if( isset($this->distributor['rank']) and $this->distributor['rank']==11 ) { ?> selected<?php }?>>10. King Power(11)</option>
+                        <option value="12" <?php if( isset($this->distributor['rank']) and $this->distributor['rank']==12 ) { ?> selected<?php }?>>11. Jaymart(12)</option>
+                    </select>
+                    <p class="help-block"></p>
+                </div>
+            </div>  
+			<div class="list_distributor"></div>
+       
+     
+
+   
+
+		</div>
+		
+	</div>
+	
+	<input type="hidden" class="good_id" name="good_id" value="<?php if( isset($this->good) && isset($this->good['id']) ) echo $this->good['id'] ?>" />
+	<div class="row-fluid">
+		<div class="span12">
+			<div class="pull-right">
+				<button type="submit" id="submit_btn" <?=$disabled3?> class="btn btn-primary">Submit</button>
+				<button type="button" id="cancel_btn" class="btn btn-warning">Cancel</button>
+			</div>
+		</div>
+	</div>
+</form>
+
+<?php
+        if (isset($this->hold_all) and $this->hold_all) { ?>
+<!-- <div class="accordion" id="accordion2">
+    <div class="accordion-group">
+        <div class="accordion-heading">
+            <a class="accordion-toggle collapsed" data-toggle="collapse" data-parent="#accordion2" href="#collapseTwo">
+                Search
+            </a>
+        </div>
+        <div id="collapseTwo" class="accordion-body collapse" style="height: 0px;">
+            <div class="accordion-inner">
+
+                <?php
+               
+                    //echo $this->render('product/hold-product/partials/search.phtml');
+               
+                ?>
+            </div>
+        </div>
+    </div>
+</div> -->
+<!-- <div class="row">
+    <div class="span12">
+        <span class="pull-right">
+            <button class="btn-success" type="button" onclick="window.location='<?php echo HOST ?>product/product-create'">
+                <i class="icon-plus"></i>
+            </button>
+        </span>
+    </div>
+</div> -->
+ <button  type="submit"  class="btn btn-warning unblockBnt" style="float: right;" >Unblock</button>
+<input type="hidden" name="hold_type" class="hold_type" value="1">
+<div class="table-responsive load-ajax">
+    <?PHP 
+            echo $this->render('product/hold-product/partials/list-hold-all.phtml');
+
+    ?>
+</div>
+
+<?PHP } ?> 
+<?php
+        if (isset($this->hold_dis) and $this->hold_dis) { ?>
+<!-- <div class="accordion" id="accordion2">
+    <div class="accordion-group">
+        <div class="accordion-heading">
+            <a class="accordion-toggle collapsed" data-toggle="collapse" data-parent="#accordion2" href="#collapseTwo">
+                Search
+            </a>
+        </div>
+        <div id="collapseTwo" class="accordion-body collapse" style="height: 0px;">
+            <div class="accordion-inner">
+
+                <?php
+               
+                    //echo $this->render('product/hold-product/partials/search.phtml');
+               
+                ?>
+            </div>
+        </div>
+    </div>
+</div> -->
+<!-- <div class="row">
+    <div class="span12">
+        <span class="pull-right">
+            <button class="btn-success" type="button" onclick="window.location='<?php echo HOST ?>product/product-create'">
+                <i class="icon-plus"></i>
+            </button>
+        </span>
+    </div>
+</div> -->
+<button  type="submit"  class="btn btn-warning unblockBnt" style="float: right;" >Unblock</button>
+<input type="hidden" name="hold_type" class="hold_type" value="2">
+<div class="table-responsive load-ajax">
+    <?PHP 
+            echo $this->render('product/hold-product/partials/list-hold.phtml');
+
+    ?>
+</div>
+<?PHP } ?>    
+<script type="text/javascript" src="/js/jquery-ui-1.8.12.custom.min.js"></script>
+<link rel="stylesheet" type="text/css" href="/css/jquery-ui-1.8.12.custom.css"/>
+
+<script>
+    $(document).ready(function () {
+        $('.form-search button:reset').click(function (e){
+            $('.form-search input, .form-search select').val('');
+            $('.form-search').submit();
+            return false;
+        });
+
+        $('.unblockBnt').click(function(event) {
+            var hold_type = $('.hold_type').val();
+            var good_id = $('.good_id').val();
+            unblock = [];
+            
+            $('.unblock:checked').each(function(index, el) {
+                unblock.push($(el).val());
+            });
+            
+            if (unblock.length > 0) {
+                // alert(good_id);
+                $.ajax({
+                    url: 'unblock-product',
+                    type: 'POST',
+                    dataType: 'html',
+                    data: {id: unblock,type:hold_type,good_id:good_id}
+
+                })
+                .done(function(data) {
+                    alert('Unblock Success');
+                    location.reload();
+                })
+                .fail(function() {
+                    console.log("error");
+                })
+                .always(function() {
+                    console.log("complete");
+                });
+               
+                
+            };
+        
+        });
+    });
+
+
+    //Update By PungPond
+   
+    
+
+    $("#checkAll").change(function () {
+    $("input:checkbox.color").prop('checked', $(this).prop("checked"));
+    });
+    $('body').on('change', '.specific_on', function () {
+        // alert('333');
+        $('.rank_box').removeClass('show_rank');
+        $('.rank').removeAttr('disabled');//.attr('disabled','disabled');
+    });
+    $('body').on('change', '.specific_off', function () {
+        // alert('333');
+        $('.rank_box').addClass('show_rank');
+        $('.rank').attr('disabled','disabled');
+
+    });
+    $('body').on('change', '.rank', function () {
+               var list =  $(this).val();
+              
+               $.ajax({
+                   url: '/product/list-distributor',
+                   type: 'POST',
+                   data: {rank: list},
+               })
+               .done(function(data) {
+                    $('.list_distributor').empty();
+                    $('.list_distributor').append(data);
+                   console.log("success");
+               })
+               .fail(function() {
+                   console.log("error");
+               })
+               .always(function() {
+                   console.log("complete");
+               });
+               
+            });
+
+
+	$('#add_color_btn').click(function(){
+        _self = $('#color_list');
+        item = _self.children('option:selected').clone();
+        list = $(item);
+
+        for (var i = 0; i < item.length; i++) {
+        	val = $(item[i]).attr('value');
+            if ( ! is_exists( val ) && val != 0 ) {
+                _des = $('#color');
+                _des.append(item[i]);
+            }
+        }
+
+        change_size($('#color'));
+    });
+
+
+
+
+    $('#remove_color_btn').click(function(){
+        _self = $('#color');
+        item = _self.children('option:selected').remove();
+        change_size(_self);
+    });
+
+    $('#form').submit(function(){
+        _name = $('#color option');
+        id_str = '';
+        
+        for(var i = 0; i < _name.length; i++) {
+            id_str += $(_name[i]).attr('value') + ',';
+        }
+        
+        id_str = id_str.replace(/\,$/, '');
+        id_str = id_str.replace(/^\,/, '');
+        $('#good_color').val(id_str);
+        return true;
+    });
+
+    $('#cancel_btn').click(function(){
+    	window.location = '<?php echo HOST ?>product/hold-product';
+    });
+
+    function is_exists(id) {
+        _des = $('#color');
+        items = _des.children('option');
+        for(var i = 0; i < items.length; i++) {
+            if ($(items[i]).attr('value') == id) {
+                return true;
+            }
+        }
+        return false;
+    }
+
+    function change_size(elm) {
+        var len = parseInt(elm.find('option').length);
+        len = len > 3 ? len : 3;
+        elm.css("height", (len*20));
+    }
+</script>

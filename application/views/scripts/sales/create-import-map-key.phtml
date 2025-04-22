@@ -1,0 +1,131 @@
+<div class="page-header">
+        <h1>Create KeyProduct ImportOnline</h1>
+        <h4>ImportMapping Lazada Online</h4>
+</div>
+
+<?php
+if (isset($this->messages) and $this->messages)
+    foreach ($this->messages as $message):
+        echo '<div class="alert alert-error">'.$message.'</div>';
+    endforeach;
+
+    if (isset($this->messages_success) and $this->messages_success)
+    foreach ($this->messages_success as $message):
+        echo '<div class="alert alert-success">'.$message.'</div>';
+    endforeach;
+?>
+
+<div class="row">
+
+        <form role="form" id="form" action="<?php echo HOST.'sales/create-import-map-key';?>" class="form-horizontal">
+            <div class="row">
+                <div class="span6">
+                    
+                    <div class="control-group">
+                        <label for="text" class="span2">Product Key<span style="color: red">*</span></label>
+                        <input type="text" name="text_key" id="text_key" required="required" value="<?php echo $this->params['text_key']; ?>"/>
+                    </div>
+
+                    <div class="control-group">
+                        <label for="cat_id" class="span2">Products category <span style="color: red">*</span></label>
+                        <select id="cat_id" class="span3" name="cat_id" required="required">
+                            <option value="">Please select</option>
+                            <?php if ($this->goodCategories): foreach ($this->goodCategories as $id=>$name):?>
+                            <option value="<?php echo $id;?>" <?php if (isset($this->params['cat_id']) and $id==$this->params['cat_id']):?> selected<?php endif;?>><?php echo $name;?></option>
+                            <?php endforeach; endif;?>
+                        </select>
+                    </div>
+
+                    <div class="control-group">
+                        <label for="good_id" class="span2">Purchase of products <span style="color: red">*</span></label>
+                        <select id="good_id" class="span3" name="good_id" required="required">
+                            <option value="">Please select</option>
+                            <?php if($this->goods_cached): foreach ($this->goods_cached as $id=>$item):?>
+                            <option value="<?php echo $id;?>" <?php if(isset($this->params['good_id']) and $id==$this->params['good_id']):?> selected<?php endif;?> ><?php echo $item;?></option>
+                            <?php endforeach; endif;?>
+                        </select>
+                    </div>
+
+                    <div class="control-group">
+                        <label for="good_color_id" class="span2">Color of products <span style="color: red">*</span></label>
+                        <select id="good_color_id" class="span3" name="good_color_id" required="required">
+                            <option value="">Please select</option>
+                               <?php if ($this->goodColors):foreach($this->goodColors as $id=>$item):?>
+                            <option value="<?php echo $id;?>"<?php if (isset($this->params['good_color_id']) and $id==$this->params['good_color_id']):?> selected<?php endif;?>><?php echo $item;?></option>
+                            <?php endforeach; endif; ?>
+                        </select>
+                    </div>
+
+                </div>
+            </div>
+            <div class="row">
+                <div class="span6">
+                    <div class="control-group">
+                        <div class="span4">
+                            <button type="submit" class="btn btn-primary">Insert</button>
+                            <a href="create-import-map-key" class="btn btn-warning">Reset</a>
+                            <input type="hidden" name="back_url" id="back_url" value="/sales/create-auto-so">
+                            <button type="button" class="btn btn-danger go-back">Go back</button>
+                            <a type="button" class="btn" href="list-map-keyproduct" >Go to Table</a>
+                        </div>
+                    </div>
+                    <div class="clearfix"></div>
+                </div>
+            </div>
+    </form>
+        
+</div>
+
+<script type="text/javascript" src="/js/jquery-ui-1.8.12.custom.min.js"></script>
+<link rel="stylesheet" type="text/css" href="/css/jquery-ui-1.8.12.custom.css"/>
+<script type="text/javascript">
+$(document).ready(function () {
+      $('.go-back').click(function(e){
+            window.location.href = $('#back_url').val();
+            return false;
+        });
+
+        $('#cat_id, #good_id').change(function(){
+            $(this).after('<span class="loading"></span>');
+            var _self = $(this);
+            var cat_id = $('#cat_id').val();
+
+            if (_self.attr('id')=='cat_id')
+                $('#good_id').find('option:not(:first)').remove();
+
+            var good_id = $('#good_id').val();
+
+            $('#good_color_id').find('option:not(:first)').remove();
+
+            $('#num, #price').val('');
+
+            $.get("/get/load",
+                {cat_id: cat_id, good_id: good_id}
+                ,function(data,status){
+                    var data = $.parseJSON( data );
+                    if (data.goods){
+                        var obj = data.goods;
+                        for (var i = 0; i < obj.length; i++) {
+                            $('#good_id').append('<option value="'+obj[i]['id']+'">'+obj[i]['name']+'</option>');
+                        }
+                    }
+                    if (data.colors){
+                        var obj = data.colors;
+                        for (var i = 0; i < obj.length; i++) {
+                            $('#good_color_id').append('<option value="'+obj[i]['id']+'">'+obj[i]['name']+'</option>');
+                        }
+                    }
+                    _self.nextAll('.loading').remove();
+                });
+        });
+
+       
+        $('button:reset').click(function(e){
+            e.preventDefault();
+            $('select, input:text').val('');
+            $('textarea').text('');
+        })
+       
+    });
+
+</script>

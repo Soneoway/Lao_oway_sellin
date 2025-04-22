@@ -1,0 +1,82 @@
+<table class="table table-bordered">
+    <thead>
+        <tr>
+            <?php echo $this->sorting(array(
+				'#', 
+                'product_phone'    => 'Product Phone',
+                'accessories'      => 'Accessories',
+                'start_date'       => 'Date Start<br>(ระยะเวลที่เริ่ม)',
+                'end_date'         => 'Date End<br>(ระยะเวลาที่สิ้นสุด)',
+                'all_date'         => 'Always<br>(ตลอดระยะเวลา)',
+                'create_date'      => 'Created Date',
+                'create_by'        => 'Create By',
+                'update'           => 'Update By',
+				'Action'
+                ),
+            $this->url, $this->current_col, $this->desc); ?>
+        </tr>
+    </thead>
+    <tbody>
+     <?php
+
+        if (isset($this->list_autogift) and $this->list_autogift) :
+            foreach ($this->list_autogift as $k => $a):
+
+     ?>
+        <tr>
+            <td>
+                <?php
+                    $inc = $this->offset + $k + 1;
+                	echo $inc;
+                ?>
+            </td>
+            <td><?php echo $a['phone_name'] ?></td>
+            <td><?php echo $a['gift_name'] ?></td>
+            <td><?php 
+                      if($a['start_date'] == ''||$a['start_date'] == 0){
+                          echo '-';        
+                      }else{
+                          echo $a['start_date'];
+                      } 
+                ?>  
+            </td>
+            <td><?php 
+                     if($a['end_date'] == ''||$a['end_date'] == 0){
+                        echo '-';
+                     }else{
+                        echo $a['end_date'];
+                     } 
+                ?>
+            </td>
+            <td><?php 
+                     if($a['all_date'] == 0){
+                       echo '-';
+                     }else{
+                      echo 'All DAY';
+                     } 
+                ?>
+            </td>
+            <td><?php echo $a['created_date'] ?></td>
+            <td><?php echo $a['username'] ?></td>
+            <td><?php 
+                      if($a['user_update'] == null){
+                        echo '-';
+                      }else{
+                        echo $a['user_update'];
+                      }
+                ?>
+            </td>
+            <td><center>
+                <a title="Delete"class="confirmLink"href="/manage/delautogift?id=<?php echo $a['id'];?>"> <i class="icon-trash"></i></a>
+                <a title="Edit" href="/manage/add-auto-giftbox?id=<?php echo $a['id'];?>"> <i class="icon-edit"></i></a>
+            </td></center>
+        </tr>
+        <?php endforeach;?>
+		<?php endif; ?>
+    </tbody>
+</table>
+<div class="paging">
+    <?php echo $this->paging($this->total, $this->limit, $this->offset, $this->url);?>
+</div>
+<?php echo $this->load();?>
+<?php echo $this->confirm();?>

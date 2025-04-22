@@ -1,0 +1,99 @@
+<style>
+.red
+{
+    background: #1B8324;
+    color:white;
+}
+.red:hover
+{
+    color:black;
+}
+
+.hilight
+{
+    background: #E8ADAA;
+    /*color:white;*/
+}
+.hilight:hover
+{
+    /*color:black;*/
+}
+</style>
+<table class="table table-bordered">
+    <thead>
+        <tr>
+            <?php echo $this->sorting(array(
+                    'sn'            => 'Sale Order Number',
+					'payment_no'    => 'Payment Number',
+					'd_id'          => 'Retailer Name',
+					'total_price'  => 'Total Amount',
+                    'warehouse_id'  => 'Warehouse',
+                    'sales_confirm_date' => 'Sales Confirm Date',
+					'Action'
+                ),
+                $this->url, $this->sort, $this->desc); ?>
+        </tr>
+    </thead>
+    <tbody>
+        <?php
+        $statuses = unserialize(DISCOUNT_STATUS);
+        if (isset($this->markets_sn) and $this->markets_sn) :
+            foreach ($this->markets_sn as $k=>$m):
+             $dt = DateTime::CreateFromFormat("Y-m-d H:i:s", isset($m['last_updated_at']) ? $m['last_updated_at'] : $m['add_time']);
+             $h = $dt->format('H');
+             $i = $dt->format('i');
+             $d = $dt->format('d');
+             $date = date('d');
+
+             $sn_ref = $m['sn_ref'];
+             if($sn_ref==''){
+                $sn_ref = $m['sn'];
+             }
+
+             $total_amount = $m['total_price_amount'] - $m['total_discount'] + $m['delivery_fee'];
+             if($m['delivery_fee']>0){
+                $delivery_fee ="Delivery fee = ".$m['delivery_fee'];
+             }else{
+                $delivery_fee ="";
+             }
+            ?>
+            <tr class="<?php
+                    if(isset($h) and isset($i) and ($h >= 16))
+                       {
+                            if($date == $d)
+                            {
+                                if($h==16 and $i>=30)
+                                    echo 'red';
+                                else if($h > 16)
+                                    echo 'red';
+                            }                            
+                       }
+            ?>">
+                <td><?php if(isset($m['pay_group']) and $m['pay_group'] == 1){echo 'M';}else{echo $sn_ref;} ?></td>
+                <td><?php echo $m['payment_no'] ?></td>
+                <td><?php if (isset($this->distributors) && $this->distributors && isset($this->distributors[$m['d_id']])) echo $this->distributors[$m['d_id']]['title'] ?></td>
+                <?php if($m['rank'] == '9') {?>
+                    <td style="text-align: right;"><?php echo My_Number::f($m['total_price']); ?></td>
+                <?php }else{ ?>
+                    <td style="text-align: right;"><?php echo My_Number::f($m['total_price']); ?></td>
+                <?php } ?>
+                <td class="<?php if (isset($m['warehouse_id']) && $m['warehouse_id'] != 36) echo 'hilight'; ?>"><?php if (isset($this->warehouses_cached[$m['warehouse_id']])) echo $this->warehouses_cached[$m['warehouse_id']] ?></td>
+                
+                <td><?php if(isset($m['sales_confirm_date']) && $m['sales_confirm_date']){ echo $m['sales_confirm_date']; }else{ echo '-';} ?></td>
+
+                <td style="text-align: center;">
+                    <?php if(isset($m['pay_group']) and $m['pay_group'] == 1){ ?>
+                    <a title="Edit" href="/finance/sales-confirm-paygroup?paygroup=<?php echo $m['payment_no'];?>"> <i class="icon-edit"></i></a>
+                    <?php }else{ ?>
+                    <a title="Edit" href="/finance/sales-confirm?sn=<?php echo $m['sn'];?>"> <i class="icon-edit"></i></a>
+                    <?php } ?>
+                </td>
+            </tr>
+
+        <?php endforeach;?>
+		<?php endif; ?>
+    </tbody>
+</table>
+<div class="paging">
+    <?php echo $this->paging($this->total, $this->limit, $this->offset, $this->url);?>
+</div>

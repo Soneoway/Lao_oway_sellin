@@ -1,0 +1,153 @@
+<style type="text/css">
+.invoice{position:relative;top:0;z-index:9999;top:-486px;height:440px;margin-bottom:-440px}
+  </style>
+<table class="tbllist invoice" cellspacing="1" cellpadding="5">
+    <?php
+    $distributor_name = $this->distributor['unames'];
+
+
+
+
+    $fpt  = 'FPT';
+    $pos = strpos($distributor_name, $fpt);
+    if ($pos and $this->distributor['id'] != 1030) $fpt=1;
+    $count = 0;
+    $text_km = 'Hàng khuyến mãi không thu tiền';
+    $num_total = $price_before_vat = $price_after_vat = 0;
+
+    if (isset($this->market) && $this->market && isset($this->mk_goods) && $this->mk_goods):
+        $i = 1;
+        foreach ($this->mk_goods as $k => $v):
+            if ($v['cat_id'] == PHONE_CAT_ID)
+            {
+                $this->all_goods[$v['good_id']]['name'] = 'Điện thoại di động OPPO '.($this->goods_cached[$v['good_id']] ? $this->goods_cached[$v['good_id']] : '');
+                $count++;
+            }
+            if ($v['cat_id'] != PHONE_CAT_ID)
+                $this->all_goods[$v['good_id']]['name'] = $this->all_goods[$v['good_id']]['desc'];
+            if ($v['cat_id'] != PHONE_CAT_ID && $fpt!=1)
+                $this->all_goods[$v['good_id']]['name'] = $this->all_goods[$v['good_id']]['desc_name'];
+
+            //bao da n1 mini
+            if ($v['cat_id'] != PHONE_CAT_ID && $fpt==1 )
+                $this->all_goods[$v['good_id']]['name'] = $this->all_goods[$v['good_id']]['desc_name'];
+
+           
+
+            //đơn hàng nguyễn kim - có thêm màu - thiệt là vl
+            if(isset($this->nk)and $this->nk)
+            {
+                $this->all_goods[$v['good_id']]['name'] =  $this->all_goods[$v['good_id']]['name'].'-'.$this->good_colors[$v['good_color']];
+            }
+
+             
+
+             $v['price'] = round($v['price'] / 1.1);
+
+
+            if(isset($v['sale_off_percent'])&& $v['sale_off_percent'] !=0)
+                $v['price'] = intval($v['price']*$v['sale_off_percent']/100);
+
+            $price_after_vat += $v['total_price'];
+            $type = $v['type'];
+            $sale_off = $v['sale_off_percent'];
+            $tt = round($v['total_price'] / 1.1,2);            //đơn giá
+            $dg = round($tt/$v['num'],2);
+
+            $tt = $dg * $v['num'];
+
+            if($this->distributor['parent'] == 2363 and $v['price'] == 0)
+             {
+                $dg = $this->all_goods[$v['good_id']]['price_5'];
+                $tt = 0;
+             }
+
+            $price_before_vat +=  $tt;
+
+
+
+            if($v['cat_id'] == PHONE_CAT_ID || $fpt!=1 && $this->all_goods[$v['good_id']]['id']!=176 && $this->all_goods[$v['good_id']]['id']!=166):?>
+                <tr class="sp none">
+                    <td class="abc"><span><?php echo $i++ ?></span></td>
+                    <td class="productname">
+                        <?php if(isset($this->all_goods) && $this->all_goods && isset($this->all_goods[$v['good_id']])) echo $this->all_goods[$v['good_id']]['name'] ?>
+                    </td>
+                    <td class="unit">Chiếc</td>
+                    <td class="quantity" ><?php echo $v['num']; $num_total += $v['num']; ?></td>
+                    <?php if (intval($dg)==0):?>
+                        <td colspan="2" class="hangkhuyenmai"><?php echo $text_km;  ?></td>
+                    <?php else:?>
+                        <td class="price"><?php echo My_Number::product_price($dg , 2);  ?></td>
+                        <td class="total"><?php echo My_Number::product_price($tt , 2); ?></td>
+                    <?php endif;?>
+                </tr>
+            <?php else:
+                if( 1 == 1 ):   ?>
+                    <tr  class="sp none">
+                        <td class="abc"><span><?php echo $i++ ?></span></td>
+                        <td class="productname">
+                            <?php if(isset($this->all_goods) && $this->all_goods && isset($this->all_goods[$v['good_id']])) echo $this->all_goods[$v['good_id']]['name'] ?>
+                        </td>
+                        <td class="unit">Chiếc</td>
+                        <td class="quantity" ><?php echo $v['num']; $num_total += $v['num']; ?></td>
+                        <?php if (intval($dg)==0):?>
+                            <td colspan="2" class="hangkhuyenmai"><?php echo $text_km;  ?></td>
+                        <?php else:?>
+                            <td class="price"><?php echo My_Number::product_price($dg , 2);  ?></td>
+                            <td class="total"><?php echo My_Number::product_price($tt , 2); ?></td>
+                        <?php endif;?>
+                    </tr>
+                <?php endif;?>
+            <?php endif;?>
+            <input type="hidden" name="invoice_price[]" value="<?php echo $v['id'] . '_' . $tt ; ?>" />
+            <?php $this->all_goods[$v['good_id']]['name'] = '';?>
+
+
+
+        <?php endforeach;
+    endif; ?>
+
+    <?php  if(isset($type)&& $type==2) : ?>
+
+        <tr class="sp none">
+            <td class="abc"><span><?php echo $i ?></span></td>
+            <td class="name" >
+                <?php if(isset($type)&& $type==2) echo ' Máy mẫu trưng bày';?>
+            </td>
+            <td></td>
+            <td></td>
+            <td></td>
+            <td></td>
+        </tr>
+    <?php endif ?>
+
+    <?php if(isset($this->event) and $this->event): ?>
+        <tr class="sp none">
+            <td><span></span></td>
+            <td  class="name" >
+                ( Hàng tặng không thu tiền )
+            </td>
+        </tr>
+    <?php endif; ?>
+
+    <?php if(isset($this->fee) and $this->fee): ?>
+        <tr class="sp">
+            <td><span><?php echo $i ?></span></td>
+            <td  class="name" >
+                <?php echo $this->fee[0]['desc']; ?>
+            </td>
+            <td class="tdnum"></td>
+            <td class="tdright"></td>
+            <td class="total fee"><?php echo My_Number::product_price(round($this->fee[0]['total_price'] / 1.1,2)); ?></td>
+        </tr>
+    <?php endif; ?>
+
+    <tr></tr>
+
+</table>
+
+<?php
+echo $price_after_vat;exit;
+$this->price_after_vat  = $price_after_vat;
+
+?>

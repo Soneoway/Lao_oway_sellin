@@ -1,0 +1,66 @@
+<table class="table table-bordered">
+    <thead>
+    <tr>
+        <?php echo $this->sorting(array(
+                '#',
+                'Name',
+                'Current Order',
+                'Total Storage',
+                'Available Stock',
+                'Current Order HCM'
+            ),
+            $this->url, $this->sort, $this->desc); ?>
+    </tr>
+    </thead>
+    <tbody>
+    <?php
+    if (isset($this->goods) and $this->goods)
+        foreach ($this->goods as $k=>$good): ?>
+            <tr>
+                <td>
+                    <?php
+                    $inc = $this->offset + $k + 1;
+                    echo $inc;
+                    ?>
+                </td>
+                <td><?php echo $good['name'] ?></td>            
+                <td><?php $current_order =  ($good['current_order'] ? $good['current_order'] : 0); echo $current_order; ?></td>
+              <?php
+                    $bad = $count = 0;
+                    if ($good['cat_id'] == PHONE_CAT_ID){
+                        $bad = ($good['imei_bad_count'] ? $good['imei_bad_count'] : 0);
+                        $count = ($good['imei_count'] ? $good['imei_count'] : 0);
+                    } elseif ($good['cat_id'] == ILIKE_CAT_ID){
+                        $bad = ($good['ilike_bad_count'] ? $good['ilike_bad_count'] : 0);
+                        $count = ($good['ilike_count'] ? $good['ilike_count'] : 0);
+                    } elseif ($good['cat_id'] == DIGITAL_CAT_ID){
+                        $bad = ($good['digital_bad_count'] ? $good['digital_bad_count'] : 0);
+                        $count = ($good['digital_count'] ? $good['digital_count'] : 0);
+                    } else {
+                        $bad = ($good['damage_product_count'] ? $good['damage_product_count'] : 0);
+                        $count = ($good['product_count'] ? $good['product_count'] : 0);
+                    }                 
+               ?>
+                <td><?php
+                    $total_storage = $count + $bad;
+                    echo ($total_storage ? $total_storage : 0);
+                    ?></td>
+                <td><?php
+                    $available = intval($count) - intval($current_order);
+                        echo ($available > 0 ? $available : 0);
+                    ?></td>
+                    
+                    <td>
+                      <?php   $current_order_hcm =  ($this->good_all[1][$k]['current_order'] ? $this->good_all[1][$k]['current_order'] : 0); echo $current_order_hcm;                                ?>
+                    </td>
+
+            </tr>
+        <?php endforeach;?>
+
+    </tbody>
+</table>
+<div class="paging">
+    <?php echo $this->paging($this->total, $this->limit, $this->offset, $this->url);?>
+</div>
+<?php echo $this->load();?>
+<?php echo $this->confirm();?>

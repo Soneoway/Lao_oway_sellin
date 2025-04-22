@@ -1,0 +1,70 @@
+<div class="row">
+    <div class="span6">
+        <label class="span4">Change type:<span style="color: red">*</span></label>
+    </div>
+</div> 
+
+<div class="row">
+    <div class="span6">
+        <label class="span4" for="is_changed_wh1">
+            <input type="radio" required="required" name="is_changed_wh" id="is_changed_wh1" value="1" <?php if (isset($this->changeSalesOrder['is_changed_wh']) and $this->changeSalesOrder['is_changed_wh'] == 1){?> checked <?php }?> <?php if (isset($this->disabledFields) and is_array($this->disabledFields) and in_array('is_changed_wh', $this->disabledFields)) {?> disabled<?php } ?>>
+            Warehouse to warehouse
+        </label>
+
+        <br>
+
+        <label class="span4" for="is_changed_wh0">
+            <input type="radio" required="required" name="is_changed_wh" id="is_changed_wh0" value="0" <?php if (isset($this->changeSalesOrder['is_changed_wh']) and $this->changeSalesOrder['is_changed_wh'] == 0){?> checked <?php }?> <?php if (isset($this->disabledFields) and is_array($this->disabledFields) and in_array('is_changed_wh', $this->disabledFields)) {?> disabled<?php } ?>>
+            Retailer to retailer
+        </label>
+    </div>
+</div>
+
+<div class="row is_changed_wh0" style="display: none">
+    <div class="span6">
+        <label class="span4" for="distributor_id1">From retailer:<span style="color: red">*</span>
+            <select id="distributor_id1" class="span4" name="distributor_id1" <?php if (isset($this->disabledFields) and is_array($this->disabledFields) and in_array('is_changed_wh', $this->disabledFields)) {?> disabled<?php } ?>>
+                <option value="">Please select</option>
+                <?php foreach ($this->distributors as $id=>$distributor):?>
+                    <option value="<?php echo $id;?>" <?php if (isset($this->changeSalesOrder['is_changed_wh']) and $this->changeSalesOrder['is_changed_wh'] == 0 and $this->changeSalesOrder['old_id'] == $id){?> selected="selected" <?php }?>><?php echo $distributor;?></option>
+                <?php endforeach;?>
+            </select>
+        </label>
+    </div>
+
+    <div class="span6">
+        <label class="span4" for="distributor_id2">To retailer:<span style="color: red">*</span>
+            <select id="distributor_id2" class="span4" name="distributor_id2" <?php if (isset($this->disabledFields) and is_array($this->disabledFields) and in_array('is_changed_wh', $this->disabledFields)) {?> disabled<?php } ?>>
+                <option value="">Please select</option>
+                <?php foreach ($this->distributors as $id=>$distributor):?>
+                    <option value="<?php echo $id;?>" <?php if (isset($this->changeSalesOrder['is_changed_wh']) and $this->changeSalesOrder['is_changed_wh'] == 0 and $this->changeSalesOrder['new_id'] == $id){?> selected="selected" <?php }?>><?php echo $distributor;?></option>
+                <?php endforeach;?>
+            </select>
+        </label>
+    </div>
+</div>
+
+<div class="row is_changed_wh1" >
+
+    <div class="span6">
+        <label class="span4" for="warehouse_id1">From warehouse:<span style="color: red">*</span>
+            <select id="warehouse_id1" class="span4" name="warehouse_id1" required="required" <?php if (isset($this->disabledFields) and is_array($this->disabledFields) and in_array('is_changed_wh', $this->disabledFields)) {?> disabled<?php } ?>>
+                <option value="">Please select</option>
+                <?php foreach ($this->warehouses as $id=>$warehouse):?>
+                    <option value="<?php echo $id;?>" <?php if (isset($this->changeSalesOrder['is_changed_wh']) and $this->changeSalesOrder['is_changed_wh'] == 1 and $this->changeSalesOrder['old_id'] == $id){?> selected="selected" <?php }?>><?php echo $warehouse;?></option>
+                <?php endforeach;?>
+            </select>
+        </label>
+    </div>
+
+    <div class="span6">
+        <label class="span4" for="warehouse_id2">To warehouse:<span style="color: red">*</span>
+            <select id="warehouse_id2" class="span4" name="warehouse_id2" required="required" <?php if (isset($this->disabledFields) and is_array($this->disabledFields) and in_array('is_changed_wh', $this->disabledFields)) {?> disabled<?php } ?>>
+                <option value="">Please select</option>
+                <?php foreach ($this->warehouses as $id=>$warehouse):?>
+                    <option value="<?php echo $id;?>" <?php if (isset($this->changeSalesOrder['is_changed_wh']) and $this->changeSalesOrder['is_changed_wh'] == 1 and $this->changeSalesOrder['new_id'] == $id){?> selected="selected" <?php }?>><?php echo $warehouse;?></option>
+                <?php endforeach;?>
+            </select>
+        </label>
+    </div>
+</div>

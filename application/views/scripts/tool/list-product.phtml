@@ -1,0 +1,78 @@
+                <div class="well-p">
+                    <div class="row tabLeft">
+                        <div class="col-md-7">
+                            <div class="input-prepend">
+                                <span class="add-on"><i class="icon icon-search"></i></span>
+                                <input type="text" name="SearchDualListProduct" class="form-control" placeholder="Search" />
+                            </div>
+                        </div>
+                        <div class="col-md-2">
+                            <div class="btn-group">
+                                <a class="btn btn-default selectorPP" title="select all"><i class="icon icon-circle-blank"></i></a>
+                            </div>
+                        </div>
+                    </div>
+                    <div>
+                         <span class="so-title">Product ID</span>
+                         <span class="price_ori">Product Name</span>
+                         
+                    </div>
+                    <ul class="list-group">
+                    <?PHP 
+                            // $this->goods = json_decode($this->goods);
+                            // print_r($this->goods);die;
+                            // print_r($this->goods['goods']);die;
+                        $i = 1;
+                        foreach ($this->goods as $key => $list) :
+                         
+                            ?>
+                        <li class="list-group-item item-product">
+                            <span class="so"><?=$list['id']?></span>
+                            <span class="price_ori "><?=$list['desc']?>
+
+                            <input type="hidden" class="sn" name="g_id[]" disabled value="<?=$list['id']?>">
+                            </span>
+                           
+                            <span class="price_text none_price"><span style="vertical-align: super;">จำนวน : </span> 
+
+                            <input type="number" min="1" disabled   name="g_id_num[]" required>
+                            </span>
+                            
+                        </li>
+                            
+                      <?PHP $i+=1; 
+                       
+                      endforeach; ?>  
+                        
+                    </ul>
+                </div>
+    <script type="text/javascript">
+        $(document).ready(function () {
+              $('[name="SearchDualListProduct"]').keyup(function (e) {
+                    var code = e.keyCode || e.which;
+                    if (code == '9') return;
+                    if (code == '27') $(this).val(null);
+                    var $rows = $(this).closest('.dual-list').find('.list-group .item-product');
+                    var val = $.trim($(this).val()).replace(/ +/g, ' ').toLowerCase();
+                    $rows.show().filter(function () {
+                        var text = $(this).text().replace(/\s+/g, ' ').toLowerCase();
+                        return !~text.indexOf(val);
+                    }).hide();
+                });
+
+             $('.selectorPP').click(function () {
+                var $checkBox = $(this);
+                if (!$checkBox.hasClass('selected')) {
+                    $checkBox.addClass('selected').closest('.well-p').find('ul li:not(.activeP)').addClass('activeP');
+                    $checkBox.children('i').removeClass('icon icon-circle-blank').addClass('icon icon-ok');
+                } else {
+                    $checkBox.removeClass('selected').closest('.well-p').find('ul li.activeP').removeClass('activeP');
+                    $checkBox.children('i').removeClass('icon icon-ok').addClass('icon icon-circle-blank');
+                }
+            });
+
+             });
+    </script>
+        
+       
+     

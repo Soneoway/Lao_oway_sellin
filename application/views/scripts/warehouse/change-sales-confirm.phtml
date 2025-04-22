@@ -1,0 +1,85 @@
+<div class="page-header">
+    <h1>Change ORDER - CONFIRM OUT</h1>
+</div>
+
+<?php
+if (isset($this->messages_success) and $this->messages_success)
+    foreach ($this->messages_success as $message):
+        echo '<div class="alert alert-success">'.$message.'</div>';
+    endforeach;
+
+if (isset($this->messages) and $this->messages)
+    foreach ($this->messages as $message):
+        echo '<div class="alert alert-error">'.$message.'</div>';
+    endforeach;
+?>
+
+<iframe name="iframe" id="iframe" width="100%" style="display:none;"></iframe>
+
+<form role="form" id="form" method="post" target="iframe"  class="form-inline">
+
+    <?php echo $this->render('warehouse/partials/change-sales-add-type.phtml');?>
+
+    <div style="margin-top: 10px;">
+        <label class="span4" >Remark<span style="color: red">*</span>
+            <input type='text' class="span4" name='remark' id="remark" placeholder="" autocomplete="off" value="<?php if (isset($this->changeSalesOrder['remark']) and $this->changeSalesOrder['remark']) echo $this->changeSalesOrder['remark'];?>" maxlength="255" readonly required>
+        </label>
+    </div>
+
+    <?php echo $this->render('warehouse/partials/change-sales-add-form.phtml');?>
+
+    <div style="margin-left: 30px;">
+
+        <?php if(in_array($this->is_kerry, ['KERRY','J&T'])){ 
+
+            $title_delivery = '';
+
+            switch ($this->is_kerry) {
+                case 'KERRY':
+                    $title_delivery = 'Kerry';
+                    break;
+                case 'J&T':
+                    $title_delivery = 'J&T';
+                    break;
+            }
+
+        ?>
+            <br><br>
+            <legend><?=$title_delivery?></legend>
+
+            <div class="control-group">
+                <label class="control-label" for="number_of_package">Number of Packages <span style="color: red">*</span></label>
+                <div class="controls">
+                    <input type="number" name="number_of_package" id="number_of_package" value="1" required="required"/>
+                </div>
+            </div>
+
+            <div class="control-group">
+                <label class="control-label" for="weight">Weight <span style="color: red">*</span></label>
+                <div class="controls">
+                    <input type="text" name="weight" id="weight" required="required"/>
+                </div>
+            </div>
+            <input type="hidden" name="is_kerry" value="<?= $this->is_kerry ?>">
+            <br/><br/>
+
+        <?php } ?>
+
+    </div>
+
+    <div class="row">
+        <div class="span6">
+            <div class="control-group">
+                <div class="span4">
+                    <button type="submit" class="btn btn-primary">Submit</button>
+                    <input type="hidden" name="id" value="<?php if (isset($this->changeSalesOrder['id']) and $this->changeSalesOrder['id']) echo $this->changeSalesOrder['id'];?>" />
+                    <input type="hidden" name="back_url" id="back_url" value="/warehouse/change-sales-list">
+                    <button type="button" class="btn btn-danger go-back">Go back</button>
+                </div>
+            </div>
+            <div class="clearfix"></div>
+        </div>
+    </div>
+</form>
+
+<?php echo $this->render('warehouse/partials/change-sales-add-script.phtml');?>

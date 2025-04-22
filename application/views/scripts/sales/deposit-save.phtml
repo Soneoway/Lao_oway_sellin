@@ -1,0 +1,33 @@
+<link href="<?php echo HOST ?>css/bootstrap.min.css" rel="stylesheet" />
+<link href="<?php echo HOST ?>css/default.css" rel="stylesheet" />
+
+<style>
+    body {
+        background: #f9f6f1;
+        padding: 10px;
+    }
+
+    .info {
+        margin-bottom: 20px;
+    }
+</style>
+<div id="content_wrapper">
+    
+    <?php if (isset($this->error) && $this->error): ?>
+        <div class="alert alert-error">
+            <button type="button" class="close" data-dismiss="alert">&times;</button>
+            <strong>ERROR!</strong> <?php echo $this->error ?>
+        </div>
+    <?php endif ?>
+</div>
+<script>
+    parent.$('.loading, .pre_loading').remove();
+    parent.$('form button, form input, form select').prop('readonly', false);
+    parent.$('form input').val('');
+    parent.clear_interval();
+    parent.window.onbeforeunload = null;
+
+    function clear_content() {
+        document.getElementById('content_wrapper').innerHTML = '';
+    }
+</script>

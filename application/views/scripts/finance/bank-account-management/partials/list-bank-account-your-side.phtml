@@ -1,0 +1,54 @@
+<table class="table table-bordered">
+	<thead>
+		<tr>
+			<th>Bank Account(My Side)</th>
+			<th>Our Bank Card Number</th>
+			<th>Accounting organization</th>
+			<th>Distributor(Your Side)</th>
+			<th>Finance Client</th>
+			<th>Finance Client Code</th>
+			<th>Store</th>
+			<th>Card No./Account</th>
+			<th>Opposite Account</th>
+			<th>Bank</th>
+			<th>Account Property</th>
+			<th>Creator</th>
+			<th>Modifier</th>
+			<th>Modified Time</th>
+			<th>Contact</th>
+			<th>Remarks</th>
+			<th>Action</th>
+	</thead>
+	<tbody>
+
+		<?php if(isset($this->bankAccountYour) && $this->bankAccountYour) : ?>
+			<?php foreach ($this->bankAccountYour as $value) : ?>
+				<?php if($value['account_pp'] == 1) { $account_pp = "Personal Account"; }else{ $account_pp = "Company Account"; } ?>
+
+				<tr>
+					<td><?php echo $value['bank_account_my'] ?></td>
+					<td><?php echo $value['my_card_no'] ?></td>
+					<td><?php echo $value['account_org_name'] ?></td>
+					<td><?php echo $value['distributor_your_name'] ?></td>
+					<td><?php echo $value['finance_client_name'] ?></td>
+					<td><?php echo $value['finance_client_mnemonic_code'] ?></td>
+					<td><?php echo $value['store_name'] ?></td>
+					<td><?php echo $value['my_bank_code'] ?></td>
+					<td><?php echo $value['account_name'] ?></td>
+					<td><?php echo $value['bank_name'] ?></td>
+					<td><?php echo $account_pp ?></td>
+					<td><?php echo $this->staffs[$value['created_by']] ?></td>
+					<td><?php echo $this->staffs[$value['updated_by']] ?></td>
+					<td><?php echo $value['updated_at'] ?></td>
+					<td><?php echo $value['contact'] ?></td>
+					<td><?php echo $value['remark'] ?></td>
+					<td>
+						<a href="<?php echo HOST ?>finance/add-bank-account-your-side?id=<?php echo $value['id'] ?>"> Edit </a>
+						| <a href="#" style="color: red"> Delete </a>
+					</td>
+				</tr>
+			<?php endforeach; ?>
+		<?php endif; ?>
+
+	</tbody>
+</tr>

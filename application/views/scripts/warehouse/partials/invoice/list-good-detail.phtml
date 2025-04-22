@@ -1,0 +1,133 @@
+<style>
+    .productname div{
+        width: 250px;
+        line-height: 25px;
+    }
+    .thead
+    {
+        text-align: center;
+    }
+    .invoice-date div
+    {
+        width: 70px;
+    }
+    .invoice_number div
+    {
+        width: 80px;
+    }
+    .sp1 td div
+    {
+        width: 627px;
+        text-align: right;
+    }
+    .price-name span{
+        font-style: italic;
+    }
+    .total div
+    {
+        width: 110px;
+    }
+    .price div
+    {
+        width: 70px;
+    }
+    @media screen and (-webkit-min-device-pixel-ratio:0) { 
+  .sp1 td div
+    {width: 630px;} 
+}
+</style>
+<div class="tblist">
+
+    <table class="table-border" cellspacing="0">
+        <tr class="thead">
+            <td>STT</td>
+            <td class="productname">Tên hàng hóa dịch vụ</td>
+            <td class="invoice_number">Số hóa đơn</td>
+            <td class="invoice-date">Ngày hóa đơn</td>
+            <td class="unit">Đơn vị tính</td>
+            <td class="quantity">Số lượng</td>
+            <td class="price">Đơn giá</td>
+            <td class="total"><div>Thành tiền</div></td>
+        </tr>
+        <tr class="thead">
+            <td>1</td>
+            <td>2</td>
+            <td>3</td>
+            <td>4</td>
+            <td>5</td>
+            <td>6</td>
+            <td>7</td>
+            <td>8 = 6x7</td>
+        </tr>
+        <?php
+        if(isset($this->market_product) and $this->market_product):
+            $i = 1;
+            $num_total = $price_before_vat = $price_after_vat = $total_prcie = 0;
+           foreach($this->market_product as $k=> $market_product): ?>
+               <?php   if(isset($market_product) and $market_product):
+
+                   foreach ($market_product as $k => $md):
+                        if(isset($md) and $md['type'] == 3)
+                              $total = $md['total_price'];
+                        else
+                             $total = $md['quantity'] * $md['imei_price'];
+                       $price_after_vat += $total;
+                       $tt = round($total / 1.1 ,2);            //đơn giá
+                       $dg = round($tt/$md['quantity'],2);
+                       $tt = $dg * $md['quantity'];
+                       $price_before_vat +=  $tt;
+
+                   ?>
+                    <?php if($k == 0) : ?>
+                        <tr class="sp">
+                            <td><?php echo $i++ ?></td>
+                            <td class="productname"><div><?php  echo ($this->joint[$market_product[0]['joint']]); ?>  </div></td>
+                            <td class="invoice_number"><div></div></td>
+                            <td class="invoice-date"><div></div></td>
+                            <td class="unit"></td>
+                            <td class="quantity"></td>
+                            <td class="price"></td>
+                            <td class="total"></td>
+                        </tr>
+                       <?php endif;
+                            if(isset($md) and $md['type'] == 3)
+                                 $good_name = $this->all_goods[$md['good_id']]['desc_name'];
+                                    else
+                                 $good_name = 'Điện thoại di động OPPO '. $this->goods_cached[$md['good_id']];
+                        ?>
+                        <tr class="sp">
+                            <td></td>
+                            <td class="productname"><div><?php   echo isset($good_name) ?  $good_name : ''; ?>  </div></td>
+                            <td class="invoice_number"><div><?php if(isset($md['invoice'])) echo $md['invoice']; ?></div></td>
+                            <td class="invoice-date"><div><?php if(isset($md['date']) and isset($md['invoice'])) echo date('d-m-Y', strtotime($md['date']) ); ?></div></td>
+                            <td class="unit">Chiếc</td>
+                            <td class="quantity"><?php if(isset($md['num'])) echo $md['quantity'] ?></td>
+                            <td class="price"><div><?php if(isset($md['price'])) echo My_Number::product_price($dg); ?></div></td>
+                            <td class="total" style="text-align:right;"><div><?php if(isset($md['total'])) echo My_Number::product_price($tt); ?></div></td>
+                        </tr>
+
+            <?php endforeach;endif;endforeach; $vat = $price_after_vat - $price_before_vat; endif;  ?>
+            <table class="table-border" cellspacing="1" cellpadding="5" style="border-top: none;margin-top: 0px">
+                <tbody>
+                <tr class="sp1">
+                    <td colspan="5"><div>Cộng tiền hàng:</div></td>
+                    <td style="text-align:right;"><?php if(isset($price_before_vat)) echo My_Number::product_price($price_before_vat); ?></td>
+                </tr>
+                <tr class="sp1">
+                    <td colspan="5"><div>Tiền thuế GTGT 10%:</div></td>
+                    <td style="text-align:right;"><?php if(isset($vat) and $vat) echo My_Number::product_price($vat); ?></td>
+                </tr>
+
+                <tr class="sp1">
+                    <td colspan="5"><div>Tổng cộng tiền thanh toán:</div></td>
+                    <td><div style="width:110px"><?php if(isset($price_after_vat)) echo My_Number::product_price($price_after_vat); ?></div></td>
+                </tr>
+                <tr class="sp1">
+                    <td colspan="6" class="price-name">Số tiền viết bằng chữ:<span><?php echo My_Number::priceText($price_after_vat).' đồng' ?></span></td>
+                </tr>
+                </tbody>
+            </table>
+
+    </table>
+
+</div>

@@ -1,0 +1,88 @@
+<table class="table table-bordered">
+	<thead>
+		<tr>
+			<th>Finance Warehouse No.</th>
+			<th>Mnemonic code</th>
+			<th>Finance Warehouse Name</th>
+			<th>Warehouse Name</th>
+			<th>Code</th>
+			<th>Accounting organization</th>
+			<th>Creation Time</th>
+			<th>Creator</th>
+			<th>Modified Time</th>
+			<th>Last Modifier</th>
+			<th>Remarks</th>
+			<th>Off/On</th>
+			<th>Operation</th>
+		</tr>
+	</thead>
+	<tbody>
+
+		<?php if(isset($this->financeWarehouse) && $this->financeWarehouse) : ?>
+			<?php foreach ($this->financeWarehouse as $key => $value) : ?>
+				<?php
+					if($value['status'] == 1) {
+						$status = "<span style='color: green'> On </span>";
+					} elseif($value['status'] == 2) {
+						$status = "<span style='color: red'> Off </span>";
+					} else {
+						$status = "Deleted";
+					}
+				?>
+
+				<tr>
+					<td><?php echo $value['id'] ?></td>
+					<td><?php echo $value['mnemonic_code'] ?></td>
+					<td><?php echo $value['name'] ?></td>
+					<td><?php echo $this->warehouse[$value['warehouse_id']] ?></td>
+					<td><?php echo $value['code'] ?></td>
+					<td><?php echo $this->accountorg[$value['account_org']] ?></td>
+					<td><?php echo $value['created_at'] ?></td>
+					<td><?php echo $this->staff[$value['created_by']] ?></td>
+					<td><?php echo $value['updated_at'] ?></td>
+					<td><?php echo $this->staff[$value['updated_by']] ?></td>
+					<td><?php echo $value['remark'] ?></td>
+					<td><?php echo $status ?></td>
+					<td>
+						<a href="<?php echo HOST ?>finance/add-finance-warehouse?id=<?php echo $value['id'] ?>"> Edit </a>
+						| <a href="#" style="color: red" data-id="<?php echo $value['id']; ?>" class="Confirm_data"> Delete </a>
+					</td>
+				</tr>
+
+			<?php endforeach; ?>
+		<?php endif; ?>
+
+	</tbody>
+</table>
+
+<div class="paging">
+	<?php echo $this->paging($this->total, $this->limit, $this->offset, $this->url);?>
+</div>
+
+<script type="text/javascript">
+	$(document).ready(function(){
+		$('.Confirm_data').on('click', function (event) {
+			event.preventDefault();
+			var id = $(this).data('id');
+
+			Swal.fire({
+				title: 'Confirm to delete?',
+				text: 'ຢືນຢັນການລຶບ ຂໍ້ມູນ ຫຼື ບໍ່? ຫຼັງຈາກລົບໄປເເລ້ວຈະບໍ່ສາມາດກູ້ຄືນໄດ້',
+				icon: 'question',
+				showCancelButton: true,
+				confirmButtonColor: '#3085d6',
+				cancelButtonColor: '#d33',
+				confirmButtonText: '<b style="font-family:Phetsarath OT">ຢືນຢັນ</ b>',
+				cancelButtonText: '<b style="font-family:Phetsarath OT">ຍົກເລີກ</ b>',
+			}).then((result) => {
+
+				if (result.isConfirmed) {
+					window.location.href="/finance/delete-finance-warehouse?id="+id;
+				}
+
+			});
+		});
+
+	});
+
+</script>

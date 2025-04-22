@@ -1,0 +1,133 @@
+<link rel="stylesheet" href="<?php echo HOST?>css/select2.css" />
+<script src="<?php echo HOST?>js/select2.js"></script>
+
+<form class="form-search form-horizontal" method="get">
+	<div class="row">
+
+		<div class="span5">
+
+			<div class="control-group">
+				<label for="dis_id" class="control-label">Distributor(My Side) : </label>
+				<div class="controls">
+					<select class="span3" name="dis_id" id="dis_id">
+						<option value=""> Please Selected </option>
+						<?php foreach ($this->distributor as $value) : ?>
+							<option value="<?php echo $value['id'] ?>" <?php if(isset($this->params['dis_id']) && $this->params['dis_id'] == $value['id']) : ?> selected <?php endif; ?>><?php echo $value['title'] ?></option>
+						<?php endforeach; ?>
+					</select>
+				</div>
+			</div>
+
+			<div class="control-group">
+				<label for="bank_account" class="control-label"> Bank Account : </label>
+				<div class="controls">
+					<input type="text" name="bank_account" id="bank_account" class="span3" value="<?php isset($this->params['bank_account']) and printf($this->params['bank_account']);?>">
+				</div>
+			</div>
+
+			<div class="control-group">
+				<label for="bank" class="control-label"> Bank : </label>
+				<div class="controls">
+					<select class="span3" name="bank" id="bank">
+						<option value=""> Please Selected </option>
+						<?php foreach ($this->bank as $key => $value) : ?>
+							<option value="<?php echo $key ?>" <?php if(isset($this->params['bank']) && $this->params['bank'] == $key) : ?> selected <?php endif; ?>><?php echo $value ?></option>
+						<?php endforeach; ?>
+					</select>
+				</div>
+			</div>
+
+			<div class="control-group">
+				<label for="account_type" class="control-label"> Account Type : </label>
+				<div class="controls">
+					<select class="span3" name="account_type" id="account_type">
+						<option value=""> Please Selected </option>
+
+						<?php foreach($this->accountType as $key => $value) : ?>
+							<option value="<?php echo $key ?>" <?php if(isset($this->params['account_type']) && $this->params['account_type'] == $key) : ?> selected <?php endif; ?>><?php echo $value ?></option>
+						<?php endforeach; ?>
+					</select>
+				</div>
+			</div>
+
+			<div class="control-group">
+				<label for="mnemonic_code" class="control-label"> Mnemonic code : </label>
+				<div class="controls">
+					<input type="text" name="mnemonic_code" id="mnemonic_code" class="span3" value="<?php isset($this->params['mnemonic_code']) and printf($this->params['mnemonic_code']); ?>">
+				</div>
+			</div>
+
+		</div>
+
+		<div class="span6">
+
+			<div class="control-group">
+				<label for="host" class="control-label">Host-to-Host : </label>
+				<div class="controls">
+					<select class="span3" name="host" id="host">
+						<option value=""> Please Select </option>
+						<option value="1" <?php if(isset($this->params['host']) && $this->params['host'] == 1) : ?> selected <?php endif; ?> > Yes </option>
+						<option value="2" <?php if(isset($this->params['host']) && $this->params['host'] == 2) : ?> selected <?php endif; ?> > No </option>
+					</select>
+				</div>
+			</div>
+
+			<div class="control-group">
+				<label for="status" class="control-label">Off/On : </label>
+				<div class="controls">
+					<select class="span3" name="status" id="status">
+						<option value=""> Please Selected </option>
+						<option value="1" <?php if(isset($this->params['status']) && $this->params['status'] == 1) : ?> selected <?php endif; ?> > On </option>
+						<option value="2" <?php if(isset($this->params['status']) && $this->params['status'] == 2) : ?> selected <?php endif; ?> > Off </option>
+					</select>
+				</div>
+			</div>
+
+			<div class="control-group">
+				<label for="account_pp" class="control-label">Account Property : </label>
+				<div class="controls">
+					<select class="span3" name="account_pp" id="account_pp">
+						<option value=""> Please Selected </option>
+						<option value="1" <?php if(isset($this->params['account_pp']) && $this->params['account_pp'] == 1) : ?> selected <?php endif; ?> > Personal Account </option>
+						<option value="2" <?php if(isset($this->params['account_pp']) && $this->params['account_pp'] == 2) : ?> selected <?php endif; ?> > Company Account </option>
+					</select>
+				</div>
+			</div>
+
+			<div class="control-group">
+				<label for="user_id" class="control-label">User : </label>
+				<div class="controls">
+					<select class="span3" name="user_id" id="user_id">
+						<option value=""> Please Selected </option>
+
+						<?php foreach($this->staffs as $value) : ?>
+							<option value="<?php echo $value['id'] ?>" <?php if(isset($this->params['user_id']) && $this->params['user_id'] == $value['id']) : ?> selected <?php endif; ?> ><?php echo $value['staff_code'] ?> [ <?php echo $value['firstname'] ?> <?php echo $value['lastname'] ?> ] </option>
+						<?php endforeach; ?>
+					</select>
+				</div>
+			</div>
+
+			<div class="control-group">
+				<label for="card_type" class="control-label" >Primary and secondary cards : </label>
+				<div class="controls">
+					<select name="card_type" id="card_type" class="span3">
+						<option value=""> Please Selected </option>
+						<option value="1" <?php if(isset($this->params['card_type']) && $this->params['card_type'] == 1) : ?> selected <?php endif; ?> > Major Card </option>
+						<option value="2" <?php if(isset($this->params['card_type']) && $this->params['card_type'] == 2) : ?> selected <?php endif; ?> > Deputy Card </option>
+						<option value="3" <?php if(isset($this->params['card_type']) && $this->params['card_type'] == 3) : ?> selected <?php endif; ?> > Virtual Card </option>
+					</select>
+				</div>
+			</div>
+
+		</div>
+
+		<button type="submit" class="btn btn-primary">Search</button>
+		<button type="reset" class="btn btn-warning">Reset</button>
+		<button type="submit" class="btn btn-success" name="export" value="1"> Export </button>
+
+	</div>
+</form>
+
+<script type="text/javascript">
+	$('#dis_id, #bank, #account_type, #user_id').select2();
+</script>

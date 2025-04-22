@@ -1,0 +1,170 @@
+<?php
+function product_price($priceFloat) {
+    $symbol = ' THB';
+    $symbol_thousand = ',';
+    $decimal_place = 2;
+    $price = number_format($priceFloat, $decimal_place, '.', $symbol_thousand);
+    return $price;
+}
+?>
+<?php $userStorage = Zend_Auth::getInstance()->getStorage()->read(); ?>
+<?php if($userStorage->id == 1): ?>
+  <button class="btn btn-danger pull-right" onclick="bulk_delete()"><i class="glyphicon glyphicon-trash"></i> Bulk Delete</button>
+<?php endif; ?>
+<table class="table table-bordered">
+    <thead>
+        <tr>
+            <?php echo $this->sorting(array(
+					'#',
+					'sn'            => 'Sale Order Number',
+					'd_id'          => 'Retailer Name',
+					'good_id'       => 'Product Name',
+					'good_color'    => 'Product Color',
+					'num'           => 'Sales Quantity',
+					'price'         => 'Sales Price',
+					'total'         => 'Total',
+					'pay_time'      => 'Settle Account',
+                    'warehouse'     => 'RETURN WAREHOUSE',
+					'add_time'      => 'Order Time',
+					'Action',
+					'<input type="checkbox" id="check-all">',
+                ),
+                $this->url, $this->sort, $this->desc); ?>
+        </tr>
+    </thead>
+    <tbody>
+        <?php
+        if (isset($this->markets_sn) and $this->markets_sn) :
+            foreach ($this->markets_sn as $k=>$m): 
+                $sn_ref = $m['sn_ref'];
+                if($sn_ref==''){
+                    $sn_ref = $m['sn'];  
+                }
+                ?>
+        <tr class="accordion-heading">
+        	<td><a href="#id" class="collapse_a btn btn-default btn-small" id="m_<?php echo $m['sn'] ?>">+</a></td>
+            <td><?php echo $sn_ref; ?></td>
+            <td><?php if (isset($this->distributors) && $this->distributors && isset($this->distributors[$m['d_id']])) echo $this->distributors[$m['d_id']] ?></td>
+            <td></td>            
+            <td></td>            
+            <td><?php echo $m['total_qty'] * -1 ?></td>
+            <td></td>
+            <td><?php echo product_price($m['total_price'] * -1) ?></td>
+            <td><?php if ($m['pay_time']):?><i class="icon-ok"></i><?php else:?><i class="icon-remove"></i><?php endif;?></td>
+            <td><?php echo $this->warehouses[$m['warehouse_id']] ?></td>
+            <td><?php echo $m['add_time'] ?></td>
+            <td>
+                <a title="View" href="/sales/return-view?sn=<?php echo $m['sn'];?>"> <i class="icon-eye-open"></i></a>
+                <?php if (!$m['outmysql_time']): ?>
+                    <?php if($this->user_group=='admin'){?>
+                    <a title="Rollback" class="confirmLink" href="/warehouse/rollback?sn=<?php echo $m['sn'];?>"> <i class="icon-repeat"></i></a>
+                    <?php }?>
+                    <a title="Confirm" href="/warehouse/return-confirm?sn=<?php echo $m['sn'];?>"> <i class="icon-ok"></i></a>
+                <?php else:?>
+                    <a class="lock" title="Lock" href="javascript:void(0);"> <i class="icon-lock"></i></a>
+                <?php endif;?>
+            </td>
+	    <td><input type="checkbox" class="data-check" value="<?php echo $m['sn'];?>"></td>
+        </tr>
+        	<?php if (isset($this->markets) && $this->markets && isset($this->markets[$m['sn']])): ?>
+        		<?php foreach ($this->markets[$m['sn']] as $key => $value): ?>
+        			<tr class="m_<?php echo $m['sn'] ?> accordion-body collapse" style="display:none;">
+        				<td></td>
+        				<td></td>
+			            <td></td>
+			            <td>
+                            <?php
+                                $QBrand = new Application_Model_Brand();
+                                $brand = $QBrand->getBrand($value['good_id']);
+                            ?>
+
+                            <?php echo $brand[0]['brand_name']; ?>
+                            <?php if (isset($this->goods) && $this->goods && isset($this->goods[$value['good_id']])) echo $this->goods[$value['good_id']] ?>
+                                
+                            </td>            
+			            <td><?php if (isset($this->goodColors) && $this->goodColors && isset($this->goodColors[$value['good_color']])) echo $this->goodColors[$value['good_color']] ?></td>            
+			            <td><?php echo $value['num'] * -1 ?></td>
+			            <td><?php echo product_price($value['price']) ?></td>
+			            <td><?php echo product_price($value['total'] * -1) ?></td>
+			            <td></td>
+			            <td></td>
+			            <td></td>
+			            <td></td>
+        			</tr>
+        		<?php endforeach ?>
+        	<?php endif ?>
+        <?php endforeach;?>
+		<?php endif; ?>
+    </tbody>
+</table>
+<div class="paging">
+    <?php echo $this->paging($this->total, $this->limit, $this->offset, $this->url);?>
+</div>
+
+<script type="text/javascript" src="/js/jquery-ui-1.8.12.custom.min.js"></script>
+<link rel="stylesheet" type="text/css" href="/css/jquery-ui-1.8.12.custom.css"/>
+<?php echo $this->load();?>
+<?php echo $this->confirm();?>
+<script>
+    $('.lock').click(function(e){
+        e.preventDefault();
+        alert('Sorry,This information is blocked...You can not delete payment has been made or has been the storage of information!');
+    });
+
+    $('.collapse_a').each(function(){
+    	var _this = $(this);
+    	var _this_id = _this.attr('id');
+    	var $coll = $('.'+_this_id);
+
+    	_this.click(function(){
+
+    		$coll.toggle();
+    		if ($coll.is(':visible'))
+	    		_this.html('-');
+	    	else _this.html('+');
+    	});
+    });
+
+//----------------------------------
+    $("#check-all").click(function () {
+        $(".data-check").prop('checked', $(this).prop('checked'));
+    });
+//----------------------------------
+function bulk_delete()
+{
+    var list_id = [];
+    $(".data-check:checked").each(function() {
+            list_id.push(this.value);
+    });
+    if(list_id.length > 0)
+    {
+        Swal.fire({
+        title: '<font style="font-family: phetsarath ot">ທ່ານຕ້ອງການລົບບິນສັ່ງຊື້ຫຼືບໍ່?</font>',
+        text: "Are you sure delete this "+list_id.length+" data?",
+        icon: 'warning',
+        showCancelButton: true,
+        confirmButtonColor: '#ed9a03',
+        cancelButtonColor: '#ababab',
+        confirmButtonText: '<font style="font-family: phetsarath ot">ຢືນຢັ້ນ</font>',
+        cancelButtonText: '<font style="font-family: phetsarath ot">ຍົກເລີກ</font>'
+        }).then((result) => {
+        if (result.isConfirmed) {
+            location.reload();
+            $.ajax({
+                type: "POST",
+                data: {id:list_id},
+                url: "/warehouse/rollback2",
+                dataType: "JSON",
+            });
+        }else{
+        Swal.fire("Error","no data selected", "error");
+        }
+    });
+
+    }
+    else
+    {
+        Swal.fire("Error","no data selected", "error");
+    }
+}
+</script>

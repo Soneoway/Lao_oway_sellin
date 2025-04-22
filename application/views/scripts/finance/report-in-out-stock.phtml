@@ -1,0 +1,258 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="utf-8">
+<title>Print</title>
+</head>
+
+<link rel="stylesheet" type="text/css" href="/css/bootstrap_3.3.7.css"/>
+<link href="/css/bootstrap-responsive.min.css" rel="stylesheet">
+
+
+<style type="text/css">
+
+    .pagebreak { page-break-before: always; }
+
+    body {
+      font-family: "Times New Roman", Times, serif;
+      background: white; 
+      font-size:12px;
+      margin: 0px;
+    }
+    page {
+      background: white;
+      display: block;
+      margin: 0 auto;
+      /*margin-bottom: 0.5cm;*/
+      /*box-shadow: 0 0 0.5cm rgba(0,0,0,0.5);*/
+      padding-left:0.5cm;
+      padding-right:0.5cm;
+    }
+    page[size="A4"] {  
+      width: 21cm;
+      height: 29.7cm;
+    }
+
+    .title_page{
+        font-size: 18px;
+        font-weight: bold;
+    }
+    .text{
+        font-size: 15px;
+    }
+    .text-input{
+        font-size: 15px;
+        font-weight: bold;
+        position: absolute;
+    }
+</style>
+
+<body>
+
+    <page size="A4">
+
+        <?php
+
+        $limit_page = 34;
+        $total_all = 0;
+        $total_page = 0;
+        $current_page = 0;
+        $start = 0;
+        $end = 0;
+
+        if($this->data){
+        $total_all = count($this->data);
+        $total_page = ceil($total_all/$limit_page);
+
+        // echo "limit_page : $limit_page";
+        // echo "<br>";
+        // echo "total_all : $total_all";
+        // echo "<br>";
+        // echo "total_page : $total_page";
+        // echo "<br>";
+
+        }
+        $total_bal =0;
+        while ($current_page < $total_page) {
+
+        $start = $limit_page*$current_page;
+        $end = $start+$limit_page-1;
+
+        $current_page++;
+
+        // echo "<br>";
+        // echo "--------------";
+        // echo "<br>";
+        // echo "page : $current_page/$total_page";
+        // echo "<br>";
+        // echo "start : $start";
+        // echo "<br>";
+        // echo "end : $end";
+        // echo "<br>";
+        // echo "--------------";
+        // echo "<br>";
+
+        ?>
+
+        <div class="title_page" align="center" style="margin-top: 15px;">รายงานสินค้าและวัตถุดิบ</div>
+        <div align="right" style="margin-right: 30px;"><?php echo "$current_page/$total_page";?></div align="right">
+        <div class="text" align="center">ตามประกาศอธิบดีกรมสรรพากร เกี่ยวกับภาษีมูลค่าเพิ่ม (ฉนับที่ 104)</div>
+        <div class="text" align="center" style="margin-top: 10px;">สำหรับผู้ประกอบการรถเข็น/ล้อเลื่อน/ลักษณะอื่น ที่ได้รับอนุมัติให้จัดทำรายงานรวมกันกับสำนักงานใหญ่</div>
+        <div class="text" align="center" style="margin-top: 10px;">เดือนภาษี...............................ปี............2561................</div>
+        <span class="text-input" style="margin-left: 385px; margin-top: 5px;">บริษัท ไทย ออปโป้ จำกัด</span>
+        <div class="text" align="center" style="margin-top: 10px;">ชื่อผู้ประกอบการที่ได้รับอนุมัติให้จัดทำรายงานรวม..................................................เลขประจำตัวผู้เสียภาษี</div>
+        <div align="center">
+            <table style="margin-left: 430px;" border="1">
+                <tr>
+                    <td align="center" class="text" style="width: 25px;height: 25px;">0</td>
+                    <td align="center" class="text" style="width: 25px;height: 25px;">1</td>
+                    <td align="center" class="text" style="width: 25px;height: 25px;">0</td>
+                    <td align="center" class="text" style="width: 25px;height: 25px;">5</td>
+                    <td align="center" class="text" style="width: 25px;height: 25px;">5</td>
+                    <td align="center" class="text" style="width: 25px;height: 25px;">6</td>
+                    <td align="center" class="text" style="width: 25px;height: 25px;">1</td>
+                    <td align="center" class="text" style="width: 25px;height: 25px;">0</td>
+                    <td align="center" class="text" style="width: 25px;height: 25px;">0</td>
+                    <td align="center" class="text" style="width: 25px;height: 25px;">6</td>
+                    <td align="center" class="text" style="width: 25px;height: 25px;">6</td>
+                    <td align="center" class="text" style="width: 25px;height: 25px;">5</td>
+                    <td align="center" class="text" style="width: 25px;height: 25px;">6</td>
+                </tr>
+            </table>
+        </div>
+        <span class="text-input" style="margin-left: 255px; margin-top: 5px;">บริษัท ไทย ออปโป้ จำกัด</span>
+        <div class="text" align="center" style="margin-top: 10px;">ชื่อสถานประกอบการ..........................................................................สำนักงานใหญ่ที่จัดทำรายงานรวม</div>
+        <div align="center">
+            <span class="text" style="margin-left: -303px; margin-top: 10px;position: absolute;">ชื่อสินค้า....................................สี.....................</span>
+            <?php 
+                //print_r($this->params['good_id']);
+
+                if (isset($this->data) and $this->data)
+                {
+                    if($this->params['good_id']=="all"){
+                        $product_name="สินค้าทั้งหมด";
+                    }else{
+                        foreach ($this->data as $keys=>$m){
+                            $product_name= $m['good_code'];
+                            if($product_name !=""){
+                                continue;
+                            }
+                        }
+                    }
+                    
+                    if($this->params['good_color']=="all"){
+                        $product_color="ทุกสี";
+                    }else{
+                        foreach ($this->data as $keys=>$m){
+                            $product_color= $m['good_color'];
+                            if($product_color !=""){
+                                continue;
+                            }
+                        }
+                    }
+                }
+
+            ?>
+
+
+            <span class="text-input" style="margin-left: -230px; margin-top: 5px;"><?php echo $product_name;?></span>
+            <span class="text-input" style="margin-left: -90px; margin-top: 5px;"><?php echo $product_color;?></span>
+            <table style="margin-left: 430px;" border="1">
+                <tr>
+                    <td align="center" class="text" style="width: 25px;height: 25px;">0</td>
+                    <td align="center" class="text" style="width: 25px;height: 25px;">0</td>
+                    <td align="center" class="text" style="width: 25px;height: 25px;">0</td>
+                    <td align="center" class="text" style="width: 25px;height: 25px;">0</td>
+                    <td align="center" class="text" style="width: 25px;height: 25px;">0</td>
+                </tr>
+            </table>
+        </div>
+
+        <table style="width: 100%; margin-top: 15px;" border="1">
+            <tr>
+                <td style="height: 55px; width: 175px;" rowspan="2" align="center">เลขที่<br>ใบสำคัญ</td>
+                <td style="height: 55px; width: 100px;" rowspan="2" align="center">วัน เดือน ปี</td>
+                <td colspan="3" align="center">ปริมาณสินค้า วัตถุดิบ</td>
+                <td style="height: 55px;" rowspan="2" align="center">หมายเหตุ</td>
+            </tr>
+            <tr>
+                <td style="width: 75px;" align="center">รับ</td>
+                <td style="width: 75px;" align="center">จ่าย</td>
+                <td style="width: 75px;" align="center">คงเหลือ</td>
+            </tr>
+            <?php  
+            
+            
+            if (isset($this->data) and $this->data){
+
+                foreach ($this->data as $key=>$m){
+
+                    if($key < $start || $key > $end){
+                        // echo 'current : '.$key . '| start : ' . $start . '| end : ' . $end . '<br>';
+                        continue;
+                    }
+
+                    $qty_in_purchase =0;$qty_in =0;$out_product =0;$qty_ro_purchase =0;
+                    $qty_ro =0;$qty_do =0;$qty_re =0;
+                    $qty_in_re=0;$qty_out_re=0;
+
+                    if($m['doc_type']=='in_purchase'){
+                        $qty_in =$m['qty_in_purchase'];
+                    }else if($m['doc_type']=='in_cn'){
+                        $qty_in =$m['qty_in_cn'];
+                    }else if($m['doc_type']=='in_do'){
+                        $qty_in =$m['qty_in_do'];
+                    }else if($m['doc_type']=='in_ro'){
+                        $qty_in =$m['qty_in_ro'];   
+                    }else if($m['doc_type']=='in_re'){
+                        //$qty_in =$m['qty_in_re'];
+                        if($m['qty_in_re']>=0){
+                           $qty_in =$m['qty_in_re']; //บวก
+                        }        
+                    }else if($m['doc_type']=='out_product'){
+                        $out_product =$m['out_product'];
+                    }else if($m['doc_type']=='Beginning'){
+
+                        if($m['qty_in_re']>=0){
+                           $qty_in_re =$m['qty_in_re']; //บวก
+                        }
+
+                        if($m['qty_in_re']<0){
+                           $qty_out_re =$m['qty_in_re']*-1; // ลบ
+                        }
+
+                        $qty_in =$m['qty_in_purchase']+$m['qty_in_cn']+$m['qty_in_do']+$m['qty_in_ro']+$qty_in_re;
+                        $out_product =$m['out_product']+$qty_out_re;
+                    }
+
+                    $doc_no_day="";
+                    if($m['doc_no_day']=='Beginning'){
+                        $doc_no_day = "ยอดยกมา";
+                    }else{
+                        $doc_no_day = $m['doc_no_day'];
+                    }
+
+                    $total_bal +=($qty_in);
+                    $total_bal -=$out_product;
+            ?>
+            <tr style="height: 25px;">
+                <td style="text-align: center;"><?php echo $doc_no_day; ?></td>
+                <td style="text-align: center;"><?php echo $m['doc_date']; ?></td>
+                <td style="text-align: center;"><?php echo number_format($qty_in); ?></td>
+                <td style="text-align: center;"><?php echo number_format($out_product); ?></td>
+                <td style="text-align: center;"><?php echo number_format($total_bal); ?></td>
+                <td></td>
+            </tr>
+            <?php }}?>
+        </table>
+
+    <div class="pagebreak"> </div>
+    <?php } ?>
+
+    </page>
+
+</body>
+
+<script type="text/javascript" src="/js/jquery-1.12.4.js"></script>
+
+</html>

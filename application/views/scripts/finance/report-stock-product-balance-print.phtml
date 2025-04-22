@@ -1,0 +1,192 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="utf-8">
+<title>Print</title>
+</head>
+
+<link rel="stylesheet" type="text/css" href="/css/bootstrap_3.3.7.css"/>
+<link href="/css/bootstrap-responsive.min.css" rel="stylesheet">
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
+
+<style type="text/css">
+
+    .pagebreak { page-break-before: always; }
+
+    body {
+      font-family: "Times New Roman", Times, serif;
+      background: white; 
+      font-size:12px;
+      margin: 0px;
+    }
+    page {
+      background: white;
+      display: block;
+      margin: 0 auto;
+      /*margin-bottom: 0.5cm;*/
+      /*box-shadow: 0 0 0.5cm rgba(0,0,0,0.5);*/
+      padding-left:0.5cm;
+      padding-right:0.5cm;
+    }
+    page[size="A4"] {  
+      width: 21cm;
+      height: 29.7cm;
+    }
+
+    .title_page{
+        font-size: 18px;
+        font-weight: bold;
+    }
+    .text{
+        font-size: 15px;
+    }
+    .text-input{
+        font-size: 15px;
+        font-weight: bold;
+        position: absolute;
+    }
+</style>
+
+<body>
+
+    <page size="A4">
+
+        <?php
+
+        $limit_page = 34;
+        $total_all = 0;
+        $total_page = 1;
+        $current_page = 0;
+        $start = 0;
+        $end = 0;
+        $no = 0;
+        if($this->data){
+        $total_all = count($this->data);
+        $total_page = ceil($total_all/$limit_page);
+
+        // echo "limit_page : $limit_page";
+        // echo "<br>";
+        // echo "total_all : $total_all";
+        // echo "<br>";
+        // echo "total_page : $total_page";
+        // echo "<br>";
+
+        }
+
+        while ($current_page < $total_page) {
+
+        $start = $limit_page*$current_page;
+        $end = $start+$limit_page-1;
+
+        $current_page++;
+
+        // echo "<br>";
+        // echo "--------------";
+        // echo "<br>";
+        // echo "page : $current_page/$total_page";
+        // echo "<br>";
+        // echo "start : $start";
+        // echo "<br>";
+        // echo "end : $end";
+        // echo "<br>";
+        // echo "--------------";
+        // echo "<br>";
+        $doc_date="";
+        if (isset($this->params) and $this->params){
+            $doc_date=$this->params['doc_created_at_from'];
+        }
+
+        ?>
+
+        <div class="title_page" align="center" style="margin-top: 15px;">รายละเอียดสินค้าคงเหลือ</div>
+        <div align="right" style="margin-right: 30px;"><?php echo "$current_page/$total_page";?></div align="right">
+            <span class="text-input" style="margin-left: 350px; margin-top: -5px;"><?php echo $doc_date; ?></span>
+        <div class="text" align="center">ณ วันที่ .............................................</div>
+        <div class="text" style="margin-top: 10px;">ชื่อผู้ประกอบการ......................................................................................&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbspเลขประจำตัวผู้เสียภาษีอากร</div>
+        <div align="center">
+            <table style="margin-left: 430px;" border="1">
+                <tr>
+                    <td align="center" class="text" style="width: 25px;height: 25px;">0</td>
+                    <td align="center" class="text" style="width: 25px;height: 25px;">7</td>
+                    <td align="center" class="text" style="width: 25px;height: 25px;">4</td>
+                    <td align="center" class="text" style="width: 25px;height: 25px;">5</td>
+                    <td align="center" class="text" style="width: 25px;height: 25px;">5</td>
+                    <td align="center" class="text" style="width: 25px;height: 25px;">5</td>
+                    <td align="center" class="text" style="width: 25px;height: 25px;">2</td>
+                    <td align="center" class="text" style="width: 25px;height: 25px;">0</td>
+                    <td align="center" class="text" style="width: 25px;height: 25px;">0</td>
+                    <td align="center" class="text" style="width: 25px;height: 25px;">0</td>
+                    <td align="center" class="text" style="width: 25px;height: 25px;">8</td>
+                    <td align="center" class="text" style="width: 25px;height: 25px;">6</td>
+                    <td align="center" class="text" style="width: 25px;height: 25px;">6</td>
+                </tr>
+            </table>
+        </div>
+
+
+        <span class="text-input" style="margin-left: 200px; margin-top: 15px;">บริษัท ไทย ออปโป้ จำกัด</span>
+        <div class="text" style="margin-top: 10px;">ชื่อสถานประกอบการ...............................................................................&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp <i class="fa fa-square-o fa-2x"></i> สำนักงานใหญ่&nbsp&nbsp&nbsp&nbsp&nbsp <i class="fa fa-square-o fa-2x"></i> สาขาที่</div>
+        <div>
+            <table style="margin-left: 540px;" border="1">
+                <tr>
+                    <td align="center" class="text" style="width: 25px;height: 25px;">0</td>
+                    <td align="center" class="text" style="width: 25px;height: 25px;">0</td>
+                    <td align="center" class="text" style="width: 25px;height: 25px;">0</td>
+                    <td align="center" class="text" style="width: 25px;height: 25px;">0</td>
+                    <td align="center" class="text" style="width: 25px;height: 25px;">0</td>
+                </tr>
+            </table>
+            <div class="text" style="px;margin-top: 10px;line-height: 35px;">ชื่อ/ชนิด/ขนาดของอะไหล่ที่จำหน่าย จ่าย โอน โดยไม่คิดมูลค่า......................................................................................................<br>.........................................................................................................................................................................................................</div>
+        </div>
+
+        <table style="width: 100%; margin-top: 15px;" border="1">
+
+            <tr>
+                <td style="height: 55px; width: 55px;" align="center">ลำดับที่</td>
+                <td style="height: 55px; width: 250px;" align="center">รายการ</td>
+                <td style="height: 55px; width: 100px;" align="center">จำนวนหน่วย</td>
+                <!-- <td style="height: 55px; width: 100px;" align="center">ราคาต่อหน่วย</td>
+                <td style="height: 55px; width: 100px;" align="center">จำนวนเงิน</td> -->
+                <td style="height: 55px;" align="center">หมายเหตุ</td>
+            </tr>
+
+            <?php  
+            
+            if (isset($this->data) and $this->data){
+
+                foreach ($this->data as $key=>$m){
+
+                    if($key < $start || $key > $end){
+                        // echo 'current : '.$key . '| start : ' . $start . '| end : ' . $end . '<br>';
+                        continue;
+                    }
+                    $total_qty =0;$cost_price =0;$total_cost =0;
+
+                    $total_qty =$m['total_qty'];
+                    $cost_price =$m['cost_price'];
+                    $total_cost =$m['total_cost'];
+                    //print_r($m);
+                $no += 1;
+
+            ?>
+            <tr style="height: 25px;">
+                <td style="text-align: center;"><?php echo $no; ?></td>
+                <td style="text-align: center;"><?php echo $m['product_detail']; ?></td>
+                <td style="text-align: center;"><?php echo number_format($total_qty); ?></td>
+                <!-- <td style="text-align: right;"><?php echo number_format($cost_price,2); ?></td>
+                <td style="text-align: right;"><?php echo number_format($total_cost,2); ?></td> -->
+                <td></td>
+            </tr>
+            <?php }}?>
+        </table>
+
+    <div class="pagebreak"> </div>
+    <?php } ?>
+
+    </page>
+
+</body>
+
+<script type="text/javascript" src="/js/jquery-1.12.4.js"></script>
+
+</html>

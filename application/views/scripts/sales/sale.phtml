@@ -1,0 +1,136 @@
+<style>
+.page-header{margin-top: 70px;}
+#submit_btn{margin-left: 10px;}
+#delete_shipment{cursor: pointer;}
+#show_detail{cursor: pointer;}
+</style>
+<div class="page-header">
+    <h1>Sale Off</h1>
+</div>
+
+<div class="content_sale_phone">
+    <form action="<?php echo HOST;?>/sales/sale-phone">
+    <table class="table table-bordered">
+        <thead>
+            <tr>
+				<th>#</th>
+                <th>Content</th>
+                <th>Sale</th>
+                <th>Action</th>
+            </tr>
+        </thead>
+        
+        <tbody>
+			<?php $stt = 0;?>
+            <?php if(isset($this->data) && $this->data) : ?> 
+            <?php foreach($this->data as $key => $value) : ?> 
+			<?php $stt++;?>
+            <tr>
+                <td><?php echo $stt;?></td>
+				<td><?php echo $value['type'];?></td>
+				<td><?php echo $value['sale'];?> %</td>
+                <td>
+                    <a title="Edit" href="/sales/edit-sale?id=<?php echo $value['id'];?>"> <i class="icon-edit"></i></a>
+                    <a title="Delete" class="confirmLink" id="delete_shipment" id_shipment="<?php echo $value['id'];?>"> <i class="icon-trash"></i></a>
+                </td>
+            </tr>
+            <?php endforeach; ?>
+            <?php endif; ?>
+        </tbody>
+    </table>
+        <button type="button" class="btn btn-primary pull-right btn btn-warning" id="add_category_btn">Add</button>
+    </form>
+</div>
+
+<form action="<?php echo HOST."sales/save-sale";?>" method="POST">
+<div id="modal_new_category" class="modal hide fade in" tabindex="-1" role="dialog" aria-labelledby="newCategoryLabel" aria-hidden="true" style="display: block;">
+    <div class="modal-header">
+        <button type="button" class="close" data-dismiss="modal" aria-hidden="true">×</button>
+        <h3 id="newCategoryLabel">Add New Sale Off</h3>
+    </div>
+    <div class="modal-body">
+        <div class="row-fluid">
+            <div class="row">
+                <div class="span3">
+                    <div class="control-group">
+                        <label for="category_name">Content</label>
+                        <input type="text" name="type" value="" />
+                    </div>
+                </div>
+                <div class="span3">
+                    <div class="control-group">
+                        <label for="category_name">Sale</label>
+                        <input type="number" name="sale" value="" />
+                    </div>
+                </div>
+            </div>            
+        </div>
+    </div>
+    <div class="modal-footer">
+        <input type="hidden" name="check" value="3" />
+        <input type="hidden" name="id_shipment" value="<?php if(isset($this->data) && $this->data): echo $this->data->id;endif;?>" />
+        <button class="btn btn-primary" type="submit" id="save_category_btn">Save</button>
+        <button class="btn" data-dismiss="modal" aria-hidden="true">Cancel</button>
+    </div>
+</div>
+</form>
+
+<script>
+$(document).ready(function() {
+    $new_category_modal = $("#modal_new_category");
+    $new_category_modal.hide();
+    $("#add_category_btn").click(show_new_category_modal);
+    function show_new_category_modal(e) {
+        $new_category_modal.modal({backdrop: 'static'})
+    }
+    
+    $(document).on('click', "#delete_shipment", function() {  
+        id = $(this).attr("id_shipment");
+        if (confirm('Remove this ??')) {
+            $.ajax({
+    			  url: "<?php echo HOST."sales/delete-sale";?>",
+    		      type: "POST",
+    		      dataType: "text",
+    		      context: this,
+    		      data: "id_sale="+id,
+    		      beforeSend: function() {				
+    				},
+    		      success: function(result){
+    					if(result)
+    					{
+                            $(this).closest('tr').hide();
+    					}
+    					else
+    					{	
+    						alert("Có lỗi 1 !!");
+    					}						
+    		      },
+    		      error:function(){
+    		    	  alert("Có lỗi 2!!");
+    		      }
+    		});
+        }
+    });
+    
+    //Show good_shipment_phone
+    $(document).on('click', "#show_detail", function() {
+        
+    });
+    
+});
+
+</script>
+
+
+
+
+
+
+
+
+
+
+
+
+
+

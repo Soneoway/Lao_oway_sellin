@@ -1,0 +1,83 @@
+<style>
+.red
+{
+    background: #1B8324;
+    color:white;
+}
+.red:hover
+{
+    color:black;
+}
+
+.hilight
+{
+    background: #E8ADAA;
+    /*color:white;*/
+}
+.hilight:hover
+{
+    /*color:black;*/
+}
+</style>
+<table class="table table-bordered">
+    <thead>
+        <tr>
+            <?php echo $this->sorting(array(
+                'document_type' => 'Document Type',
+                'document_date' => 'Document Date',
+                'File Name',
+                'File Download',
+            ),
+            $this->url, $this->sort, $this->desc); ?>
+        </tr>
+    </thead>
+    <tbody>
+        <a href=""></a>
+        <?php
+        $main_part = 'http://203.150.225.104/oppocron/';
+        if (isset($this->data) and $this->data) :
+            foreach ($this->data as $k=>$m):
+
+                $file_path_date_csv = $m['document_date'];
+                ?>
+                <tr>
+                    <td class="span3"><?php if(isset($m['document_type']) && $m['document_type']){
+                            switch ($m['document_type']) {
+                                case '1':
+                                echo $m['document_type_name'];
+                                break;
+                                case '2':
+                                echo $m['document_type_name'];
+                                break;
+                                case '3':
+                                echo $m['document_type_name'];
+                                break;
+                                case '4':
+                                echo $m['document_type_name'];
+                                break;
+                                case '5':
+                                echo $m['document_type_name'];
+                                break;
+                                case '6':
+                                echo $m['document_type_name'];
+                                break;
+                                default:
+                                echo '-';
+                                break;
+                            }
+                        }else{ echo '-';} ?></td>
+                    <td class="span2"><?php if(isset($m['document_date']) && $m['document_date']){ echo $m['document_date']; }else{ echo '-';} ?></td>
+                    <td >
+                        <a target="_blank" title="Download CSV" href="<?php echo $main_part . $m['file_link']; ?>" download><?php  echo $m['file_name']; ?> </a>
+                    </td>
+                    <td class="span2">
+                        <a target="_blank" title="Download CSV" href="<?php echo $main_part . $m['file_link']; ?>" download> <i class="icon-file-text-alt"></i></a>
+                    </td>
+                </tr>
+            <?php endforeach;?>
+        <?php endif; ?>
+    </tbody>
+</table>
+<div class="paging">
+    <?php echo $this->paging($this->total, $this->limit, $this->offset, $this->url);?>
+</div>

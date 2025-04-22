@@ -1,0 +1,127 @@
+<?php
+function product_price($priceFloat) {
+$symbol_thousand = '.';
+$decimal_place = 0;
+$price = number_format($priceFloat, $decimal_place, '', $symbol_thousand);
+return $price;
+}
+?>
+<table class="table table-bordered">
+    <thead>
+        <tr>
+            <?php echo $this->sorting(array(
+                    //'<label class="select_all">Select All <input type="checkbox" style="display:none;" /></label>',
+                    'Select',
+                    'sn'             => 'Sales Order Number',
+                    'num'            => 'Quantity',
+                    'd_id'           => 'Retailer',
+                    'region'         => 'Province',
+                    'district'       => 'District',
+                    'invoice_number' => 'Invoice Number',
+                    'outmysql_time'  => 'OUT Time',
+                    'warehouse_id'   => 'Warehouse',
+                    'Additional Info',
+                ),
+                $this->url, $this->sort, $this->desc); ?>
+        </tr>
+    </thead>
+    <tbody>
+        <?php
+        if (isset($this->markets) and $this->markets)
+            foreach ($this->markets as $k=>$PO): 
+                $sn_ref = $PO['sn_ref'];
+                if($sn_ref==''){
+                    $sn_ref = $PO['sn'];    
+                }
+            ?>
+        <tr>
+            <td>
+                <?php echo ($this->offset + $k + 1) ?>
+                <input type="checkbox" name="sn[]" value="<?php echo $PO['sn'] ?>" class="row_select" data-warehouse="<?php echo $PO['warehouse_id'] ?>">
+            </td>
+            <td><?php echo $sn_ref;?></td>
+            <td><?php echo $PO['total_qty'];?></td>
+            <td><?php if(isset($this->distributorsList[$PO['d_id']])) echo $this->distributorsList[$PO['d_id']]['title'];?></td>
+            <td><?php if (isset($this->distributorsList[ $PO['d_id'] ]['district'])) echo My_Region::getValue($this->distributorsList[ $PO['d_id'] ]['district'], My_Region::Province) ?></td>
+            <td><?php if (isset($this->distributorsList[ $PO['d_id'] ]['district'])) echo My_Region::getValue($this->distributorsList[ $PO['d_id'] ]['district'], My_Region::District) ?></td>
+            <td><?php if(isset($PO['invoice_number'])) echo $PO['invoice_number'];?></td>
+            <td><?php echo $PO['outmysql_time'];?></td>
+            <td><?php if(isset($this->warehouses[ $PO['warehouse_id'] ])) echo $this->warehouses[ $PO['warehouse_id'] ];?></td>
+            <td>
+                <?php echo @$PO['text']."<br/>" ?>
+                <?php
+                    if(isset($PO['office_address']))  {
+                        ?>
+                        <span class="label label-success"><?php echo $PO['office_title']; ?></span> <?php echo $PO['office_address']; ?>
+                <?php } ?>
+                <?php
+                    if(isset($this->services[ $PO['service'] ])) { ?>
+                        <span class="label label-success"><?php echo $this->services[ $PO['service'] ]['name'] ?></span> <?php echo $this->services[ $PO['service'] ]['address'] ?>
+                <?php } ?>
+
+            </td>
+        </tr>
+        <?php endforeach;?>
+
+    </tbody>
+</table>
+
+<div class="paging">
+    <?php echo $this->paging($this->total, $this->limit, $this->offset, $this->url);?>
+</div>
+
+<script type="text/javascript" src="/js/jquery-ui-1.8.12.custom.min.js"></script>
+<link rel="stylesheet" type="text/css" href="/css/jquery-ui-1.8.12.custom.css"/>
+<?php echo $this->load();?>
+<?php echo $this->confirm();?>
+<script>
+
+var tmp_warehouse_id = 0;
+var locaton_pair = {
+    1: 8,
+    2: 11,
+    3: 10,
+    8: 1,
+    10: 3,
+    11: 2
+};
+
+;(function($){
+    $('.select_all input').on('change', function(e) {
+        check = $('.select_all input').prop('checked');
+        $('.row_select').prop('checked', check);
+
+        if (check)
+            $('.row_select').parents('tr').addClass("checked");
+        else
+            $('.row_select').parents('tr').removeClass("checked");
+    });
+
+    $(".row_select").on('change', function(e) {
+
+        if ($(this).prop('checked') == true) {
+            $('.row_select').prop('checked', false);
+            $(this).prop('checked', true);
+        } 
+
+        /*
+        if($(this).is(":checked")){
+            current_warehouse_id = $(this).data('warehouse');
+            if (tmp_warehouse_id && tmp_warehouse_id != current_warehouse_id && locaton_pair[tmp_warehouse_id] != current_warehouse_id) {
+                console.log(locaton_pair[tmp_warehouse_id]);
+                e.preventDefault();
+                $(this).removeAttr('checked');
+                alert("Orders in 02 warehouses");
+
+                return false;
+            }
+
+            tmp_warehouse_id = current_warehouse_id;
+
+            $(this).closest('tr').addClass("checked");
+        } else{
+            $(this).closest('tr').removeClass("checked");
+        }*/
+    });
+})(jQuery);
+</script>

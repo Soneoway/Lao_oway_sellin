@@ -1,0 +1,369 @@
+<link rel="stylesheet" href="<?php echo HOST?>css/jquery-ui-1.8.12.custom.css" />
+<link rel="stylesheet" href="<?php echo HOST?>css/checkmoney.css" />
+<link rel="stylesheet" href="<?php echo HOST?>js/chosen.css" />
+<style>
+    table tr td ul{
+        list-style: none;
+        margin: 0px;
+        padding: 0px;
+    }
+    table tr td{
+        vertical-align: top!important;
+    }
+    table tr.main-row
+    {
+        background: #e5e5e5!important;
+    }
+    .chosen-container-multi .chosen-choices{
+        border-radius: 3px;
+        border: 1px solid #ccc;
+        box-shadow: none;
+    }
+
+    #SearchBox{
+        width: 370px;
+    }
+    #d_id{
+        left: 0px!important;
+        margin-left: 0px;
+        margin-top: 20px;
+        width: 380px;
+    }
+    .group{
+        padding: 10px;
+        border: 1px solid #ccc;
+        margin-bottom: 15px;
+    }
+    .group p{
+        font-weight: bold;
+    }
+</style>
+<div class="page-header">
+    <h1>Cash List Transaction</h1>
+</div>
+<?php
+    if (isset($this->messages_success) and $this->messages_success)
+        foreach ($this->messages_success as $message):
+            echo '<div class="alert alert-success">'.$message.'</div>';
+        endforeach;
+
+    if (isset($this->messages) and $this->messages)
+        foreach ($this->messages as $message):
+            echo '<div class="alert alert-error">'.$message.'</div>';
+        endforeach;
+?>
+<div class="row">
+    <div class="span12">
+        <span class="pull-right">
+            <button type="button" class="btn btn-info" onclick="window.open('<?php echo HOST ?>checkmoney/payment-order','_blank');">Payment Order</button>
+        </span>
+
+      <!--   <span class="pull-right">
+            <button type="button" class="btn btn-warning" onclick="window.open('<?php echo HOST ?>checkmoney/lastinput','_blank');">Last Input</button>
+        </span> -->
+        <span class="pull-right">
+            <button type="button" class="btn btn-success" onclick="window.open('<?php echo HOST ?>checkmoney/add','_blank');"><i class="icon-plus"></i></button>
+        </span>
+    </div>
+</div>
+
+<div class="accordion" id="accordion2">
+    <div class="accordion-group">
+        <div class="accordion-heading">
+            <a class="accordion-toggle collapsed" data-toggle="collapse" data-parent="#accordion2" href="#collapseTwo">
+                Search
+            </a>
+        </div>
+        <div id="collapseTwo" class="accordion-body collapse" style="height: 0px;">
+            <div class="accordion-inner">
+                <?php
+                    echo $this->render('checkmoney/partials/search_by_retailer.phtml');
+                ?>
+            </div>
+        </div>
+    </div>
+</div>
+
+<div class="table-responsive">
+    <?php
+        echo $this->render('checkmoney/partials/list_by_retailer.phtml');
+    ?>
+</div>
+
+<script src="<?php echo HOST?>js/jets.js"></script>
+<script src="<?php echo HOST?>js/jquery-ui-1.8.12.custom.min.js"></script>
+<script src="<?php echo HOST?>js/numeral.min.js"></script>
+<script src="<?php echo HOST?>js/chosen.jquery.js"></script>
+
+<script>
+	 $(document).ready(function () {
+        // var jets = new Jets({
+        //   searchTag: '#SearchBox',
+        //   contentTag: '#d_id'
+        // });
+        initSelectChosen();
+
+        $('#loading').hide();
+        $('#loading').ajaxStart(function() {
+            $(this).show();
+        });
+        $('#loading').ajaxStop(function() {
+            $(this).hide();
+        });
+
+        $(".export").click(function(){
+            var chk_export = $(this).val();
+            var params1 = $('#from_collection_time').val();
+            var params2 = $('#to_collection_time').val();
+            var params3 = $('#from_invoice_time').val();
+            var params4 = $('#to_invoice_time').val();
+            var chk=false;var check = 0;
+            //alert(chk_export);
+            if(chk_export=="2"){
+                if(params1 != '' && params2 != ''){
+                    check++;
+                }
+
+                if(params3 != '' && params4 != ''){
+                    check++;
+                }
+
+                if(check == 0){
+                    alert('กรุณาระบุวันที่ต้องการจะที่จะค้นหา');
+                    chk =  false;
+                    return chk;
+                }else{
+                  chk =  true;  
+                }
+                <?php
+                $userStorage = Zend_Auth::getInstance()->getStorage()->read();
+                if (!My_Staff_Group::inGroup($userStorage->group_id, array(ADMINISTRATOR_ID,SEARCH_UNLIMITED_DATA))){
+                ?>
+                    var date1 = new Date(params1);
+                    var date2 = new Date(params2);
+                    var diffDays1 = parseInt((date2 - date1) / (1000 * 60 * 60 * 24)); 
+                    if(diffDays1>1){
+                        alert('ไม่อนุญาตให้ค้นหาข้อมูลมากกว่า 1 วัน!');
+                        chk =  false; 
+                        return chk;
+                    }else{
+                        chk =  true;
+                    }
+
+                    var date3 = new Date(params3);
+                    var date4 = new Date(params4);
+                    var diffDays2 = parseInt((date4 - date3) / (1000 * 60 * 60 * 24)); 
+                    if(diffDays2>1){
+                        alert('ไม่อนุญาตให้ค้นหาข้อมูลมากกว่า 1 วัน!');
+                        chk =  false; 
+                        return chk;
+                    }else{
+                        chk =  true;
+                    }
+                <?php
+                }
+                ?>  
+                
+            }else{
+                chk =  true;
+            }
+        
+            return chk;
+        });
+
+        
+
+        function initSelectChosen(){
+            $("#bank_id").chosen();
+        }
+
+         $( ".datepicker" ).datepicker({ dateFormat: "yy-mm-dd" });
+         $('.form-search button:reset').click(function (e){
+            $('.form-search input, .form-search select').val('');
+            $('textarea').val('');
+            $('.form-search').submit();
+            return false;
+        });
+
+         $('.confirmLink').bind("contextmenu",function(e){
+            return false;
+        });
+
+        initShowTransaction();
+        initViewmore();
+
+        //Ajax set default
+        $.ajaxSetup({
+            type: 'GET',
+            datatype: 'json',
+            timeout: 20000
+        });
+
+        $("#dialog").dialog({
+            autoOpen: false,
+            modal: true
+        });
+
+        
+
+
+        function initShowTransaction(){
+            $('.collapse_a').click(function(){
+                var _this   = $(this);
+                _this.attr('disabled','disabled');
+                var check       = _this.html();
+                var d_id        = _this.attr('id');//d_007 :D
+
+                //class cho các dòng được sinh ra
+                var _class      =  d_id+'_sub';
+                var check_ajax;
+
+                if(check == '+'){
+                    _this.html('-');
+
+                    var check_class = $('tr').hasClass(_class);
+                    if(check_class){// If data existed then show
+                        $('.'+_class).show();
+                    }else{
+                        var view_more = '<tr class="'+_class+'"><td></td><td colspan="12"><button class="btn pull-right view-more" value="1">view more</button></td></tr>';
+                        $(view_more).insertAfter($('#'+d_id).parent().parent());
+                        /*
+                        var not_pay_ment = '<button class="btn pull-right not-confirm" value="'+d_id+'">Order not payment</button>';
+                        $(not_pay_ment).appendTo($('.'+_class+' td:last'));
+                        */
+
+                        var page = parseInt($('.'+_class+' .view-more').val());
+
+                        check_ajax = loadCheckMoney(d_id,_class,page);
+                        initViewmore();
+                        // initShowOrderNotConfirm();
+                    }
+                }else{
+                    $('.'+_class).hide();
+                    _this.html('+');
+                }
+
+
+
+
+                _this.removeAttr('disabled');
+            });
+        }
+
+
+        function initShowOrderNotConfirm(){
+            $('.not-confirm').click(function(){
+                var _this  = $(this);
+                _this.attr('disabled','disabled');
+                var d_id         =  $(this).val();// ex: d_10
+                var _class       =  d_id+'_sub';
+                var _class_order =  d_id+'_order';
+
+                //lấy d_id
+                d_id = d_id.split('_')[1];
+
+                $.ajax({
+                    type: 'get',
+                    url:  '/checkmoney/getorder',
+                    data: {id: d_id},
+                    success: function(data){
+
+                        $('.'+_class_order).remove();
+                        
+                        var check_data = data.length;
+                        check_data = parseInt(check_data);
+                        if(check_data > 0){
+                            var html = '';
+                            html += '<tr class="'+_class_order+' '+_class+'"><td></td><td colspan=12>';
+                            html += '<table class="table-sub">';
+                            html += '<thead>'
+                                        +'<tr>'
+                                            +'<td>Order is not payment</td>'
+                                            +'<td>Order time</td>'
+                                            +'<td>Total</td>'
+                                        +'</tr>'
+                                    +'</thead>';
+                            //xóa hết trước khi tạo lại
+                            html += '<tbody>';
+                            $.each(data,function(i){
+                                html += '<tr>'
+
+                                        +'<td><a href="/sales/view?sn='+this.sn+'">'+this.sn_ref+'</a></td>'
+                                        +'<td>'+this.add_time+'</td>'
+                                        +'<td>'+ numeral(this.total_sn).format('0,0')
+                                        +'</td>'
+                                    +'</tr>';
+                            });
+                            html +='<tbody></table>';
+                            html +='</td></tr>';
+                            var node = $('.'+_class+' .not-confirm').parent().parent();
+                            $(html).insertAfter(node);
+                        }else{
+
+                            $('#dialog').html('Data have loaded full');
+                            $('#dialog').dialog({
+                                modal:true,
+                                title: 'Message',
+                                buttons:{
+                                    'Ok':function(){
+                                        $(this).dialog('close');
+                                    }
+                                }
+                            });
+                            $('#dialog').dialog("open");
+                            setTimeout(function(){
+                                $('#dialog').dialog('close');
+                            },3000);
+                        }//check total data
+                    }
+                });
+                _this.removeAttr('disabled');
+            });
+        }
+
+
+        function initViewmore(){
+            $('.view-more').on('click',function(){
+
+                var _this   = $(this);
+                var page    = parseInt(_this.val());
+                var _class  = _this.parent().parent().attr('class');
+                var d_id    = 'd_'+_class.split('_')[1];
+                var check_ajax = 0;
+                check_ajax  = loadCheckMoney(d_id,_class,page);
+
+            });
+        }
+
+
+        function loadCheckMoney(d_id,_class,page){
+            var check_ajax = 1;
+            var id = d_id.split('_')[1];
+            var uri = "<?php echo http_build_query($this->params)?>";
+            $.ajax({
+                type: 'get',
+                url: '/checkmoney/getcheckmoney?'+uri,
+                data: {'d_id2': id,'page':page,'_class':_class},
+                error: function(){
+                    check_ajax = 0;
+                },
+                success: function(data){
+                    var html = data;
+                    //alert(data);
+                    if(page == 1){
+                        $(html).insertAfter($('#'+d_id).parent().parent());
+                    }else{
+                        var node_view_more = $('.'+_class+' .view-more');
+                        $(html).insertBefore(node_view_more.parent().parent());
+                    }
+
+                    var page = parseInt($('.'+_class+' .view-more').val());
+                    $('.'+_class+' .view-more').val(page+1);
+                    check_ajax = 2;
+                }
+            });
+
+            return check_ajax;
+        }
+    });
+</script>

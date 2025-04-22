@@ -1,0 +1,249 @@
+<div class="page-header">
+    <h1>Distributor Target</h1>
+</div>
+
+<div class="row">
+    <div class="span12">
+        <p><a class="btn btn-info" href="<?php echo HOST ?>sales/target-view">View List</a></p>
+    </div>
+</div>
+
+<div class="row">
+    <div class="span12">
+        <p>Chọn khu vực, sau đó tìm đại lý và đặt target. Kiểm tra lại lần nữa và bấm Save.</p>
+    </div>
+</div>
+
+<div class="row">
+    <div class="span6">
+        <form action="" onsubmit="return false;" class="form-horizontal">
+            <div class="control-group">
+                <label class="control-label" for="area">Area</label>
+                <div class="controls">
+                    <select name="area" id="area">
+                        <option value>---</option>
+                        <?php if (isset($this->areas) && $this->areas): ?>
+                            <?php foreach ($this->areas as $key => $value): ?>
+                                <option value="<?php echo $key ?>"><?php echo $value ?></option>
+                            <?php endforeach ?>
+                        <?php endif ?>
+                    </select>
+                </div>
+            </div>
+            <div class="control-group">
+                <label class="control-label">Distributor name</label>
+                <div class="controls">
+                    <input type='text' name='SearchBox' id="SearchBox" placeholder="Search" autocomplete="off" />
+                    <select name="distributor_id" id="distributor_id" size="5">
+                        <option value="">Select Area first</option>
+                        <?php
+                        if (isset($this->distributors) && $this->distributors)
+                            foreach($this->distributors as $key => $value):?>
+                                <option value="<?php echo $key ?>"><?php echo $value ?></option>';
+                            <?php endforeach;
+                        ?>
+                    </select>
+                </div>
+            </div>
+
+            <div class="control-group">
+                <div class="controls">
+                    <p id="info" class="alert"></p>
+                </div>
+            </div>
+
+            <div class="control-group">
+                <label class="control-label" for="target">Target</label>
+                <div class="controls">
+                    <input type="number" value="" name="target" id="target" /> x 3.200.000đ
+                </div>
+            </div>
+
+            <div class="control-group">
+                <label class="control-label" for="total">Total</label>
+                <div class="controls">
+                    <input type="text" readonly value="" name="total" id="total" />
+                </div>
+            </div>
+
+            <div class="action-group">
+                
+                <div class="controls">
+                    <button type="button" id="save_btn" class="btn btn-primary">Save</button>
+                </div>
+            </div>
+        </form>
+    </div>
+</div>
+
+<script>
+    Number.prototype.formatMoney = function(decPlaces, thouSeparator, decSeparator) {
+        var n = this,
+            decPlaces = isNaN(decPlaces = Math.abs(decPlaces)) ? 2 : decPlaces,
+            decSeparator = decSeparator == undefined ? "." : decSeparator,
+            thouSeparator = thouSeparator == undefined ? "," : thouSeparator,
+            sign = n < 0 ? "-" : "",
+            i = parseInt(n = Math.abs(+n || 0).toFixed(decPlaces)) + "",
+            j = (j = i.length) > 3 ? j % 3 : 0;
+        return sign + (j ? i.substr(0, j) + thouSeparator : "") + i.substr(j).replace(/(\d{3})(?=\d)/g, "$1" + thouSeparator) + (decPlaces ? decSeparator + Math.abs(n - i).toFixed(decPlaces).slice(2) : "");
+    };
+
+    $(document).ready(function () {
+        initChangeRetailer();
+
+        $("#target").change(change_target);
+        $("#area").change(load_distributor);
+        $("#target").keyup(change_target);
+        $("#save_btn").click(save_target);
+    });
+
+    function save_target() {
+        $('#info').text('');
+
+        $(".loading").remove();
+        $("#save_btn").after('<span class="loading"></span>');
+        $("#save_btn").prop("disabled", true);
+
+        area = $("#area").val();
+
+        if (!area) {
+            $("#info").text("Chọn khu vực");
+            return false;
+        }
+
+        distributor_id = $("#distributor_id").val();
+
+        if (!distributor_id) {
+            $("#info").text("Chọn retailer");
+            return false;
+        }
+
+        target = $("#target").val().trim();
+
+        if (!target || isNaN(target)) { 
+            $("#info").text("Target phải là số");
+            return false;
+        }
+
+        $('#info').text('');
+
+        $.ajax({    
+            url: '<?php echo HOST ?>sales/target-save',
+            type: 'post',
+            dataType: 'json',
+            data: {
+                area : area,
+                distributor_id : distributor_id,
+                target : target
+            },
+        })
+        .done(function(data) {
+            console.log("success");
+
+            if (data.result)
+                $('#info').text('Đăng ký thành công');
+            else if (data.error)
+                $('#info').text(data.error);
+            else
+                $('#info').text('Đăng ký thất bại');
+        })
+        .fail(function() {
+            console.log("error");
+        })
+        .always(function() {
+            $(".loading").remove();
+            $("#save_btn").prop("disabled", false);
+            console.log("complete");
+        });
+        
+    }
+
+    function change_target() {
+        target = $("#target").val().trim();
+
+        if (!target)
+            target = 0;
+
+        total = target * 3200000 
+        
+        $("#total").val(total.formatMoney(0,'.',','));
+    }
+
+    function initChangeRetailer(){//change retailer
+        $("#distributor_id").change(function() {
+            $('#info').text('');
+
+            distributor_id = $("#distributor_id").val();
+
+            if (!distributor_id) return false;
+
+            $(".loading").remove();
+            $("#save_btn").after('<span class="loading"></span>');
+            $("#save_btn").prop("disabled", true);
+
+            $.ajax({
+                url: '<?php echo HOST ?>sales/target-check',
+                type: 'post',
+                dataType: 'json',
+                data: {distributor_id: distributor_id},
+            })
+            .done(function(data) {
+                console.log("success");
+
+                if (data.result) {
+                    $("#info").text("Chưa đăng ký target");
+                    $("#save_btn").prop("disabled", false);
+                } else {
+                    $("#info").text("Đã đăng ký target");
+                    $("#save_btn").prop("disabled", true);
+                }
+            })
+            .fail(function() {
+                console.log("error");
+            })
+            .always(function() {
+                $(".loading").remove();
+                console.log("complete");
+            });
+        });
+        
+    }
+
+    function load_distributor(e) {
+        $(".loading").remove();
+        $("#save_btn").after('<span class="loading"></span>');
+        $("#distributor_id").html('<option value>loading...</option>');
+        $("#save_btn").prop("disabled", true);
+
+        area = $("#area").val();
+
+        if (!area) {
+            $("#info").text("Chọn khu vực");
+            return false;
+        }
+
+        $.ajax({
+            url: '<?php echo HOST ?>get/distributor-cbb',
+            type: 'post',
+            dataType: 'html',
+            data: { area: area }
+        })
+        .done(function(data) {
+            console.log("success");
+            initSearchOptionDistributor('distributor_id', 'SearchBox');
+
+            try {
+                $("#distributor_id").html(data);
+            } catch(err){}
+        })
+        .fail(function() {
+            console.log("error");
+        })
+        .always(function() {
+            console.log("complete");
+            $(".loading").remove();
+            $("#save_btn").prop("disabled", false);
+        });
+        
+    }
+</script>

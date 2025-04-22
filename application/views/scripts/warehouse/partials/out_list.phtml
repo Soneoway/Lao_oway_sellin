@@ -1,0 +1,430 @@
+<?php
+
+function product_price($priceFloat) {
+    $symbol = ' THB';
+    $symbol_thousand = ',';
+    $decimal_place = 2;
+    $price = number_format($priceFloat, $decimal_place, '.', $symbol_thousand);
+    return $price;
+} 
+
+?>
+
+<style>
+    .no_show {
+        display: none;
+    }
+    .new .icon-print {
+        font-size: 20px;
+        color: red;
+    }
+
+    .old .icon-print {
+        color: black;
+    }
+    
+</style>
+<button class="btn btn-inverse btn-mini pull-left btn_print">Print Picking Lists</button>
+<button class="btn btn-success btn-mini pull-left btn_print_list">Print Product Lists</button>
+<?php $userStorage = Zend_Auth::getInstance()->getStorage()->read(); ?>
+<?php if($userStorage->id == 1): ?>
+  <button class="btn btn-danger pull-right" onclick="bulk_delete()"><i class="glyphicon glyphicon-trash"></i> Bulk Delete</button>
+<?php endif; ?>
+<div class="row">
+    <div class="span12">
+    </div>
+</div>
+
+<table class="table table-bordered">
+    <thead>
+        <tr>
+            <?php echo $this->sorting(array(
+                    '#',
+                    'ID'            => 'Sale ID',
+                    'sn'             => 'Sales Order Number',
+                    'payment_no'             => 'Payment Number',
+                    'staff_username' => 'Sales Admin',
+                   // 'Product Category',
+                    'Product',
+                    'Color',
+                    'total_qty'      => 'Quantity',
+                    'total_price'    => 'Price',
+                    'd_id'           => 'Retailer',
+                    'd.region'      => 'Province',
+                   // 'district'       => 'District',
+                    'warehouse_id'   => 'Warehouse',
+                    /*'Remark',*/
+                   // 'Order Type',
+                    'p.id'           => 'Order Time',
+                    'pay_time' => 'Finance Confirm',
+                    'Action',
+                    '<input type="checkbox" id="check-all">'
+                ),
+                $this->url, $this->sort, $this->desc); ?>
+        </tr>
+    </thead>
+    <tbody>
+        <?php
+        if (isset($this->markets) and $this->markets){
+            foreach ($this->markets as $k=>$mk){ 
+                //print_r($mk);die;
+                $sn_ref = $mk['sn_ref'];
+                 if($sn_ref==''){
+                    $sn_ref = $mk['sn'];
+                 }
+                ?>
+                <tr>
+                    <td><a href="#id" rel="<?php echo $mk['sn'] ?>" class="collapse_a btn btn-default btn-small" id="m_<?php echo $mk['sn'] ?>"><span class="col-sign">+</span><img class="img-loading" src="<?php echo HOST?>img/ajax-loader.gif" style="display: none" /></a></td>
+                    <td><?php echo $mk['id'];?></td>
+                    <td><?php echo $sn_ref;?></td>
+                    <td><?php echo $mk['payment_no'];?></td>
+                    <td><?php if(isset($this->staffs[$mk['user_id']])) echo $this->staffs[$mk['user_id']];?></td>
+           
+                    <td></td>
+                    <td></td>
+                    <td><?php echo $mk['total_qty'];?></td>
+                    <td><?php echo product_price($mk['total_price']); ?></td>
+
+                    <td>
+                        <?php
+                            if($mk['store_id'] != 0): 
+                                echo $this->store[$mk['store_id']];
+                            else:
+                                echo $mk['title'];
+                            endif;
+                        ?>
+                        
+                        <!-- <?php echo $mk['title'];?>  -->
+                    </td>
+
+                    
+                    <td><?php if (isset($mk['district'])) echo My_Region::getValue($mk['district'], My_Region::Province) ?></td>
+                <!--    <td><?php if (isset($mk['district'])) echo My_Region::getValue($mk['district'], My_Region::District) ?></td> -->
+                    
+                    <td><?php if (isset($this->warehouses[$mk['warehouse_id']])) echo str_replace('OPPOWarehouse_', '', $this->warehouses[$mk['warehouse_id']]) ?></td>
+                  <!--  <td><?php echo ($mk['type'] == 1?'Retailer':($mk['type'] == 2 ? 'Demo' : ($mk['type'] == 3 ? 'Staff' : 'Lending'))) ?></td> -->
+                    <td><?php echo $mk['add_time'];?></td>
+                    <td><?php echo $mk['pay_time'];?></td>
+
+                    <td class="">
+                        <?php
+                        if($this->warehouse_rollback == 1){
+                            if($this->access('warehouse','rollback')){
+                                //if ( $mk['total_imei'] == 0 and $mk['total_digital'] == 0 ){ ?>
+                                <a title="Rollback" class="swal" id="id" data-id="<?php echo $mk['sn'];?>&action_frm=out_list;?>"> <i class="icon-repeat"></i></a>
+                        <?php
+                            }
+                        }
+                        ?>
+
+                        <?php
+                        if($this->access('warehouse','add-imei-out')){
+                            if ( ( $mk['phone_qty'] > $mk['total_imei'] )
+                                or ( $mk['digital_qty'] > $mk['total_digital'] )
+                                or ( $mk['ilike_qty'] > $mk['total_ilike'] )
+                            ){ ?>
+                            <a title="Add IMEI" href="/warehouse/add-imei-out?sn=<?php echo $mk['sn'];?>"> <i class="icon-qrcode"></i></a>
+                        <?php
+                            }
+                        }
+                        ?>
+
+                        <?php
+                        if($this->access('warehouse','print-picking-list'))
+                        {
+                        ?>
+                            <a title="Print Picking List"
+                                
+                                href="<?php echo HOST ?>warehouse/print-picking-list?sn[]=<?php echo $mk['sn'];?>&sn_ref[]=<?php echo $mk['sn_ref'];?>"
+                                target="picking_list"
+                                data-sn="<?php echo $mk['sn'] ?>"
+                                class="<?php if ($mk['print_picking_list'] == 1) echo 'old'; else echo 'new'; ?>"> <i class="icon-print"></i></a>
+                        <?php
+                        }
+                        ?>
+
+                        <!-- print invoice -->
+                        <?php
+                        if(
+                            $this->access('warehouse','invoice')
+                            or $this->access('warehouse','invoice-no-accessories')
+                            or $this->access('warehouse','invoice-vt')
+                            or $this->access('warehouse','product-out-print')
+                        )
+                        {
+                            if (
+                                ( intval($mk['phone_qty']) == intval($mk['total_imei']) )
+                                and ( intval($mk['digital_qty']) == intval($mk['total_digital'] ))
+                                and ( intval($mk['ilike_qty']) == intval($mk['total_ilike'] ))
+                            ){
+                            ?>
+                                <a class="no_show" href="<?php echo HOST ?>warehouse/product-out-print?sn=<?php echo $mk['sn'];?>" class="btn <?php if(isset($mk['print_time']) && $mk['print_time']) echo 'btn-info'; else echo 'btn-default'; ?> btn-small" target="_blank"><?php if(isset($mk['print_time']) && $mk['print_time']) echo $mk['print_time']; else echo "Print" ?></a>
+
+                                <div class="btn-group no_show">
+                                    <a class="btn dropdown-toggle btn-warning" data-toggle="dropdown" href="#">
+                                        Print Invoice
+                                        <span class="caret"></span>
+                                    </a>
+
+                                    <ul class="dropdown-menu" role="menu" aria-labelledby="dropdownMenu3">
+                                        <li role="presentation"><a role="menuitem" tabindex="-1" target="_blank" href="<?php echo HOST ?>warehouse/invoice?sn=<?php echo $mk['sn'];?>">Invoice</a></li>
+                                        <li role="presentation"><a role="menuitem" tabindex="-1" target="_blank" href="<?php echo HOST ?>warehouse/invoice-no-accessories?sn=<?php echo $mk['sn'];?>">Invoice no Accessories</a></li>
+                                        <li role="presentation"><a role="menuitem" tabindex="-1" target="_blank" href="<?php echo HOST ?>warehouse/invoice-vt?sn=<?php echo $mk['sn'];?>">Viettel</a></li>
+                                        <li role="presentation"><a role="menuitem" tabindex="-1" target="_blank" href="<?php echo HOST ?>warehouse/invoice?sn=<?php echo $mk['sn'];?>&type=fpt">FPT</a></li>
+                                        <li role="presentation"><a role="menuitem" tabindex="-1" target="_blank" href="<?php echo HOST ?>warehouse/invoice?sn=<?php echo $mk['sn'];?>&type=nk">Nguyễn  Kim</a></li>
+                                        <li role="presentation"><a role="menuitem" tabindex="-1" target="_blank" href="<?php echo HOST ?>warehouse/invoice?sn=<?php echo $mk['sn'];?>&type=bvg">Đơn hàng bảo vệ giá</a></li>
+                                    </ul>
+                                </div>
+                            <?php
+                            }
+                        }
+                        ?>
+                        <!-- print invoice -->
+
+                    </td>
+                    <td>
+                                <input type="checkbox" class="data-check" value="<?php echo $mk['sn'];?>">
+                    </td>
+                </tr>
+
+            <?php }?>
+        <?php }?>
+
+    </tbody>
+</table>
+<div class="paging">
+    <?php echo $this->paging($this->total, $this->limit, $this->offset, $this->url);?>
+</div>
+
+<iframe src="" class="print_frame" name="picking_list" frameborder="0" style="opacity: 0;height: 0px;width: 0px;"></iframe>
+
+<script type="text/javascript" src="<?php echo HOST ?>js/jquery-ui-1.8.12.custom.min.js"></script>
+<link rel="stylesheet" type="text/css" href="<?php echo HOST ?>css/jquery-ui-1.8.12.custom.css"/>
+<?php echo $this->load();?>
+<?php echo $this->confirm();?>
+<script>
+    $(document).ready(function() {
+        $('.check_all').change(check_all);
+        $('.btn_print').click(print);
+        $('.btn_print_list').click(print_list);
+
+    });
+
+    $(document).off('click', '.old, .new')
+    .on('click', '.old, .new', function(e){
+
+        var _this = $(this);
+        var user_staff="";
+        var sn = _this.attr('data-sn');
+        $.ajax({
+                type: 'get',
+                url: '/get/load-print-picking-user-log',
+                data: {'sales_sn': sn},
+                async: false,
+                cache: false,
+                timeout: 30000,
+                error: function(){
+                },
+                success: function(data){
+                   user_staff = data; 
+                }
+            });
+
+        if(user_staff !='')
+        {
+            return confirm('มีการปริ้นไปแล้วโดยคุณ [ '+user_staff+' ] ต้องการปริ้นอีกครั้งหรือไม่?'); 
+        }      
+    });
+
+    function check_all(e) {
+        _self = $(e.target);
+        $('.print_chk').prop('checked', _self.is(":checked"));
+    }    
+
+    function print_list(){
+    
+        sn = [];
+
+        $('.print_chk:checked').each(function(index, el) {
+            sn.push($(el).val());
+        });
+        if (sn.length > 0) {
+            
+            $.ajax({
+                url: '<?php echo HOST ?>warehouse/print-product-list',
+                type: 'GET',
+                dataType: 'html',
+                data: {sn: sn}
+            })
+            .done(function(data) {
+                $('.print_frame').get(0).contentWindow.document.body.innerHTML = data;
+                
+                setTimeout(function() {
+                    window.frames['picking_list'].focus();
+                    window.frames['picking_list'].print();
+                }, 500);
+
+                for (x in sn) {
+                    set_as_printed(sn[x]);
+                }
+            })
+            .fail(function() {
+                console.log("error");
+            })
+            .always(function() {
+                console.log("complete");
+            });
+
+        }
+    }
+    function print() {
+        sn = [];
+        $('.print_chk:checked').each(function(index, el) {
+            sn.push($(el).val());
+        });
+
+        if (sn.length > 0) {
+
+            $.ajax({
+                url: '<?php echo HOST ?>warehouse/print-picking-list',
+                type: 'GET',
+                dataType: 'html',
+                data: {sn: sn}
+            })
+            .done(function(data) {
+                $('.print_frame').get(0).contentWindow.document.body.innerHTML = data;
+                
+                setTimeout(function() {
+                    window.frames['picking_list'].focus();
+                    window.frames['picking_list'].print();
+                }, 3000);
+
+                for (x in sn) {
+                    set_as_printed(sn[x]);
+                }
+            })
+            .fail(function() {
+                console.log("error");
+            })
+            .always(function() {
+                console.log("complete");
+            });
+
+        }
+
+    }
+
+    function set_as_printed(sn) {
+        $('[data-sn="'+sn+'"]').removeClass('new').addClass('old');
+    }
+
+    $('.collapse_a').click(function(){
+        var _this = $(this);
+        var _this_id = _this.attr('id');
+        var sn = _this.attr('rel');
+
+        if (_this.parent().parent().next().hasClass('accordion-body')){
+
+            $('.m_'+sn).toggle();
+
+            if ($('.m_'+sn).is(':visible'))
+                _this.find('.col-sign'). html('-');
+            else _this.find('.col-sign'). html('+');
+
+        } else {
+            _this.find('.col-sign'). html('');
+
+            getMarketDetail(sn);
+        }
+
+    });
+
+    function getMarketDetail(sn){
+        if (! $('#m_'+sn).parent().parent().next().hasClass('accordion-body')){
+            $('#m_'+sn+' .col-sign').html('');
+            $('#m_'+sn+' .img-loading').show();
+
+            $.ajax({
+                type: 'post',
+                url: '/get/market-detail',
+                data: {
+                    'sn': sn,
+                    'list': 'out',
+                    'params': '<?php echo (isset($this->params) ? serialize($this->params) : '')?>'
+                },
+                error: function(){
+                },
+                success: function(data){
+                    $('.m_'+sn).remove();
+                    $('#m_'+sn).parent().parent().after(data);
+                    $('#m_'+sn).find('.col-sign').html('-');
+                    $('#m_'+sn+' .img-loading').hide();
+                }
+            });
+        }
+    }
+
+
+$(document).on('click', '.swal', function(e) {
+    var id = $(this).data('id');
+    Swal.fire({
+        title: '<font style="font-family: phetsarath ot">ທ່ານຕ້ອງການຍົກເລີກບິນສັ່ງຊື້ຫຼືບໍ່?</font>',
+        text: "Are you sure?",
+        icon: 'warning',
+        showCancelButton: true,
+        confirmButtonColor: '#ed9a03',
+        cancelButtonColor: '#ababab',
+        confirmButtonText: '<font style="font-family: phetsarath ot">ຢືນຢັ້ນ</font>',
+        cancelButtonText: '<font style="font-family: phetsarath ot">ຍົກເລີກ</font>'
+    }).then((result) => {
+        if (result.isConfirmed) {
+              window.location.href="/warehouse/rollback?sn="+id;
+        }else{
+            Swal.fire('Cancel !', '<font style="font-family: phetsarath ot">ທ່ານໄດ້ຍົກເລົກການຢືນຢັ້ນ.</font>','error');
+        }
+    });
+});
+
+//----------------------------------
+    $("#check-all").click(function () {
+        $(".data-check").prop('checked', $(this).prop('checked'));
+    });
+//----------------------------------
+function bulk_delete()
+{
+    var list_id = [];
+    $(".data-check:checked").each(function() {
+            list_id.push(this.value);
+    });
+    if(list_id.length > 0)
+    {
+        Swal.fire({
+        title: '<font style="font-family: phetsarath ot">ທ່ານຕ້ອງການລົບບິນສັ່ງຊື້ຫຼືບໍ່?</font>',
+        text: "Are you sure delete this "+list_id.length+" data?",
+        icon: 'warning',
+        showCancelButton: true,
+        confirmButtonColor: '#ed9a03',
+        cancelButtonColor: '#ababab',
+        confirmButtonText: '<font style="font-family: phetsarath ot">ຢືນຢັ້ນ</font>',
+        cancelButtonText: '<font style="font-family: phetsarath ot">ຍົກເລີກ</font>'
+        }).then((result) => {
+        if (result.isConfirmed) {
+            location.reload();
+            $.ajax({
+                type: "POST",
+                data: {id:list_id},
+                url: "/warehouse/rollback2",
+                dataType: "JSON",
+            });
+        }else{
+        Swal.fire("Error","no data selected", "error");
+        }
+    });
+
+    }
+    else
+    {
+        Swal.fire("Error","no data selected", "error");
+    }
+}
+</script>

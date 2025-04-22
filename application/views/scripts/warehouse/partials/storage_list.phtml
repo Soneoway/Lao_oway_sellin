@@ -1,0 +1,237 @@
+<?php if (isset($this->goods) and $this->goods): ?>
+
+    <?php 
+
+    ?>
+
+    <div class="pull-right">
+
+        <?php
+        foreach ($this->goods as $k=>$good){
+            $inc = $this->offset + $k + 1;
+            $bad = $demo = $count = $available_normal = $available_demo = $available_apk = $total_normal = $total_demo = $total_changing = $total_apk = 0;
+            if ($good['cat_id'] == PHONE_CAT_ID){
+                $bad = ($good['imei_bad_count'] ? $good['imei_bad_count'] : "-");
+                $bad_normal = ($good['imei_normal_bad_count'] ? $good['imei_normal_bad_count'] : "-");
+                $bad_demo = ($good['imei_demo_bad_count'] ? $good['imei_demo_bad_count'] : "-");
+                $bad_apk = ($good['imei_apk_bad_count'] ? $good['imei_apk_bad_count'] : "-");
+                $bad_staff = ($good['imei_staff_bad_count'] ? $good['imei_staff_bad_count'] : "-");
+                $count = ($good['imei_count'] ? $good['imei_count'] : "-");
+                $demo = ($good['imei_demo_count'] ? $good['imei_demo_count'] : "-");
+                $apk = ($good['imei_apk_count'] ? $good['imei_apk_count'] : "-");
+                $staff = ($good['imei_staff_count'] ? $good['imei_staff_count'] : "-");
+            } elseif ($good['cat_id'] == ILIKE_CAT_ID){
+                $bad = ($good['ilike_bad_count'] ? $good['ilike_bad_count'] : "-");
+                $count = ($good['ilike_count'] ? $good['ilike_count'] : "-");
+            } elseif ($good['cat_id'] == DIGITAL_CAT_ID){
+                $bad = ($good['digital_bad_count'] ? $good['digital_bad_count'] : "-");
+                $count = ($good['digital_count'] ? $good['digital_count'] : "-");
+
+            } elseif ($good['cat_id'] == IOT_CAT_ID) {
+                $bad = ($good['iot_imei_bad_count'] ? $good['iot_imei_bad_count'] : "-");
+                $bad_normal = 0;
+                $bad_demo = 0;
+                $bad_apk = 0;
+                $bad_staff = 0;
+                $count = ($good['iot_imei_count'] ? $good['iot_imei_count'] : "-");
+                $demo = ($good['imei_demo_count'] ? $good['imei_demo_count'] : "-");
+                $apk = ($good['imei_apk_count'] ? $good['imei_apk_count'] : "-");
+                $staff = ($good['imei_staff_count'] ? $good['imei_staff_count'] : "-");
+
+            } else {
+                $bad = ($good['damage_product_count'] ? $good['damage_product_count'] : "-");
+                $count = ($good['product_count'] ? $good['product_count'] : "-");
+            }
+    $current_order =  ($good['current_order'] ? $good['current_order'] : "-");                                       //>> Total SO
+    $current_change_order =  ($good['current_change_order'] ? $good['current_change_order'] : "-");                  //>> Total CO
+    $total_normal = $count;
+    $available_normal = $total_normal - $current_order - $current_change_order;
+    $current_order_demo =  ($good['current_order_demo'] ? $good['current_order_demo'] : "-");
+    $current_change_order_demo =  ($good['current_change_order_demo'] ? $good['current_change_order_demo'] : "-");
+    $total_demo = $demo;
+    $current_order_staff = ($good['current_order_staff'] ? $good['current_order_staff'] : "-");
+    $current_change_order_staff = ($good['current_change_order_staff'] ? $good['current_change_order_staff'] : "-");
+    $total_staff = $staff;
+    $available_staff = $total_staff - $current_order_staff - $current_change_order_staff;
+    $available_demo = $total_demo - $current_order_demo - $current_change_order_demo;
+    $current_order_apk =  ($good['current_order_apk'] ? $good['current_order_apk'] : "-");
+    $current_change_order_apk =  ($good['current_change_order_apk'] ? $good['current_change_order_apk'] : "-");
+    $total_apk = $apk;
+    $available_apk = $total_apk - $current_order_apk - $current_change_order_apk;
+    $total_current_order = $current_order + $current_order_demo + $current_order_apk + $current_order_staff;
+    $total_current_change_order = $current_change_order + $current_change_order_demo + $current_change_order_apk + $urrent_change_order_staff;
+    $total_available = intval($available_normal) + intval($available_demo) + intval($available_apk) + intval($available_staff);                   //>> Total Avilable
+    $total_storage = $total_normal + $total_demo + $total_apk + $total_staff;                                                         //>> Total Storage 
+    $total_changing =  ($good['current_changing_order'] ? $good['current_changing_order'] : "-");
+
+
+    $sum_total_all_so+=$current_order + $current_order_apk + $current_order_staff;
+    $sum_total_all_co+=$current_change_order + $current_change_order_apk + $current_change_order_staff ;
+    $sum_total_all_available+=$total_available;
+    $sum_total_all_storage+=$total_storage;
+}
+?>
+
+<b>
+    Total SO Reserved:  <b style="color: blue"><?php echo $sum_total_all_so ?></b>&nbsp; || &nbsp;
+    Total CO Reserved:  <b style="color: blue"><?php echo $sum_total_all_co ?></b>&nbsp; || &nbsp;
+    Total Available:  <b style="color: blue"><?php echo $sum_total_all_available ?></b>&nbsp; || &nbsp;
+    Total All:  <b style="color: blue"><?php echo $sum_total_all_storage ?></b>
+    <br>
+    <b>=====================================================================</b>
+</b>
+</div>
+
+<table class="table table-bordered">
+    <tr style="text-align: center;">
+        <th rowspan="2" style="text-align: center; color: green; font-weight: bold;">#</th>
+        <th rowspan="2" style="text-align: center; color: green; font-weight: bold;">Name</th>
+        <th rowspan="2" style="text-align: center; color: green; font-weight: bold;">Color</th>
+        <th rowspan="2" style="text-align: center; color: green; font-weight: bold;">Category</th>
+        <!-- <th rowspan="2" style="text-align: center; color: green; font-weight: bold;">Product Detail</th> -->
+        <th colspan="4" style="text-align: center; color: blue; font-weight: bold; font-size: 16px;">Normal</th>
+        <th colspan="4" style="text-align: center; color: green; font-weight: bold; font-size: 16px;">Staff</th>
+        <th colspan="4" style="text-align: center; color: red; font-weight: bold; font-size: 16px;">DEMO</th>
+        <!-- <th colspan="4">Demo</th> -->
+        <th rowspan="2" style="text-align: center; color:#9c27b0; font-weight: bold;">Total Avaliable</th>
+        <th rowspan="2" style="text-align: center; color:#9c27b0; font-weight: bold;">Total Storage</th>
+        <th rowspan="2" style="text-align: center; color:#9c27b0; font-weight: bold;">CO On Changing</th>
+    </tr>
+    <tr>
+        <th style="text-align: center; color: blue; font-weight: bold;">SO Reserve</th>
+        <th style="text-align: center; color: blue; font-weight: bold;">CO Reserved</th>
+        <th style="text-align: center; color: blue; font-weight: bold;">Available</th>
+        <th style="text-align: center; color: blue; font-weight: bold;">Total</th>
+        <!-- <th>SO Reserve</th>
+        <th>CO Reserved</th>
+        <th>Available</th>
+        <th>Total</th> -->
+        <th style="text-align: center; color: green; font-weight: bold;">SO Reserve</th>
+        <th style="text-align: center; color: green; font-weight: bold;">CO Reserved</th>
+        <th style="text-align: center; color: green; font-weight: bold;">Available</th>
+        <th style="text-align: center; color: green; font-weight: bold;">Total</th>
+
+        <th style="text-align: center; color: red;">SO Reserve</th>
+        <th style="text-align: center; color: red;">CO Reserved</th>
+        <th style="text-align: center; color: red;">Available</th>
+        <th style="text-align: center; color: red;">Total</th>
+    </tr>
+    <?php
+    foreach ($this->goods as $k=>$good){
+        $inc = $this->offset + $k + 1;
+        $bad = $demo = $count = $available_normal = $available_demo = $available_apk = $total_normal = $total_demo = $total_changing = $total_apk = $total_staff = 0;
+        if ($good['cat_id'] == PHONE_CAT_ID){
+            $bad = ($good['imei_bad_count'] ? $good['imei_bad_count'] : "-");
+            $bad_normal = ($good['imei_normal_bad_count'] ? $good['imei_normal_bad_count'] : "-");
+            $bad_demo = ($good['imei_demo_bad_count'] ? $good['imei_demo_bad_count'] : "-");
+            $bad_apk = ($good['imei_apk_bad_count'] ? $good['imei_apk_bad_count'] : "-");
+            $bad_staff = ($good['imei_staff_bad_count'] ? $good['imei_staff_bad_count'] : "-");
+            $count = ($good['imei_count'] ? $good['imei_count'] : "-");
+            $demo = ($good['imei_demo_count'] ? $good['imei_demo_count'] : "-");
+            $apk = ($good['imei_apk_count'] ? $good['imei_apk_count'] : "-");
+            $staff = ($good['imei_staff_count'] ? $good['imei_staff_count'] : "-");
+        } elseif ($good['cat_id'] == ILIKE_CAT_ID){
+            $bad = ($good['ilike_bad_count'] ? $good['ilike_bad_count'] : "-");
+            $count = ($good['ilike_count'] ? $good['ilike_count'] : "-");
+        } elseif ($good['cat_id'] == DIGITAL_CAT_ID){
+            $bad = ($good['digital_bad_count'] ? $good['digital_bad_count'] : "-");
+            $count = ($good['digital_count'] ? $good['digital_count'] : "-");
+
+        }elseif ($good['cat_id'] == IOT_CAT_ID) {
+            $bad = ($good['iot_imei_bad_count'] ? $good['iot_imei_bad_count'] : "-");
+            $bad_normal = 0;
+            $bad_demo = 0;
+            $bad_apk = 0;
+            $bad_staff = 0;
+            $count = ($good['iot_imei_count'] ? $good['iot_imei_count'] : "-");
+            $demo = ($good['imei_demo_count'] ? $good['imei_demo_count'] : "-");
+            $apk = ($good['imei_apk_count'] ? $good['imei_apk_count'] : "-");
+            $staff = ($good['imei_staff_count'] ? $good['imei_staff_count'] : "-");
+
+
+        } else {
+            $bad = ($good['damage_product_count'] ? $good['damage_product_count'] : "-");
+            $count = ($good['product_count'] ? $good['product_count'] : "-");
+        }
+
+    $current_order =  ($good['current_order'] ? $good['current_order'] : "-");                                       //>> Total SO
+    $current_change_order =  ($good['current_change_order'] ? $good['current_change_order'] : "-");                  //>> Total CO
+    $total_normal = $count;
+    $available_normal = $total_normal - $current_order - $current_change_order;
+
+    $current_order_demo =  ($good['current_order_demo'] ? $good['current_order_demo'] : "-");
+    $current_change_order_demo =  ($good['current_change_order_demo'] ? $good['current_change_order_demo'] : "-");
+    $total_demo = $demo;
+    $available_demo = $total_demo - $current_order_demo - $current_change_order_demo;
+
+    $current_order_apk =  ($good['current_order_apk'] ? $good['current_order_apk'] : "-");
+    $current_change_order_apk =  ($good['current_change_order_apk'] ? $good['current_change_order_apk'] : "-");
+    $total_apk = $apk;
+    $available_apk = $total_apk - $current_order_apk - $current_change_order_apk;
+
+    $current_order_staff = ($good['current_order_staff'] ? $good['current_order_staff'] : "-");
+    $current_change_order_staff = ($good['current_change_order_staff'] ? $good['current_change_order_staff'] : "-");
+    $total_staff = $staff;
+    $available_staff = $total_staff - $current_order_staff - $current_change_order_staff;
+
+    $total_current_order = $current_order + $current_order_demo + $current_order_apk + $current_order_staff;
+    $total_current_change_order = $current_change_order + $current_change_order_demo + $current_change_order_apk + $urrent_change_order_staff;
+    $total_available = intval($available_normal) + intval($available_demo) + intval($available_apk) + intval($available_staff);                   //>> Total Avilable
+    $total_storage = $total_normal + $total_demo + $total_apk + $total_staff;                                                         //>> Total Storage
+    $total_changing =  ($good['current_changing_order'] ? $good['current_changing_order'] : "-");
+
+    ?>
+    <tr>
+     <td><?php echo $inc ?></td>
+     <td><?php echo $this->brands[$good['brand_id']] ?> <?php echo $good['name'] ?></td>
+     <td><?php if ( isset($this->goodColorsCache[$good['good_color_id']]) ) echo $this->goodColorsCache[$good['good_color_id']] ?></td>
+     <td><?php if ( isset( $this->goodCategories ) && isset( $this->goodCategories[$good['cat_id']] ) ) echo $this->goodCategories[$good['cat_id']] ?></td>
+     <!-- <td><?php echo $good['desc'] ?></td> -->
+     <td style="text-align: center; color: blue;"><?php echo $current_order ?></td>
+     <td style="text-align: center; color: blue;"><?php echo $current_change_order; ?></td>
+     <td style="text-align: center; color: blue;"><?php echo $available_normal ?></td>
+     <td style="text-align: center; color: blue;"><?php echo $total_normal ?></td>
+
+     <td style="text-align: center; color: green;"><?php echo $current_order_staff ?></td>
+     <td style="text-align: center; color: green;"><?php echo $current_change_order_staff; ?></td>
+     <td style="text-align: center; color: green;"><?php echo $available_staff ?></td>
+     <td style="text-align: center; color: green;"><?php echo $total_staff ?></td>
+
+        <td style="text-align: center; color: red;"><?php echo $current_order_demo; ?></td>
+        <td style="text-align: center; color: red;"><?php echo $current_change_order_demo; ?></td>
+        <td style="text-align: center; color: red;"><?php echo $available_demo ?></td>
+        <td style="text-align: center; color: red;"><?php echo $total_demo ?></td>
+
+        <!-- <td style="text-align: center; color: red;"><?php echo $current_order_apk; ?></td>
+        <td style="text-align: center; color: red;"><?php echo $current_change_order_apk; ?></td>
+        <td style="text-align: center; color: red;"><?php echo $available_apk ?></td>
+        <td style="text-align: center; color: red;"><?php echo $total_apk ?></td> -->
+        
+        <td style="text-align: center; color: #9c27b0; font-weight: bold; font-size: 17px;"><?php echo $total_available ?></td>
+        <td style="text-align: center; color: #9c27b0; font-weight: bold; font-size: 17px;"><?php echo $total_storage ?></td>
+        <td style="text-align: center; color: #9c27b0; font-weight: bold; font-size: 17px;"><?php echo $total_changing ?></td> 
+    </tr>
+    <?php
+}
+?>
+</table><div class="paging">
+    <?php echo $this->paging($this->total, $this->limit, $this->offset, $this->url);?>
+</div>
+
+<?php else: ?>
+    Choice condition and click SEARCH to know Inventory Warehouse
+<?php endif ?>
+<?php echo $this->load();?>
+
+
+<!-- <div class="pull-right">
+    <b>
+    Total SO Reserved:  <?php echo $sum_total_all_so ?>&nbsp; || &nbsp;
+    Total CO Reserved:  <?php echo $sum_total_all_co ?>&nbsp; || &nbsp;
+    Total Avilable:  <?php echo $sum_total_all_available ?>&nbsp; || &nbsp;
+    Total All:  <?php echo $sum_total_all_storage ?>
+    <br>
+    <b>=====================================================================</b>
+    </b>
+</div> -->
+<br>

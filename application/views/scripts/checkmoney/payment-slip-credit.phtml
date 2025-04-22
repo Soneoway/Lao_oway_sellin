@@ -1,0 +1,1001 @@
+    <!-- <link href="//netdna.bootstrapcdn.com/bootstrap/3.2.0/css/bootstrap.min.css" rel="stylesheet" id="bootstrap-css"> -->
+
+    <link href="<?=HOST?>public/css/bootstrap.modi.min.css" rel="stylesheet">
+   <style type="text/css">
+        .list-group{
+            height: 500px;
+            overflow: hidden;
+            overflow-y: scroll;
+        }
+        .set-position-input{
+            margin-bottom: 0px;
+        }
+    </style>
+
+    <div class="page-header">
+        <h1>Payment Slip Credit</h1>
+    </div>
+    <div class="container">
+    <?php if(isset($this->distributor_name) && $this->distributor_name){ ?>
+    <h3>Distributor : <?php echo $this->distributor_name; ?></h3>
+    <?php } ?>
+    <br />
+    <form role="form" id="form" enctype="multipart/form-data" action="<?php echo HOST.'checkmoney/payment-slip-credit';?>" method="post" >
+        <div class="col-md-12">
+            <div class="form-group">
+            <!-- isset($this->transaction[$i]['id']) and $item['id']==$this->transaction[$i]['id'] -->
+                <label >Bank Payment Order <span style="color: red">*</span></label>
+                    <select id="select_bank_id" name="select_bank_id" class="select_bank_id" required >
+                        <option value="">Choose</option>
+                        <?php foreach ($this->banks as $item):?>
+                            <option value="<?php echo $item['id'];?>" <?php if (1==1):?> selected="selected" <?php endif;?>><?php echo $item['name'];?></option>
+                        <?php endforeach;?>
+                    </select>
+            </div>
+            <div class="form-group">
+                <label>Money ( THB ) <span class='required'><span style="color: red">*</span></span></label>
+                <input type='number' step='0.01' class='form-control pay_money' value="100000" id="pay_money" name='pay_money' required='true' autocomplete='off' value="<?=$pay_money?>" />
+            </div>
+            <div class="form-group">
+                <label>bank_transaction_code<span class='required'><span style="color: red">*</span></span></label>
+                <input type='text'  class='form-control' id="bank_transaction_code" name='bank_transaction_code' required='true' autocomplete='off' value="1<?=$pay_money?>" />
+            </div>
+             <div class="form-group">
+                    <label>File Payment Slip (ขนาดไฟล์ ไม่เกิน 2MB)<span style="color: red">*</span> (*.jpg,jpeg,gif,png)</label>
+                        <input type="file" class="span4" id="file" name="file" multiple />
+            </div>
+            <div class="form-group">
+                        <label>Date time:<span class='required'><span style="color: red">*</span></span></label>
+                        <input type='text' name='pay_time' id='pay_time' class='form-control datepicker' required  autocomplete='off' />
+            </div>
+        </div>
+        
+        
+
+       <!-- SO invoice_number -->
+        <div class="col-md-12" style="display: flex;">
+            <div class="dual-list list-left col-md-5">
+                <div class="well">
+                    <div class="row tabLeft">
+                        <div class="col-md-7">
+                            <div class="input-prepend">
+                                <span class="add-on"><i class="icon icon-search"></i></span>
+                                <input type="text" name="SearchDualList" class="form-control" placeholder="Search" />
+                            </div>
+                        </div>
+                        <div class="col-md-2">
+                            <div class="btn-group">
+                                <a class="btn btn-default selector" title="select all"><i class="icon icon-circle-blank"></i></a>
+                            </div>
+                        </div>
+                    </div>
+                    <div>
+                         <span class="so-title">SO</span>
+                         <span class="price_ori">ยอดสั่งซื้อรวม</span>
+                         <span class="price_ori" style="width: 120px;">ยอดที่ต้องชำระ</span>
+                    </div>
+                    <ul class="list-group">
+                    <?PHP 
+                    // echo "<pre>"; print_r($this->list);
+                        $i = 1;
+                        foreach ($this->list as $list) :
+                            $sn_ref = $list['invoice_number'];
+                            if($sn_ref!=''){
+                                
+                            ?>
+                        <li class="list-group-item">
+                            <span class="so"><?=$list['invoice_number']?></span>
+                            <span class="price_ori "><?=number_format($list['out_put'],2)?></span>
+                            <span class="price_ori">
+                            <span class="none"> <?=number_format($list['pay_ment'],2)?></span>
+                            <input type="hidden" class="sn" name="sn[]" disabled value="<?=$list['sn']?>">
+                            <input type="text" style="width:90px;margin-left: 18px;margin-top: 5px;text-align: right;" class="number none_price pay_ment"  name="pay_ment[]" id="pay_ment" disabled="disabled" value="<?=$list['pay_ment']?>">
+                            
+                            <!--<input type="hidden" class="num" name="num[]" disabled value=""> -->
+                            </span>
+                            
+                        </li>
+                                
+                            
+                            
+                      <?PHP $i+=1; 
+                        }
+                      endforeach; ?>  
+
+                      <?php 
+                        $i = 1;
+                        foreach ($this->newSOManual as $list) :
+                            ?>
+                        <li class="list-group-item">
+                            <span class="so"><?=$list['sn_ref']?></span>
+                            <span class="price_ori "><?=number_format($list['total'],2)?></span>
+                            <span class="price_ori">
+                            <span class="none"> <?=number_format($list['total'],2)?></span>
+                            <input type="hidden" class="sn" name="sn[]" disabled value="<?=$list['sn']?>">
+                            <input type="text" style="width:90px;margin-left: 18px;margin-top: 5px;text-align: right;" class="number none_price pay_ment addnewsn"  name="pay_ment[]" id="pay_ment" disabled="disabled" value="<?=$list['total']?>">
+                            
+                            </span>
+                            
+                        </li>
+                            
+                      <?php endforeach; ?>  
+                        
+                    </ul>
+
+                   
+                </div>
+            </div>
+
+            <div class="list-arrows col-md-1 text-center">
+                <div class="but">
+                        <a class="btn btn-default btn-sm move-left"><span class="icon icon-chevron-left"></span></a>
+                        <a class="btn btn-default btn-sm move-right"><span class="icon icon-chevron-right"></span></a>
+                </div>
+                
+            </div>
+
+            <div class="dual-list list-right col-md-5">
+                <div class="well">
+                    <div class="row tabLeft">
+                        
+                        <div class="col-md-7">
+                            <div class="input-prepend">
+                                <span class="add-on"><i class="icon icon-search"></i></span>
+                                <input type="text" name="SearchDualList" class="form-control" placeholder="Search" />
+                                
+                            </div>
+                        </div>
+                        <div class="col-md-2">
+                            <div class="btn-group">
+                                <a class="btn btn-default selector" title="select all"><i class="icon icon-circle-blank"></i></a>
+                            </div>
+                        </div>
+                    </div>
+                    <div>
+                         <span class="so-title">SO</span>
+                         <span class="price_ori">ยอดสั่งซื้อรวม</span>
+                         <span class="price_ori" style="width: 120px;">ยอดที่ต้องการชำระ</span>
+                    </div>
+                    <ul class="list-group add-new-sn">
+                        
+                    </ul>
+                     <div>
+                         <span class="so-title">ยอดที่ต้องชำระ</span>
+                         
+                         <span id="total_balances_in" class="number number_right" style="width: 200px;text-align: right;padding-right: 21px;">0.00</span>
+                    </div>
+                </div>
+            </div>
+        </div>
+        
+        <!-- CN -->
+        <div class="col-md-12" style="display: flex;">
+            <div class="dual-list list-left2 col-md-5">
+                <div class="well">
+                    <div class="row tabLeft">
+                        <div class="col-md-7">
+                            <div class="input-prepend">
+                                <span class="add-on"><i class="icon icon-search"></i></span>
+                                <input type="text" name="SearchDualList" class="form-control" placeholder="Search" />
+                            </div>
+                        </div>
+                        <div class="col-md-2">
+                            <div class="btn-group">
+                                <a class="btn btn-default selector" title="select all"><i class="icon icon-circle-blank"></i></a>
+                            </div>
+                        </div>
+                    </div>
+                    <div>
+                         <span class="so-title">CN</span>
+                         <span class="price_ori">ยอดสั่งซื้อรวม</span>
+                         <span class="price_ori" style="width: 120px;">ยอดที่ต้องชำระ</span>
+                    </div>
+                    <ul class="list-group">
+                    <?PHP 
+                        $i = 1;
+                        foreach ($this->credits_note as $item) :
+                            $sn_ref = $item['creditnote_sn'];
+                            
+                                
+                            ?>
+                        <li class="list-group-item">
+                            <span class="so"><?=$sn_ref?></span>
+                            <span class="price_ori "><?=number_format($item['total_amount'],2)?></span>
+                            <span class="price_ori ">
+                            <span class="none">    
+                            <?=number_format($item['balance_total'],2)?></span>
+                            <input type="hidden" class="cn" name="cn[]" disabled value="<?=$item['creditnote_sn']?>">
+                            <input type="text"  style="width:90px;margin-left: 18px;margin-top: 5px;text-align: right;" class="pay_cn number none_price" name="pay_cn[]" id="pay_cn" disabled="disabled" value="<?=$item['balance_total']?>">
+                            <!-- <input type="hidden" class="num" name="num[]" disabled value="<?=$i?>">  --> 
+                            </span>
+                            
+                            
+                        </li>
+                                
+                            
+                            
+                      <?PHP $i+=1; 
+                       
+                      endforeach; ?>  
+
+                      <?php 
+                        foreach ($this->newCNCPManual as $item) :
+                            ?>
+                        <li class="list-group-item">
+                            <span class="so"><?=$item['sn_ref']?></span>
+                            <span class="price_ori "><?=number_format($item['total'],2)?></span>
+                            <span class="price_ori ">
+                            <span class="none">    
+                            <?=number_format($item['total'],2)?></span>
+                            <input type="hidden" class="cn" name="cn[]" disabled value="<?=$item['sn_ref']?>">
+                            <input type="text"  style="width:90px;margin-left: 18px;margin-top: 5px;text-align: right;" class="pay_cn number none_price addnewsn" name="pay_cn[]" id="pay_cn" disabled="disabled" value="<?=$item['total']?>"> 
+                            </span>
+                        </li>
+                                
+                      <?php endforeach; ?>  
+                        
+                    </ul>
+
+                </div>
+            </div>
+
+            <div class="list-arrows2 col-md-1 text-center">
+                <div class="but">
+                    <a class="btn btn-default btn-sm move-left2"><span class="icon icon-chevron-left"></span></a>
+                    <a class="btn btn-default btn-sm move-right2"><span class="icon icon-chevron-right"></span></a>
+                </div>
+                
+            </div>
+
+            <div class="dual-list list-right2 col-md-5">
+                <div class="well">
+                    <div class="row tabLeft">
+                        
+                        <div class="col-md-7">
+                            <div class="input-prepend">
+                                <span class="add-on"><i class="icon icon-search"></i></span>
+                                <input type="text" name="SearchDualList" class="form-control" placeholder="Search" />
+                                
+                            </div>
+                        </div>
+                        <div class="col-md-2">
+                            <div class="btn-group">
+                                <a class="btn btn-default selector" title="select all"><i class="icon icon-circle-blank"></i></a>
+                            </div>
+                        </div>
+                    </div>
+                    <div>
+                         <span class="so-title">CN</span>
+                         <span class="price_ori">ยอดสั่งซื้อรวม</span>
+                         <span class="price_ori" style="width: 120px;">ยอดที่ต้องการชำระ</span>
+                    </div>
+                    <ul class="list-group add-new-cncp">
+                        
+                    </ul>
+                    <div>
+                         <span class="so-title">ยอดที่ต้องชำระ CN</span>
+                         
+                         <span id="total_balances_sn" class="number number_right" style="width: 200px;text-align: right;padding-right: 21px;">0.00</span>
+                    </div>
+                </div>
+            </div>
+        </div>
+                            
+        <div class="col-md-12">
+
+        <div class="tabRight" style="width: 400px;">
+            <span class=" "><span style="width: 200px;display: -webkit-inline-box;">เงินขาด(+) : </span> 
+            <input class="price txtPrice " type="text" name="lack_of_money"   value="" >
+            </span>
+            <span class=" "><span style="width: 200px;display: -webkit-inline-box;">เงินเกิน(-) : </span> 
+            <input class="price" id="cach_surplus" type="text" name="payment_surplus"   value="" >
+            </span>
+            <span class=" "><span style="width: 200px;display: -webkit-inline-box;">ค่าธรรมเนียมธนาคาร</span>   
+            <input class="price txtPrice " type="text" name="payment_banktransfer"   value="" >
+            </span>
+            <span class=" "><span style="width: 200px;display: -webkit-inline-box;">ลูกหนี้อื่นๆ</span>   
+            <input class="price txtPrice " type="text" name="payment_etc"   value="" >
+            </span>
+            <span class=" "><span style="width: 200px;display: -webkit-inline-box;">หัก ณ ที่จ่าย 3%</span>   
+            <input class="price txtPrice " type="text" name="payment_service"   value="" >
+            </span>
+        </div>
+
+        <div style="width: 600px; margin-left: 20px;">
+
+            <span class="main-add-sn"><span>SN : </span> 
+            <input style="width: 170px;" class="set-position-input" type="text" id="newsn" name="newsn[]" placeholder="Invoice/CN/CP">
+            <input style="width: 70px;" type="text" class="set-position-input number" id="newsn_value" name="newsn_value[]" placeholder="จำนวนเงิน">
+            <select style="width: 70px;" id="newsn_type" name="newsn_type[]" class="set-position-input">
+                <option value="1">Invoice</option>
+                <option value="2">CN/CP</option>
+            </select>
+            <button class="btn btn-warning btn-add-sn-new" style="margin-left: 15px;" type="button"><i class="icon-plus"></i></button>
+            </span>
+            <br/><br/>
+            <span id="add-sn-new"></span>
+            <div style="margin-bottom: 30px">
+                <button type="button" class="btn btn-success" id="btn-add-new-sn">Add</button>
+            </div>
+
+        </div>
+
+        <div style="clear:both"></div>
+        <hr>
+        <div class="tabRight" style="width: 367px;margin-right: 30px;">
+            <span style="width: 200px;display: -webkit-inline-box;">ยอดลูกหนี้ทั้งหมด : </span><span id="balance_paid" class="number number_right"> 0.00</span>
+            <br/>
+            <hr>
+            <span style="width: 200px;display: -webkit-inline-box;">ยอดโอนเงินทั้งหมด : </span><span id="total_tranfer" class="number number_right"> 0.00</span>
+            <br/>
+            
+            <span style="width: 200px;display: -webkit-inline-box;">ยอด CN  : </span><span id="elite_cn" class="number number_right"> 0.00</span>
+            <span style="width: 200px;display: -webkit-inline-box;">อื่นๆ : </span><span id="total" class="number number_right"> 0.00</span>
+            <span style="width: 200px;display: -webkit-inline-box;">รวมชำระ  : </span><span id="sum" class="number number_right" style="border-top: 2px #eee solid;"> 0.00</span>
+            <!-- <span style="width: 200px;display: -webkit-inline-box;">ยอดที่ต้องชำระ : </span><span id="total_balances" class="number number_right"> 0.00</span> -->
+            <br/>
+            
+            
+            <br/><span style="width: 200px;display: -webkit-inline-box;">ยอดหนี้คงเหลือ : </span><span id="balances" class="number number_right"> 0.00</span>
+            <input type="hidden" name="balances" id="hid_balances" value="">
+            <br/>
+            
+           
+        </div>
+        </div>    
+        <div class="row">
+                <div class="span6">
+                    <div class="control-group">
+                        <div class="span4">
+
+                            <button type="button" class="btn btn-primary" id="submit_btn">Confirm</button>
+                            <button type="submit" style="display:none;"></button>
+
+                            
+                            <!-- <a href="/finance/sales-confirm?act=reject&sn_re=<?=$this->sales[0]['sale']->sn?>" class="btn btn-warning">Reject</a> -->
+                             <input type="hidden" name="back_url" id="back_url" value="/checkmoney/credit-list">
+                            <input type="hidden" name="d_id" id="d_id" value="<?php echo $_GET['d_id']?>">
+                            <input type="hidden" name="payment" id="payment" value="1">
+                            
+                            <!--<input type="hidden" name="payment_type" class ="payment_type" id="payment_type" value="<?=$payment_type_code?>">
+                            <input type="hidden" name="total_amount" class ="total_amount" id="total_amount" value="<?=$total_amount?>">
+                            <input type="hidden" name="retailer_rank" class ="retailer_rank" id="retailer_rank" value="<?=$retailer_rank?>"> -->
+                            <button type="button" class="btn btn-danger go-back">Go back</button>
+                        </div>
+                    </div>
+                    <div class="clearfix"></div>
+                </div>
+        </div>
+    </form>
+</div>
+    
+    <!--  -->
+     
+<script type="text/javascript" src="http://code.jquery.com/jquery.js"></script>
+<script src="<?php echo HOST?>js/jquery.datetimepicker.js"></script>
+<link rel="stylesheet" href="<?php echo HOST?>css/jquery.datetimepicker.css" />
+<!-- <script type="text/javascript" src="<?php echo HOST?>js/numeral.js"></script> -->
+
+    <script type="text/javascript">
+     
+    function initDatepicker(){
+        $( ".datepicker" ).datetimepicker({
+            format:'Y-m-d H:i:s'
+        });
+    }
+    // function reNew(){IN590401-00066
+    //         var pay_money = $('#pay_money').val();
+    //         console.log('pay_money='+pay_money)
+    //         var text = 0;
+    //         var newTotal =0;
+    //             $( ".txtPrice" ).each(function() {
+    //             //text  = parseFloat($(this).val(),10);
+    //             text = parseFloat($(this).val().split(',').join(''),10);
+               
+    //               if(!isNaN(text)){ 
+    //                     newTotal += text;
+                       
+    //                 } 
+    //                 balances = pay_money-newTotal;
+    //                  console.log('balances='+balances)
+
+                     
+    //                 $("#total_tranfer").empty();
+    //                 $('#total_tranfer').append(roundNumber(pay_money,2));
+    //                 $("#total").empty();
+    //                 $('#total').append(roundNumber(newTotal,2));
+    //                 $("#balances").empty();
+    //                 $('#balances').append(roundNumber(balances,2));
+    //                 $("#sum").val(roundNumber(newTotal,2));
+    //             });
+    //         }
+
+
+
+    $(document).ready(function () {
+            initDatepicker();
+            // calculator_pay_in();
+            
+            initSelectDiscountCreditNote();
+            initRemoveCreditNote();
+            $("*").keypress(function(event){  
+                 if(event.keyCode==13){  
+                    return false;  
+                 }  
+            });
+
+
+            $('#btn-add-new-sn').click(function(event) {
+
+                $.ajax({
+                    url: '<?php echo HOST.'checkmoney/add-new-sn';?>',
+                    type: 'POST',
+                    data: {newsn: $("input[id='newsn']").map(function(){return $(this).val();}).get(), newsn_value: $("input[id='newsn_value']").map(function(){return $(this).val();}).get(),newsn_type: $("select[id='newsn_type']").map(function(){return $(this).val();}).get(),d_id: $('#d_id').val()},
+                })
+                .done(function(response) {
+                    var obj_response = jQuery.parseJSON(response);
+                    console.log("success");
+
+                     switch(obj_response.status) {
+                        case 200:
+                            console.log('done');
+
+                            clearNewSN();
+
+                            $.each(obj_response.data, function( key, value ) {
+
+                                var num_total = new Number(value.total);
+                                num_total = num_total.toFixed(2);
+                                num_total_addformat = formatMoney(num_total);
+
+                                switch(value.type) {
+                                    case '1':
+                                        $('.add-new-sn').append('<li class="list-group-item active"><span class="so">'+value.sn_ref+'</span><span class="price_ori ">'+num_total_addformat+'</span><span class="price_ori"><span class="none none_price">'+num_total_addformat+'</span><input type="hidden" class="sn" name="sn[]" value="'+value.sn+'"><input type="text" style="width:90px;margin-left: 18px;margin-top: 5px;text-align: right;" class="number pay_ment pay_money_total_in addnewsn" name="pay_ment[]" id="pay_ment" value="'+num_total+'" readonly></span></li>');
+                                        break;
+                                    case '2':
+                                        $('.add-new-cncp').append('<li class="list-group-item active"><span class="so">'+value.sn_ref+'</span><span class="price_ori ">'+num_total_addformat+'</span><span class="price_ori"><span class="none none_price">'+num_total_addformat+'</span><input type="hidden" class="cn" name="cn[]" value="'+value.sn_ref+'"><input type="text" style="width:90px;margin-left: 18px;margin-top: 5px;text-align: right;" class="pay_cn number pay_money_total_sn addnewsn" name="pay_cn[]" id="pay_cn" value="'+num_total+'" readonly></span></li>');
+                                        break;
+                                }
+
+                            });
+
+                            calculator_pay_in();
+
+                            break;
+                        case 400:
+                            alert(obj_response.message);
+                            break;
+                        default:
+                            location.reload();
+                    }
+
+                });
+                
+            });
+
+            function clearNewSN(){
+                $('#add-sn-new').remove();
+                $('.set-position-input').val('');
+                $('#newsn_type').val(1);
+            }
+
+            function formatMoney(inum){  // ฟังก์ชันสำหรับแปลงค่าตัวเลขให้อยู่ในรูปแบบ เงิน
+                var s_inum=new String(inum);
+                var num2=s_inum.split(".");
+                var n_inum="";  
+                if(num2[0]!=undefined){
+                    var l_inum=num2[0].length;  
+                    for(i=0;i<l_inum;i++){  
+                        if(parseInt(l_inum-i)%3==0){  
+                            if(i==0){  
+                                n_inum+=s_inum.charAt(i);         
+                            }else{  
+                                n_inum+=","+s_inum.charAt(i);         
+                            }     
+                        }else{  
+                            n_inum+=s_inum.charAt(i);  
+                        }  
+                    }  
+                }else{
+                    n_inum=inum;
+                }
+                if(num2[1]!=undefined){
+                    n_inum+="."+num2[1];
+                }
+                return n_inum;
+            }
+
+            var count_add_sn = 0;
+            $(document).off('click', '.btn-add-sn-new').on('click', '.btn-add-sn-new', function(e) {
+
+                var newdiv = $('.main-add-sn').clone();
+
+                newdiv.removeClass('main-add-sn');
+
+                newdiv.attr('id', 'div-id-add-sn_'+count_add_sn);
+
+                newdiv.find('input').val('');
+
+                newdiv.append('<button class="btn btn-danger btn-remove-sn-new" style="margin-left: 15px;" type="button" value="div-id-add-sn_'+count_add_sn+'"><i class="icon-minus"></i></button><br/><br/>');
+
+                $('#add-sn-new').append(newdiv);
+
+                count_add_sn++;
+            });
+
+            $(document).off('click', '.btn-remove-sn-new').on('click', '.btn-remove-sn-new', function(e) {
+                count_add_sn--;
+                $('#'+$(this).val()).remove();
+            });
+
+            $('.go-back').click(function(e){
+                window.location.href = $('#back_url').val();
+            });
+            
+            $('.txtPrice,.number').keypress(function(event) {
+                if (event.which != 46 && (event.which < 47 || event.which > 59))
+                {
+                    event.preventDefault();
+                    if ((event.which == 46) && ($(this).indexOf('.') != -1)) {
+                        event.preventDefault();
+                    }
+                }
+            });
+            $('.number').keypress(function(event) {
+                if (event.which != 46 && (event.which < 47 || event.which > 59))
+                {
+                    event.preventDefault();
+                    if ((event.which == 46) && ($(this).indexOf('.') != -1)) {
+                        event.preventDefault();
+                    }
+                }
+            });
+            $('body').on('click', '.list-group .list-group-item', function () {
+                $(this).toggleClass('active');
+            });
+            $('body').on('change', '.pay_money,.pay_ment,.pay_cn,.txtPrice', function () {
+               calculator_pay_in();
+            });
+            
+            $('body').on('change', '#cach_surplus', function () {
+               calculator_pay_in();
+            });
+           $('body').on('click', '#submit_btn', function () {
+                 var  balances = $('#hid_balances').val().trim().split(',').join('');
+                 
+                  console.log('balances ='+balances);
+                   
+                    if(balances == 0 ){
+                        $('#form').find(':submit').click();
+                    }else{
+                        alert('ยังมียอดเงินคงเหลือ '+roundNumber(balances,2)+' บาท กรุณาใช้ให้ครบตามยอดลูกหนี้ทั้งหมด');
+                        return false;
+                    }
+
+
+            });
+
+            $(document).on("submit", "form", function(e)
+            {
+                 $('#form').submit();
+            });
+           $('body').on('click', '.add_cn', function () {
+                  var distributor_id = $('#d_id').val();
+                  var sn = $(this).parent().parent().parent().find('.sn').val();
+                  // alert(sn);
+
+                      // alert(sn);  
+                    if(!distributor_id)
+                    {
+                        alert('Please insert Distributor');
+                        return false;
+                    }
+
+                    //alert('Add New');
+                    var old_div = $('.div-discount-credit-note-'+sn);
+                    var new_div = old_div.clone();
+                    new_div.removeClass('div-discount-credit-note-'+sn).find('select, input, textarea').removeAttr('disabled');
+                    new_div.insertBefore($(this).parent().parent().parent().find('.show_cn')).show();
+
+                    var creditnote_sn_list='';
+                    $('.discount_creditnote').each(function(){
+                        var creditnote_sn = $(this).find('option:selected').text();
+                        if(creditnote_sn!='Please select'){
+                            creditnote_sn_list +="'"+$.trim(creditnote_sn)+"',";
+                        }
+                    });
+                    // alert(distributor_id);alert(creditnote_sn_list);
+                    $.get("/get/load-credit-note-payslip",
+                        {distributor_id : distributor_id , init_params :creditnote_sn_list.slice(0, -1)}
+                        ,function(data,status){
+                            // alert(distributor_id+'---'+creditnote_sn_list);
+                            // alert(data); 
+                            var data = $.parseJSON( data );
+                            
+                            if (data){
+                                var obj = data
+
+                                //console.log(obj);
+                                new_div.find('.discount_creditnote').html('<option value="0">Please select</option>');
+                                for (var i = 0; i < obj.length; i++) {
+                                        new_div.find('.discount_creditnote').append('<option value="'+obj[i]['balance_total']+'">'+obj[i]['creditnote_sn']+'</option>');
+                                }
+                            }
+                            else
+                            {
+                            new_div.find('.discount_creditnote').html('<option value="0">Please select</option>');
+                                //alert(data.error);
+                            }
+                        });
+                    // calculator_pay_ment();
+                    return false;
+            });
+               // $('.list-arrows a').click(function () {
+               //      var $button = $(this), actives = '';
+               //      if ($button.hasClass('move-left')) {
+               //          actives = $('.list-right ul li.active');
+               //         acc = actives.clone().appendTo('.list-left ul').find('span.price_text').addClass('none_price').find('input,textarea,select,hidden,number').attr('disabled','disabled').val('');
+               //          acc.parent().parent().find('.pay_ment').removeClass('pay_money_total');
+               //          actives.remove();
+                        
+               //          calculator_pay_ment();
+               //      } else if ($button.hasClass('move-right')) {
+               //          actives = $('.list-left ul li.active');
+               //          g_num = 0;
+               //      acc  =  actives.clone().appendTo('.list-right ul').find('span').removeClass('none_price').find('input,textarea,select,hidden,number').removeAttr('disabled');
+               //          acc.parent().find('.pay_ment').addClass('pay_money_total');
+               //          actives.remove();
+               //          calculator_pay_ment();
+                        
+                        
+               //      }
+               //  });
+            $('.list-arrows a').click(function () {
+                var $button = $(this), actives = '';
+                if ($button.hasClass('move-left')) {
+                    actives = $('.list-right ul li.active');
+                   acc = actives.clone().appendTo('.list-left ul').find('span.price_ori').find('input,textarea,select,hidden,number').attr('disabled','disabled');
+                    acc.parent().parent().find('.pay_ment').removeClass('pay_money_total_in');
+                    acc.parent().parent().find('.none').removeClass('none_price');
+                    acc.parent().parent().find('.pay_ment').addClass('none_price');
+                    actives.remove();
+                    calculator_pay_in();
+                } else if ($button.hasClass('move-right')) {
+                    actives = $('.list-left ul li.active');
+                    g_num = 0;
+                acc  =  actives.clone().appendTo('.list-right ul').find('span').find('input,textarea,select,hidden,number').removeAttr('disabled');
+
+                    $('.addnewsn').attr('readonly', true);
+
+                    acc.parent().find('.pay_ment').addClass('pay_money_total_in');
+                    acc.parent().find('.none').addClass('none_price');
+                    acc.parent().find('.pay_ment').removeClass('none_price');
+                    actives.remove();
+                    calculator_pay_in();
+                    
+                    
+                }
+            });
+
+            // CN
+            $('.list-arrows2 a').click(function () {
+                var $button = $(this), actives = '';
+                if ($button.hasClass('move-left2')) {
+                    actives = $('.list-right2 ul li.active');
+                   acc = actives.clone().appendTo('.list-left2 ul').find('span.price_ori').find('input,textarea,select,hidden,number').attr('disabled','disabled');
+                    acc.parent().parent().find('.pay_cn').removeClass('pay_money_total_sn');
+                    acc.parent().parent().find('.none').removeClass('none_price');
+                    acc.parent().parent().find('.pay_cn').addClass('none_price');
+                    actives.remove();
+                    calculator_pay_in();
+                } else if ($button.hasClass('move-right2')) {
+                    actives = $('.list-left2 ul li.active');
+                    g_num = 0;
+                acc  =  actives.clone().appendTo('.list-right2 ul').find('span').removeClass('none_price').find('input,textarea,select,hidden,number').removeAttr('disabled');
+
+                    $('.addnewsn').attr('readonly', true);
+
+                    acc.parent().find('.pay_cn').addClass('pay_money_total_sn');
+                    acc.parent().find('.none').addClass('none_price');
+                    acc.parent().find('.pay_cn').removeClass('none_price');
+                    actives.remove();
+                    calculator_pay_in();
+                    
+                    
+                }
+            });
+            // end CN
+            $('.dual-list .selector').click(function () {
+                var $checkBox = $(this);
+                if (!$checkBox.hasClass('selected')) {
+                    $checkBox.addClass('selected').closest('.well').find('ul li:not(.active)').addClass('active');
+                    $checkBox.children('i').removeClass('icon icon-circle-blank').addClass('icon icon-ok');
+                } else {
+                    $checkBox.removeClass('selected').closest('.well').find('ul li.active').removeClass('active');
+                    $checkBox.children('i').removeClass('icon icon-ok').addClass('icon icon-circle-blank');
+                }
+            });
+            $('[name="SearchDualList"]').keyup(function (e) {
+                var code = e.keyCode || e.which;
+                if (code == '9') return;
+                if (code == '27') $(this).val(null);
+                var $rows = $(this).closest('.dual-list').find('.list-group li');
+                var val = $.trim($(this).val()).replace(/ +/g, ' ').toLowerCase();
+                $rows.show().filter(function () {
+                    var text = $(this).text().replace(/\s+/g, ' ').toLowerCase();
+                    return !~text.indexOf(val);
+                }).hide();
+            });
+            
+            
+        });
+
+        function calculator_pay_in(element){
+            var pay_money       = $('#pay_money').val();
+            var cach_surplus    = $('#cach_surplus').val();
+            var pay_ment        = 0;
+            var total_pay_in    = 0;
+            var total_pay_sn    = 0;
+            var newTotal        = 0;
+            var balances        = 0; 
+            var balances_in        = 0; 
+            var balances_cn        = 0; 
+            var total_pay_ment  = 0;
+            var total_pay       = 0;
+            var total       = 0;
+            $( ".pay_money_total_in" ).each(function() {
+                    pay_ment  = parseFloat($(this).val().trim().split(',').join(''),10);
+
+                      if(!isNaN(pay_ment)){
+                        console.log(pay_ment);
+                            total_pay_in += pay_ment;
+                        }
+                
+                
+               
+                
+            });
+                $('#total_balances_in').empty();
+                $('#total_balances_in').append(roundNumber(total_pay_in,2));
+                $('#balance_paid').empty();
+                $('#balance_paid').append(roundNumber(total_pay_in,2));
+            $( ".pay_money_total_sn" ).each(function() {
+                    pay_sn  = parseFloat($(this).val().trim().split(',').join(''),10);
+                    console.log(pay_sn);
+                      if(!isNaN(pay_sn)){
+                        
+                            total_pay_sn += pay_sn;
+                        }
+
+                
+                
+            });
+                $('#total_balances_sn').empty();
+                $('#total_balances_sn').append(roundNumber(total_pay_sn,2));
+                $('#elite_cn').empty();
+                $('#elite_cn').append(roundNumber(total_pay_sn,2));    
+
+                $( ".txtPrice" ).each(function() {
+
+                //text  = parseFloat($(this).val(),10);
+                pay_ment  = parseFloat($.trim($(this).val()).split(',').join(''),10);
+
+                var div_parent = $(this).parent().parent();  
+
+                  if(!isNaN(pay_ment)){ 
+
+                    newTotal += pay_ment;
+                    
+                    
+                    //total_pay_ment = parseFloat($.trim(div_parent.find('.pay_ment').val()).split(',').join(''),10);
+                    
+
+                    //  if(total_pay_ment < pay_ment ){
+                    //     $(this).val(0).focus();
+                    //     alert('ยอดที่กำหนดมากกว่ายอดที่ต้องชำระ');
+                    //     return false;
+
+                    // }else if(balances > total_pay ){
+                    //     $(this).val(0).focus();
+                    //     alert('ยอดที่ต้องการชำระเกินจำนาณเงินที่โอน');
+                    //     return false;
+                    // }
+                } 
+                    
+                });
+                    total = newTotal-cach_surplus;
+                    balances = (total_pay_in-newTotal-pay_money-total_pay_sn)-cach_surplus;
+                    balances_sum = (parseFloat(newTotal)+parseFloat(pay_money)+parseFloat(total_pay_sn))-cach_surplus;
+                    // console.log('balances_sum '+balances_sum);
+                    //   if(balances_sum > total_pay_in ){
+                    //     $(this).val(0).focus();
+                    //     alert('ยอดที่กำหนดมากกว่ายอดที่ต้องชำระ');
+                    //     return false;
+
+                    // }
+                    $("#total_tranfer").empty();
+                    $('#total_tranfer').append(roundNumber(pay_money,2));
+                    $("#total").empty();
+                    $('#total').append(roundNumber(total,2));
+                    $("#balances").empty();
+                    $('#balances').append(roundNumber(balances,2));
+                    $("#hid_balances").empty();
+                    $('#hid_balances').val(roundNumber(balances,2));
+                    $("#sum").empty();
+                    $('#sum').append(roundNumber(balances_sum,2));
+                    
+        }
+
+        // function calculator_pay_ment(element){
+        //     pay_ment
+        //     // alert('22222');
+        //     var pay_money = $('#pay_money').val();
+        //     var pay_ment = 0;
+        //     var newTotal =0;
+        //     var total_pay_ment =0;
+        //     var total_pay =0;
+        //     var balances = 0;
+        //     var p_ment = 0;
+        //     var total_p_ment = 0;
+        //     var balance_trans = 0;
+        //         $( ".pay_money_total" ).each(function() {
+        //             pay_ment  = parseFloat($(this).val().trim().split(',').join(''),10);
+
+        //               if(!isNaN(pay_ment)){
+        //                 console.log(pay_ment);
+        //                     total_pay += pay_ment;
+        //                 }
+        //         });
+        //         $('#total_balances').empty();
+        //         $('#total_balances').append(roundNumber(total_pay,2));
+
+
+        //         $( ".payment_" ).each(function() {
+
+        //              p_ment =  parseFloat($(this).val().trim().split(',').join(''),10);
+        //               if(!isNaN(p_ment)){
+        //                     total_p_ment += p_ment;
+        //                 }
+        //              balance_trans =   pay_money-total_p_ment;
+        //             $('#Balance_transfers').empty();
+        //             $('#Balance_transfers').append(roundNumber(balance_trans,2));
+        //             if(total_p_ment > pay_money ){
+        //                 $(this).val(0).focus();
+        //                 alert('ยอดที่ต้องชำระ เกินกว่าเงินที่โอน');
+        //             return false;
+
+        //             }
+        //         });
+                 
+                
+
+        //         $( ".txtPrice" ).each(function() {
+        //         //text  = parseFloat($(this).val(),10);
+        //         pay_ment  = parseFloat($.trim($(this).val()).split(',').join(''),10);
+        //         var div_parent = $(this).parent().parent();  
+
+        //           if(!isNaN(pay_ment)){ 
+        //             newTotal += pay_ment;
+        //             balances = total_pay-newTotal;
+        //             total_pay_ment = parseFloat($.trim(div_parent.find('.pay_ment').val()).split(',').join(''),10);       
+        //              if(total_pay_ment < pay_ment ){
+        //                 $(this).val(0).focus();
+        //                 alert('ยอดที่กำหนดมากกว่ายอดที่ต้องชำระ');
+        //                 return false;
+
+        //             }else if(balances > total_pay ){
+        //                 $(this).val(0).focus();
+        //                 alert('ยอดที่ต้องการชำระเกินจำนาณเงินที่โอน');
+        //                 return false;
+        //             }
+        //         } 
+        //             $("#total_tranfer").empty();
+        //             $('#total_tranfer').append(roundNumber(pay_money,2));
+        //             $("#total").empty();
+        //             $('#total').append(roundNumber(newTotal,2));
+        //             $("#balances").empty();
+        //             $('#balances').append(roundNumber(balances,2));
+        //             $("#sum").val(roundNumber(newTotal,2));
+        //         });
+
+
+                 
+        // }
+
+        function check_pay_in_box(div_parent){
+            // var pay_money = $('#pay_money').val();
+            var pay_money = div_parent.parent().parent().find('.pay_ment').val();
+            
+            var num = div_parent.parent().parent().find('.num').val();
+            var total_p_ment = 0;
+            var p_ment = 0;
+            var total_p_ment = 0;
+            console.log('pay_money='+pay_money);
+            console.log('num='+num);
+            
+            $( ".count_pay_in_box_"+num ).each(function() {
+
+                     p_ment =  parseFloat($(this).val().trim().split(',').join(''),10);
+                     console.log('p_ment='+p_ment);
+                     // alert(p_ment);
+                      if(!isNaN(p_ment)){
+                            total_p_ment += p_ment;
+                        }
+                    // alert(total_p_ment+'>'+pay_money);    
+                    if(total_p_ment > pay_money ){
+                        $(this).val(0).focus();
+                        alert('ยอดที่กำหนดมากกว่ายอดที่ต้องชำระ');
+                    return false;
+
+                    }
+                });
+            calculator_pay_ment();
+            // alert(num);
+        }
+
+        function initSelectDiscountCreditNote()
+        {
+            $(document).off('change', '.discount_creditnote')
+            .on('change', '.discount_creditnote', function(e) {
+                var div_parent = $(this).parent();
+                var creditnote_sn = '';
+                var price_discount = '';
+                // alert('5555');
+                 creditnote_sn = div_parent.find('.discount_creditnote option:selected').text();
+                 price_discount = div_parent.find('.discount_creditnote option:selected').val();
+               
+                div_parent.find('.price_balance_discount_creditnote').val(price_discount);
+                div_parent.find('.price_creditnote').val(price_discount);
+                div_parent.find('.ids_discount_creditnote').val(creditnote_sn);
+                calculator_pay_ment();
+                
+            });
+        }
+
+        function initRemoveCreditNote(){
+            $(document).off('click', '.remove-credit-note')
+            .on('click', '.remove-credit-note', function(e) {
+
+                $(this).parent().remove();
+                calculator_pay_ment();
+                //Auto_Summary_TotalPrice();
+                return false;
+            });
+        }
+
+        function initSelectDiscountDeposit()
+        {
+            $(document).off('change', '.discount_deposit')
+            .on('change', '.discount_deposit', function(e) {
+                var div_parent = $(this).parent();
+                var deposit_sn = '';
+                var price_discount = '';
+                // alert('5555');
+                 deposit_sn = div_parent.find('.discount_deposit option:selected').text();
+                 price_discount = div_parent.find('.discount_deposit option:selected').val();
+               
+                div_parent.find('.price_balance_deposit').val(price_discount);
+                div_parent.find('.price_deposit').val(price_discount);
+                div_parent.find('.ids_deposit').val(deposit_sn);
+                calculator_pay_ment();
+                
+            });
+        }
+
+        function initRemoveDeposit(){
+            $(document).off('click', '.remove-deposit')
+            .on('click', '.remove-deposit', function(e) {
+
+                $(this).parent().remove();
+                calculator_pay_ment();
+                //Auto_Summary_TotalPrice();
+                return false;
+            });
+        }
+        
+        //Tanong
+        function roundNumber(num, dec) {
+            var result = Math.round(num*Math.pow(10,dec))/Math.pow(10,dec);
+            return Number(result).toLocaleString('en',{ minimumFractionDigits: 2 });
+        }
+    </script>

@@ -1,0 +1,89 @@
+
+<div class="page-header">
+    <h1>LOCK IMEI</h1>
+</div>
+<?php
+if (isset($this->messages) and $this->messages)
+    foreach ($this->messages as $message):
+        echo '<div class="alert alert-error">'.$message.'</div>';
+    endforeach;
+?>
+<div class="accordion" id="accordion2">
+    <div class="accordion-group">
+        <div class="accordion-heading">
+            <a class="accordion-toggle collapsed" data-toggle="collapse" data-parent="#accordion2" href="#collapseTwo">
+                Search
+            </a>
+        </div>
+        <div id="collapseTwo" class="accordion-body collapse" style="height: 0px;">
+            <div class="accordion-inner">
+                <?php
+                    echo $this->render('tool/partials/lockimei_search.phtml');
+                ?>
+            </div>
+        </div>
+    </div>
+</div>
+<div style="margin-bottom: 15px;">
+    <a href="/tool/add-lockimei" class="btn btn-success">Add Lock Imei</a>
+    <button class="btn btn-danger" onclick="bulk_delete()"><i class="glyphicon glyphicon-trash"></i> Bulk Delete</button>
+</div>
+
+<div class="table-responsive">
+    <?php
+        echo $this->render('tool/partials/lish-lockimei.phtml');
+    ?>
+</div>
+
+<script>
+    $(document).ready(function () {
+        $('.form-search button:reset').click(function (e){
+            $('.form-search input, .form-search select').val('');
+            $('.form-search').submit();
+            return false;
+        });
+    });
+</script>
+<script>
+    $("#check-all").click(function () {
+        $(".data-check").prop('checked', $(this).prop('checked'));
+    });
+function bulk_delete()
+{
+    var list_id = [];
+    $(".data-check:checked").each(function() {
+            list_id.push(this.value);
+    });
+    if(list_id.length > 0)
+    {
+        Swal.fire({
+        title: '<font style="font-family: phetsarath ot">ທ່ານຕ້ອງການຍົກເລີກ Lock Imei?</font>',
+        text: "Are you sure cancle this "+list_id.length+" data?",
+        icon: 'warning',
+        showCancelButton: true,
+        confirmButtonColor: '#ed9a03',
+        cancelButtonColor: '#ababab',
+        confirmButtonText: '<font style="font-family: phetsarath ot">ຢືນຢັ້ນ</font>',
+        cancelButtonText: '<font style="font-family: phetsarath ot">ຍົກເລີກ</font>'
+        }).then((result) => {
+        if (result.isConfirmed) {
+            location.reload();
+            $.ajax({
+                type: "POST",
+                data: {id:list_id},
+                url: "/tool/del2",
+                dataType: "JSON",
+            });
+        }else{
+        Swal.fire("Error","no data selected", "error");
+        }
+    });
+
+    }
+    else
+    {
+        Swal.fire("Error","no data selected", "error");
+    }
+}
+</script>
+<?php echo $this->load('combobox');?>

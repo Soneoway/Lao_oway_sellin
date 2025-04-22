@@ -1,0 +1,547 @@
+<div class="page-header">
+    <h1>List Staff Order</h1>
+</div>
+<div class="accordion" id="accordion2">
+    <div class="accordion-group">
+        <div class="accordion-heading">
+            <a class="accordion-toggle collapsed" data-toggle="collapse" data-parent="#accordion2" href="#collapseTwo">
+                Search
+            </a>
+        </div>
+        <div id="collapseTwo" class="accordion-body collapse" style="height: 0px;">
+            <div class="accordion-inner">
+                
+                
+                
+                
+                
+                
+                
+                <form class="form-search form-horizontal" method="get" action="<?php echo HOST ?>sales">
+                    <div class="row">
+                        <div class="span5">
+                            <div class="control-group">
+                                <label for="sn" class="span2">Sales Order Number</label>
+                                <input id="sn" name="sn" type="text" class="input-medium search-query form-control" value="<?php isset($this->params['sn']) and printf($this->params['sn']);?>">
+                            </div>
+                
+                            <div class="control-group">
+                                <label for="warehouse_id" class="span2">Warehouse</label>
+                                <select id="warehouse_id" class="span3" name="warehouse_id">
+                                    <option value="">Choose</option>
+                                    <?php if ($this->warehouses_cached): foreach ($this->warehouses_cached as $id=>$name):?>
+                                        <option value="<?php echo $id;?>" <?php if (isset($this->params['warehouse_id']) and $id==$this->params['warehouse_id']):?> selected<?php endif;?>><?php echo $name;?></option>
+                                    <?php endforeach; endif;?>
+                                </select>
+                            </div>
+                
+                            <div class="control-group">
+                                <label for="cat_id" class="span2">Product Category</label>
+                                <select id="cat_id" class="span3" name="cat_id">
+                                    <option value="">Choose</option>
+                                    <?php if ($this->good_categories): foreach ($this->good_categories as $id=>$name):?>
+                                        <option value="<?php echo $id;?>" <?php if (isset($this->params['cat_id']) and $id==$this->params['cat_id']):?> selected<?php endif;?>><?php echo $name;?></option>
+                                    <?php endforeach; endif;?>
+                                </select>
+                            </div>
+                
+                            <div class="control-group">
+                                <label for="good_id" class="span2">Product</label>
+                                <select id="good_id" class="span3" name="good_id">
+                                    <option value="">Choose</option>
+                                    <?php if ($this->goods): foreach ($this->goods as $key=> $item):?>
+                                        <option value="<?php echo $key;?>" <?php if (isset($this->params['good_id']) and $key==$this->params['good_id']):?> selected<?php endif;?>><?php echo $item;?></option>
+                                    <?php endforeach; endif;?>
+                                </select>
+                            </div>
+                
+                            <div class="control-group">
+                                <label for="good_color" class="span2">Color</label>
+                                <select id="good_color" class="span3" name="good_color">
+                                    <option value="">Choose</option>
+                                    <?php if ($this->goodColors): foreach ($this->goodColors as $key=>$item):?>
+                                        <option value="<?php echo $key;?>" <?php if (isset($this->params['good_color']) and $key==$this->params['good_color']):?> selected<?php endif;?>><?php echo $item;?></option>
+                                    <?php endforeach; endif;?>
+                                </select>
+                            </div>
+                
+                            <div class="control-group">
+                                <label for="type" class="span2">Order Type</label>
+                                <select id="type" class="span3" name="type">
+                                    <option value="">Choose</option>
+                                    <option value="1" <?php if (isset($this->params['type']) and $this->params['type']==1):?> selected <?php endif;?>>For Retailer</option>
+                                    <option value="2" <?php if (isset($this->params['type']) and $this->params['type']==2):?> selected <?php endif;?>>For Demo</option>
+                                    <option value="3" <?php if (isset($this->params['type']) and $this->params['type']==3):?> selected <?php endif;?>>For Staffs</option>
+                                    <option value="4" <?php if (isset($this->params['type']) and $this->params['type']==4):?> selected <?php endif;?>>For Lending</option>
+                                </select>
+                            </div>
+                
+                            <div class="control-group">
+                                <label for="invoice_number" class="span2">Invoice Number</label>
+                                <input id="invoice_number" name="invoice_number" type="text" class="input-medium search-query form-control" value="<?php isset($this->params['invoice_number']) and printf($this->params['invoice_number']);?>">
+                            </div>
+                
+                            <div class="control-group">
+                                <label class="span2" for="distributor_po">PO Number</label>
+                                <select name="distributor_po" class="span3" id="distributor_po">
+                                    <option value>---</option>
+                
+                                    <?php if (isset($this->po_list)): ?>
+                                        <?php foreach ($this->po_list as $_key => $_po): ?>
+                                            <option value="<?php echo $_po['id'] ?>"
+                                                <?php if(isset($this->params['distributor_po']) && $this->params['distributor_po'] == $_po['id']) echo "selected" ?>><?php echo $_po['po_name'] ?></option>
+                                        <?php endforeach ?>
+                                    <?php endif ?>
+                                </select>
+                            </div>
+                
+                            <div class="control-group">
+                                <label for="myTags" class="span2">Tags</label>
+                                <ul class="form-control span3" id="myTags"><?php
+                                    if (isset($this->params['tags']) and $this->params['tags']):
+                                        foreach ($this->params['tags'] as $ta)
+                                            echo '<li>'.$ta.'</li>';
+                                    endif;
+                                    ?></ul>
+                            </div>
+                            
+                            <div class="control-group">
+                                <label for="distributor_name" class="span2">Retailer Name</label>
+                                <input id="distributor_name" name="distributor_name" type="text" class="input-medium search-query form-control" value="<?php isset($this->params['distributor_name']) and printf($this->params['distributor_name']);?>">
+                            </div>
+                            
+                            <div class="control-group">
+                                <label for="d_id" class="span2">Retailer</label>
+                                    <input type='text' class="span3" name='SearchBox' id="SearchBox" placeholder="Search" autocomplete="off" />
+                                    <select name="d_id" id="d_id" class="span3" size="5">
+                                        <option value="">Choose</option>
+                                        <?php if (isset($this->distributors) && $this->distributors): foreach ($this->distributors as $id=>$name):?>
+                                            <option value="<?php echo $id;?>" <?php if (isset($this->params['d_id']) and $id==$this->params['d_id']):?> selected="selected"<?php endif;?>><?php echo $name;?></option>
+                                        <?php endforeach; endif;?>
+                                    </select>
+                                
+                            </div>
+                
+                        </div>
+                        <div class="span5">
+                            <div class="control-group">
+                                <label for="area_id" class="span2">Area</label>
+                                <select name="area_id" id="area" class="span3">
+                                    <option value="">Choose</option>
+                                    <?php if (isset($this->areas) && $this->areas): foreach ($this->areas as $id=>$name):?>
+                                        <option value="<?php echo $id;?>" <?php if (isset($this->params['area_id']) and $id==$this->params['area_id']):?> selected="selected"<?php endif;?>><?php echo $name;?></option>
+                                    <?php endforeach; endif;?>
+                                </select>
+                            </div>
+                
+                            <div class="control-group">
+                                <label for="region" class="span2">Province</label>
+                                <select name="region_id" id="region" class="span3">
+                                    <option value="">Choose</option>
+                                    <?php if (isset($this->regions) && $this->regions): foreach ($this->regions as $id=>$name):?>
+                                        <option value="<?php echo $id;?>" <?php if (isset($this->params['region_id']) and $id==$this->params['region_id']):?> selected="selected"<?php endif;?>><?php echo $name;?></option>
+                                    <?php endforeach; endif;?>
+                                </select>
+                            </div>
+                
+                            <div class="control-group">
+                                <label for="district" class="span2">District</label>
+                                <select name="district_id" id="district" class="span3">
+                                    <option value="">Choose</option>
+                                    <?php if (isset($this->districts) && $this->districts): foreach ($this->districts as $id=>$name):?>
+                                        <option value="<?php echo $id;?>" <?php if (isset($this->params['district_id']) and $id==$this->params['district_id']):?> selected="selected"<?php endif;?>><?php echo $name;?></option>
+                                    <?php endforeach; endif;?>
+                                </select>
+                            </div>
+                
+                            <div class="control-group">
+                                <label for="campaign" class="span2">Campaign</label>
+                                <select name="campaign_id" id="campaign" class="span3">
+                                    <option value="">Choose</option>
+                                    <?php if (isset($this->campaign) && $this->campaign): foreach ($this->campaign as $id=>$name):?>
+                                        <option value="<?php echo $id;?>" <?php if (isset($this->params['campaign_id']) and $id==$this->params['campaign_id']):?> selected="selected"<?php endif;?>><?php echo $name;?></option>
+                                    <?php endforeach; endif;?>
+                                </select>
+                            </div>
+                
+                
+                            <div class="control-group">
+                                <label for="payment" class="span2">PAYMENT</label>
+                                <input id="payment" name="payment" type="checkbox" class="input-large search-query form-control" value="1" <?php if (isset($this->params['payment']) and $this->params['payment']):?>checked="checked" <?php endif;?>>
+                            </div>
+                            <div class="control-group">
+                                <label for="outmysql_time" class="span2">OUT OF THE WAREHOUSE</label>
+                                <input id="outmysql_time" name="outmysql_time" type="checkbox" class="input-large search-query form-control" value="1" <?php if (isset($this->params['outmysql_time']) and $this->params['outmysql_time']):?>checked="checked" <?php endif;?>>
+                            </div>
+                            <div class="control-group">
+                                <label for="created_at_from" class="span2">Order Time From</label>
+                                <input type="text" class="form-control search-query date" id="created_at_from" name="created_at_from" value="<?php isset($this->params['created_at_from']) and printf($this->params['created_at_from']);?>">
+                            </div>
+                            <div class="control-group">
+                                <label for="created_at_to" class="span2">Order Time To</label>
+                                <input type="text" class="form-control search-query date" id="created_at_to" name="created_at_to" value="<?php isset($this->params['created_at_to']) and printf($this->params['created_at_to']);?>">
+                            </div>
+                            <div class="control-group">
+                                <label for="invoice_time_from" class="span2">Invoice Time From</label>
+                                <input type="text" class="form-control search-query date" id="invoice_time_from" name="invoice_time_from" value="<?php isset($this->params['invoice_time_from']) and printf($this->params['invoice_time_from']);?>">
+                            </div>
+                            <div class="control-group">
+                                <label for="invoice_time_to" class="span2">Invoice Time To</label>
+                                <input type="text" class="form-control search-query date" id="invoice_time_to" name="invoice_time_to" value="<?php isset($this->params['invoice_time_to']) and printf($this->params['invoice_time_to']);?>">
+                            </div>
+                            <div class="control-group">
+                                <label for="status" class="span2">Status</label>
+                                <select id="status" class="span3" name="status">
+                                    <option value="1" <?php if (isset($this->params['status']) and $this->params['status']==1):?> selected<?php endif;?>>Active</option>
+                                    <option value="2" <?php if (isset($this->params['status']) and $this->params['status']==2):?> selected<?php endif;?>>Expired</option>
+                                </select>
+                            </div>
+                            <div class="control-group">
+                                <label for="text" class="span2">Remark</label>
+                                <input id="text" name="text" type="text" class="input-medium search-query form-control" value="<?php isset($this->params['text']) and printf($this->params['text']);?>">
+                            </div>
+                            <div class="control-group">
+                                <label for="user_id" class="span2">Order Maker</label>
+                                <select id="user_id" class="span3" name="user_id">
+                                    <option value="">Choose</option>
+                                    <?php if ($this->staffs_cached): foreach ($this->staffs_cached as $id=>$name):?>
+                                        <option value="<?php echo $id;?>" <?php if (isset($this->params['user_id']) and $id==$this->params['user_id']):?> selected<?php endif;?>><?php echo $name;?></option>
+                                    <?php endforeach; endif;?>
+                                </select>
+                            </div>
+                        </div>
+                    </div>
+                
+                    <button type="submit" class="btn btn-primary">Search</button>
+                    <button type="submit" name="export" value="1" class="btn btn-success">Export</button>
+                </form>
+                
+                <script type="text/javascript" src="<?php echo HOST ?>js/jquery-ui-1.8.12.custom.min.js"></script>
+                <link rel="stylesheet" type="text/css" href="<?php echo HOST ?>css/jquery-ui-1.8.12.custom.css"/>
+                <script src="<?php echo HOST ?>js/tag-it.min.js" type="text/javascript" charset="utf-8"></script>
+                <link href="<?php echo HOST ?>css/jquery.tagit.css" rel="stylesheet" type="text/css">
+                <link href="<?php echo HOST ?>css/tagit.ui-zendesk.css" rel="stylesheet" type="text/css">
+                
+                <script>
+                
+                    function initTag(){
+                
+                        $('#myTags').tagit({
+                            allowSpaces: true,
+                            fieldName: 'tags[]',
+                            autocomplete: {
+                                delay: 0,
+                                minLength: 2,
+                                source: "<?php echo HOST;?>get/get-tags"
+                            }
+                        });
+                
+                    }
+                
+                    $(document).ready(function () {
+                
+                        initSearchOptionDistributor('d_id', 'SearchBox');
+                
+                        initTag();
+                
+                        $( '.date' ).datepicker({ dateFormat: "dd/mm/yy" });
+                
+                        $('#cat_id, #good_id').change(function(){
+                            $(this).after('<span class="loading"></span>');
+                            var _self = $(this);
+                            var cat_id = $('#cat_id').val();
+                
+                            if (_self.attr('id')=='cat_id')
+                                $('#good_id').find('option:not(:first)').remove();
+                
+                            var good_id = $('#good_id').val();
+                
+                            $('#good_color').find('option:not(:first)').remove();
+                
+                            $('#num, #price').val('');
+                
+                            $.get("/get/load",
+                                {cat_id: cat_id, good_id: good_id}
+                                ,function(data,status){
+                                    var data = $.parseJSON( data );
+                                    if (data.goods){
+                                        var obj = data.goods;
+                                        for (var i = 0; i < obj.length; i++) {
+                                            $('#good_id').append('<option value="'+obj[i]['id']+'">'+obj[i]['name']+'</option>');
+                                        }
+                                    }
+                                    if (data.colors){
+                                        var obj = data.colors;
+                                        for (var i = 0; i < obj.length; i++) {
+                                            $('#good_color').append('<option value="'+obj[i]['id']+'">'+obj[i]['name']+'</option>');
+                                        }
+                                    }
+                                    _self.nextAll('.loading').remove();
+                                });
+                        });
+                
+                        $('#area').change(function(){
+                            $('.loading').remove();
+                
+                            $(this).after('<span class="loading"></span>');
+                            var _self = $(this);
+                            var area_id = $(this).val();
+                
+                            $.get("<?php echo HOST ?>get/region",
+                                {area_id: area_id}
+                                ,function(data,status){
+                                    var obj = $.parseJSON( data );
+                                    $('#region').find('option:not(:first)').remove();
+                                    $('#district').find('option:not(:first)').remove();
+                
+                                    for (var i = 0; i < obj.length; i++) {
+                                        $('#region').append('<option value="'+obj[i]['id']+'">'+obj[i]['name']+'</option>');
+                                    }
+                
+                                    $('.loading').remove();
+                                });
+                        });
+                
+                        $('#region').change(function(){
+                
+                            $(this).after('<span class="loading"></span>');
+                            var _self = $(this);
+                            var region = _self.val();
+                
+                            $('#district').find('option:not(:first)').remove();
+                
+                            $.get("/get/district",
+                                {region: region}
+                                ,function(data,status){
+                                    var data = $.parseJSON( data );
+                
+                                    for (var i = 0; i < data.length; i++) {
+                                        $('#district').append('<option value="'+data[i]['id']+'">'+data[i]['name']+'</option>');
+                                    }
+                
+                                    _self.nextAll('.loading').remove();
+                                });
+                        });
+                
+                    });
+                </script>
+                
+                
+                
+                
+                
+                
+                
+                
+            </div>
+        </div>
+    </div>
+</div>
+
+<div class="table-responsive">
+    
+    
+    
+    <style>
+    .red
+    {
+        background: #1B8324;color:white;
+    }
+    </style>
+    <table class="table table-bordered">
+        <thead>
+            <tr>
+                <?php echo $this->sorting(array(
+    					'#',
+    					'code'            => 'Mã code',
+    					'firstname'            => 'Họ',
+    					'lastname'         => 'Tên',
+    					'id_number'      => 'CMND',
+    					'num'             => 'Sales Quantity',
+    					'price'           => 'Sales Price',
+    					'total'           => 'Total',
+    					'pay_time'        => 'Payment or Not',
+    					'shipping_yes_time'      => 'Shipping',
+    					'outmysql_time'   => 'Out of Warehouse',
+    					'warehouse_id'  => 'Warehouse',
+    					'status'        => 'Status',
+                        'Discount',
+    					'p.id'          => 'Order Time',
+    					'Action'
+                    ),
+                    $this->url, $this->sort, $this->desc); ?>
+            </tr>
+        </thead>
+        <tbody>
+        <?php
+    
+            $statuses = unserialize(DISCOUNT_STATUS);    
+            if (isset($this->markets_sn) and $this->markets_sn) :
+                foreach ($this->markets_sn as $k=>$m):
+                 $dt = DateTime::CreateFromFormat("Y-m-d H:i:s", $m['add_time']);
+                 $h = $dt->format('H');
+                 $i = $dt->format('i');
+                 $d = $dt->format('d');
+                 $date = date('d');
+                ?>
+                <tr class="<?php
+                        if(isset($h) and isset($i) and ($h >= 16))
+                           {
+                                if($date == $d)
+                                {
+                                    if($h==16 and $i>=30)
+                                        echo 'red';
+                                    else if($h > 16)
+                                        echo 'red';
+                                }                            
+                           }
+                ?>">
+                        <td><a href="#id" rel="<?php echo $m['sn'] ?>" class="collapse_a btn btn-default btn-small" id="m_<?php echo $m['sn'] ?>"><span class="col-sign">+</span><img class="img-loading" src="<?php echo HOST?>img/ajax-loader.gif" style="display: none" /></a></td>
+                    <td><?php echo $m['sn'] ?></td>
+                    <td><?php if (isset($this->distributors2) && $this->distributors2 && isset($this->distributors2[$m['d_id']])) echo $this->distributors2[$m['d_id']]['title']; ?></td>
+                    <td></td>
+                    <td></td>
+                    <td><?php echo $m['total_qty'] ?></td>
+                    <td></td>
+                    <td><?php echo number_format($m['total_price'], 0, ',', '.'); ?></td>
+                    <td><?php if ($m['pay_time']):?><i class="icon-ok"></i><?php else:?><i class="icon-remove"></i><?php endif;?></td>
+                    <td><?php if ($m['shipping_yes_time']):?><i class="icon-ok"></i><?php else:?><i class="icon-remove"></i><?php endif;?></td>
+                    <td><?php if ($m['outmysql_time']):?><i class="icon-ok"></i><?php else:?><i class="icon-remove"></i><?php endif;?></td>
+                    <td><?php if (isset($this->warehouses_cached[$m['warehouse_id']])) echo $this->warehouses_cached[$m['warehouse_id']] ?></td>
+                    <td><?php if ($m['status']==1):?>Active<?php else:?>Expired<?php endif;?></td>
+                    <td><?php echo ( isset($statuses[ $m['discount'] ]) ? $statuses[ $m['discount'] ] : '' ); ?></td>
+                    <td><?php echo $m['add_time'] ?></td>
+                    <td>
+                        <a title="View" href="/sales/view?sn=<?php echo $m['sn'];?>"> <i class="icon-eye-open"></i></a>
+    
+                        <?php if ($m['status']==1): ?>
+                            <?php if (!$m['pay_time'] and !$m['outmysql_time']): ?>
+                                <a title="Edit" href="/sales/create?sn=<?php echo $m['sn'];?>"> <i class="icon-edit"></i></a>
+                                <a title="Delete" class="confirmLink" href="/sales/del?sn=<?php echo $m['sn'];?>"> <i class="icon-trash"></i></a>
+    
+                            <?php else:?>
+                                <a class="lock" title="Lock" href="javascript:void(0);"> <i class="icon-lock"></i></a>
+    
+                                <?php if (!$m['canceled']):?>
+                                    <a class="cancel" title="Mark Canceled" rel="<?php echo $m['sn'];?>" href="javascript:void(0);"> <i class="icon-eraser"></i></a>
+                                <?php else:?>
+                                    <span>Canceled</span>
+                                <?php endif;?>
+                            <?php endif;?>
+                            <a title="Print" target="_blank" href="/sales/print-sale?sn=<?php echo $m['sn'];?>"> <i class="icon-print"></i></a>
+    
+                        <?php endif;?>
+                    </td>
+                    </tr>
+    
+                <?php endforeach;?>
+    		<?php endif; ?>
+        </tbody>
+    </table>
+    <div class="paging">
+        <?php echo $this->paging($this->total, $this->limit, $this->offset, $this->url);?>
+    </div>
+    
+    <script type="text/javascript" src="/js/jquery-ui-1.8.12.custom.min.js"></script>
+    <link rel="stylesheet" type="text/css" href="/css/jquery-ui-1.8.12.custom.css"/>
+    <?php echo $this->load();?>
+    <?php echo $this->confirm();?>
+    <script>
+        $(".cancel").click(function(e) {
+            e.preventDefault();
+    
+            var _self = $(this);
+            var sn = _self.attr('rel');
+    
+            $("#dialog").dialog({
+                buttons : {
+                    "Confirm" : function() {
+                        $.post('<?php echo HOST ?>get/mark-cancel-order', {sn: sn}, function(data) {
+                            if (data==0){ //success
+                                _self.replaceWith('<span>Canceled</span>');
+                            } else if (data==-1){
+                                alert('Order number is empty!');
+                            } else if (data==-2){
+                                alert('Order number is invalid!');
+                            } else if (data==-3){
+                                alert('Order status is invalid!');
+                            } else if (data==-4){
+                                alert('Cannot update, please try again!');
+                            } else if (data==-5){
+                                alert('You cannot cancel this Order!');
+                            }
+                        });
+                        $(this).dialog("close");
+                    },
+                    "Cancel" : function() {
+                        $(this).dialog("close");
+                    }
+                }
+            });
+    
+            $("#dialog").dialog("open");
+        });
+    
+        $('.lock').click(function(e){
+            e.preventDefault();
+            alert('Sorry,This information is blocked...You can not delete payment has been made or has been the storage of information!');
+        });
+    
+        $('.collapse_a').click(function(){
+            var _this = $(this);
+            var _this_id = _this.attr('id');
+            var sn = _this.attr('rel');
+    
+            if (_this.parent().parent().next().hasClass('accordion-body')){
+    
+                $('.m_'+sn).toggle();
+    
+                if ($('.m_'+sn).is(':visible'))
+                    _this.find('.col-sign'). html('-');
+                else _this.find('.col-sign'). html('+');
+    
+            } else {
+                _this.find('.col-sign'). html('');
+    
+                getMarketDetail(sn);
+            }
+    
+        });
+    
+        function getMarketDetail(sn){
+            if (! $('#m_'+sn).parent().parent().next().hasClass('accordion-body')){
+                $('#m_'+sn+' .col-sign').html('');
+                $('#m_'+sn+' .img-loading').show();
+    
+                $.ajax({
+                    type: 'post',
+                    url: '/get/market-detail',
+                    data: {
+                        'sn': sn,
+                        'list': 'sales',
+                        'params': '<?php echo (isset($this->params) ? serialize($this->params) : '')?>'
+                    },
+                    error: function(){
+                    },
+                    success: function(data){
+                        $('.m_'+sn).remove();
+                        $('#m_'+sn).parent().parent().after(data);
+                        $('#m_'+sn).find('.col-sign').html('-');
+                        $('#m_'+sn+' .img-loading').hide();
+                    }
+                });
+            }
+        }
+    </script>
+
+    
+</div>
+<script>
+    $(document).ready(function () {
+        $('.form-search button:reset').click(function (e){
+            $('.form-search input, .form-search select').val('');
+            $('.form-search').submit();
+            return false;
+        });
+    });
+</script>

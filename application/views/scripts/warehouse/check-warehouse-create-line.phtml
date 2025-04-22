@@ -1,0 +1,214 @@
+<style>
+    .blockOverlay{
+        z-index: 10000 !important;
+    }
+    .blockPage{
+        z-index: 10001 !important;
+    }
+</style>
+
+<div class="page-header">
+    <h1>Manage Line Check Warehouse <button type="button" class="btn btn-warning" onclick="location.href='<?php echo HOST.'warehouse/check-warehouse-line-monitoring';?>';">Monitoring Line</button></h1>
+</div>
+
+<?php
+    if (isset($this->messages_success) and $this->messages_success)
+        foreach ($this->messages_success as $message):
+            echo '<div class="alert alert-success">'.$message.'</div>';
+        endforeach;
+
+    if (isset($this->messages) and $this->messages)
+        foreach ($this->messages as $message):
+            echo '<div class="alert alert-error">'.$message.'</div>';
+        endforeach;
+?>
+
+<style>
+    .form_data{
+        margin-top: 25px;
+        margin-bottom: 25px;
+    }
+</style>
+
+<div class="row form_data">
+    <div class="span6">
+        <label class="span6">
+            <label class="">Line Name</label>
+            <select id="select_line" class="" id="select_line" name="select_line" style="width: auto" />
+            <option value>-------</option>
+            <?php if(isset($this->line) and $this->line): ?>
+            <?php foreach($this->line as $k => $v): ?>
+                <option value="<?php echo $v['id'] ? $v['id'] : '' ?>"><?php echo $v['line_name'] ? $v['line_name'] : ''; ?>  ( Wherehouse : <?php echo $v['warehouse_name'] ? $v['warehouse_name'] : ''; ?> | Product : <?php echo $v['good_name'] ? $v['good_name'] : ''; ?> | Color : <?php echo $v['good_color_name'] ? $v['good_color_name'] : ''; ?> )</option>
+            <?php endforeach;endif; ?>
+            </select>
+
+            <br/>
+
+            <button type="button" class="btn btn-primary" id="btn-join-line">Join Line</button>
+
+            <button type="button" class="btn btn-danger" id="btn-finish-line">Finish Line</button>
+
+        </label>
+    </div>
+</div>
+
+<form role="form" id="form" action="<?php echo HOST.'warehouse/check-warehouse-create-line';?>" method="post" class="form-horizontal">
+    <hr>
+    <h3>Create New Line</h3>
+    <?php if($this->errorInput){?>
+        <span style="color: red">***<?=$this->errorInput;?>***</span>
+    <?php } ?>
+    <div class="row form_data">
+        <div class="span6">
+	        <label class="span6">
+                <label class="">Line Name <span style="color: red"> *</span></label>
+                <input type="text" class="form-control" name="new_line_name" value="<?php if(isset($this->errorInputLineName) && $this->errorInputLineName){ echo $this->errorInputLineName; } ?>" required>
+
+                <label class="">Warehouse Name <span style="color: red"> *</span></label>
+                <select id="warehouse_id" name="warehouse_id" style="width: auto" required>
+                    <option value>-------</option>
+                    <?php
+                    if ($this->warehouse) :
+                        foreach ($this->warehouse as $warehouse):?>
+                            <option value="<?php echo $warehouse->id;?>" <?php if (isset($this->errorInputWarehouse) &&  $this->errorInputWarehouse == $warehouse->id){ echo 'selected'; }?> ><?php echo $warehouse->name . ' (' . $warehouse->id . ')';?></option>
+                        <?php
+                        endforeach;
+                    endif;
+                    ?>
+                </select>
+
+                <label class="">Product Name <span style="color: red"> *</span></label>
+                <select id="good_id" name="good_id" style="width: auto" required>
+                    <option value>-------</option>
+                    <?php
+                    if ($this->goods) :
+                        foreach ($this->goods as $goods):?>
+                            <option value="<?php echo $goods->id;?>" <?php if (isset($this->errorInputProduct) &&  $this->errorInputProduct == $goods->id){ echo 'selected'; }?> ><?php echo $goods->name . ' (' . $goods->id . ')'; ?></option>
+                        <?php
+                        endforeach;
+                    endif;
+                    ?>
+                </select>
+
+                <label class="">Color Name <span style="color: red"> *</span></label>
+                <select id="color_id" name="color_id" style="width: auto" required>
+                    <option value>-------</option>
+                    <!-- <?php
+                    if ($this->colors) :
+                        foreach ($this->colors as $colors):?>
+                            <option value="<?php echo $colors->id;?>" <?php if (isset($this->errorInputColor) &&  $this->errorInputColor == $colors->id){ echo 'selected'; }?> ><?php echo $colors->name . ' ('. $colors->id . ')';?></option>
+                        <?php
+                        endforeach;
+                    endif;
+                    ?> -->
+                </select>
+
+                <br/><br/>
+
+                <button type="submit" class="btn btn-primary">Create Line</button>
+
+	        </label>
+        </div>
+    </div>
+
+</form>
+
+<script src="/js/jquery.blockUI.js"></script>
+
+<script>
+
+    $(document).ajaxStart(function(){
+        $.blockUI({ css: { 
+            border: 'none', 
+            padding: '15px', 
+            backgroundColor: '#000', 
+            '-webkit-border-radius': '10px', 
+            '-moz-border-radius': '10px', 
+            opacity: .5, 
+            color: '#fff' 
+        } });
+    });
+
+    $(document).ajaxStop(function(){
+        $.unblockUI();
+    });
+
+    $(document).ready(function () {
+
+        $('#btn-finish-line').click(function(event) {
+
+            if (confirm('You confirm to finish line')) {
+
+                $.ajax({
+                    url: '<?php echo HOST.'warehouse/finish-line';?>',
+                    type: 'POST',
+                    data: {'select_line': $('#select_line').val()},
+                })
+                .done(function(response) {
+                    var obj_response = jQuery.parseJSON(response);
+                    console.log("success");
+
+                     switch(obj_response.status) {
+                        case 200:
+                            console.log('done');
+                            location.reload();
+                            break;
+                        case 400:
+                            alert(obj_response.message);
+                            break;
+                        default:
+                            location.reload();
+                    }
+                    
+                });
+            }
+
+        });
+
+        $('#btn-join-line').click(function(event) {
+
+            var line = '';
+
+            if(parseInt($('#select_line').val()) > 0){
+                line = '?line=' + parseInt($('#select_line').val());
+            }
+
+            window.location.href = "<?php echo HOST.'warehouse/check-warehouse-line';?>" + line;
+        });
+
+        $('#good_id').change(function(event) {
+            
+            $.ajax({
+                url: '<?php echo HOST.'warehouse/get-color-by-product';?>',
+                type: 'POST',
+                data: {'good_id': $(this).val()},
+            })
+            .done(function(response) {
+                var obj_response = jQuery.parseJSON(response);
+                console.log("success");
+
+                console.log(obj_response);
+
+                $.each(obj_response, function(index, item) {
+                    // console.log('index : ' + index + ' | item : ' + item.name);
+                  $('#color_id').append(new Option(item.name, item.id));
+                });
+
+                //  switch(obj_response.status) {
+                //     case 200:
+                //         console.log('done');
+                //         location.reload();
+                //         break;
+                //     case 400:
+                //         alert(obj_response.message);
+                //         break;
+                //     default:
+                //         location.reload();
+                // }
+                
+            });
+
+        });
+
+    });
+</script>

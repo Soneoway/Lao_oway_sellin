@@ -1,0 +1,2648 @@
+
+ <style>
+   body{
+    font-family: phetsarath ot;
+   }
+ </style>
+
+ <script src="<?php echo HOST ?>js/jquery-ui.js"></script>
+<script src="<?php echo HOST ?>js/tag-it.min.js" type="text/javascript" charset="utf-8"></script>
+<script src="<?php echo HOST ?>js/bootstrap-modal.js"></script>
+<script src="<?php echo HOST ?>js/bootstrap-modalmanager.js"></script>
+<script src="<?php echo HOST ?>js/jquery.blockUI.js"></script>
+<script type="text/javascript" src="<?php echo HOST ?>js/sales.po.js"></script>
+<script src="<?php echo HOST?>js/numeral.min.js"></script>
+<script>
+
+$(document).ready(function () {
+    initChangeWarehouse();
+    initChangeRetailer();
+    initGoBack();
+    initAddSales();
+    //Add nvmm
+    initAddNvmm();
+    initSelectPaid();
+    initSelectTotal();
+    initSearchObjectOption();
+    
+    initAddBVG();
+    initRemoveSales();
+    initSelectProduct();
+    initSelectQuantity();
+    initSelectShipmentTypeQuantity();
+    initSelectPercent();
+    initSelectOrderType();
+    initReset();
+    initTag();
+    initDialog();
+    initCheckDemoBeforeSubmit();
+    initTooltip();
+    initGetSettedRetailer();
+    initSearchOptionDistributor('distributor_id', 'SearchBox');
+    initSelectJoint();
+    initSelectQuantityBVG();
+    initSelectProductBVG();
+    initAddDiscount();
+    initChangeInvoice();
+    initChangeSalesCatty();
+   // initChangeCustomer();
+    initConfirmCampaign();
+    get_po_list("<?php isset($this->sales) and $this->sales and isset($this->sales[0]['sale']['po_id']) and printf($this->sales[0]['sale']['po_id']);?>", "#distributor_po");
+    $('#add_po_btn').click(show_add_po_modal);
+
+    $(document).off('change', '[class*="total"]').on('change', '[class*="total"]', calculate_fee);
+
+    //NHAN VIEN MUA MAY
+    addRowNVMM();
+    removeRowNVMM();
+    initSelectAreaService();
+    autoRemarkForStaff();
+    changePartner();
+    show_shipment_type();
+
+    //Tanong 20160309    
+    initChangeDiscount();
+    initAddDiscountCreditNote();
+    initSelectDiscountCreditNote();
+    initChangeDiscountCreditNote();
+    
+    initRemoveCreditNote();
+    initChangeDeliveryFee();
+    $('.box_delivery_fee').hide();
+   // $('#btn-discount-creditnote').attr('disabled','disabled');
+
+    Auto_Summary_TotalPrice();
+
+    $('#delivery_fee').keypress(function(event) {
+        return /\d/.test(String.fromCharCode(event.keyCode));
+    });
+
+    $(document).on("submit", "form", function(e)
+    {
+
+        //check credit limit
+        /*
+        var credit_status=0;
+        $.ajax({
+            type: 'get',
+            url : '/checkmoney/getbalance',
+            data: {'id':4607},
+            success: function(data){
+                if(data.status != 0){
+                    alert(JSON.stringify(data));
+                   if(data.result.credit_status==1){
+                     credit_status=1;
+                   }else{
+                     alert('ບໍ່ສາມາດໃຊ້ວົງເຄຍດິດໄດ້');
+                     credit_status=0;
+                     e.preventDefault();
+                     return  false;
+                   }
+                } else {
+                   credit_status=0;
+                }
+            }
+        });
+
+ 
+        if(credit_status==0){
+            alert(credit_status);
+            
+        }
+        */
+
+        var total_amout = $('#priceall').text();
+        var delivery_fee =$('#delivery_fee').val();
+        var delivery_fee_status =$('#delivery_fee_status').val();
+        
+        var totals = parseFloat(total_amout.split(',').join(''));
+        
+        if(delivery_fee<=0 && delivery_fee_status==1){
+            if (confirm('มูลค่าจัดส่งไม่ถูกต้อง ! ต้องการดำเนินการต่อหรือไม่ ?')) {
+                return  true;
+            }else{
+                e.preventDefault();
+                return  false;
+            }
+        }
+        if(!isNaN(totals)){
+            price_discount = totals;
+        }
+        if(price_discount <0){
+            alert('ยอดค่าใช้จ่ายของท่านไม่ถูกต้อง !');
+            return  false;
+        }
+    });
+});
+
+ $(document).on('focus',".payment_date", function(){ 
+   $(this).datepicker({ dateFormat: "dd/mm/yy" });
+});
+
+//Add id nhân viên mua máy
+function initAddNvmm(){
+    $('.id_for_staff').live('click',function(e) {
+        $id_staff = $('.object_id').val();
+        var data_name = $('.object_id option:selected').attr('data-name');
+        console.log(data_name);
+        $name_staff = $( ".object_id option:selected" ).text().replace("Please select", "");
+        if($id_staff == '' || $id_staff == 0){
+            alert('Vui lòng chọn nhân viên');
+        }else{
+            var for_staff = $(this).closest('.span12').find('.name_staff');
+            var id_staff = $(this).closest('.span12').find('.id_staff');
+            for_staff.val($name_staff);
+            id_staff.val($id_staff);
+            id_staff.attr('data-name',data_name);
+        }
+
+    });
+}
+
+//thay đổi số tiền thực tế thanh toán 
+function initSelectPaid(){
+    $('.sotienthucte').live('change', function(e) {
+        var _self = $(this);
+        paid  = _self.val();
+        
+        total = $(this).closest('.row').find('.total').val().split('.').join('');
+        var so_du = parseInt(paid) - parseInt(total);
+        
+        $(this).closest('.row').find('.sodu').val(float_f(so_du));
+    });
+}
+//thay đổi giá máy không khớp với giá trên lô => hiện thông báo nếu có chọn lô máy 
+function initSelectTotal(){
+    $(document).off('change', '.total')
+    .on('change', '.total', function(e) {
+        var div_parent = $(this).parent().parent().parent();
+        var _self = $(this);
+        //alert(_self.val());
+        total  = _self.val().split('.').join('');
+        var num = div_parent.find('.num').val();
+        var price = div_parent.find('.price').val().split('.').join('');
+        var good_id = div_parent.find('.good_id').val();
+        var shipment = $('.shipment_id').val();
+        
+        var price_2 = total/num;
+        if(shipment){
+            if(price != price_2){
+                $(this).after('<span class="loading"></span>');
+                $.get("/sales/check-price-shipment",
+                {shipment:shipment, good_id:good_id, price: price_2}
+                ,function(data){
+                    if (data == "false"){
+                        alert("Other prices in batch plant price !");//alert("Giá khác giá trong lô máy !");
+                        $('.loading').remove();
+                    }
+                    else if(data == "true"){
+                        alert("Price right in batch plant !");//alert("Giá đúng trong lô máy !");
+                        $('.loading').remove();
+                    }
+                });
+            }
+        }
+        
+        var sum = 0;
+        $('.total').each(function(){
+            var totals = parseInt($(this).val().split('.').join(''));
+            if(!isNaN(totals)){
+                sum += totals;
+            }
+        });
+        
+        var paid = $('.paid').val();
+        var so_du = parseInt(paid) - parseInt(sum);
+        $('.so_du').val(float_f(so_du));
+        
+        $('#txt_sum_total').val(sum);
+        Auto_Summary_TotalPrice();
+
+    });
+}
+//reset lại khi chọn lô máy
+function initSelectShipment(){
+    $(document).off('change', '.shipment_id').on('change', '.shipment_id', function(e) {
+        $('.num, .price, .total, .paid, .so_du, .shipment_type').val('');
+    });
+}
+
+function initSearchObjectOption(){
+    var timeout;
+    $("#SearchBoxObject").live("keyup", function () {
+        var userInput = $("#SearchBoxObject").val();
+        window.clearTimeout(timeout);
+        timeout = window.setTimeout(function() {
+            showOnlyOptionsSimilarToText($(".object_id"), userInput, true, '');
+        }, 500);
+
+    });
+}
+
+//end NVMM
+
+function initResetRebate(){
+    $(document).off('change', 'form .cat_id,form .good_id,form .good_color,form .num,form .price,form .sale_off_percent,form .total')
+    .on('change', 'form .cat_id,form .good_id,form .good_color,form .num,form .price,form .sale_off_percent,form .total,form .id_for_staff', function(e) {
+        $("#rebate_price").val('');
+    });
+}
+
+function initConfirmCampaign(){
+    $("#dialogcampaign").hide();
+    $(".campaign_ck").click(function(e) {
+        _self = $(this);
+        if(!$(this).is(":checked"))
+        {
+            $("#dialogcampaign").html('Destroy campaign discount');
+            var destroy = true;
+        }
+        e.preventDefault();
+        var div_parent = _self.parent().parent().parent();
+
+        var campaign_val = div_parent.find('.campaign_val');
+        $("#dialogcampaign").dialog({
+            buttons : {
+                "Confirm" : function() {
+                   if(!destroy)
+                   {
+                       var campaign = $('._campaign').val();
+                       if(!campaign)
+                       {
+                           alert('please choose campaign');
+                           return false;
+                       }
+                       _self.prop("checked", !_self.prop("checked"));
+                       div_parent.find('.campaign_val').val(campaign);
+                       div_parent.find('.total').val(0);
+
+                   }
+
+                    else
+                   {
+                       _self.prop("checked", false);
+                       $('button[type=submit]').prop('disabled', true);
+                       $('form').bind('submit',function(e){e.preventDefault();});
+                       $.blockUI({ overlayCSS: { backgroundColor: '#009B72' } });
+                       var num = div_parent.find('.num').val();
+                       var good_id = div_parent.find('.good_id').val();
+                       var good_color = div_parent.find('.good_color').val();
+                       var cat_id = div_parent.find('.cat_id').val();
+                       var id = div_parent.find('.ids').val();
+                       var warehouse_id = $('#warehouse_id').val();
+                       var distributor_id = $('#distributor_id').val();
+                       var type = $('#type').val();
+                       div_parent.find('.campaign_val').val('');
+                       var sale_off_percent = div_parent.find('.sale_off_percent').val();
+                       if (distributor_id && warehouse_id) {
+                           if(xhr){
+                               xhr.abort();
+                           }
+                           xhr = $.get("/get/load-price",
+                               {
+                                   num: num,
+                                   good_id: good_id,
+                                   is_sales_price: 1,
+                                   distributor_id: distributor_id,
+                                   good_color: good_color,
+                                   cat_id: cat_id,
+                                   warehouse_id: warehouse_id,
+                                   type: type,
+                                   id: id
+                               }, function (data, status) {
+                                   if (data.indexOf("-3") !== -1) {
+                                        var myarr = data.split("|");
+                                        alert('The available stock is only ' + myarr[1]);
+                                        div_parent.find('.num').val('');
+                                        div_parent.find('.sale_off_percent').val(0);
+                                        div_parent.find('.total').val(0);
+                                   } else {
+                                       var price = 0;
+
+                                       if (data > 0 && num > 0) price = data / num;
+
+                                       div_parent.find('.price').val(float_f(price));
+
+                                       var total_price = data;
+
+                                       if (data > 0 && sale_off_percent > 0)
+                                           total_price = data - Math.round(data * sale_off_percent / 100);
+
+                                       div_parent.find('.total').val(float_f(total_price)).change();
+                                   }
+
+                                   $('button[type=submit]').prop('disabled', false);
+                                   setTimeout($.unblockUI, 300);
+                                   $('form').unbind('submit');
+                                   $('.loading').remove();
+                               });
+
+                           _self.prop('checked', false);
+
+                       }
+                       else
+                       {
+                           alert('Please select Warehouse/Retailer!');
+                           return;
+                       }
+                   }
+
+                    $(this).dialog("close");
+                    return true;
+                },
+                "Cancel" : function() {
+                    $(this).dialog("close");
+                }
+            }
+        });
+
+        $("#dialogcampaign").dialog("open");
+    });
+}
+
+function initRebate(){
+    var timeout1;
+    $("#btn-calculate").on("click", function () {
+        window.clearTimeout(timeout1);
+        timeout1 = window.setTimeout(function() {
+            calculateRebatePrice();
+        }, 500);
+
+    });
+}
+
+function calculateRebatePrice(){
+    var total_price = 0;
+    var rebate_price = $("#rebate_price").val();
+
+    if (rebate_price == '')
+        return;
+
+    $('button[type=submit]').prop('disabled', true);
+    $('form').bind('submit',function(e){e.preventDefault();});
+
+    $('form .total').each(function(){
+        var div_parent = $(this).parent().parent().parent();
+        if (div_parent.find('.cat_id').val() == '<?php echo PHONE_CAT_ID;?>') {
+            if ($(this).val() == ''){
+                alert('Please choose Total price');
+                $("#rebate_price").val('');
+                return;
+            }
+            total_price += Math.round( $(this).val() );
+        }
+    });
+
+    if ( total_price > 0 ){
+        var $rebate_percent = rebate_price/total_price;
+
+        $('form .total').each(function(){
+            var div_parent = $(this).parent().parent().parent();
+            if (div_parent.find('.cat_id').val() == '<?php echo PHONE_CAT_ID;?>') {
+                $v = $(this).val();
+                if ($v > 0){
+                    var $re = $v - Math.round($v * $rebate_percent);
+                    $(this).val($re);
+                }
+            }
+        });
+
+    } else {
+        alert('Please choose Total price');
+        $("#rebate_price").val('');
+    }
+
+    $('button[type=submit]').prop('disabled', false);
+    $('form').unbind('submit');
+    return;
+}
+
+function initSearchOption(){
+    var timeout;
+    $("#SearchBox").on("keyup", function () {
+        var userInput = $("#SearchBox").val();
+        window.clearTimeout(timeout);
+        timeout = window.setTimeout(function() {
+            showOnlyOptionsSimilarToText($("#distributor_id"), userInput, true, 'initChangeRetailer');
+        }, 500);
+
+    });
+}
+
+function initDialog(){
+    $("#dialog").dialog({
+        autoOpen: false,
+        modal: true
+    });
+}
+
+function initCheckDemoBeforeSubmit(){
+    $('#submit_btn').on('click',function(event){
+        initCheckGoodDemo();
+        add_product_color_key_nvmm();
+    });
+}
+
+function initTooltip(){
+    $('.tooltip-r').tooltip({
+        placement: 'right',
+        html: true,
+        title: $('#tooltip_type').html()
+    });
+}
+
+function initTag(){
+
+    $('#myTags').tagit({
+        allowSpaces: true,
+        fieldName: 'tags[]',
+        autocomplete: {
+            delay: 0,
+            minLength: 2,
+            source: "<?php echo HOST;?>get/get-tags"
+        }
+    });
+
+}
+
+function initChangeRetailer(){//change retailer
+
+    $('.distributor-info').hide();
+    $('.customer-info').hide();
+    $(document).off('change', '#distributor_id')
+    .on('change', '#distributor_id', function(e) {
+        $('#form .num,#form .sale_off_percent,#form .total,#form .price').val('');
+        getRetailerInfo($(this));
+       // DiscountCreditNote();
+    });
+    
+    initViewMore();
+}
+
+function initChangeWarehouse(){//change warehouse
+
+    $('#warehouse_id').live('change', function(e) {
+        $('#form .num,#form .sale_off_percent,#form .total,#form .price').val('');
+    });
+
+    $('#form .good_id, #form .good_color').live('change', function(e) {
+        var div_parent = $(this).parent().parent().parent();
+        div_parent.find('.price').val('');
+        div_parent.find('.total').val('');
+        div_parent.find('.num').val('');
+        div_parent.find('.sale_off_percent').val('');
+        Auto_Summary_TotalPrice();
+    });
+
+}
+
+function initAddMethodPayment()
+{
+    var old_div = $('.div-payment');
+    var new_div = old_div.clone();
+    new_div.removeClass('.div-payment').find('select').removeAttr('disabled');
+    new_div.attr('id', 'payment');
+    new_div.insertAfter($('.distributor-info').parent().parent()).show();
+}
+
+function initChangeInvoice()
+{
+    if($('#invoice_type').val() == 1)
+    {
+        $('.invoice_div').show();
+        $('.invoice_div').find('select, input, textarea').removeAttr('disabled');
+    }
+    else
+    {
+        $('.invoice_div').hide();
+        $('.invoice_div').find('select, input, textarea').prop('disabled', true);
+    }
+
+    $(document).off('change', '#invoice')
+    .on('change', '#invoice', function(e) {
+        initChangeInvoice();
+    });
+}
+
+
+
+function initGetSettedRetailer(){
+    var d_id = $('#distributor_id').val();
+    if(d_id){
+        getRetailerInfo($('#distributor_id'));
+    }
+}
+
+function initViewMore(){
+    $(document).off('click', '.view-more')
+    .on('click', '.view-more', function(e) {
+        $('.distributor-info .info ').toggle();
+        var text = $(this).text();
+        if(text == '+'){
+            $(this).text('-');
+        }else{
+            $(this).text('+');
+        }
+    });
+}
+
+function initChangeSalesCatty(){
+    $(document).off('change', '.salesman_catty')
+    .on('change', '.salesman_catty', function(e) {
+        alert(1);
+    });
+    
+}
+
+function getCustomerInfo(){
+    
+    var id = $("#customer_id").val();
+    //alert(id);
+    $('.customer_id').val('');
+    $('.customer_tax_number').val('');
+    $('.customer-info .customer_tax_address textarea').html('');
+    $.get("/get/load-customer-brand-shop",
+    {customer_id: id}
+    ,function(data,status){
+        var data = $.parseJSON(data);
+        if (data.result){
+            var obj = data.result;
+            for (var i = 0; i < obj.length; i++) {
+               var customer_id = obj[i]['customer_id'];
+               var customer_name = obj[i]['customer_name'];
+               var tax_number = obj[i]['tax_number'];
+               var address_tax = obj[i]['address_tax'];
+
+                //alert(address_tax);
+                $('.customer_id').val(customer_id);
+                $('.customer_name').val(customer_name);
+                $('.customer_tax_number').val(tax_number);
+                $('.customer_tax_address').val(address_tax);
+              // alert(text);
+               //$('.customer_id').append(new Option(text, val));
+            }
+        }else{
+            $('.customer_name').val('');
+            $('.customer_tax_number').val('');
+            $('.customer_tax_address').val('');
+        }
+    });
+    
+
+}
+
+function getRetailerInfo(_this){
+
+    var id = _this.val();
+
+        if(id == <?php echo OPPO_SERVICE_CLUB ?>)
+        {
+            alert('Bạn đã chọn đơn hàng cho Service Club, bạn vui lòng chọn trung tâm bảo hành');
+
+            var old_div = $('.div-service');
+
+            var new_div = old_div.clone();
+
+            new_div.removeClass('div-service').find('select, input, textarea').removeAttr('disabled');
+
+            new_div.attr('id', 'service_id');
+
+            new_div.insertAfter($('.distributor-info').parent().parent()).show();
+
+            return false;
+        }
+        else
+        {
+            $('#service_id').remove();
+        }
+        ///// don hang cho nhan vien muon //////
+        if(id == <?php echo OPPO_BORROW ?> )
+        {
+            alert('Bạn đã chọn đơn hàng mượn, Hệ thống sẽ ghi nhận trường hợp này');
+
+            return false;
+        }
+
+        ///// don hang cho nhan vien mua may //////
+
+        if(id == <?php echo OPPO_STAFF ?> || id == <?php echo OPPO_KVL ?>)
+        {
+
+            $('#invoice').remove();
+            alert('Bạn đã chọn đơn hàng bán máy cho nhân viên , KVL , Vui lòng chọn chính xác có lấy hóa đơn hay không?');
+            var old_div = $('.div-invoice');
+            var new_div = old_div.clone();
+
+            new_div.removeClass('div-invoice').find('select, input, textarea').removeAttr('disabled');
+            new_div.attr('id', 'invoice');
+            new_div.insertAfter($('.distributor-info').parent().parent()).show();
+
+            initChangeInvoice();
+            $(".object_id :selected").focus();
+
+            if(id == <?php echo OPPO_STAFF ?>){
+                var for_partner = "<?php  echo isset($this->for_partner) ? intval($this->for_partner) : 0;?>";
+                $('.wrap_for_partner').show();
+                $('#form .wrap_list_staff').show();
+                $('.btn_add_row_nvmm').show();
+                $('.info_nvmm').show();
+                $('.info_ingame').hide();
+                $('#div-number-sales').remove();
+                var old_div = $('.div-number-sales');
+                var new_div = old_div.clone();
+                new_div.attr('id', 'div-number-sales');
+                new_div.insertAfter($('#form .wrap_list_staff')).show();
+
+            }else{
+                $('.wrap_for_partner').hide();
+                ResetNvmm();
+            }
+            return false;
+        }
+        
+        ///// don hang cho nhan vien ingame //////
+        if(id == <?php echo OPPO_INGAME ?>)
+        {
+            $('.wrap_for_partner').show();
+            $('#invoice').remove();
+
+            alert('Bạn đã chọn đơn hàng bán máy cho nhân viên , KVL , Vui lòng chọn chính xác có lấy hóa đơn hay không?');
+            var old_div = $('.div-invoice');
+            var new_div = old_div.clone();
+            new_div.removeClass('div-invoice').find('select, input, textarea').removeAttr('disabled');
+            new_div.attr('id', 'invoice');
+            new_div.insertAfter($('.distributor-info').parent().parent()).show();
+            initChangeInvoice();
+            $(".object_id :selected").focus();
+
+
+            $('#form .wrap_list_staff').hide();
+            $('.btn_add_row_nvmm').show();
+            $('.info_nvmm').hide();
+
+            $('#form .info_ingame').show();
+            $('.info_ingame').show();
+
+            $('#div-number-sales').remove();
+            var old_div = $('.div-number-sales');
+            var new_div = old_div.clone();
+            new_div.attr('id', 'div-number-sales');
+            new_div.insertAfter($('#form .wrap_list_staff')).show();
+            return false;
+        }
+        
+        else
+        {
+            $('#invoice').remove();
+            $('#div-number-sales').remove();
+            $('#div-shipment').remove();
+            $('#div-outsite').remove();
+        }
+
+        ///// don hang tặng cho nhân viên /////
+
+        if(id == <?php echo OPPO_GIFT ?> || id == <?php echo OPPO_SUPER_DAY?>)
+        {
+            if(id == <?php echo OPPO_GIFT?>)
+                   alert('Bạn đã chọn đơn hàng tặng cho nhân viên');
+                   else
+                    alert('Bạn đã chọn đơn hàng SUPER DAY , vui lòng chọn khu vực tương ứng');
+
+            var old_div = $('.div-gift');
+
+            var new_div = old_div.clone();
+
+            new_div.removeClass('div-gift').find('select').removeAttr('disabled');
+
+            new_div.attr('id', 'gift');
+
+            new_div.insertAfter($('.distributor-info').parent().parent()).show();
+
+            initChangeInvoice();
+
+            return false;
+        }
+        else
+        {
+            $('#gift').remove();
+        }
+
+         if(id == <?php echo OPPO_DEMO ?> || id == <?php echo OPPO_EVENT ?>)
+         {
+            alert('Bạn đã chọn đơn hàng phụ kiện, vui lòng chọn khu vực');
+
+            var old_div = $('.div-gift');
+
+            var new_div = old_div.clone();
+
+            new_div.removeClass('div-gift').find('select').removeAttr('disabled');
+
+            new_div.attr('id', 'gift');
+
+            new_div.insertAfter($('.distributor-info').parent().parent()).show();
+
+            initChangeInvoice();
+
+            return false;
+        }
+        else
+        {
+            $('#gift').remove();
+        }
+
+    var distributor_rank=0;    
+    if(id == ''){
+        $('.distributor-info').slideUp();
+        $('.customer-info').slideUp();
+    }else{
+
+        $.ajax({
+            type: 'get',
+            url : '/checkmoney/getbalance',
+            data: {'id':id},
+            success: function(data){
+                if(data.status != 0){
+                   // alert(JSON.stringify(data));
+                   //alert(data.result.balance);
+                   var credit_status='';
+                   if(data.result.credit_status==1){
+                     credit_status='ໃຊ້ວົງເຄຍດິດໄດ້';
+                   }else{
+                     credit_status='ບໍ່ສາມາດໃຊ້ວົງເຄຍດິດໄດ້';
+
+                   }
+                    $('.distributor-info .retailer_name span').html(data.result.retailer_name);
+                    $('.distributor-info .add textarea').html(data.result.add);
+                    $('.distributor-info .add input').html(data.result.add);
+                    $('.distributor-info .credit_amount span').html(data.result.credit_amount);
+                    $('.distributor-info .balance span').html(data.result.balance);
+                    $('.distributor-info .total_balance span').html(data.result.total_balance);
+                    $('.distributor-info .credit_type span').html(data.result.credit_type);
+                    $('.distributor-info .credit_status span').html(credit_status);
+                    $('.rank').val(data.result.rank);
+
+                    distributor_rank = data.result.rank;
+                   // alert(distributor_rank);
+                    //distributor_rank=10;    
+                   //--------Get Customer-----------
+                   if(distributor_rank == 10){
+                       // alert(distributor_rank);
+                       // $(this).after('<span class="loading"></span>');
+                       // alert(div_parent.val());
+                        $('.customer-info').slideDown();
+                        $('.customer_id').empty();
+                        $.get("/get/load-customer-brand-shop",
+                        {customer_id: ''}
+                        ,function(data,status){
+                            var data = $.parseJSON(data);
+                            if (data.result){
+                                var obj = data.result;
+                                for (var i = 0; i < obj.length; i++) {
+                                   
+                                   var val = obj[i]['customer_id']
+                                   var text = obj[i]['customer_name'];
+
+                                   //var tax_number = obj[i]['tax_number'];
+                                   //var text_name = text+'['+tax_number+']';
+                                  // alert(text);
+                                   $('.customer_id').append(new Option(text, val));
+                                }
+                            }
+                        });
+                        
+                     }else{
+                        $('.customer-info').slideUp();
+                        $('.customer_id').val('');
+                        $('.customer_name').val('');
+                        $('.customer_tax_number').val('');
+                        $('.customer_tax_address').val('');
+
+                     }
+
+                   //-------------------------------
+                } else {
+                    $('.distributor-info .retailer_name span').html('');
+                    $('.distributor-info .add textarea').html('');
+                    $('.distributor-info .credit_amount span').html('');
+                    $('.distributor-info .balance span').html('');
+                    $('.distributor-info .total_balance span').html('');
+                    $('.distributor-info .credit_type span').html('');
+                    $('.distributor-info .credit_status span').html('');
+                }
+            }
+        });
+
+        $('#salesman_catty').empty();
+        var sales_admin_id = $('#salesman').val();
+        var sales_catty_id = $('#sales_catty_id').val();
+
+        $.get("/get/load-sales-catty",
+        {distributor_id: id}
+        ,function(data,status){
+            var data = $.parseJSON( data );
+            if (data.result){
+                var obj = data.result;
+                for (var i = 0; i < obj.length; i++) 
+                {
+                  var select ='';
+                  if(sales_catty_id==obj[i]['id']){
+                          select='selected'; 
+                      $('#salesman_catty').append('<option ref="1" '+select+' value="'+obj[i]['id']+'">'+obj[i]['fullname']+'</option>');
+                  }else{
+                      $('#salesman_catty').append('<option ref="1" value="'+obj[i]['id']+'">'+obj[i]['fullname']+'</option>');
+                  }           
+                }
+            }
+
+            _self.nextAll('.loading').remove();
+        });
+      
+        $('.distributor-info').slideDown();
+        var chBtn = $('.view-more').text();
+        if(chBtn == '-'){
+            $('.view-more').trigger('click');
+        }
+
+        //Tanong
+        GetSalesOrder_Amount(id);
+        GetDelivery_Fee_All(id);
+        //alert(id);
+        Auto_Summary_TotalPrice();
+    }
+
+    calculate_fee();
+
+    //get_po_list(id, "#distributor_po");
+}
+
+Array.prototype.contains = function (v) {
+    return this.indexOf(v) > -1;
+}
+
+var array_ka = [ <?php echo KA_TGDD ?>, <?php echo KA_VTA ?> , <?php echo KA_FPT; ?> ];
+
+function check_gift(elm) {
+
+    if (!$('#form')[0].checkValidity()) {
+        $('#form').find(':submit').click();
+        return;
+    }
+
+    var distributor_id = $('#distributor_id').val();
+    var sales_sn = $('#sn').val();
+    var order_date = $('#order_date').val();
+    
+    /*--------check Gifts F1S----------*/
+
+    var chk_good=0;var chk_gifts=0;var chk_gifts_sdcard=0;
+    $('[name="good_id[]"]:visible').each(function(index, elm) {
+      var good_id=$(elm).val();
+      if(good_id==142)  //F1s
+      {
+        chk_good+=1;
+      }
+      if(good_id==152)  //Gift 05GB0001
+      {
+        chk_gifts+=1;
+      }
+      if(good_id==151)  //Gift 01 SD CARD 32GB
+      {
+        chk_gifts_sdcard+=1;
+      }
+
+    });
+
+    /*
+    if(distributor_id==36){
+      if(chk_good > 0 && chk_gifts <=0){
+        alert('กรุณาเลือกของแถมสำหรับ F1s ! (05GB0001)');
+        return false;
+      }
+    }
+    */
+/*
+    if(distributor_id==36){
+      if(chk_good > 0 && chk_gifts_sdcard <=0){
+        alert('กรุณาเลือกของแถมสำหรับ F1s ! (SD CARD 32GB)');
+        return false;
+      }
+    }
+*/    
+//return false;
+    var good_num_qty=0;good_num_f1s_qty=0;good_color_num_f1s_qty=0;
+    var gift_num_qty=0;var gift_sdcard_num_qty=0;var chk_good=0;var chk_gifts=0;
+    $('.num').each(function(){
+      var div_parent = $(this).parent().parent().parent();
+      var good_id = div_parent.find('.good_id').val();
+      var good_color = div_parent.find('.good_color').val();
+      var totals = parseFloat($(this).val().split(',').join(''));
+      
+      //alert(good_color);
+      if(!isNaN(totals)){
+        if(good_id==142)  //F1s
+        {
+          good_num_qty += totals;
+          good_num_f1s_qty += totals;
+            if(good_color==24)  //F1s  Rose Gold/ชมพู
+            {
+                good_color_num_f1s_qty += totals;
+            }
+        }
+        if(good_id==152)  //Gift 05GB0001
+        {
+          gift_num_qty += totals;
+        }
+        
+        if(good_id==151)  //Gift SD CARD 32GB
+        {
+          gift_sdcard_num_qty += totals;
+        }
+
+      }
+    });
+
+    /*----------Chk No Sales-------------*/
+
+    var salesman = $('#salesman').val();
+    var warehouse_id = $('#warehouse_id').val();
+    var group_id = $('#group_id').val();
+    //alert(warehouse_id);
+    // ปิดการขายสินค้า
+    
+    /*
+    if(good_color_num_f1s_qty>0 && salesman !=3 && warehouse_id==36)  //F1s
+    {
+        alert('ระงับการสั่งซื้อ F1s สี Rose Gold/ชมพู ชั่วคราว !');
+        return false;
+    }
+    */
+
+/*----------Chk Limit-----------------*/
+//alert(group_id);
+if(salesman !=3 && salesman !=146 && salesman !=231 && salesman !=129){
+	var product_total_qty=100;
+	var total_qty=0;
+	var bal_total_qty=0;
+    if(warehouse_id==36){
+        if(good_num_f1s_qty>0){
+            var distributor_no_check_limit =0;
+            var distributor_id = $('#distributor_id').val();
+            var chk_good_id=142;
+            distributor_no_check_limit = $('#distributor_no_check_limit').val();
+            if(distributor_no_check_limit==''){
+              GetDistributor_no_check_limit(distributor_id,sales_sn,chk_good_id,order_date);
+              distributor_no_check_limit = $('#distributor_no_check_limit').val();
+            }
+            	//alert(distributor_no_check_limit);
+                if(distributor_no_check_limit==1){
+                    product_total_qty = $('#product_total_qty').val();
+                    
+                    if(!isNaN(product_total_qty) || product_total_qty=='')
+                    {
+                        //alert('product_total_qty');
+                        total_qty = parseFloat(good_num_f1s_qty)+parseFloat(product_total_qty);
+                        // Limit 4
+                        //bal_total_qty = (4 - product_total_qty);
+                        //alert(total_qty);
+                        /*
+                        if(total_qty >4 )
+                        {
+                          alert('จำนวนสั่งซื้อ F1s ของร้านค้านี้เกินกำหนด (4 เครื่องต่อวัน) จำนวนที่สั่งซื้อได้ '+bal_total_qty+' เครื่อง !');
+                          return false;
+                        }
+                        */
+                        
+                        if(product_total_qty==''){
+                            //alert(product_total_qty);
+                            /*---------Get Good QTY------------*/
+                            GetProduct_Order(distributor_id,sales_sn,chk_good_id,order_date);
+                            return false;
+                        }
+                    }
+                }else{
+                	if(distributor_no_check_limit ==0 || distributor_no_check_limit =='')
+                	{
+                		product_total_qty = $('#product_total_qty').val();
+					    total_qty = parseFloat(good_num_f1s_qty)+parseFloat(product_total_qty);
+					    if(product_total_qty==''){
+					        //alert(product_total_qty);
+					        /*---------Get Good QTY------------*/
+					        GetProduct_Order(distributor_id,sales_sn,chk_good_id,order_date);
+					        return false;
+					    }
+					    product_total_qty = $('#product_total_qty').val();
+					    bal_total_qty = (4 - product_total_qty);
+					    if(total_qty >4 )
+					    {
+					      alert('จำนวนสั่งซื้อ F1s ของร้านค้านี้เกินกำหนด (4 เครื่องต่อวัน) จำนวนที่สั่งซื้อได้ '+bal_total_qty+' เครื่อง !');
+					      GetDistributor_no_check_limit(distributor_id,sales_sn,chk_good_id,order_date);
+					      return false;
+					    }
+            }
+                	
+          }
+        }
+    }
+
+    
+
+    
+   // alert($('#product_total_qty').val());
+
+}
+
+
+    //if(good_num_qty != gift_num_qty && good_num_qty >0)
+    /*
+    if(distributor_id==36){
+      if(good_num_qty != gift_num_qty)
+      {
+        alert('จำนวนของแถมไม่ตรงกับจำนวนการขาย F1s ! (05GB0001)');
+        return false;
+      }
+    }
+    */
+    /*else if(good_num_qty != gift_sdcard_num_qty)
+    {
+      alert('จำนวนของแถมไม่ตรงกับจำนวนการขาย F1s ! (SD CARD 32GB)');
+      return false;
+    }
+    */
+
+    /*--------End check Gifts F1S----------*/
+
+            $('button, input, select').prop('disabled', true);
+            $('#form').unbind('submit');
+
+            good_list = [];
+            $('[name="good_id[]"]:visible').each(function(index, elm) {
+                good_list.push($(elm).val());
+            });
+
+            $.ajax({
+                url: '<?php echo HOST ?>get/check-gift',
+                dataType: 'json',
+                data: {good_list: good_list},
+            })
+            .done(function(result) {
+                $('button, input, select').prop('disabled', false);
+                $('#form').bind('submit');
+
+                //var distributor_id = $('#distributor_id').val();
+
+                $.ajax({
+                    type: 'get',
+                    url : '/checkmoney/getbalance',
+                    data: {'id':distributor_id},
+                    success: function(data){
+                        if(data.status != 0){
+                           // alert(JSON.stringify(data));
+                            var credit_status = parseInt(data.result.credit_status);
+                            var credit_amount = parseFloat(data.result.credit_amount.split(',').join(''));
+                            var balance = parseFloat(data.result.balance.split(',').join(''));
+                            var total_proce = $('.total_amount_all').val();
+                            //alert(total_proce);
+                           // alert(credit_status);alert(credit_amount);alert(balance);
+                           if(credit_status==0 && credit_amount<=0){
+                             //---------Submit Use Cash---------
+                                if (typeof result.code != "undefined" && result.code != 1) {
+                                    $('#dialog').html(result.error);
+
+                                    $("#dialog").dialog({
+                                        buttons : {
+                                            "Choose Gifts" : function() {
+                                                $(this).dialog("close");
+                                                return false;
+                                            },
+                                            "Ignore" : function() {
+                                                $('#form').submit();
+                                            }
+                                        }
+                                    });
+                                    $("#dialog").dialog("open");
+                                } else {
+                                    $('#form').submit();
+                                }
+                              //-----------------------------------
+                           
+                           }else if(credit_status==1 && credit_amount > 0){
+                            //alert(credit_amount);
+                            //alert(balance);
+                            //alert(total_proce);
+                              var total_bal = balance-total_proce;
+                              total_bal = 100000;
+                              if((total_bal) > 0){
+                                //---------Submit Use Credit---------
+                                if (typeof result.code != "undefined" && result.code != 1) {
+                                    $('#dialog').html(result.error);
+
+                                    $("#dialog").dialog({
+                                        buttons : {
+                                            "Choose Gifts" : function() {
+                                                $(this).dialog("close");
+                                                return false;
+                                            },
+                                            "Ignore" : function() {
+                                                $('#form').submit();
+                                            }
+                                        }
+                                    });
+                                    $("#dialog").dialog("open");
+                                } else {
+                                    $('#form').submit();
+                                }
+                                //-----------------------------------
+                              }else{
+                                alert('ไม่สามารถสั่งซื้อสินค้าได้ เนื่องจากวงเงินเครดิตไม่พอ !('+total_bal+')');
+                              }
+                           }else{
+                             alert('ບໍ່ສາມາດໃຊ້ວົງເຄຍດິດໄດ້ !');
+                           }
+                        } else {
+                           alert('ไม่สามารถสั่งซื้อสินค้าได้ !');
+                        }
+                    }
+                });
+
+            })
+            .fail(function(result) {
+                console.log(result.error);
+            })
+            .always(function() {
+                console.log("complete");
+            });
+
+        /*------------------------*/
+
+}
+
+function initGoBack(){
+    $(document).off('click', '.go-back')
+    .on('click', '.go-back', function(e) {
+        window.location.href = $('#back_url').val();
+        return false;
+    });
+}
+
+function initRemoveSales(){
+    $(document).off('click', '.remove-sales')
+    .on('click', '.remove-sales', function(e) {
+
+        $(this).parent().parent().parent().remove();
+        calculate_fee();
+        Auto_Summary_TotalPrice();
+        return false;
+    });
+}
+
+function initRemoveCreditNote(){
+    $(document).off('click', '.remove-credit-note')
+    .on('click', '.remove-credit-note', function(e) {
+
+        $(this).parent().parent().parent().remove();
+        calculate_fee();
+        Auto_Summary_TotalPrice();
+        return false;
+    });
+}
+
+
+function initAddSales(){
+    $(document).off('click', '.add-sales')
+    .on('click', '.add-sales', function(e) {
+        var old_div = $('.div-add');
+        var new_div = old_div.clone();
+
+        new_div.removeClass('div-add').find('select, input, textarea').removeAttr('disabled');
+
+        new_div.insertBefore($(this).parents('.row')).show();
+
+        $(document).off('change', '[class*="total"]').on('change', '[class*="total"]', calculate_fee);
+        initSelectProduct();
+        initSelectQuantity();
+        initSelectPercent();
+        initRemoveSales();
+        initConfirmCampaign();
+        // initResetRebate();
+
+        return false;
+    });
+}
+
+// function add bvg
+function initAddBVG(){
+    $('.add-bvg').click(function(e){
+        var old_div = $('.div-bvg');
+        var new_div = old_div.clone();
+        var distributor_id = $('#distributor_id').val();
+        new_div.removeClass('div-bvg').find('select, input, textarea').removeAttr('disabled');
+        $('from .joint').each(function(i, obj) {
+           if($('.joint').val())
+           {
+               joint_total++;
+           }
+        });
+        $.get("/get/load-joint",
+            {distributor_id : distributor_id , init_params : 1}
+            ,function(data,status){
+                var data = $.parseJSON( data );
+
+                if (data){
+                    var obj = data;
+
+
+                    new_div.find('.joint').html('<option value="0">Please select</option>');
+                    for (var i = 0; i < obj.length; i++) {
+
+                        if(i <= joint_total)
+                        {
+                            new_div.find('.joint').append('<option value="'+obj[i]['id']+'">'+obj[i]['name']+'</option>');
+                        }
+                        else
+                            new_div.find('.joint').append('<option disabled value="'+obj[i]['id']+'">'+obj[i]['name']+'</option>');
+                    }
+                }
+
+                else
+                {
+                    alert(data.error);
+                }
+
+
+                $('button[type=submit]').prop('disabled', false);
+                $('form').unbind('submit');
+            });
+
+        new_div.insertBefore($(this).parent().parent().parent()).show();
+        $(document).off('change', '[class*="total"]')
+            .on('change', '[class*="total"]', calculate_fee);
+
+
+        initSelectJoint();
+        initSelectQuantityBVG();
+        initRemoveSales();
+        initSelectProductBVG();
+
+        Auto_Summary_TotalPrice();
+        return false;
+    });
+}
+
+function initAddDiscount(){
+    $('#btn-discount').click(function(e){
+        var old_div = $('.div-discount');
+        var new_div = old_div.clone();
+        new_div.removeClass('div-discount').find('select, input, textarea').removeAttr('disabled');
+        new_div.insertBefore($(this).parent().parent().parent()).show();
+
+        var distributor_id = $('#distributor_id').val();
+
+        if(!distributor_id)
+        {
+            alert('Please insert Distributor');
+            return false;
+        }
+
+        $.get("/get/load-joint",
+            {distributor_id : distributor_id , init_params : 2}
+            ,function(data,status){
+                var data = $.parseJSON( data );
+
+                if (data){
+                    var obj = data
+
+                    console.log(obj);
+
+
+                    new_div.find('.joint_discount').html('<option value="0">Please select</option>');
+                    for (var i = 0; i < obj.length; i++) {
+                            new_div.find('.joint_discount').append('<option value="'+obj[i]['id']+'">'+obj[i]['name']+'</option>');
+                    }
+                }
+
+                else
+                {
+                    alert(data.error);
+                }
+
+
+                $('button[type=submit]').prop('disabled', false);
+                $('form').unbind('submit');
+            });
+
+
+
+
+        initSelectQuantityBVG();
+        initRemoveSales();
+        initSelectProductBVG();
+        selectJointDiscount();
+
+        Auto_Summary_TotalPrice();
+        return false;
+    });
+}
+
+var joint_total = 0;
+var joint_discount_total = 0;
+
+
+function resetJoint()
+{
+    if($('.joint').val())
+         $('.joint').parent().parent().remove();
+}
+
+function selectJointDiscount()
+{
+    $(document).off('change', '.joint_discount')
+        .on('change', '.joint_discount', function() {
+
+            $('button[type=submit]').prop('disabled', true);
+            $('form').bind('submit',function(e){e.preventDefault();});
+            $('.loading').remove();
+            $(this).after('<span class="loading"></span>');
+            var distributor_id = $('#distributor_id').val();
+            var joint = $(this).val();
+            var _selft = $(this);
+            var parent =  _selft.parent().parent();
+
+            if(!distributor_id)
+            {
+                alert('Please select Joint Circular');
+                return;
+            }
+
+            $.get("/get/load-jointprice",
+                {joint: joint, d_id: distributor_id}
+                ,function(data,status){
+                    var data = $.parseJSON( data );
+
+                    if (data.code == 1){
+                        parent.find('.price_discount').val(data.price);
+                        parent.find('.price_discount').attr('readonly', true);
+                    }
+
+                    if(data.code == -2)
+                    {
+                        alert(data.error)
+                    }
+
+                    $('button[type=submit]').prop('disabled', false);
+                    $('form').unbind('submit');
+                    $('.loading').remove();
+                });
+
+        });
+    }
+
+function initSelectJoint()
+{
+    var distributor_id = $('#distributor_id').val();
+     $(document).off('change', '.joint')
+    .on('change', '.joint', function() {
+        $('button[type=submit]').prop('disabled', true);
+        $('form').bind('submit',function(e){e.preventDefault();});
+        $('.loading').remove();
+        $(this).after('<span class="loading"></span>');
+        var div_parent = $(this).parent().parent().parent();
+        var _self = $(this);
+        var joint = div_parent.find('.joint').val();
+
+        if (_self.hasClass('joint'))
+            div_parent.find('.good_id').find('option:not(:first)').remove();
+
+        var good_id = div_parent.find('.good_id').val();
+
+        div_parent.find('.good_color').find('option:not(:first)').remove();
+
+        div_parent.find('.num, .price, .total').val('');
+
+
+        $.get("/get/load-joint",
+            {joint: joint, good_id: good_id , distributor_id : distributor_id}
+            ,function(data,status){
+                var data = $.parseJSON( data );
+                if (data.goods){
+                    var obj = data.goods;
+                    div_parent.find('.good_id_bvg').html('<option value="0">Please select</option>');
+                    for (var i = 0; i < obj.length; i++) {
+                        div_parent.find('.good_id_bvg').append('<option value="'+obj[i]['id']+'">'+obj[i]['name']+'</option>');
+                    }
+
+
+
+                }
+
+
+
+                $('button[type=submit]').prop('disabled', false);
+                $('form').unbind('submit');
+                _self.nextAll('.loading').remove();
+            });
+    });
+}
+
+function initSelectProduct(){
+    $(document).off('change', '.cat_id, .good_id')
+    .on('change', '.cat_id, .good_id', function(e) {
+        $('button[type=submit]').prop('disabled', true);
+        $('form').bind('submit',function(e){e.preventDefault();});
+
+        $('.loading').remove();
+        $(this).after('<span class="loading"></span>');
+        var div_parent = $(this).parent().parent().parent();
+        var _self = $(this);
+        var cat_id = div_parent.find('.cat_id').val();
+
+        if (_self.hasClass('cat_id'))
+            div_parent.find('.good_id').find('option:not(:first)').remove();
+
+        var good_id = div_parent.find('.good_id').val();
+
+        div_parent.find('.good_color').find('option:not(:first)').remove();
+
+        div_parent.find('.num, .price, .total').val('');
+
+        //alert(cat_id);alert(good_id);
+        $.get("/get/load",
+            {cat_id: cat_id, good_id: good_id}
+            ,function(data,status){
+                var data = $.parseJSON( data );
+
+                if (data.goods){
+                    var obj = data.goods;
+                    div_parent.find('.good_id').html('<option value="0">Please select</option>');
+                    for (var i = 0; i < obj.length; i++) {
+                        div_parent.find('.good_id').append('<option value="'+obj[i]['id']+'">'+obj[i]['name']+'</option>');
+                    }
+                }
+                if (data.colors){
+                    var obj = data.colors;
+                    div_parent.find('.good_color').html('<option value="0">Please select</option>');
+                    for (var i = 0; i < obj.length; i++) {
+                        div_parent.find('.good_color').append('<option value="'+obj[i]['id']+'">'+obj[i]['name']+'</option>');
+                    }
+                }
+
+                $('button[type=submit]').prop('disabled', false);
+                $('form').unbind('submit');
+                _self.nextAll('.loading').remove();
+            });
+
+    });
+}
+
+var xhr;
+
+    function initSelectProductBVG()
+    {
+        $(document).off('change', '.good_id_bvg')
+        .on('change', '.good_id_bvg', function(e) {
+            $('button[type=submit]').prop('disabled', true);
+            $('form').bind('submit',function(e){e.preventDefault();});
+            var distributor_id    = $('#distributor_id').val();
+            var _self = $(this);
+            if(!distributor_id)
+            {
+                _self.val('');
+                alert('Please select Warehouse/Retailer!');
+            }
+
+
+            $('.loading').remove();
+            $(this).after('<span class="loading"></span>');
+
+            var div_parent = $(this).parent().parent().parent();
+
+
+
+            var good_id = div_parent.find('.good_id_bvg').val();
+            var joint = div_parent.find('.joint').val();
+
+            div_parent.find('.num_bvg, .price_bvg, .total_bvg').val('');
+
+
+            $.get("/get/load-joint",
+                {joint: joint, good_id: good_id , distributor_id : distributor_id}
+                ,function(data,status){
+
+                    var data = $.parseJSON( data );
+
+                    var price = data.price;
+                    var num = data.total;
+                    var total = data.total_price;
+
+                    if (num > 0){
+                        div_parent.find('.price_bvg').val(float_f(price));
+                        div_parent.find('.num_bvg').val(float_f(num));
+                        div_parent.find('.total_bvg').val(float_f(total));
+                        selectBVGIMEI(div_parent);
+                        joint_total++;
+                    }
+                    else
+                    {
+                        alert('This distributor is don\'t have imei for this joint circular or discounts have been paid!');
+                    }
+
+                    $('button[type=submit]').prop('disabled', false);
+                    $('form').unbind('submit');
+                    _self.nextAll('.loading').remove();
+                });
+        });
+    }
+
+    function initSelectQuantityBVG()
+    {
+        $(document).off('change', '.num_bvg')
+        .on('change', '.num_bvg', function(e) {
+            $('button[type=submit]').prop('disabled', true);
+            $('form').bind('submit',function(e){e.preventDefault();});
+            $('.loading').remove();
+            var distributor_id    = $('#distributor_id').val();
+            var div_parent = $(this).parent().parent().parent();
+            var _self = $(this);
+            var num = _self.val();
+            var price = floatval(div_parent.find('.price_bvg').val());
+
+            if (distributor_id) {
+                console.log(distributor_id);
+                var total_price = 0;
+                if (price && num)
+                    total_price = price * num;
+                div_parent.find('.total_bvg').val(float_f(total_price)).change();
+                selectBVGIMEI(div_parent);
+
+            }
+            else
+            {
+                _self.val('');
+                alert('Please select Warehouse/Retailer!');
+            }
+        });
+    }
+
+    function selectBVGIMEI(div_parent)
+    {
+        $('button, input, select').prop('disabled', true);
+        distributor_id    = $('#distributor_id').val();
+        joint  = div_parent.find('.joint').val();
+        good_id_bvg = div_parent.find('.good_id_bvg').val();
+        num =  div_parent.find('.num_bvg').val();
+        var value = '';
+
+        if(!joint && !good_id_bvg)
+        {
+            alert('Please Choose BVG');
+            $('button, input, select').prop('disabled', false);
+            return false;
+        }
+
+        $('.loading').remove();
+        var targetUrl = '<?php echo HOST."bvg/get-imei" ?>';
+
+        //get ajax content
+
+        if (distributor_id && joint && good_id_bvg){
+            div_parent.parents('.control-group').append("<span class=\'loading\'></span>");
+
+            $.post(targetUrl, {
+                d_id : distributor_id,
+                joint_circular_id : joint,
+                good_id : good_id_bvg,
+                num : num
+            }, function(data){
+                $('button, input, select').prop('disabled', false);
+
+                if (data){
+                    if(data.result == 3)
+                    {
+                        alert('Number imei you insert is too large, Please contact Technolog Team');
+                        $('.loading').remove();
+                        div_parent.find('.num_bvg').val(0);
+                        div_parent.find('.total_bvg').val(0).change();
+                        div_parent.find('.bvg_imei').find('option').remove();
+                    }
+                     if(data.result == 4)
+                    {
+                        alert('This distributor don\'t have imei for discount');
+                        $('.loading').remove();
+                        div_parent.find('.num_bvg').val(0);
+                        div_parent.find('.total_bvg').val(0).change();
+                        div_parent.find('.bvg_imei').find('option').remove();
+                    }
+
+                    if(data.result == 1)
+                    {
+
+                          div_parent.find('.bvg_imei option').remove();
+                          var obj = data.data;
+                          for (var i = 0; i < obj.length; i++) {
+                             div_parent.find('.bvg_imei').append('<option value="'+obj[i]['id']+'">'+obj[i]['imei_sn']+'</option>');
+                             value += obj[i]['id'] + ',';
+                    }
+                  }
+
+                }
+                $('.loading').remove();
+                div_parent.find('.ids_imei').val(value.slice(0,-1));
+                div_parent.find('.bvg_imei option').prop('selected', true);
+            });
+        }
+    }
+
+function initSelectPercent(){
+    $('.sale_off_percent').live('change',function(e) {
+        var div_parent = $(this).parent().parent().parent();
+        var _self = $(this);
+        var sale_off_percent = _self.val();
+        var price = parseFloat(div_parent.find('.price').val().split(',').join(''));
+        var num = parseFloat(div_parent.find('.num').val().split(',').join(''));
+        //alert(price);
+        var total_price = 0;
+        if (sale_off_percent > 0 && num > 0){
+
+            total_price = price - Math.round((price*sale_off_percent/100)*100)/100;
+            var tmp_total = Math.round(total_price*num,2);
+            div_parent.find('.total').val(tmp_total.toLocaleString('en',{ minimumFractionDigits: 2 })).change();
+        }
+        
+        phone_id = floatval( div_parent.find('.good_id').val() );
+        var type = $('.type').val();
+        var for_partner = $("#for_partner").val();
+        if(for_partner === undefined){
+            for_partner = 2;
+        }
+
+        if(type == <?php echo FOR_STAFFS ?> && for_partner == 2)
+        {
+            $.ajax({
+                  url: "/sales/check-sale-phone",
+                  type: "get",
+                  data: {'phone_id':phone_id,'sale_off_percent':sale_off_percent},
+                  success: function(result){
+                        if(result == 0)
+                        {
+                            alert("ไม่มีส่วนลดใช้ในระดับนี้");
+                            _self.val('0');
+                            sale_off_percent = 0;
+
+                            var price = parseFloat(div_parent.find('.price').val().split(',').join(''));
+                            var num = parseFloat(div_parent.find('.num').val().split(',').join(''));
+                    
+                            var total_price = 0;
+                            if (price > 0 && num > 0){
+                                total_price = price - Math.round((price*sale_off_percent/100)*100)/100;
+                                var tmp_total = Math.round(total_price*num,2);
+                                div_parent.find('.total').val(tmp_total.toLocaleString('en',{ minimumFractionDigits: 2 })).change();
+
+                            }
+                        }
+                        else{
+                          
+                            var price = parseFloat(div_parent.find('.price').val().split(',').join(''));
+                            var num = parseFloat(div_parent.find('.num').val().split(',').join(''));
+                            var total_price = 0;
+                            if (price > 0 && num > 0){
+                                total_price = price - Math.round((price*sale_off_percent/100)*100)/100;
+                                var tmp_total = Math.round(total_price*num,2);
+                                div_parent.find('.total').val(tmp_total.toLocaleString('en',{ minimumFractionDigits: 2 })).change();
+                            }
+                          
+                        }           
+                  },
+                  error:function(){
+                      alert("Error");
+                  }
+            });
+        }
+        else{
+            
+            var price = parseFloat(div_parent.find('.price').val().split(',').join(''));
+            var num = parseFloat(div_parent.find('.num').val().split(',').join(''));
+    
+            var total_price = 0;
+            if (price > 0 && num > 0){
+                total_price = price - Math.round((price*sale_off_percent/100)*100)/100;
+                var tmp_total = Math.round(total_price*num,2);
+                div_parent.find('.total').val(tmp_total.toLocaleString('en',{ minimumFractionDigits: 2 })).change();    
+            }
+        } 
+        
+    });
+}
+
+function initSelectQuantity(){
+    $(document).off('change', '.num')
+    .on('change', '.num', function(e) {
+        $('button[type=submit]').prop('disabled', true);
+        $('form').bind('submit',function(e){e.preventDefault();});
+
+        $('.loading').remove();
+        var div_parent = $(this).parent().parent().parent();
+        var _self = $(this);
+        var num = _self.val();
+        var good_id = div_parent.find('.good_id').val();
+        var good_color = div_parent.find('.good_color').val();
+        var cat_id = div_parent.find('.cat_id').val();
+        var id = div_parent.find('.ids').val();
+        var warehouse_id = $('#warehouse_id').val();
+        var distributor_id = $('#distributor_id').val();
+        var sales_sn = $('#sn').val();
+        var type = $('#type').val();
+        var order_date = $('#order_date').val();
+        
+
+        //NVMM LO MAY THANH LY
+        var id_shipment = $('.shipment_id').val();
+        var type_shipment = div_parent.find('.shipment_type').val();
+
+        
+        if (type==2){ //for demo
+            //set default sale off to 50%
+            div_parent.find('.sale_off_percent').val('50');
+        }
+        var sale_off_percent = div_parent.find('.sale_off_percent').val();
+
+        if (distributor_id && warehouse_id) {
+            $(this).after('<span class="loading"></span>');
+            if(xhr){
+                xhr.abort();
+            }
+            xhr = $.get("/get/load-price",
+                {num: num, good_id: good_id, is_sales_price: 1, distributor_id: distributor_id, good_color: good_color,
+                    cat_id: cat_id, warehouse_id: warehouse_id, type: type, id: id, id_shipment: id_shipment,
+                    type_shipment: type_shipment}
+                ,function(data,status){
+                    if (data.indexOf("-3") !== -1){
+                        //alert(data);
+                        var myarr = data.split("|");
+                        alert('The available stock is only '+myarr[1]);
+                        div_parent.find('.num').val('');
+                        div_parent.find('.sale_off_percent').val(0);
+                        div_parent.find('.total').val(0);
+                    } else {
+                        //alert("tt");
+                        var price = 0;
+
+                        if (data > 0 && num > 0) price = data/num;
+
+                        var tmp_price = Math.round(price*100)/100;
+                        div_parent.find('.price').val(tmp_price.toLocaleString('en',{ minimumFractionDigits: 2 }));
+
+                        var total_price = data;
+
+                        if (data > 0 && sale_off_percent > 0){
+
+                          //alert(Math.round((data*sale_off_percent/100)*100)/100);
+                          total_price = data - Math.round((data*sale_off_percent/100)*100)/100;
+                        }
+                            
+                        var tmp_total = Math.round(total_price*100)/100;
+
+                        //alert(tmp_total.toLocaleString('en',{ minimumFractionDigits: 2 }));
+
+                        div_parent.find('.total').val(tmp_total.toLocaleString('en',{ minimumFractionDigits: 2 })).change();
+                    }
+
+                    $('button[type=submit]').prop('disabled', false);
+                    $('form').unbind('submit');
+                    $('.loading').remove();
+                });
+        } else{
+            _self.val('');
+            alert('Please select Warehouse/Retailer!');
+        }
+
+        /*----------------------*/
+/*------------Check Limit Order---------*/
+if(good_id==142){ // F1S
+    $('#distributor_no_check_limit').val(0);
+    $.get("/get/load-distributor-no-check-limit",{distributor_id : distributor_id,good_id : good_id}
+            ,function(data,status){
+        
+        var data = $.parseJSON(data);
+        //alert(data);
+        if (data){   
+            if(data==0){
+                /*---------Get Good QTY------------*/
+                GetProduct_Order(distributor_id,sales_sn,good_id,order_date);
+                $('#distributor_no_check_limit').val(0).change();
+            }else{
+                $('#distributor_no_check_limit').val(1).change();
+            }
+        }else{
+            $('#distributor_no_check_limit').val(0).change();
+        }
+    });    
+    }
+    });
+}
+
+
+
+function initSelectShipmentTypeQuantity(){
+    $(document).off('change', '.shipment_type')
+    .on('change', '.shipment_type', function(e) {
+        $('button[type=submit]').prop('disabled', true);
+        $('form').bind('submit',function(e){e.preventDefault();});
+
+        $('.loading').remove();
+        var div_parent     = $(this).parent().parent().parent();
+        var _self          = $(this);
+        var type_shipment  = _self.val();
+        var good_id        = div_parent.find('.good_id').val();
+        var good_color     = div_parent.find('.good_color').val();
+        var cat_id         = div_parent.find('.cat_id').val();
+        var id             = div_parent.find('.ids').val();
+        var warehouse_id   = $('#warehouse_id').val();
+        var distributor_id = $('#distributor_id').val();
+        var type           = $('#type').val();
+        //NVMM LO MAY THANH LY
+        var id_shipment = $('.shipment_id').val();
+        var num = div_parent.find('.num').val();
+        
+        if (type==2){ //for demo
+            //set default sale off to 50%
+            div_parent.find('.sale_off_percent').val('50');
+        }
+        var sale_off_percent = div_parent.find('.sale_off_percent').val();
+
+        if (distributor_id && warehouse_id) {
+            $(this).after('<span class="loading"></span>');
+            if(xhr){
+                xhr.abort();
+            }
+            xhr = $.get("/get/load-price",
+                {num: num, good_id: good_id, is_sales_price: 1, distributor_id: distributor_id, good_color: good_color, cat_id: cat_id, warehouse_id: warehouse_id, type: type, id: id, id_shipment: id_shipment, type_shipment: type_shipment}
+                ,function(data,status){
+                    if (data.indexOf("-3") !== -1){
+                        var myarr = data.split("|");
+                        alert('The available stock is only '+myarr[1]);
+                        div_parent.find('.num').val('');
+                        div_parent.find('.sale_off_percent').val(0);
+                        div_parent.find('.total').val(0);
+                    } else {
+                        var price = 0;
+
+                        if (data > 0 && num > 0) price = data/num;
+
+                        div_parent.find('.price').val(Math.round(price*100)/100);
+
+                        var total_price = data;
+
+                        if (data > 0 && sale_off_percent > 0)
+                            total_price = data - Math.round((data*sale_off_percent/100)*100)/100;
+
+                        div_parent.find('.total').val(Math.round(total_price*100)/100).change();
+                    }
+
+                    $('button[type=submit]').prop('disabled', false);
+                    $('form').unbind('submit');
+                    $('.loading').remove();
+                });
+        } else{
+            _self.val('');
+            alert('Please select Warehouse/Retailer!');
+        }
+    });
+}
+
+
+
+function initSelectOrderType(){
+    $(document).off('change', '#type')
+    .on('change', '#type', function(e) {
+        $('.num, .price, .total, .sale_off_percent').val('');
+    });
+}
+
+function initReset(){
+    $(document).off('click', 'button:reset')
+    .on('click', 'button:reset', function(e) {
+        e.preventDefault();
+        $('select, input:text, input.num, input.price').val('');
+        $('textarea').text('');
+
+        $(form).find('select').each(function(i, v)
+        {
+            $(v).trigger('chosen:updated');
+        });
+    });
+}
+
+function initCheckGoodDemo(){//when submit
+
+    var type        = $("#form #type").val(); //get current type
+    var type_demo   = "<?php echo FOR_DEMO;?>";
+    var good_id     = $('[name="good_id[]"]:visible');
+    var num         = $('[name="num[]"]:visible');
+    var arr_good    = [];
+    var arr_num     = [];
+    var d_id        = $("#distributor_id").val();
+
+    $('#dialog').html('');//reset
+
+    //check For order?
+    if( type == type_demo ){
+
+        good_id.each(function(index,elem){
+            arr_good.push($(elem).val());
+        });
+
+        num.each(function(index,elem){
+            arr_num.push($(elem).val());
+        });
+
+        $.ajax({
+            type: 'post',
+            url: '/get/check-good-demo',
+            data: {'good_id':arr_good,'num':arr_num,'d_id':d_id},
+            error: function(){
+                alert('check demo error');
+            },
+            success: function(data){
+                if(data.status == false)
+                {
+                    alert('get data check demo fail!');
+                }else{
+                    var $table = $('<table>',{class:'table'});
+                    var tr = '';
+                    var msg = '<div colspan=3 style="color: red">*This retailer has ordered above demo products, please confirm customer!</div>';
+                    $table.append(
+                        +'<thead>'
+                            +'<tr>'
+                                +'<td>Product</td>'
+                                +'<td>Avaiable</td>'
+                                +'<td>Over</td>'
+                            +'</tr>'
+                        +'</thead>'
+                    );
+
+                    if(data.result.length){
+
+                        $.each(data.result,function(index){
+                            tr += '<tr>'
+                                +'<td>'+this.name+'</td>'
+                                +'<td>'+this.avaiable+'</td>'
+                                +'<td>'+this.over+'</td>'
+                                +'</tr>';
+                        });
+
+                        $table.append(tr);
+                        $('#dialog').append(msg);
+                        $('#dialog').append($table[0]);
+
+                        $('#dialog').dialog({
+                            buttons:{
+                                'Close':function(){
+                                    $(this).dialog('close');
+                                },
+                                'Ignore': function(){
+                                    check_gift();
+                                    $(this).dialog('close');
+                                }
+                            }
+                        });
+                        $("#dialog").dialog("open");
+
+                    }else{
+                        check_gift();
+                    }
+                }
+            }//End success
+        });//End ajax
+    }else{
+        check_gift();
+    }
+
+}
+
+function addRowNVMM(){
+    $('.add_row_nvmm').live('click',function(){
+        var _self = $(this);
+        var d_id = $("#distributor_id").val();
+        var nvmm =  '';
+        if( d_id == <?php echo OPPO_STAFF;?> ){
+            nvmm = $('.wrap_nvmm .info_nvmm');
+        }else if(d_id == <?php echo OPPO_INGAME;?>) {
+            nvmm = $('.wrap_nvmm .info_ingame');
+        }
+
+        var div_add_row = _self.parent().parent().parent();
+        $(div_add_row).append(nvmm.clone());
+
+    });
+}
+
+function removeRowNVMM(){
+    $('#form .remove_nvmm').live('click',function(){
+        console.log('cái nồi');
+        $(this).parent().parent().remove();
+    });
+}
+
+function add_product_color_key_nvmm(){
+    $("#form .good_id").each(function(index,value){
+        var row = $(this).closest('.row');
+        var good_id = $(row).find('.good_id').val();
+        var good_color = $(row).find('.good_color').val();
+        var key = good_id+'_'+good_color;
+        $(row).find('.product_color_key').val(key);
+        console.log(key);
+    });
+}
+
+//Khi chọn select area hoặc service center
+function initSelectAreaService(){
+    $('.addr_nvmm').each(function(i,v){
+        var current = $(this).val();
+        if(current != ''){
+            $(".addr_nvmm").not(this).attr('required',false);
+        }
+    });
+
+    $('.addr_nvmm').live('change',function(){
+        $(".addr_nvmm").attr('required',true);
+        var current = $(this).val();
+        $(".addr_nvmm").not(this).val("");
+        if(current == '' || current == 0){
+            $(".addr_nvmm").attr('required',true);
+        }else{
+            $(".addr_nvmm").not(this).attr('required',false);
+        }
+    })
+}
+
+// tao remark tu dong cho nvmm
+function autoRemarkForStaff(){
+    $("#btn_auto_remark").live('click',function(){
+        var d_id = $("#distributor_id").val();
+        $("#form .good_id").each(function(index,value){
+            var row = $(this).closest('.row');
+            var shipment_id = $('.shipment_id').val();
+            var good_id = $(row).find('.good_id').val();
+            var good_color = $(row).find('.good_color').val();
+            var cat_id = $(row).find('.cat_id').val();
+            var type = $(row).find('.sale_off_percent option:selected').text();
+            var all_staff = $(row).find('.id_staff');
+            var all_num = $(row).find('.staff_num');
+            var all_ingame = $(row).find('.name_staff_ingame');
+            var all_ingame_cmndd = $(row).find('.cmnd_staff_ingame');
+            var shipment_type = $(row).find('.shipment_type');
+            var remark = '';
+
+            remark = 'ส่วนลด ' + type + '';
+            var str_cat = ' máy cho ';
+            if(shipment_id === undefined){
+                shipment_id = '';
+            }
+
+            if(shipment_id != ''){
+                remark = 'Lô thanh lý ' + $('.shipment_id option:selected').html() + ': ';
+            }
+
+            if(cat_id == 12){
+                str_cat = ' cái cho ';
+            }
+
+            if(d_id == <?php echo OPPO_STAFF;?>){
+                $(all_staff).each(function(i,v){
+                    var _num = $(all_num[i]).val();
+                    var _name = $(v).attr('data-name');
+                    var _type_name = '';
+                    if(shipment_id != ''){
+                        _type_name = ' loại ';
+                        var _type = $(shipment_type[i]).val();
+                        if(_type == 1){
+                            _type_name += 'A ';
+                        }else if(_type == 2){
+                            _type_name += 'B ';
+                        }else if(_type == 3){
+                            _type_name += 'C ';
+                        }else if(_type == 4){
+                            _type_name += 'D ';
+                        }else{
+                            _type_name = '';
+                        }
+                    }
+                    remark += _num + _type_name + str_cat+ _name + '; ';
+                });
+            }
+
+            if(d_id == <?php echo OPPO_INGAME;?>){
+
+                $(all_ingame).each(function(i,v){
+                    var _num = $(all_num[i]).val();
+                    var _name = $(v).val()+ ' (' + $(all_ingame_cmndd[i]).val()+ ')';
+                    var _type_name = '';
+                    if(shipment_id != ''){
+                        _type_name = ' loại ';
+                        var _type = $(shipment_type[i]).val();
+                        if(_type == 1){
+                            _type_name += 'A ';
+                        }else if(_type == 2){
+                            _type_name += 'B ';
+                        }else if(_type == 3){
+                            _type_name += 'C ';
+                        }else if(_type == 4){
+                            _type_name += 'D ';
+                        }else{
+                            _type_name = '';
+                        }
+                    }
+                    remark += _num + _type_name + str_cat+ _name + '; ';
+                });
+            }
+
+            $(row).find('.text').val(remark);
+
+        });
+    })
+}
+
+function ResetNvmm(){
+    $('#form .wrap_list_staff').hide();
+    $('.btn_add_row_nvmm').hide();
+
+    $('#form .info_nvmm').remove();
+    $('.info_nvmm').hide();
+
+    $('#form .info_ingame').remove();
+    $('.info_ingame').hide();
+
+    $('#div-number-sales').remove();
+}
+
+function show_nvmm(option){
+    if(option == 1){
+        $('#form .wrap_list_staff').show();
+        $('.btn_add_row_nvmm').show();
+
+        $('#form .info_nvmm').remove();
+        $('.info_nvmm').show();
+
+        $('#form .info_ingame').remove();
+        $('.info_ingame').hide();
+
+        $('#div-number-sales').remove();
+        var old_div = $('.div-number-sales');
+        var new_div = old_div.clone();
+        new_div.attr('id', 'div-number-sales');
+        new_div.insertAfter($('#form .wrap_list_staff')).show();
+    }else{
+        $('#form .wrap_list_staff').hide();
+        $('.btn_add_row_nvmm').show();
+
+        $('#form .info_nvmm').remove();
+        $('.info_nvmm').hide();
+
+        $('#form .info_ingame').show();
+        $('.info_ingame').show();distributor_id
+
+        $('#div-number-sales').remove();
+        var old_div = $('.div-number-sales');
+        var new_div = old_div.clone();
+        new_div.attr('id', 'div-number-sales');
+        new_div.insertAfter($('#form .wrap_list_staff')).show();
+
+    }
+}
+
+function changePartner(){
+    $("#for_partner").live('change',function(){
+        var current = $(this).val();
+        if(current == 2){
+            var d_id = $('#distributor_id').val();
+            if(d_id == <?php echo OPPO_STAFF?>){
+                show_nvmm(1);
+            }else{
+                show_nvmm(2);
+            }
+        }else{
+            ResetNvmm();
+        }
+
+    })
+}
+
+function  show_shipment_type(){
+    //NHAN VIEN MUA MAY
+    <?php if(!My_Staff_Group::create_for_partner($this->userStorage->id,$this->userStorage->group_id)):?>
+        $('.wrap_shipment_type').hide();
+    <?php endif?>
+}
+
+//Tanong
+
+function DiscountCreditNote(){
+    var distributor_id = $('#distributor_id').val();
+    var creditnote_sn_list='';
+
+    //alert(distributor_id);
+    $.get("/get/load-credit-note",
+        {distributor_id : distributor_id , init_params :creditnote_sn_list.slice(0, -1)}
+        ,function(data,status){
+            //alert(data);
+            var data = $.parseJSON(data);
+            //alert(data);
+            if (data){
+                //alert(data);
+                var obj = data
+                
+                console.log(obj);
+                //alert(obj.length);
+                $('#btn-discount-creditnote').removeAttr('disabled');
+            }
+            else
+            {
+                alert(data.error);
+            }
+        });
+}
+function initAddDiscountCreditNote(){
+    $('#btn-discount-creditnote').click(function(e){
+
+        var distributor_id = $('#distributor_id').val();
+
+        if(!distributor_id)
+        {
+            alert('Please insert Distributor');
+            return false;
+        }
+
+        //alert('Add New');
+        var old_div = $('.div-discount-credit-note');
+        var new_div = old_div.clone();
+        new_div.removeClass('div-discount-credit-note').find('select, input, textarea').removeAttr('disabled');
+        new_div.insertBefore($(this).parent().parent().parent()).show();
+
+        var creditnote_sn_list='';
+        $('.discount_creditnote').each(function(){
+            var creditnote_sn = $(this).find('option:selected').text();
+            if(creditnote_sn!='Please select'){
+                creditnote_sn_list +="'"+$.trim(creditnote_sn)+"',";
+            }
+        });
+
+        
+        //alert(distributor_id);alert(creditnote_sn_list);
+        $.get("/get/load-credit-note",
+            {distributor_id : distributor_id , init_params :creditnote_sn_list.slice(0, -1)}
+            ,function(data,status){
+                //alert(data);
+                var data = $.parseJSON( data );
+                
+                if (data){
+                    var obj = data
+
+                    //console.log(obj);
+                    new_div.find('.discount_creditnote').html('<option value="0">Please select</option>');
+                    for (var i = 0; i < obj.length; i++) {
+                            new_div.find('.discount_creditnote').append('<option value="'+obj[i]['balance_total']+'">'+obj[i]['creditnote_sn']+'</option>');
+                    }
+                }
+                else
+                {
+                new_div.find('.discount_creditnote').html('<option value="0">Please select</option>');
+                    //alert(data.error);
+                }
+            });
+
+       Auto_Summary_TotalPrice();
+       
+       
+
+        return false;
+    });
+}
+
+//Tanong
+function initSelectDiscountCreditNote()
+{
+    $(document).off('change', '.discount_creditnote')
+    .on('change', '.discount_creditnote', function(e) {
+        var div_parent = $(this).parent().parent().parent();
+        var creditnote_sn = div_parent.find('.discount_creditnote option:selected').text();
+        var price_discount = div_parent.find('.discount_creditnote option:selected').val();
+
+        div_parent.find('.price_balance_discount_creditnote').val(price_discount);
+        div_parent.find('.price_use_discount_creditnote').val(price_discount);
+        div_parent.find('.ids_discount_creditnote').val(creditnote_sn);
+        
+        Auto_Summary_TotalPrice();
+    });
+}
+
+function initChangeDiscount()
+{
+    $(document).off('change', '.price_discount')
+    .on('change', '.price_discount', function(e) {
+        var div_parent = $(this).parent().parent().parent();
+        Auto_Summary_TotalPrice();
+    });
+}
+
+//Tanong
+function initChangeDeliveryFee()
+{
+    $(document).off('change', '.delivery_fee')
+    .on('change', '.delivery_fee', function(e) {
+        Auto_Summary_TotalPrice();
+    });
+}
+
+//Tanong
+function initChangeDiscountCreditNote()
+{
+    $(document).off('change', '.price_use_discount_creditnote')
+    .on('change', '.price_use_discount_creditnote', function(e) {
+        //var div_parent = $(this).parent().parent().parent();
+        var use_discount = parseFloat($(this).val());
+        var total_discount = $('.price_balance_discount_creditnote').val();
+        //alert(total_discount);
+        if(total_discount<use_discount){
+            alert('ส่วนลดที่ใช้มากกว่าส่วนลดทั้งหมด');
+            $(this).val(0);
+            return;
+        }
+        Auto_Summary_TotalPrice();
+    });
+}
+
+
+//Tanong
+function GetSalesOrder_Amount(d_id)
+{  
+    var total_amount_all=0;
+    $.get("/get/load-sales-order-amount",{distributor_id : d_id}
+            ,function(data,status){
+                var data = $.parseJSON(data);
+                if (data){                
+                    total_amount_all=data;
+                    $('#total_amount_all').val(total_amount_all);
+                    //alert(total_amount_all);
+                }
+                else
+                {
+                    alert(data.error);
+                    $('#total_amount_all').val(0);
+                }
+            });
+    //Auto_Summary_TotalPrice();
+    return parseFloat(total_amount_all);
+}
+
+//Tanong
+function GetDelivery_Fee_All(d_id)
+{  
+    var delivery_fee_all=0;
+    $.get("/get/load-delivery-fee-all",{distributor_id : d_id}
+            ,function(data,status){
+                var data = $.parseJSON(data);
+                if (data){   
+                //alert(data);                
+                    delivery_fee_all=data;
+                    $('#delivery_fee_all').val(delivery_fee_all);
+                   // alert(delivery_fee_all);
+                }
+                else
+                {
+                    alert(data.error);
+                    $('#delivery_fee_all').val(0);
+                }
+            });
+    //Auto_Summary_TotalPrice();
+    return parseFloat(delivery_fee_all);
+}
+
+//Tanong
+function GetProduct_Order(d_id,sales_sn,good_id,order_date)
+{  
+    var product_total_qty=100;
+    $('#product_total_qty').val(product_total_qty).change();
+    $.get("/get/load-product-order",{distributor_id : d_id,sales_sn : sales_sn,good_id : good_id,order_date : order_date}
+            ,function(data,status){
+            	//alert(data);
+                var data = $.parseJSON(data);
+                if (data){   
+                  //  product_total_qty = parseFloat(data); 
+
+                    product_total_qty = parseFloat(data.split(',').join(''));
+
+                    
+			        if(!isNaN(product_total_qty)){
+			            $('#product_total_qty').val(product_total_qty).change();
+			            //alert(product_total_qty);
+			        }else{
+			        	$('#product_total_qty').val(100).change();
+			        }
+			        //alert($('#product_total_qty').val());
+                    
+                }
+                else
+                {
+                    alert(data.error);
+                    $('#product_total_qty').val(product_total_qty).change();
+                }
+
+            });  
+            
+}
+
+function GetDistributor_no_check_limit(distributor_id,sales_sn,good_id,order_date)
+{  
+    if(good_id==142){ // F1S
+        $('#distributor_no_check_limit').val(0);
+        $.get("/get/load-distributor-no-check-limit",{distributor_id : distributor_id,good_id : good_id}
+                ,function(data,status){
+            
+            var data = $.parseJSON(data);
+            //alert(data);
+            if (data){   
+                if(data==0){
+                    /*---------Get Good QTY------------*/
+                    GetProduct_Order(distributor_id,sales_sn,good_id,order_date);
+                    $('#distributor_no_check_limit').val(0).change();
+                }else{
+                    $('#distributor_no_check_limit').val(1).change();
+                }
+            }else{
+                $('#distributor_no_check_limit').val(0).change();
+            }
+        });    
+
+    }
+}
+
+//Tanong
+function Auto_Summary_TotalPrice()
+{  
+   var distributor_id = $('#distributor_id').val(); 
+   var ext_vat_product_total_amount=0;   var ext_vat_delivery=0;
+   var ext_vat_price_discount=0;   var ext_vat_total_amount=0;   var vat_amount=0;
+
+   var in_vat_price_discount=0;
+   var in_vat_total_amount=0;
+
+    var total_amount=0;var vat_amount=0;var priceall=0;
+    var price_discount=0;var price_total=0;var delivery_fee=0;
+    //price_total = $('#txt_sum_total').val();
+
+     $('.total').each(function(){
+        var totals = parseFloat($(this).val().split(',').join(''));
+        if(!isNaN(totals)){
+            price_total += totals;
+        }
+    });
+
+    $('.total_bvg').each(function(){
+        var totals = parseFloat($(this).val().split(',').join(''));
+        if(!isNaN(totals)){
+            price_discount += totals;
+        }
+    });
+
+    $('.price_discount').each(function(){
+        var totals = parseFloat($(this).val().split(',').join(''));
+        if(!isNaN(totals)){
+            price_discount += totals;
+        }
+    });
+
+    $('.price_use_discount_creditnote').each(function(){
+        var totals = parseFloat($(this).val().split(',').join(''));
+        if(!isNaN(totals)){
+            price_discount += totals;
+        }
+    });
+
+    $('.delivery_fee').each(function(){
+        var totals = parseFloat($(this).val().split(',').join(''));
+        if(!isNaN(totals)){
+            delivery_fee += totals;
+        }
+    });
+
+//Exc VAT
+    
+    //Delivery Fee < 10000 all sales order per 1 day
+    //delivery_fee_status = 1 : use delivery_fee
+    GetSalesOrder_Amount(distributor_id);
+    GetDelivery_Fee_All(distributor_id);
+
+    var total_amount_all=0;var delivery_fee_all=0;var sales_order='';
+    var chk_total_amount_all=0;
+
+   in_vat_total_amount = (price_total- price_discount)+delivery_fee;
+
+   total_amount_all = $('#total_amount_all').val();
+   delivery_fee_all = $('#delivery_fee_all').val();
+   sales_order = $('#sales_order').val();
+  
+   chk_total_amount_all = parseFloat(total_amount_all)+in_vat_total_amount;
+
+    if(sales_order!=''){
+       if(delivery_fee>0){
+            $('.box_delivery_fee').show();
+            $('#delivery_fee_status').val(1);
+       }
+    }else{
+       if(delivery_fee_all<=0){
+           if(sales_order==''){
+                if(chk_total_amount_all<10000){
+
+                    var count_access_cat_id = 0;count_phone_cat_id = 0;
+                    $('.cat_id').each(function(){
+
+                        var div_parent = $(this).parent().parent().parent();
+                        var good_id = div_parent.find('.good_id option:selected').val();
+                        var cat_id = $(this).val();
+                        if(cat_id==12 && good_id != 127 && good_id != 141){
+                          count_access_cat_id+=1;
+                        }
+                        if(cat_id==11){
+                          count_phone_cat_id+=1;
+                        }
+                    });
+                    if(count_access_cat_id >0 && count_phone_cat_id <=0){ // chk access only in order
+                      if(chk_total_amount_all<2000){ // chk total amount access <2000 show fee delivery
+                        $('.box_delivery_fee').show();
+                        $('#delivery_fee_status').val(1);
+                      }else{
+                        $('.box_delivery_fee').hide();
+                        delivery_fee=0;
+                        $('#delivery_fee').val(0);
+                        $('#delivery_fee_status').val(0);
+                      }
+                    }else{
+                      $('.box_delivery_fee').show();
+                      $('#delivery_fee_status').val(1);
+                    }          
+                }else{
+                    $('.box_delivery_fee').hide();
+                    delivery_fee=0;
+                    $('#delivery_fee').val(0);
+                    $('#delivery_fee_status').val(0);
+                }
+            }else{
+                $('.box_delivery_fee').show();
+                $('#delivery_fee_status').val(1);
+            }
+        }else{
+            if(sales_order==''){
+                if(chk_total_amount_all<10000){
+                    $('.box_delivery_fee').show();
+                    $('#delivery_fee_status').val(1);
+                }else{
+                    $('.box_delivery_fee').hide();
+                    delivery_fee=0;
+                    $('#delivery_fee').val(0);
+                    $('#delivery_fee_status').val(0);
+                }
+            }else{
+                $('.box_delivery_fee').show();
+                $('#delivery_fee_status').val(1);
+            }
+        }
+    }
+
+   //alert(total_amount_all);
+   //total_amount_all=1000;
+   ext_vat_price_total=price_total/1.07;
+   ext_vat_price_discount=(price_discount/1.07)*-1;
+   ext_vat_delivery= delivery_fee/1.07;
+
+   ext_vat_total_amount = (delivery_fee+price_total);
+
+   ext_vat_product_total_amount=ext_vat_total_amount/1.07;  
+   vat_amount= ext_vat_total_amount - ext_vat_product_total_amount;
+
+   in_vat_total_amount = (price_total - price_discount+delivery_fee);
+  //alert(ext_vat_product_total_amount);
+//Ext VAT 
+    $('#total_total').text(roundNumber(ext_vat_product_total_amount,2));
+    $('#ext_vat_delivery').text(roundNumber(ext_vat_delivery,2));
+    $('#vat_amount').text(roundNumber(vat_amount,2));
+    $('#ext_sum_discount_price').text((roundNumber(ext_vat_price_discount,2)));
+    $('#total_amount').text(roundNumber(ext_vat_total_amount,2));
+
+//Inc VAT
+    $('#sum_discount_price').text(roundNumber((price_discount*-1),2));
+    $('#in_vat_delivery').text(roundNumber(delivery_fee,2));
+    $('#priceall').text(roundNumber(in_vat_total_amount,2));
+
+}
+
+//Tanong
+ function roundNumber(num, dec) {
+   var result = Math.round(num*Math.pow(10,dec))/Math.pow(10,dec);
+   return Number(result).toLocaleString('en',{ minimumFractionDigits: 2 });
+
+   //tmp.toLocaleString('en',{ minimumFractionDigits: 4 });
+
+}
+
+
+
+</script>

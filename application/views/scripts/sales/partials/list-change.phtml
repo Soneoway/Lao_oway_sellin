@@ -1,0 +1,98 @@
+<?php
+
+function product_price($priceFloat) {
+    $symbol = ' THB';
+    $symbol_thousand = ',';
+    $decimal_place = 2;
+    $price = number_format($priceFloat, $decimal_place, '.', $symbol_thousand);
+    return $price;
+}
+
+?>
+<?php $userStorage = Zend_Auth::getInstance()->getStorage()->read(); ?>
+<table class="table table-bordered">
+    <thead>
+        <tr>
+            <?php echo $this->sorting(array(
+               '#',
+               'Imei'            => 'Imei',
+               'Do Number'        => 'Do Number',
+               'Invoice Number',
+               'Tranfer IN ( Store Name )',
+               'Tranfer OUT ( Store Name )',
+               'Distibutor / Warehouse ( IN )',
+               'Distibutor / Warehouse ( OUT )',
+               'Remark',
+               'Created By',
+               'Created At',
+               // 'Action'
+           ),
+           $this->url, $this->sort, $this->desc); ?>
+       </tr>
+   </thead>
+   <tbody>
+    <?php
+    if (isset($this->change) and $this->change) :
+        foreach ($this->change as $k=>$m): 
+            ?>
+            <tr class="accordion-heading">
+               <td><!-- <a href="#id" class="collapse_a btn btn-default btn-small" id="m_<?php echo $m['sn'] ?>">+</a> --></td>
+               <td><?php echo $m['imei_sn']?></td>
+               <td><?php echo $m['do_number'] ?></td>
+               <td><?php echo $m['invoice_number'] ?></td>
+
+               <td><?php echo $this->store[$m['new_store']] ?></td>
+               <td><?php echo $this->store[$m['old_store']]?></td>
+               <td>
+                <?php 
+                if(empty($m['new_distibutor'])) {
+                    echo $this->warehouse[$m['change_warehouse']];
+                }else{
+                    echo $this->distibutor[$m['new_distibutor']];
+                }
+                ?>
+                </td>
+                <td><?php echo $this->distibutor[$m['old_distibutor']] ?></td>
+
+
+            <td><?php echo $m['remark'] ?></td>
+            <td><?php echo $this->staff[$m['change_by']] ?></td>
+            <td><?php echo $m['change_at'] ?></td>
+           <!--  <td>
+                <?php if($userStorage->id == 1): ?>
+                    <a title="Rollback" class="confirmLink" href="/sales/del-change?id=<?php echo $m['id'];?>"> <i class="icon-refresh"></i>
+                <?php endif; ?></a>
+            </td> -->
+        </tr>
+    <?php endforeach;?>
+<?php endif; ?>
+</tbody>
+</table>
+<div class="paging">
+    <?php echo $this->paging($this->total, $this->limit, $this->offset, $this->url);?>
+</div>
+
+<script type="text/javascript" src="/js/jquery-ui-1.8.12.custom.min.js"></script>
+<link rel="stylesheet" type="text/css" href="/css/jquery-ui-1.8.12.custom.css"/>
+<?php echo $this->load();?>
+<?php echo $this->confirm();?>
+<script>
+    $('.lock').click(function(e){
+        e.preventDefault();
+        alert('Sorry,This information is blocked...You can not delete payment has been made or has been the storage of information!');
+    });
+
+    $('.collapse_a').each(function(){
+        var _this = $(this);
+        var _this_id = _this.attr('id');
+        var $coll = $('.'+_this_id);
+
+        _this.click(function(){
+
+            $coll.toggle();
+            if ($coll.is(':visible'))
+                _this.html('-');
+            else _this.html('+');
+        });
+    });
+</script>

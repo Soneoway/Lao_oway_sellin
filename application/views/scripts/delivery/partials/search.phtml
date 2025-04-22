@@ -1,0 +1,297 @@
+<link rel="stylesheet" href="<?php echo HOST ?>css/bootstrap-multiselect.css" type="text/css"/>
+<link rel="stylesheet" type="text/css" href="<?php echo HOST ?>css/jquery-ui-1.8.12.custom.css"/>
+<link href="<?php echo HOST ?>css/jquery.tagit.css" rel="stylesheet" type="text/css">
+<link href="<?php echo HOST ?>css/tagit.ui-zendesk.css" rel="stylesheet" type="text/css">
+
+<style type="text/css">
+    #d_id {
+        left: 140px !important;
+    }
+
+    [class*="span"] {
+        margin-left: 10px;
+    }
+
+    #d_id {
+        margin-bottom: 0;
+    }
+
+    .span2{
+        text-align: right;
+        padding-right: 20px;
+        width: 130px !important;
+    }
+</style>
+
+<form class="form-search form-horizontal" method="get" action="<?php echo HOST ?>delivery">
+    <div class="row">
+        <div class="span5">
+            <div class="control-group">
+                <label for="sn" class="control-label">Sales Order Number</label>
+                <div class="controls">
+                    <textarea id="sn" name="sn" class="search-query form-control"
+                        rows="7"><?php if (isset($this->params['sn'])) echo trim($this->params['sn']); ?></textarea>
+                </div>
+            </div>
+
+            <div class="control-group">
+                <label for="warehouse_id" class="control-label">Warehouse</label>
+                <div class="controls">
+                    <select id="warehouse_id" class="multiselect" name="warehouse_id[]" multiple="multiple">
+                        <?php if ($this->warehouses): foreach ($this->warehouses as $id=>$name):?>
+                            <option value="<?php echo $id;?>" <?php if (isset($this->params['warehouse_id']) and ( (is_array($this->params['warehouse_id']) and in_array($id, $this->params['warehouse_id'])) || $id==$this->params['warehouse_id']) ):?> selected<?php endif;?>><?php echo str_replace('Warehouse_', ' ', $name);?></option>
+                        <?php endforeach; endif;?>
+                    </select>
+                </div>
+            </div>
+
+            <div class="control-group">
+                <label for="out_time_from" class="control-label">OUT Time From</label>
+                <div class="controls">
+                    <input type="text" class="form-control search-query date" id="out_time_from" name="out_time_from" value="<?php isset($this->params['out_time_from']) and printf($this->params['out_time_from']);?>">
+                </div>
+            </div>
+            <div class="control-group">
+                <label for="out_time_to" class="control-label">OUT Time To</label>
+                <div class="controls">
+                    <input type="text" class="form-control search-query date" id="out_time_to" name="out_time_to" value="<?php isset($this->params['out_time_to']) and printf($this->params['out_time_to']);?>">
+                </div>
+            </div>
+        </div>
+
+        <div class="span5">
+
+            <div class="control-group">
+             <label class="span2" for="rank">ประเภทร้านค้า<span style="color: red">*</span></label>
+                
+                    <select id="rank" name="rank" class="rank span3">
+                        <option value="">---</option>
+                        <option value="1" <?php if( isset($this->distributor['rank']) and $this->distributor['rank']==1 ) { ?> selected<?php }?>>1. ORG-WDS(1)</option>
+                        <option value="2" <?php if( isset($this->distributor['rank']) and $this->distributor['rank']==2 ) { ?> selected<?php }?>>2. ORG(2)</option>
+                        <option value="5" <?php if( isset($this->distributor['rank']) and $this->distributor['rank']==5 ) { ?> selected<?php }?>>3. ORG-Dtac/Advice(5)</option>
+                        <option value="6" <?php if( isset($this->distributor['rank']) and $this->distributor['rank']==6 ) { ?> selected<?php }?>>4. ORG-Lotus/Power by(6)</option>
+                        <option value="7" <?php if( isset($this->distributor['rank']) and $this->distributor['rank']==7 ) { ?> selected<?php }?>>5. Dealer(7)</option>
+                        <option value="8" <?php if( isset($this->distributor['rank']) and $this->distributor['rank']==8 ) { ?> selected<?php }?>>6. HUB(8)</option>
+                        <option value="9" <?php if( isset($this->distributor['rank']) and $this->distributor['rank']==9 ) { ?> selected<?php }?>>7. Laos(9)</option>
+                        <option value="3" <?php if( isset($this->distributor['rank']) and $this->distributor['rank']==3 ) { ?> selected<?php }?>>8. Online and Staff(3)</option>
+                        <option value="10" <?php if( isset($this->distributor['rank']) and $this->distributor['rank']==10 ) { ?> selected<?php }?>>9. Brand Shop/Service(10)</option>
+                        <option value="11" <?php if( isset($this->distributor['rank']) and $this->distributor['rank']==11 ) { ?> selected<?php }?>>10. King Power(11)</option>
+                        <option value="12" <?php if( isset($this->distributor['rank']) and $this->distributor['rank']==12 ) { ?> selected<?php }?>>11. Jaymart(12)</option>
+                        <option value="13" <?php if( isset($this->distributor['rank']) and $this->distributor['rank']==13 ) { ?> selected<?php }?>>12. Brand Shop By Dealer(13)</option> 
+                        <option value="14" <?php if( isset($this->distributor['rank']) and $this->distributor['rank']==14 ) { ?> selected<?php }?>>13. KR Dealer(14)</option> 
+                        <option value="15" <?php if( isset($this->distributor['rank']) and $this->distributor['rank']==15 ) { ?> selected<?php }?>>14. TRUE(15)</option> 
+                    </select>
+                
+             </div>       
+                
+        <div class="retailer_name_list"></div>
+
+            <div class="control-group">
+                <label for="area_id" class="control-label">Area</label>
+                <div class="controls">
+                    <select name="area_id[]" id="area" class="multiselect" multiple="multiple">
+                        <?php if (isset($this->areas) && $this->areas): foreach ($this->areas as $id=>$name):?>
+                            <option value="<?php echo $id;?>" 
+                                <?php if (isset($this->params['area_id']) 
+                                    and (
+                                         (is_array($this->params['area_id']) && in_array($id, $this->params['area_id']))
+                                        || $id == $this->params['area_id']
+                                    ) ):?> 
+                                        selected="selected"<?php endif;?>
+                            ><?php echo $name;?></option>
+                        <?php endforeach; endif;?>
+                    </select>
+                </div>
+            </div>
+
+            <div class="control-group">
+                <label for="region" class="control-label">Province</label>
+                <div class="controls">
+                    <select name="region_id[]" id="region" class="multiselect" multiple="multiple">
+                        <?php if (isset($this->regions) && $this->regions): foreach ($this->regions as $id=>$name):?>
+                            <option value="<?php echo $id;?>" 
+                                <?php if (isset($this->params['region_id']) 
+                                    and (
+                                         (is_array($this->params['region_id']) && in_array($id, $this->params['region_id']))
+                                        || $id == $this->params['region_id']
+                                    ) ):?> 
+                                        selected="selected"<?php endif;?>
+                            ><?php echo $name;?></option>
+                        <?php endforeach; endif;?>
+                    </select>
+                </div>
+            </div>
+
+            <div class="control-group">
+                <label for="district" class="control-label">District</label>
+                <div class="controls">
+                    <select name="district_id[]" id="district" class="multiselect" multiple="multiple">
+                        <?php if (isset($this->districts) && $this->districts): foreach ($this->districts as $id=>$name):?>
+                            <option value="<?php echo $id;?>" 
+                                <?php if (isset($this->params['district_id']) 
+                                    and (
+                                         (is_array($this->params['district_id']) && in_array($id, $this->params['district_id']))
+                                        || $id == $this->params['district_id']
+                                    )  ):?> 
+                                        selected="selected"<?php endif;?>
+                            ><?php echo $name;?></option>
+                        <?php endforeach; endif;?>
+                    </select>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <button type="submit" class="btn btn-primary">Search</button>
+    <button type="reset" class="btn btn-warning">Reset</button>
+</form>
+<script type="text/javascript" src="<?php echo HOST ?>js/bootstrap-multiselect.js"></script>
+<script type="text/javascript" src="<?php echo HOST ?>js/jquery-ui-1.8.12.custom.min.js"></script>
+<script src="<?php echo HOST ?>js/tag-it.min.js" type="text/javascript" charset="utf-8"></script>
+<script src="<?php echo HOST?>js/jets.js"></script>
+
+<script>
+options = {
+    selectAllText: 'Select All',
+    includeSelectAllOption: true,
+    includeSelectAllIfMoreThan: 3,
+    disableIfEmpty: true
+};
+
+function multi() {
+    $('.multiselect').multiselect(options);
+}
+
+    $(document).ready(function () {
+        multi();
+
+        <?php if(isset($this->rank)) { ?>
+            $('#rank').val(<?= $this->rank ?>);
+            get_distributor_cached_for_search(<?= $this->rank ?>);
+        <?php }?>
+
+        $('.rank').change(function(event) {
+            get_distributor_cached_for_search($(this).val());
+          });
+
+        function get_distributor_cached_for_search(rank_id){
+
+            var rank_id = rank_id;
+                  $.ajax({
+                      url: '<?php echo HOST ?>get/distributor-cached-for-search',
+                      type: 'POST',
+                      dataType: 'html',
+                      data: {rank_id: rank_id},
+                  })
+                  .done(function(data) {
+                      $('.retailer_name_list').empty();
+                      $('.retailer_name_list').append(data);
+                        var jets = new Jets({
+                        searchTag: '#SearchBox',
+                        contentTag: '#d_id'
+                    });
+                        <?php if(isset($this->d_id)){ ?>
+                            $('#d_id').val(<?= $this->d_id ?>);
+                        <?php }?>
+                      console.log("success");
+                  })
+                  .fail(function() {
+                      console.log("error");
+                  })
+                  .always(function() {
+                      console.log("complete");
+                  });
+
+        }
+
+        $( '.date' ).datepicker({ dateFormat: "dd/mm/yy" });
+
+        $('#cat_id, #good_id').change(function(){
+            $(this).after('<span class="loading"></span>');
+            var _self = $(this);
+            var cat_id = $('#cat_id').val();
+
+            if (_self.attr('id')=='cat_id')
+                $('#good_id').find('option:not(:first)').remove();
+
+            var good_id = $('#good_id').val();
+
+            $('#good_color').find('option:not(:first)').remove();
+
+            $('#num, #price').val('');
+
+            $.get("/get/load",
+                {cat_id: cat_id, good_id: good_id}
+                ,function(data,status){
+                    var data = $.parseJSON( data );
+                    if (data.goods){
+                        var obj = data.goods;
+                        for (var i = 0; i < obj.length; i++) {
+                            $('#good_id').append('<option value="'+obj[i]['id']+'">'+obj[i]['name']+'</option>');
+                        }
+                    }
+                    if (data.colors){
+                        var obj = data.colors;
+                        for (var i = 0; i < obj.length; i++) {
+                            $('#good_color').append('<option value="'+obj[i]['id']+'">'+obj[i]['name']+'</option>');
+                        }
+                    }
+                    _self.nextAll('.loading').remove();
+                });
+        });
+
+        $('#area').change(function(){
+            $('.loading').remove();
+            $(this).next('.btn-group').append('<span class="loading"></span>');
+            var _self = $(this);
+            var area_id = $(this).val();
+            $('#region').find('option').remove();
+            $('#district').find('option').remove();
+
+            $.get("<?php echo HOST ?>get/province-v2",
+                {area_id: area_id}
+                ,function(data,status){
+                    for (i in data)
+                        $('#region').append('<option value="'+i+'">'+data[i]+'</option>');
+
+                    $('#district, #region').multiselect("destroy").multiselect(options);
+                    $('.loading').remove();
+                });
+        });
+
+        $('#region').change(function(){
+            $('.loading').remove();
+            $(this).next('.btn-group').append('<span class="loading"></span>');
+            var _self = $(this);
+            var region = _self.val();
+            $('#district').find('option').remove();
+
+            $.get("/get/district-v2",
+                {province_id: region}
+                ,function(data,status){
+                    for (i in data)
+                        $('#district').append('<option value="'+i+'">'+data[i]+'</option>');
+
+                    $('#district').multiselect("destroy").multiselect(options);
+                    $('.loading').remove();
+                });
+        });
+
+        initTag();
+        initSearchOptionDistributor('d_id', 'SearchBox');
+    });
+
+    function initTag(){
+
+        $('#myTags').tagit({
+            allowSpaces: true,
+            fieldName: 'tags[]',
+            autocomplete: {
+                delay: 0,
+                minLength: 2,
+                source: "<?php echo HOST;?>get/get-tags"
+            }
+        });
+
+    }
+</script>

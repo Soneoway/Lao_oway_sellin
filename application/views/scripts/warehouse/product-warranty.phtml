@@ -1,0 +1,103 @@
+<style type="text/css">
+  table.dataTable thead th, table.dataTable thead td{
+    border-bottom: 0 !important;
+  }
+
+  table.dataTable.no-footer {
+       border-bottom:  0 !important;
+  }
+
+  .table-bordered, .table-bordered>thead>tr>th, .table-bordered>tbody>tr>th, .table-bordered>tfoot>tr>th, .table-bordered>thead>tr>td, .table-bordered>tbody>tr>td, .table-bordered>tfoot>tr>td, .nav-tabs.nav-justified>.active>a, .nav-tabs.nav-justified>.active>a:hover, .nav-tabs.nav-justified>.active>a:focus, .nav-tabs-justified>.active>a, .nav-tabs-justified>.active>a:hover, .nav-tabs-justified>.active>a:focus {
+    border: 1px solid #ddd;
+  }
+
+
+  .table-bordered th {
+    background: -webkit-gradient(linear, left top, left bottom, color-stop(0%,#FAFAFA), color-stop(100%,#E9E9E9)) !important;
+   
+    font-size: 10px;
+    color: #19bc9c;
+    text-transform: uppercase;
+  }
+
+  .date-start-co{
+    margin: 2% 0;
+    font-size: 20px;
+  }
+
+  table.dataTable tbody tr{
+    background-color: #f9f6f1 !important;
+  }
+
+  
+</style>
+<div class="page-header">
+    <h1>Product Warranty</h1>
+</div>
+
+<div class="accordion" id="accordion2">
+    <div class="accordion-group">
+        <div class="accordion-heading">
+            <a class="accordion-toggle collapsed" data-toggle="collapse" data-parent="#accordion2" href="#collapseTwo">
+                Search
+            </a>
+        </div>
+        <div id="collapseTwo" class="accordion-body collapse" style="height: 0px;">
+            <div class="accordion-inner">
+                <?php
+                    echo $this->render('warehouse/partials/warranty_search.phtml');
+                ?>
+            </div>
+        </div>
+    </div>
+</div>
+<div class="score" id="score">
+
+    <div class="date-start-co">Start Date CO : <?=$this->warrantyCO[0]["completed_date"]?></div>
+    
+	<div class="score_co">
+		<center>
+            <div class="box-score-head">
+                <p>Total Change Orders</p>
+            </div>
+			<div class="box-score">
+				<p><?=$this->co_receive_total;?></p>
+			</div>
+		</center>		
+	</div>
+    <div class="score_co">
+        <center>
+            <div class="box-score-head">
+                <p>Remaining IMEIs</p>
+            </div>
+            <div class="box-score">
+                <p><?php echo (int)$this->co_receive_total - (int)$this->po_receive_total;?></p>                
+            </div>
+        </center>
+    </div>
+    <div class="score_po">
+        <center>
+            <div class="box-score-head">
+                <p>New IMEI</p>
+            </div>
+            <div class="box-score">
+                <p><?=$this->po_receive_total;?></p>
+            </div>
+        </center>
+    </div>
+</div>
+
+<div class="table-responsive">
+    <?php
+        echo $this->render('warehouse/partials/warranty_list.phtml');
+    ?>
+</div>
+<script>
+    $(document).ready(function () {
+        $('.form-search button:reset').click(function (e){
+            $('.form-search input, .form-search select').val('');
+            $('.form-search').submit();
+            return false;
+        });
+    });
+</script>

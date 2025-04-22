@@ -1,0 +1,767 @@
+<link rel="stylesheet" type="text/css" href="/css/jquery-ui-1.8.12.custom.css"/>
+<link href="<?php echo HOST ?>css/jquery.tagit.css" rel="stylesheet" type="text/css">
+<link href="<?php echo HOST ?>css/tagit.ui-zendesk.css" rel="stylesheet" type="text/css">
+<style>
+/*    #sn_munti{
+        width: 256px;
+        background-color: #fff;
+        border: 1px solid #ccc;
+        box-shadow: inset 0 1px 1px rgba(0, 0, 0, 0.075);
+        display: inline-block;
+        padding: 4px 6px;
+        margin-bottom: 10px;
+        color: #555;
+        vertical-align: middle;
+        border-radius: 4px;
+        max-width: 100%;
+        line-height: 22px;
+        cursor: text;
+    }*/
+
+    /*#in_munti{
+        width: 256px;
+        background-color: #fff;
+        border: 1px solid #ccc;
+        box-shadow: inset 0 1px 1px rgba(0, 0, 0, 0.075);
+        display: inline-block;
+        padding: 4px 6px;
+        margin-bottom: 10px;
+        color: #555;
+        vertical-align: middle;
+        border-radius: 4px;
+        max-width: 100%;
+        line-height: 22px;
+        cursor: text;
+    }*/
+
+    .icon-imge{
+        padding: 0 20px;
+        cursor: pointer;
+    }
+    .img-slip{
+        cursor: -webkit-zoom-in;
+    }
+    body{
+        font-family: 'Noto Sans Lao', sans-serif;
+    }
+</style>
+<div class="page-header">
+    <h1>List Sales Order ລາຍການສັ່ງຊື້</h1>
+</div>
+<?php
+    if (isset($this->messages_success) and $this->messages_success)
+        foreach ($this->messages_success as $message):
+            echo '<div class="alert alert-success">'.$message.'</div>'; ?>
+            <script>
+                Swal.fire('Done !', '<font style="font-family: Noto Sans Lao">ການດຳເນີນການສຳເລັດ.</font>','success');
+            </script>
+    <?php endforeach;
+
+    if (isset($this->messages) and $this->messages)
+        foreach ($this->messages as $message):
+            echo '<div class="alert alert-error">'.$message.'</div>';?>
+            <script>
+                Swal.fire('Error !', '<font style="font-family: Noto Sans Lao">ການດຳເນີນການບໍ່ສຳເລັດ.</font>','error');
+            </script>
+   <?php     endforeach;
+?>
+<div class="accordion" id="accordion2">
+    <div class="accordion-group">
+        <div class="accordion-heading">
+            <a class="accordion-toggle collapsed" data-toggle="collapse" data-parent="#accordion2" href="#collapseTwo">
+                Search
+            </a>
+        </div>
+        <div id="collapseTwo" class="accordion-body collapse" style="height: 0px;">
+            <div class="accordion-inner">
+                <?php
+                    echo $this->render('sales/partials/search.phtml');
+                ?>
+            </div>
+        </div>
+    </div>
+</div>
+
+<div class="">
+    <?php
+        echo $this->render('sales/partials/list.phtml');
+    ?>
+</div>
+
+    <div class="modal hide" id="editPO">
+        <div class="modal-header">
+            <button class="close" data-dismiss="modal">×</button>
+            <h3>Edit PO</h3>
+        </div>
+        <div class="modal-body">
+            <p>PO</p>
+            <input type="text" name="po" class="po" id="_po" value="">
+            <input type="hidden" name="sn" class="sn" id="_sn" value=""/>
+        </div>
+        <div class="modal-footer"> 
+            <button type="button" class="btn blue" id="save-edit-po" >Save</button>
+            <button type="button" class="btn default" data-dismiss="modal">Close</button>
+        </div>
+    </div>
+
+    <div class="modal hide" id="cancelSO">
+        <div class="modal-header">
+            <button class="close" data-dismiss="modal">×</button>
+            <h3>Mark as Cancel</h3>
+        </div>
+        <div class="modal-body">
+            <p>Remark</p>
+            <textarea  name="remark" required class="remark" style="width: 520px;"></textarea>
+            <input type="hidden" name="sn" class="sn" id="_sn" value=""/>
+        </div>
+        <div class="modal-footer"> 
+            <button type="button" class="btn blue" id="save-remark" >Save</button>
+            <button type="button" class="btn default" data-dismiss="modal">Close</button>
+        </div>
+    </div>
+
+    <div class="modal hide" id ="editCustomer">
+        <div class="modal-header">
+            <button class="close" data-dismiss="modal">×</button>
+            <h3>Edit Customer</h3>
+        </div>
+        <div class="modal-body">
+            
+            <div class="control-group">
+                <label for="invoice_number" class="span2">เลขที่ SO</label>
+                <input type="text" name="snf" class="snf" id="_snf" value="" readonly />
+            </div>
+
+            <div class="control-group">
+                <label for="invoice_number" class="span2">ชื่อลูกค้า</label>
+                <input id="" name="customer_name" type="text" class="input-medium form-control customer_name" >
+        </div>
+        <div class="control-group">
+                <label for="invoice_number" class="span2">เลขผู้เสียภาษี</label>
+                <input id="" name="tax" type="text" class="input-medium form-control tax" onkeypress="number()" minlength="13" maxlength="13">
+        </div>
+        <div class="control-group">
+                <label for="invoice_number" class="span2">ที่อยู่</label>
+                <textarea name="add" class="add"></textarea>    
+        </div>
+            
+        </div>
+        <div class="modal-footer">
+            <!-- <input type="hidden" name="snref" class="snref" value=""/> -->
+            <button type="button" class="btn default" data-dismiss="modal">Close</button>
+            <button type="button" class="btn blue" id="save-edit" >Save</button>
+        </div>
+    </div>
+
+    <div class="modal hide" id="canceRemark">
+        <div class="modal-header">
+            <button class="close" data-dismiss="modal">×</button>
+            <h3>ยกเลิกรายการ</h3>
+        </div>
+        <div class="modal-body " id="remark_">
+       
+            <p><storage>Canceled By : </storage> </p>
+            <p><storage>Canceled date : </storage> </p>
+            <p><storage>Remark : </storage> </p>
+            <p></p>
+    
+        </div>
+        <div class="modal-footer">
+            <button type="button" class="btn default" data-dismiss="modal">Exit</button>
+            <!-- <button type="button" class="btn blue" id="save-remark" >Save Cancel</button> -->
+        </div>
+    </div>
+
+  <div class="modal fade" id="modal-show-payment" role="dialog">
+      <div class="modal-header" align="center">
+      <button type="button" class="close" data-dismiss="modal" aria-hidden="true">×</button>
+      <h3 id="myModalLabel">Payment Slip</h3>
+    </div>
+    <div id="show-img-payment" class="modal-body">
+    
+    </div>
+    <div class="modal-footer">
+      <button class="btn" data-dismiss="modal" aria-hidden="true">Close</button>
+    </div>
+</div>
+
+<script type="text/javascript" src="<?php echo HOST ?>js/jets.js"></script>
+<script type="text/javascript" src="<?php echo HOST ?>js/bootstrap.min.js"></script>
+
+<script src="<?php echo HOST ?>js/tag-it.min.js" type="text/javascript" charset="utf-8"></script>
+<?php echo $this->confirm();?>
+
+<script>
+ // $(window).ready(function() {
+ //        $.ajax({
+ //            type: 'post',
+ //            url: '/tool/corn-stock',
+ //            error: function(){
+
+ //            },
+ //            success: function(data){
+ //                console.log('Success');
+ //            }
+ //        })
+ //    });
+
+    function getMarketDetail(sn){
+        if (! $('#m_'+sn).parent().parent().next().hasClass('accordion-body')){
+            $('#m_'+sn+' .col-sign').html('');
+            $('#m_'+sn+' .img-loading').show();
+
+            $.ajax({
+                type: 'post',
+                url: '/get/market-detail',
+                data: {
+                    'sn': sn,
+                    'list': 'sales',
+                    'params': '<?php echo (isset($this->params) ? serialize($this->params) : '')?>'
+                },
+                error: function(){
+                },
+                success: function(data){
+                    $('.m_'+sn).remove();
+                    $('#m_'+sn).parent().parent().after(data);
+                    $('#m_'+sn).find('.col-sign').html('-');
+                    $('#m_'+sn+' .img-loading').hide();
+                }
+            });
+        }
+    }
+
+    function initTag(){
+
+        $('#myTags').tagit({
+            allowSpaces: true,
+            fieldName: 'tags[]',
+            autocomplete: {
+                delay: 0,
+                minLength: 2,
+                source: "<?php echo HOST;?>get/get-tags"
+            }
+        });
+
+        $('#sn_munti').tagit({
+            fieldName: 'sn_munti[]'
+        });
+
+        $('#in_munti').tagit({
+            fieldName: 'in_munti[]'
+        });
+
+    }
+    $(document).on("click", ".edit-po", function () {
+        var sn = $(this).data('sn');
+        var po = $(this).data('po');
+        
+         $(".modal-body #_sn").val(sn);
+         $(".modal-body #_po").val(po);
+       
+    });
+    $(document).on("click", ".open-cancel", function () {
+        var sn = $(this).data('sn');
+        
+         $(".modal-body #_sn").val(sn);
+       
+    });
+    $(document).on("click", ".open-customer", function () {
+        var sn = $(this).data('snf');
+        
+         $(".modal-body #_snf").val(sn);
+       
+    });
+    $(document).on("click", ".open-remark", function () {
+        sn = $(this).data('sn');
+        $.ajax({
+            url: '<?php echo HOST ?>get/get-mark-cancel',
+            type: 'GET',
+            data: {sn: sn},
+        })
+        .done(function(data) {
+            $('#remark_').html(data);
+            console.log("success");
+        })
+        .fail(function() {
+            console.log("error");
+        })
+        .always(function() {
+            console.log("complete");
+        });
+        
+        
+        
+    });
+   
+    $('#save-remark').click(function(){
+            var sn = $('.sn').val();
+          
+            var remark = $('.remark').val();
+            var _self = $(this);
+
+            if (remark == '') {
+                alert('Please insert remark !')
+                return false;
+            }
+            $.ajax({
+                url: '<?php echo HOST ?>get/mark-cancel-order',
+                type: 'GET',
+                data: {sn: sn,remark:remark},
+            })
+            .done(function(data) {
+                    if (data==0){ //success
+                        alert("ยกเลิกเอกสารเรียบร้อย!");
+                        // 
+                        _self.replaceWith('<span>Canceled</span>');
+                        location.reload();
+                    } else if (data==-1){
+                        alert('Order number is empty!');
+                    } else if (data==-2){
+                        alert('Order number is invalid!');
+                    } else if (data==-3){
+                        alert('Order status is invalid!');
+                    } else if (data==-4){
+                        alert('Cannot update, please try again!');
+                    } else if (data==-5){
+                        alert('You cannot cancel this Order!');
+                    }else if (data==-6){
+                        alert('This order have Create Credit Note! You cannot cancel this Order!');
+                    }
+                    
+                console.log("success");
+            })
+            .fail(function() {
+                console.log("error");
+            })
+            .always(function() {
+                console.log("complete");
+            });
+            
+        });
+
+
+    $('#save-edit').click(function(){
+            var sn = $('.snf').val();
+            var name = $('.customer_name').val();
+            var tax = $('.tax').val();
+            var add = $('.add').val();
+
+            if(name.length > 0){
+                if(name.length < 4){
+                    alert('กรุณาใส่ชื่อลูกค้าให้ถูกต้อง');
+                    return false;
+                }
+            }
+
+            if(tax.length > 0){
+                if(tax.length < 13){
+                    alert('กรุณาใส่เลขผู้เสียภาษี ให้ถูกต้อง');
+                    return false;
+                }
+            }
+
+            var customer =1;
+            // alert(sn+'='+name+'='+tax+'='+add);
+            $('.customer_name').val('');
+            $('.tax').val('');
+            $('.add').val('');
+            $.ajax({
+                url: '<?php echo HOST ?>tool/customer-edit',
+                type: 'POST',
+                data: {sn: sn,name:name,tax:tax,add:add,customer:customer},
+            })
+            .done(function(data) {
+                    if (data==1){ //success
+                        alert("แก้ไขข้อมูลเรียบร้อย!");
+                     $("#editCustomer").modal('hide');  
+                    } else if (data==-1){
+                        alert('ไทม่สามารถแก้ไขข้อมูลได้!');
+                     $("#editCustomer").modal('hide');  
+
+                    } 
+                    
+                console.log("success");
+            })
+            .fail(function() {
+                console.log("error");
+            })
+            .always(function() {
+                console.log("complete");
+            });
+            
+        });
+
+    $('#save-edit-po').click(function(){
+
+        if (!confirm('You confirm to change po')) {
+            return false;
+        }
+
+        var sn = $('.sn').val();
+        var po = $('.po').val();
+        $.ajax({
+            url: '<?php echo HOST ?>tool/edit-po',
+            type: 'POST',
+            data: {sn:sn,po:po},
+        })
+        .done(function(data) {
+                if (data==1){ //success
+                    alert("แก้ไขข้อมูลเรียบร้อย!");
+                 $("#editPO").modal('hide');
+                 location.reload();
+                } else if (data==-1){
+                    alert('ไทม่สามารถแก้ไขข้อมูลได้!');
+                 $("#editPO").modal('hide');  
+
+                } 
+                
+            console.log("success");
+        })
+        .fail(function() {
+            console.log("error");
+        })
+        .always(function() {
+            console.log("complete");
+        });
+        
+    });
+
+    function number() {
+      var key = event.keyCode ? event.keyCode : event.which ? event.which : event.charCode;
+      if ((key<46 || key>57 || key == 47) && (key != 13)) {
+        event.returnValue = false;
+      }
+    }
+
+    $(document).ready(function () {
+
+        <?php for($i=0;$i<=10;$i++){ ?>
+        var retate_current_<?=$i;?> = 0;
+        var retate_<?=$i;?> = 90;
+
+        var zoom_status_<?=$i;?> = 'IN';
+
+        $('#img-slip_<?=$i;?>').live('click',function(event) {
+            if(zoom_status_<?=$i;?> == 'IN'){
+                zoom_status_<?=$i;?> = 'OUT';
+                var width = $('#img-slip_<?=$i;?>').width()+zoom;
+                var modal_width = $('#modal-show-payment').width()+zoom;
+                $('#modal-show-payment').animate({width: modal_width+"px"}, 'slow');
+                $('#img-slip_<?=$i;?>').animate({width: width+"px"}, 'slow');
+                $('#img-slip_<?=$i;?>').css({'cursor':'-webkit-zoom-out'});
+                return false;
+            }
+
+            if(zoom_status_<?=$i;?> == 'OUT'){
+                zoom_status_<?=$i;?> = 'IN';
+                var width = $('#img-slip_<?=$i;?>').width()-zoom;
+                var modal_width = $('#modal-show-payment').width()-zoom;
+                $('#modal-show-payment').animate({width: modal_width+"px"}, 'slow');
+                $('#img-slip_<?=$i;?>').css({'cursor':'-webkit-zoom-in'});
+                $('#img-slip_<?=$i;?>').animate({width: width+"px"}, 'slow');
+                return false;
+            }
+
+        });
+
+        $('#icon-imge-l_<?=$i;?>').live('click',function(event) {
+            retate_current_<?=$i;?> = retate_current_<?=$i;?>-retate_<?=$i;?>;
+
+            $('#img-slip_<?=$i;?>').css({
+                 '-moz-transform':'rotate('+retate_current_<?=$i;?>+'deg)',
+                 '-webkit-transform':'rotate('+retate_current_<?=$i;?>+'deg)',
+                 '-o-transform':'rotate('+retate_current_<?=$i;?>+'deg)',
+                 '-ms-transform':'rotate('+retate_current_<?=$i;?>+'deg)',
+                 'transform':'rotate('+retate_current_<?=$i;?>+'deg)'
+            });
+        });
+
+        $('#icon-imge-r_<?=$i;?>').live('click',function(event) {
+            retate_current_<?=$i;?> = retate_current_<?=$i;?>+retate_<?=$i;?>;
+
+            $('#img-slip_<?=$i;?>').css({
+                 '-moz-transform':'rotate('+retate_current_<?=$i;?>+'deg)',
+                 '-webkit-transform':'rotate('+retate_current_<?=$i;?>+'deg)',
+                 '-o-transform':'rotate('+retate_current_<?=$i;?>+'deg)',
+                 '-ms-transform':'rotate('+retate_current_<?=$i;?>+'deg)',
+                 'transform':'rotate('+retate_current_<?=$i;?>+'deg)'
+            });
+        });
+
+        $('#img-slip_<?=$i;?>').error(function() {
+        $(this).attr('src', 'http://www.nosun.co.za/wp-content/themes/sistina/core/assets/images/no-featured-175.jpg');
+
+        });
+
+        <?php } ?>
+        var zoom = 350;
+
+        var old_width = $('.img-slip').width();
+        var old_modal_width = $('#modal-show-payment').width();
+
+        $('.getImgPaymentOne').click(function(event) {
+
+            $('#show-img-payment').empty();
+
+            <?php for($i=0;$i<=10;$i++){ ?>
+
+            if(zoom_status_<?=$i;?> == 'OUT'){
+                zoom_status_<?=$i;?> = 'IN';
+                var width_<?=$i;?> = $('#img-slip_<?=$i;?>').width()-zoom;
+                var modal_width_<?=$i;?> = $('#modal-show-payment').width()-zoom;
+                $('#modal-show-payment').css({width: modal_width_<?=$i;?>+"px"});
+                $('#img-slip_<?=$i;?>').css({'cursor':'-webkit-zoom-in'});
+                $('#img-slip_<?=$i;?>').css({width: width_<?=$i;?>+"px"});
+              }
+
+              retate_current_<?=$i;?> = 0;
+
+              $('#modal').css({width: old_modal_width+"px"});
+              $('#img-slip_<?=$i;?>').css({width: old_width+"px"});
+
+              $('#img-slip_<?=$i;?>').css({
+                 '-moz-transform':'rotate('+retate_current_<?=$i;?>+'deg)',
+                 '-webkit-transform':'rotate('+retate_current_<?=$i;?>+'deg)',
+                 '-o-transform':'rotate('+retate_current_<?=$i;?>+'deg)',
+                 '-ms-transform':'rotate('+retate_current_<?=$i;?>+'deg)',
+                 'transform':'rotate('+retate_current_<?=$i;?>+'deg)'
+                });
+
+              <?php } ?>
+
+            var sn = $(this).data('sn');   
+            var payment_no = $(this).data('payment_no');
+            
+            $('#modal-show-payment').modal();
+
+            $.ajax({
+                url: '<?php echo HOST.'sales/ajaxgetimgpayment';?>',
+                type: 'POST',
+                data: {sn:sn,payment_no:payment_no},
+            })
+            .done(function(response) {
+                var obj_response = jQuery.parseJSON(response);
+                console.log("success");
+
+                var count_index = 0;
+                $.each(obj_response['img_payment'], function( index, value ) {
+                    // alert( index + ": " + value );
+                    console.log(value);
+                    $('#show-img-payment').append('<table border=0 width="100%"><tr><td style="text-align:center"><img id="img-slip_'+count_index+'" class="img-slip" src="'+value+'" alt="Payment Slip" height="400" width="400"></td></tr></table><div align="center"><span><i class="icon-imge icon-mail-reply icon-3x" id="icon-imge-l_'+count_index+'"></i></span><span><i class="icon-imge icon-mail-forward icon-3x" id="icon-imge-r_'+count_index+'"></i></span></div><br/>');
+
+                    count_index++;
+
+                });
+            });
+        });
+    
+        
+    });
+
+        $('.check_all').change(check_all);
+
+        function check_all(e) {
+            _self = $(e.target);
+            $('.attach-so').prop('checked', _self.is(":checked"));
+        }
+
+        $('#attach-payment').click(function(event) {
+            sn = [];
+            $('.attach-so:checked').each(function(index, el) {
+                sn.push($(el).val());
+            });
+            if(sn.length > 0){
+                var url = "/sales/sales-confirm-order-multi?sn="+sn;
+                window.open(url, '_blank');
+            }
+        });
+
+        $('#create-payment-group').click(function(event) {
+
+            sn = [];
+
+            $('.attach-so:checked').each(function(index, el) {
+                sn.push($(el).val());
+            });
+
+            if(sn.length > 1){
+                var url = "/sales/create-payment-group?sn="+sn.join(',');
+                window.open(url);
+            }
+
+        });
+
+        $('.form-search button:reset').click(function (e){
+            $('.form-search input, .form-search select').val('');
+            $('.form-search').submit();
+            return false;
+        });
+
+        $(".cancel").click(function(e) {
+            e.preventDefault();
+
+            var _self = $(this);
+            var sn = _self.attr('rel');
+
+            $("#dialog").dialog({
+                buttons : {
+                    "Confirm" : function() {
+                        $.post('<?php echo HOST ?>get/mark-cancel-order', {sn: sn}, function(data) {
+                            
+                            if (data==0){ //success
+                                _self.replaceWith('<span>Canceled</span>');
+                            } else if (data==-1){
+                                alert('Order number is empty!');
+                            } else if (data==-2){
+                                alert('Order number is invalid!');
+                            } else if (data==-3){
+                                alert('Order status is invalid!');
+                            } else if (data==-4){
+                                alert('Cannot update, please try again!');
+                            } else if (data==-5){
+                                alert('You cannot cancel this Order!');
+                            }else if (data==-6){
+                                alert('This order have Create Credit Note! You cannot cancel this Order!');
+                            }
+                        });
+                        $(this).dialog("close");
+                    },
+                    "Cancel" : function() {
+                        $(this).dialog("close");
+                    }
+                }
+            });
+
+            $("#dialog").dialog("open");
+        });
+
+        $('.lock').click(function(e){
+            e.preventDefault();
+            alert('Sorry,This information is blocked...You can not delete payment has been made or has been the storage of information!');
+        });
+
+        $('.collapse_a').click(function(){
+            var _this = $(this);
+            var _this_id = _this.attr('id');
+            var sn = _this.attr('rel');
+
+            if (_this.parent().parent().next().hasClass('accordion-body')){
+
+                $('.m_'+sn).toggle();
+
+                if ($('.m_'+sn).is(':visible'))
+                    _this.find('.col-sign'). html('-');
+                else _this.find('.col-sign'). html('+');
+
+            } else {
+                _this.find('.col-sign'). html('');
+
+                getMarketDetail(sn);
+            }
+
+        });
+
+        initTag();
+
+        $( '.date' ).datepicker({ dateFormat: "dd/mm/yy" });
+
+        $("#brand_id").change(function() {
+            $("#good_id").empty();
+            $("#good_id").select2("val", "");
+            $("#good_color").select2("val", "");
+        });
+        
+        $("#cat_id").change(function() {
+            $("#good_id").empty();
+            $("#good_id").select2("val", "");
+            $("#good_color").select2("val", "");
+        });
+
+        $("#good_id").change(function() { 
+            $("#good_color").select2("val", "");
+        });
+
+        $('#cat_id, #good_id, #brand_id').change(function(){
+            $(this).after('<span class="loading"></span>');
+            var div_parent = $(this).parent().parent().parent();
+            var _self = $(this);
+            var cat_id = $('#cat_id').val();
+            var brand_id = $('#brand_id').val();
+
+            if (_self.attr('id')=='cat_id')
+                $('#good_id').find('option:not(:first)').remove();
+
+            var good_id = $('#good_id').val();
+
+            $('#good_color').find('option:not(:first)').remove();
+
+            $('#num, #price').val('');
+
+            $.get("/get/load",
+                {cat_id: cat_id, good_id: good_id, brand_id: brand_id}
+                ,function(data,status){
+                    var data = $.parseJSON( data );
+
+                    if (data.goods){
+                        var obj = data.goods;
+                        div_parent.find('#good_id').html('<option value="0">Please select</option>');
+                        for (var i = 0; i < obj.length; i++) {
+                            $('#good_id').append('<option value="'+obj[i]['id']+'">'+obj[i]['brand_name']+' '+obj[i]['name']+'</option>');
+                        }
+                    }
+
+                    if (data.colors){
+                        var obj = data.colors;
+                        for (var i = 0; i < obj.length; i++) {
+                            $('#good_color').append('<option value="'+obj[i]['id']+'">'+obj[i]['name']+'</option>');
+                        }
+                    }
+                   
+                    _self.nextAll('.loading').remove();
+                });
+        });
+
+        $('#area').change(function(){
+            $('.loading').remove();
+
+            $(this).after('<span class="loading"></span>');
+            var _self = $(this);
+            var area_id = $(this).val();
+
+            $.get("<?php echo HOST ?>get/region",
+                {area_id: area_id}
+                ,function(data,status){
+                    var obj = $.parseJSON( data );
+                    $('#region').find('option:not(:first)').remove();
+                    $('#district').find('option:not(:first)').remove();
+
+                    for (var i = 0; i < obj.length; i++) {
+                        $('#region').append('<option value="'+obj[i]['id']+'">'+obj[i]['name']+'</option>');
+                    }
+
+                    $('.loading').remove();
+                });
+        });
+
+        $('#region').change(function(){
+
+            $(this).after('<span class="loading"></span>');
+            var _self = $(this);
+            var region = _self.val();
+
+            $('#district').find('option:not(:first)').remove();
+
+            $.get("/get/district",
+                {region: region}
+                ,function(data,status){
+                    var data = $.parseJSON( data );
+
+                    for (var i = 0; i < data.length; i++) {
+                        $('#district').append('<option value="'+data[i]['id']+'">'+data[i]['name']+'</option>');
+                    }
+
+                    _self.nextAll('.loading').remove();
+                });
+        });
+
+</script>

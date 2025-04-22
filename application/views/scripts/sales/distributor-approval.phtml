@@ -1,0 +1,70 @@
+<link rel="stylesheet" type="text/css" href="/css/jquery-ui-1.8.12.custom.css"/>
+<link href="<?php echo HOST ?>css/jquery.tagit.css" rel="stylesheet" type="text/css">
+<link href="<?php echo HOST ?>css/tagit.ui-zendesk.css" rel="stylesheet" type="text/css">
+<style>
+    
+</style>
+<div class="page-header">
+    <h1>Distributor Approval</h1>
+</div>
+<?php
+    if (isset($this->messages_success) and $this->messages_success)
+        foreach ($this->messages_success as $message):
+            echo '<div class="alert alert-success">'.$message.'</div>';
+        endforeach;
+
+    if (isset($this->messages) and $this->messages)
+        foreach ($this->messages as $message):
+            echo '<div class="alert alert-error">'.$message.'</div>';
+        endforeach;
+?>
+<div class="accordion" id="accordion2">
+    <div class="accordion-group">
+        <div class="accordion-heading">
+            <a class="accordion-toggle collapsed" data-toggle="collapse" data-parent="#accordion2" href="#collapseTwo">
+                Search
+            </a>
+        </div>
+        <div id="collapseTwo" class="accordion-body collapse" style="height: 0px;">
+            <div class="accordion-inner">
+                <?php
+                    echo $this->render('sales/partials/distributor-approval-search.phtml');
+                ?>
+            </div>
+        </div>
+    </div>
+</div>
+
+<div class="table-responsive">
+    <?php
+        echo $this->render('sales/partials/distributor-approval-list.phtml');
+    ?>
+</div>
+
+<script type="text/javascript" src="<?php echo HOST ?>js/jets.js"></script>
+<script type="text/javascript" src="<?php echo HOST ?>js/bootstrap.min.js"></script>
+
+<script src="<?php echo HOST ?>js/tag-it.min.js" type="text/javascript" charset="utf-8"></script>
+<script>
+
+    $('.check_all').change(check_all);
+
+    function check_all(e) {
+        _self = $(e.target);
+        $('.checkbox-approval').prop('checked', _self.is(":checked"));
+    }
+
+    $('#btn-approval').click(function(event) {
+        id = [];
+        $('.checkbox-approval:checked').each(function(index, el) {
+            id.push($(el).val());
+        });
+        if(id.length > 0){
+            if (confirm('You confirm to approval')) {
+                var url = "/sales/distributor-approval?save=1&id="+id;
+                window.location.replace(url);
+            }
+        }
+    });
+
+</script>
